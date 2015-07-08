@@ -104,6 +104,11 @@ define(
             getCcAvailableTypes: function() {
                 return window.checkoutConfig.payment.ccform.availableTypes[this.getCode()];
             },
+            getIcons: function (type) {
+                return window.checkoutConfig.payment.ccform.icons.hasOwnProperty(type)
+                    ? window.checkoutConfig.payment.ccform.icons[type]
+                    : false
+            },
             getCcMonths: function() {
                 return window.checkoutConfig.payment.ccform.months[this.getCode()];
             },

@@ -72,6 +72,26 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $dataSourceModel;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeDate;
+
+    /**
+     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $importExportData;
+
+    /**
      * @var array
      */
     protected $cachedSkuToDelete;
@@ -95,7 +115,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_importExportData = $this->getMock(
+        $this->importExportData = $this->getMock(
             '\Magento\ImportExport\Helper\Data',
             [],
             [],
@@ -109,7 +129,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_resource = $this->getMock(
+        $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',
             ['getConnection'],
             [],
@@ -122,7 +142,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->dataSourceModel = $this->getMock(
             '\Magento\ImportExport\Model\Resource\Import\Data',
             [],
@@ -132,11 +152,13 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         );
         $this->resourceFactory = $this->getMock(
             '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory',
-            [],
+            ['create', 'getTable'],
             [],
             '',
             false
         );
+        $this->resourceFactory->expects($this->any())->method('create')->willReturnSelf();
+        $this->resourceFactory->expects($this->any())->method('getTable')->willReturnSelf();
         $this->productModel = $this->getMock(
             '\Magento\Catalog\Model\Product',
             [],
@@ -186,6 +208,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->localeDate = $this->getMock(
+            '\Magento\Framework\Stdlib\DateTime\Timezone',
+            ['date', 'format'],
+            [],
+            '',
+            false
+        );
+        $this->localeDate->expects($this->any())->method('date')->willReturnSelf();
 
         $this->advancedPricing = $this->getAdvancedPricingMock([
             'retrieveOldSkus',
@@ -195,11 +225,18 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             'getCustomerGroupId',
             'getWebSiteId',
             'deleteProductTierAndGroupPrices',
+            'getBehavior',
+            'saveAndReplaceAdvancedPrices',
+            'processCountExistingPrices',
+            'processCountNewPrices'
         ]);
 
         $this->advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn([]);
     }
 
+    /**
+     * Test getter for entity type code.
+     */
     public function testGetEntityTypeCode()
     {
         $result = $this->advancedPricing->getEntityTypeCode();
@@ -209,6 +246,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test method validateRow against its result.
+     *
      * @dataProvider validateRowResultDataProvider
      */
     public function testValidateRowResult($rowData, $validatedRows, $invalidRows, $behavior, $expectedResult)
@@ -232,6 +271,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test method validateRow whether AddRowError is called.
+     *
      * @dataProvider validateRowAddRowErrorCallDataProvider
      */
     public function testValidateRowAddRowErrorCall($rowData, $validatedRows, $invalidRows, $behavior, $error)
@@ -254,6 +295,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $advancedPricingMock->validateRow($rowData, $rowNum);
     }
 
+    /**
+     * Test method validateRow whether internal validator is called.
+     */
     public function testValidateRowValidatorCall()
     {
         $rowNum = 0;
@@ -276,7 +320,10 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $advancedPricingMock->validateRow($rowData, $rowNum);
     }
 
-    public function testSaveAdvancedPricingAddRowErrorCall()
+    /**
+     * Test method saveAndReplaceAdvancedPrices whether AddRowError is called.
+     */
+    public function testSaveAndReplaceAdvancedPricesAddRowErrorCall()
     {
         $rowNum = 0;
         $testBunch = [
@@ -293,13 +340,30 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             ->method('addRowError')
             ->with(RowValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
 
-        $this->advancedPricing->saveAdvancedPricing();
+        $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
     }
 
     /**
-     * @dataProvider saveAdvancedPricingDataProvider
+     * Test method saveAdvancedPricing.
      */
-    public function testSaveAdvancedPricing(
+    public function testSaveAdvancedPricing()
+    {
+        $this->advancedPricing
+            ->expects($this->once())
+            ->method('saveAndReplaceAdvancedPrices');
+
+        $result = $this->advancedPricing->saveAdvancedPricing();
+
+        $this->assertEquals($this->advancedPricing, $result);
+    }
+
+    /**
+     * Test method saveAndReplaceAdvancedPrices with append import behaviour.
+     * Take into consideration different data and check relative internal calls.
+     *
+     * @dataProvider saveAndReplaceAdvancedPricesAppendBehaviourDataProvider
+     */
+    public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCalls(
         $data,
         $tierCustomerGroupId,
         $groupCustomerGroupId,
@@ -308,6 +372,10 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $expectedTierPrices,
         $expectedGroupPrices
     ) {
+        $this->advancedPricing
+            ->expects($this->any())
+            ->method('getBehavior')
+            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
         $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
 
@@ -326,9 +394,79 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             [$expectedGroupPrices, AdvancedPricing::TABLE_GROUPED_PRICE]
         )->will($this->returnSelf());
 
-        $this->advancedPricing->saveAdvancedPricing();
+        $this->advancedPricing->expects($this->any())->method('processCountExistingPrices')->willReturnSelf();
+        $this->advancedPricing->expects($this->any())->method('processCountNewPrices')->willReturnSelf();
+
+        $result = $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
+
+        $this->assertEquals($this->advancedPricing, $result);
     }
 
+    /**
+     * Test method saveAndReplaceAdvancedPrices with replace import behaviour.
+     */
+    public function testSaveAndReplaceAdvancedPricesReplaceBehaviourInternalCalls()
+    {
+        $skuVal = 'sku value';
+        $data = [
+            0 => [
+                AdvancedPricing::COL_SKU => $skuVal,
+            ],
+        ];
+        $expectedTierPrices = [];
+        $expectedGroupPrices = [];
+        $listSku = [
+            $skuVal
+        ];
+        $this->advancedPricing->expects($this->any())->method('getBehavior')->willReturn(
+            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
+        );
+        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
+
+        $this->advancedPricing
+            ->expects($this->never())
+            ->method('getCustomerGroupId');
+        $this->advancedPricing
+            ->expects($this->never())
+            ->method('getWebSiteId');
+
+        $this->advancedPricing
+            ->expects($this->exactly(2))
+            ->method('deleteProductTierAndGroupPrices')
+            ->withConsecutive(
+                [
+                    $listSku,
+                    AdvancedPricing::TABLE_GROUPED_PRICE
+                ],
+                [
+                    $listSku,
+                    AdvancedPricing::TABLE_TIER_PRICE,
+                ]
+            )
+            ->willReturn(true);
+
+        $this->advancedPricing
+            ->expects($this->exactly(2))
+            ->method('saveProductPrices')
+            ->withConsecutive(
+                [
+                    $expectedTierPrices,
+                    AdvancedPricing::TABLE_TIER_PRICE
+                ],
+                [
+                    $expectedGroupPrices,
+                    AdvancedPricing::TABLE_GROUPED_PRICE,
+                ]
+            )
+            ->will($this->returnSelf());
+
+        $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
+    }
+
+    /**
+     * Test method deleteAdvancedPricing() whether correct $listSku is formed.
+     */
     public function testDeleteAdvancedPricingFormListSkuToDelete()
     {
         $skuOne = 'sku value';
@@ -345,14 +483,20 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
         $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
-        $this->advancedPricing->expects($this->exactly(2))->method('deleteProductTierAndGroupPrices')->withConsecutive(
-            [$expectedSkuList, AdvancedPricing::TABLE_GROUPED_PRICE],
-            [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
-        )->will($this->returnSelf());
+        $this->advancedPricing
+            ->expects($this->exactly(2))
+            ->method('deleteProductTierAndGroupPrices')
+            ->withConsecutive(
+                [$expectedSkuList, AdvancedPricing::TABLE_GROUPED_PRICE],
+                [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
+            )->will($this->returnSelf());
 
         $this->advancedPricing->deleteAdvancedPricing();
     }
 
+    /**
+     * Test method deleteAdvancedPricing() whether _cachedSkuToDelete property is set to null.
+     */
     public function testDeleteAdvancedPricingResetCachedSkuToDelete()
     {
         $this->setPropertyValue($this->advancedPricing, '_cachedSkuToDelete', 'some value');
@@ -364,12 +508,26 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($cachedSkuToDelete);
     }
 
+    /**
+     * Test method replaceAdvancedPricing().
+     */
     public function testReplaceAdvancedPricing()
     {
-        $this->markTestSkipped('The method replaceAdvancedPricing is empty');
+        $this->advancedPricing
+            ->expects($this->once())
+            ->method('saveAndReplaceAdvancedPrices');
+
+        $result = $this->advancedPricing->saveAdvancedPricing();
+
+        $this->assertEquals($this->advancedPricing, $result);
     }
 
-    public function saveAdvancedPricingDataProvider()
+    /**
+     * Data provider for testSaveAndReplaceAdvancedPricesAppendBehaviour().
+     *
+     * @return array
+     */
+    public function saveAndReplaceAdvancedPricesAppendBehaviourDataProvider()
     {
         // @codingStandardsIgnoreStart
         return [
@@ -522,6 +680,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         // @codingStandardsIgnoreEnd
     }
 
+    /**
+     * Data provider for testValidateRowResult().
+     *
+     * @return array
+     */
     public function validateRowResultDataProvider()
     {
         return [
@@ -583,6 +746,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * Data provider for testValidateRowAddRowErrorCall().
+     *
+     * @return array
+     */
     public function validateRowAddRowErrorCallDataProvider()
     {
         return [
@@ -616,6 +784,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      *
      * @param $object
      * @param $property
+     * @return mixed
      */
     protected function getPropertyValue($object, $property)
     {
@@ -644,6 +813,24 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Invoke any method of class AdvancedPricing.
+     *
+     * @param object $object
+     * @param string $method
+     * @param array $args
+     *
+     * @return mixed the method result.
+     */
+    private function invokeMethod($object, $method, $args = [])
+    {
+        $class = new \ReflectionClass('\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing');
+        $method = $class->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($this->advancedPricing, []);
+    }
+
+    /**
      * Get AdvancedPricing Mock object with predefined methods.
      *
      * @param array $methods
@@ -656,11 +843,12 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing',
             $methods,
             [
+                $this->localeDate,
                 $this->jsonHelper,
-                $this->_importExportData,
+                $this->importExportData,
                 $this->resourceHelper,
                 $this->dataSourceModel,
-                $this->_resource,
+                $this->resource,
                 $this->resourceFactory,
                 $this->productModel,
                 $this->catalogData,
