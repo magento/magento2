@@ -90,8 +90,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
         $themePath = '*/*';
         $module = $this->getTemplateModule($templateId);
         $filename = $this->_getInfo($templateId, 'file');
-        $emailDirectory = DirectoryList::EMAIL;
-        $searchPattern = "{$area}/{$themePath}/{$module}/{$emailDirectory}/{$filename}";
+        $searchPattern = "{$area}/{$themePath}/{$module}/email/{$filename}";
         $files = $this->themesDirectory->search($searchPattern);
 
         $pattern = "#^(?<area>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)/#i";
