@@ -348,7 +348,7 @@
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Check Cron Scripts</h3>
                 <p>
-                    Cron has proper permissions.
+                    Cron Script Readiness Check Passed.
                 </p>
                 <p ng-show="cronScript.notice" ng-bind-html="cronScript.setupNoticeMessage">
                 </p>
@@ -362,7 +362,7 @@
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Check Cron Scripts</h3>
                 <p>
-                    Cron has incorrect permissions.
+                    Cron Script Readiness Check Failed.
                     <a href="#cron-script" ng-click="updateOnExpand(cronScript)">
                         <span ng-hide="cronScript.expanded">Show detail</span>
                         <span ng-show="cronScript.expanded">Hide detail</span>
