@@ -76,12 +76,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $linkInitializer;
 
     /*
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider
+     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
      */
     protected $linkTypeProvider;
 
     /*
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
