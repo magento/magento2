@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Asset\PreProcessor;
 
-use Magento\Framework\App\State;
 use Magento\Framework\Code\Minifier\AdapterInterface;
 use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\View\Asset\PreProcessor;
@@ -27,20 +26,13 @@ class Minify implements PreProcessorInterface
     protected $adapter;
 
     /**
-     * @var State
-     */
-    protected $appState;
-
-    /**
      * @param ConfigInterface $config
      * @param AdapterInterface $adapter
-     * @param State $appState
      */
-    public function __construct(ConfigInterface $config, AdapterInterface $adapter, State $appState)
+    public function __construct(ConfigInterface $config, AdapterInterface $adapter)
     {
         $this->config = $config;
         $this->adapter = $adapter;
-        $this->appState = $appState;
     }
 
     /**
@@ -55,8 +47,7 @@ class Minify implements PreProcessorInterface
         if (
             $this->config->isAssetMinification($extension) &&
             substr($chain->getOrigAssetPath(), strrpos($chain->getOrigAssetPath(), '.') - 4, 5) != '.min.' &&
-            substr($chain->getTargetAssetPath(), -5 - strlen($extension)) == '.min.' . $extension &&
-            $this->appState->getMode() != State::MODE_DEVELOPER
+            substr($chain->getTargetAssetPath(), -5 - strlen($extension)) == '.min.' . $extension
         ) {
             $content = $this->adapter->minify($chain->getContent());
             $chain->setContent($content);
