@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
 
 /**
  * View asset configuration interface
@@ -48,13 +49,19 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
+    /**
+     * @var State
+     */
+    protected $appState;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @param State $appState
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
+    public function __construct(ScopeConfigInterface $scopeConfig, State $appState)
     {
         $this->scopeConfig = $scopeConfig;
+        $this->appState = $appState;
     }
 
     /**
@@ -104,10 +111,12 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isAssetMinification($contentType)
     {
-        return (bool)$this->scopeConfig->isSetFlag(
-            sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
-            ScopeInterface::SCOPE_STORE
-        );
+        return
+            $this->appState->getMode() != State::MODE_DEVELOPER &&
+            (bool)$this->scopeConfig->isSetFlag(
+                sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
+                ScopeInterface::SCOPE_STORE
+            );
     }
 
     /**
