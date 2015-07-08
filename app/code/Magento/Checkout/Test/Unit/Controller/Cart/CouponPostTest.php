@@ -138,7 +138,10 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->couponFactory = $this->getMock('Magento\SalesRule\Model\CouponFactory', [], [], '', false);
+        $this->couponFactory = $this->getMockBuilder('Magento\SalesRule\Model\CouponFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->quoteRepository = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
