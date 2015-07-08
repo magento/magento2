@@ -4,8 +4,7 @@
  */
 define([
         'Magento_Ui/js/lib/component/traversal'
-    ],
-    function (traversal) {
+    ], function (traversal) {
         'use strict';
 
         describe( 'Magento_Ui/js/lib/component/traversal', function(){

@@ -4,8 +4,7 @@
  */
 define([
         'Magento_Ui/js/lib/component/provider'
-    ],
-    function (provider) {
+    ], function (provider) {
         'use strict';
 
         describe( 'Magento_Ui/js/lib/component/provider', function(){
