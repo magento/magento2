@@ -14,7 +14,7 @@ define([
         beforeEach(function(){
             storageObj = new storage();
         });
-        it('has getter method', function () {
+        it('has setter method', function () {
             spyOn(storageObj, 'set');
             storageObj.set();
             expect(storageObj.set).toHaveBeenCalled();
