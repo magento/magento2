@@ -43,7 +43,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      */
     public function beforeSave($object)
     {
-        $password = $object->getPassword();
+        $password = (string)$object->getPassword();
 
         $length = $this->string->strlen($password);
         if ($length > 0) {
@@ -53,7 +53,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
                 );
             }
 
-            if (trim($password) != $password) {
+            if (trim($password) !== $password) {
                 throw new LocalizedException(__('The password can not begin or end with a space.'));
             }
 
@@ -67,8 +67,8 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      */
     public function validate($object)
     {
-        $password = $object->getPassword();
-        if ($password && $password == $object->getPasswordConfirm()) {
+        $password = (string)$object->getPassword();
+        if ($password && $password === (string)$object->getPasswordConfirm()) {
             return true;
         }
 
