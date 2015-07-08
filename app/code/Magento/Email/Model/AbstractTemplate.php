@@ -518,8 +518,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Loads the area associated with a template and stores it so that it will be returned by getDesignConfig and
-     * getDesignParams.
+     * Store the area associated with a template so that it will be returned by getDesignConfig and getDesignParams
      *
      * @param string $templateId
      * @return $this
@@ -528,15 +527,16 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function setForcedArea($templateId)
     {
         if ($this->area) {
-            throw new \Magento\Framework\Exception\MailException(__('Area is already set'));
+            throw new \LogicException(__('Area is already set'));
         }
         $this->area = $this->emailConfig->getTemplateArea($templateId);
         return $this;
     }
 
     /**
-     * Manually set a theme that will be used by getParams. Used to force the loading of an email template from a
-     * specific theme.
+     * Manually set a theme that will be used by getParams
+     *
+     * Used to force the loading of an email template from a specific theme
      *
      * @param string $templateId
      * @param string $theme
