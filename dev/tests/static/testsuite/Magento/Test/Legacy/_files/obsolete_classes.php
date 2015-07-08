@@ -7,9 +7,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 return [
     ['Mage_Admin_Helper_Data', 'Magento\Backend\Helper\Data'],
     ['Mage_Admin_Model_Acl', 'Magento_Acl'],
@@ -3674,6 +3671,31 @@ return [
     ['Magento\Framework\View\Element\UiComponent\JsConfigInterface'],
     ['Magento\GiftMessage\Model\Plugin\TotalsDataProcessorPlugin'],
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['Magento\Authorizenet\Block\Authorizenet\Form\Cc'],
+    ['Magento\Authorizenet\Block\Authorizenet\Info\Cc'],
+    ['Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Payment\Cancel'],
+    ['Magento\Authorizenet\Controller\Authorizenet\Payment\Cancel'],
+    [
+        'Magento\Authorizenet\Model\Authorizenet\Source\Cctype',
+        'Magento\Authorizenet\Model\Source\Cctype'
+    ],
+    [
+        'Magento\Authorizenet\Model\Authorizenet\Source\PaymentAction',
+        'Magento\Authorizenet\Model\Source\PaymentAction'
+    ],
+    ['Magento\Authorizenet\Model\Authorizenet\Cards'],
+    [
+        'Magento\Authorizenet\Model\Authorizenet\Debug',
+        'Magento\Authorizenet\Model\Debug'
+    ],
+    [
+        'Magento\Authorizenet\Model\Resource\Authorizenet\Debug\Collection',
+        'Magento\Authorizenet\Model\Resource\Debug\Collection'
+    ],
+    [
+        'Magento\Authorizenet\Model\Resource\Authorizenet\Debug',
+        'Magento\Authorizenet\Model\Resource\Debug'
+    ],
     ['Magento\GoogleShopping\Block\SiteVerification'],
     ['Magento\GoogleShopping\Block\Adminhtml\Items\Renderer\Id'],
     ['Magento\GoogleShopping\Block\Adminhtml\Items\Item'],
@@ -3764,9 +3786,11 @@ return [
     ['Magento\GoogleShopping\Test\Unit\Model\MassOperationsTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\ObserverTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\ServiceTest'],
-    ['Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType\Configurable'],
     ['Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Settings'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tabs\Configurable'],
-    ['Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType\Configurable'],
+    [
+        'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
+        . '\Configurable'
+    ],
 ];
