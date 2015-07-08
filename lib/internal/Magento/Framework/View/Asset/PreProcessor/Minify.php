@@ -54,6 +54,7 @@ class Minify implements PreProcessorInterface
         $extension = pathinfo($chain->getTargetAssetPath(), PATHINFO_EXTENSION);
         if (
             $this->config->isAssetMinification($extension) &&
+            substr($chain->getOrigAssetPath(), strrpos($chain->getOrigAssetPath(), '.') - 4, 5) != '.min.' &&
             substr($chain->getTargetAssetPath(), -5 - strlen($extension)) == '.min.' . $extension &&
             $this->appState->getMode() != State::MODE_DEVELOPER
         ) {

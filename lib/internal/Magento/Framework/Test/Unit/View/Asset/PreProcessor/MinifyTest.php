@@ -60,14 +60,15 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $targetPath
-     * @param \PHPUnit_Framework_MockObject_Invocation $minifyCalls
-     * @param \PHPUnit_Framework_MockObject_Invocation $setContentCalls
+     * @param string $originalPath
+     * @param int $minifyCalls
+     * @param int $setContentCalls
      * @param bool $isEnabled
      * @param int $appMode
      * @return void
      * @dataProvider processDataProvider
      */
-    public function testProcess($targetPath, $minifyCalls, $setContentCalls, $isEnabled, $appMode)
+    public function testProcess($targetPath, $originalPath, $minifyCalls, $setContentCalls, $isEnabled, $appMode)
     {
         $chainMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
             ->disableOriginalConstructor()
@@ -77,16 +78,20 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
             ->method('getTargetAssetPath')
             ->willReturn($targetPath);
         $chainMock
-            ->expects($setContentCalls)
+            ->expects($this->exactly($setContentCalls))
             ->method('setContent')
             ->with('minified content');
         $chainMock
             ->expects($this->any())
             ->method('getContent')
             ->willReturn('original content');
+        $chainMock
+            ->expects($this->any())
+            ->method('getOrigAssetPath')
+            ->willReturn($originalPath);
 
         $this->adapterMock
-            ->expects($minifyCalls)
+            ->expects($this->exactly($minifyCalls))
             ->method('minify')
             ->with('original content')
             ->willReturn('minified content');
@@ -110,15 +115,16 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
     public function processDataProvider()
     {
         return [
-            ['test.min.css', $this->once(), $this->once(), true, State::MODE_PRODUCTION],
-            ['test.min.css', $this->once(), $this->once(), true, State::MODE_DEFAULT],
-            ['test.min.css', $this->never(), $this->never(), true, State::MODE_DEVELOPER],
-            ['test.jpeg', $this->never(), $this->never(), true, State::MODE_DEFAULT],
-            ['test.css', $this->never(), $this->never(), true, State::MODE_DEFAULT],
-            ['test.jpeg', $this->never(), $this->never(), true, State::MODE_DEFAULT],
-            ['test.css', $this->never(), $this->never(), true, State::MODE_DEFAULT],
-            ['test.min.css', $this->never(), $this->never(), false, State::MODE_DEFAULT],
-            ['test.css', $this->never(), $this->never(), false, State::MODE_DEFAULT]
+            ['test.min.css', 'test.css', 1, 1, true, State::MODE_PRODUCTION],
+            ['test.min.css', 'test.css', 1, 1, true, State::MODE_DEFAULT],
+            ['test.min.css', 'test.min.css', 0, 0, true, State::MODE_PRODUCTION],
+            ['test.min.css', 'test.css', 0, 0, true, State::MODE_DEVELOPER],
+            ['test.jpeg', 'test.jpeg', 0, 0, true, State::MODE_DEFAULT],
+            ['test.css', 'test.css', 0, 0, true, State::MODE_DEFAULT],
+            ['test.jpeg', 'test.jpeg', 0, 0, true, State::MODE_DEFAULT],
+            ['test.css', 'test.css', 0, 0, true, State::MODE_DEFAULT],
+            ['test.min.css', 'test.css', 0, 0, false, State::MODE_DEFAULT],
+            ['test.css', 'test.css', 0, 0, false, State::MODE_DEFAULT]
         ];
     }
 }
