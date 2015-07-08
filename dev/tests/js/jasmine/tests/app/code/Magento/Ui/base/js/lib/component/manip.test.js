@@ -4,13 +4,11 @@
  */
 define([
         'Magento_Ui/js/lib/component/manip'
-    ],
-    function (manip) {
+    ], function (manip) {
         'use strict';
 
         describe( 'Magento_Ui/js/lib/component/manip', function(){
             var manipObj,
-                stubbedObj,
                 returnedValue;
 
             beforeEach(function(){
