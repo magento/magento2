@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Bundle model
  */
 class Bundle
 {
@@ -38,15 +38,23 @@ class Bundle
     protected $content = [];
 
     /**
+     * @var ConfigInterface
+     */
+    protected $assetConfig;
+
+    /**
      * @param Filesystem $filesystem
      * @param Bundle\ConfigInterface $bundleConfig
+     * @param ConfigInterface $assetConfig
      */
     public function __construct(
         Filesystem $filesystem,
-        Bundle\ConfigInterface $bundleConfig
+        Bundle\ConfigInterface $bundleConfig,
+        ConfigInterface $assetConfig
     ) {
         $this->filesystem = $filesystem;
         $this->bundleConfig = $bundleConfig;
+        $this->assetConfig = $assetConfig;
     }
 
     /**
@@ -153,7 +161,15 @@ class Bundle
      */
     protected function getAssetKey(LocalInterface $asset)
     {
-        return ($asset->getModule() == '') ? $asset->getFilePath() : $asset->getModule() . '/' . $asset->getFilePath();
+        $result = (($asset->getModule() == '') ? '' : $asset->getModule() . '/') . $asset->getFilePath();
+        if (
+            $this->assetConfig->isAssetMinification('js') &&
+            substr($result, -3) == '.js' &&
+            substr($result, -7) != '.min.js'
+        ) {
+            $result = substr($result, 0, -2) . 'min.js';
+        }
+        return $result;
     }
 
     /**
@@ -228,16 +244,12 @@ class Bundle
             $this->fillContent($parts, $context);
         }
 
-        $this->content[count($this->content) > 0 ? count($this->content) - 1 : 0] .= $this->getInitJs();
+        $this->content[max(0, count($this->content) - 1)] .= $this->getInitJs();
 
-        if (count($this->content) > 1) {
-            foreach ($this->content as $partIndex => $content) {
-                $dir->writeFile($bundlePath . "$partIndex.js", $content);
-            }
-            return;
+        $extension = ($this->assetConfig->isAssetMinification('js') ? '.min' : '') . '.js';
+        foreach ($this->content as $partIndex => $content) {
+            $dir->writeFile($bundlePath . $partIndex . $extension, $content);
         }
-
-        $dir->writeFile($bundlePath . '0.js', $this->content[0]);
     }
 
     /**
