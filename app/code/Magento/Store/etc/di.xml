@@ -288,14 +288,16 @@
             <argument name="modulePrefix" xsi:type="string">store</argument>
         </arguments>
     </type>
+    <virtualType name="cssMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Css\CSSmin" />
+    <virtualType name="jsMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Js\JShrink" />
     <virtualType name="cssMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
         <arguments>
-            <argument name="adapter" xsi:type="object">Magento\Framework\Code\Minifier\Adapter\Css\CssMinifier</argument>
+            <argument name="adapter" xsi:type="object">cssMinificationAdapter</argument>
         </arguments>
     </virtualType>
     <virtualType name="jsMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
         <arguments>
-            <argument name="adapter" xsi:type="object">Magento\Framework\Code\Minifier\Adapter\Js\Jsmin</argument>
+            <argument name="adapter" xsi:type="object">jsMinificationAdapter</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Asset\PreProcessor\Pool">

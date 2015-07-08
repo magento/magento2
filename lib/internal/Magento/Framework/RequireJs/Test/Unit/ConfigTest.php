@@ -37,6 +37,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $assetConfigMock;
+
+    /**
+     * @var \Magento\Framework\Code\Minifier\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $minifyAdapterMock;
+
     protected function setUp()
     {
         $this->fileSource = $this->getMock(
@@ -64,7 +74,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
         $repo->expects($this->once())->method('getStaticViewFileContext')->will($this->returnValue($this->context));
-        $this->object = new \Magento\Framework\RequireJs\Config($this->fileSource, $this->design, $filesystem, $repo);
+        $this->assetConfigMock = $this->getMockBuilder('Magento\Framework\View\Asset\ConfigInterface')
+            ->getMockForAbstractClass();
+        $this->minifyAdapterMock = $this->getMockBuilder('Magento\Framework\Code\Minifier\AdapterInterface')
+            ->getMockForAbstractClass();
+
+        $this->object = new Config(
+            $this->fileSource,
+            $this->design,
+            $filesystem,
+            $repo,
+            $this->assetConfigMock,
+            $this->minifyAdapterMock
+        );
     }
 
     public function testGetConfig()
@@ -98,9 +120,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getFiles')
             ->with($theme, Config::CONFIG_FILE_NAME)
             ->will($this->returnValue([$fileOne, $fileTwo]));
+        $this->assetConfigMock
+            ->expects($this->atLeastOnce())
+            ->method('isAssetMinification')
+            ->with('js')
+            ->willReturn(true);
 
         $expected = <<<expected
 (function(require){
+    if (!require.s.contexts._._nameToUrl) {
+        require.s.contexts._._nameToUrl = require.s.contexts._.nameToUrl;
+        require.s.contexts._.nameToUrl = function (moduleName, ext, skipExt) {
+            if (!ext && !skipExt) {
+                ext = '.min.js';
+            }
+            return require.s.contexts._._nameToUrl.apply(require.s.contexts._, [moduleName, ext, skipExt])
+                .replace(/(\.min\.min\.js)(\?.*)*$/, '.min.js$2');
+        }
+    }
 require.config({"baseUrl":""});
 (function() {
 relative/file_one.js content
@@ -115,6 +152,12 @@ require.config(config);
 
 })(require);
 expected;
+
+        $this->minifyAdapterMock
+            ->expects($this->once())
+            ->method('minify')
+            ->with($expected)
+            ->willReturnArgument(0);
 
         $actual = $this->object->getConfig();
         $this->assertStringMatchesFormat($expected, $actual);
