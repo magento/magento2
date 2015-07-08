@@ -100,11 +100,11 @@ class Grid extends DataGrid
     {
         $this->openFilterBlock();
         $storeGroupElements = $this->_rootElement->find($this->purchasePointFilter)
-            ->getElements('.//optgroup[./option]', Locator::SELECTOR_XPATH);
+            ->getElements('//option/preceding-sibling::optgroup[1]', Locator::SELECTOR_XPATH);
         $result = [];
 
         foreach ($storeGroupElements as $storeGroupElement) {
-            $result[] = trim($storeGroupElement->getAttribute('label'), ' ');
+            $result[] = trim($storeGroupElement->getAttribute('label'));
         }
 
         return $result;
