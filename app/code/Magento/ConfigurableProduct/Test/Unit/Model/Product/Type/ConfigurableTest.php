@@ -951,7 +951,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $newSimpleProductMock->expects($this->once())->method('addData')->willReturnSelf();
         $parentProductMock->expects($this->once())->method('getWebsiteIds')->willReturn('website_id');
         $newSimpleProductMock->expects($this->once())->method('setWebsiteIds')->with('website_id')->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('setStatus')->with(1)->willReturnSelf();
         $newSimpleProductMock->expects($this->once())->method('setVisibility')->with(1)->willReturnSelf();
         $newSimpleProductMock->expects($this->once())->method('save')->willReturnSelf();
         $newSimpleProductMock->expects($this->once())->method('getId')->willReturn('product_id');
