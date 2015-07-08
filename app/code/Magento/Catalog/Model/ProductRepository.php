@@ -146,7 +146,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $requestBuilder;
 
     /**
-     * @var \Magento\Search\Model\SearchEngine
+     * @var \Magento\Framework\Search\SearchEngineInterface
      */
     private $searchEngine;
 
@@ -182,7 +182,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Search\Request\Builder $requestBuilder
-     * @param \Magento\Search\Model\SearchEngine $searchEngine
+     * @param \Magento\Framework\Search\SearchEngineInterface $searchEngine
      * @param SearchResponseBuilder $searchResponseBuilder
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -210,7 +210,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Search\Request\Builder $requestBuilder,
-        \Magento\Search\Model\SearchEngine $searchEngine,
+        \Magento\Framework\Search\SearchEngineInterface $searchEngine,
         SearchResponseBuilder $searchResponseBuilder,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
