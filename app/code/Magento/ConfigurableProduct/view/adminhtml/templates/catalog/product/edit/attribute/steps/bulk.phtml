@@ -133,7 +133,7 @@
                             <span><?= __('Remove image') ?></span>
                         </button>
                         <div class="draggable-handle"></div>
-                        <div class="image-label"></div>
+                        <div class="image-label" title="<?= $block->escapeHtml(__('Edit role')) ?>"></div>
                         <div class="image-fade"><span><?= __('Hidden') ?></span></div>
                     </div>
                 </script>
@@ -152,7 +152,7 @@
                             <span><?= __('Remove image') ?></span>
                         </button>
                         <div class="draggable-handle"></div>
-                        <div class="image-label"></div>
+                        <div class="image-label" title="<?= $block->escapeHtml(__('Edit role')) ?>"></div>
                         <div class="image-fade"><span><?= __('Hidden') ?></span></div>
                     </div>
                 </script>
@@ -174,8 +174,8 @@
                                         <textarea id="image-description"
                                                   class="admin__control-textarea"
                                                   rows="3"
-                                                  name="product[media_gallery][images][<%- data.file_id %>][label]">
-                                            <%- data.label %></textarea>
+                                                  name="product[media_gallery][images][<%- data.file_id %>][label]"
+                                            ><%- data.label %></textarea>
                                     </div>
                                 </div>
 
@@ -338,7 +338,7 @@
                                     <span><?= __('Remove image') ?></span>
                                 </button>
                                 <div class="draggable-handle"></div>
-                                <div class="image-label"></div>
+                                <div class="image-label" title="<?= $block->escapeHtml(__('Edit role')) ?>"></div>
                                 <div class="image-fade"><span><?= __('Hidden') ?></span></div>
                             </div>
                         </script>
@@ -358,7 +358,7 @@
                                     <span><?= __('Remove image') ?></span>
                                 </button>
                                 <div class="draggable-handle"></div>
-                                <div class="image-label"></div>
+                                <div class="image-label" title="<?= $block->escapeHtml(__('Edit role')) ?>"></div>
                                 <div class="image-fade"><span><?= __('Hidden') ?></span></div>
                             </div>
                         </script>
@@ -370,11 +370,6 @@
                                 </div>
                                 <div class="image-panel-controls">
                                     <strong class="image-name"><%- data.label %></strong>
-
-                                    <button type="button" class="action-remove"
-                                            title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                        <span><?= __('Remove image') ?></span>
-                                    </button>
 
                                     <fieldset class="admin__fieldset fieldset-image-panel">
                                         <div class="field field-image-description">
