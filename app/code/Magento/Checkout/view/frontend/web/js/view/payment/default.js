@@ -45,7 +45,10 @@ define(
             /**
              * Place order.
              */
-            placeOrder: function () {
+            placeOrder: function (data, event) {
+                if (event) {
+                    event.preventDefault();
+                }
                 var self = this,
                     placeOrder,
                     emailValidationResult = customer.isLoggedIn(),
