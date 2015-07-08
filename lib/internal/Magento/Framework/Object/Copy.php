@@ -79,7 +79,16 @@ class Copy
         }
 
         $eventName = sprintf('core_copy_fieldset_%s_%s', $fieldset, $aspect);
-        $this->_eventManager->dispatch($eventName, ['target' => $target, 'source' => $source, 'root' => $root]);
+        if($targetIsArray) {
+            $target = new \Magento\Framework\Object($target);
+        }
+        $this->_eventManager->dispatch(
+            $eventName,
+            ['target' => $target, 'source' => $source, 'root' => $root]
+        );
+        if($targetIsArray) {
+            $target = $target->getData();
+        }
 
         return $target;
     }
