@@ -51,8 +51,8 @@ define([
                 var variation = [], images, sku, quantity, price;
                 images = getSectionValue('images', options);
                 variation.push(images);
-                sku = _.reduce(options, function (memo, option) {
-                    return productName + memo + '-' + option.label;
+                sku = productName + _.reduce(options, function (memo, option) {
+                    return memo + '-' + option.label;
                 }, '');
                 variation.push(sku);
                 quantity = getSectionValue('quantity', options);
@@ -62,7 +62,7 @@ define([
                     variation.push(option.label);
                 });
                 price = getSectionValue('price', options);
-                variation.push(price);
+                variation.push('$ ' + price);
                 this.variationsComponent().populateVariationMatrix(options, images, sku, quantity, price);
                 return variation;
             }, this);
