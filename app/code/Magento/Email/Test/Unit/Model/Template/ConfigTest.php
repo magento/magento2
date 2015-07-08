@@ -30,9 +30,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Email\Model\Template\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $emailTemplateFileSystem;
+    protected $viewFileSystem;
 
     protected function setUp()
     {
@@ -57,8 +57,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->emailTemplateFileSystem = $this->getMock(
-            '\Magento\Email\Model\Template\FileSystem',
+        $this->viewFileSystem = $this->getMock(
+            '\Magento\Framework\View\FileSystem',
             ['getEmailTemplateFileName'],
             [],
             '',
@@ -69,7 +69,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [
                     $this->_dataStorage,
                     $this->_moduleReader,
-                    $this->emailTemplateFileSystem,
+                    $this->viewFileSystem,
                 ]
             )
             ->setMethods(['getThemeTemplates'])
@@ -103,14 +103,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTemplateFilenameWithParams()
     {
-        $this->emailTemplateFileSystem->expects(
+        $this->viewFileSystem->expects(
             $this->once()
         )->method(
             'getEmailTemplateFileName'
         )->with(
             'one.html',
-            'Fixture_ModuleOne',
-            $this->designParams
+            $this->designParams,
+            'Fixture_ModuleOne'
         )->will(
             $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
         );
@@ -124,12 +124,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTemplateFilenameWithNoParams()
     {
-        $this->emailTemplateFileSystem->expects(
+        $this->viewFileSystem->expects(
             $this->once()
         )->method(
             'getEmailTemplateFileName'
         )->with(
             'one.html',
+            [
+                'area' => $this->designParams['area'],
+                'module' => $this->designParams['module'],
+            ],
             'Fixture_ModuleOne'
         )->will(
             $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
@@ -190,7 +194,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $model = new \Magento\Email\Model\Template\Config(
             $dataStorage,
             $this->_moduleReader,
-            $this->emailTemplateFileSystem
+            $this->viewFileSystem
         );
         if (!$argument) {
             $model->{$getterMethod}('fixture');
