@@ -6,10 +6,9 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    './storage',
-    'Magento_Ui/js/lib/collapsible',
-    'Magento_Ui/js/core/renderer/layout'
-], function (_, utils, registry, Storage, Collapsible, layout) {
+    'uiLayout',
+    'Magento_Ui/js/lib/collapsible'
+], function (_, utils, registry, layout, Collapsible) {
     'use strict';
 
     /**
@@ -19,7 +18,7 @@ define([
      * @returns {String} Path without namespace.
      */
     function removeStateNs(path) {
-        path = typeof path == 'string' ? path.split('.') : '';
+        path = typeof path == 'string' ? path.split('.') : [];
 
         if (path[0] === 'current') {
             path.shift();
@@ -34,7 +33,6 @@ define([
             defaultIndex: 'default',
             activeIndex: 'default',
             hasChanges: false,
-            initialSet: true,
             templates: {
                 view: {
                     parent: '${ $.$data.name }',
@@ -51,8 +49,9 @@ define([
                 }
             },
             storageConfig: {
-                provider: '${ $.storageConfig.namespace }.bookmarks.storage',
-                name: '${ $.storageConfig.provider }'
+                provider: '${ $.storageConfig.name }',
+                name: '${ $.name }_storage',
+                component: 'Magento_Ui/js/grid/controls/bookmarks/storage'
             },
             views: {
                 default: {
@@ -79,6 +78,8 @@ define([
             utils.limit(this, 'checkChanges', 50);
 
             this._super()
+                .restore()
+                .initStorage()
                 .initViews();
 
             return this;
@@ -102,11 +103,9 @@ define([
          * @returns {Bookmarks} Chainable.
          */
         initStorage: function () {
-            var storage = new Storage(this.storageConfig);
+            layout([this.storageConfig]);
 
-            registry.set(this.storageConfig.name, storage);
-
-            return this._super();
+            return this;
         },
 
         /**
@@ -195,7 +194,7 @@ define([
          */
         removeView: function (view) {
             if (view.active()) {
-                this.defaultView.active(true);
+                this.applyView(this.defaultIndex);
             }
 
             if (!view.isNew) {
@@ -234,7 +233,7 @@ define([
         /**
          * Activates specified view and applies its' data.
          *
-         * @param {View|String} view - View to be applied.
+         * @param {(View|String)} view - View to be applied.
          * @returns {Bookmarks} Chainable.
          */
         applyView: function (view) {
@@ -247,7 +246,7 @@ define([
             view.active(true);
 
             this.activeView(view);
-            this.set('current', view.getData());
+            this.applyState('saved');
 
             return this;
         },
@@ -302,6 +301,17 @@ define([
                 diff = utils.compare(view.getData(), this.current);
 
             this.hasChanges(!diff.equal);
+
+            return this;
+        },
+
+        /**
+         * Resets current state to a saved state of an active view.
+         *
+         * @returns {Bookmarks} Chainable.
+         */
+        discardChanges: function () {
+            this.applyState('saved');
 
             return this;
         },
