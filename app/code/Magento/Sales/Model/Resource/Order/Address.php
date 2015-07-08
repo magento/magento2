@@ -132,8 +132,8 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $resource = parent::_afterSave($object);
-        if ($object->getOrderId()) {
-            $this->gridPool->refreshByOrderId($object->getOrderId());
+        if ($object->getParentId()) {
+            $this->gridPool->refreshByOrderId($object->getParentId());
         }
         return $resource;
     }
