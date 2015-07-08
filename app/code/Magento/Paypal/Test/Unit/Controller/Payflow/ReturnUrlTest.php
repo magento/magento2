@@ -183,6 +183,11 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
 
         $this->orderMock
             ->expects($this->once())
+            ->method('getIncrementId')
+            ->will($this->returnValue($lastRealOrderId));
+
+        $this->orderMock
+            ->expects($this->once())
             ->method('getState')
             ->will($this->returnValue($state));
 
@@ -239,6 +244,11 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
             ->method('loadByIncrementId')
             ->with($lastRealOrderId)
             ->will($this->returnSelf());
+
+        $this->orderMock
+            ->expects($this->once())
+            ->method('getIncrementId')
+            ->will($this->returnValue($lastRealOrderId));
 
         $this->orderMock
             ->expects($this->once())
