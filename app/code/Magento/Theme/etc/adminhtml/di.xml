@@ -21,4 +21,7 @@
             <argument name="storageHelper" xsi:type="object">Magento\Theme\Helper\Storage\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\App\AbstractAction">
+        <plugin name="themeRegistrationFromFilesystem" type="Magento\Theme\Model\Theme\Plugin\Registration"/>
+    </type>
 </config>

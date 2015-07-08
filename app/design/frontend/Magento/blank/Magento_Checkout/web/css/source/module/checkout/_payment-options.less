@@ -79,6 +79,7 @@
                 display: inline-block;
                 list-style: none;
                 margin: 0 @indent__xs 0 0;
+                vertical-align: top;
                 &._active {
                     font-weight: @font-weight__bold;
                     img {
@@ -86,6 +87,11 @@
                         filter: grayscale(0%);
                         filter: none;
                     }
+                }
+                span {
+                    display: inline-block;
+                    padding-top: 6px;
+                    vertical-align: top;
                 }
             }
             img {
