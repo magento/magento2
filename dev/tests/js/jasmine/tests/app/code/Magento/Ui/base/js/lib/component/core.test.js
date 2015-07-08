@@ -2,10 +2,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
         'Magento_Ui/js/lib/component/core'
-    ],
-    function (core) {
+    ], function (core) {
         'use strict';
 
         describe( 'Magento_Ui/js/lib/component/core', function(){

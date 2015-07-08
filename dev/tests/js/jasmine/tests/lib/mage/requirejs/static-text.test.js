@@ -27,8 +27,10 @@ define([
             require([
                 external.path
             ], function (data) {
+                var regExp = /\s+/g;
+
                 expect(text._load).toHaveBeenCalled();
-                expect(data.replace(/\s+/g,' ')).toEqual(external.result.replace(/\s+/g,' '));
+                expect(data.replace(regExp,' ')).toEqual(external.result.replace(regExp,' '));
 
                 done();
             });

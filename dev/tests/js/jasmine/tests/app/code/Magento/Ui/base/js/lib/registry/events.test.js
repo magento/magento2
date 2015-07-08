@@ -19,13 +19,15 @@ define([
                 }
             },
             eventsClass = new EventBus(storage);
+
         describe('"resolve" method', function () {
             it('Check for defined ', function () {
                 expect(eventsClass.resolve()).toBeDefined();
             });
             it('Check answer type', function () {
-               var type = typeof(eventsClass.resolve());
-                   expect(type).toEqual('object');
+                var type = typeof(eventsClass.resolve());
+
+                expect(type).toEqual('object');
             });
         });
         describe('"wait" method', function () {
@@ -34,10 +36,12 @@ define([
             });
             it('Check return object property "requests" defined', function () {
                 var thisObject = eventsClass.wait([],{}).requests;
+
                 expect(thisObject).toBeDefined();
             });
             it('Check return object property "requests" type', function () {
                 var thisObject = typeof(eventsClass.wait([],{}).requests);
+
                 expect(thisObject).toEqual('object');
             });
         });
@@ -51,7 +55,4 @@ define([
             });
         });
     });
-
 });
-
-

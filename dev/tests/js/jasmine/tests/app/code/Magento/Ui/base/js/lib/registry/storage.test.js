@@ -17,10 +17,12 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(storage);
+
                 expect(type).toEqual('object');
             });
             it('Check storage.data for defined', function () {
                 var data = storage.data;
+
                 expect(typeof data).toEqual('object');
             });
         });
@@ -30,11 +32,13 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(storage.get);
+
                 expect(type).toEqual('function');
             });
             it('Check returned value if argument is array values', function () {
                 var elem = 'magento',
                     value = 'magentoValue';
+
                 storage.data[elem] = value;
                 expect(storage.get([elem])).toEqual([value]);
             });
@@ -48,6 +52,7 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(storage.set);
+
                 expect(type).toEqual('function');
             });
             it('Check returned value for defined', function () {
@@ -55,11 +60,13 @@ define([
             });
             it('Check returned value type', function () {
                 var type = typeof(storage.set());
+
                 expect(type).toEqual('object');
             });
             it('Check returned value if argument is "elem, value" ', function () {
                 var elem = 'magento',
                     value = 'magentoValue';
+
                 storage.set(elem, value);
                 expect(storage.data[elem]).toEqual(value);
             });
@@ -70,6 +77,7 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(storage.remove);
+
                 expect(type).toEqual('function');
             });
             it('Check returned value for defined', function () {
@@ -77,11 +85,13 @@ define([
             });
             it('Check returned value type', function () {
                 var type = typeof(storage.remove([]));
+
                 expect(type).toEqual('object');
             });
             it('Check if called with argument "elem" ', function () {
                 var elem = ['magento'],
                     value = 'magentoValue';
+
                 storage.data[elem] = value;
                 storage.remove(elem);
                 expect(storage.data[elem]).not.toBeDefined();
@@ -93,11 +103,13 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(storage.has);
+
                 expect(type).toEqual('function');
             });
             it('Check returned value if data has element property', function () {
                 var elem = 'magento',
                     value = 'magentoValue';
+
                 storage.data[elem] = value;
                 expect(storage.has([elem])).toEqual(true);
             });
@@ -106,7 +118,4 @@ define([
             });
         });
     });
-
 });
-
-
