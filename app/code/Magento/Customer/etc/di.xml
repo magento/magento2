@@ -70,6 +70,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Resource\Address">
+        <arguments>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Model\Address\Config">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Customer\Model\Address\Config\Reader\Proxy</argument>
