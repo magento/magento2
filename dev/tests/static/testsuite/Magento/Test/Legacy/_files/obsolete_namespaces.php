@@ -82,5 +82,7 @@ return [
     ['Magento\Checkout\Service'],
     ['Magento\GiftMessage\Service'],
     ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
-    ['Magento\Framework\Test\Utility', 'Magento\Framework\App\Utility']
+    ['Magento\Framework\Test\Utility', 'Magento\Framework\App\Utility'],
+    ['Magento\Paypal\Block\Standard'],
+    ['Magento\Paypal\Controller\Standard']
 ];

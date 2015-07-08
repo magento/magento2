@@ -81,21 +81,37 @@ config;
     private $staticContext;
 
     /**
+     * @var \Magento\Framework\View\Asset\ConfigInterface
+     */
+    private $assetConfig;
+
+    /**
+     * @var \Magento\Framework\Code\Minifier\AdapterInterface
+     */
+    private $minifyAdapter;
+
+    /**
      * @param \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Filesystem $appFilesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\View\Asset\ConfigInterface $assetConfig
+     * @param \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter
      */
     public function __construct(
         \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Filesystem $appFilesystem,
-        \Magento\Framework\View\Asset\Repository $assetRepo
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\View\Asset\ConfigInterface $assetConfig,
+        \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter
     ) {
         $this->fileSource = $fileSource;
         $this->design = $design;
         $this->baseDir = $appFilesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->staticContext = $assetRepo->getStaticViewFileContext();
+        $this->assetConfig = $assetConfig;
+        $this->minifyAdapter = $minifyAdapter;
     }
 
     /**
@@ -123,6 +139,10 @@ config;
             self::FULL_CONFIG_TEMPLATE
         );
 
+        if ($this->assetConfig->isAssetMinification('js')) {
+            $fullConfig = $this->minifyAdapter->minify($fullConfig);
+        }
+
         return $fullConfig;
     }
 
@@ -133,7 +153,7 @@ config;
      */
     public function getConfigFileRelativePath()
     {
-        return self::DIR_NAME . '/' . $this->staticContext->getConfigPath() . '/' . self::CONFIG_FILE_NAME;
+        return self::DIR_NAME . '/' . $this->staticContext->getConfigPath() . '/' . $this->getConfigFileName();
     }
 
     /**
@@ -153,10 +173,46 @@ config;
      */
     public function getBaseConfig()
     {
+        $result = '';
         $config = [
             'baseUrl' => $this->staticContext->getBaseUrl() . $this->staticContext->getPath(),
         ];
         $config = json_encode($config, JSON_UNESCAPED_SLASHES);
-        return "require.config($config);";
+        if ($this->assetConfig->isAssetMinification('js')) {
+            $result .= $this->getMinificationCode();
+        }
+        $result .= "require.config($config);";
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getConfigFileName()
+    {
+        return $this->assetConfig->isAssetMinification('js') ?
+            substr(self::CONFIG_FILE_NAME, 0, -2) . 'min.js' :
+            self::CONFIG_FILE_NAME;
+
+    }
+
+    /**
+     * @return string
+     */
+    protected function getMinificationCode()
+    {
+        return <<<code
+    if (!require.s.contexts._._nameToUrl) {
+        require.s.contexts._._nameToUrl = require.s.contexts._.nameToUrl;
+        require.s.contexts._.nameToUrl = function (moduleName, ext, skipExt) {
+            if (!ext && !skipExt) {
+                ext = '.min.js';
+            }
+            return require.s.contexts._._nameToUrl.apply(require.s.contexts._, [moduleName, ext, skipExt])
+                .replace(/(\.min\.min\.js)(\?.*)*$/, '.min.js$2');
+        }
+    }
+
+code;
     }
 }
