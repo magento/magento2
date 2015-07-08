@@ -40,8 +40,8 @@ define([
             it('Check assigned value after used method', function () {
                 var elem = 'test',
                     prop = 'magento';
+                
                 registry.set(elem, prop);
-
                 expect(registry.storage.data[elem]).toEqual(prop);
             });
         });
