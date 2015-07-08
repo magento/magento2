@@ -65,17 +65,17 @@ class Document extends AbstractSimpleObject implements DocumentInterface
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
-        $isSetAttribute = false;
+        $isAlreadyAdded = false;
         /** @var \Magento\Framework\Api\AttributeInterface[] $attributes */
         $attributes = is_array($this->getCustomAttributes()) ? $this->getCustomAttributes() : [];
-        foreach ($attributes as $key => $attribute) {
+        foreach ($attributes as $attribute) {
             if ($attribute->getAttributeCode() === $attributeCode) {
                 $attribute->setValue($attributeValue);
-                $isSetAttribute = true;
+                $isAlreadyAdded = true;
                 break;
             }
         }
-        if ($isSetAttribute === false) {
+        if (!$isAlreadyAdded) {
             $attributes[] = $this->attributeValueFactory->create()
                 ->setAttributeCode($attributeCode)
                 ->setValue($attributeValue);
