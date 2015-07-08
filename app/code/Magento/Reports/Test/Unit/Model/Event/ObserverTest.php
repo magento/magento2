@@ -85,7 +85,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject $storeManager */
         $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-
         $this->storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
             ->disableOriginalConstructor()->getMock();
 
@@ -128,7 +127,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $storeId = 1;
         $expectedViewedData = [
             'product_id' => $productId,
-            'customer_id' => $customerId
+            'customer_id' => $customerId,
+            'store_id' => $storeId,
         ];
 
         $expectedEventData = [
@@ -160,7 +160,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $storeId = 1;
         $expectedViewedData = [
             'product_id' => $productId,
-            'visitor_id' => $visitorId
+            'visitor_id' => $visitorId,
+            'store_id' => $storeId,
         ];
 
         $expectedEventData = [
