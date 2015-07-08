@@ -108,7 +108,7 @@ class FileSystem
      *
      * @param string $fileId
      * @param array $params
-     * @return string|false
+     * @return string|bool
      */
     public function getTemplateFileName($fileId, array $params = [])
     {
@@ -148,8 +148,8 @@ class FileSystem
      *
      * @param string $fileId
      * @param array $params
-     * @param $module
-     * @return string|false
+     * @param string $module
+     * @return string|bool
      */
     public function getEmailTemplateFileName($fileId, array $params = [], $module)
     {
