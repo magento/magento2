@@ -7,8 +7,6 @@
  */
 namespace Magento\Customer\Model\Resource;
 
-use Magento\Framework\Exception\InputException;
-
 class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
