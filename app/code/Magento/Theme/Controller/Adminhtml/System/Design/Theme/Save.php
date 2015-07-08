@@ -73,7 +73,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $redirectBack
-            ? $this->_redirect('adminhtml/*/edit',['id' => $theme->getId()])
+            ? $this->_redirect('adminhtml/*/edit', ['id' => $theme->getId()])
             : $this->_redirect('adminhtml/*/');
     }
 }

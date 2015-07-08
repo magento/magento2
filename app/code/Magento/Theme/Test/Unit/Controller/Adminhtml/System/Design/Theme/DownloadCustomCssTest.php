@@ -8,6 +8,9 @@ namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Theme\Controller\Adminhtml\System\Design\Theme\DownloadCustomCss;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
 {
     /**
