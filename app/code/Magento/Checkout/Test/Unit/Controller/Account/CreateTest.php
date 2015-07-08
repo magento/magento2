@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Test\Unit\Controller\Cart;
+namespace Magento\Checkout\Test\Unit\Controller\Account;
 
 /**
  * Shopping cart edit tests
@@ -19,6 +19,16 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $checkoutSession;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $messageManager;
+
+    /**
+     * @var \Magento\Checkout\Controller\Account\Create
+     */
+    protected $action;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
