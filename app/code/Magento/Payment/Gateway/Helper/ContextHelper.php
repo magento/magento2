@@ -33,7 +33,7 @@ class ContextHelper
     public static function assertQuotePayment(InfoInterface $paymentInfo)
     {
         if (!$paymentInfo instanceof \Magento\Quote\Model\Quote\Payment) {
-            throw new \LogicException('Order payment should be provided.');
+            throw new \LogicException('Quote payment should be provided.');
         }
     }
 }
