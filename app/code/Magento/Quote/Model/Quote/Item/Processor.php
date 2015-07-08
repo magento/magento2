@@ -94,7 +94,7 @@ class Processor
         /**
          * We specify qty after we know about parent (for stock)
          */
-        if ($request->getResetCount()) {
+        if ($request->getResetCount() && !$candidate->getStickWithinParent() && $item->getId() == $request->getId()) {
             $item->setData(CartItemInterface::KEY_QTY, 0);
         }
         $item->addQty($candidate->getCartQty());
