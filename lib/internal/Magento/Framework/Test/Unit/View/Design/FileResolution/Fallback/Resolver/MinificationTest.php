@@ -7,6 +7,7 @@
 namespace Magento\Framework\Test\Unit\View\Design\FileResolution\Fallback\Resolver;
 
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification;
+use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 
 /**
  * Unit test for Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification
@@ -19,7 +20,7 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
     protected $minification;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resolverMock;
 
@@ -33,7 +34,8 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->resolverMock = $this->getMockBuilder('Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface')
+        $this->resolverMock = $this
+            ->getMockBuilder('Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->configMock = $this->getMockBuilder('Magento\Framework\View\Asset\ConfigInterface')
@@ -57,8 +59,14 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @dataProvider resolveDataProvider
      */
-    public function testResolve($isEnabled, $requested, $alternative, $expected, $resolvedOriginal, $resolvedAlternative)
-    {
+    public function testResolve(
+        $isEnabled,
+        $requested,
+        $alternative,
+        $expected,
+        $resolvedOriginal,
+        $resolvedAlternative
+    ) {
         $this->configMock
             ->expects($this->any())
             ->method('isAssetMinification')
