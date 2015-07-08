@@ -71,6 +71,20 @@ class GridPoolTest extends \PHPUnit_Framework_TestCase
     public function testRefreshByOrderId()
     {
         $orderId = 1;
+
+        $this->orderGridMock->expects($this->once())
+            ->method('getOrderIdField')
+            ->willReturn('sfo.entity_id');
+        $this->invoiceGridMock->expects($this->once())
+            ->method('getOrderIdField')
+            ->willReturn('sfo.entity_id');
+        $this->shipmentGridMock->expects($this->once())
+            ->method('getOrderIdField')
+            ->willReturn('sfo.entity_id');
+        $this->creditmemoGridMock->expects($this->once())
+            ->method('getOrderIdField')
+            ->willReturn('sfo.entity_id');
+
         $this->orderGridMock->expects($this->once())
             ->method('refresh')
             ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))

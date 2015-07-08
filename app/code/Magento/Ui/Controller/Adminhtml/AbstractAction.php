@@ -56,4 +56,12 @@ abstract class AbstractAction extends Action implements UiActionInterface
     {
         return $this->_request->getParam('component');
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return true;
+    }
 }

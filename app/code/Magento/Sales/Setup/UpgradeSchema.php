@@ -119,7 +119,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'sales_invoice',
                 'sales_order',
                 'sales_shipment',
-                'sales_creditmemo_grid',
                 'sales_order_grid',
             ];
             foreach ($dropIncrementIndexTables as $table) {
@@ -137,7 +136,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'sales_invoice',
                 'sales_order',
                 'sales_shipment',
-                'sales_creditmemo_grid',
                 'sales_order_grid',
             ];
             foreach ($createIncrementIndexTables as $table) {
