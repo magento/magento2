@@ -8,7 +8,7 @@ namespace Magento\Quote\Model\Resource\Quote\Item;
 /**
  * Quote item resource collection
  */
-class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Collection
 {
     /**
      * Collection quote instance
@@ -44,24 +44,35 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Quote\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
+     * @param Option\CollectionFactory $itemOptionCollectionFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Quote\Model\Quote\Config $quoteConfig
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Zend_Db_Adapter_Abstract|null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Quote\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Quote\Model\Quote\Config $quoteConfig,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $entitySnapshot,
+            $connection,
+            $resource
+        );
         $this->_itemOptionCollectionFactory = $itemOptionCollectionFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_quoteConfig = $quoteConfig;
