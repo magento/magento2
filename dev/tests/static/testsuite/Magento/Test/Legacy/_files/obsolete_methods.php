@@ -2313,4 +2313,6 @@ return [
     ['getPriceValues', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute'],
     ['savePrices', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'],
     ['loadPrices', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'],
+    ['_parseVariationPrices', '\Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
+    ['_collectSuperDataPrice', '\Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
 ];
