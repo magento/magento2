@@ -2278,6 +2278,29 @@ return [
     ['_getCentinelEciLabel', 'Magento\Paypal\Model\Info'],
     ['_getPayPalPayflowPro3dSecure', 'Magento\Config\Test\Repository\Config'],
     ['_getPayPalPaymentsPro3dSecure', 'Magento\Config\Test\Repository\Config'],
+    ['addAdditionalFieldsToResponseFrontend', 'Magento\Authorizenet\Model\Directpost\Observer'],
+    ['_getAuthorizeNet3dSecure', 'Magento\Config\Test\Repository\Config'],
+    [
+        'getRelyUrl',
+        'Magento\Authorizenet\Helper\Backend\Data',
+        'Magento\Authorizenet\Helper\Backend\Data::getRelayUrl()'
+    ],
+    [
+        'getRelyUrl',
+        'Magento\Authorizenet\Helper\Data',
+        'Magento\Authorizenet\Helper\Data::getRelayUrl()'
+    ],
+    ['setPartialAuthorizationLastActionState', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['getPartialAuthorizationLastActionState', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['unsetPartialAuthorizationLastActionState', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['cancelPartialAuthorization', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['getCardsStorage', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['isPartialAuthorization', 'Magento\Authorizenet\Model\Authorizenet'],
+    [
+        'setHelper',
+        'Magento\Authorizenet\Model\Directpost',
+        'Magento\Authorizenet\Model\Directpost::setDataHelper()'
+    ],
     ['getPriceValues', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'],
     ['getPricingValue', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue'],
     ['getIsPercent', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue'],

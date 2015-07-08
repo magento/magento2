@@ -48,22 +48,22 @@ define([
             var productName = this.variationsComponent().getProductValue('name');
             this.variationsComponent().reset();
             return _.map(variations, function (options) {
-                var variation = [], images, sku, inventory, price;
+                var variation = [], images, sku, quantity, price;
                 images = getSectionValue('images', options);
                 variation.push(images);
                 sku = _.reduce(options, function (memo, option) {
                     return productName + memo + '-' + option.label;
                 }, '');
                 variation.push(sku);
-                inventory = getSectionValue('inventory', options);
-                variation.push(inventory);
+                quantity = getSectionValue('quantity', options);
+                variation.push(quantity);
                 //attributes
                 _.each(options, function (option) {
                     variation.push(option.label);
                 });
-                price = getSectionValue('pricing', options);
+                price = getSectionValue('price', options);
                 variation.push(price);
-                this.variationsComponent().populateVariationMatrix(options, images, sku, inventory, price);
+                this.variationsComponent().populateVariationMatrix(options, images, sku, quantity, price);
                 return variation;
             }, this);
         },
@@ -71,7 +71,7 @@ define([
             this.sections(wizard.data.sections());
             this.attributes(wizard.data.attributes());
 
-            this.attributesName([$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Inventory'), $.mage.__('Price')]);
+            this.attributesName([$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'), $.mage.__('Price')]);
             this.attributes.each(function (attribute, index) {
                 this.attributesName.splice(3 + index, 0, attribute.label);
             }, this);
