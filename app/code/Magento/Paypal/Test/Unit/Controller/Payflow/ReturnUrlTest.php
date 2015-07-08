@@ -16,6 +16,11 @@ use Magento\Paypal\Helper\Checkout;
 use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class ReturnUrlTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ReturnUrlTest extends \PHPUnit_Framework_TestCase
 {
     /**
