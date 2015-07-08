@@ -394,7 +394,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field name firstname required">', $body);
+        $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
         $this->assertContains('<input type="checkbox" name="change_password" id="change-password" value="1" ' .
             'title="Change Password" class="checkbox"/>', $body);
@@ -411,7 +411,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field name firstname required">', $body);
+        $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is checked
         $this->assertContains('<input type="checkbox" name="change_password" id="change-password" value="1" ' .
             'title="Change Password" checked="checked" class="checkbox"/>', $body);
