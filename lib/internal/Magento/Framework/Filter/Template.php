@@ -359,8 +359,8 @@ class Template implements \Zend_Filter_Interface
     /**
      * Loops over a set of stack args to process variables into array argument values
      *
-     * @param $stack
-     * @return mixed
+     * @param array $stack
+     * @return array
      */
     protected function getStackArgs($stack) {
         foreach ($stack as $i => $value) {
