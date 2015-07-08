@@ -816,7 +816,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 
-        $this->assertNotNull($response['items'][0]['sku']);
-        $this->assertEquals('simple', $response['items'][0]['sku']);
+        $this->assertNotNull($response['items'][0]['id']);
+        $this->assertEquals('relevance', $response['items'][0]['custom_attributes'][0]['attribute_code']);
+        $this->assertTrue($response['items'][0]['custom_attributes'][0]['value'] > 0);
     }
 }
