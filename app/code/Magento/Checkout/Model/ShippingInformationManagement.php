@@ -109,7 +109,6 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $this->validateQuote($quote);
 
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
-        $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
         $this->addressValidator->validate($address);
         $quote->setShippingAddress($address);
@@ -119,7 +118,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
         }
-        $address->setSameAsBilling($sameAsBilling);
+
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
 
@@ -169,9 +168,12 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     }
 
     /**
+     * Validate quote
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @throws InputException
      * @throws NoSuchEntityException
+     * @return void
      */
     protected function validateQuote(\Magento\Quote\Model\Quote $quote)
     {
