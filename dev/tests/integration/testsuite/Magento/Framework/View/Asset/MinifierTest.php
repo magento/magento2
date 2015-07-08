@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Asset;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\State as AppState;
 
 /**
  * Tests for minifier
@@ -13,15 +14,31 @@ use Magento\TestFramework\Helper\Bootstrap;
 class MinifierTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\TestFramework\ObjectManager
      */
     protected $objectManager;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
+        parent::setUp();
         $this->objectManager = Bootstrap::getInstance()->getObjectManager();
-        $this->objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-        Bootstrap::getInstance()->reinitialize();
+        /** @var \Magento\TestFramework\App\State $appState */
+        $appState = $this->objectManager->get('Magento\TestFramework\App\State');
+        $appState->setMode(AppState::MODE_DEFAULT);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown()
+    {
+        /** @var \Magento\TestFramework\App\State $appState */
+        $appState = $this->objectManager->get('Magento\TestFramework\App\State');
+        $appState->setMode(AppState::MODE_DEVELOPER);
+        parent::tearDown();
     }
 
     /**
@@ -58,50 +75,23 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testCssMinification($requestedUri, $requestedFilePath, $testFile, $assertionCallback)
     {
-        /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject $appState */
-        $appState = $this->getMock('\Magento\Framework\App\State', ['getMode'], [], '', false);
-        $appState->expects($this->any())
-            ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEFAULT));
-
         /** @var \Magento\Framework\App\Request\Http $request */
         $request = $this->objectManager->get('Magento\Framework\App\Request\Http');
         $request->setRequestUri($requestedUri);
         $request->setParam('resource', $requestedUri);
 
-        $response = $this->getMockForAbstractClass(
-            'Magento\Framework\App\Response\FileInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['setFilePath']
-        );
-        $response->expects(
-            $this->any()
-        )->method(
-            'setFilePath'
-        )->will(
-            $this->returnCallback(
-                $assertionCallback
-            )
-        );
-
-        $publisher = $this->objectManager->create(
-            'Magento\Framework\App\View\Asset\Publisher',
-            [
-                'appState' => $appState
-            ]
-        );
+        $response = $this->getMockBuilder('Magento\Framework\App\Response\FileInterface')
+            ->setMethods(['setFilePath'])
+            ->getMockForAbstractClass();
+        $response
+            ->expects($this->any())
+            ->method('setFilePath')
+            ->will($this->returnCallback($assertionCallback));
 
         /** @var \Magento\Framework\App\StaticResource $staticResourceApp */
         $staticResourceApp = $this->objectManager->create(
             'Magento\Framework\App\StaticResource',
-            [
-                'response' => $response,
-                'publisher' => $publisher
-            ]
+            ['response' => $response]
         );
         $initParams = Bootstrap::getInstance()->getAppInitParams();
         $designPath = $initParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]['design']['path'];
@@ -189,7 +179,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 
         $staticPath = $initDirectories['static']['path'];
 
-        $fileToBePublished = $staticPath . '/frontend/Magento/blank/en_US/css/styles.css';
+        $fileToBePublished = $staticPath . '/frontend/Magento/blank/en_US/css/styles.min.css';
         $destFile = $designPath . '/frontend/Magento/blank/web/css/styles.css';
         $fileToTestPublishing = dirname(__DIR__) . '/_files/static/css/styles.css';
 
@@ -225,7 +215,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        /** @var \Magento\Setup\ModelDeployer $deployer */
+        /** @var \Magento\Setup\Model\Deployer $deployer */
         $deployer = $this->objectManager->create(
             'Magento\Setup\Model\Deployer',
             ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => false]
