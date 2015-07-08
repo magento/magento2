@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\TestJoinDirectives\Model;
+namespace Magento\TestModuleJoinDirectives\Model;
 
-use Magento\TestJoinDirectives\Api\TestRepositoryInterface;
+use Magento\TestModuleJoinDirectives\Api\TestRepositoryInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
