@@ -25,6 +25,7 @@ class MagentoComposerApplicationFactory
     /**
      * Constructor
      *
+     * @param ComposerJsonFinder $composerJsonFinder
      * @param DirectoryList $directoryList
      * @throws \Exception
      */
