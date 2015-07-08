@@ -4,8 +4,7 @@
  */
 define([
         'Magento_Ui/js/lib/component/links'
-    ],
-    function (links) {
+    ], function (links) {
         'use strict';
 
         describe( 'Magento_Ui/js/lib/component/links', function(){
