@@ -52,7 +52,7 @@ class State
     /**
      * Is area code being emulated
      *
-     * @var string
+     * @var bool
      */
     protected $_isAreaCodeEmulated = false;
 
@@ -168,7 +168,7 @@ class State
     /**
      * Checks whether area code is being emulated
      *
-     * @return string
+     * @return bool
      */
     public function isAreaCodeEmulated()
     {
