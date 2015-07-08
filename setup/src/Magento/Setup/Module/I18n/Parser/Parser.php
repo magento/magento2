@@ -45,7 +45,9 @@ class Parser extends AbstractParser
                 'quote' => $phraseData['quote'],
             ]);
         } catch (\DomainException $e) {
-            throw new \DomainException("{$e->getMessage()} in {$phraseData['file']}:{$phraseData['line']}", $e->getCode(), $e);
+            throw new \DomainException(
+                "{$e->getMessage()} in {$phraseData['file']}:{$phraseData['line']}", $e->getCode(), $e
+            );
         }
     }
 }
