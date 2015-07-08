@@ -58,11 +58,13 @@
                             </div>
                             <button type="button"
                                     class="action-save"
+                                    title="<?= $block->escapeHtml(__('Save Option')) ?>"
                                     data-bind="click: $parents[1].saveOption.bind($parent)">
                                 <span><?= __('Save Option') ?></span>
                             </button>
                             <button type="button"
                                     class="action-remove"
+                                    title="<?= $block->escapeHtml(__('Remove Option')) ?>"
                                     data-bind="click: $parents[1].removeOption.bind($parent)">
                                 <span><?= __('Remove Option') ?></span>
                             </button>
