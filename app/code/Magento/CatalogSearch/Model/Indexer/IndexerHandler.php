@@ -157,6 +157,9 @@ class IndexerHandler implements IndexerInterface
     private function insertDocuments(array $documents, array $dimensions)
     {
         $documents = $this->prepareSearchableFields($documents);
+        if (empty($documents)) {
+            return;
+        }
         $this->getAdapter()->insertOnDuplicate(
             $this->getTableName($dimensions),
             $documents,
