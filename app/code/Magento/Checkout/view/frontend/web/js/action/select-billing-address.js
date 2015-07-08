@@ -5,12 +5,20 @@
 /*global define*/
 define(
     [
+        'jquery',
         '../model/quote'
     ],
-    function(quote) {
+    function($, quote) {
         "use strict";
         return function(billingAddress) {
-            quote.billingAddress(billingAddress);
+            var address = null;
+            if (billingAddress.getCacheKey() == quote.shippingAddress().getCacheKey()) {
+                address = $.extend({}, billingAddress);
+                address.save_in_address_book = false;
+            } else {
+                address = billingAddress;
+            }
+            quote.billingAddress(address);
         };
     }
 );
