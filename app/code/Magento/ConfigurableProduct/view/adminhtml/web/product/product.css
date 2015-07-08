@@ -36,14 +36,11 @@
 #product-variations-matrix img.variation {
     display: block;
     position: relative;
-    border: 1px solid #b7b2a7;
-    width: 32px;
-    height: 32px;
+    border: 1px solid #d6d6d6;
+    width: 50px;
+    height: 50px;
     z-index: 2;
     background: #fff;
-}
-#product-variations-matrix .actions-image-uploader img.variation {
-    border: 0;
 }
 
 #product-variations-matrix .action-upload {
@@ -52,9 +49,9 @@
     background: #fff;
     border-radius: 0;
     padding: 0;
-    width: 31px;
-    height: 31px;
-    line-height: 31px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
     text-align: center;
     color: #9f9a91;
     overflow: hidden;
@@ -66,8 +63,8 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 31px;
-    height: 31px;
+    width: 50px;
+    height: 50px;
     background: none;
     border: 500px solid transparent;
     font-size: 10em;

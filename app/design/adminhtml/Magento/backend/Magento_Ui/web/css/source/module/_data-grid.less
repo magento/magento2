@@ -199,7 +199,8 @@
         }
         .action-menu {
             left: auto;
-            right: auto;
+            min-width: 10rem;
+            right: 0;
             top: auto;
             z-index: 1;
         }
@@ -268,6 +269,9 @@
     .data-grid-thumbnail-cell {
         width: 7rem;
         text-align: center;
+        img {
+            border: 1px solid @data-grid-td__border-color;
+        }
     }
     .data-grid-multiselect-cell {
         padding: @data-grid-th__padding-horizontal @data-grid-th__padding-vertical @data-grid-th__padding-horizontal - .1rem;
