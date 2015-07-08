@@ -14,18 +14,18 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $collection;
 
     /**
-     * @param \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler $configurableAttributeHandler
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
+     * @param \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler $configurableAttributeHandler
      * @param array $meta
      * @param array $data
      */
     public function __construct(
-        \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler $configurableAttributeHandler,
         $name,
         $primaryFieldName,
         $requestFieldName,
+        \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler $configurableAttributeHandler,
         array $meta = [],
         array $data = []
     ) {

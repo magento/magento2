@@ -101,7 +101,7 @@ class View extends \Magento\Framework\Object
     /**
      * Initialize block
      *
-     * @param $product
+     * @param \Magento\Catalog\Model\Product $product
      * @param string $location
      * @param string $module
      * @return $this

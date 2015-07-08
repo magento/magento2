@@ -59,6 +59,7 @@ class Config extends Widget implements TabInterface
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
+     * @param \Magento\Catalog\Helper\Image $image
      * @param array $data
      */
     public function __construct(
