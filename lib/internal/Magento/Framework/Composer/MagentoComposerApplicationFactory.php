@@ -27,7 +27,6 @@ class MagentoComposerApplicationFactory
      *
      * @param ComposerJsonFinder $composerJsonFinder
      * @param DirectoryList $directoryList
-     * @throws \Exception
      */
     public function __construct(ComposerJsonFinder $composerJsonFinder, DirectoryList $directoryList)
     {
