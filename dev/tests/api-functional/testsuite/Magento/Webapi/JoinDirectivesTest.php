@@ -54,8 +54,8 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $searchCriteria = $this->searchBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchCriteria];
 
-        $restResourcePath = '/V1/TestJoinDirectives/';
-        $soapService = 'testJoinDirectivesTestRepositoryV1';
+        $restResourcePath = '/V1/TestModuleJoinDirectives/';
+        $soapService = 'testModuleJoinDirectivesTestRepositoryV1';
         $expectedExtensionAttributes = $this->getExpectedExtensionAttributes();
 
         $serviceInfo = [
