@@ -109,7 +109,7 @@
 // Modals overlay
 
 .modals-overlay {
-    &:extend(.ui-widget-overlay all);
+    &:extend(.abs-modal-overlay all);
     z-index: @overlay__z-index;
 }
 
@@ -180,6 +180,9 @@
         margin-top: auto;
         padding-top: @modal-popup__padding;
         padding-bottom: @modal-popup__padding;
+    }
+    .modal-footer-actions {
+        text-align: right;
     }
 }
 
