@@ -26,6 +26,9 @@
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate"/>
             <rule type="simple/disable" event="deactivate"/>
+            <rule type="conflict" event=":load">
+                <argument name="express_checkout_other">express_checkout_other</argument>
+            </rule>
         </relation>
     </payment>
     <!-- Express Checkout -->
@@ -47,6 +50,9 @@
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate"/>
             <rule type="simple/disable" event="deactivate"/>
+            <rule type="conflict" event=":load">
+                <argument name="wps_other">wps_other</argument>
+            </rule>
         </relation>
     </payment>
 </rules>

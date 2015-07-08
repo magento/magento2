@@ -2278,6 +2278,8 @@ return [
         'Magento\Email\Block\Adminhtml\Template\Edit',
         'Magento\Email\Block\Adminhtml\Template\Edit::getCurrentlyUsedForPaths',
     ],
+    ['_implodeStreetValue', 'Magento\Customer\Model\Address\AbstractAddress', '_implodeArrayValues',],
+    ['_implodeStreetField', 'Magento\Customer\Model\Address\AbstractAddress', '_implodeArrayField',],
     ['_applyDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'applyDesignConfig'],
     ['_cancelDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'cancelDesignConfig'],
     ['loadByCode', 'Magento\Newsletter\Model\Resource'],
@@ -2298,5 +2300,28 @@ return [
         '_getConfig',
         'Magento\Store\Model\Store',
         'Magento\Store\Model\Store::getConfig',
+    ],
+    ['addAdditionalFieldsToResponseFrontend', 'Magento\Authorizenet\Model\Directpost\Observer'],
+    ['_getAuthorizeNet3dSecure', 'Magento\Config\Test\Repository\Config'],
+    [
+        'getRelyUrl',
+        'Magento\Authorizenet\Helper\Backend\Data',
+        'Magento\Authorizenet\Helper\Backend\Data::getRelayUrl()'
+    ],
+    [
+        'getRelyUrl',
+        'Magento\Authorizenet\Helper\Data',
+        'Magento\Authorizenet\Helper\Data::getRelayUrl()'
+    ],
+    ['setPartialAuthorizationLastActionState', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['getPartialAuthorizationLastActionState', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['unsetPartialAuthorizationLastActionState', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['cancelPartialAuthorization', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['getCardsStorage', 'Magento\Authorizenet\Model\Authorizenet'],
+    ['isPartialAuthorization', 'Magento\Authorizenet\Model\Authorizenet'],
+    [
+        'setHelper',
+        'Magento\Authorizenet\Model\Directpost',
+        'Magento\Authorizenet\Model\Directpost::setDataHelper()'
     ]
 ];

@@ -67,19 +67,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Shipment\Grid\Colle
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addFieldToSelect(
-            'entity_id'
-        )->addFieldToSelect(
-            'created_at'
-        )->addFieldToSelect(
-            'increment_id'
-        )->addFieldToSelect(
-            'total_qty'
-        )->addFieldToSelect(
-            'shipping_name'
-        )->setOrderFilter(
-            $this->getOrder()
-        );
+        $this->setOrderFilter($this->getOrder());
         return $this;
     }
 }
