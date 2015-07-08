@@ -98,7 +98,7 @@ class Grid extends DataGrid
      */
     public function getPurchasePointStoreGroups()
     {
-        $this->waitLoader();
+        $this->openFilterBlock();
         $storeGroupElements = $this->_rootElement->find($this->purchasePointFilter)
             ->getElements('.//optgroup[./option]', Locator::SELECTOR_XPATH);
         $result = [];
