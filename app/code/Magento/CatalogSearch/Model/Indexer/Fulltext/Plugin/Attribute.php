@@ -14,6 +14,10 @@ class Attribute extends AbstractPlugin
      */
     private $config;
 
+    /**
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Search\Request\Config $config
+     */
     public function __construct(
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Search\Request\Config $config
