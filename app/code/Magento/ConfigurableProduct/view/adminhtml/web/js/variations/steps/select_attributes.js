@@ -10,7 +10,7 @@ define([
     "use strict";
 
     var initNewAttributeListener = function (provider) {
-        $('[data-role=configurable-attributes-container]').on('add', function() {
+        $('[data-role=product-variations-generator]').on('add', function() {
             provider().reload();
         });
     };
