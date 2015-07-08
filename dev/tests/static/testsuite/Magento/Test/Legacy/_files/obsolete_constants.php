@@ -729,5 +729,7 @@ return [
         'Magento\Framework\App\ScopeInterface',
         'Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT',
     ],
-    ['METHOD_WPS', 'Magento\Paypal\Model\Config']
+    ['METHOD_WPS', 'Magento\Paypal\Model\Config'],
+    ['ERROR_INVALID_PRICE_CORRECTION', 'Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
+
 ];
