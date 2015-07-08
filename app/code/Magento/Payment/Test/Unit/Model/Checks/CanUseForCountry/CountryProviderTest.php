@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Payment\Model\Checks\CanUseForCountry;
+namespace Magento\Payment\Test\Unit\Model\Checks\CanUseForCountry;
 
 class CountryProviderTest extends \PHPUnit_Framework_TestCase
 {
