@@ -47,7 +47,7 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
     private $searchRequestConfig;
 
     /**
-     * @param Full $fullAction
+     * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param StoreManagerInterface $storeManager
      * @param DimensionFactory $dimensionFactory

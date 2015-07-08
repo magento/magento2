@@ -2263,4 +2263,5 @@ return [
         '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
     ],
     ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
+    ['prepareIndexdata', 'Magento\Search\Helper\Data'],
 ];

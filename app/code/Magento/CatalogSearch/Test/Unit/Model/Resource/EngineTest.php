@@ -52,7 +52,7 @@ class EngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider saveDataProvider
      */
-    public function testSave($storeId, $entityIndexes, $expected)
+    public function testSaveIndex($storeId, $entityIndexes, $expected)
     {
         $dimension = $this->getMockBuilder('\Magento\Framework\Search\Request\Dimension')
             ->disableOriginalConstructor()
@@ -102,6 +102,46 @@ class EngineTest extends \PHPUnit_Framework_TestCase
                         'attribute_id' => 0,
                         'data_index' => 'Some | Index | Value'
                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param null|string $expected
+     * @param array $data
+     * @dataProvider prepareEntityIndexDataProvider
+     */
+    public function testPrepareEntityIndex($expected, array $data)
+    {
+        $this->assertEquals($expected, $this->target->prepareEntityIndex($data['index'], $data['separator']));
+    }
+
+    /**
+     * @return array
+     */
+    public function prepareEntityIndexDataProvider()
+    {
+        return [
+            [
+                [],
+                [
+                    'index' => [],
+                    'separator' => '--'
+                ],
+            ],
+            [
+                ['element1','element2','element3--element4'],
+                [
+                    'index' => [
+                        'element1',
+                        'element2',
+                        [
+                            'element3',
+                            'element4',
+                        ],
+                    ],
+                    'separator' => '--'
                 ]
             ]
         ];
