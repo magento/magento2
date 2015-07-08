@@ -173,7 +173,9 @@ class Config
     {
         $states = [];
         foreach ($this->_getCollection() as $item) {
-            $states[$item->getState()] = __($item->getData('label'));
+            if ($item->getState()) {
+                $states[$item->getState()] = __($item->getData('label'));
+            }
         }
         return $states;
     }
