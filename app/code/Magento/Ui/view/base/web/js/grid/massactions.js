@@ -144,7 +144,7 @@ define([
          * @param {Object} data - Selections data.
          * @param {Object} action - Action data.
          */
-        defaultCallback: function (data, action) {
+        defaultCallback: function (action, data) {
             var selections = {};
 
             if (data.excludeMode) {
