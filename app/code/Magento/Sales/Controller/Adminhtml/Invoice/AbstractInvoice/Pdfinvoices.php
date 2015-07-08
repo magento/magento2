@@ -45,6 +45,8 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
     }
 
     /**
+     * Save collection items to pdf invoices
+     *
      * @param AbstractCollection $collection
      * @return ResponseInterface
      * @throws \Exception
