@@ -173,12 +173,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'Template from module - admin' => [
                 \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
                 'customer_create_account_email_template',
-                'To login to our site, use these credentials during checkout',
+                'To sign in to our site, use these credentials during checkout',
             ],
             'Template from module - frontend' => [
                 \Magento\Framework\App\Area::AREA_FRONTEND,
                 'customer_create_account_email_template',
-                'To login to our site, use these credentials during checkout',
+                'To sign in to our site, use these credentials during checkout',
             ],
             'Template from theme - frontend' => [
                 \Magento\Framework\App\Area::AREA_FRONTEND,
