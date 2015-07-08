@@ -5,20 +5,18 @@
 
 define([
         'Magento_Ui/js/grid/dnd'
-    ],
-    function(dnd){
+    ], function(dnd){
         'use strict';
 
         describe('Magento_Ui/js/grid/controls/grid/dnd', function(){
             var dragAndDrop,
-                fakeElement
-                ;
+                fakeElement;
 
             beforeEach(function(){
                 spyOn(document, 'addEventListener');
                 dragAndDrop = new dnd({a:'a'});
             });
-            it('has init method', function(){
+            it('Dragging changes <body> state on init', function(){
                 expect(document.addEventListener).toHaveBeenCalled();
                 expect(dragAndDrop.$body).toBeDefined();
             });

@@ -16,6 +16,7 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(registry);
+
                 expect(type).toEqual('object');
             });
         });
@@ -25,6 +26,7 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(registry.set);
+
                 expect(type).toEqual('function');
             });
             it('Check returned value', function () {
@@ -32,12 +34,14 @@ define([
             });
             it('Check returned value type', function () {
                 var type = typeof(registry.set());
+
                 expect(type).toEqual('object');
             });
             it('Check assigned value after used method', function () {
                 var elem = 'test',
                     prop = 'magento';
                 registry.set(elem, prop);
+
                 expect(registry.storage.data[elem]).toEqual(prop);
             });
         });
@@ -47,6 +51,7 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(registry.get);
+
                 expect(type).toEqual('function');
             });
             it('Check returned value if method called without arguments', function () {
@@ -54,6 +59,7 @@ define([
             });
             it('Check returned value type if method called without arguments', function () {
                 var type = registry.get() instanceof Array;
+
                 expect(type).toEqual(true);
             });
             it('Check called callback with arguments', function () {
@@ -70,6 +76,7 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(registry.remove);
+
                 expect(type).toEqual('function');
             });
             it('Check returned value if method called with arguments', function () {
@@ -77,10 +84,12 @@ define([
             });
             it('Check returned value type if method called without arguments', function () {
                 var type = typeof registry.remove('magento');
+
                 expect(type).toEqual('object');
             });
             it('Check called registry.storage.remove with arguments', function () {
                 var elems = ['magento'];
+
                 registry.storage.remove = jasmine.createSpy();
                 registry.remove(elems);
                 expect(registry.storage.remove).toHaveBeenCalledWith(elems);
@@ -92,20 +101,24 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(registry.has);
+
                 expect(type).toEqual('function');
             });
             it('Check returned value if registry.storage has property', function () {
                 var name = 'magento',
                     value = 'magentoValue';
+
                 registry.storage.data[name] = value;
                 expect(registry.has(name)).toEqual(true);
             });
             it('Check returned value if registry.storage has not property', function () {
                 var name = 'magentoNonProperty';
+
                 expect(registry.has(name)).toEqual(false);
             });
             it('Check called registry.storage.has with arguments', function () {
                 var elems = ['magento'];
+
                 registry.storage.has = jasmine.createSpy();
                 registry.has(elems);
                 expect(registry.storage.has).toHaveBeenCalledWith(elems);
@@ -117,6 +130,7 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(registry.async);
+
                 expect(type).toEqual('function');
             })
         });
@@ -126,10 +140,12 @@ define([
             });
             it('Check type', function () {
                 var type = typeof(registry.async);
+
                 expect(type).toEqual('function');
             });
             it('Check returned value type if method called without arguments', function () {
                 var type = typeof registry.remove('magento');
+
                 expect(type).toEqual('object');
             });
             it('Check registry.storage for defined', function () {
@@ -150,7 +166,4 @@ define([
             });
         });
     });
-
 });
-
-

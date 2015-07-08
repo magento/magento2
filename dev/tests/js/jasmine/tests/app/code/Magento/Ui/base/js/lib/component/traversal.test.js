@@ -19,15 +19,5 @@ define([
                 traversalObj.delegate();
                 expect(traversalObj.delegate).toHaveBeenCalled();
             });
-            it('has _delegate method', function(){
-                spyOn(traversalObj, "_delegate");
-                traversalObj._delegate();
-                expect(traversalObj._delegate).toHaveBeenCalled();
-            });
-            it('has _delegate method', function(){
-                spyOn(traversalObj, "_delegate");
-                traversalObj._delegate();
-                expect(traversalObj._delegate).toHaveBeenCalled();
-            });
         });
     });
