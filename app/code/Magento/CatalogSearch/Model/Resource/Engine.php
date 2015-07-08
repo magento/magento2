@@ -37,14 +37,7 @@ class Engine implements EngineInterface
     protected $productFactoryNames;
 
     /**
-     * Catalog search data
-     *
-     * @var \Magento\CatalogSearch\Helper\Data
-     */
-    protected $catalogSearchData;
-
-    /**
-     * @var \Magento\Search\Model\IndexScopeResolver
+     * @var \Magento\Search\Model\ScopeResolver\IndexScopeResolver
      */
     private $indexScopeResolver;
 
@@ -62,20 +55,17 @@ class Engine implements EngineInterface
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Search\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
      * @param \Magento\Framework\App\Resource $resource
      * @param string $tableName
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Search\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver,
         \Magento\Framework\App\Resource $resource,
         $tableName = 'catalogsearch_fulltext'
     ) {
         $this->catalogProductVisibility = $catalogProductVisibility;
-        $this->catalogSearchData = $catalogSearchData;
         $this->indexScopeResolver = $indexScopeResolver;
         $this->connection = $resource->getConnection(\Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE);
         $this->tableName = $resource->getTableName($tableName);
@@ -208,6 +198,7 @@ class Engine implements EngineInterface
 
     /**
      * Prepare index array as a string glued by separator
+     * Support 2 level array gluing
      *
      * @param array $index
      * @param string $separator
@@ -215,7 +206,11 @@ class Engine implements EngineInterface
      */
     public function prepareEntityIndex($index, $separator = ' ')
     {
-        return $this->catalogSearchData->prepareIndexdata($index, $separator);
+        $indexData = [];
+        foreach ($index as $attributeId => $value) {
+            $indexData[$attributeId] = is_array($value) ? implode($separator, $value) : $value;
+        }
+        return $indexData;
     }
 
     /**

@@ -25,8 +25,6 @@ class Batch
                 $batch = [];
             }
         }
-        if (count($batch) > 0) {
-            yield $batch;
-        }
+        yield $batch;
     }
 }
