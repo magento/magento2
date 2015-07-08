@@ -27,5 +27,5 @@ interface InvoiceCommentSearchResultInterface extends \Magento\Framework\Api\Sea
      * @param \Magento\Sales\Api\Data\InvoiceCommentInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }
