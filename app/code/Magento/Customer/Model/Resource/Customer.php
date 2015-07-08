@@ -32,10 +32,16 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $dateTime;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -43,12 +49,14 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $data = []
     ) {
         parent::__construct($context, $data);
         $this->_scopeConfig = $scopeConfig;
         $this->_validatorFactory = $validatorFactory;
         $this->dateTime = $dateTime;
+        $this->storeManager = $storeManager;
         $this->setType('customer');
         $this->setConnection('customer_read', 'customer_write');
     }
@@ -79,6 +87,11 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _beforeSave(\Magento\Framework\Object $customer)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
+        if ($customer->getStoreId() === null) {
+            $customer->setStoreId($this->storeManager->getStore()->getId());
+        }
+        $customer->getGroupId();
+
         parent::_beforeSave($customer);
 
         if (!$customer->getEmail()) {

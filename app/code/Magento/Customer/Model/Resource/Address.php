@@ -7,8 +7,6 @@
  */
 namespace Magento\Customer\Model\Resource;
 
-use Magento\Framework\Exception\InputException;
-
 class Address extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
@@ -17,24 +15,24 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $_validatorFactory;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerFactory;
+    protected $customerRepository;
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Framework\Validator\Factory $validatorFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
         \Magento\Framework\Validator\Factory $validatorFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         $data = []
     ) {
+        $this->customerRepository = $customerRepository;
         $this->_validatorFactory = $validatorFactory;
-        $this->_customerFactory = $customerFactory;
         parent::__construct($context, $data);
     }
 
@@ -124,14 +122,6 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     }
 
     /**
-     * @return \Magento\Customer\Model\Customer
-     */
-    protected function _createCustomer()
-    {
-        return $this->_customerFactory->create();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function delete($object)
@@ -147,14 +137,14 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _afterDelete(\Magento\Framework\Object $address)
     {
         if ($address->getId()) {
-            $customer = $this->_createCustomer()->load($address->getCustomerId());
+            $customer = $this->customerRepository->getById($address->getCustomerId());
             if ($customer->getDefaultBilling() == $address->getId()) {
                 $customer->setDefaultBilling(null);
             }
             if ($customer->getDefaultShipping() == $address->getId()) {
                 $customer->setDefaultShipping(null);
             }
-            $customer->save();
+            $this->customerRepository->save($customer);
         }
         return parent::_afterDelete($address);
     }
