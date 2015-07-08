@@ -28,6 +28,11 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
     protected $methodList;
 
     /**
+     * @var
+     */
+    protected $addressFactory;
+
+    /**
      * Constructor
      *
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
@@ -38,6 +43,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator,
         \Magento\Payment\Model\MethodList $methodList
+
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->zeroTotalValidator = $zeroTotalValidator;
@@ -69,9 +75,9 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
 
         if ($quote->isVirtual()) {
             // check if billing address is set
-            if ($quote->getBillingAddress()->getCountryId() === null) {
-                throw new InvalidTransitionException(__('Billing address is not set'));
-            }
+//            if ($quote->getBillingAddress()->getCountryId() === null) {
+//                throw new InvalidTransitionException(__('Billing address is not set'));
+//            }
             $quote->getBillingAddress()->setPaymentMethod($payment->getMethod());
         } else {
             // check if shipping address is set
