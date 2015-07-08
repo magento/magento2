@@ -29,6 +29,11 @@ define([
                 providerObj.remove();
                 expect(providerObj.remove).toHaveBeenCalled();
             });
+            it('has restore method', function(){
+                spyOn(providerObj, "restore");
+                providerObj.restore();
+                expect(providerObj.restore).toHaveBeenCalled();
+            });
             it('has removeStored method', function(){
                 spyOn(providerObj, "removeStored");
                 providerObj.removeStored();
