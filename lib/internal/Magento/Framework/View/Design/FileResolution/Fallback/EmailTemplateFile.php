@@ -14,7 +14,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 class EmailTemplateFile
 {
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple
      */
     protected $resolver;
 
@@ -37,7 +37,7 @@ class EmailTemplateFile
      * @param string $locale
      * @param string $file
      * @param string|null $module
-     * @return bool|false|string
+     * @return bool|bool|string
      */
     public function getFile($area, ThemeInterface $themeModel, $locale, $file, $module = null)
     {
