@@ -6,7 +6,7 @@
 'use strict';
 angular.module('complete-backup', ['ngStorage'])
     .constant('BACKUPCOUNTER', 1)
-    .controller('completeBackupController', ['$rootScope', '$scope', '$http', '$timeout', 'BACKUPCOUNTER', '$localStorage', function ($rootScope, $scope, $http, $timeout, BACKUPCOUNTER, $localStorage) {
+    .controller('completeBackupController', ['$rootScope', '$scope', '$http', '$timeout', 'BACKUPCOUNTER', '$localStorage', '$q', function ($rootScope, $scope, $http, $timeout, BACKUPCOUNTER, $localStorage, $q) {
         $scope.backupInfoPassed = {
             options: {
                 code: false,
@@ -163,11 +163,14 @@ angular.module('complete-backup', ['ngStorage'])
         $scope.progress = function() {
             $rootScope.hasErrors = false;
             $scope.hasErrors = false;
+            var promise = $q.all(null);
             angular.forEach($scope.items, function(item) {
                 item.show();
-            });
-            angular.forEach($scope.items, function(item) {
-                $scope.query(item);
+                promise = promise.then(function() {
+                    return $scope.query(item);
+                }, function() {
+                    return $scope.query(item);
+                });
             });
         };
 
