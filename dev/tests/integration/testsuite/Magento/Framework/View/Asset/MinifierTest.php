@@ -54,12 +54,30 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testCSSminLibrary()
     {
         /** @var \Magento\Framework\Code\Minifier\AdapterInterface $adapter */
-        $adapter = $this->objectManager->get('Magento\Framework\Code\Minifier\Adapter\Css\CSSmin');
+        $adapter = $this->objectManager->get('cssMinificationAdapter');
         $this->assertEquals(
             file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
             $adapter->minify(file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.css')),
             'Minified CSS differs from initial minified CSS snapshot. '
             . 'Ensure that new CSS is fully valid for all supported browsers '
+            . 'and replace old minified snapshot with new one.'
+        );
+    }
+
+    /**
+     * Test JS minification library
+     * 
+     * @return void
+     */
+    public function testJshrinkLibrary()
+    {
+        /** @var \Magento\Framework\Code\Minifier\AdapterInterface $adapter */
+        $adapter = $this->objectManager->get('jsMinificationAdapter');
+        $this->assertEquals(
+            file_get_contents(dirname(__DIR__) . '/_files/static/js/test.min.js'),
+            $adapter->minify(file_get_contents(dirname(__DIR__) . '/_files/static/js/test.js')),
+            'Minified JS differs from initial minified JS snapshot. '
+            . 'Ensure that new JS is fully valid for all supported browsers '
             . 'and replace old minified snapshot with new one.'
         );
     }
