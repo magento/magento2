@@ -68,17 +68,4 @@ class ConfigTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
             )->willReturn(true);
         $this->assertTrue($this->model->isAssetMinification($contentType));
     }
-
-    public function testGetAssetMinificationAdapter()
-    {
-        $contentType = 'content type';
-        $adapter = 'adapter';
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with(
-                sprintf(Config::XML_PATH_MINIFICATION_ADAPTER, $contentType),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )->willReturn($adapter);
-        $this->assertSame($adapter, $this->model->getAssetMinificationAdapter($contentType));
-    }
 }
