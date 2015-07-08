@@ -78,6 +78,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     "'invalid' is not a valid value of the atomic type 'emailTemplateFormatType'."
                 ],
             ],
+            'node "template" without attribute "area"' => [
+                '<config><template id="test" label="Test" file="test.txt" type="text" module="Module"/></config>',
+                ["Element 'template': The attribute 'area' is required but missing."],
+            ],
             'node "template" with invalid attribute "area"' => [
                 '<config><template id="test" label="Test" file="test.txt" type="text" module="Module" area="invalid"/></config>',
                 [

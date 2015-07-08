@@ -31,29 +31,21 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 
     /**
      * Email logo url
-     *
-     * @var string
      */
     const XML_PATH_DESIGN_EMAIL_LOGO = 'design/email/logo';
 
     /**
      * Email logo alt text
-     *
-     * @var string
      */
     const XML_PATH_DESIGN_EMAIL_LOGO_ALT = 'design/email/logo_alt';
 
     /**
      * Email logo width
-     *
-     * @var string
      */
     const XML_PATH_DESIGN_EMAIL_LOGO_WIDTH = 'design/email/logo_width';
 
     /**
      * Email logo height
-     *
-     * @var string
      */
     const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
 
@@ -100,8 +92,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     private $store;
 
     /**
-     * Tracks whether design has been applied within the context of this template model. Important as there are multiple
-     * entry points for the applyDesignConfig method.
+     * Tracks whether design has been applied within the context of this template model.
+     *
+     * Important as there are multiple entry points for the applyDesignConfig method.
      *
      * @var bool
      */
@@ -279,8 +272,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $templateTypeCode = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
         $this->setTemplateType($templateTypeCode);
 
-        $modulesDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $templateText = $modulesDirectory->readFile($modulesDirectory->getRelativePath($templateFile));
+        $rootDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $templateText = $rootDirectory->readFile($rootDirectory->getRelativePath($templateFile));
 
         /**
          * trim copyright message
@@ -352,7 +345,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $result = $processor->filter($this->getTemplateText());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
-            throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
+            throw new \LogicException(__($e->getMessage()), $e);
         }
         if ($isDesignApplied) {
             $this->cancelDesignConfig();

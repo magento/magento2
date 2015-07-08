@@ -30,9 +30,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Email\Model\Template\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $emailTemplateFileSystem;
+    protected $viewFileSystem;
 
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -62,8 +62,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->emailTemplateFileSystem = $this->getMock(
-            '\Magento\Email\Model\Template\FileSystem',
+        $this->viewFileSystem = $this->getMock(
+            '\Magento\Framework\View\FileSystem',
             ['getEmailTemplateFileName'],
             [],
             '',
@@ -81,8 +81,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [
                     $this->_dataStorage,
                     $this->_moduleReader,
-                    $this->emailTemplateFileSystem,
-                    $this->fileSystem
+                    $this->fileSystem,
+                    $this->viewFileSystem
                 ]
             )
             ->setMethods(['getThemeTemplates'])
@@ -123,11 +123,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $foundThemePath = 'Vendor/custom_theme';
         $module = $template['module'];
         $filename = $template['file'];
-        $emailDirectory = \Magento\Framework\App\Filesystem\DirectoryList::EMAIL;
         $themeDirectory->expects($this->once())
             ->method('search')
-            ->with("{$area}/{$searchThemePath}/{$module}/{$emailDirectory}/{$filename}")
-            ->will($this->returnValue(["{$area}/{$foundThemePath}/{$module}/{$emailDirectory}/{$filename}"]));
+            ->with("{$area}/{$searchThemePath}/{$module}/email/{$filename}")
+            ->will($this->returnValue(["{$area}/{$foundThemePath}/{$module}/email/{$filename}"]));
 
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryRead')
@@ -138,8 +137,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [
                     $this->_dataStorage,
                     $this->_moduleReader,
-                    $this->emailTemplateFileSystem,
-                    $this->fileSystem
+                    $this->fileSystem,
+                    $this->viewFileSystem
                 ]
             )
             ->setMethods(null)
@@ -218,14 +217,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTemplateFilenameWithParams()
     {
-        $this->emailTemplateFileSystem->expects(
+        $this->viewFileSystem->expects(
             $this->once()
         )->method(
             'getEmailTemplateFileName'
         )->with(
             'one.html',
-            'Fixture_ModuleOne',
-            $this->designParams
+            $this->designParams,
+            'Fixture_ModuleOne'
         )->will(
             $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
         );
@@ -239,12 +238,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTemplateFilenameWithNoParams()
     {
-        $this->emailTemplateFileSystem->expects(
+        $this->viewFileSystem->expects(
             $this->once()
         )->method(
             'getEmailTemplateFileName'
         )->with(
             'one.html',
+            [
+                'area' => $this->designParams['area'],
+                'module' => $this->designParams['module'],
+            ],
             'Fixture_ModuleOne'
         )->will(
             $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
@@ -305,8 +308,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $model = new \Magento\Email\Model\Template\Config(
             $dataStorage,
             $this->_moduleReader,
-            $this->emailTemplateFileSystem,
-            $this->fileSystem
+            $this->fileSystem,
+            $this->viewFileSystem
         );
         if (!$argument) {
             $model->{$getterMethod}('fixture');
