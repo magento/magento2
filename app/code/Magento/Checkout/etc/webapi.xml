@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+
+    <!-- Managing shipping guest information -->
+    <route url="/V1/carts/:cartId/shipping-information" method="POST">
+        <service class="Magento\Checkout\Api\GuestShippingInformationManagementInterface" method="saveAddressInformation"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <!-- Managing My shipping information -->
+    <route url="/V1/carts/mine/shipping-information" method="POST">
+        <service class="Magento\Checkout\Api\ShippingInformationManagementInterface" method="saveAddressInformation"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <!-- Guest place order with payment information saving -->
+    <route url="/V1/guest-carts/:cartId/payment-information" method="POST">
+        <service class="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <!-- My place order with payment information saving -->
+    <route url="/V1/carts/mine/payment-information" method="POST">
+        <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
+    <!-- Managing payment guest information -->
+    <route url="/V1/guest-carts/:cartId/set-payment-information" method="POST">
+        <service class="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" method="savePaymentInformation"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <!-- Managing My shipping information -->
+    <route url="/V1/carts/mine/set-payment-information" method="POST">
+        <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="savePaymentInformation"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+</routes>

@@ -274,11 +274,17 @@
         }
         .gift-content {
             border-top: @border-width__base solid @color-gray-light5;
-            margin-left: -@mobile-cart-padding;
             margin-right: -@mobile-cart-padding;
             padding-left: @mobile-cart-padding;
             padding-right: @mobile-cart-padding;
             overflow: hidden;
+        }
+    }
+
+    .gift-options-cart-item {
+        & + .action-towishlist {
+            left: 43px;
+            position: absolute;
         }
     }
 }
