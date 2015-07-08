@@ -99,9 +99,14 @@ class Full
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\EngineProvider
+     * @var \Magento\CatalogSearch\Model\Resource\Engine
      */
-    protected $engineProvider;
+    protected $engine;
+
+    /**
+     * @var \Magento\Framework\IndexerInterface
+     */
+    protected $indexHandler;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
@@ -145,7 +150,8 @@ class Full
      * @param \Magento\Framework\Search\Request\Config $searchRequestConfig
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
-     * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
+     * @param \Magento\CatalogSearch\Model\Resource\Engine $engine
+     * @param \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -163,7 +169,8 @@ class Full
         \Magento\Framework\Search\Request\Config $searchRequestConfig,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
-        \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
+        \Magento\CatalogSearch\Model\Resource\Engine $engine,
+        \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -182,7 +189,8 @@ class Full
         $this->eventManager = $eventManager;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
-        $this->engineProvider = $engineProvider;
+        $this->engine = $engine;
+        $this->indexHandler = $indexHandlerFactory->create();
         $this->dateTime = $dateTime;
         $this->localeResolver = $localeResolver;
         $this->localeDate = $localeDate;
@@ -245,11 +253,10 @@ class Full
     protected function rebuildIndex($productIds = null)
     {
         $storeIds = array_keys($this->storeManager->getStores());
-        $engine = $this->getEngineProvider();
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-            $engine->deleteIndex([$dimension], $this->getIterator($productIds));
-            $engine->saveIndex(
+            $this->indexHandler->deleteIndex([$dimension], $this->getIterator($productIds));
+            $this->indexHandler->saveIndex(
                 [$dimension],
                 $this->rebuildStoreIndex($storeId, $productIds)
             );
@@ -308,7 +315,7 @@ class Full
         $visibility = $this->getSearchableAttribute('visibility');
         $status = $this->getSearchableAttribute('status');
         $statusIds = $this->catalogProductStatus->getVisibleStatusIds();
-        $allowedVisibility = $this->getEngineProvider()->getAllowedVisibility();
+        $allowedVisibility = $this->engine->getAllowedVisibility();
 
         $lastProductId = 0;
         while (true) {
@@ -431,7 +438,7 @@ class Full
     protected function cleanIndex($storeId)
     {
         $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-        $this->getEngineProvider()->cleanIndex([$dimension]);
+        $this->indexHandler->cleanIndex([$dimension]);
     }
 
     /**
@@ -444,7 +451,7 @@ class Full
     protected function deleteIndex($storeId = null, $productIds = null)
     {
         $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-        $this->getEngineProvider()->deleteIndex([$dimension], $this->getIterator($productIds));
+        $this->indexHandler->deleteIndex([$dimension], $this->getIterator($productIds));
     }
 
     /**
@@ -476,7 +483,7 @@ class Full
 
             $this->eventManager->dispatch(
                 'catelogsearch_searchable_attributes_load_after',
-                ['engine' => $this->getEngineProvider(), 'attributes' => $attributes]
+                ['engine' => $this->engine, 'attributes' => $attributes]
             );
 
             $entity = $this->getEavConfig()->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getEntity();
@@ -722,7 +729,7 @@ class Full
             $index['options'] = $data;
         }
 
-        return $this->getEngineProvider()->prepareEntityIndex($index, $this->separator);
+        return $this->engine->prepareEntityIndex($index, $this->separator);
     }
 
     /**
@@ -736,11 +743,11 @@ class Full
     protected function getAttributeValue($attributeId, $valueId, $storeId)
     {
         $attribute = $this->getSearchableAttribute($attributeId);
-        $value = $this->getEngineProvider()->processAttributeValue($attribute, $valueId);
+        $value = $this->engine->processAttributeValue($attribute, $valueId);
 
         if ($attribute->getIsSearchable()
             && $attribute->usesSource()
-            && $this->getEngineProvider()->allowAdvancedIndex()
+            && $this->engine->allowAdvancedIndex()
         ) {
             $attribute->setStoreId($storeId);
             $valueText = $attribute->getSource()->getIndexOptionText($valueId);
@@ -802,13 +809,5 @@ class Full
         foreach ($data as $key => $value) {
             yield $key => $value;
         }
-    }
-
-    /**
-     * @return \Magento\CatalogSearch\Model\Resource\EngineInterface
-     */
-    private function getEngineProvider()
-    {
-        return $this->engineProvider->get();
     }
 }

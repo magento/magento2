@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
