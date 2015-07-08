@@ -43,11 +43,6 @@ class Emulation extends \Magento\Framework\Object
     protected $_design;
 
     /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $appState;
-
-    /**
      * @var ConfigInterface
      */
     protected $inlineConfig;
@@ -73,7 +68,6 @@ class Emulation extends \Magento\Framework\Object
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\DesignInterface $viewDesign
      * @param \Magento\Framework\App\DesignInterface $design
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\TranslateInterface $translate
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param ConfigInterface $inlineConfig
@@ -87,7 +81,6 @@ class Emulation extends \Magento\Framework\Object
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\DesignInterface $viewDesign,
         \Magento\Framework\App\DesignInterface $design,
-        \Magento\Framework\App\State $appState,
         \Magento\Framework\TranslateInterface $translate,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         ConfigInterface $inlineConfig,
@@ -101,7 +94,6 @@ class Emulation extends \Magento\Framework\Object
         $this->_storeManager = $storeManager;
         $this->_viewDesign = $viewDesign;
         $this->_design = $design;
-        $this->appState = $appState;
         $this->_translate = $translate;
         $this->_scopeConfig = $scopeConfig;
         $this->inlineConfig = $inlineConfig;
@@ -137,10 +129,6 @@ class Emulation extends \Magento\Framework\Object
 
         // emulate inline translations
         $this->inlineTranslation->suspend($this->inlineConfig->isActive($storeId));
-
-        // emulate area - it is necessary to emulate the area as the \Magento\Theme\Model\View\Design and
-        // \Magento\Theme\Model\Theme classes retrieve their area from the app state
-        $this->appState->setAreaCode($area, true);
 
         // emulate design
         $storeTheme = $this->_viewDesign->getConfigurationDesignTheme($area, ['store' => $storeId]);
@@ -182,7 +170,6 @@ class Emulation extends \Magento\Framework\Object
             return $this;
         }
 
-        $this->appState->setAreaCode($this->initialEnvironmentInfo->getInitialAreaCode(), true);
         $this->_restoreInitialInlineTranslation($this->initialEnvironmentInfo->getInitialTranslateInline());
         $initialDesign = $this->initialEnvironmentInfo->getInitialDesign();
         $this->_restoreInitialDesign($initialDesign);
@@ -202,9 +189,7 @@ class Emulation extends \Magento\Framework\Object
     public function storeCurrentEnvironmentInfo()
     {
         $this->initialEnvironmentInfo = new \Magento\Framework\Object();
-        $this->initialEnvironmentInfo->setInitialAreaCode(
-            $this->appState->getAreaCode()
-        )->setInitialTranslateInline(
+        $this->initialEnvironmentInfo->setInitialTranslateInline(
             $this->inlineTranslation->isEnabled()
         )->setInitialDesign(
             [

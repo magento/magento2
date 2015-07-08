@@ -49,6 +49,13 @@ class State
      */
     protected $_areaCode;
 
+    /**
+     * Is area code being emulated
+     *
+     * @var bool
+     */
+    protected $_isAreaCodeEmulated = false;
+
     /**#@+
      * Application modes
      */
@@ -128,13 +135,12 @@ class State
      * Set area code
      *
      * @param string $code
-     * @param bool $force
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function setAreaCode($code, $force = false)
+    public function setAreaCode($code)
     {
-        if (isset($this->_areaCode) && !$force) {
+        if (isset($this->_areaCode)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 new \Magento\Framework\Phrase('Area code is already set')
             );
@@ -160,6 +166,16 @@ class State
     }
 
     /**
+     * Checks whether area code is being emulated
+     *
+     * @return bool
+     */
+    public function isAreaCodeEmulated()
+    {
+        return $this->_isAreaCodeEmulated;
+    }
+
+    /**
      * Emulate callback inside some area code
      *
      * @param string $areaCode
@@ -172,13 +188,16 @@ class State
     {
         $currentArea = $this->_areaCode;
         $this->_areaCode = $areaCode;
+        $this->_isAreaCodeEmulated = true;
         try {
             $result = call_user_func_array($callback, $params);
         } catch (\Exception $e) {
             $this->_areaCode = $currentArea;
+            $this->_isAreaCodeEmulated = false;
             throw $e;
         }
         $this->_areaCode = $currentArea;
+        $this->_isAreaCodeEmulated = false;
         return $result;
     }
 }
