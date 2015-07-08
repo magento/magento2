@@ -28,7 +28,7 @@ define([
                         variation.options,
                         variation.images,
                         variation.sku,
-                        variation.inventory,
+                        variation.quantity,
                         variation.price,
                         variation.name,
                         variation.product_id,
@@ -72,7 +72,7 @@ define([
         showVariations: function() {
             return this.productMatrix().length > 0;
         },
-        populateVariationMatrix: function(options, images, sku, inventory, price, name, productId, status) {
+        populateVariationMatrix: function(options, images, sku, quantity, price, name, productId, status) {
             var attributes = _.reduce(options, function (memo, option) {
                 var attribute = {};
                 attribute[option.attribute_code] = option.value;
@@ -83,7 +83,7 @@ define([
                 images: images,
                 sku: sku,
                 name: name || sku,
-                inventory: inventory,
+                quantity: quantity,
                 price: price || this.getProductValue('price'),
                 options: options,
                 attribute: JSON.stringify(attributes),
