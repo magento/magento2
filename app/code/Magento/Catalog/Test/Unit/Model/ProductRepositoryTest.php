@@ -18,6 +18,7 @@ use Magento\Store\Model\ScopeInterface;
  * Class ProductRepositoryTest
  * @package Magento\Catalog\Test\Unit\Model
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -19,7 +19,7 @@ class Document extends AbstractSimpleObject implements DocumentInterface
      * @param AttributeValueFactory $attributeValueFactory
      * @param array $data
      */
-    public function __construct(AttributeValueFactory $attributeValueFactory,array $data = [])
+    public function __construct(AttributeValueFactory $attributeValueFactory, array $data = [])
     {
         parent::__construct($data);
         $this->attributeValueFactory = $attributeValueFactory;

@@ -7,7 +7,7 @@ namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\SearchResultsInterface;
 
-interface SearchResultInterface extends  SearchResultsInterface
+interface SearchResultInterface extends SearchResultsInterface
 {
     /**#@+
      * Constants defined for keys of data array
