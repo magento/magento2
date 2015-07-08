@@ -85,6 +85,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
             }
 
             if ($codeLength) {
+                $escaper = $this->_objectManager->get('Magento\Framework\Escaper');
                 if (!$itemsCount) {
                     if ($isCodeLengthValid) {
                         $coupon = $this->couponFactory->create();
@@ -94,14 +95,14 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                             $this->messageManager->addSuccess(
                                 __(
                                     'You used coupon code "%1".',
-                                    $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                                    $escaper->escapeHtml($couponCode)
                                 )
                             );
                         } else {
                             $this->messageManager->addError(
                                 __(
                                     'The coupon code "%1" is not valid.',
-                                    $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                                    $escaper->escapeHtml($couponCode)
                                 )
                             );
                         }
@@ -109,7 +110,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                         $this->messageManager->addError(
                             __(
                                 'The coupon code "%1" is not valid.',
-                                $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                                $escaper->escapeHtml($couponCode)
                             )
                         );
                     }
@@ -118,14 +119,14 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                         $this->messageManager->addSuccess(
                             __(
                                 'You used coupon code "%1".',
-                                $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                                $escaper->escapeHtml($couponCode)
                             )
                         );
                     } else {
                         $this->messageManager->addError(
                             __(
                                 'The coupon code "%1" is not valid.',
-                                $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                                $escaper->escapeHtml($couponCode)
                             )
                         );
                         $this->cart->save();
