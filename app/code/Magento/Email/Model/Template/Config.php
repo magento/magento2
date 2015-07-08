@@ -31,7 +31,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      *
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
-    private $themesDirectory;
+    protected $themesDirectory;
 
     /**
      * @var \Magento\Framework\View\FileSystem
