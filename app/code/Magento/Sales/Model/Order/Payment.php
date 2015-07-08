@@ -2785,5 +2785,28 @@ class Payment extends Info implements OrderPaymentInterface
         return (bool)$this->getData('is_fraud_detected');
     }
 
+    /**
+     * Sets whether should close parent transaction
+     *
+     * @param int|bool $flag
+     * @return $this
+     */
+    public function setShouldCloseParentTransaction($flag)
+    {
+        $this->setData('should_close_parent_transaction', (bool)$flag);
+        return $this;
+    }
+
+    /**
+     * Whether should close parent transaction
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getShouldCloseParentTransaction()
+    {
+        return (bool)$this->getData('should_close_parent_transaction');
+    }
+
     //@codeCoverageIgnoreEnd
 }
