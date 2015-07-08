@@ -111,7 +111,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn('getId value');
 
-        $configurable->expects($this->exactly(7))
+        $configurable->expects($this->exactly(6))
             ->method('getTable')
             ->will(
                 $this->returnValueMap(
@@ -121,7 +121,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                         ['eav_attribute', 'eav_attribute value'],
                         ['catalog_product_entity', 'catalog_product_entity value'],
                         ['eav_attribute_option_value', 'eav_attribute_option_value value'],
-                        ['catalog_product_super_attribute_pricing', 'catalog_product_super_attribute_pricing value'],
                         ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value']
                     ]
                 )
@@ -205,7 +204,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $select->expects($this->exactly(3))
+        $select->expects($this->exactly(2))
             ->method('joinLeft')
             ->will($this->returnSelf())
             ->withConsecutive(
@@ -216,17 +215,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                         [
                             'option_value.option_id = entity_value.value',
                             'option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                        ]
-                    ),
-                    []
-                ],
-                [
-                    ['attribute_pricing' => 'catalog_product_super_attribute_pricing value'],
-                    implode(
-                        ' AND ',
-                        [
-                            'super_attribute.product_super_attribute_id = attribute_pricing.product_super_attribute_id',
-                            'entity_value.value = attribute_pricing.value_index'
                         ]
                     ),
                     []
