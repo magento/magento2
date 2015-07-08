@@ -63,23 +63,14 @@ return [
             'order'       => 3,
         ],
         [
-            'id'          => 'root.complete-backup',
-            'url'         => 'complete-backup',
-            'templateUrl' => "{$base}/complete-backup",
-            'title'       => "Create \n Backup",
-            'header'      => 'Step 2: Create Backup',
-            'nav-bar'     => false,
-            'order'       => 4,
-        ],
-        [
-            'id'          => 'root.complete-backup.progress',
-            'url'         => 'complete-backup/progress',
+            'id'          => 'root.create-backup.progress',
+            'url'         => 'create-backup/progress',
             'templateUrl' => "{$base}/complete-backup/progress",
             'title'       => "Create \n Backup",
             'header'      => 'Step 2: Create Backup',
             'controller'  => 'completeBackupController',
             'nav-bar'     => false,
-            'order'       => 5,
+            'order'       => 4,
         ],
         [
             'id'          => 'root.component-upgrade',
@@ -89,14 +80,14 @@ return [
             'title'       => "Component \n Upgrade",
             'header'      => 'Step 3: Component Upgrade',
             'nav-bar'     => true,
-            'order'       => 6,
+            'order'       => 5,
         ],
         [
             'id'          => 'root.component-upgrade-success',
             'url'         => 'component-upgrade-success',
             'templateUrl' => "{$base}/component-upgrade-success",
             'controller'  => 'componentUpgradeSuccessController',
-            'order'       => 7,
+            'order'       => 6,
             'main'        => true
         ],
     ]
