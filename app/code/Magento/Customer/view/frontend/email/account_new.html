@@ -33,7 +33,7 @@
 </ul>
 <p>
     {{trans
-        'Forgot your Account password? Click <a href="%reset_url">here</a> to reset it.'
+        'Forgot your account password? Click <a href="%reset_url">here</a> to reset it.'
 
         reset_url="$store.getUrl('customer/account/createPassword/', [_query_id:$customer.id, _query_token:$customer.rp_token])"
     |raw}}
