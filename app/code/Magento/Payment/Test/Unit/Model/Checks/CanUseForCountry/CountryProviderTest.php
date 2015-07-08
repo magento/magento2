@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Model\Checks\CanUseForCountry;
 class CountryProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CountryProvider
+     * @var \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider
      */
     protected $model;
 
@@ -20,7 +20,7 @@ class CountryProviderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->directoryMock = $this->getMock('Magento\Directory\Helper\Data', [], [], '', false, false);
-        $this->model = new CountryProvider($this->directoryMock);
+        $this->model = new \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider($this->directoryMock);
     }
 
     public function testGetCountryForNonVirtualQuote()
