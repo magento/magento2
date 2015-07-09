@@ -38,6 +38,7 @@ app.config(function ($stateProvider) {
             };
             return $delegate;
         });
-    }).run(function ($rootScope, $state) {
+    })
+    .run(function ($rootScope, $state) {
         $rootScope.$state = $state;
     });
