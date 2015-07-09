@@ -81,28 +81,13 @@
         </div>
     </div>
 </form>
-<script>
-require([
-    "jquery",
-    "mage/mage"
-], function($){
-
-    $('#review-form').mage('validation', {
-        errorPlacement: function (error, element) {
-            if (element.parents('#product-review-table').length) {
-                $('#product-review-table').siblings(this.errorElement + '.' + this.errorClass).remove();
-                $('#product-review-table').after(error);
-            } else {
-                element.after(error);
-            }
-        }
-    });
-});
-</script>
 <script type="text/x-magento-init">
 {
     "[data-role=product-review-form]": {
         "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
+    },
+    "#review-form": {
+        "Magento_Review/js/error-placement": {}
     }
 }
 </script>
