@@ -10,6 +10,7 @@ use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -95,6 +96,7 @@ class Deployer
         $this->isDryRun = $isDryRun;
         $this->minifyService = $minifyService;
         $this->jsTranslationConfig = $jsTranslationConfig;
+        $this->parentTheme = [];
     }
 
     /**
@@ -125,8 +127,14 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
                     foreach ($appFiles as $info) {
-                        list($fileArea, , , $module, $filePath) = $info;
-                        if ($fileArea == $area || $fileArea == 'base') {
+                        list($fileArea, $fileTheme, , $module, $filePath) = $info;
+                        if (($fileArea == $area || $fileArea == 'base') &&
+                            ($fileTheme == '' || $fileTheme == $themePath ||
+                                in_array(
+                                    $fileArea . Theme::THEME_PATH_SEPARATOR . $fileTheme,
+                                    $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
+                                ))
+                        ) {
                             $this->deployFile($filePath, $area, $themePath, $locale, $module);
                         }
                     }
@@ -300,6 +308,25 @@ class Deployer
             $this->verboseLog((string)$e);
             $this->errorCount++;
         }
+    }
+
+    /**
+     * Find ancestor themes' full paths
+     *
+     * @param string $themeFullPath
+     * @return string[]
+     */
+    private function findAncestors($themeFullPath)
+    {
+        /** @var \Magento\Framework\View\Design\Theme\ListInterface $themeCollection */
+        $themeCollection = $this->objectManager->get('Magento\Framework\View\Design\Theme\ListInterface');
+        $theme = $themeCollection->getThemeByFullPath($themeFullPath);
+        $ancestors = $theme->getInheritedThemes();
+        $ancestorThemeFullPath = [];
+        foreach ($ancestors as $ancestor) {
+            $ancestorThemeFullPath[] = $ancestor->getFullPath();
+        }
+        return $ancestorThemeFullPath;
     }
 
     /**
