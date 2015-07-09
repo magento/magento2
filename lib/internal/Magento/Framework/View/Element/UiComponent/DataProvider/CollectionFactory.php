@@ -7,20 +7,29 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class CollectionPool
  */
-class CollectionPool
+class CollectionFactory
 {
     /**
      * @var AbstractCollection[]
      */
     protected $collections;
 
-    public function __construct(array $collections  = [])
-    {
+    /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    public function __construct(
+        ObjectManagerInterface $objectManagerInterface,
+        array $collections  = []
+    ) {
         $this->collections = $collections;
+        $this->objectManager = $objectManagerInterface;
     }
 
     /**
@@ -28,11 +37,11 @@ class CollectionPool
      * @return AbstractCollection
      * @throws \Exception
      */
-    public function getCollection($requestName)
+    public function getReport($requestName)
     {
         if (!isset($this->collections[$requestName])) {
-            throw new \Exception('111111');
+            throw new \Exception(sprintf('Not registered handle %s', $requestName));
         }
-        return $this->collections[$requestName];
+        return $this->objectManager->create($this->collections[$requestName]);
     }
 }

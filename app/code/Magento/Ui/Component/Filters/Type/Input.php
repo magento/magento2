@@ -75,9 +75,9 @@ class Input extends AbstractFilter
     {
         $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
         if ($value) {
-            $filter = $this->filterBuilder->setConditionType('eq')
+            $filter = $this->filterBuilder->setConditionType('like')
                 ->setField($this->getName())
-                ->setValue($value)
+                ->setValue(sprintf('%s%%', $value))
                 ->create();
             $this->getContext()->getDataProvider()->addFilter($filter);
         }
