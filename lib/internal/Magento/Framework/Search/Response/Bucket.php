@@ -5,12 +5,14 @@
  */
 namespace Magento\Framework\Search\Response;
 
+use Magento\Framework\Api\Search\AggregationValueInterface;
+use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\Search\Response\Aggregation\Value;
 
 /**
  * Facet Bucket
  */
-class Bucket
+class Bucket implements BucketInterface
 {
     /**
      * Field name
@@ -28,8 +30,7 @@ class Bucket
 
     /**
      * @param string $name
-     * @param Value[] $values
-     * @codeCoverageIgnore
+     * @param \Magento\Framework\Api\Search\AggregationValueInterface[] $values
      */
     public function __construct($name, $values)
     {
@@ -38,10 +39,7 @@ class Bucket
     }
 
     /**
-     * Get field name
-     *
-     * @return string
-     * @codeCoverageIgnore
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -49,10 +47,7 @@ class Bucket
     }
 
     /**
-     * Get field values
-     *
-     * @return Value[]
-     * @codeCoverageIgnore
+     * {@inheritdoc}
      */
     public function getValues()
     {
