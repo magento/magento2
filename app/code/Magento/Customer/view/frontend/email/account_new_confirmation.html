@@ -6,7 +6,7 @@
 -->
 <!--@subject Please confirm your {{var store.getFrontendName()}} account @-->
 <!--@vars {
-"store url=\"customer\/account\/confirm\/\" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url":"Confirmation URL",
+"var store.getUrl('customer/account/confirm/', [_query:[id:$customer.id, key:$customer.confirmation, back_url:$back_url]])":"Confirmation URL",
 "store url=\"customer\/account\/\"":"Customer Account URL",
 "var customer.email":"Customer Email",
 "var customer.name":"Customer Name",
