@@ -32,4 +32,5 @@
     </type>
     <preference for="Magento\Search\Model\AutocompleteInterface" type="Magento\Search\Model\Autocomplete" />
     <preference for="Magento\Search\Model\Autocomplete\ItemInterface" type="Magento\Search\Model\Autocomplete\Item" />
+    <preference for="Magento\Framework\Search\SearchEngineInterface" type="Magento\Search\Model\SearchEngine"/>
 </config>
