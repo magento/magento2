@@ -2323,7 +2323,7 @@ return [
         'setHelper',
         'Magento\Authorizenet\Model\Directpost',
         'Magento\Authorizenet\Model\Directpost::setDataHelper()'
-    ]
+    ],
     ['_getPayPalPaymentsPro3dSecure', 'Magento\Config\Test\Repository\Config'],
     [
         'getCreatedAtFormated',
