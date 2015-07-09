@@ -65,7 +65,7 @@ angular.module('complete-backup', ['ngStorage'])
         };
         $scope.items = {
             'backup-check': {
-                url:'index.php/complete-backup/check',
+                url:'index.php/backup-checks/check',
                 show: function() {
                     $scope.startProgress();
                     $scope.check.visible = true;
@@ -97,7 +97,7 @@ angular.module('complete-backup', ['ngStorage'])
                 }
             },
             'backup-create': {
-                url:'index.php/complete-backup/create',
+                url:'index.php/backup-checks/create',
                 show: function() {
                     $scope.startProgress();
                     $scope.create.visible = true;
@@ -145,19 +145,11 @@ angular.module('complete-backup', ['ngStorage'])
         }
 
         $scope.query = function(item) {
-            if (endsWith(item.url, '/create')) {
-                return $http.post(item.url, $scope.backupInfoPassed, {timeout: 3000000})
-                    .success(function(data) { item.process(data) })
-                    .error(function(data, status) {
-                        item.fail();
-                    });
-            } else {
-                return $http.get(item.url, {timeout: 3000000})
-                    .success(function(data) { item.process(data) })
-                    .error(function(data, status) {
-                        item.fail();
-                    });
-            }
+            return $http.post(item.url, $scope.backupInfoPassed, {timeout: 3000000})
+                .success(function(data) { item.process(data) })
+                .error(function(data, status) {
+                    item.fail();
+                });
         };
 
         $scope.progress = function() {
