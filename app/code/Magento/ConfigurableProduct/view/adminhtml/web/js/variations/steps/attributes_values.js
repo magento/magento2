@@ -35,15 +35,12 @@ define([
         }
     };
 
-    var requestAttributes = _.memoize(function (attributeIds) {
-        $.ajax({
-            type: "POST",
-            url: this.optionsUrl,
-            data: {attributes: attributeIds},
-            showLoader: true
-        }).done(function(attributes){
-            this.attributes(_.map(attributes, this.createAttribute, this));
-        }.bind(this));
+    var saveAttributes = _.memoize(function (attributes) {
+        return _.map(attributes, this.createAttribute, this);
+    }, function(attributes) {
+        return _.reduce(attributes, function (memo, attribute) {
+            return memo + attribute.id;
+        });
     });
 
     return Collapsible.extend({
@@ -131,9 +128,19 @@ define([
 
             }.bind(this));
         },
+        requestAttributes: function (attributeIds) {
+            $.ajax({
+                type: "POST",
+                url: this.optionsUrl,
+                data: {attributes: attributeIds},
+                showLoader: true
+            }).done(function(attributes){
+                this.attributes(saveAttributes.call(this, attributes));
+            }.bind(this));
+        },
         render: function(wizard) {
             this.wizard = wizard;
-            requestAttributes.call(this, wizard.data.attributesIds());
+            this.requestAttributes(wizard.data.attributesIds());
         },
         force: function(wizard) {
             this.saveOptions();
