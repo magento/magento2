@@ -529,36 +529,42 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="SalesGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
             <argument name="appliers" xsi:type="array">
                 <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
                 <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="sales_order_grid_data_source" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Grid\Collection</item>
+                <item name="sales_invoice_grid_data_source" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Invoice\Grid\Collection</item>
+                <item name="sales_shipment_grid_data_source" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Shipment\Grid\Collection</item>
+                <item name="sales_creditmemo_grid_data_source" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\\Creditmemo\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="OrderGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Grid\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
         </arguments>
     </virtualType>
     <virtualType name="InvoiceGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Invoice\Grid\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
         </arguments>
     </virtualType>
     <virtualType name="ShipmentGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Shipment\Grid\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
         </arguments>
     </virtualType>
     <virtualType name="CreditmemoGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Sales\Model\Order\Config">
