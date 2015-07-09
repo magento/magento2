@@ -171,7 +171,7 @@ class Full
         \Magento\Framework\Search\Request\Config $searchRequestConfig,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
-        \Magento\CatalogSearch\Model\Resource\Engine $engine,
+        \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
         \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -192,7 +192,7 @@ class Full
         $this->eventManager = $eventManager;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
-        $this->engine = $engine;
+        $this->engine = $engineProvider->get();
         $configData = $indexerConfig->getIndexer(Fulltext::INDEXER_ID);
         $this->indexHandler = $indexHandlerFactory->create(['data' => $configData]);
         $this->dateTime = $dateTime;
