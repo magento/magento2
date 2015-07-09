@@ -78,7 +78,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $this->assertCount(2, $option['values']);
 
 
-        foreach ($option['values'] as $key => $value) {
+        foreach ($option['values'] as $value) {
             $this->assertTrue(is_array($value));
             $this->assertNotEmpty($value);
 
