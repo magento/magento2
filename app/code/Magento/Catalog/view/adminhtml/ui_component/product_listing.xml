@@ -252,8 +252,15 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="childDefaults" xsi:type="array">
-                    <item name="actionField" xsi:type="string">actions</item>
-                    <item name="clickAction" xsi:type="string">edit</item>
+                    <item name="fieldAction" xsi:type="array">
+                        <item name="provider" xsi:type="string">product_listing.product_listing.product_columns.actions</item>
+                        <item name="target" xsi:type="string">applyAction</item>
+                        <item name="params" xsi:type="array">
+                            <item name="0" xsi:type="string">edit</item>
+                            <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                        </item>
+                    </item>
+                    <item name="controlVisibility" xsi:type="boolean">true</item>
                     <item name="appendTo" xsi:type="string">product_listing.product_listing.listing_top.columns_controls</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.bookmarks</item>
