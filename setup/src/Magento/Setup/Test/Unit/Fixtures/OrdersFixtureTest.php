@@ -52,7 +52,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
         $mockObjects = [];
 
         foreach ($mockObjectNames as $mockObjectName) {
-            $mockObject = $this->getMock($mockObjectName, [], [], '', false);
+            $mockObject = $this->getMock($mockObjectName, ['getTable'], [], '', false);
             $path = explode('\\', $mockObjectName);
             $name = array_pop($path);
             if (strcasecmp($mockObjectName, 'Magento\Sales\Model\Resource\Order') == 0) {

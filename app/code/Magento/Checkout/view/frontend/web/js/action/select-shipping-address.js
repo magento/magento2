@@ -4,11 +4,13 @@
  */
 /*global define*/
 define(
-    ['../model/quote',
-     'Magento_Checkout/js/model/shipping-rate-service'
+    [
+        '../model/quote',
+        'Magento_Checkout/js/model/shipping-rate-service',
+        'Magento_Checkout/js/action/select-billing-address'
     ],
-    function(quote, shippingRateService) {
-        "use strict";
+    function(quote, shippingRateService, selectBillingAddress) {
+        'use strict';
         quote.shippingAddress.subscribe(function () {
             shippingRateService.getRates(quote.shippingAddress())
         });
@@ -16,7 +18,7 @@ define(
             quote.shippingAddress(shippingAddress);
             //set billing address same as shipping by default if it is not empty
             if (shippingAddress.countryId != undefined && shippingAddress.canUseForBilling()) {
-                quote.billingAddress(shippingAddress);
+                selectBillingAddress(quote.shippingAddress());
             }
         };
     }
