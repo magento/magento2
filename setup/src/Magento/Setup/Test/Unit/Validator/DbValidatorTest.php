@@ -32,6 +32,11 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $random;
 
+    /**
+     * @var \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $table;
+
     protected function setUp()
     {
         $this->connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
@@ -41,14 +46,17 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator = new DbValidator($this->connectionFactory, $this->random);
     }
 
-    public function testCheckDatabaseConnection()
+    public function setUpDatabaseConnectionValid()
     {
         $this->connection
             ->expects($this->once())
             ->method('fetchOne')
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
-        $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
+        $this->random->expects($this->once())->method('getRandomString')->willReturn('new_table');
+        $this->table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
+        $this->table->expects($this->once())->method('addColumn')->willReturn($this->table);
+        $this->connection->expects($this->once())->method('newTable')->willReturn($this->table);
     }
 
     public function testCheckDatabaseTablePrefix()
@@ -91,39 +99,42 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
-    public function testCheckDatabaseWriteFailedCreateTable()
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedExceptionMessage Database user does not have write access.
+     */
+    public function testCheckDatabaseConnectionWriteFailedCreateTable()
     {
-        $this->random->expects($this->once())->method('getRandomString')->willReturn('new_table');
-        $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
-        $table->expects($this->once())->method('addColumn')->willReturn($table);
-        $this->connection->expects($this->once())->method('newTable')->willReturn($table);
+        $this->setUpDatabaseConnectionValid();
         $this->connection->expects($this->once())
             ->method('createTemporaryTable')
             ->willThrowException(new \Zend_Db_Exception());
         $this->connection->expects($this->never())->method('insert');
         $this->connection->expects($this->never())->method('fetchAll');
-        $this->assertFalse($this->dbValidator->checkDatabaseWrite('name', 'host', 'user', 'password'));
+        $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
-    public function testCheckDatabaseWriteFailedInsert()
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedExceptionMessage Database user does not have access to some write operations
+     */
+    public function testCheckDatabaseConnectionWriteFailedInsert()
     {
-        $this->random->expects($this->once())->method('getRandomString')->willReturn('new_table');
-        $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
-        $table->expects($this->once())->method('addColumn')->willReturn($table);
-        $this->connection->expects($this->once())->method('newTable')->willReturn($table);
+        $this->setUpDatabaseConnectionValid();
         $this->connection->expects($this->once())->method('createTemporaryTable');
         $this->connection->expects($this->once())->method('insert');
         $this->connection->expects($this->once())->method('fetchAll')->willReturn([]);
-        $this->assertFalse($this->dbValidator->checkDatabaseWrite('name', 'host', 'user', 'password'));
+        $this->assertFalse($this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
     }
 
-    public function testCheckDatabaseWriteFailedDelete()
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedExceptionMessage Database user does not have access to some write operations
+     */
+    public function testCheckDatabaseConnectionWriteFailedDelete()
     {
-        $this->random->expects($this->once())->method('getRandomString')->willReturn('new_table');
-        $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
-        $table->expects($this->once())->method('addColumn')->willReturn($table);
-        $this->connection->expects($this->once())->method('newTable')->willReturn($table);
-        $this->connection->expects($this->once())->method('createTemporaryTable')->willReturn($table);
+        $this->setUpDatabaseConnectionValid();
+        $this->connection->expects($this->once())->method('createTemporaryTable')->willReturn($this->table);
         $this->connection->expects($this->once())->method('insert');
         $this->connection->expects($this->once())->method('delete');
         $this->connection->expects($this->exactly(2))
@@ -134,16 +145,13 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
                     ['select * from new_table', [], null, [['testCol' => 'testing']]],
                 ]
             ));
-        $this->assertFalse($this->dbValidator->checkDatabaseWrite('name', 'host', 'user', 'password'));
+        $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
-    public function testCheckDatabaseWrite()
+    public function testCheckDatabaseConnection()
     {
-        $this->random->expects($this->once())->method('getRandomString')->willReturn('new_table');
-        $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
-        $table->expects($this->once())->method('addColumn')->willReturn($table);
-        $this->connection->expects($this->once())->method('newTable')->willReturn($table);
-        $this->connection->expects($this->once())->method('createTemporaryTable')->willReturn($table);
+        $this->setUpDatabaseConnectionValid();
+        $this->connection->expects($this->once())->method('createTemporaryTable')->willReturn($this->table);
         $this->connection->expects($this->once())->method('insert');
         $this->connection->expects($this->once())->method('delete');
         $this->connection->expects($this->exactly(2))
@@ -154,6 +162,6 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
                     ['select * from new_table', [], null, []],
                 ]
             ));
-        $this->assertTrue($this->dbValidator->checkDatabaseWrite('name', 'host', 'user', 'password'));
+        $this->assertTrue($this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
     }
 }

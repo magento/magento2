@@ -79,17 +79,6 @@ class ReadinessCheck
                 $dbInfo[ConfigOptionsListConstants::KEY_USER],
                 $dbInfo[ConfigOptionsListConstants::KEY_PASSWORD]
             );
-            $dbWritable = $this->dbValidator->checkDatabaseWrite(
-                $dbInfo[ConfigOptionsListConstants::KEY_NAME],
-                $dbInfo[ConfigOptionsListConstants::KEY_HOST],
-                $dbInfo[ConfigOptionsListConstants::KEY_USER],
-                $dbInfo[ConfigOptionsListConstants::KEY_PASSWORD]
-            );
-            if (!$dbWritable) {
-                $success = false;
-                $errorMsg .= 'Database user ' . $dbInfo[ConfigOptionsListConstants::KEY_USER] .
-                    ' does not have write access';
-            }
         } catch (\Exception $e) {
             $success = false;
             $errorMsg .= $e->getMessage();

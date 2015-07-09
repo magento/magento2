@@ -94,27 +94,21 @@ class DbValidator
                 }
             }
         }
+        if (!$this->checkDatabaseWrite($connection)) {
+            throw new \Magento\Setup\Exception('Database user does not have access to some write operations.');
+        }
         return true;
     }
 
     /**
      * Check database write permission
      *
-     * @param string $dbName
-     * @param string $dbHost
-     * @param string $dbUser
-     * @param string string $dbPass
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
+     * @throws \Magento\Setup\Exception
      */
-    public function checkDatabaseWrite($dbName, $dbHost, $dbUser, $dbPass = '')
+    private function checkDatabaseWrite(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {
-        $connection = $this->connectionFactory->create([
-            ConfigOptionsListConstants::KEY_NAME => $dbName,
-            ConfigOptionsListConstants::KEY_HOST => $dbHost,
-            ConfigOptionsListConstants::KEY_USER => $dbUser,
-            ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
-            ConfigOptionsListConstants::KEY_ACTIVE => true,
-        ]);
         $tableName = $this->random->getRandomString(10);
         $newTable = $connection->newTable($tableName)->addColumn('testCol', \Magento\Framework\DB\Ddl\Table::TYPE_TEXT);
         try {
@@ -131,7 +125,7 @@ class DbValidator
                 }
             }
         } catch (\Zend_Db_Exception $e) {
-            return false;
+            throw new \Magento\Setup\Exception('Database user does not have write access.');
         }
         return false;
     }

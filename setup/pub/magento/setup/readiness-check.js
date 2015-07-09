@@ -76,7 +76,7 @@ angular.module('readiness-check', [])
             setupNoticeMessage: '',
             updaterNoticeMessage: '',
         };
-        $scope.componentdependency = {
+        $scope.componentDependency = {
             visible: false,
             processed: false,
             expanded: false,
@@ -89,7 +89,7 @@ angular.module('readiness-check', [])
             {name: 'symfony/console', version: '2.5'}
         ];
         if ($localStorage.packages) {
-            $scope.componentdependency.packages = $localStorage.packages;
+            $scope.componentDependency.packages = $localStorage.packages;
         }
         $scope.items = {
             'php-version': {
@@ -207,22 +207,22 @@ angular.module('readiness-check', [])
             };
             $scope.items['component-dependency'] = {
                 url: 'index.php/environment/component-dependency',
-                params: $scope.componentdependency.packages,
+                params: $scope.componentDependency.packages,
                 show: function() {
                     $scope.startProgress();
-                    $scope.componentdependency.visible = true;
+                    $scope.componentDependency.visible = true;
                 },
                 process: function(data) {
-                    $scope.componentdependency.processed = true;
+                    $scope.componentDependency.processed = true;
                     if (data.errorMessage) {
                         data.errorMessage = $sce.trustAsHtml(data.errorMessage);
                     }
-                    angular.extend($scope.componentdependency, data);
-                    $scope.updateOnProcessed($scope.componentdependency.responseType);
+                    angular.extend($scope.componentDependency, data);
+                    $scope.updateOnProcessed($scope.componentDependency.responseType);
                     $scope.stopProgress();
                 },
                 fail: function() {
-                    $scope.requestFailedHandler($scope.componentdependency);
+                    $scope.requestFailedHandler($scope.componentDependency);
                 }
             };
         }
@@ -231,7 +231,7 @@ angular.module('readiness-check', [])
             return $scope.version.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed
-                && (($scope.cronScript.processed && $scope.componentdependency.processed && $scope.updater.processed)
+                && (($scope.cronScript.processed && $scope.componentDependency.processed && $scope.updater.processed)
                 || ($scope.actionFrom !== 'updater'));
         };
 

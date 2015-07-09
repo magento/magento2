@@ -81,14 +81,14 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
     public function testRunReadinessCheckNoDbWriteAccess()
     {
         $this->dbValidator->expects($this->once())
-            ->method('checkDatabaseConnection');
-        $this->dbValidator->expects($this->once())->method('checkDatabaseWrite')->willReturn(false);
+            ->method('checkDatabaseConnection')
+            ->willThrowException(new \Magento\Setup\Exception('Database user username does not have write access.'));
         $this->write->expects($this->once())->method('isExist')->willReturn(false);
         $this->write->expects($this->never())->method('readFile');
         $expected = [
             ReadinessCheck::KEY_READINESS_CHECKS => [
                 ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => false,
-                'error' => 'Database user username does not have write access'
+                'error' => 'Database user username does not have write access.'
             ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
@@ -101,9 +101,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testRunReadinessCheck()
     {
-        $this->dbValidator->expects($this->once())
-            ->method('checkDatabaseConnection');
-        $this->dbValidator->expects($this->once())->method('checkDatabaseWrite')->willReturn(true);
+        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn (true);
         $this->write->expects($this->once())->method('isExist')->willReturn(false);
         $this->write->expects($this->never())->method('readFile');
         $expected = [
@@ -119,9 +117,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testRunReadinessCheckLastTimestamp()
     {
-        $this->dbValidator->expects($this->once())
-            ->method('checkDatabaseConnection');
-        $this->dbValidator->expects($this->once())->method('checkDatabaseWrite')->willReturn(true);
+        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn (true);
         $this->write->expects($this->once())->method('isExist')->willReturn(true);
         $this->write->expects($this->once())->method('readFile')->willReturn('{"current_timestamp": 50}');
         $expected = [
