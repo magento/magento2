@@ -28,7 +28,8 @@ foreach ($prices as $price) {
 }
 
 /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
-$collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
+$collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Catalog\Model\Resource\Category\Collection');
 $collection
     ->addAttributeToFilter('level', 2)
     ->load()
