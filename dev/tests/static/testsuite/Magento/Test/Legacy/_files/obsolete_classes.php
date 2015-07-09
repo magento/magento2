@@ -3785,5 +3785,6 @@ return [
     ['Magento\GoogleShopping\Test\Unit\Model\ConfigTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\MassOperationsTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\ObserverTest'],
-    ['Magento\GoogleShopping\Test\Unit\Model\ServiceTest']
+    ['Magento\GoogleShopping\Test\Unit\Model\ServiceTest'],
+    ['Magento\Framework\View\Asset\ModuleNotation\Resolver', 'Magento\Framework\View\Asset\NotationResolver\Module']
 ];
