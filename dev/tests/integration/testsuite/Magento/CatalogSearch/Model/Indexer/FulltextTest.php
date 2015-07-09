@@ -100,8 +100,6 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
     public function testReindexAll()
     {
-        $this->engine->cleanIndex([$this->dimension]);
-
         $this->indexer->reindexAll();
 
         $products = $this->search('Apple');
