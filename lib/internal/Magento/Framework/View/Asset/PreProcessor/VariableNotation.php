@@ -11,8 +11,9 @@ use Magento\Framework\View\Asset\NotationResolver;
 use Magento\Framework\View\Url\CssResolver;
 
 /**
- * Class VariableNotation
- * @package Magento\Framework\View\Asset\PreProcessor
+ * Support of notation "{{variable}}" in CSS-files
+ *
+ * Used to replace placeholder variables (such as {{base_url_path}}) with dynamic values.
  */
 class VariableNotation implements Asset\PreProcessorInterface
 {
@@ -27,6 +28,8 @@ class VariableNotation implements Asset\PreProcessorInterface
     private $notationResolver;
 
     /**
+     * Constructor
+     *
      * @param CssResolver $cssResolver
      * @param NotationResolver\Variable $notationResolver
      */

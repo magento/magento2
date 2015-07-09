@@ -8,17 +8,10 @@
 <!--@vars {
 "var comment":"Credit Memo Comment",
 "var creditmemo.increment_id":"Credit Memo Id",
-"template config_path=\"design\/email\/footer_template\"":"Email Footer Template",
-"template config_path=\"design\/email\/header_template\"":"Email Header Template",
-"var logo_alt":"Email Logo Image Alt",
-"var logo_url":"Email Logo Image URL",
 "var billing.getName()":"Guest Customer Name",
 "var order.increment_id":"Order Id",
-"var order.getStatusLabel()":"Order Status",
-"var store.getFrontendName()":"Store Name",
-"store url=\"\"":"Store URL"
-} @-->
-
+"var order.getStatusLabel()":"Order Status"
+@-->
 {{template config_path="design/email/header_template"}}
 
 <table>
@@ -38,7 +31,8 @@
                     'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>'
 
                     store_email=$store_email
-                |raw}}{{depend store_phone}}
+                |raw}}
+                {{depend store_phone}}
                     {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}
                 {{/depend}}.
                 {{depend store_hours}}

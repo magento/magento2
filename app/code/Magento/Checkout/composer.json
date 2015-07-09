@@ -5,6 +5,7 @@
         "php": "~5.5.0|~5.6.0",
         "magento/module-store": "0.74.0-beta16",
         "magento/module-sales": "0.74.0-beta16",
+        "magento/module-backend": "0.74.0-beta16",
         "magento/module-catalog-inventory": "0.74.0-beta16",
         "magento/module-config": "0.74.0-beta16",
         "magento/module-customer": "0.74.0-beta16",
