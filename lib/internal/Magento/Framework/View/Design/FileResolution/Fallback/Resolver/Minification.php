@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
-use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\View\Asset\Minification as AssetMinification;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 use Magento\Framework\View\Design\ThemeInterface;
