@@ -38,8 +38,8 @@
             <?= $block->getChildHtml('order_totals') ?>
         </tfoot>
     </table>
-    <?php if ($block->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
-        <?php $_giftMessage = $block->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_order->getGiftMessageId()); ?>
+    <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
+        <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_order->getGiftMessageId()); ?>
         <?php if ($_giftMessage): ?>
             <br />
             <table class="message-gift">
