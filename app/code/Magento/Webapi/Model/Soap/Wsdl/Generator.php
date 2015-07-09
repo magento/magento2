@@ -167,9 +167,7 @@ class Generator
                 $wsdl->addSoapOperation($bindingOperation, $operationName, SOAP_1_2);
             }
         }
-        $dom = $wsdl->toDomDocument();
-        $dom->formatOutput = true;
-        return $dom->saveXML();
+        return $wsdl->toXML();
     }
 
     /**
