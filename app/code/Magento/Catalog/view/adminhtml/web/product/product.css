@@ -51,12 +51,6 @@
     z-index: 1;
 }
 
-.admin__scope-old .image-label {
-    visibility: hidden;
-    position: absolute;
-    z-index: 2;
-}
-
 .admin__scope-old .base-image .image-label {
     background: url(Magento_Backend::images/gallery-image-base-label.png) no-repeat;
     bottom: 0;
@@ -68,6 +62,10 @@
 
 .admin__scope-old .image.base-image .image-label:before {
     display: none;
+}
+
+.admin__scope-old .image.base-image:hover .image-label:before {
+    display: block;
 }
 
 .admin__scope-old .image.active {
@@ -87,20 +85,20 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    z-index: 1;
 }
 
 .admin__scope-old .image .actions [class^="action-"],
-.admin__scope-old .image:hover .image-label,
-.admin__scope-old .image[data-image-hidden]:hover .actions [class^="action-"],
-.admin__scope-old .image.hidden-for-front:hover .actions [class^="action-"] {
+.admin__scope-old .image .image-label,
+.admin__scope-old .image[data-image-hidden] .actions [class^="action-"],
+.admin__scope-old .image.hidden-for-front .actions [class^="action-"] {
     visibility: hidden;
 }
 
 .admin__scope-old .image:hover .actions [class^="action-"],
 .admin__scope-old .image:hover .image-label,
+.admin__scope-old .image.base-image .image-label,
 .admin__scope-old .image[data-image-hidden]:hover .actions .action-delete,
-.admin__scope-old .hidden-for-front:hover .actions .action-delete {
+.admin__scope-old .hidden-for-front:hover .actions [class^="action-"] {
     visibility: visible;
 }
 
@@ -108,7 +106,7 @@
     position: absolute;
     left: 6px;
     bottom: 6px;
-    z-index: 2;
+    z-index: 3;
 }
 
 .admin__scope-old .image .action-delete:before {
@@ -251,6 +249,18 @@
 .admin__scope-old .field-price .addon > input {
     width: 99px;
     float: left;
+}
+
+.admin__scope-old .image-panel .fieldset > .field > .label {
+    line-height: inherit;
+}
+
+.admin__scope-old .image-panel .fieldset > .field > .label span {
+    font-weight: 400;
+}
+
+.admin__scope-old .image-panel-controls .fieldset-image-panel {
+    padding: 2rem 0.5rem 0 0;
 }
 
 /* Validation for Product Fields with addons  */
