@@ -24,5 +24,5 @@ interface ProductSearchResultsInterface extends \Magento\Framework\Api\SearchRes
      * @param \Magento\Catalog\Api\Data\ProductInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }
