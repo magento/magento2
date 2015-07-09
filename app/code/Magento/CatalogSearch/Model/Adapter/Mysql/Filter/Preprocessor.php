@@ -64,11 +64,10 @@ class Preprocessor implements PreprocessorInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function process(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
     {
-        return $resultQuery = $this->processQueryWithField($filter, $isNegation, $query, $queryContainer);
+        return $this->processQueryWithField($filter, $isNegation, $query, $queryContainer);
     }
 
     /**
