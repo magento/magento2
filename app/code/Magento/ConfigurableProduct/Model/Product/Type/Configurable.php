@@ -1227,6 +1227,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Duplicate images for variations
      *
      * @param $productsData
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function duplicateImagesForVariations(&$productsData)
     {
