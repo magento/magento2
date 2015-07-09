@@ -14,7 +14,7 @@ define([
     /**
      * Removes 'current' namespace from a 'path' string.
      *
-     * @param {String} path 
+     * @param {String} path
      * @returns {String} Path without namespace.
      */
     function removeStateNs(path) {

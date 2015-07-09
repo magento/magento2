@@ -69,7 +69,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                     'setConvertingFromQuote',
                     'setItemAppliedTaxes'
                 ]
-            )->getMock();
+            )->getMockForAbstractClass();
 
         return $orderExtensionAttributeMock;
     }
