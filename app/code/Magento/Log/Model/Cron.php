@@ -7,7 +7,7 @@
 /**
  * Log Cron Model
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Log\Model;
 

@@ -6,6 +6,9 @@
  */
 namespace Magento\Contact\Test\Unit\Controller\Index;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PostTest extends \PHPUnit_Framework_TestCase
 {
     /**
