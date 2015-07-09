@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Search;
 
+use Magento\Framework\Api\Search\AggregationInterface;
+
 /**
  * Search Request
  */

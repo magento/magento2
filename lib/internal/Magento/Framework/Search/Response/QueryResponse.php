@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Response;
 
-use Magento\Framework\Search\AggregationInterface;
+use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Search\Document;
 use Magento\Framework\Search\ResponseInterface;
 
