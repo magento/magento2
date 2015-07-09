@@ -74,7 +74,7 @@
 
 </div>
 
-<div id="store-maintenance" class="rediness-check-item" ng-show="maintenance.visible">
+<div id="store-maintenance" class="rediness-check-item" ng-show="maintenance.visible && !hasErrors">
 
     <h3 class="readiness-check-title" ng-hide="maintenance.processed">
         Putting store in maintenance mode...
@@ -112,7 +112,7 @@
 
 </div>
 
-<div id="backup-create" class="rediness-check-item" ng-show="create.visible">
+<div id="backup-create" class="rediness-check-item" ng-show="create.visible && !hasErrors">
 
     <h3 class="readiness-check-title" ng-hide="create.processed">
         Creating Backup...
