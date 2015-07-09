@@ -109,6 +109,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $this->validateQuote($quote);
 
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
+        $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
         $this->addressValidator->validate($address);
         $quote->setShippingAddress($address);
@@ -120,6 +121,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         }
 
         $address->setSaveInAddressBook($saveInAddressBook);
+        $address->setSameAsBilling($sameAsBilling);
         $address->setCollectShippingRates(true);
 
         if (!$address->getCountryId()) {
