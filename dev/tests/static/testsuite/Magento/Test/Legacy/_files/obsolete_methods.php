@@ -2300,5 +2300,7 @@ return [
         'setHelper',
         'Magento\Authorizenet\Model\Directpost',
         'Magento\Authorizenet\Model\Directpost::setDataHelper()'
-    ]
+    ],
+    ['isAssetMinification', 'Magento\Framework\View\Asset\ConfigInterface', 'Magento\Framework\View\Asset\Minification::isEnabled'],
+    ['isAssetMinification', 'Magento\Framework\View\Asset\Config', 'Magento\Framework\View\Asset\Minification::isEnabled'],
 ];

@@ -24,15 +24,21 @@ class Minification
      * @var State
      */
     private $appState;
+    /**
+     * @var string
+     */
+    private $scope;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param State $appState
+     * @param string $scope
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, State $appState)
+    public function __construct(ScopeConfigInterface $scopeConfig, State $appState, $scope = 'store')
     {
         $this->scopeConfig = $scopeConfig;
         $this->appState = $appState;
+        $this->scope = $scope;
     }
 
     /**
@@ -47,7 +53,7 @@ class Minification
             $this->appState->getMode() != State::MODE_DEVELOPER &&
             (bool)$this->scopeConfig->isSetFlag(
                 sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
-                ScopeInterface::SCOPE_STORE
+                $this->scope
             );
     }
 

@@ -729,5 +729,7 @@ return [
         'Magento\Framework\App\ScopeInterface',
         'Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT',
     ],
-    ['METHOD_WPS', 'Magento\Paypal\Model\Config']
+    ['METHOD_WPS', 'Magento\Paypal\Model\Config'],
+    ['XML_PATH_MINIFICATION_ENABLED', 'Magento\Framework\View\Asset\Config', 'Magento\Framework\View\Asset\Minification::XML_PATH_MINIFICATION_ENABLED'],
+    ['XML_PATH_MINIFICATION_ADAPTER', 'Magento\Framework\View\Asset\Config'],
 ];
