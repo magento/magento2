@@ -19,32 +19,31 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
     protected $minify;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $configMock;
-
-    /**
      * @var \Magento\Framework\Code\Minifier\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $adapterMock;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $minificationMock;
 
     /**
      * {@inheritDoc}
      */
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder('Magento\Framework\View\Asset\ConfigInterface')
-            ->setMethods(['isAssetMinification'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $this->adapterMock = $this->getMockBuilder('Magento\Framework\Code\Minifier\AdapterInterface')
             ->setMethods(['minify'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->minify = new Minify(
-            $this->configMock,
-            $this->adapterMock
+            $this->adapterMock,
+            $this->minificationMock
         );
     }
 
@@ -85,10 +84,21 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
             ->with('original content')
             ->willReturn('minified content');
 
-        $this->configMock
+        $this->minificationMock
             ->expects($this->any())
-            ->method('isAssetMinification')
+            ->method('isEnabled')
             ->willReturnMap([['css', $isEnabled]]);
+
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('isMinifiedFilename')
+            ->willReturnMap(
+                [
+                    ['test.min.css', true],
+                    ['test.jpeg', false],
+                    ['test.css', false]
+                ]
+            );
 
         $this->minify->process($chainMock);
     }

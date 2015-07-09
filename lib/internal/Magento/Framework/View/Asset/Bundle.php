@@ -38,23 +38,23 @@ class Bundle
     protected $content = [];
 
     /**
-     * @var ConfigInterface
+     * @var Minification
      */
-    protected $assetConfig;
+    protected $minification;
 
     /**
      * @param Filesystem $filesystem
      * @param Bundle\ConfigInterface $bundleConfig
-     * @param ConfigInterface $assetConfig
+     * @param Minification $minification
      */
     public function __construct(
         Filesystem $filesystem,
         Bundle\ConfigInterface $bundleConfig,
-        ConfigInterface $assetConfig
+        Minification $minification
     ) {
         $this->filesystem = $filesystem;
         $this->bundleConfig = $bundleConfig;
-        $this->assetConfig = $assetConfig;
+        $this->minification = $minification;
     }
 
     /**
@@ -162,13 +162,7 @@ class Bundle
     protected function getAssetKey(LocalInterface $asset)
     {
         $result = (($asset->getModule() == '') ? '' : $asset->getModule() . '/') . $asset->getFilePath();
-        if (
-            $this->assetConfig->isAssetMinification('js') &&
-            substr($result, -3) == '.js' &&
-            substr($result, -7) != '.min.js'
-        ) {
-            $result = substr($result, 0, -2) . 'min.js';
-        }
+        $result = $this->minification->addMinifiedSign($result);
         return $result;
     }
 
@@ -246,9 +240,8 @@ class Bundle
 
         $this->content[max(0, count($this->content) - 1)] .= $this->getInitJs();
 
-        $extension = ($this->assetConfig->isAssetMinification('js') ? '.min' : '') . '.js';
         foreach ($this->content as $partIndex => $content) {
-            $dir->writeFile($bundlePath . $partIndex . $extension, $content);
+            $dir->writeFile($this->minification->addMinifiedSign($bundlePath . $partIndex . '.js'), $content);
         }
     }
 

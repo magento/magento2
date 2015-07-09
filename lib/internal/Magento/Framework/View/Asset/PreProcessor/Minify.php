@@ -6,7 +6,7 @@
 namespace Magento\Framework\View\Asset\PreProcessor;
 
 use Magento\Framework\Code\Minifier\AdapterInterface;
-use Magento\Framework\View\Asset\ConfigInterface;
+use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\PreProcessor;
 use Magento\Framework\View\Asset\PreProcessorInterface;
 
@@ -16,23 +16,23 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 class Minify implements PreProcessorInterface
 {
     /**
-     * @var ConfigInterface
-     */
-    protected $config;
-
-    /**
      * @var AdapterInterface
      */
     protected $adapter;
 
     /**
-     * @param ConfigInterface $config
-     * @param AdapterInterface $adapter
+     * @var Minification
      */
-    public function __construct(ConfigInterface $config, AdapterInterface $adapter)
+    protected $minification;
+
+    /**
+     * @param AdapterInterface $adapter
+     * @param Minification $minification
+     */
+    public function __construct(AdapterInterface $adapter, Minification $minification)
     {
-        $this->config = $config;
         $this->adapter = $adapter;
+        $this->minification = $minification;
     }
 
     /**
@@ -43,11 +43,10 @@ class Minify implements PreProcessorInterface
      */
     public function process(PreProcessor\Chain $chain)
     {
-        $extension = pathinfo($chain->getTargetAssetPath(), PATHINFO_EXTENSION);
         if (
-            $this->config->isAssetMinification($extension) &&
-            substr($chain->getOrigAssetPath(), strrpos($chain->getOrigAssetPath(), '.') - 4, 5) != '.min.' &&
-            substr($chain->getTargetAssetPath(), -5 - strlen($extension)) == '.min.' . $extension
+            $this->minification->isEnabled(pathinfo($chain->getTargetAssetPath(), PATHINFO_EXTENSION)) &&
+            $this->minification->isMinifiedFilename($chain->getTargetAssetPath()) &&
+            !$this->minification->isMinifiedFilename($chain->getOrigAssetPath())
         ) {
             $content = $this->adapter->minify($chain->getContent());
             $chain->setContent($content);

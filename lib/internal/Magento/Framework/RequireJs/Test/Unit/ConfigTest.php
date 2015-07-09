@@ -38,9 +38,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $assetConfigMock;
+    private $minificationMock;
 
     /**
      * @var \Magento\Framework\Code\Minifier\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -74,8 +74,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
         $repo->expects($this->once())->method('getStaticViewFileContext')->will($this->returnValue($this->context));
-        $this->assetConfigMock = $this->getMockBuilder('Magento\Framework\View\Asset\ConfigInterface')
-            ->getMockForAbstractClass();
+        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->minifyAdapterMock = $this->getMockBuilder('Magento\Framework\Code\Minifier\AdapterInterface')
             ->getMockForAbstractClass();
 
@@ -84,8 +85,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->design,
             $filesystem,
             $repo,
-            $this->assetConfigMock,
-            $this->minifyAdapterMock
+            $this->minifyAdapterMock,
+            $this->minificationMock
         );
     }
 
@@ -120,9 +121,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getFiles')
             ->with($theme, Config::CONFIG_FILE_NAME)
             ->will($this->returnValue([$fileOne, $fileTwo]));
-        $this->assetConfigMock
+        $this->minificationMock
             ->expects($this->atLeastOnce())
-            ->method('isAssetMinification')
+            ->method('isEnabled')
             ->with('js')
             ->willReturn(true);
 
@@ -165,6 +166,10 @@ expected;
 
     public function testGetConfigFileRelativePath()
     {
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('addMinifiedSign')
+            ->willReturnArgument(0);
         $this->context->expects($this->once())->method('getConfigPath')->will($this->returnValue('path'));
         $actual = $this->object->getConfigFileRelativePath();
         $this->assertSame('_requirejs/path/requirejs-config.js', $actual);
