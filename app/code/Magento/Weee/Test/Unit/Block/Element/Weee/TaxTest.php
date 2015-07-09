@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Weee\Test\Block\Element\Weee;
+namespace Magento\Weee\Test\Unit\Block\Element\Weee;
 
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
