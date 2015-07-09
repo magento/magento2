@@ -64,22 +64,6 @@ angular.module('complete-backup', ['ngStorage'])
             isRequestError: false
         };
         $scope.items = {
-            'store-maintenance': {
-                url:'index.php/complete-backup/maintenance',
-                show: function() {
-                    $scope.startProgress();
-                    $scope.maintenance.visible = true;
-                },
-                process: function(data) {
-                    $scope.maintenance.processed = true;
-                    angular.extend($scope.maintenance, data);
-                    $scope.updateOnProcessed($scope.maintenance.responseType);
-                    $scope.stopProgress();
-                },
-                fail: function() {
-                    $scope.requestFailedHandler($scope.maintenance);
-                }
-            },
             'backup-check': {
                 url:'index.php/complete-backup/check',
                 show: function() {
@@ -94,6 +78,22 @@ angular.module('complete-backup', ['ngStorage'])
                 },
                 fail: function() {
                     $scope.requestFailedHandler($scope.check);
+                }
+            },
+            'store-maintenance': {
+                url:'index.php/complete-backup/maintenance',
+                show: function() {
+                    $scope.startProgress();
+                    $scope.maintenance.visible = true;
+                },
+                process: function(data) {
+                    $scope.maintenance.processed = true;
+                    angular.extend($scope.maintenance, data);
+                    $scope.updateOnProcessed($scope.maintenance.responseType);
+                    $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.maintenance);
                 }
             },
             'backup-create': {
@@ -169,7 +169,7 @@ angular.module('complete-backup', ['ngStorage'])
                 promise = promise.then(function() {
                     return $scope.query(item);
                 }, function() {
-                    return $scope.query(item);
+                    return void (0);
                 });
             });
         };
