@@ -149,7 +149,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
     /**
      * Get array value for method args
      *
-     * Parses arrays demarkated via open/closing brackets. Keys/value pairs are seperated by a
+     * Parses arrays demarcated via open/closing brackets. Keys/value pairs are separated by a
      * single colon character. Multi-dimensional arrays are supported. Example input:
      *
      * [key:value, "key2":"value2", [
