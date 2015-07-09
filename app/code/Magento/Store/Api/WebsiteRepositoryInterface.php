@@ -52,6 +52,8 @@ interface WebsiteRepositoryInterface
 
     /**
      * Clear cached entities
+     *
+     * @return void
      */
     public function clean();
 }

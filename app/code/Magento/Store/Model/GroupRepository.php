@@ -80,7 +80,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     }
 
     /**
-     * Clear cached data
+     * {@inheritdoc}
      */
     public function clean()
     {

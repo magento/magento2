@@ -5,6 +5,9 @@
  */
 namespace Magento\Store\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StoreManager implements \Magento\Store\Model\StoreManagerInterface
 {
     /**
@@ -63,7 +66,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
      *
      * @var bool
      */
-    protected $isSingleStoreAllowed = true;
+    protected $isSingleStoreAllowed;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
@@ -78,6 +81,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
      * @param StoreResolverInterface $storeResolver
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookie
+     * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param bool $isSingleStoreAllowed
      */
     public function __construct(
@@ -95,11 +99,11 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
         $this->websiteRepository = $websiteRepository;
         $this->groupRepository = $groupRepository;
         $this->scopeConfig = $scopeConfig;
-        $this->isSingleStoreAllowed = $isSingleStoreAllowed;
         $this->cookie = $cookie;
         $this->request = $request;
         $this->storeResolver = $storeResolver;
         $this->cache = $cache;
+        $this->isSingleStoreAllowed = $isSingleStoreAllowed;
     }
 
     /**
