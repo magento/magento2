@@ -9,7 +9,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Store model
@@ -30,7 +29,8 @@ use Magento\Store\Model\StoreManagerInterface;
 class Store extends AbstractModel implements
     \Magento\Framework\App\ScopeInterface,
     \Magento\Framework\Url\ScopeInterface,
-    \Magento\Framework\Object\IdentityInterface
+    \Magento\Framework\Object\IdentityInterface,
+    \Magento\Store\Api\Data\StoreInterface
 {
     /**
      * Entity name

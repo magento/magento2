@@ -48,13 +48,11 @@ return [
     [
         '_checkCookieStore',
         'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_checkCookieStore',
     ],
     ['_checkGetStore', 'Magento\Core\Model\App'],
     [
         '_checkGetStore',
         'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_checkRequestStore',
     ],
     ['_checkUrlSettings', 'Magento\Backend\Controller\Adminhtml\Action'],
     ['_collectOrigData', 'Magento\Catalog\Model\Resource\AbstractResource'],
@@ -118,13 +116,11 @@ return [
     [
         '_getStoreByGroup',
         'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_getStoreByGroup',
     ],
     ['_getStoreByWebsite', 'Magento\Core\Model\App'],
     [
         '_getStoreByWebsite',
         'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_getStoreByWebsite',
     ],
     ['_getStoreTaxRequest', 'Magento\Tax\Model\Sales\Total\Quote\Shipping'],
     ['_getUploadMaxFilesize', 'Magento\Catalog\Model\Product\Option\Type\File'],
@@ -690,15 +686,6 @@ return [
     ['init', 'Magento\Webapi\Controller\Front'],
     ['initCache'],
     ['initControllerRouters', 'Magento\Cms\Controller\Router'],
-    [
-        'initCurrentStore',
-        'Magento\Store\Model\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_reinitStores',
-    ],
-    ['_checkGetStore', 'Magento\Store\Model\Storage\Db'],
-    ['_checkCookieStore', 'Magento\Store\Model\Storage\Db'],
-    ['_getStoreByGroup', 'Magento\Store\Model\Storage\Db'],
-    ['_getStoreByWebsite', 'Magento\Store\Model\Storage\Db'],
     ['initLabels', 'Magento\Catalog\Model\Resource\Eav\Attribute'],
     ['initLayoutMessages', 'Magento\Framework\App\Action\Action'],
     ['initSerializerBlock', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Ajax\Serializer'],
