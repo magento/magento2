@@ -34,9 +34,6 @@ class Deployer
     /** @var Version\StorageInterface */
     private $versionStorage;
 
-    /** @var \Magento\Framework\Stdlib\DateTime */
-    private $dateTime;
-
     /** @var \Magento\Framework\View\Asset\Repository */
     private $assetRepo;
 
@@ -75,7 +72,6 @@ class Deployer
      * @param Files $filesUtil
      * @param OutputInterface $output
      * @param Version\StorageInterface $versionStorage
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\View\Asset\MinifyService $minifyService
      * @param JsTranslationConfig $jsTranslationConfig
      * @param bool $isDryRun
@@ -84,7 +80,6 @@ class Deployer
         Files $filesUtil,
         OutputInterface $output,
         Version\StorageInterface $versionStorage,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\View\Asset\MinifyService $minifyService,
         JsTranslationConfig $jsTranslationConfig,
         $isDryRun = false
@@ -92,7 +87,6 @@ class Deployer
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
-        $this->dateTime = $dateTime;
         $this->isDryRun = $isDryRun;
         $this->minifyService = $minifyService;
         $this->jsTranslationConfig = $jsTranslationConfig;
@@ -159,7 +153,7 @@ class Deployer
         $this->count = 0;
         foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
             $this->htmlMinifier->minify($template);
-            if ($this->output->isVerbose()) {
+            if ($this->output->isVeryVerbose()) {
                 $this->output->writeln($template . " minified\n");
             } else {
                 $this->output->write('.');
@@ -272,7 +266,9 @@ class Deployer
             $logMessage .= ", module '$module'";
         }
 
-        $this->verboseLog($logMessage);
+        if ($this->output->isVeryVerbose()) {
+            $this->output->writeln($logMessage);
+        }
 
         try {
             $asset = $this->assetRepo->createAsset(
@@ -280,7 +276,7 @@ class Deployer
                 ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
             );
             $asset = $this->minifyService->getAssets([$asset], true)[0];
-            if ($this->output->isVerbose()) {
+            if ($this->output->isVeryVerbose()) {
                 $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'");
             } else {
                 $this->output->write('.');
@@ -292,20 +288,16 @@ class Deployer
                 $this->bundleManager->addAsset($asset);
             }
             $this->count++;
-        } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {
-            // File was not found by Fallback (possibly because it's wrong context for it) - there is nothing to publish
-            $this->verboseLog(
-                "\tNotice: Could not find file '$filePath'. This file may not be relevant for the theme or area."
-            );
         } catch (\Less_Exception_Compiler $e) {
             $this->verboseLog(
                 "\tNotice: Could not parse LESS file '$filePath'. "
                 . "This may indicate that the file is incomplete, but this is acceptable. "
                 . "The file '$filePath' will be combined with another LESS file."
             );
+            $this->verboseLog("\tCompiler error: " . $e->getMessage());
         } catch (\Exception $e) {
             $this->output->writeln($e->getMessage() . " ($logMessage)");
-            $this->verboseLog((string)$e);
+            $this->verboseLog($e->getTraceAsString());
             $this->errorCount++;
         }
     }
