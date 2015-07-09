@@ -27,16 +27,12 @@ foreach ($prices as $price) {
     $lastProductId++;
 }
 
-$categoryIds = [3, 4];
-foreach ($categoryIds as $categoryId) {
-    /** @var \Magento\Catalog\Model\Category $category */
-    $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
-    $category->load($categoryId);
-
-    if ($category->getId()) {
-        $category->delete();
-    }
-}
+/** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
+$collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
+$collection
+    ->addAttributeToFilter('level', 2)
+    ->load()
+    ->delete();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
