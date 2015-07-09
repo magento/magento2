@@ -20,34 +20,57 @@ class AgreementsConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfigMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $agreementsRepositoryMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->agreementsRepositoryMock = $this->getMock(
+            '\Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = $objectManager->getObject(
             'Magento\CheckoutAgreements\Model\AgreementsConfigProvider',
-            ['scopeConfiguration' => $this->scopeConfigMock]
+            [
+                'scopeConfiguration' => $this->scopeConfigMock,
+                'checkoutAgreementsRepository' => $this->agreementsRepositoryMock
+            ]
         );
     }
 
-    public function testGetConfigIfAgreementsEnabled()
+    /**
+     * @dataProvider getConfigDataProvider
+     * @param bool $isAgreementsEnabled
+     * @param array $agreements
+     * @param array $expectedResult
+     */
+    public function testGetConfig($isAgreementsEnabled, $agreements, $expectedResult)
     {
-        $expectedResult = ['checkoutAgreementsEnabled' => true];
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
-            ->willReturn(true);
+            ->willReturn($isAgreementsEnabled);
+        $this->agreementsRepositoryMock->expects($this->any())->method('getList')->willReturn($agreements);
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
 
-    public function testGetConfigIfAgreementsDisabled()
+    /**
+     * @return array
+     */
+    public function getConfigDataProvider()
     {
-        $expectedResult = [];
-        $this->scopeConfigMock->expects($this->once())
-            ->method('isSetFlag')
-            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
-            ->willReturn(false);
-        $this->assertEquals($expectedResult, $this->model->getConfig());
+        return [
+            [true, ['agreement'], ['checkoutAgreementsEnabled' => true]],
+            [true, [], []],
+            [false, [], []]
+        ];
     }
 }
