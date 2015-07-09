@@ -25,7 +25,7 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
  * 5. Perform assertions.
  *
  * @group Localization_(PS)
- * @ZephyrId MAGETWO-12427, MAGETWO-36824
+ * @ZephyrId MAGETWO-36824
  */
 class CreateCurrencyRateTest extends Injectable
 {

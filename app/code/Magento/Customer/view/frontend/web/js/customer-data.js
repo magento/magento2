@@ -8,7 +8,7 @@ define([
     'ko',
     'Magento_Customer/js/section-config',
     'jquery/jquery-storageapi',
-    'jquery/jquery-cookie'
+    'jquery/jquery.cookie'
 ], function ($, _, ko, sectionConfig) {
     'use strict';
 

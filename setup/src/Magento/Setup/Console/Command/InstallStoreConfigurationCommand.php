@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\InputOption;
@@ -178,6 +178,9 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
             switch ($key) {
                 case StoreConfigurationDataMapper::KEY_BASE_URL:
                     /** @var Validator $url */
+                    if (strcmp($value, '{{base_url}}') == 0) {
+                        break;
+                    }
                     $url = $this->objectManager->get('Magento\Framework\Url\Validator');
                     if (!$url->isValid($value)) {
                         $errorMsgs = $url->getMessages();

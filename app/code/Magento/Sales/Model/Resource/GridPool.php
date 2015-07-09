@@ -6,36 +6,22 @@
 
 namespace Magento\Sales\Model\Resource;
 
-use Magento\Sales\Model\Resource\Order\Creditmemo\Grid as CreditmemoGrid;
-use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
-use Magento\Sales\Model\Resource\Order\Invoice\Grid as InvoiceGrid;
-use Magento\Sales\Model\Resource\Order\Shipment\Grid as ShipmentGrid;
-
+/**
+ * Class GridPool
+ */
 class GridPool
 {
     /**
-     * @var GridInterface[]
+     * @var \Magento\Sales\Model\Resource\Grid[]
      */
     protected $grids;
 
     /**
-     * @param OrderGrid $orderGrid
-     * @param InvoiceGrid $invoiceGrid
-     * @param ShipmentGrid $shipmentGrid
-     * @param CreditmemoGrid $creditmemoGrid
+     * @param array $grids
      */
-    public function __construct(
-        OrderGrid $orderGrid,
-        InvoiceGrid $invoiceGrid,
-        ShipmentGrid $shipmentGrid,
-        CreditmemoGrid $creditmemoGrid
-    ) {
-        $this->grids = [
-            'order_grid' => $orderGrid,
-            'invoice_grid' => $invoiceGrid,
-            'shipment_grid' => $shipmentGrid,
-            'creditmemo_grid' => $creditmemoGrid,
-        ];
+    public function __construct(array $grids)
+    {
+        $this->grids = $grids;
     }
 
     /**
@@ -47,8 +33,9 @@ class GridPool
     public function refreshByOrderId($orderId)
     {
         foreach ($this->grids as $grid) {
-            $grid->refresh($orderId, 'sfo.entity_id');
+            $grid->refresh($orderId, $grid->getOrderIdField());
         }
+
         return $this;
     }
 }

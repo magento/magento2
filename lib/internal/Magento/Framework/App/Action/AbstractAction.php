@@ -60,15 +60,4 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
     {
         return $this->_response;
     }
-
-    /**
-     * Create redirect object, which can be used to redirect user to previous or main page
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setRefererOrBaseUrl();
-    }
 }

@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action;
 
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Backend\Test\Block\Widget\Form;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
@@ -25,6 +25,7 @@ class Attribute extends Form
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         $data = $fixture->getData();
+        $fields = [];
         foreach ($data as $name => $dataValue) {
             $fields['toggle_' . $name] = 'Yes';
             $fields[$name] = $dataValue;

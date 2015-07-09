@@ -89,7 +89,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                                   reference_field="customer_id"
                                   join_on_field="id"
                             >
-                                <select_field>library_card_id</select_field>
+                                <field>library_card_id</field>
                             </join>
                         </attribute>
                     </extension_attributes>
@@ -107,7 +107,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                                   reference_field="customer_id"
                                   join_on_field="id"
                             >
-                                <select_field>library_card_id</select_field>
+                                <field>library_card_id</field>
                             </join>
                         </attribute>
                     </extension_attributes>
@@ -142,7 +142,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     "Element 'join': The attribute 'reference_table' is required but missing.",
                     "Element 'join': The attribute 'join_on_field' is required but missing.",
                     "Element 'join': The attribute 'reference_field' is required but missing.",
-                    "Element 'join': Missing child element(s). Expected is ( select_field ).",
+                    "Element 'join': Missing child element(s). Expected is ( field ).",
                 ],
             ],
         ];

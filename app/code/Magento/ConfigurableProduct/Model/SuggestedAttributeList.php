@@ -15,14 +15,12 @@ class SuggestedAttributeList
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
      */
     protected $_attributeColFactory;
-
     /**
      * Catalog resource helper
      *
      * @var \Magento\Catalog\Model\Resource\Helper
      */
     protected $_resourceHelper;
-
     /**
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
@@ -34,7 +32,6 @@ class SuggestedAttributeList
         $this->_attributeColFactory = $attributeColFactory;
         $this->_resourceHelper = $resourceHelper;
     }
-
     /**
      * Retrieve list of attributes with admin store label containing $labelPart
      *
@@ -59,7 +56,6 @@ class SuggestedAttributeList
             'is_global',
             \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL
         );
-
         $result = [];
         $types = [
             \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,

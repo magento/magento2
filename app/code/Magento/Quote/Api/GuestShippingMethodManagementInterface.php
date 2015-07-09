@@ -45,4 +45,13 @@ interface GuestShippingMethodManagementInterface
      * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
      */
     public function getList($cartId);
+
+    /**
+     * Estimate shipping
+     *
+     * @param string $cartId The shopping cart ID.
+     * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address The estimate address
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
+     */
+    public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address);
 }

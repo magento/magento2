@@ -5,8 +5,6 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
-
 /**
  * Class Form
  */
