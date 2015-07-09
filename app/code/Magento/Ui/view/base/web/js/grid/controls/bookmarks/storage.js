@@ -39,19 +39,17 @@ define([
          */
         set: function (path, value) {
             var property = removeNs(this.namespace, path),
+                data = {},
                 config;
 
-            config = {
-                data: {
-                    data: {}
-                }
-            };
-
-            utils.nested(config.data.data, property, value);
+            utils.nested(data, property, value);
 
             config = utils.extend({
-                url: this.saveUrl
-            }, this.ajaxSettings, config);
+                url: this.saveUrl,
+                data: {
+                    data: JSON.stringify(data)
+                }
+            }, this.ajaxSettings);
 
             $.ajax(config);
         },
@@ -65,15 +63,12 @@ define([
             var property = removeNs(this.namespace, path),
                 config;
 
-            config = {
+            config = utils.extend({
+                url: this.deleteUrl,
                 data: {
                     data: property
                 }
-            };
-
-            config = utils.extend({
-                url: this.deleteUrl
-            }, this.ajaxSettings, config);
+            }, this.ajaxSettings);
 
             $.ajax(config);
         }
