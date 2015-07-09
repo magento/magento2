@@ -107,7 +107,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertEquals(0, $quoteCount);
         $this->assertSessionMessages(
-            $this->contains('You can buy this product only in increments of 5 for "Simple Product".'),
+            $this->contains('You can buy this product only in quantities of 5 at a time for "Simple Product".'),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

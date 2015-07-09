@@ -2338,4 +2338,5 @@ return [
     ['getChilds', 'Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer', 'getChildren'],
     ['getChilds', 'Magento\Bundle\Block\Sales\Order\Items\Renderer', 'getChildren'],
     ['getChilds', 'Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems', 'getChildren'],
+    ['prepareIndexdata', 'Magento\Search\Helper\Data'],
 ];
