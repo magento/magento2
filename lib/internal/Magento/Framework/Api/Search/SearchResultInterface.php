@@ -32,12 +32,12 @@ interface SearchResultInterface extends SearchResultsInterface
     public function setItems(array $items = null);
 
     /**
-     * @return \Magento\Framework\Search\AggregationInterface
+     * @return \Magento\Framework\Api\Search\AggregationInterface
      */
     public function getAggregations();
 
     /**
-     * @param \Magento\Framework\Search\AggregationInterface $aggregations
+     * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return $this
      */
     public function setAggregations($aggregations);

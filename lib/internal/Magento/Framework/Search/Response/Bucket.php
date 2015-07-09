@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Search\Response;
 
-use Magento\Framework\Search\AggregationValueInterface;
-use Magento\Framework\Search\BucketInterface;
+use Magento\Framework\Api\Search\AggregationValueInterface;
+use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\Search\Response\Aggregation\Value;
 
 /**
@@ -30,7 +30,7 @@ class Bucket implements BucketInterface
 
     /**
      * @param string $name
-     * @param AggregationValueInterface[] $values
+     * @param \Magento\Framework\Api\Search\AggregationValueInterface[] $values
      */
     public function __construct($name, $values)
     {

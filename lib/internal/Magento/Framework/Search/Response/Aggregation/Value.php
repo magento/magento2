@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Response\Aggregation;
 
-use Magento\Framework\Search\AggregationValueInterface;
+use Magento\Framework\Api\Search\AggregationValueInterface;
 
 class Value implements AggregationValueInterface
 {

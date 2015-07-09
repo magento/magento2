@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Search\Response;
 
-use Magento\Framework\Search\AggregationInterface;
-use Magento\Framework\Search\BucketInterface;
+use Magento\Framework\Api\Search\AggregationInterface;
+use Magento\Framework\Api\Search\BucketInterface;
 
 /**
  * Faceted data
