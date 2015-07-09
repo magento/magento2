@@ -253,13 +253,14 @@ class SearchDataProvider implements DataProviderInterface
      */
     public function getData()
     {
-        $data = [];
-        $searchResult = $this->reporting->search($searchCriteria);
-        $documents = $searchResult->getItems();
-        foreach ($documents as $document) {
-            $data[] = $document->getCustomAttribures();
-        }
+//        $data = [];
+//        $searchResult = $this->reporting->search($searchCriteria);
+//        $documents = $searchResult->getItems();
+//        foreach ($documents as $document) {
+//            $data[] = $document->getCustomAttribures();
+//        }
         //$this->filterPool->applyFilters($this->collection);
+        $this->filterGroupBuilder->create();
         return $this->collection->toArray();
     }
 
