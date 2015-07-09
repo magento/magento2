@@ -28,11 +28,6 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
     protected $methodList;
 
     /**
-     * @var
-     */
-    protected $addressFactory;
-
-    /**
      * Constructor
      *
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
@@ -74,10 +69,6 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
         $payment->importData($data);
 
         if ($quote->isVirtual()) {
-            // check if billing address is set
-//            if ($quote->getBillingAddress()->getCountryId() === null) {
-//                throw new InvalidTransitionException(__('Billing address is not set'));
-//            }
             $quote->getBillingAddress()->setPaymentMethod($payment->getMethod());
         } else {
             // check if shipping address is set
