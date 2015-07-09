@@ -8,6 +8,7 @@
 //  _____________________________________________
 
 @checkout-shipping-address__max-width: 500px;
+@checkout-shipping-address__margin-top: 28px;
 
 @checkout-shipping-item-icon__background-color: @checkout-shipping-item__active__border-color;
 @checkout-shipping-item-icon__color: @color-white;
@@ -50,7 +51,8 @@
 
         .form-login,
         .form-shipping-address {
-            .css(margin-bottom, @checkout-step-title__margin-bottom);
+            .css(margin-top, @checkout-shipping-address__margin-top);
+            .css(margin-bottom, @checkout-shipping-address__margin-top);
             .fieldset {
                 .field {
                     .label {
@@ -292,7 +294,7 @@
 
         .form-login {
             .css(border-bottom, @checkout-step-title__border);
-            .css(padding-bottom, @checkout-step-title__margin-bottom);
+            padding-bottom: @indent__base;
         }
     }
     .table-checkout-shipping-method {
