@@ -276,6 +276,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             /** @var \Magento\Framework\Search\Document $document */
             $actualIds[] = $document->getId();
         }
+        sort($actualIds);
         $this->assertEquals($expectedIds, $actualIds);
     }
 

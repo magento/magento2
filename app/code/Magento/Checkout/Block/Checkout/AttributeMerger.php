@@ -125,6 +125,9 @@ class AttributeMerger
                 'elementTmpl' => isset($additionalConfig['config']['elementTmpl'])
                     ? $additionalConfig['config']['elementTmpl']
                     : $elementTemplate,
+                'tooltip' => isset($additionalConfig['config']['tooltip'])
+                    ? $additionalConfig['config']['tooltip']
+                    : null
             ],
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'label' => $attributeConfig['label'],
@@ -141,7 +144,7 @@ class AttributeMerger
 
         $defaultValue = $this->getDefaultValue($attributeCode);
         if (null !== $defaultValue) {
-            $element['default'] = $defaultValue;
+            $element['value'] = $defaultValue;
         }
         return $element;
     }

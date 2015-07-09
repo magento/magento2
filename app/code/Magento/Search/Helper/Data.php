@@ -236,7 +236,7 @@ class Data extends AbstractHelper
         if ($this->_queryFactory->get()->isQueryTextExceeded()) {
             $this->addNoteMessage(
                 __(
-                    'Your search query can\'t be longer than %1, so we had to shorten your query.',
+                    'Your search query can\'t be longer than %1, so we shortened your query.',
                     $this->getMaxQueryLength()
                 )
             );

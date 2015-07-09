@@ -32,7 +32,7 @@ class AssertTierPriceOnBundleProductPage extends AssertProductTierPriceOnProduct
      *
      * @var int
      */
-    protected $priceFormat = 4;
+    protected $priceFormat = 0;
 
     /**
      * Assertion that tier prices are displayed correctly

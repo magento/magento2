@@ -14,26 +14,6 @@ class Notification extends \Magento\Backend\App\AbstractAction
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'markAsRead':
-                $acl = 'Magento_AdminNotification::mark_as_read';
-                break;
-
-            case 'massMarkAsRead':
-                $acl = 'Magento_AdminNotification::mark_as_read';
-                break;
-
-            case 'remove':
-                $acl = 'Magento_AdminNotification::adminnotification_remove';
-                break;
-
-            case 'massRemove':
-                $acl = 'Magento_AdminNotification::adminnotification_remove';
-                break;
-
-            default:
-                $acl = 'Magento_AdminNotification::show_list';
-        }
-        return $this->_authorization->isAllowed($acl);
+        return $this->_authorization->isAllowed('Magento_AdminNotification::show_list');
     }
 }

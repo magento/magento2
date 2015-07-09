@@ -19,6 +19,7 @@ class Item extends \Magento\Framework\Object
 
     /**
      * Set is empty indicator
+     * @codeCoverageIgnore
      *
      * @param bool $flag
      * @return $this
@@ -31,6 +32,7 @@ class Item extends \Magento\Framework\Object
 
     /**
      * Get is empty indicator
+     * @codeCoverageIgnore
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
@@ -49,6 +51,7 @@ class Item extends \Magento\Framework\Object
 
     /**
      * Get children
+     * @codeCoverageIgnore
      *
      * @return array
      */
@@ -59,6 +62,7 @@ class Item extends \Magento\Framework\Object
 
     /**
      * Set children
+     * @codeCoverageIgnore
      *
      * @param array $children
      * @return $this

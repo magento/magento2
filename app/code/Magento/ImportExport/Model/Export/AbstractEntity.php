@@ -390,7 +390,7 @@ abstract class AbstractEntity
             ) ? __(
                 $this->_messageTemplates[$errorCode]
             ) : __(
-                "Please correct the value for '%1' column",
+                'Please correct the value for "%1" column.',
                 $errorCode
             );
             $message = (string)$message;
@@ -449,7 +449,7 @@ abstract class AbstractEntity
     public function getWriter()
     {
         if (!$this->_writer) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify writer.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the writer.'));
         }
 
         return $this->_writer;

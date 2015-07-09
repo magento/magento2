@@ -8,7 +8,7 @@ namespace Magento\Setup\Controller;
 use Composer\Package\Version\VersionParser;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
-use Magento\Setup\Model\ComposerInformation;
+use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\PhpInformation;
 use Magento\Setup\Model\FilePermissions;
 

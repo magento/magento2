@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Component\Form;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -104,7 +103,7 @@ class Fieldset extends AbstractComponent
                     'config' => $fieldData
                 ]
             ];
-            $fieldComponent = $this->uiComponentFactory->create($name, 'field', $argument);
+            $fieldComponent = $this->uiComponentFactory->create($name, Field::NAME, $argument);
             $fieldComponent->prepare();
             $this->addComponent($name, $fieldComponent);
         } else {

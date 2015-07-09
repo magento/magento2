@@ -8,7 +8,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 /**
  * @magentoAppArea adminhtml
  */
-class CreditmemoTest extends \Magento\Backend\Utility\Controller
+class CreditmemoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoConfigFixture current_store cataloginventory/item_options/auto_return 1

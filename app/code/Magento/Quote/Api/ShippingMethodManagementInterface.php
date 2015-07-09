@@ -27,6 +27,24 @@ interface ShippingMethodManagementInterface
     public function set($cartId, $carrierCode, $methodCode);
 
     /**
+     * Estimate shipping
+     *
+     * @param int $cartId The shopping cart ID.
+     * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address The estimate address
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
+     */
+    public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address);
+
+    /**
+     * Estimate shipping
+     *
+     * @param int $cartId The shopping cart ID.
+     * @param int $addressId The estimate address id
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
+     */
+    public function estimateByAddressId($cartId, $addressId);
+
+    /**
      * Returns selected shipping method for a specified quote.
      *
      * @param int $cartId The shopping cart ID.

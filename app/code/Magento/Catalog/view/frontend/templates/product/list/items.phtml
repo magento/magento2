@@ -60,7 +60,7 @@ switch ($type = $block->getType()) {
 
             $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'upsell_products_list';
-            $title = __('You may also be interested in the following product(s)');
+            $title = __('We found other products you might like!');
             $items = $block->getAllItems();
             $limit = $block->getPositionLimit();
             $shuffle = (int) $block->isShuffled();
@@ -81,7 +81,7 @@ switch ($type = $block->getType()) {
 
             $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'upsell_products_list';
-            $title = __('You may also be interested in the following product(s)');
+            $title = __('We found other products you might like!');
             $items = $block->getItemCollection()->getItems();
             $limit = $block->getItemLimit('upsell');
             $shuffle = 0;
