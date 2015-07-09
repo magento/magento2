@@ -75,14 +75,14 @@ class TransportBuilder
 
     /**
      * @param FactoryInterface $templateFactory
-     * @param \Magento\Framework\Mail\Message $message
+     * @param \Magento\Framework\Mail\MessageInterface $message
      * @param \Magento\Framework\Mail\Template\SenderResolverInterface $senderResolver
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Mail\TransportInterfaceFactory $mailTransportFactory
      */
     public function __construct(
         \Magento\Framework\Mail\Template\FactoryInterface $templateFactory,
-        \Magento\Framework\Mail\Message $message,
+        \Magento\Framework\Mail\MessageInterface $message,
         \Magento\Framework\Mail\Template\SenderResolverInterface $senderResolver,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Mail\TransportInterfaceFactory $mailTransportFactory
