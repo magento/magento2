@@ -4,10 +4,13 @@
  */
 define(
     [
-        'Magento_Checkout/js/view/summary/abstract-total',
-        'Magento_Checkout/js/model/totals'
+        'uiComponent',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Catalog/js/price-utils',
+        'Magento_Checkout/js/model/totals',
+        'Magento_Checkout/js/model/sidebar'
     ],
-    function (Component, totals) {
+    function (Component, quote, priceUtils, totals, sidebarModel) {
         'use strict';
         return Component.extend({
             getQuantity: function() {
@@ -21,6 +24,12 @@ define(
                     return parseFloat(totals.getSegment('grand_total').value);
                 }
                 return 0;
+            },
+            showSidebar: function() {
+                sidebarModel.show();
+            },
+            getFormattedPrice: function (price) {
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             getValue: function () {
                 return this.getFormattedPrice(this.getPureValue());
