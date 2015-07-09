@@ -30,6 +30,7 @@ class Cc extends \Magento\Braintree\Model\Config
     const KEY_CC_TYPES = 'cctypes';
     const KEY_ACTIVE = 'active';
     const KEY_FRAUD_PROTECTION = 'fraudprotection';
+    const KEY_AUTO_DETECTION = 'enable_cc_detection';
 
     /**
      * @var string
@@ -175,6 +176,17 @@ class Cc extends \Magento\Braintree\Model\Config
     {
         return (bool)(int)$this->getConfigData(self::KEY_ADVANCED_FRAUD_PROTECTION, $this->storeId);
     }
+
+    /**
+     * If Credit Card Auto Detection is enabled
+     *
+     * @return bool
+     */
+    public function isCcDetectionEnabled()
+    {
+        return (bool)(int)$this->getConfigData(self::KEY_AUTO_DETECTION, $this->storeId);
+    }
+
 
     /**
      * Get Advanced Fraud JS

@@ -37,13 +37,21 @@
             </select>
         </div>
     </div>
-    <!-- /ko -->
     <div>&nbsp;</div>
+    <!-- /ko -->
     <div class="field type required" data-bind="visible: isCcFormShown">
         <label data-bind="attr: {for: getCode() + '_cc_type'}" class="label">
             <span><!-- ko text: $t('Credit Card Type')--><!-- /ko --></span>
         </label>
         <div class="control">
+            <!-- ko if: (!isCcDetectionEnabled())-->
+            <select name="payment[cc_type]" class="select"
+                    data-bind="attr: {id: getCode() + '_cc_type', 'data-container': getCode() + '-cc-type', 'data-validate': JSON.stringify({required:true, 'validate-cc-type-select':'#' + getCode() + '_cc_number'})},
+                mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
+                enable: true, options: getCcAvailableTypesValues(), optionsValue: 'value', optionsText: 'type', optionsCaption: $t('--Please Select--'), value: creditCardType">
+            </select>
+            <!-- /ko -->
+            <!-- ko if: (isCcDetectionEnabled())-->
             <ul class="credit-card-types">
                 <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
                 <li class="item" data-bind="css: {_active: $parent.selectedCardType() == item.value} ">
@@ -65,6 +73,7 @@
                    data-bind="attr: {id: getCode() + '_cc_type', 'data-container': getCode() + '-cc-type'},
                    value: creditCardType
                    ">
+            <!-- /ko -->
         </div>
     </div>
     <div class="field number required" data-bind="visible: isCcFormShown">
