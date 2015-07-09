@@ -8,6 +8,9 @@ namespace Magento\Framework\View\Asset\NotationResolver;
 
 use Magento\Framework\View\Asset;
 
+/**
+ * Variable resolver to allow specific placeholders in CSS files
+ */
 class Variable
 {
     /**
@@ -37,7 +40,7 @@ class Variable
      * Replaces the placeholder variables into the given path
      *
      * @param string $path
-     * @return mixed
+     * @return string
      */
     public function convertVariableNotation($path)
     {

@@ -42,7 +42,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
             ->method('getStaticViewFileContext')
             ->will($this->returnValue($this->context));
 
-        $this->object = new NotationResolver\Variable($this->assetRepo);
+        $this->object = new \Magento\Framework\View\Asset\NotationResolver\Variable($this->assetRepo);
     }
 
     /**
