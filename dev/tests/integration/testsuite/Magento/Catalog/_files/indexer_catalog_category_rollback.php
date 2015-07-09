@@ -23,16 +23,12 @@ foreach ($products as $product) {
     }
 }
 
-$defaultCategoryIds = [1, 2];
-/** @var \Magento\Catalog\Model\Category $category */
-$category = $objectManager->create('Magento\Catalog\Model\Category');
-/** @var \Magento\Catalog\Model\Category[] $categories */
-$categories = $category->getCollection()->getItems();
-foreach ($categories as $category) {
-    if ($category->getId() && !in_array($category->getId(), $defaultCategoryIds)) {
-        $category->delete();
-    }
-}
+/** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
+$collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
+$collection
+    ->addAttributeToFilter('level', 2)
+    ->load()
+    ->delete();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
