@@ -13,16 +13,24 @@ use Magento\Store\Model\ScopeInterface;
  */
 class AgreementsProvider implements AgreementsProviderInterface
 {
-    /** Path to config node */
+    /**
+     * Path to config node
+     */
     const PATH_ENABLED = 'checkout/options/enable_agreements';
 
-    /** @var \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory */
+    /**
+     * @var Resource\Agreement\CollectionFactory
+     */
     protected $agreementCollectionFactory;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $scopeConfig;
 
-    /** @var  \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
     /**
@@ -47,13 +55,13 @@ class AgreementsProvider implements AgreementsProviderInterface
      */
     public function getRequiredAgreementIds()
     {
-        if (!$this->scopeConfig->isSetFlag(self::PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
-            return [];
-        } else {
-            return $this->agreementCollectionFactory->create()
-                ->addStoreFilter($this->storeManager->getStore()->getId())
-                ->addFieldToFilter('is_active', 1)
-                ->getAllIds();
+        $agreementIds = [];
+        if ($this->scopeConfig->isSetFlag(self::PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
+            $agreementCollection = $this->agreementCollectionFactory->create();
+            $agreementCollection->addStoreFilter($this->storeManager->getStore()->getId());
+            $agreementCollection->addFieldToFilter('is_active', 1);
+            $agreementIds = $agreementCollection->getAllIds();
         }
+        return $agreementIds;
     }
 }
