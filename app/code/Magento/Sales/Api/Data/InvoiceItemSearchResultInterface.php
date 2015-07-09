@@ -26,5 +26,5 @@ interface InvoiceItemSearchResultInterface extends \Magento\Framework\Api\Search
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }
