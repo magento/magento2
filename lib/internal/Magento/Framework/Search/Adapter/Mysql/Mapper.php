@@ -23,7 +23,6 @@ use Magento\Framework\Search\RequestInterface;
  */
 class Mapper
 {
-    const SQL_ENTITIES_MATCH_LIMIT = 100000;
     /**
      * @var ScoreBuilder
      */
@@ -151,6 +150,8 @@ class Mapper
                 );
             }
         }
+
+        $select->limit($request->getSize());
 
         $select->limit($request->getSize());
         $select->order('relevance ' . Select::SQL_DESC);
