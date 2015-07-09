@@ -98,7 +98,13 @@ abstract class ThemeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->session = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
+        $this->session = $this->getMock(
+            'Magento\Backend\Model\Session',
+            ['setIsUrlNotice', 'setThemeData', 'setThemeCustomCssData'],
+            [],
+            '',
+            false
+        );
         $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
         $this->backendHelper = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
         $this->coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
