@@ -29,9 +29,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     protected $bundleConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $assetConfigMock;
+    protected $minificationMock;
 
     /**
      * {@inheritDoc}
@@ -44,14 +44,14 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->bundleConfigMock = $this->getMockBuilder('Magento\Framework\View\Asset\Bundle\ConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assetConfigMock = $this->getMockBuilder('Magento\Framework\View\Asset\ConfigInterface')
+        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->bundle = new Bundle(
             $this->filesystemMock,
             $this->bundleConfigMock,
-            $this->assetConfigMock
+            $this->minificationMock
         );
     }
 
@@ -62,11 +62,17 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     public function testMinSuffix()
     {
-        $this->assetConfigMock
+        $this->minificationMock
             ->expects($this->any())
-            ->method('isAssetMinification')
-            ->with('js')
-            ->willReturn(true);
+            ->method('addMinifiedSign')
+            ->withConsecutive(
+                ['onefile.js'],
+                ['/js/bundle/bundle0.js']
+            )
+            ->willReturnOnConsecutiveCalls(
+                'onefile.min.js',
+                '/js/bundle/bundle0.min.js'
+            );
 
         $contextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
             ->disableOriginalConstructor()

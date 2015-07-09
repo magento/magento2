@@ -25,10 +25,9 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
     protected $resolverMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configMock;
-
+    protected $assetMinificationMock;
     /**
      * {@inheritDoc}
      */
@@ -38,14 +37,14 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder('Magento\Framework\View\Asset\ConfigInterface')
-            ->setMethods(['isAssetMinification'])
+
+        $this->assetMinificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->minification = new Minification(
             $this->resolverMock,
-            $this->configMock
+            $this->assetMinificationMock
         );
     }
 
@@ -67,10 +66,15 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
         $resolvedOriginal,
         $resolvedAlternative
     ) {
-        $this->configMock
+        $this->assetMinificationMock
             ->expects($this->any())
-            ->method('isAssetMinification')
+            ->method('isEnabled')
             ->willReturnMap([['css', $isEnabled]]);
+        $this->assetMinificationMock
+            ->expects($this->any())
+            ->method('removeMinifiedSign')
+            ->with($requested)
+            ->willReturn($alternative);
 
         $this->resolverMock
             ->expects($this->any())
@@ -91,7 +95,7 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [true, 'file.min.css', 'file.css', 'found.css', false, 'found.css'],
-            [false, 'file.min.css', 'file.css', false, false, 'found.css']
+            [false, 'file.min.css', 'file.min.css', false, false, 'found.css']
         ];
     }
 }
