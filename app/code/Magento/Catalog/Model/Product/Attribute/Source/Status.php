@@ -5,13 +5,14 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Product status functionality model
  */
-class Status extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource implements
-    \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface, OptionSourceInterface
+class Status extends AbstractSource implements SourceInterface, OptionSourceInterface
 {
     /**#@+
      * Product Status values
@@ -87,7 +88,7 @@ class Status extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource i
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param string $dir direction
-     * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+     * @return AbstractSource
      */
     public function addValueSortToCollection($collection, $dir = 'asc')
     {

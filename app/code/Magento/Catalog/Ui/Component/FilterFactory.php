@@ -15,7 +15,7 @@ class FilterFactory
     /**
      * @var array
      */
-    protected  $filterMap = [
+    protected $filterMap = [
         'default' => 'filterInput',
         'select' => 'filterSelect',
         'boolean' => 'filterSelect',

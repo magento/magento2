@@ -39,7 +39,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->storeManager = $storeManager;
-     }
+    }
 
     /**
      * {@inheritdoc}

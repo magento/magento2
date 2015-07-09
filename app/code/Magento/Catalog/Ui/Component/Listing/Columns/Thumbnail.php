@@ -33,7 +33,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->imageFactory = $imageFactory;
         $this->urlBuilder = $urlBuilder;
-     }
+    }
 
     /**
      * Prepare Data Source
