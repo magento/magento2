@@ -102,4 +102,6 @@ return [
     '/config/global/currency/import/services' => 'Configurations moved to DI file settings',
     '/config/global/template' => 'Use /config/template of email_templates.xml',
     '/config/default/general/file/sitemap_generate_valid_paths' => '/config/default/sitemap/file/valid_paths',
+    '/config/dev/css/minify_adapter' => 'Was replaced using di',
+    '/config/dev/js/minify_adapter' => 'Was replaced using di',
 ];

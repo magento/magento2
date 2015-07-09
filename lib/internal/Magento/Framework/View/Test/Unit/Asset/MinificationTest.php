@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Test\Unit\View\Asset;
+namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\Minification;
