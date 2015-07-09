@@ -81,7 +81,6 @@ class QueryContainer
         $subScoreBuilder = $this->scoreBuilderFactory->create();
         $this->buildMatchQuery($subScoreBuilder, $subSelect, $query, $conditionType);
         $subSelect->columns($subScoreBuilder->build());
-        $subSelect->limit($this->request->getSize());
         $this->addDerivedQuery($subSelect);
 
         return $select;
