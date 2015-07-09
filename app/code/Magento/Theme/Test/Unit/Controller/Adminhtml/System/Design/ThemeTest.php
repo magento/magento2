@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Test backend controller for the theme
- */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     /**

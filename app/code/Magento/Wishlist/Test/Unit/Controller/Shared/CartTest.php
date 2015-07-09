@@ -336,7 +336,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $itemId = 1;
         $refererUrl = 'referer_url';
-        $productUrl = 'product_url';
 
         $this->request->expects($this->once())
             ->method('getParam')

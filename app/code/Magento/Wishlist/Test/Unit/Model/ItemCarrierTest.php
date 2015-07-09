@@ -7,6 +7,9 @@ namespace Magento\Wishlist\Test\Unit\Model;
 
 use Magento\Wishlist\Model\Resource\Item\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ItemCarrierTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Wishlist\Model\ItemCarrier */
@@ -463,7 +466,6 @@ class ItemCarrierTest extends \PHPUnit_Framework_TestCase
         $qtys = [14 => 21];
         $isOwner = true;
         $indexUrl = 'index_url';
-        $redirectUrl = 'redirect_url';
 
         /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemOneMock */
         $itemOneMock = $this->getMockBuilder('Magento\Wishlist\Model\Item')
