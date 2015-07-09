@@ -35,6 +35,8 @@ interface GroupRepositoryInterface
 
     /**
      * Clear cached entities
+     *
+     * @return void
      */
     public function clean();
 }

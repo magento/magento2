@@ -31,7 +31,7 @@ class ReaderList
         $resolverMap = [
             ScopeInterface::SCOPE_WEBSITE => '\Magento\Store\Model\StoreResolver\Website',
             ScopeInterface::SCOPE_GROUP => '\Magento\Store\Model\StoreResolver\Group',
-            ScopeInterface::SCOPE_STORE => '\Magento\Store\Model\StoreResolver\Store'
+            ScopeInterface::SCOPE_STORE => '\Magento\Store\Model\StoreResolver\Store',
         ]
     ) {
         $this->resolverMap = $resolverMap;

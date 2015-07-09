@@ -41,6 +41,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * @param StoreFactory $storeFactory
+     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeFactory
      */
     public function __construct(
         StoreFactory $storeFactory,
@@ -106,7 +107,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     }
 
     /**
-     * @return Data\StoreInterface[]
+     * {@inheritdoc}
      */
     public function clean()
     {

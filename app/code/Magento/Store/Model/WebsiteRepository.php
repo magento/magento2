@@ -142,7 +142,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     }
 
     /**
-     * Clear cached entities
+     * {@inheritdoc}
      */
     public function clean()
     {
