@@ -182,6 +182,7 @@ class Observer
                     }
                 } catch (\Exception $e) {
                     $schedule->setMessages($e->getMessage());
+                    $schedule->setStatus(Schedule::STATUS_ERROR);
                 }
                 $schedule->save();
             }
