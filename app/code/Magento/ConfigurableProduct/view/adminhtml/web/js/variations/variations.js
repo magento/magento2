@@ -22,20 +22,7 @@ define([
         initialize: function () {
             this._super();
             if (this.variations.length) {
-                this.attributes(this.productAttributes);
-                _.each(this.variations, function(variation) {
-                    this.populateVariationMatrix(
-                        variation.options,
-                        variation.images,
-                        variation.sku,
-                        variation.quantity,
-                        variation.price,
-                        variation.name,
-                        variation.product_id,
-                        variation.status
-                    );
-                }, this);
-                this.render();
+                this.render(this.variations, this.productAttributes);
             }
         },
         initObservable: function () {
@@ -60,10 +47,9 @@ define([
             return 'product[configurable_attributes_data][' + attribute.id  + '][values][' + option.value + ']['
                 + field + ']';
         },
-        reset: function() {
-            this.productMatrix([]);
-        },
-        render: function() {
+        render: function(variations, attributes) {
+            this.populateVariationMatrix(variations);
+            this.attributes(attributes);
             this.initImageUpload();
         },
         getAttributesOptions: function() {
@@ -72,27 +58,25 @@ define([
         showVariations: function() {
             return this.productMatrix().length > 0;
         },
-        populateVariationMatrix: function(options, images, sku, quantity, price, name, productId, status) {
-            var attributes = _.reduce(options, function (memo, option) {
-                var attribute = {};
-                attribute[option.attribute_code] = option.value;
-                return _.extend(memo, attribute);
-            }, {});
-            this.productMatrix.push({
-                productId: productId || null,
-                images: images,
-                sku: sku,
-                name: name || sku,
-                quantity: quantity,
-                price: price || this.getProductValue('price'),
-                options: options,
-                attribute: JSON.stringify(attributes),
-                variationKey: _.values(attributes).join('-'),
-                weight: this.getProductValue('weight'),
-                readonly: productId > 0,
-                productUrl: this.productUrl.replace('%id%', productId),
-                status: status === undefined ? 1 : parseInt(status)
-            });
+        populateVariationMatrix: function(variations) {
+            this.productMatrix([]);
+            _.each(variations, function(variation) {
+                var attributes = _.reduce(variation.options, function (memo, option) {
+                    var attribute = {};
+                    attribute[option.attribute_code] = option.value;
+                    return _.extend(memo, attribute);
+                }, {});
+                this.productMatrix.push(_.extend(variation, {
+                    productId: variation.product_id || null,
+                    name: variation.name || variation.sku,
+                    weight: variation.weight || this.getProductValue('weight'),
+                    attribute: JSON.stringify(attributes),
+                    variationKey: _.values(attributes).join('-'),
+                    readonly: variation.product_id > 0,
+                    productUrl: this.productUrl.replace('%id%', variation.product_id),
+                    status: variation.status === undefined ? 1 : parseInt(variation.status)
+                }));
+            }, this);
         },
         isReadonly: function (variation) {
             return variation.productId !== null;

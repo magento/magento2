@@ -48,13 +48,16 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function getData()
     {
         $items = [];
+        $skippedItems = 0;
         foreach ($this->getCollection()->getItems() as $attribute) {
             if ($this->configurableAttributeHandler->isAttributeApplicable($attribute)) {
                 $items[] = $attribute->toArray();
+            } else {
+                $skippedItems++;
             }
         }
         return [
-            'totalRecords' => $this->collection->getSize(),
+            'totalRecords' => $this->collection->getSize() - $skippedItems,
             'items' => $items
         ];
     }
