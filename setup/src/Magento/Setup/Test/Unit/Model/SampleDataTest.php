@@ -7,6 +7,7 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\SampleData;
+
 /**
  * Test Magento\Setup\Model\SampleData
  */
