@@ -74,9 +74,9 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
         if ($this->isWhiteSpace()) {
             return $value;
         }
-        $qouteStart = $this->isQuote();
+        $quoteStart = $this->isQuote();
 
-        if ($qouteStart) {
+        if ($quoteStart) {
             $breakSymbol = $this->char();
         } else {
             $breakSymbol = false;
