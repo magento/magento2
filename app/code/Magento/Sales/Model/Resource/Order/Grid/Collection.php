@@ -5,44 +5,19 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Grid;
 
+use Magento\Framework\Search\AggregationInterface;
+
 /**
  * Flat sales order grid collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Collection
+class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
 {
-    /**
-     * Event prefix
-     *
-     * @var string
-     */
-    protected $_eventPrefix = 'sales_order_grid_collection';
-
-    /**
-     * Event object
-     *
-     * @var string
-     */
-    protected $_eventObject = 'order_grid_collection';
-
     /**
      * Customer mode flag
      *
      * @var bool
      */
     protected $_customerModeFlag = false;
-
-    /**
-     * Model initialization
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setMainTable('sales_order_grid');
-    }
 
     /**
      * Get SQL for get record count
