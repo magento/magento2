@@ -1,12 +1,11 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
-class UploadCss extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest
+class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest
 {
     /** @var string  */
     protected $name = 'UploadCss';
