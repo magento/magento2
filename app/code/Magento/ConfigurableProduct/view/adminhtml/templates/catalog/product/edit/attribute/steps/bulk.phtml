@@ -71,7 +71,7 @@
                                    name="image"
                                    class="admin__control-file"
                                    multiple="multiple"
-                                   data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
+                                   data-url="<?=$block->getUrl('catalog/product_gallery/upload') ?>" />
                         </div>
                     </div>
                     <p class="image-placeholder-text"><?= __('Browse to find or drag image here') ?></p>
@@ -265,7 +265,7 @@
                                 <div class="image-browse">
                                     <span><?= __('Browse Files...') ?></span>
                                     <input type="file" name="image" multiple="multiple"
-                                           data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
+                                           data-url="<?=$block->getUrl('catalog/product_gallery/upload') ?>" />
                                 </div>
                             </div>
                             <p class="image-placeholder-text"><?= __('Browse to find or drag image here') ?></p>

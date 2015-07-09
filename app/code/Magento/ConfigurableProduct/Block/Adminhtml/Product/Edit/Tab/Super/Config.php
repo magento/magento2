@@ -326,5 +326,4 @@ class Config extends Widget implements TabInterface
     {
         return $this->image->getDefaultPlaceholderUrl('thumbnail');
     }
-
 }

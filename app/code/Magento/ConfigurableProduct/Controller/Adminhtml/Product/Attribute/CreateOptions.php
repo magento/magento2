@@ -31,8 +31,7 @@ class CreateOptions extends Action
         Action\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         AttributeFactory $attributeFactory
-    )
-    {
+    ) {
         $this->jsonHelper = $jsonHelper;
         $this->attributeFactory = $attributeFactory;
         parent::__construct($context);

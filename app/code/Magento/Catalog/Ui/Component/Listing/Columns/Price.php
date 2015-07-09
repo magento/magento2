@@ -39,7 +39,7 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->localeCurrency = $localeCurrency;
         $this->storeManager = $storeManager;
-     }
+    }
 
     /**
      * Prepare Data Source
