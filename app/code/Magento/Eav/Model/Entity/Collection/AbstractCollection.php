@@ -5,6 +5,8 @@
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
+use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -14,7 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
+abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
     /**
      * Array of items with item id key
@@ -368,7 +370,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      *
      * @param mixed $attribute
      * @param mixed $condition
-     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     * @return $this|AbstractDb
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
@@ -1558,5 +1560,26 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
             unset($this->_itemsById[$this->_items[$key]->getId()]);
         }
         return parent::removeItemByKey($key);
+    }
+
+    /**
+     * Returns main table name - extracted from "module/table" style and
+     * validated by db adapter
+     *
+     * @return string
+     */
+    public function getMainTable()
+    {
+        return $this->getSelect()->getPart(Select::FROM)['e']['tableName'];
+    }
+
+    /**
+     * @param string $fieldName
+     * @param string $alias
+     * @return $this
+     */
+    public function addFieldToSelect($fieldName, $alias)
+    {
+        return $this->addAttributeToSelect($fieldName);
     }
 }
