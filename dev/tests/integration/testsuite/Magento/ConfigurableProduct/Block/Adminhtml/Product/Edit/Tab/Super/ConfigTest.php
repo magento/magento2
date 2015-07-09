@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Resource\Eav\Attribute;
 /**
  * @magentoAppArea adminhtml
  */
-class ConfigTest extends \Magento\Backend\Utility\Controller
+class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     const ATTRIBUTE_LABEL = 'New Attribute Label';
     const ATTRIBUTE_POSITION = 42;

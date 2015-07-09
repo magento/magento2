@@ -17,6 +17,11 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
      */
     protected $_resourceMock;
 
+    /**
+     * @var \Magento\Indexer\Model\Indexer\Table\StrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_tableStrategyInterface;
+
 
     protected function setUp()
     {
@@ -24,10 +29,20 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->_tableStrategyInterface = $this->getMock(
+            'Magento\Indexer\Model\Indexer\Table\StrategyInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments(
             '\Magento\Indexer\Test\Unit\Model\Resource\AbstractResourceStub',
-            ['resource' => $this->_resourceMock]
+            [
+                'resource' => $this->_resourceMock,
+                'tableStrategy' => $this->_tableStrategyInterface
+            ]
         );
         $this->model = $objectManager->getObject(
             '\Magento\Indexer\Test\Unit\Model\Resource\AbstractResourceStub',
@@ -37,16 +52,15 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testReindexAll()
     {
+        $this->_tableStrategyInterface->expects($this->once())
+            ->method('setUseIdxTable')
+            ->with(true);
+        $this->_tableStrategyInterface->expects($this->once())
+            ->method('prepareTableName')
+            ->with('test')
+            ->will($this->returnValue('test_idx'));
         $this->model->reindexAll();
         $this->assertEquals('test_idx', $this->model->getIdxTable('test'));
-    }
-
-    public function testUseIdxTable()
-    {
-        $this->model->useIdxTable(true);
-        $this->assertEquals('test_idx', $this->model->getIdxTable('test'));
-        $this->model->useIdxTable(false);
-        $this->assertEquals('test_tmp', $this->model->getIdxTable('test'));
     }
 
     public function testClearTemporaryIndexTable()

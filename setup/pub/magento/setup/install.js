@@ -10,6 +10,8 @@ angular.module('install', ['ngStorage'])
         $scope.isInProgress = false;
         $scope.isConsole = false;
         $scope.isDisabled = false;
+        $scope.isSampleDataError = false;
+        $scope.isShowCleanUpBox = false;
         $scope.toggleConsole = function () {
             $scope.isConsole = $scope.isConsole === false;
         };
@@ -34,6 +36,9 @@ angular.module('install', ['ngStorage'])
                     $scope.progressText = response.data.progress + '%';
                 } else {
                     $scope.displayFailure();
+                    if (response.data.isSampleDataError) {
+                        $scope.isSampleDataError = true;
+                    }
                 }
                 if ($scope.isInProgress) {
                     $timeout(function() {
@@ -43,7 +48,24 @@ angular.module('install', ['ngStorage'])
             });
         };
 
+        $scope.showCleanUpBox = function() {
+            $scope.isShowCleanUpBox = true;
+        };
+        $scope.hideCleanUpBox = function() {
+            $scope.isShowCleanUpBox = false;
+        };
+        $scope.startCleanup = function(performClenup) {
+            $scope.hideCleanUpBox();
+            $scope.isSampleDataError = false;
+            $localStorage.store.cleanUpDatabase = performClenup;
+            $scope.start();
+        };
+
         $scope.start = function () {
+            if ($scope.isSampleDataError) {
+                $scope.showCleanUpBox();
+                return;
+            }
             var data = {
                 'db': $localStorage.db,
                 'admin': $localStorage.admin,
@@ -60,6 +82,9 @@ angular.module('install', ['ngStorage'])
                     $scope.nextState();
                 } else {
                     $scope.displayFailure();
+                    if (response.isSampleDataError) {
+                        $scope.isSampleDataError = true;
+                    }
                 }
             });
             progress.get(function () {

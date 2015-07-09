@@ -9,10 +9,23 @@
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
     <preference for="Magento\Framework\App\Response\RedirectInterface" type="Magento\Store\App\Response\Redirect" />
+    <type name="Magento\Framework\App\Response\Http">
+        <plugin name="xFrameOptionsHeader" type="Magento\Framework\App\Response\XFrameOptPlugin"/>
+    </type>
+    <type name="Magento\Framework\App\Response\XFrameOptPlugin">
+        <arguments>
+            <argument name="xFrameOpt" xsi:type="init_parameter">Magento\Framework\App\Response\XFrameOptPlugin::DEPLOYMENT_CONFIG_X_FRAME_OPT</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\Config\ScopePool">
         <arguments>
             <argument name="readerPool" xsi:type="object">Magento\Store\Model\Config\Reader\ReaderPool\Proxy</argument>
         <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Template\File\Validator">
+        <arguments>
+            <argument name="scope" xsi:type="string">store</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Config\Reader\Website">

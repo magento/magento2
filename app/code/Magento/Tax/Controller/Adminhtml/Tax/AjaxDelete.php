@@ -26,7 +26,7 @@ class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Tax
         } catch (\Exception $e) {
             $responseContent = [
                 'success' => false,
-                'error_message' => __('Something went wrong deleting this tax class.')
+                'error_message' => __('We can\'t delete this tax class right now.')
             ];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */

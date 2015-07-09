@@ -23,7 +23,7 @@ class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __("Cannot delete the design change."));
+                $this->messageManager->addException($e, __("You can't delete the design change."));
             }
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

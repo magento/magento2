@@ -40,7 +40,7 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
     public function updateAttributes($entityIds, $attrData, $storeId)
     {
         $object = new \Magento\Framework\Object();
-        $object->setIdFieldName('entity_id')->setStoreId($storeId);
+        $object->setStoreId($storeId);
 
         $this->_getWriteAdapter()->beginTransaction();
         try {
@@ -54,6 +54,7 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
                 foreach ($entityIds as $entityId) {
                     $i++;
                     $object->setId($entityId);
+                    $object->setEntityId($entityId);
                     // collect data for save
                     $this->_saveAttributeValue($object, $attribute, $value);
                     // save collected data every 1000 rows

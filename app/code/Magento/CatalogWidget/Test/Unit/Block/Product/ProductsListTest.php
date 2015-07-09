@@ -115,17 +115,17 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getMockBuilder('\Magento\Store\Model\Store')
             ->disableOriginalConstructor()->setMethods(['getId'])->getMock();
-        $store->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
+        $store->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
         $theme = $this->getMock('\Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->once())->method('getId')->will($this->returnValue('blank'));
-        $this->design->expects($this->once())->method('getDesignTheme')->will($this->returnValue($theme));
+        $theme->expects($this->once())->method('getId')->willReturn('blank');
+        $this->design->expects($this->once())->method('getDesignTheme')->willReturn($theme);
 
-        $this->httpContext->expects($this->once())->method('getValue')->will($this->returnValue('context_group'));
+        $this->httpContext->expects($this->once())->method('getValue')->willReturn('context_group');
         $this->productsList->setData('conditions', 'some_serialized_conditions');
 
-        $this->request->expects($this->once())->method('getParam')->with('np')->will($this->returnValue(1));
+        $this->request->expects($this->once())->method('getParam')->with('np')->willReturn(1);
 
         $cacheKey = ['CATALOG_PRODUCTS_LIST_WIDGET', 1, 'blank', 'context_group', 1, 5, 'some_serialized_conditions'];
         $this->assertEquals($cacheKey, $this->productsList->getCacheKeyInfo());
@@ -137,7 +137,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $product->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $product->expects($this->once())->method('getId')->willReturn(1);
 
         $priceRenderer = $this->getMockBuilder('\Magento\Framework\Pricing\Render')
             ->setMethods(['render'])
@@ -151,8 +151,8 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
                 'zone' => 'item_list',
                 'price_id' => 'old-price-1-some-price-type'
             ])
-            ->will($this->returnValue('<html>'));
-        $this->layout->expects($this->once())->method('getBlock')->will($this->returnValue($priceRenderer));
+            ->willReturn('<html>');
+        $this->layout->expects($this->once())->method('getBlock')->willReturn($priceRenderer);
 
         $this->assertEquals('<html>', $this->productsList->getProductPriceHtml(
             $product,
@@ -176,7 +176,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getSize'])
             ->disableOriginalConstructor()
             ->getMock();
-        $collection->expects($this->once())->method('getSize')->will($this->returnValue(3));
+        $collection->expects($this->once())->method('getSize')->willReturn(3);
 
         $this->productsList->setData('show_pager', true);
         $this->productsList->setData('products_per_page', 2);
@@ -194,23 +194,32 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
                 'setCollection',
             ])->disableOriginalConstructor()->getMock();
 
-        $pagerBlock->expects($this->once())->method('setUseContainer')->will($this->returnSelf());
-        $pagerBlock->expects($this->once())->method('setShowAmounts')->will($this->returnSelf());
-        $pagerBlock->expects($this->once())->method('setShowPerPage')->will($this->returnSelf());
-        $pagerBlock->expects($this->once())->method('setPageVarName')->will($this->returnSelf());
-        $pagerBlock->expects($this->once())->method('setLimit')->will($this->returnSelf());
-        $pagerBlock->expects($this->once())->method('setTotalLimit')->will($this->returnSelf());
-        $pagerBlock->expects($this->once())->method('setCollection')->with($collection)->will($this->returnSelf());
+        $pagerBlock->expects($this->once())->method('setUseContainer')->willReturnSelf();
+        $pagerBlock->expects($this->once())->method('setShowAmounts')->willReturnSelf();
+        $pagerBlock->expects($this->once())->method('setShowPerPage')->willReturnSelf();
+        $pagerBlock->expects($this->once())->method('setPageVarName')->willReturnSelf();
+        $pagerBlock->expects($this->once())->method('setLimit')->willReturnSelf();
+        $pagerBlock->expects($this->once())->method('setTotalLimit')->willReturnSelf();
+        $pagerBlock->expects($this->once())->method('setCollection')->with($collection)->willReturnSelf();
 
-        $pagerBlock->expects($this->once())->method('toHtml')->will($this->returnValue('<pager_html>'));
-        $this->layout->expects($this->once())->method('createBlock')->will($this->returnValue($pagerBlock));
+        $pagerBlock->expects($this->once())->method('toHtml')->willReturn('<pager_html>');
+        $this->layout->expects($this->once())->method('createBlock')->willReturn($pagerBlock);
         $this->assertEquals('<pager_html>', $this->productsList->getPagerHtml());
     }
 
-    public function testCreateCollection()
+    /**
+     * Test public `createCollection` method and protected `getPageSize` method via `createCollection`
+     *
+     * @param bool $pagerEnable
+     * @param int $productsCount
+     * @param int $productsPerPage
+     * @param int $expectedPageSize
+     * @dataProvider createCollectionDataProvider
+     */
+    public function testCreateCollection($pagerEnable, $productsCount, $productsPerPage, $expectedPageSize)
     {
         $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
-            ->will($this->returnValue([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]));
+            ->willReturn([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
         $collection = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Collection')
             ->setMethods([
                 'setVisibility',
@@ -226,17 +235,17 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $collection->expects($this->once())->method('setVisibility')
             ->with([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH])
-            ->will($this->returnSelf());
-        $collection->expects($this->once())->method('addMinimalPrice')->will($this->returnSelf());
-        $collection->expects($this->once())->method('addFinalPrice')->will($this->returnSelf());
-        $collection->expects($this->once())->method('addTaxPercents')->will($this->returnSelf());
-        $collection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());
-        $collection->expects($this->once())->method('addUrlRewrite')->will($this->returnSelf());
-        $collection->expects($this->once())->method('addStoreFilter')->will($this->returnSelf());
-        $collection->expects($this->once())->method('setPageSize')->will($this->returnSelf());
-        $collection->expects($this->once())->method('setCurPage')->will($this->returnSelf());
+            ->willReturnSelf();
+        $collection->expects($this->once())->method('addMinimalPrice')->willReturnSelf();
+        $collection->expects($this->once())->method('addFinalPrice')->willReturnSelf();
+        $collection->expects($this->once())->method('addTaxPercents')->willReturnSelf();
+        $collection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $collection->expects($this->once())->method('addUrlRewrite')->willReturnSelf();
+        $collection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
+        $collection->expects($this->once())->method('setPageSize')->with($expectedPageSize)->willReturnSelf();
+        $collection->expects($this->once())->method('setCurPage')->willReturnSelf();
 
-        $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
 
         $conditions = $this->getMockBuilder('\Magento\Rule\Model\Condition\Combine')
@@ -245,16 +254,44 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $conditions->expects($this->once())->method('collectValidatedAttributes')
             ->with($collection)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->builder->expects($this->once())->method('attachConditionToCollection')
             ->with($collection, $conditions)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
-        $this->rule->expects($this->once())->method('loadPost')->will($this->returnSelf());
-        $this->rule->expects($this->once())->method('getConditions')->will($this->returnValue($conditions));
+        $this->rule->expects($this->once())->method('loadPost')->willReturnSelf();
+        $this->rule->expects($this->once())->method('getConditions')->willReturn($conditions);
+
+
+        if ($productsPerPage) {
+            $this->productsList->setData('products_per_page', $productsPerPage);
+        } else {
+            $this->productsList->unsetData('products_per_page');
+        }
+
+        $this->productsList->setData('show_pager', $pagerEnable);
+        $this->productsList->setData('products_count', $productsCount);
 
         $this->assertSame($collection, $this->productsList->createCollection());
+    }
+
+    public function createCollectionDataProvider()
+    {
+        return [
+            [true, 1, null, 5],
+            [true, 5, null, 5],
+            [true, 10, null, 5],
+            [true, 1, 2, 2],
+            [true, 5, 3, 3],
+            [true, 10, 7, 7],
+            [false, 1, null, 1],
+            [false, 3, null, 3],
+            [false, 5, null, 5],
+            [false, 1, 3, 1],
+            [false, 3, 5, 3],
+            [false, 5, 10, 5]
+        ];
     }
 
     public function testGetProductsCount()
@@ -296,5 +333,10 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
     {
         $this->productsList->setTitle('Custom Title');
         $this->assertEquals('Custom Title', $this->productsList->getTitle());
+    }
+
+    public function testScope()
+    {
+        $this->assertFalse($this->productsList->isScopePrivate());
     }
 }

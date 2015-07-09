@@ -206,7 +206,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'stores',
                 'multiselect',
                 [
-                    'label' => __('Visible In'),
+                    'label' => __('Visibility'),
                     'name' => 'stores[]',
                     'values' => $this->systemStore->getStoreValuesForForm()
                 ]

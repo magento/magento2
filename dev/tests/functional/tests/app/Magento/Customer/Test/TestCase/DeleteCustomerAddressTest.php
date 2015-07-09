@@ -60,7 +60,6 @@ class DeleteCustomerAddressTest extends Injectable
      */
     public function test(Customer $customer)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-34634');
         // Precondition:
         $customer->persist();
         $addressToDelete = $customer->getDataFieldConfig('address')['source']->getAddresses()[1];

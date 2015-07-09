@@ -287,7 +287,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productListFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -316,7 +316,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productListFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
@@ -427,6 +427,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Load order by system increment identifier
      *
+     * @deprecated
      * @param string $incrementId
      * @return \Magento\Sales\Model\Order
      */
@@ -510,7 +511,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canVoidPayment()
     {
-        return $this->_canVoidOrder() ? $this->getPayment()->canVoid($this->getPayment()) : false;
+        return $this->_canVoidOrder() ? $this->getPayment()->canVoid() : false;
     }
 
     /**
@@ -1067,16 +1068,28 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Is order status in DB "Fraud detected"
+     *
+     * @return bool
+     */
+    public function isFraudDetected()
+    {
+        return $this->getOrigData(self::STATE) == self::STATE_PAYMENT_REVIEW
+            && $this->getOrigData(self::STATUS) == self::STATUS_FRAUD;
+    }
+
+    /**
      * Prepare order totals to cancellation
      *
      * @param string $comment
      * @param bool $graceful
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerCancellation($comment = '', $graceful = true)
     {
-        if ($this->canCancel() || $this->isPaymentReview()) {
+        if ($this->canCancel() || $this->isPaymentReview() || $this->isFraudDetected()) {
             $state = self::STATE_CANCELED;
             foreach ($this->getAllItems() as $item) {
                 if ($state != self::STATE_PROCESSING && $item->getQtyToRefund()) {
@@ -1883,6 +1896,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns increment id
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getIncrementId()
@@ -1906,6 +1921,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function setItems($items)
     {
@@ -1928,6 +1944,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function setPayments(array $payments = null)
     {
@@ -1950,12 +1967,49 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function setAddresses(array $addresses = null)
     {
         return $this->setData(OrderInterface::ADDRESSES, $addresses);
     }
 
+    /**
+     * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]
+     */
+    public function getStatusHistories()
+    {
+        if ($this->getData(OrderInterface::STATUS_HISTORIES) == null) {
+            $this->setData(
+                OrderInterface::STATUS_HISTORIES,
+                $this->getStatusHistoryCollection()->getItems()
+            );
+        }
+        return $this->getData(OrderInterface::STATUS_HISTORIES);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    //@codeCoverageIgnoreStart
     /**
      * Returns adjustment_negative
      *
@@ -2067,33 +2121,33 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Returns base_hidden_tax_amount
+     * Returns base_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount()
+    public function getBaseDiscountTaxCompensationAmount()
     {
-        return $this->getData(OrderInterface::BASE_HIDDEN_TAX_AMOUNT);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
-     * Returns base_hidden_tax_invoiced
+     * Returns base_discount_tax_compensation_invoiced
      *
      * @return float
      */
-    public function getBaseHiddenTaxInvoiced()
+    public function getBaseDiscountTaxCompensationInvoiced()
     {
-        return $this->getData(OrderInterface::BASE_HIDDEN_TAX_INVOICED);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_INVOICED);
     }
 
     /**
-     * Returns base_hidden_tax_refunded
+     * Returns base_discount_tax_compensation_refunded
      *
      * @return float
      */
-    public function getBaseHiddenTaxRefunded()
+    public function getBaseDiscountTaxCompensationRefunded()
     {
-        return $this->getData(OrderInterface::BASE_HIDDEN_TAX_REFUNDED);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED);
     }
 
     /**
@@ -2127,13 +2181,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Returns base_shipping_hidden_tax_amnt
+     * Returns base_shipping_discount_tax_compensation_amnt
      *
      * @return float
      */
-    public function getBaseShippingHiddenTaxAmnt()
+    public function getBaseShippingDiscountTaxCompensationAmnt()
     {
-        return $this->getData(OrderInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT);
+        return $this->getData(OrderInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT);
     }
 
     /**
@@ -2695,33 +2749,33 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Returns hidden_tax_amount
+     * Returns discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getHiddenTaxAmount()
+    public function getDiscountTaxCompensationAmount()
     {
-        return $this->getData(OrderInterface::HIDDEN_TAX_AMOUNT);
+        return $this->getData(OrderInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
-     * Returns hidden_tax_invoiced
+     * Returns discount_tax_compensation_invoiced
      *
      * @return float
      */
-    public function getHiddenTaxInvoiced()
+    public function getDiscountTaxCompensationInvoiced()
     {
-        return $this->getData(OrderInterface::HIDDEN_TAX_INVOICED);
+        return $this->getData(OrderInterface::DISCOUNT_TAX_COMPENSATION_INVOICED);
     }
 
     /**
-     * Returns hidden_tax_refunded
+     * Returns discount_tax_compensation_refunded
      *
      * @return float
      */
-    public function getHiddenTaxRefunded()
+    public function getDiscountTaxCompensationRefunded()
     {
-        return $this->getData(OrderInterface::HIDDEN_TAX_REFUNDED);
+        return $this->getData(OrderInterface::DISCOUNT_TAX_COMPENSATION_REFUNDED);
     }
 
     /**
@@ -2925,13 +2979,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Returns shipping_hidden_tax_amount
+     * Returns shipping_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getShippingHiddenTaxAmount()
+    public function getShippingDiscountTaxCompensationAmount()
     {
-        return $this->getData(OrderInterface::SHIPPING_HIDDEN_TAX_AMOUNT);
+        return $this->getData(OrderInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -3255,41 +3309,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]
-     */
-    public function getStatusHistories()
-    {
-        if ($this->getData(OrderInterface::STATUS_HISTORIES) == null) {
-            $this->setData(
-                OrderInterface::STATUS_HISTORIES,
-                $this->getStatusHistoryCollection()->getItems()
-            );
-        }
-        return $this->getData(OrderInterface::STATUS_HISTORIES);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes)
-    {
-        return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setStatusHistories(array $statusHistories = null)
@@ -3297,7 +3316,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         return $this->setData(OrderInterface::STATUS_HISTORIES, $statusHistories);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
@@ -4269,65 +4287,74 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxAmount($amount)
+    public function setDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(OrderInterface::HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(OrderInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxAmount($amount)
+    public function setBaseDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(OrderInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setShippingHiddenTaxAmount($amount)
+    public function setShippingDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(OrderInterface::SHIPPING_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(OrderInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseShippingHiddenTaxAmnt($amnt)
+    public function setBaseShippingDiscountTaxCompensationAmnt($amnt)
     {
-        return $this->setData(OrderInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT, $amnt);
+        return $this->setData(OrderInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT, $amnt);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxInvoiced($hiddenTaxInvoiced)
+    public function setDiscountTaxCompensationInvoiced($discountTaxCompensationInvoiced)
     {
-        return $this->setData(OrderInterface::HIDDEN_TAX_INVOICED, $hiddenTaxInvoiced);
+        return $this->setData(OrderInterface::DISCOUNT_TAX_COMPENSATION_INVOICED, $discountTaxCompensationInvoiced);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced)
+    public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced)
     {
-        return $this->setData(OrderInterface::BASE_HIDDEN_TAX_INVOICED, $baseHiddenTaxInvoiced);
+        return $this->setData(
+            OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_INVOICED,
+            $baseDiscountTaxCompensationInvoiced
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxRefunded($hiddenTaxRefunded)
+    public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded)
     {
-        return $this->setData(OrderInterface::HIDDEN_TAX_REFUNDED, $hiddenTaxRefunded);
+        return $this->setData(
+            OrderInterface::DISCOUNT_TAX_COMPENSATION_REFUNDED,
+            $discountTaxCompensationRefunded
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded)
+    public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded)
     {
-        return $this->setData(OrderInterface::BASE_HIDDEN_TAX_REFUNDED, $baseHiddenTaxRefunded);
+        return $this->setData(
+            OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED,
+            $baseDiscountTaxCompensationRefunded
+        );
     }
 
     /**

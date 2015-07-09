@@ -56,7 +56,7 @@ class WishlistTab extends TabWrapper implements TabInterface
      */
     public function getTabLabel()
     {
-        return __('Wishlist');
+        return __('Wish List');
     }
 
     /**

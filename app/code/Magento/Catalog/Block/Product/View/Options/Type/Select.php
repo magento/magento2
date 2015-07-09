@@ -46,7 +46,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN) {
                 $select->setName('options[' . $_option->getid() . ']')->addOption('', __('-- Please Select --'));
             } else {
-                $select->setName('options[' . $_option->getid() . ']');
+                $select->setName('options[' . $_option->getid() . '][]');
                 $select->setClass('multiselect admin__control-multiselect' . $require . ' product-custom-option');
             }
             foreach ($_option->getValues() as $_value) {
@@ -89,7 +89,8 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     $type = 'radio';
                     $class = 'radio admin__control-radio';
                     if (!$_option->getIsRequire()) {
-                        $selectHtml .= '<div class="field admin__field choice"><input type="radio" id="options_' .
+                        $selectHtml .= '<div class="field choice admin__field admin__field-option">' .
+                            '<input type="radio" id="options_' .
                             $_option->getId() .
                             '" class="' .
                             $class .
@@ -97,7 +98,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                             $_option->getId() .
                             ']"' .
                             ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"') .
-                            ' value="" checked="checked" /><label class="label" for="options_' .
+                            ' value="" checked="checked" /><label class="label admin__field-label" for="options_' .
                             $_option->getId() .
                             '"><span>' .
                             __('None') . '</span></label></div>';
@@ -153,7 +154,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     ' price="' .
                     $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false) .
                     '" />' .
-                    '<label class="label" for="options_' .
+                    '<label class="label admin__field-label" for="options_' .
                     $_option->getId() .
                     '_' .
                     $count .

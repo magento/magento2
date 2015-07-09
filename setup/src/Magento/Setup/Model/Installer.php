@@ -19,6 +19,7 @@ use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
 use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
@@ -1014,7 +1015,7 @@ class Installer
                     return;
                 }
                 $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
-                $this->log->log("Recreating database {$dbName}");
+                $this->log->log("Cleaning up database {$dbName}");
                 $connection->query("DROP DATABASE IF EXISTS {$dbName}");
                 $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
                 return;
@@ -1056,7 +1057,10 @@ class Installer
     private function assertDeploymentConfigExists()
     {
         if (!$this->deploymentConfig->isAvailable()) {
-            throw new \Magento\Setup\Exception("Can't run this operation: deployment configuration is absent.");
+            throw new \Magento\Setup\Exception(
+                "Can't run this operation: deployment configuration is absent."
+                . " Run 'magento setup:config:set --help' for options."
+            );
         }
     }
 
@@ -1099,14 +1103,22 @@ class Installer
      *
      * @param array $request
      * @return void
+     * @throws \Magento\Setup\SampleDataException
      *
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function installSampleData($request)
     {
-        $userName = isset($request[AdminAccount::KEY_USER]) ? $request[AdminAccount::KEY_USER] : '';
-        $this->objectManagerProvider->reset();
-        $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
+        try {
+            $userName = isset($request[AdminAccount::KEY_USER]) ? $request[AdminAccount::KEY_USER] : '';
+            $this->objectManagerProvider->reset();
+            $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
+        } catch (\Exception $e) {
+            throw new \Magento\Setup\SampleDataException(
+                "Error during sample data installation: {$e->getMessage()}",
+                $e->getCode()
+            );
+        }
     }
 
     /**

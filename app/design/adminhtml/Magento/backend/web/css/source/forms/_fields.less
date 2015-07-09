@@ -31,6 +31,10 @@
 @field-error-message__border-color: @color-apricot;
 @field-error-message__color: @color-very-dark-gray2;
 
+@field-grid__columns: 9;
+@field-control-grid__column: 4;
+@field-label-grid__column: 3;
+
 //
 //  Form Fields
 //  _____________________________________________
@@ -54,11 +58,11 @@
             &:extend(.abs-field-rows all);
         }
         > .admin__field-control {
-            #mix-grid .column(4,9);
+            #mix-grid .column(@field-control-grid__column, @field-grid__columns);
         }
 
         > .admin__field-label {
-            #mix-grid .column(3,9);
+            #mix-grid .column(@field-label-grid__column, @field-grid__columns);
         }
     }
 }
@@ -164,7 +168,7 @@
 
     &[data-config-scope] {
         &:before {
-            #mix-grid .return_length(7,9);
+            #mix-grid .return_length(7, @field-grid__columns);
             color: @field-scope__color;
             content: attr(data-config-scope);
             display: inline-block;
@@ -175,7 +179,7 @@
             position: absolute;
 
             & {
-                #mix-grid .return_length(2,9);
+                #mix-grid .return_length(2, @field-grid__columns);
                 width: @_length;
             }
         }
@@ -267,7 +271,7 @@
     & > .admin__field:first-child {
         position: static;
         & > .admin__field-label {
-            #mix-grid .column(3, 9);
+            #mix-grid .column(@field-label-grid__column, @field-grid__columns);
             cursor: pointer;
             left: 0;
             opacity: 0;

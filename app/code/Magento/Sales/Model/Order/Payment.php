@@ -112,7 +112,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -129,7 +129,7 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -163,6 +163,8 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Declare order model object
      *
+     * @codeCoverageIgnore
+     *
      * @param Order $order
      * @return $this
      */
@@ -175,11 +177,47 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Retrieve order model object
      *
+     * @codeCoverageIgnore
+     *
      * @return Order
      */
     public function getOrder()
     {
         return $this->_order;
+    }
+
+    /**
+     * Sets transaction id for current payment
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->setData('transaction_id', $transactionId);
+        return $this;
+    }
+
+    /**
+     * Sets transaction close flag
+     *
+     * @param bool $isClosed
+     * @return $this
+     */
+    public function setIsTransactionClosed($isClosed)
+    {
+        $this->setData('is_transaction_closed', (bool)$isClosed);
+        return $this;
+    }
+
+    /**
+     * Returns transaction parent
+     *
+     * @return string
+     */
+    public function getParentTransactionId()
+    {
+        return $this->getData('parent_transaction_id');
     }
 
     /**
@@ -272,11 +310,14 @@ class Payment extends Info implements OrderPaymentInterface
                 $orderState = $order->getState() ? $order->getState() : $orderState;
                 $orderStatus = $order->getStatus() ? $order->getStatus() : $orderStatus;
             }
+        } else {
+            $order->setState($orderState)
+                ->setStatus($orderStatus);
         }
 
         $isCustomerNotified = $isCustomerNotified ?: $order->getCustomerNoteNotify();
 
-        if (!in_array($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
+        if (!array_key_exists($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
             $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
         }
 
@@ -309,12 +350,12 @@ class Payment extends Info implements OrderPaymentInterface
                 break;
             case ($message):
             case ($originalOrderState && $message):
-            case ($originalOrderState != $orderState):
-            case ($originalOrderStatus != $orderStatus):
-                $order->setState($orderState)
-                    ->setStatus($orderStatus)
-                    ->addStatusHistoryComment($message)
-                    ->setIsCustomerNotified($isCustomerNotified);
+                if ($originalOrderState != $orderState || $originalOrderStatus != $orderStatus) {
+                    $order->setState($orderState)
+                        ->setStatus($orderStatus)
+                        ->addStatusHistoryComment($message)
+                        ->setIsCustomerNotified($isCustomerNotified);
+                }
                 break;
             default:
                 break;
@@ -369,6 +410,9 @@ class Payment extends Info implements OrderPaymentInterface
         if (is_null($invoice)) {
             $invoice = $this->_invoice();
             $this->setCreatedInvoice($invoice);
+            if ($this->getIsFraudDetected()) {
+                $this->getOrder()->setStatus(Order::STATUS_FRAUD);
+            }
             return $this;
         }
         $amountToCapture = $this->_formatAmount($invoice->getBaseGrandTotal());
@@ -396,17 +440,23 @@ class Payment extends Info implements OrderPaymentInterface
          * Capture attempt will happen only when invoice is not yet paid and the transaction can be paid
          */
         if ($invoice->getTransactionId()) {
-            $this->getMethodInstance()->setStore(
+            $method = $this->getMethodInstance();
+            $method->setStore(
                 $order->getStoreId()
-            )->fetchTransactionInfo(
+            );
+            $method->fetchTransactionInfo(
                 $this,
                 $invoice->getTransactionId()
             );
         }
         $status = false;
-        if (!$invoice->getIsPaid() && !$this->getIsTransactionPending()) {
+        if (!$invoice->getIsPaid()) {
             // attempt to capture: this can trigger "is_transaction_pending"
-            $this->getMethodInstance()->setStore($order->getStoreId())->capture($this, $amountToCapture);
+            $method = $this->getMethodInstance();
+            $method->setStore(
+                $order->getStoreId()
+            );
+            $method->capture($this, $amountToCapture);
 
             $transaction = $this->_addTransaction(
                 Transaction::TYPE_CAPTURE,
@@ -441,7 +491,8 @@ class Payment extends Info implements OrderPaymentInterface
             $order->setState($state)
                 ->setStatus($status)
                 ->addStatusHistoryComment($message);
-            $this->getMethodInstance()->processInvoice($invoice, $this);
+
+            $invoice->setTransactionId($this->getLastTransId());
             return $this;
         }
         throw new \Magento\Framework\Exception\LocalizedException(
@@ -601,13 +652,12 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Check order payment void availability
      *
-     * @param \Magento\Framework\Object $document
      * @return bool
      */
-    public function canVoid(\Magento\Framework\Object $document)
+    public function canVoid()
     {
         if (null === $this->_canVoidLookup) {
-            $this->_canVoidLookup = (bool)$this->getMethodInstance()->canVoid($document);
+            $this->_canVoidLookup = (bool)$this->getMethodInstance()->canVoid();
             if ($this->_canVoidLookup) {
                 $authTransaction = $this->getAuthorizationTransaction();
                 $this->_canVoidLookup = (bool)$authTransaction && !(int)$authTransaction->getIsClosed();
@@ -646,6 +696,30 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
+     * Sets creditmemo for current payment
+     *
+     * @param Creditmemo $creditmemo
+     * @return $this
+     */
+    public function setCreditmemo(Creditmemo $creditmemo)
+    {
+        $this->setData('creditmemo', $creditmemo);
+        return $this;
+    }
+
+    /**
+     * Returns Creditmemo assigned for this payment
+     *
+     * @return Creditmemo|null
+     */
+    public function getCreditmemo()
+    {
+        return $this->getData('creditmemo') instanceof Creditmemo
+            ? $this->getData('creditmemo')
+            : null;
+    }
+
+    /**
      * Refund payment online or offline, depending on whether there is invoice set in the creditmemo instance
      * Updates transactions hierarchy, if required
      * Updates payment totals, updates order status and adds proper comments
@@ -681,16 +755,14 @@ class Payment extends Info implements OrderPaymentInterface
                 try {
                     $gateway->setStore(
                         $this->getOrder()->getStoreId()
-                    )->processBeforeRefund(
-                        $invoice,
-                        $this
-                    )->refund(
+                    );
+                    $this->setRefundTransactionId($invoice->getTransactionId());
+                    $gateway->refund(
                         $this,
                         $baseAmountToRefund
-                    )->processCreditmemo(
-                        $creditmemo,
-                        $this
                     );
+
+                    $creditmemo->setTransactionId($this->getLastTransId());
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     if (!$captureTxn) {
                         throw new \Magento\Framework\Exception\LocalizedException(
@@ -872,7 +944,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function cancel()
     {
         $isOnline = true;
-        if (!$this->canVoid($this)) {
+        if (!$this->canVoid()) {
             $isOnline = false;
         }
 
@@ -896,7 +968,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function canReviewPayment()
     {
-        return (bool)$this->getMethodInstance()->canReviewPayment($this);
+        return (bool)$this->getMethodInstance()->canReviewPayment();
     }
 
     /**
@@ -917,7 +989,8 @@ class Payment extends Info implements OrderPaymentInterface
         $transactionId = $this->getLastTransId();
 
         /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
-        $method = $this->getMethodInstance()->setStore($this->getOrder()->getStoreId());
+        $method = $this->getMethodInstance();
+        $method->setStore($this->getOrder()->getStoreId());
         if ($method->acceptPayment($this)) {
             $invoice = $this->_getInvoiceForTransactionId($transactionId);
             $message = $this->_appendTransactionToMessage(
@@ -939,15 +1012,25 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Accept order with payment method instance
      *
+     * @param bool $isOnline
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deny()
+    public function deny($isOnline = true)
     {
-        $transactionId = $this->getLastTransId();
+        $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
 
-        /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
-        $method = $this->getMethodInstance()->setStore($this->getOrder()->getStoreId());
-        if ($method->denyPayment($this)) {
+        if ($isOnline) {
+            /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+            $method = $this->getMethodInstance();
+            $method->setStore($this->getOrder()->getStoreId());
+
+            $result = $method->denyPayment($this);
+        } else {
+            $result = (bool)$this->getNotificationResult();
+        }
+
+        if ($result) {
             $invoice = $this->_getInvoiceForTransactionId($transactionId);
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
@@ -955,9 +1038,11 @@ class Payment extends Info implements OrderPaymentInterface
             );
             $this->cancelInvoiceAndRegisterCancellation($invoice, $message);
         } else {
+            $txt = $isOnline ?
+                'There is no need to deny this payment.' : 'Registered notification about denied payment.';
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
-                $this->_prependMessage(__('There is no need to deny this payment.'))
+                $this->_prependMessage(__($txt))
             );
             $this->setOrderStatePaymentReview($message, $transactionId);
         }
@@ -967,16 +1052,21 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Performs registered payment update.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param bool $isOnline
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function update()
+    public function update($isOnline = true)
     {
-        $transactionId = $this->getLastTransId();
+        $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
         $invoice = $this->_getInvoiceForTransactionId($transactionId);
 
-        $this->getMethodInstance()->setStore($this->getOrder()->getStoreId())
-            ->fetchTransactionInfo($this, $transactionId);
+        
+        if ($isOnline) {
+            $method = $this->getMethodInstance();
+            $method->setStore($this->getOrder()->getStoreId());
+            $method->fetchTransactionInfo($this, $transactionId);
+        }
 
         if ($this->getIsTransactionApproved()) {
             $message = $this->_appendTransactionToMessage(
@@ -1081,9 +1171,12 @@ class Payment extends Info implements OrderPaymentInterface
 
         // do ordering
         $order = $this->getOrder();
+
         $state = Order::STATE_PROCESSING;
         $status = false;
-        $this->getMethodInstance()->setStore($order->getStoreId())->order($this, $amount);
+        $method = $this->getMethodInstance();
+        $method->setStore($order->getStoreId());
+        $method->order($this, $amount);
 
         if ($this->getSkipOrderProcessing()) {
             return $this;
@@ -1146,7 +1239,9 @@ class Payment extends Info implements OrderPaymentInterface
         $status = false;
         if ($isOnline) {
             // invoke authorization on gateway
-            $this->getMethodInstance()->setStore($order->getStoreId())->authorize($this, $amount);
+            $method = $this->getMethodInstance();
+            $method->setStore($order->getStoreId());
+            $method->authorize($this, $amount);
         }
 
         // similar logic of "payment review" order as in capturing
@@ -1158,7 +1253,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
         } else {
             if ($this->getIsFraudDetected()) {
-                $state = Order::STATE_PAYMENT_REVIEW;
+                $state = Order::STATE_PROCESSING;
                 $message = __(
                     'Order is suspended as its authorizing amount %1 is suspected to be fraudulent.',
                     $this->_formatPrice($amount, $this->getCurrencyCode())
@@ -1207,7 +1302,9 @@ class Payment extends Info implements OrderPaymentInterface
 
         // attempt to void
         if ($isOnline) {
-            $this->getMethodInstance()->setStore($order->getStoreId())->{$gatewayCallback}($this);
+            $method = $this->getMethodInstance();
+            $method->setStore($order->getStoreId());
+            $method->{$gatewayCallback}($this);
         }
         if ($this->_isTransactionExists()) {
             return $this;
@@ -1365,16 +1462,18 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function importTransactionInfo(Transaction $transactionTo)
     {
-        $data = $this->getMethodInstance()->setStore(
+        $method = $this->getMethodInstance();
+        $method->setStore(
             $this->getOrder()->getStoreId()
-        )->fetchTransactionInfo(
+        );
+        $method->fetchTransactionInfo(
             $this,
             $transactionTo->getTxnId()
         );
-        if ($data) {
+        if ($method) {
             $transactionTo->setAdditionalInformation(
                 Transaction::RAW_DETAILS,
-                $data
+                $method
             );
         }
         return $this;
@@ -1421,7 +1520,7 @@ class Payment extends Info implements OrderPaymentInterface
     protected function _appendTransactionToMessage($transaction, $message)
     {
         if ($transaction) {
-            $txnId = is_object($transaction) ? $transaction->getTxnId() : $transaction;
+            $txnId = is_object($transaction) ? $transaction->getHtmlTxnId() : $transaction;
             $message .= ' ' . __('Transaction ID: "%1"', $txnId);
         }
         return $message;
@@ -1438,11 +1537,14 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $preparedMessage = $this->getPreparedMessage();
         if ($preparedMessage) {
-            if (is_string($preparedMessage)) {
+            if (
+                is_string($preparedMessage)
+                || $preparedMessage instanceof \Magento\Framework\Phrase
+            ) {
                 return $preparedMessage . ' ' . $messagePrependTo;
             } elseif (is_object(
-                $preparedMessage
-            ) && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
+                    $preparedMessage
+                ) && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
             ) {
                 $comment = $preparedMessage->getComment() . ' ' . $messagePrependTo;
                 $preparedMessage->setComment($comment);
@@ -1666,8 +1768,8 @@ class Payment extends Info implements OrderPaymentInterface
         }
         foreach ($this->getOrder()->getInvoiceCollection() as $invoice) {
             if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN && $invoice->load(
-                $invoice->getId()
-            )
+                    $invoice->getId()
+                )
             ) {
                 $invoice->setTransactionId($transactionId);
                 return $invoice;
@@ -1676,6 +1778,7 @@ class Payment extends Info implements OrderPaymentInterface
         return false;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns account_status
      *
@@ -2196,7 +2299,6 @@ class Payment extends Info implements OrderPaymentInterface
         return $this->getData(OrderPaymentInterface::SHIPPING_REFUNDED);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */

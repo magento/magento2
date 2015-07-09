@@ -19,9 +19,9 @@
         .extend__clearer();
         margin-left: ~'-@{temp_gutter}';
     }
-    .return_length(@_columns-min, @_total: @temp_columns) {
+    .return_length(@_columns-min, @_total: @temp_columns, @mathSymbol: '-') {
         @_part: @_columns-min/@_total;
-        @_length: ~'calc( (100%) * @{_part} - @{temp_gutter} )';
+        @_length: ~'calc( (100%) * @{_part} @{mathSymbol} @{temp_gutter} )';
     }
     .width(@_columns-min, @_total: @temp_columns) {
         #mix-grid .return_length(@_columns-min, @_total);
@@ -515,5 +515,12 @@ label.mage-error {
     #edit_form {
         padding-left: 1.8rem;
         padding-right: 1.8rem;
+    }
+}
+
+.product-configure-popup {
+    .time-picker {
+        display: block;
+        margin-top: 1rem;
     }
 }

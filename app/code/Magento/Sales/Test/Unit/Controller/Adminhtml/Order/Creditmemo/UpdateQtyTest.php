@@ -232,7 +232,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteException()
     {
-        $message = 'Cannot update the item\'s quantity.';
+        $message = 'We can\'t update the item\'s quantity right now.';
         $e = new \Exception($message);
         $response = ['error' => true, 'message' => $message];
 

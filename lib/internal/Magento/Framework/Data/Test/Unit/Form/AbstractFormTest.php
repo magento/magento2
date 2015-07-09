@@ -127,4 +127,94 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
         $this->allElementsMock->expects($this->once())->method('add')->with($this->elementMock, false);
         $this->abstractForm->addColumn('hidden', $config);
     }
+
+    public function testAddCustomAttribute()
+    {
+        $this->assertEquals(
+            $this->abstractForm,
+            $this->abstractForm->addCustomAttribute('attribute_key1', 'attribute_value1')
+        );
+
+        $form = clone $this->abstractForm;
+        $this->assertNotEquals(
+            $form,
+            $this->abstractForm->addCustomAttribute('attribute_key2', 'attribute_value2')
+        );
+    }
+
+    /**
+     * @param array $keys
+     * @param array $data
+     * @param array $customAttributes
+     * @param string $result
+     * @dataProvider dataProviderSerialize
+     */
+    public function testSerialize(
+        $keys,
+        $data,
+        $customAttributes,
+        $result
+    ) {
+        foreach ($data as $key => $value) {
+            $this->abstractForm->setData($key, $value);
+        }
+
+        foreach ($customAttributes as $key => $value) {
+            $this->abstractForm->addCustomAttribute($key, $value);
+        }
+
+        $this->assertEquals($result, $this->abstractForm->serialize($keys));
+    }
+
+    /**
+     * 1. Keys
+     * 2. Data
+     * 3. Custom Attributes
+     * 4. Result
+     *
+     * @return array
+     */
+    public function dataProviderSerialize()
+    {
+        return [
+            [[], [], [], ''],
+            [['key1'], [], [], ''],
+            [['key1'], ['key1' => 'value'], [], 'key1="value"'],
+            [['key1', 'key2'], ['key1' => 'value'], [], 'key1="value"'],
+            [['key1', 'key2'], ['key1' => 'value', 'key3' => 'value3'], [], 'key1="value"'],
+            [['key1', 'key2'], ['key1' => 'value', 'key3' => 'value3'], ['custom1' => ''], 'key1="value"'],
+            [
+                [
+                    'key1',
+                    'key2',
+                ],
+                [
+                    'key1' => 'value',
+                    'key3' => 'value3',
+                ],
+                [
+                    'custom1' => 'custom_value1',
+                ],
+                'key1="value" custom1="custom_value1"'
+            ],
+            [
+                [
+                    'key1',
+                    'key2',
+                ],
+                [
+                    'key1' => 'value',
+                    'key3' => 'value3',
+                ],
+                [
+                    'custom1' => 'custom_value1',
+                    'custom2' => '',
+                    'custom3' => 0,
+                    'custom4' => false,
+                    'custom5' => null,
+                ],
+                'key1="value" custom1="custom_value1"'
+            ],
+        ];
+    }
 }

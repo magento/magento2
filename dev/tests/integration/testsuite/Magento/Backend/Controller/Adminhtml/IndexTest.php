@@ -8,7 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class IndexTest extends \Magento\Backend\Utility\Controller
+class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Check not logged state

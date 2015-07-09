@@ -69,4 +69,14 @@ class GuestShippingMethodManagement implements GuestShippingMethodManagementInte
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->shippingMethodManagement->set($quoteIdMask->getQuoteId(), $carrierCode, $methodCode);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address)
+    {
+        /** @var $quoteIdMask QuoteIdMask */
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        return $this->shippingMethodManagement->estimateByAddress($quoteIdMask->getQuoteId(), $address);
+    }
 }

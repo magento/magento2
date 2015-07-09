@@ -9,10 +9,11 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
-use Magento\Ui\DataProvider\EavValidationRul;
+use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
@@ -47,6 +48,11 @@ class DataProvider implements DataProviderInterface
     protected $eavConfig;
 
     /**
+     * @var FilterPool
+     */
+    protected $filterPool;
+
+    /**
      * @var array
      */
     protected $meta = [];
@@ -75,7 +81,7 @@ class DataProvider implements DataProviderInterface
         'sortOrder' => 'sort_order',
         'notice' => 'note',
         'default' => 'default_value',
-        'size' => 'scope_multiline_count'
+        'size' => 'multiline_count'
     ];
 
     /**
@@ -90,9 +96,9 @@ class DataProvider implements DataProviderInterface
     ];
 
     /**
-     * @var EavValidationRul
+     * @var EavValidationRules
      */
-    protected $eavValidationRul;
+    protected $eavValidationRules;
 
     /**
      * Constructor
@@ -100,9 +106,10 @@ class DataProvider implements DataProviderInterface
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param EavValidationRul $eavValidationRul
+     * @param EavValidationRules $eavValidationRules
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
+     * @param FilterPool $filterPool
      * @param array $meta
      * @param array $data
      */
@@ -110,19 +117,21 @@ class DataProvider implements DataProviderInterface
         $name,
         $primaryFieldName,
         $requestFieldName,
-        EavValidationRul $eavValidationRul,
+        EavValidationRules $eavValidationRules,
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
+        FilterPool $filterPool,
         array $meta = [],
         array $data = []
     ) {
         $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
-        $this->eavValidationRul = $eavValidationRul;
+        $this->eavValidationRules = $eavValidationRules;
         $this->collection = $customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
+        $this->filterPool = $filterPool;
         $this->meta = $meta;
         $this->meta['customer']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
@@ -212,9 +221,9 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter($field, $condition = null)
+    public function addFilter($condition, $field = null, $type = 'regular')
     {
-        $this->collection->addFieldToFilter($field, $condition);
+        $this->filterPool->registerNewFilter($condition, $field, $type);
     }
 
     /**
@@ -223,6 +232,7 @@ class DataProvider implements DataProviderInterface
      * @param string|array $field
      * @param string|null $alias
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addField($field, $alias = null)
     {
@@ -260,6 +270,7 @@ class DataProvider implements DataProviderInterface
      * @param string|null $field
      * @param bool $isAlias Alias identifier
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function removeField($field, $isAlias = false)
     {
@@ -286,7 +297,7 @@ class DataProvider implements DataProviderInterface
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-
+        $this->filterPool->applyFilters($this->collection);
         $items = $this->collection->getItems();
         /** @var Customer $customer */
         foreach ($items as $customer) {
@@ -317,6 +328,7 @@ class DataProvider implements DataProviderInterface
      */
     public function count()
     {
+        $this->filterPool->applyFilters($this->collection);
         return $this->collection->count();
     }
 
@@ -369,7 +381,7 @@ class DataProvider implements DataProviderInterface
                 }
             }
 
-            $rules = $this->eavValidationRul->build($attribute, $meta[$code]);
+            $rules = $this->eavValidationRules->build($attribute, $meta[$code]);
             if (!empty($rules)) {
                 $meta[$code]['validation'] = $rules;
             }

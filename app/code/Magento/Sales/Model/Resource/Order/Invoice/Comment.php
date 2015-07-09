@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order\Invoice;
 
 use Magento\Sales\Model\Resource\EntityAbstract;
-use Magento\Sales\Model\Resource\EntitySnapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 
 /**
@@ -34,22 +34,29 @@ class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
+     * @param Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
-     * @param string|null $resourcePrefix
-     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
+        parent::__construct(
+            $context,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
+            $resourcePrefix
+        );
     }
 
     /**

@@ -15,7 +15,7 @@
 
 <form action="<?php echo $block->getImportFormAction() ?>" method="post" class="import-service">
     <?php echo $block->getBlockHtml('formkey')?>
-    <fieldset class="admin__fieldset">
+    <fieldset class="admin__fieldset admin__fieldset-import-service">
         <?php echo $block->getServicesHtml() ?>
         <?php echo $block->getImportButtonHtml() ?>
     </fieldset>

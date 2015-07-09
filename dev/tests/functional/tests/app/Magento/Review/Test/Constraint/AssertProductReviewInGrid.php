@@ -12,13 +12,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertProductReviewInGrid
- * Check that review is displayed in grid
+ * Check that review is displayed in grid.
  */
 class AssertProductReviewInGrid extends AbstractConstraint
 {
     /**
-     * Filter params
+     * Filter params.
      *
      * @var array
      */
@@ -35,10 +34,10 @@ class AssertProductReviewInGrid extends AbstractConstraint
     ];
 
     /**
-     * Assert that review is displayed in grid
+     * Assert that review is displayed in grid.
      *
      * @param ReviewIndex $reviewIndex
-     * @param Review $review ,
+     * @param Review $review
      * @param FixtureInterface $product
      * @param string $gridStatus
      * @return void
@@ -61,7 +60,7 @@ class AssertProductReviewInGrid extends AbstractConstraint
     }
 
     /**
-     * Prepare filter for assert
+     * Prepare filter for assert.
      *
      * @param FixtureInterface $product
      * @param array $review
@@ -89,6 +88,9 @@ class AssertProductReviewInGrid extends AbstractConstraint
                 case 'status_id':
                     $value = $gridStatus != '' ? $gridStatus : (isset($review[$param]) ? $review[$param] : null);
                     break;
+                case 'type':
+                    $value = isset($review[$param]) ? $review[$param] : 'Administrator';
+                    break;
                 default:
                     $value = isset($review[$param]) ? $review[$param] : null;
                     break;
@@ -101,7 +103,7 @@ class AssertProductReviewInGrid extends AbstractConstraint
     }
 
     /**
-     * Text success exist review in grid on product reviews tab
+     * Text success exist review in grid on product reviews tab.
      *
      * @return string
      */

@@ -11,6 +11,8 @@
 //  Variables
 //  ---------------------------------------------
 
+@window__min-width: 1024px;
+
 @body__background-color: @color-white-smoke;
 
 @page-wrapper__indent-left: @menu__width;
@@ -23,28 +25,48 @@
 
 //
 
+html {
+    height: 100%;
+}
+
 body {
+    &:extend(.abs-clearer all);
     background-color: @body__background-color;
+    min-height: 100%;
+    min-width: 102.4rem;
 }
 
 .page-wrapper {
     background-color: @page-wrapper__background-color;
-    min-width: 102.4rem;
-    padding-left: @page-wrapper__indent-left;
+    display: inline-block;
+    margin-left: -4px; // Clear inline-block gap
+    vertical-align: top;
+    width: ~'calc(100% - @{menu__width})';
 }
 
 .page-content {
-    .extend__clearfix();
+    &:extend(.abs-clearfix all);
     padding-bottom: @page-content__padding-vertical;
     padding-left: @page-content__padding-horizontal;
     padding-right: @page-content__padding-horizontal;
 }
 
+//  ToDo UI: should be moved to messages
 .notices-wrapper {
     margin: 0 3rem;
     .messages {
         margin-bottom: 0;
     }
+}
+
+//  Scroll bar appearing compensation
+@media (min-width: @window__min-width) {
+  html {
+    width: 100vw;
+  }
+  body {
+    overflow-x: hidden;
+  }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {

@@ -46,7 +46,8 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $object->getCode())) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'Website code may only contain letters (a-z), numbers (0-9) or underscore(_), the first character must be a letter'
+                    'Website code may only contain letters (a-z), numbers (0-9) or underscore (_),'
+                    . ' and the first character must be a letter.'
                 )
             );
         }
