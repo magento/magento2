@@ -101,11 +101,7 @@ class DbValidator
     {
         $grantInfo = $connection->query('SHOW GRANTS FOR current_user()')->fetchAll(\PDO::FETCH_NUM);
         foreach ($grantInfo as $grantRow) {
-            if (strpos($grantRow[0], 'ALL ON ' . $dbName) !== false
-                || strpos($grantRow[0], 'ALL ON *') !== false
-                || strpos($grantRow[0], 'ALL PRIVILEGES ON ' . $dbName) !== false
-                || strpos($grantRow[0], 'ALL PRIVILEGES ON *') !== false
-            ) {
+            if (preg_match('/(ALL|ALL\sPRIVILEGES)\sON\s[^a-zA-Z\d\s]?(\*|' . $dbName .  ')/', $grantRow[0]) === 1) {
                 return true;
             }
         }
