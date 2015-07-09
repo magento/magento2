@@ -728,7 +728,7 @@ class EavSetup
             )
         ) {
             throw new LocalizedException(
-                __('Maximum length of attribute code must be less than %1 symbols', $attributeCodeMaxLength)
+                __('An attribute code must be fewer than %1 characters.', $attributeCodeMaxLength)
             );
         }
 

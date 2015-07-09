@@ -27,7 +27,7 @@ class ProductOnlineSwitcher extends SimpleElement
      *
      * @var string
      */
-    protected $topPage = './ancestor::body//*[@class="page-main-actions"]';
+    protected $topPage = './ancestor::body//*[contains(@class,"page-header")]';
 
     /**
      * Set value

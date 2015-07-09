@@ -29,7 +29,19 @@ define([
             success: function (resp) {
                 if (!resp.error) {
                     save.resolve();
+                    return true;
                 }
+
+                $('body').notification('clear');
+                $.each(resp.messages, function(key, message) {
+                    $('body').notification('add', {
+                        error: resp.error,
+                        message: message,
+                        insertMethod: function(message) {
+                            $('.page-main-actions').after(message);
+                        }
+                    });
+                });
             },
             complete: function () {
                 $('body').trigger('processStop');

@@ -419,4 +419,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue($error);
         }
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoAppIsolation enabled
+     */
+    public function testGetOptions()
+    {
+        $this->_model->load(1);
+        $options = $this->_model->getOptions();
+        $this->assertEquals(4, count($options));
+    }
 }

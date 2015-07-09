@@ -26,12 +26,13 @@ define([
             error: '',
             notice: '',
             customScope: '',
+            additionalClasses: {},
 
             listens: {
                 value: 'onUpdate',
                 visible: 'setPreview',
-                '<%= provider %>:data.reset': 'reset',
-                '<%= provider %>:<% if (customScope !== "") { %><%= customScope %>.<% } %>data.validate': 'validate'
+                '${ $.provider }:data.reset': 'reset',
+                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
             },
 
             links: {
@@ -46,9 +47,10 @@ define([
         initialize: function () {
             _.bindAll(this, 'reset');
 
-            this._super();
+            this._super()
+                ._setClasses();
 
-            this.initialValue = this.getInititalValue();
+            this.initialValue = this.getInitialValue();
 
             this.value(this.initialValue);
 
@@ -93,11 +95,38 @@ define([
         },
 
         /**
+         * Extends 'additionalClasses' object.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        _setClasses: function () {
+            var addtional = this.additionalClasses,
+                classes;
+
+            if (_.isString(addtional)) {
+                addtional = this.additionalClasses.split(' ');
+                classes = this.additionalClasses = {};
+
+                addtional.forEach(function (name) {
+                    classes[name] = true;
+                }, this);
+            }
+
+            _.extend(this.additionalClasses, {
+                required:   this.required,
+                _error:     this.error,
+                _disabled:  this.disabled
+            });
+
+            return this;
+        },
+
+        /**
          * Gets initial value of element
          *
          * @returns {*} Elements' value.
          */
-        getInititalValue: function () {
+        getInitialValue: function () {
             var values = [this.value(), this.default],
                 value;
 

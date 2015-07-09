@@ -42,7 +42,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Tax
         } catch (\Exception $e) {
             $responseContent = [
                 'success' => false,
-                'error_message' => __('Something went wrong saving this tax class.'),
+                'error_message' => __('We can\'t save this tax class right now.'),
                 'class_id' => '',
                 'class_name' => '',
             ];

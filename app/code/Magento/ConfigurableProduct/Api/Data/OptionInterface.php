@@ -90,4 +90,15 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setExtensionAttributes(
         \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
     );
+
+    /**
+     * @return int|null
+     */
+    public function getProductId();
+
+    /**
+     * @param int|null $value
+     * @return $this
+     */
+    public function setProductId($value);
 }

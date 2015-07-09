@@ -26,7 +26,7 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block
                 $model->load($id);
                 $model->delete();
                 // display success message
-                $this->messageManager->addSuccess(__('The block has been deleted.'));
+                $this->messageManager->addSuccess(__('You deleted the block.'));
                 // go to grid
                 return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {

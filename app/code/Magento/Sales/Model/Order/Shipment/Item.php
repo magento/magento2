@@ -51,7 +51,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -61,7 +61,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -89,6 +89,8 @@ class Item extends AbstractModel implements ShipmentItemInterface
     /**
      * Declare Shipment instance
      *
+     * @codeCoverageIgnore
+     *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
      */
@@ -100,6 +102,8 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * Retrieve Shipment instance
+     *
+     * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Shipment
      */
@@ -160,7 +164,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
             $this->setData('qty', $qty);
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('We found an invalid qty to ship for item "%1".', $this->getName())
+                __('We found an invalid quantity to ship for item "%1".', $this->getName())
             );
         }
         return $this;
@@ -177,6 +181,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
         return $this;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns additional_data
      *
@@ -287,7 +292,6 @@ class Item extends AbstractModel implements ShipmentItemInterface
         return $this->getData(ShipmentItemInterface::WEIGHT);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */

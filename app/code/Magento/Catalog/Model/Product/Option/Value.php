@@ -67,7 +67,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -75,7 +75,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_valueCollectionFactory = $valueCollectionFactory;

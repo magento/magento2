@@ -67,6 +67,58 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     }
 
     /**
+     * Return ID
+     *
+     * @codeCoverageIgnore
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->getData($this->_idFieldName);
+    }
+
+    /**
+     * Set ID
+     *
+     * @codeCoverageIgnore
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->setData($this->_idFieldName, $id);
+        return $this;
+    }
+
+    /**
+     * Id field name setter
+     *
+     * @codeCoverageIgnore
+     *
+     * @param  string $name
+     * @return $this
+     */
+    public function setIdFieldName($name)
+    {
+        $this->_idFieldName = $name;
+        return $this;
+    }
+
+    /**
+     * Id field name getter
+     *
+     * @codeCoverageIgnore
+     *
+     * @return string
+     */
+    public function getIdFieldName()
+    {
+        return $this->_idFieldName;
+    }
+
+    /**
      * Return indexer's view ID
      *
      * @return string

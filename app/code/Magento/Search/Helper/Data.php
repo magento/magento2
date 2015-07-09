@@ -236,7 +236,7 @@ class Data extends AbstractHelper
         if ($this->_queryFactory->get()->isQueryTextExceeded()) {
             $this->addNoteMessage(
                 __(
-                    'Your search query can\'t be longer than %1, so we had to shorten your query.',
+                    'Your search query can\'t be longer than %1, so we shortened your query.',
                     $this->getMaxQueryLength()
                 )
             );
@@ -255,15 +255,11 @@ class Data extends AbstractHelper
      */
     public function prepareIndexdata($index, $separator = ' ')
     {
-        $_index = [];
-        foreach ($index as $value) {
-            if (!is_array($value)) {
-                $_index[] = $value;
-            } else {
-                $_index = array_merge($_index, $value);
-            }
+        $indexData = [];
+        foreach ($index as $attributeId => $value) {
+            $indexData[$attributeId] = is_array($value) ? implode($separator, $value) : $value;
         }
-        return join($separator, array_filter($_index));
+        return $indexData;
     }
 
     /**

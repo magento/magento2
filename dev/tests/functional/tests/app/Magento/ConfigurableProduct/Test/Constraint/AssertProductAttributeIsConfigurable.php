@@ -20,7 +20,6 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
     /**
      * Assert check whether the attribute is used to create a configurable products.
      *
-     * @param CatalogProductAttribute $productAttribute
      * @param CatalogProductAttribute $attribute
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductNew $newProductPage
@@ -28,20 +27,17 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
     public function processAssert(
         CatalogProductAttribute $attribute,
         CatalogProductIndex $productGrid,
-        CatalogProductNew $newProductPage,
-        CatalogProductAttribute $productAttribute = null
+        CatalogProductNew $newProductPage
     ) {
-        $attributeSearch = $productAttribute === null ? $attribute : $productAttribute;
         $productGrid->open();
         $productGrid->getGridPageActionBlock()->addProduct('configurable');
         $productBlockForm = $newProductPage->getProductForm();
         $productBlockForm->openTab('variations');
-
         /** @var TabVariation $tabVariation */
-        $tabVariation = $productBlockForm->getTabElement('variations');
+        $tabVariation = $productBlockForm->getTab('variations');
         $configurableAttributeSelector = $tabVariation->getAttributeBlock()->getAttributeSelector();
         \PHPUnit_Framework_Assert::assertTrue(
-            $configurableAttributeSelector->isExistAttributeInSearchResult($attributeSearch),
+            $configurableAttributeSelector->isExistAttributeInSearchResult($attribute),
             "Product attribute is absent on the product page."
         );
     }

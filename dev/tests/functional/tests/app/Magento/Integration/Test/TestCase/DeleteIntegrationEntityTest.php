@@ -11,16 +11,13 @@ use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Delete Integration Entity
- *
- * Test Flow:
  * Preconditions:
- * 1. Integration is created
+ * 1. Integration is created.
  *
  * Steps:
  * 1. Log in to backend as admin user.
- * 2. Navigate to System > Extensions > Integrations
- * 3. Click on the "Remove" icon for required integration
+ * 2. Navigate to System > Extensions > Integrations.
+ * 3. Click on the "Remove" icon for required integration.
  * 4. Click "Delete" button.
  * 5. Perform all assertions.
  *
@@ -35,14 +32,14 @@ class DeleteIntegrationEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Integration grid page
+     * Integration grid page.
      *
      * @var IntegrationIndex
      */
     protected $integrationIndexPage;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param IntegrationIndex $integrationIndex
      * @return void
@@ -53,7 +50,7 @@ class DeleteIntegrationEntityTest extends Injectable
     }
 
     /**
-     * Delete Integration Entity test
+     * Delete Integration Entity test.
      *
      * @param Integration $integration
      * @return void

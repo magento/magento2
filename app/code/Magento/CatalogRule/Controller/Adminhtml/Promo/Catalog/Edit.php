@@ -35,7 +35,7 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         $this->_coreRegistry->register('current_promo_catalog_rule', $model);
 
         $this->_initAction();
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Catalog Price Rules'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Catalog Price Rule'));
         $this->_view->getPage()->getConfig()->getTitle()->prepend(
             $model->getRuleId() ? $model->getName() : __('New Catalog Price Rule')
         );

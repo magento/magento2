@@ -16,6 +16,22 @@ class ProcessLayoutRenderElement
     protected $_config;
 
     /**
+     * Is varnish enabled flag
+     *
+     * @var bool
+     */
+    protected $isVarnishEnabled;
+
+    /**
+     * Is full page cache enabled flag
+     *
+     * @var bool
+     */
+    protected $isFullPageCacheEnabled;
+
+    /**
+     * Class constructor
+     *
      * @param \Magento\PageCache\Model\Config $config
      */
     public function __construct(\Magento\PageCache\Model\Config $config)
@@ -45,6 +61,32 @@ class ProcessLayoutRenderElement
     }
 
     /**
+     * Is full page cache enabled
+     *
+     * @return bool
+     */
+    protected function isFullPageCacheEnabled()
+    {
+        if ($this->isFullPageCacheEnabled === null) {
+            $this->isFullPageCacheEnabled = $this->_config->isEnabled();
+        }
+        return $this->isFullPageCacheEnabled;
+    }
+
+    /**
+     * Is varnish cache engine enabled
+     *
+     * @return bool
+     */
+    protected function isVarnishEnabled()
+    {
+        if ($this->isVarnishEnabled === null) {
+            $this->isVarnishEnabled = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);
+        }
+        return $this->isVarnishEnabled;
+    }
+
+    /**
      * Add comment cache containers to private blocks
      * Blocks are wrapped only if page is cacheable
      *
@@ -56,15 +98,15 @@ class ProcessLayoutRenderElement
         $event = $observer->getEvent();
         /** @var \Magento\Framework\View\Layout $layout */
         $layout = $event->getLayout();
-        if ($layout->isCacheable() && $this->_config->isEnabled()) {
+        if ($this->isFullPageCacheEnabled() && $layout->isCacheable()) {
             $name = $event->getElementName();
+            /** @var \Magento\Framework\View\Element\AbstractBlock $block */
             $block = $layout->getBlock($name);
             $transport = $event->getTransport();
             if ($block instanceof \Magento\Framework\View\Element\AbstractBlock) {
                 $blockTtl = $block->getTtl();
-                $varnishIsEnabledFlag = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);
                 $output = $transport->getData('output');
-                if ($varnishIsEnabledFlag && isset($blockTtl)) {
+                if (isset($blockTtl) && $this->isVarnishEnabled()) {
                     $output = $this->_wrapEsi($block, $layout);
                 } elseif ($block->isScopePrivate()) {
                     $output = sprintf(

@@ -59,7 +59,7 @@ class ServiceDataAttributesGenerator implements OperationInterface
         }
 
         $files = $this->directoryScanner->scan($this->data['path'], $this->data['filePatterns']);
-        $repositories = $this->serviceDataAttributesScanner->collectEntities($files['service_data_attributes']);
+        $repositories = $this->serviceDataAttributesScanner->collectEntities($files['extension_attributes']);
         foreach ($repositories as $entityName) {
             class_exists($entityName);
         }

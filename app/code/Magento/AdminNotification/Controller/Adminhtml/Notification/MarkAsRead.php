@@ -36,4 +36,12 @@ class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notific
         }
         $this->_redirect('adminhtml/*/');
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_AdminNotification::mark_as_read');
+    }
 }

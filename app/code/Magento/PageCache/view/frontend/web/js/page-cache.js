@@ -239,6 +239,7 @@ define([
                 data = {
                     blocks: [],
                     handles: this.options.handles,
+                    originalRequest: this.options.originalRequest,
                     version: version
                 };
 
@@ -247,6 +248,7 @@ define([
             }
             data.blocks = JSON.stringify(data.blocks.sort());
             data.handles = JSON.stringify(data.handles);
+            data.originalRequest = JSON.stringify(data.originalRequest);
             $.ajax({
                 url: this.options.url,
                 data: data,

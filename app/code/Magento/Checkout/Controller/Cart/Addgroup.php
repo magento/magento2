@@ -30,7 +30,10 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
                         $this->messageManager->addError($e->getMessage());
                     }
                 } catch (\Exception $e) {
-                    $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
+                    $this->messageManager->addException(
+                        $e,
+                        __('We can\'t add this item to your shopping cart right now.')
+                    );
                     $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                     return $this->_goBack();
                 }

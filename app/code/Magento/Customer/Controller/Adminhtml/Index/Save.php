@@ -45,7 +45,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         if (isset($customerData['disable_auto_group_change'])) {
-            $customerData['disable_auto_group_change'] = (int)$customerData['disable_auto_group_change'];
+            $customerData['disable_auto_group_change'] = (int) filter_var(
+                $customerData['disable_auto_group_change'],
+                FILTER_VALIDATE_BOOLEAN
+            );
         }
 
         return $customerData;
@@ -266,7 +269,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             } catch (\Exception $exception) {
-                $this->messageManager->addException($exception, __('An error occurred while saving the customer.'));
+                $this->messageManager->addException($exception, __('Something went wrong while saving the customer.'));
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             }

@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
+abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
 {
     /**
      * Array of items with item id key
@@ -364,11 +364,11 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     }
 
     /**
-     * Wrapper for compatibility with \Magento\Framework\Data\Collection\Db
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
      *
      * @param mixed $attribute
      * @param mixed $condition
-     * @return $this|\Magento\Framework\Data\Collection\Db
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
@@ -896,6 +896,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
         \Magento\Framework\Profiler::start('set_orig_data');
         foreach ($this->_items as $item) {
             $item->setOrigData();
+            $this->beforeAddLoadedItem($item);
         }
         \Magento\Framework\Profiler::stop('set_orig_data');
 
