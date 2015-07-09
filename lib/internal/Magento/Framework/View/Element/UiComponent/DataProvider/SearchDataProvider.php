@@ -9,9 +9,9 @@ namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection as Collection;
 
 /**
- * Class DataProvider
+ * Class SearchDataProvider
  */
-class DataProvider implements DataProviderInterface
+class SearchDataProvider implements DataProviderInterface
 {
     /**
      * Data Provider name
@@ -57,11 +57,24 @@ class DataProvider implements DataProviderInterface
     protected $filterPool;
 
     /**
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
+     * @var \Magento\Framework\Api\Search\FilterGroupBuilder
+     */
+    protected $filterGroup;
+
+    /**
+     * @var
+     */
+    protected $filterBuilder;
+
+    protected $searchCriteria;
+
+    /**
+     * @param $name
+     * @param $primaryFieldName
+     * @param $requestFieldName
      * @param Collection $collection
      * @param FilterPool $filterPool
+     * @param \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder
      * @param array $meta
      * @param array $data
      */
@@ -71,6 +84,8 @@ class DataProvider implements DataProviderInterface
         $requestFieldName,
         Collection $collection,
         FilterPool $filterPool,
+        \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder,
+//        \Magento\Framework\Api\Search\SearchCriteriaInterface $filterGroupBuilder,
         array $meta = [],
         array $data = []
     ) {
@@ -78,6 +93,7 @@ class DataProvider implements DataProviderInterface
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
         $this->filterPool = $filterPool;
+        $this->filterGroupBuilder = $filterGroupBuilder;
         $this->collection = $collection;
         $this->meta = $meta;
         $this->data = $data;
@@ -166,7 +182,9 @@ class DataProvider implements DataProviderInterface
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-//        $this->filterPool->registerNewFilter($condition, $field, $type);
+        $this->filterGroupBuilder->addFilter($filter);
+//            ->setFilters(
+//            array_merge($this->filterGroup->getFilters(), [])
     }
 
     /**
@@ -235,7 +253,13 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
-        $this->filterPool->applyFilters($this->collection);
+        $data = [];
+        $searchResult = $this->reporting->search($searchCriteria);
+        $documents = $searchResult->getItems();
+        foreach ($documents as $document) {
+            $data[] = $document->getCustomAttribures();
+        }
+        //$this->filterPool->applyFilters($this->collection);
         return $this->collection->toArray();
     }
 

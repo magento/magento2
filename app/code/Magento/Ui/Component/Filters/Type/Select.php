@@ -44,11 +44,13 @@ class Select extends AbstractFilter
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         OptionSourceInterface $optionsProvider = null,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder,
+
         array $components = [],
         array $data = []
     ) {
         $this->optionsProvider = $optionsProvider;
-        parent::__construct($context, $uiComponentFactory, $components, $data);
+        parent::__construct($context, $uiComponentFactory, $filterBuilder, $components, $data);
     }
 
     /**
