@@ -219,6 +219,13 @@
             <argument name="attributePrefix" xsi:type="const">Magento\CatalogSearch\Model\Resource\Engine::ATTRIBUTE_PREFIX</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Resource\EngineProvider">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Resource\Engine</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Search\Model\AdapterFactory">
         <arguments>
             <argument name="path" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineInterface::CONFIG_ENGINE_PATH</argument>
