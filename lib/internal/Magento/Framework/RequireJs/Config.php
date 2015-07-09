@@ -6,6 +6,7 @@
 namespace Magento\Framework\RequireJs;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Asset\Minification;
 
 /**
  * Provider of RequireJs config information
@@ -81,37 +82,37 @@ config;
     private $staticContext;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface
-     */
-    private $assetConfig;
-
-    /**
      * @var \Magento\Framework\Code\Minifier\AdapterInterface
      */
     private $minifyAdapter;
+
+    /**
+     * @var Minification
+     */
+    private $minification;
 
     /**
      * @param \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Filesystem $appFilesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\View\Asset\ConfigInterface $assetConfig
      * @param \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter
+     * @param Minification $minification
      */
     public function __construct(
         \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Filesystem $appFilesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\Asset\ConfigInterface $assetConfig,
-        \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter
+        \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter,
+        Minification $minification
     ) {
         $this->fileSource = $fileSource;
         $this->design = $design;
         $this->baseDir = $appFilesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->staticContext = $assetRepo->getStaticViewFileContext();
-        $this->assetConfig = $assetConfig;
         $this->minifyAdapter = $minifyAdapter;
+        $this->minification = $minification;
     }
 
     /**
@@ -139,7 +140,7 @@ config;
             self::FULL_CONFIG_TEMPLATE
         );
 
-        if ($this->assetConfig->isAssetMinification('js')) {
+        if ($this->minification->isEnabled('js')) {
             $fullConfig = $this->minifyAdapter->minify($fullConfig);
         }
 
@@ -178,7 +179,7 @@ config;
             'baseUrl' => $this->staticContext->getBaseUrl() . $this->staticContext->getPath(),
         ];
         $config = json_encode($config, JSON_UNESCAPED_SLASHES);
-        if ($this->assetConfig->isAssetMinification('js')) {
+        if ($this->minification->isEnabled(('js'))) {
             $result .= $this->getMinificationCode();
         }
         $result .= "require.config($config);";
@@ -190,10 +191,7 @@ config;
      */
     protected function getConfigFileName()
     {
-        return $this->assetConfig->isAssetMinification('js') ?
-            substr(self::CONFIG_FILE_NAME, 0, -2) . 'min.js' :
-            self::CONFIG_FILE_NAME;
-
+        return $this->minification->addMinifiedSign(self::CONFIG_FILE_NAME);
     }
 
     /**

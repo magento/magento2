@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
 use Magento\Framework\View\Asset\ConfigInterface;
+use Magento\Framework\View\Asset\Minification as AssetMinification;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 
@@ -20,23 +21,23 @@ class Minification implements ResolverInterface
     protected $fallback;
 
     /**
-     * @var ConfigInterface
-     */
-    protected $config;
-
-    /**
      * @var array
      */
     protected $extensions;
 
     /**
-     * @param ResolverInterface $fallback
-     * @param ConfigInterface $config
+     * @var AssetMinification
      */
-    public function __construct(ResolverInterface $fallback, ConfigInterface $config)
+    private $minification;
+
+    /**
+     * @param ResolverInterface $fallback
+     * @param AssetMinification $minification
+     */
+    public function __construct(ResolverInterface $fallback, AssetMinification $minification)
     {
         $this->fallback = $fallback;
-        $this->config = $config;
+        $this->minification = $minification;
     }
     /**
      * Get path of file after using fallback rules
@@ -52,13 +53,7 @@ class Minification implements ResolverInterface
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
         $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);
-        $extension = pathinfo($file, PATHINFO_EXTENSION);
-        if (
-            !$path &&
-            $this->config->isAssetMinification($extension) &&
-            substr($file, -5 - strlen($extension)) == '.min.' . $extension
-        ) {
-            $newFile = substr($file, 0, -4 - strlen($extension)) . $extension;
+        if (!$path && $file != ($newFile = $this->minification->removeMinifiedSign($file))) {
             $path = $this->fallback->resolve($type, $newFile, $area, $theme, $locale, $module);
         }
         return $path;

@@ -26,16 +26,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     const XML_PATH_MERGE_JS_FILES = 'dev/js/merge_files';
 
     /**
-     * XML path for asset minification configuration
-     */
-    const XML_PATH_MINIFICATION_ENABLED = 'dev/%s/minify_files';
-
-    /**
-     * XML path for asset minification adapter configuration
-     */
-    const XML_PATH_MINIFICATION_ADAPTER = 'dev/%s/minify_adapter';
-
-    /**
      * XML path for asset minification adapter configuration
      */
     const XML_PATH_JS_BUNDLING = 'dev/js/enable_js_bundling';
@@ -49,19 +39,13 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
-    /**
-     * @var State
-     */
-    protected $appState;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param State $appState
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, State $appState)
+    public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
-        $this->appState = $appState;
     }
 
     /**
@@ -101,22 +85,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
             self::XML_PATH_MERGE_JS_FILES,
             ScopeInterface::SCOPE_STORE
         );
-    }
-
-    /**
-     * Check whether asset minification is on for specified content type
-     *
-     * @param string $contentType
-     * @return bool
-     */
-    public function isAssetMinification($contentType)
-    {
-        return
-            $this->appState->getMode() != State::MODE_DEVELOPER &&
-            (bool)$this->scopeConfig->isSetFlag(
-                sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
-                ScopeInterface::SCOPE_STORE
-            );
     }
 
     /**

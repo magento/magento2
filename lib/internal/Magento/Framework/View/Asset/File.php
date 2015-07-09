@@ -46,9 +46,9 @@ class File implements MergeableInterface
     private $resolvedFile;
 
     /**
-     * @var AssetConfigInterface
+     * @var Minification
      */
-    private $assetConfig;
+    private $minification;
 
     /**
      * @param Source $source
@@ -56,7 +56,7 @@ class File implements MergeableInterface
      * @param string $filePath
      * @param string $module
      * @param string $contentType
-     * @param AssetConfigInterface $assetConfig
+     * @param Minification $minification
      */
     public function __construct(
         Source $source,
@@ -64,14 +64,14 @@ class File implements MergeableInterface
         $filePath,
         $module,
         $contentType,
-        AssetConfigInterface $assetConfig
+        Minification $minification
     ) {
         $this->source = $source;
         $this->context = $context;
         $this->filePath = $filePath;
         $this->module = $module;
         $this->contentType = $contentType;
-        $this->assetConfig = $assetConfig;
+        $this->minification = $minification;
     }
 
     /**
@@ -107,12 +107,7 @@ class File implements MergeableInterface
         $result = $this->join($result, $this->context->getPath());
         $result = $this->join($result, $this->module);
         $result = $this->join($result, $this->filePath);
-        if (
-            $this->assetConfig->isAssetMinification($extension = pathinfo($result, PATHINFO_EXTENSION)) &&
-            substr($result, -strlen($extension) - 5, 5) != '.min.'
-        ) {
-            $result = substr($result, 0, -strlen($extension)) . 'min.' . $extension;
-        }
+        $result = $this->minification->addMinifiedSign($result);
         return $result;
     }
 
