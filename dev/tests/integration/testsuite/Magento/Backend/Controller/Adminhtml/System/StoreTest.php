@@ -8,7 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml\System;
 /**
  * @magentoAppArea adminhtml
  */
-class StoreTest extends \Magento\Backend\Utility\Controller
+class StoreTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testIndexAction()
     {

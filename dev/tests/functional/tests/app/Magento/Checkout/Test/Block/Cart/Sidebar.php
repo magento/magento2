@@ -11,31 +11,30 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Sidebar
- * Mini shopping cart block
+ * Mini shopping cart block.
  */
 class Sidebar extends Block
 {
     /**
-     * Quantity input selector
+     * Quantity input selector.
      *
      * @var string
      */
     protected $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
 
     /**
-     * Mini cart link selector
+     * Mini cart link selector.
      *
      * @var string
      */
     protected $cartLink = 'a.showcart';
 
     /**
-     * Mini cart content selector
+     * Mini cart content selector.
      *
      * @var string
      */
-    protected $cartContent = 'div.minicart';
+    protected $cartContent = 'div.block-minicart';
 
     /**
      * Product list in mini shopping cart.
@@ -45,21 +44,21 @@ class Sidebar extends Block
     protected $cartProductList = './/*[contains(@role, "dialog") and not(contains(@style,"display: none;"))]';
 
     /**
-     * Selector for cart item block
+     * Selector for cart item block.
      *
      * @var string
      */
     protected $cartProductName = '//*[@id="mini-cart"]//li[.//a[normalize-space(text())="%s"]]';
 
     /**
-     * Counter qty locator
+     * Counter qty locator.
      *
      * @var string
      */
-    protected $counterQty = './/span[@class="counter qty"]';
+    protected $counterQty = './/div[@class="minicart-wrapper"]//span[@class="counter qty"]';
 
     /**
-     * Open mini cart
+     * Open mini cart.
      *
      * @return void
      */
@@ -72,7 +71,7 @@ class Sidebar extends Block
     }
 
     /**
-     * Wait counter qty visibility
+     * Wait counter qty visibility.
      *
      * @return void
      */
@@ -89,7 +88,7 @@ class Sidebar extends Block
     }
 
     /**
-     * Get product quantity
+     * Get product quantity.
      *
      * @param string $productName
      * @return string
@@ -102,7 +101,7 @@ class Sidebar extends Block
     }
 
     /**
-     * Get cart item block
+     * Get cart item block.
      *
      * @param FixtureInterface $product
      * @return Item

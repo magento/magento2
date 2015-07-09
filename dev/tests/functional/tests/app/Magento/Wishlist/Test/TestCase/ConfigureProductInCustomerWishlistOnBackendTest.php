@@ -73,7 +73,7 @@ class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTe
         $customerIndex->getCustomerGridBlock()->searchAndOpen(['email' => $customer->getEmail()]);
         $customerForm = $customerIndexEdit->getCustomerForm();
         $customerForm->openTab('wishlist');
-        $customerForm->getTabElement('wishlist')->getSearchGridBlock()->searchAndAction(
+        $customerForm->getTab('wishlist')->getSearchGridBlock()->searchAndAction(
             ['product_name' => $product->getName()],
             'Configure'
         );

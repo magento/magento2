@@ -103,7 +103,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param Validator\Pool $validators
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -118,7 +118,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         \Magento\SalesRule\Model\Validator\Pool $validators,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;

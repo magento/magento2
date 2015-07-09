@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * \Magento\Config\Block\System\Config\Form\Field object factory
- */
 namespace Magento\Config\Block\System\Config\Form\Field;
 
+/**
+ * Magento\Config\Block\System\Config\Form\Field Class Factory
+ *
+ * @codeCoverageIgnore
+ */
 class Factory
 {
     /**

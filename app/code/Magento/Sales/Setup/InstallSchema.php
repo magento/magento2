@@ -774,53 +774,53 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Customer Gender'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
-            'shipping_hidden_tax_amount',
+            'shipping_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Shipping Hidden Tax Amount'
+            'Shipping Discount Tax Compensation Amount'
         )->addColumn(
-            'base_shipping_hidden_tax_amnt',
+            'base_shipping_discount_tax_compensation_amnt',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Shipping Hidden Tax Amount'
+            'Base Shipping Discount Tax Compensation Amount'
         )->addColumn(
-            'hidden_tax_invoiced',
+            'discount_tax_compensation_invoiced',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Invoiced'
+            'Discount Tax Compensation Invoiced'
         )->addColumn(
-            'base_hidden_tax_invoiced',
+            'base_discount_tax_compensation_invoiced',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Invoiced'
+            'Base Discount Tax Compensation Invoiced'
         )->addColumn(
-            'hidden_tax_refunded',
+            'discount_tax_compensation_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Refunded'
+            'Discount Tax Compensation Refunded'
         )->addColumn(
-            'base_hidden_tax_refunded',
+            'base_discount_tax_compensation_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Refunded'
+            'Base Discount Tax Compensation Refunded'
         )->addColumn(
             'shipping_incl_tax',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -989,6 +989,66 @@ class InstallSchema implements InstallSchemaInterface
             null,
             [],
             'Updated At'
+        )->addColumn(
+            'billing_address',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Billing Address'
+        )->addColumn(
+            'shipping_address',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Address'
+        )->addColumn(
+            'shipping_information',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Method Name'
+        )->addColumn(
+            'customer_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Customer Email'
+        )->addColumn(
+            'customer_group',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Customer Group'
+        )->addColumn(
+            'subtotal',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Subtotal'
+        )->addColumn(
+            'shipping_and_handling',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Shipping and handling amount'
+        )->addColumn(
+            'customer_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Customer Name'
+        )->addColumn(
+            'payment_method',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Payment Method'
+        )->addColumn(
+            'total_refunded',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Total Refunded'
         )->addIndex(
             $installer->getIdxName('sales_order_grid', ['status']),
             ['status']
@@ -1030,24 +1090,30 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_order_grid', ['updated_at']),
             ['updated_at']
-        )->addForeignKey(
-            $installer->getFkName('sales_order_grid', 'customer_id', 'customer_entity', 'entity_id'),
-            'customer_id',
-            $installer->getTable('customer_entity'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
-        )->addForeignKey(
-            $installer->getFkName('sales_order_grid', 'entity_id', 'sales_order', 'entity_id'),
-            'entity_id',
-            $installer->getTable('sales_order'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('sales_order_grid', 'store_id', 'store', 'store_id'),
-            'store_id',
-            $installer->getTable('store'),
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
+        )->addIndex(
+            $installer->getIdxName(
+                'sales_order_grid',
+                [
+                    'increment_id',
+                    'billing_name',
+                    'shipping_name',
+                    'shipping_address',
+                    'billing_address',
+                    'customer_name',
+                    'customer_email'
+                ],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            [
+                'increment_id',
+                'billing_name',
+                'shipping_name',
+                'shipping_address',
+                'billing_address',
+                'customer_name',
+                'customer_email'
+            ],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'Sales Flat Order Grid'
         );
@@ -1611,41 +1677,41 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Base Row Total Incl Tax'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
-            'hidden_tax_invoiced',
+            'discount_tax_compensation_invoiced',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Invoiced'
+            'Discount Tax Compensation Invoiced'
         )->addColumn(
-            'base_hidden_tax_invoiced',
+            'base_discount_tax_compensation_invoiced',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Invoiced'
+            'Base Discount Tax Compensation Invoiced'
         )->addColumn(
-            'hidden_tax_refunded',
+            'discount_tax_compensation_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Refunded'
+            'Discount Tax Compensation Refunded'
         )->addColumn(
-            'base_hidden_tax_refunded',
+            'base_discount_tax_compensation_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Refunded'
+            'Base Discount Tax Compensation Refunded'
         )->addColumn(
             'tax_canceled',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -1653,11 +1719,11 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Tax Canceled'
         )->addColumn(
-            'hidden_tax_canceled',
+            'discount_tax_compensation_canceled',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Canceled'
+            'Discount Tax Compensation Canceled'
         )->addColumn(
             'tax_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -1893,7 +1959,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'cc_last_4',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            4,
+            100,
             [],
             'Cc Last 4'
         )->addColumn(
@@ -2185,6 +2251,8 @@ class InstallSchema implements InstallSchemaInterface
 
         /**
          * Create table 'sales_shipment_grid'
+         *
+         * @add order_id, shipping_description
          */
         $table = $installer->getConnection()->newTable(
             $installer->getTable('sales_shipment_grid')
@@ -2195,17 +2263,23 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false, 'primary' => true],
             'Entity Id'
         )->addColumn(
+            'increment_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            50,
+            [],
+            'Increment Id'
+        )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
             ['unsigned' => true],
             'Store Id'
         )->addColumn(
-            'total_qty',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Total Qty'
+            'order_increment_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            32,
+            ['nullable' => false],
+            'Order Increment Id'
         )->addColumn(
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2213,23 +2287,83 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false],
             'Order Id'
         )->addColumn(
+            'order_created_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            ['nullable' => false],
+            'Order Increment Id'
+        )->addColumn(
+            'customer_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            ['nullable' => false],
+            'Customer Name'
+        )->addColumn(
+            'total_qty',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Total Qty'
+        )->addColumn(
             'shipment_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             [],
             'Shipment Status'
         )->addColumn(
-            'increment_id',
+            'order_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            50,
+            32,
             [],
-            'Increment Id'
+            'Order'
         )->addColumn(
-            'order_increment_id',
+            'billing_address',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            50,
+            255,
             [],
-            'Order Increment Id'
+            'Billing Address'
+        )->addColumn(
+            'shipping_address',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Address'
+        )->addColumn(
+            'billing_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            [],
+            'Billing Name'
+        )->addColumn(
+            'shipping_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            [],
+            'Shipping Name'
+        )->addColumn(
+            'customer_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            [],
+            'Customer Email'
+        )->addColumn(
+            'customer_group_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            [],
+            'Customer Group Id'
+        )->addColumn(
+            'payment_method',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            32,
+            [],
+            'Payment Method'
+        )->addColumn(
+            'shipping_information',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Method Name'
         )->addColumn(
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
@@ -2237,40 +2371,52 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Created At'
         )->addColumn(
-            'order_created_at',
+            'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
             [],
-            'Order Created At'
-        )->addColumn(
-            'shipping_name',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            [],
-            'Shipping Name'
+            'Updated At'
         )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['store_id']),
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                [
+                    'increment_id',
+                    'store_id'
+                ],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            ['increment_id', 'store_id'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+        )->addIndex(
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                ['store_id']
+            ),
             ['store_id']
         )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['total_qty']),
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                ['total_qty']
+            ),
             ['total_qty']
         )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['order_id']),
-            ['order_id']
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                ['order_increment_id']
+            ),
+            ['order_increment_id']
         )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['shipment_status']),
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                ['shipment_status']
+            ),
             ['shipment_status']
         )->addIndex(
             $installer->getIdxName(
                 'sales_shipment_grid',
-                ['increment_id'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ['order_status']
             ),
-            ['increment_id'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
-        )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['order_increment_id']),
-            ['order_increment_id']
+            ['order_status']
         )->addIndex(
             $installer->getIdxName('sales_shipment_grid', ['created_at']),
             ['created_at']
@@ -2280,18 +2426,33 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_shipment_grid', ['shipping_name']),
             ['shipping_name']
-        )->addForeignKey(
-            $installer->getFkName('sales_shipment_grid', 'entity_id', 'sales_shipment', 'entity_id'),
-            'entity_id',
-            $installer->getTable('sales_shipment'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('sales_shipment_grid', 'store_id', 'store', 'store_id'),
-            'store_id',
-            $installer->getTable('store'),
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
+        )->addIndex(
+            $installer->getIdxName('sales_shipment_grid', ['billing_name']),
+            ['billing_name']
+        )->addIndex(
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                [
+                    'increment_id',
+                    'order_increment_id',
+                    'shipping_name',
+                    'customer_name',
+                    'customer_email',
+                    'billing_address',
+                    'shipping_address'
+                ],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            [
+                'increment_id',
+                'order_increment_id',
+                'shipping_name',
+                'customer_name',
+                'customer_email',
+                'billing_address',
+                'shipping_address'
+            ],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'Sales Flat Shipment Grid'
         );
@@ -2759,29 +2920,29 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Updated At'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
-            'shipping_hidden_tax_amount',
+            'shipping_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Shipping Hidden Tax Amount'
+            'Shipping Discount Tax Compensation Amount'
         )->addColumn(
-            'base_shipping_hidden_tax_amnt',
+            'base_shipping_discount_tax_compensation_amnt',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Shipping Hidden Tax Amount'
+            'Base Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_incl_tax',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -2858,23 +3019,29 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false, 'primary' => true],
             'Entity Id'
         )->addColumn(
+            'increment_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            50,
+            [],
+            'Increment Id'
+        )->addColumn(
+            'state',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'State'
+        )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
             ['unsigned' => true],
             'Store Id'
         )->addColumn(
-            'base_grand_total',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
+            'store_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
             [],
-            'Base Grand Total'
-        )->addColumn(
-            'grand_total',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Grand Total'
+            'Store Name'
         )->addColumn(
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2882,11 +3049,41 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false],
             'Order Id'
         )->addColumn(
-            'state',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            'order_increment_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            50,
+            [],
+            'Order Increment Id'
+        )->addColumn(
+            'order_created_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
             [],
-            'State'
+            'Order Created At'
+        )->addColumn(
+            'customer_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Customer Name'
+        )->addColumn(
+            'customer_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Customer Email'
+        )->addColumn(
+            'customer_group_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            [],
+            'Customer Group Id'
+        )->addColumn(
+            'payment_method',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            [],
+            'Payment Method'
         )->addColumn(
             'store_currency_code',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -2912,35 +3109,53 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Global Currency Code'
         )->addColumn(
-            'increment_id',
+            'billing_name',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            50,
+            255,
             [],
-            'Increment Id'
+            'Billing Name'
         )->addColumn(
-            'order_increment_id',
+            'billing_address',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            50,
+            255,
             [],
-            'Order Increment Id'
+            'Billing Address'
+        )->addColumn(
+            'shipping_address',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Address'
+        )->addColumn(
+            'shipping_information',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Method Name'
+        )->addColumn(
+            'subtotal',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Subtotal'
+        )->addColumn(
+            'shipping_and_handling',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Shipping and handling amount'
+        )->addColumn(
+            'grand_total',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Grand Total'
         )->addColumn(
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
             [],
             'Created At'
-        )->addColumn(
-            'order_created_at',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-            null,
-            [],
-            'Order Created At'
-        )->addColumn(
-            'billing_name',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            [],
-            'Billing Name'
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['store_id']),
             ['store_id']
@@ -2956,10 +3171,10 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName(
                 'sales_invoice_grid',
-                ['increment_id'],
+                ['increment_id', 'store_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            ['increment_id'],
+            ['increment_id', 'store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['order_increment_id']),
@@ -2973,18 +3188,30 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['billing_name']),
             ['billing_name']
-        )->addForeignKey(
-            $installer->getFkName('sales_invoice_grid', 'entity_id', 'sales_invoice', 'entity_id'),
-            'entity_id',
-            $installer->getTable('sales_invoice'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('sales_invoice_grid', 'store_id', 'store', 'store_id'),
-            'store_id',
-            $installer->getTable('store'),
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
+        )->addIndex(
+            $installer->getIdxName(
+                'sales_invoice_grid',
+                [
+                    'increment_id',
+                    'order_increment_id',
+                    'billing_name',
+                    'billing_address',
+                    'shipping_address',
+                    'customer_name',
+                    'customer_email'
+                ],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            [
+                'increment_id',
+                'order_increment_id',
+                'billing_name',
+                'billing_address',
+                'shipping_address',
+                'customer_name',
+                'customer_email'
+            ],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'Sales Flat Invoice Grid'
         );
@@ -3128,17 +3355,17 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Name'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
             'tax_ratio',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -3469,29 +3696,29 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Updated At'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
-            'shipping_hidden_tax_amount',
+            'shipping_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Shipping Hidden Tax Amount'
+            'Shipping Discount Tax Compensation Amount'
         )->addColumn(
-            'base_shipping_hidden_tax_amnt',
+            'base_shipping_discount_tax_compensation_amnt',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Shipping Hidden Tax Amount'
+            'Base Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_incl_tax',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -3562,47 +3789,17 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false, 'primary' => true],
             'Entity Id'
         )->addColumn(
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            'increment_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            50,
+            [],
+            'Increment Id'
+        )->addColumn(
+            'created_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['unsigned' => true],
-            'Store Id'
-        )->addColumn(
-            'store_to_order_rate',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
             [],
-            'Store To Order Rate'
-        )->addColumn(
-            'base_to_order_rate',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Base To Order Rate'
-        )->addColumn(
-            'grand_total',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Grand Total'
-        )->addColumn(
-            'store_to_base_rate',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Store To Base Rate'
-        )->addColumn(
-            'base_to_global_rate',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Base To Global Rate'
-        )->addColumn(
-            'base_grand_total',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Base Grand Total'
+            'Created At'
         )->addColumn(
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -3610,65 +3807,11 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false],
             'Order Id'
         )->addColumn(
-            'creditmemo_status',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            [],
-            'Creditmemo Status'
-        )->addColumn(
-            'state',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            [],
-            'State'
-        )->addColumn(
-            'invoice_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            [],
-            'Invoice Id'
-        )->addColumn(
-            'store_currency_code',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            3,
-            [],
-            'Store Currency Code'
-        )->addColumn(
-            'order_currency_code',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            3,
-            [],
-            'Order Currency Code'
-        )->addColumn(
-            'base_currency_code',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            3,
-            [],
-            'Base Currency Code'
-        )->addColumn(
-            'global_currency_code',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            3,
-            [],
-            'Global Currency Code'
-        )->addColumn(
-            'increment_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            50,
-            [],
-            'Increment Id'
-        )->addColumn(
             'order_increment_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             50,
             [],
             'Order Increment Id'
-        )->addColumn(
-            'created_at',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-            null,
-            [],
-            'Created At'
         )->addColumn(
             'order_created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
@@ -3681,31 +3824,112 @@ class InstallSchema implements InstallSchemaInterface
             255,
             [],
             'Billing Name'
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['store_id']),
-            ['store_id']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['grand_total']),
-            ['grand_total']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['base_grand_total']),
-            ['base_grand_total']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['order_id']),
-            ['order_id']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['creditmemo_status']),
-            ['creditmemo_status']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['state']),
-            ['state']
+        )->addColumn(
+            'state',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Status'
+        )->addColumn(
+            'base_grand_total',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Base Grand Total'
+        )->addColumn(
+            'order_status',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            32,
+            [],
+            'Order Status'
+        )->addColumn(
+            'store_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
+            'Store Id'
+        )->addColumn(
+            'billing_address',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Billing Address'
+        )->addColumn(
+            'shipping_address',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Address'
+        )->addColumn(
+            'customer_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            ['nullable' => false],
+            'Customer Name'
+        )->addColumn(
+            'customer_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            [],
+            'Customer Email'
+        )->addColumn(
+            'customer_group_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            [],
+            'Customer Group Id'
+        )->addColumn(
+            'payment_method',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            32,
+            [],
+            'Payment Method'
+        )->addColumn(
+            'shipping_information',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Method Name'
+        )->addColumn(
+            'subtotal',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Subtotal'
+        )->addColumn(
+            'shipping_and_handling',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Shipping and handling amount'
+        )->addColumn(
+            'adjustment_positive',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Adjustment Positive'
+        )->addColumn(
+            'adjustment_negative',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Adjustment Negative'
+        )->addColumn(
+            'order_base_grand_total',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Order Grand Total'
         )->addIndex(
             $installer->getIdxName(
                 'sales_creditmemo_grid',
-                ['increment_id'],
+                [
+                    'increment_id',
+                    'store_id'
+                ],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            ['increment_id'],
+            ['increment_id', 'store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['order_increment_id']),
@@ -3717,20 +3941,50 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getIdxName('sales_creditmemo_grid', ['order_created_at']),
             ['order_created_at']
         )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['state']),
+            ['state']
+        )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['billing_name']),
             ['billing_name']
-        )->addForeignKey(
-            $installer->getFkName('sales_creditmemo_grid', 'entity_id', 'sales_creditmemo', 'entity_id'),
-            'entity_id',
-            $installer->getTable('sales_creditmemo'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('sales_creditmemo_grid', 'store_id', 'store', 'store_id'),
-            'store_id',
-            $installer->getTable('store'),
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['order_status']),
+            ['order_status']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['base_grand_total']),
+            ['base_grand_total']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['store_id']),
+            ['store_id']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['order_base_grand_total']),
+            ['order_base_grand_total']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['order_id']),
+            ['order_id']
+        )->addIndex(
+            $installer->getIdxName(
+                'sales_creditmemo_grid',
+                [
+                    'increment_id',
+                    'order_increment_id',
+                    'billing_name',
+                    'billing_address',
+                    'shipping_address',
+                    'customer_name',
+                    'customer_email'
+                ],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            [
+                'increment_id',
+                'order_increment_id',
+                'billing_name',
+                'billing_address',
+                'shipping_address',
+                'customer_name',
+                'customer_email'
+            ],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'Sales Flat Creditmemo Grid'
         );
@@ -3874,17 +4128,17 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Name'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
             'tax_ratio',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -5024,12 +5278,6 @@ class InstallSchema implements InstallSchemaInterface
             '12,4',
             [],
             'Base Real Amount'
-        )->addColumn(
-            'hidden',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Hidden'
         )->addIndex(
             $installer->getIdxName('sales_order_tax', ['order_id', 'priority', 'position']),
             ['order_id', 'priority', 'position']

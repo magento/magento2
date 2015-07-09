@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 {
@@ -46,21 +47,29 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     protected $searchResultsDataFactory;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    private $extensionAttributesJoinProcessor;
+
+    /**
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection
      * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         QuoteFactory $quoteFactory,
         StoreManagerInterface $storeManager,
         \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection,
-        \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
+        \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory,
+        JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
         $this->searchResultsDataFactory = $searchResultsDataFactory;
         $this->quoteCollection = $quoteCollection;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -220,6 +229,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
         }
         $this->quoteCollection->setCurPage($searchCriteria->getCurrentPage());
         $this->quoteCollection->setPageSize($searchCriteria->getPageSize());
+        $this->extensionAttributesJoinProcessor->process($this->quoteCollection);
 
         $searchData->setItems($this->quoteCollection->getItems());
 

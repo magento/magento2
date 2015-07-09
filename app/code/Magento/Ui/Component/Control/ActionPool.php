@@ -128,7 +128,7 @@ class ActionPool implements ActionPoolInterface
     {
         $container = $this->context->getPageLayout()->createBlock(
             'Magento\Ui\Component\Control\Container',
-            'container-' . $key,
+            'container-' . $view->getName() . '-' . $key,
             [
                 'data' => [
                     'button_item' => $this->items[$key],

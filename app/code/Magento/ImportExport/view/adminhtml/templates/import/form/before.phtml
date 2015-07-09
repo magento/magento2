@@ -32,6 +32,12 @@ require(['jquery', 'prototype'], function(jQuery){
         entityBehaviors: <?php echo $block->getEntityBehaviors() ?>,
 
         /**
+         * Base url
+         * @type {string}
+         */
+        sampleFilesBaseUrl: '<?php echo $block->getUrl('*/*/download/', ['filename' => 'entity-name']) ?>',
+
+        /**
          * Reset selected index
          * @param {string} elementId
          */
@@ -61,17 +67,23 @@ require(['jquery', 'prototype'], function(jQuery){
          */
         showBehaviorFieldset: function(behaviorId, isShow) {
             var behaviorFieldset = jQuery('#' + behaviorId + '_fieldset'),
-                behavior = jQuery('#' + behaviorId);
+                behaviorFields = jQuery('.' + behaviorId);
             if (isShow) {
                 behaviorFieldset.show();
-                behavior.prop('disabled', false);
-                behavior.addClass('required-entry');
             } else {
                 behaviorFieldset.hide();
                 this.resetSelectIndex(behaviorId);
-                behavior.prop('disabled', 'disabled');
-                behavior.removeClass('required-entry');
             }
+            behaviorFields.each(function(k, behaviorField){
+                behaviorField = jQuery(behaviorField);
+                if (isShow) {
+                    behaviorField.prop('disabled', false);
+                    behaviorField.addClass('required-entry');
+                } else {
+                    behaviorField.prop('disabled', 'disabled');
+                    behaviorField.removeClass('required-entry');
+                }
+            });
         },
 
         /**
@@ -87,6 +99,23 @@ require(['jquery', 'prototype'], function(jQuery){
         },
 
         /**
+         * Show/hide sample file link
+         * @param {string} entityId
+         */
+        showSampleFile: function(entityId) {
+            var sampleFileSpan = jQuery('#sample-file-span');
+            if (entityId) {
+                var sampleFileLink = this.sampleFilesBaseUrl.replace('entity-name', entityId);
+                jQuery('#sample-file-link').attr('href', sampleFileLink);
+                if (sampleFileSpan.is(':hidden')) {
+                    sampleFileSpan.show();
+                }
+            } else {
+                sampleFileSpan.hide();
+            }
+        },
+
+        /**
          * Handle value change in entity type selector
          */
         handleEntityTypeSelector: function() {
@@ -94,9 +123,11 @@ require(['jquery', 'prototype'], function(jQuery){
             if (entity && entity.val()) {
                 this.showBehavior(entity.val());
                 this.showUploadFile(true);
+                this.showSampleFile(entity.val());
             } else {
                 this.showBehavior(false);
                 this.showUploadFile(false);
+                this.showSampleFile(false);
             }
         },
 

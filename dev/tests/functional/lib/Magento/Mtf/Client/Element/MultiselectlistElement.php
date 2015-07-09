@@ -28,6 +28,13 @@ class MultiselectlistElement extends MultiselectElement
     protected $optionCheckedElement = './/*[contains(@class, "mselect-checked")]/following-sibling::span';
 
     /**
+     * Option locator by value.
+     *
+     * @var string
+     */
+    protected $optionByValue = './/*[contains(@class,"mselect-list-item")]/label[contains(normalize-space(.), %s)]';
+
+    /**
      * Select options by values in multiple select list
      *
      * @param array|string $values
@@ -106,5 +113,17 @@ class MultiselectlistElement extends MultiselectElement
         }
 
         return $optionsValue;
+    }
+
+    /**
+     * Check whether value is visible in the list.
+     *
+     * @param string $value
+     * @return bool
+     */
+    public function isValueVisible($value)
+    {
+        $option = $this->find(sprintf($this->optionByValue, $this->escapeQuotes($value)), Locator::SELECTOR_XPATH);
+        return $option->isVisible();
     }
 }

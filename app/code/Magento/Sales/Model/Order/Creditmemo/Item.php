@@ -49,7 +49,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -59,7 +59,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -176,8 +176,12 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         $orderItem->setQtyRefunded($orderItem->getQtyRefunded() + $this->getQty());
         $orderItem->setTaxRefunded($orderItem->getTaxRefunded() + $this->getTaxAmount());
         $orderItem->setBaseTaxRefunded($orderItem->getBaseTaxRefunded() + $this->getBaseTaxAmount());
-        $orderItem->setHiddenTaxRefunded($orderItem->getHiddenTaxRefunded() + $this->getHiddenTaxAmount());
-        $orderItem->setBaseHiddenTaxRefunded($orderItem->getBaseHiddenTaxRefunded() + $this->getBaseHiddenTaxAmount());
+        $orderItem->setDiscountTaxCompensationRefunded(
+            $orderItem->getDiscountTaxCompensationRefunded() + $this->getDiscountTaxCompensationAmount()
+        );
+        $orderItem->setBaseDiscountTaxCompensationRefunded(
+            $orderItem->getBaseDiscountTaxCompensationRefunded() + $this->getBaseDiscountTaxCompensationAmount()
+        );
         $orderItem->setAmountRefunded($orderItem->getAmountRefunded() + $this->getRowTotal());
         $orderItem->setBaseAmountRefunded($orderItem->getBaseAmountRefunded() + $this->getBaseRowTotal());
         $orderItem->setDiscountRefunded($orderItem->getDiscountRefunded() + $this->getDiscountAmount());
@@ -194,11 +198,15 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         $this->getOrderItem()->setQtyRefunded($this->getOrderItem()->getQtyRefunded() - $this->getQty());
         $this->getOrderItem()->setTaxRefunded(
             $this->getOrderItem()->getTaxRefunded() -
-            $this->getOrderItem()->getBaseTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
+            $this->getOrderItem()->getBaseTaxAmount() *
+            $this->getQty() /
+            $this->getOrderItem()->getQtyOrdered()
         );
-        $this->getOrderItem()->setHiddenTaxRefunded(
-            $this->getOrderItem()->getHiddenTaxRefunded() -
-            $this->getOrderItem()->getHiddenTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
+        $this->getOrderItem()->setDiscountTaxCompensationRefunded(
+            $this->getOrderItem()->getDiscountTaxCompensationRefunded() -
+            $this->getOrderItem()->getDiscountTaxCompensationAmount() *
+            $this->getQty() /
+            $this->getOrderItem()->getQtyOrdered()
         );
         return $this;
     }
@@ -284,13 +292,13 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * Returns base_hidden_tax_amount
+     * Returns base_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount()
+    public function getBaseDiscountTaxCompensationAmount()
     {
-        return $this->getData(CreditmemoItemInterface::BASE_HIDDEN_TAX_AMOUNT);
+        return $this->getData(CreditmemoItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -404,13 +412,13 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * Returns hidden_tax_amount
+     * Returns discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getHiddenTaxAmount()
+    public function getDiscountTaxCompensationAmount()
     {
-        return $this->getData(CreditmemoItemInterface::HIDDEN_TAX_AMOUNT);
+        return $this->getData(CreditmemoItemInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -737,17 +745,17 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxAmount($amount)
+    public function setDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(CreditmemoItemInterface::HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(CreditmemoItemInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxAmount($amount)
+    public function setBaseDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(CreditmemoItemInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(CreditmemoItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**

@@ -14,7 +14,7 @@
     <form class="form-wishlist-items" id="wishlist-view-form"
           data-mage-init='{"wishlist":{
           "addToCartUrl":<?php echo $block->getItemAddToCartParams("%item%");?>,
-          "confirmRemoveMessage":"<?php echo __("Are you sure you want to remove this product from your wishlist?") ?>",
+          "confirmRemoveMessage":"<?php echo __("Are you sure you want to remove this product from your Wish List?") ?>",
           "addAllToCartUrl":<?php echo $block->getAddAllToCartParams(); ?>,
           "commentString":""},
           "validation": {}}' action="<?php echo $block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()]) ?>" method="post">

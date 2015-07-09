@@ -234,7 +234,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -258,7 +258,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -374,8 +374,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         } catch (NoSuchEntityException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'Sorry, but we can\'t move the category because we can\'t find the new parent category you'
-                    . ' selected.'
+                    'Sorry, but we can\'t find the new parent category you selected.'
                 ),
                 $e
             );
@@ -383,13 +382,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
         if (!$this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, but we can\'t move the category because we can\'t find the new category you selected.')
+                __('Sorry, but we can\'t find the new category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'We can\'t perform this category move operation because the parent category matches the child'
-                    . 'category.'
+                    'We can\'t move the category because the parent category name matches the child category name.'
                 )
             );
         }
@@ -451,7 +449,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get category products collection
      *
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     public function getProductCollection()
     {

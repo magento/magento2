@@ -18,7 +18,6 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockOnCategoryPage" />
         </variation>
         <variation name="CreateCmsBlockEntityTestVariation2">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-35059</data>
             <data name="cmsBlock/data/title" xsi:type="string">block_%isolation%</data>
             <data name="cmsBlock/data/identifier" xsi:type="string">identifier_%isolation%</data>
             <data name="cmsBlock/data/stores/dataSet/option_0" xsi:type="string">default</data>

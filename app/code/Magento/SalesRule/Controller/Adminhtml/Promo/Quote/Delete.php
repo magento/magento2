@@ -21,14 +21,14 @@ class Delete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $model = $this->_objectManager->create('Magento\SalesRule\Model\Rule');
                 $model->load($id);
                 $model->delete();
-                $this->messageManager->addSuccess(__('The rule has been deleted.'));
+                $this->messageManager->addSuccess(__('You deleted the rule.'));
                 $this->_redirect('sales_rule/*/');
                 return;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
-                    __('An error occurred while deleting the rule. Please review the log and try again.')
+                    __('We can\'t delete the rule right now. Please review the log and try again.')
                 );
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->_redirect('sales_rule/*/edit', ['id' => $this->getRequest()->getParam('id')]);

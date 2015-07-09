@@ -18,8 +18,7 @@ class ObjectRegistryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->object = $this->getMock('Magento\Framework\Object');
-        $this->object->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->object = new \Magento\Framework\Object(['id' => 1]);
         $this->objectRegistry = (new ObjectManager($this))->getObject(
             'Magento\CatalogUrlRewrite\Model\ObjectRegistry',
             ['entities' => [$this->object]]

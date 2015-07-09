@@ -204,7 +204,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridParentHtml()
     {
-        $templateName = $this->_viewFileSystem->getTemplateFileName($this->_parentTemplate, ['_relative' => true]);
+        $templateName = $this->resolver->getTemplateFileName($this->_parentTemplate, ['_relative' => true]);
         return $this->fetchView($templateName);
     }
 

@@ -16,25 +16,22 @@ class CcGenericConfigProvider implements ConfigProviderInterface
     protected $ccConfig;
 
     /**
-     * @var string[]
-     */
-    protected $methodCodes = [];
-
-    /**
-     * @var Method\AbstractMethod[]
+     * @var MethodInterface[]
      */
     protected $methods = [];
 
     /**
      * @param CcConfig $ccConfig
      * @param PaymentHelper $paymentHelper
+     * @param array $methodCodes
      */
     public function __construct(
         CcConfig $ccConfig,
-        PaymentHelper $paymentHelper
+        PaymentHelper $paymentHelper,
+        array $methodCodes = []
     ) {
         $this->ccConfig = $ccConfig;
-        foreach ($this->methodCodes as $code) {
+        foreach ($methodCodes as $code) {
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
         }
     }
@@ -45,8 +42,8 @@ class CcGenericConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $config = [];
-        foreach ($this->methodCodes as $methodCode) {
-            if ($this->methods[$methodCode]->isAvailable()) {
+        foreach ($this->methods as $methodCode => $method) {
+            if ($method->isAvailable()) {
                 $config = array_merge_recursive($config, [
                     'payment' => [
                         'ccform' => [
@@ -56,9 +53,9 @@ class CcGenericConfigProvider implements ConfigProviderInterface
                             'hasVerification' => [$methodCode => $this->hasVerification($methodCode)],
                             'hasSsCardType' => [$methodCode => $this->hasSsCardType($methodCode)],
                             'ssStartYears' => [$methodCode => $this->getSsStartYears()],
-                            'cvvImageUrl' => [$methodCode => $this->getCvvImageUrl()],
-                        ],
-                    ],
+                            'cvvImageUrl' => [$methodCode => $this->getCvvImageUrl()]
+                        ]
+                    ]
                 ]);
             }
         }

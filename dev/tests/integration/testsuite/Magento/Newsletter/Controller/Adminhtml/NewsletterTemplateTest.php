@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
+class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @var \Magento\Newsletter\Model\Template
@@ -46,7 +46,6 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionCreateNewTemplateAndVerifySuccessMessage()
     {
-        $this->_model->loadByCode('some_unique_code');
         $this->getRequest()->setParam('id', $this->_model->getId());
         $this->dispatch('backend/newsletter/template/save');
         /**
@@ -68,7 +67,13 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionEditTemplateAndVerifySuccessMessage()
     {
-        $this->_model->loadByCode('some_unique_code');
+        // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
+        $this->_model->load('some_unique_code', 'template_code');
+
+        // Ensure that template is actually loaded so as to prevent a false positive on saving a *new* template
+        // instead of existing one.
+        $this->assertEquals('some_unique_code', $this->_model->getTemplateCode());
+
         $this->getRequest()->setParam('id', $this->_model->getId());
         $this->dispatch('backend/newsletter/template/save');
 
@@ -122,7 +127,9 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
      */
     public function testDeleteActionTemplateAndVerifySuccessMessage()
     {
-        $this->_model->loadByCode('some_unique_code');
+        // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
+        $this->_model->load('some_unique_code', 'template_code');
+
         $this->getRequest()->setParam('id', $this->_model->getId());
         $this->dispatch('backend/newsletter/template/delete');
 

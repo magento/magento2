@@ -5,18 +5,38 @@
  */
 namespace Magento\CmsUrlRewrite\Plugin\Cms\Model\Resource;
 
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
+use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+
 /**
- * Before save plugin for \Magento\Cms\Model\Resource\Page:
+ * Before save and around delete plugin for \Magento\Cms\Model\Resource\Page:
  * - autogenerates url_key if the merchant didn't fill this field
+ * - remove all url rewrites for cms page on delete
  */
 class Page
 {
-    /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator */
+    /**
+     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
+     */
     protected $cmsPageUrlPathGenerator;
 
-    public function __construct(\Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator)
-    {
+    /**
+     * @var UrlPersistInterface
+     */
+    protected $urlPersist;
+
+    /**
+     * @param CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
+     * @param UrlPersistInterface $urlPersist
+     */
+    public function __construct(
+        CmsPageUrlPathGenerator $cmsPageUrlPathGenerator,
+        UrlPersistInterface $urlPersist
+    ) {
         $this->cmsPageUrlPathGenerator = $cmsPageUrlPathGenerator;
+        $this->urlPersist = $urlPersist;
     }
 
     /**
@@ -37,5 +57,33 @@ class Page
         if ($urlKey === '' || $urlKey === null) {
             $object->setData('identifier', $this->cmsPageUrlPathGenerator->generateUrlKey($object));
         }
+    }
+
+    /**
+     * On delete handler to remove related url rewrites
+     *
+     * @param \Magento\Cms\Model\Resource\Page $subject
+     * @param \Closure $proceed
+     * @param \Magento\Framework\Model\AbstractModel $page
+     * @return \Magento\Cms\Model\Resource\Page
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function aroundDelete(
+        \Magento\Cms\Model\Resource\Page $subject,
+        \Closure $proceed,
+        \Magento\Framework\Model\AbstractModel $page
+    ) {
+        $result = $proceed($page);
+        if ($page->isDeleted()) {
+            $this->urlPersist->deleteByData(
+                [
+                    UrlRewrite::ENTITY_ID => $page->getId(),
+                    UrlRewrite::ENTITY_TYPE => CmsPageUrlRewriteGenerator::ENTITY_TYPE,
+                ]
+            );
+        }
+
+        return $result;
     }
 }

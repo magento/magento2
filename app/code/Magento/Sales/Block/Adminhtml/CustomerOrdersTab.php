@@ -53,6 +53,8 @@ class CustomerOrdersTab extends TabWrapper
     /**
      * Return Tab label
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()

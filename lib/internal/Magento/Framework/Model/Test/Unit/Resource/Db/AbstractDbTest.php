@@ -452,7 +452,9 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $resourceMock->expects($this->any())
             ->method('_getWriteAdapter')
             ->will($this->returnValue($adapterMock));
-        $resourceCollectionMock = $this->getMock('Magento\Framework\Data\Collection\Db', [], [], '', false);
+        $resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $abstractModelMock = $this->getMockForAbstractClass(
             'Magento\Framework\Model\AbstractModel',
             [$context, $registryMock, $resourceMock, $resourceCollectionMock]

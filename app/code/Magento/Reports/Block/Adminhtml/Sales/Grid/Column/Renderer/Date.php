@@ -13,6 +13,8 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 {
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
@@ -35,31 +37,20 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
     {
         $format = $this->getColumn()->getFormat();
         if (!$format) {
-            if (self::$_format === null) {
-                try {
-                    $formats = (new DataBundle())->get(
-                        $this->_localeResolver->getLocale()
-                    )['calendar']['gregorian']['availableFormats'];
-
-                    switch ($this->getColumn()->getPeriodType()) {
-                        case 'month':
-                            self::$_format = $formats['yM'];
-                            break;
-
-                        case 'year':
-                            self::$_format = $formats['y'];
-                            break;
-
-                        default:
-                            self::$_format = $this->_localeDate->getDateFormat(
-                                \IntlDateFormatter::MEDIUM
-                            );
-                            break;
-                    }
-                } catch (\Exception $e) {
-                }
+            $dataBundle = new DataBundle();
+            $resourceBundle = $dataBundle->get($this->_localeResolver->getLocale());
+            $formats = $resourceBundle['calendar']['gregorian']['availableFormats'];
+            switch ($this->getColumn()->getPeriodType()) {
+                case 'month':
+                    $format = $formats['yM'];
+                    break;
+                case 'year':
+                    $format = $formats['y'];
+                    break;
+                default:
+                    $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
+                    break;
             }
-            $format = self::$_format;
         }
         return $format;
     }
@@ -72,51 +63,22 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
      */
     public function render(\Magento\Framework\Object $row)
     {
-        //@todo: check this logic manually
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             switch ($this->getColumn()->getPeriodType()) {
                 case 'month':
-                    $dateFormat = 'yyyy-MM';
+                    $data = $data . '-01';
                     break;
                 case 'year':
-                    $dateFormat = 'yyyy';
-                    break;
-                default:
-                    $dateFormat = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+                    $data = $data . '-01-01';
                     break;
             }
-
             $format = $this->_getFormat();
-            try {
-                $data = $this->getColumn()->getGmtoffset()
-                    ? \IntlDateFormatter::formatObject(
-                        $this->_localeDate->date(new \DateTime($data)),
-                        $format
-                    )
-                    : \IntlDateFormatter::formatObject(
-                        $this->_localeDate->date(
-                            new \DateTime($data),
-                            null,
-                            false
-                        ),
-                        $format
-                    );
-            } catch (\Exception $e) {
-                $data = $this->getColumn()->getTimezone()
-                    ? \IntlDateFormatter::formatObject(
-                        $this->_localeDate->date(new \DateTime($data)),
-                        $format
-                    )
-                    : \IntlDateFormatter::formatObject(
-                        $this->_localeDate->date(
-                            new \DateTime($data),
-                            null,
-                            false
-                        ),
-                        $format
-                    );
+            if ($this->getColumn()->getGmtoffset() || $this->getColumn()->getTimezone()) {
+                $date = $this->_localeDate->date(new \DateTime($data));
+            } else {
+                $date = $this->_localeDate->date(new \DateTime($data), null, false);
             }
-            return $data;
+            return \IntlDateFormatter::formatObject($date, $format);
         }
         return $this->getColumn()->getDefault();
     }

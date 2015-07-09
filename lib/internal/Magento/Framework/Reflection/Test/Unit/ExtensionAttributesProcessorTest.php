@@ -6,8 +6,7 @@
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use Magento\Framework\Api\Config\Converter;
-use Magento\Framework\Api\Config\Reader;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\ExtensionAttributesProcessor;
@@ -46,9 +45,9 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
     private $typeCasterMock;
 
     /**
-     * @var Reader
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config
      */
-    private $configReaderMock;
+    private $configMock;
 
     /**
      * @var AuthorizationInterface
@@ -73,7 +72,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
         $this->fieldNamerMock = $this->getMockBuilder('Magento\Framework\Reflection\FieldNamer')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configReaderMock = $this->getMockBuilder('Magento\Framework\Api\Config\Reader')
+        $this->configMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\Config')
             ->disableOriginalConstructor()
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
@@ -88,7 +87,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
                 'typeCaster' => $this->typeCasterMock,
                 'fieldNamer' => $this->fieldNamerMock,
                 'authorization' => $this->authorizationMock,
-                'configReader' => $this->configReaderMock,
+                'config' => $this->configMock,
                 'isPermissionChecked' => true,
             ]
         );
@@ -120,8 +119,8 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($methodName)
             ->will($this->returnValue($attributeName));
         $permissionName = 'Magento_Permission';
-        $this->configReaderMock->expects($this->once())
-            ->method('read')
+        $this->configMock->expects($this->once())
+            ->method('get')
             ->will($this->returnValue([
                 $dataObjectType => [
                     $attributeName => [ Converter::RESOURCE_PERMISSIONS => [ $permissionName ] ]

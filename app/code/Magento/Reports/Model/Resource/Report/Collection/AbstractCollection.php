@@ -64,6 +64,7 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
 
     /**
      * Set array of columns that should be aggregated
+     * @codeCoverageIgnore
      *
      * @param array $columns
      * @return $this
@@ -76,6 +77,7 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
 
     /**
      * Retrieve array of columns that should be aggregated
+     * @codeCoverageIgnore
      *
      * @return array
      */
@@ -86,6 +88,7 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
 
     /**
      * Set date range
+     * @codeCoverageIgnore
      *
      * @param mixed $from
      * @param mixed $to
@@ -100,6 +103,7 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
 
     /**
      * Set period
+     * @codeCoverageIgnore
      *
      * @param string $period
      * @return $this
@@ -218,6 +222,7 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
 
     /**
      * Setter for isSubTotals
+     * @codeCoverageIgnore
      *
      * @param bool $flag
      * @return $this

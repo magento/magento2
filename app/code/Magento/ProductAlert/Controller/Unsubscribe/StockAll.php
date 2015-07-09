@@ -6,6 +6,7 @@
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
 use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
+use Magento\Framework\Controller\ResultFactory;
 
 class StockAll extends UnsubscribeController
 {
@@ -14,26 +15,21 @@ class StockAll extends UnsubscribeController
      */
     public function execute()
     {
-        $this->_objectManager->create('Magento\ProductAlert\Model\Stock')
-            ->deleteCustomer(
-                $this->customerSession->getCustomerId(),
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
-                    ->getStore()
-                    ->getWebsiteId()
-            );
-        $this->messageManager->addSuccess(__('You will no longer receive stock alerts.'));
+        try {
+            $this->_objectManager->create('Magento\ProductAlert\Model\Stock')
+                ->deleteCustomer(
+                    $this->customerSession->getCustomerId(),
+                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                        ->getStore()
+                        ->getWebsiteId()
+                );
+            $this->messageManager->addSuccess(__('You will no longer receive stock alerts.'));
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
+        }
 
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Framework\Controller\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('customer/account/');
     }
 }

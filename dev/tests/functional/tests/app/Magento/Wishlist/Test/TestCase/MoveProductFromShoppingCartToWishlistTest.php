@@ -29,7 +29,6 @@ class MoveProductFromShoppingCartToWishlistTest extends AbstractWishlistTest
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'CS';
-    const STABLE = 'no';
     /* end tags */
 
     /**

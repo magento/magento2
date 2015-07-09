@@ -56,14 +56,14 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
                 null,
                 [],
-                'From Date'
+                'From'
             )
             ->addColumn(
                 'to_date',
                 \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
                 null,
                 [],
-                'To Date'
+                'To'
             )
             ->addColumn(
                 'is_active',
@@ -355,22 +355,6 @@ class InstallSchema implements InstallSchemaInterface
                 ['product_id']
             )
             ->setComment('CatalogRule Product Price');
-
-        $installer->getConnection()->createTable($table);
-
-        /**
-         * Create table 'catalogrule_affected_product'
-         */
-        $table = $installer->getConnection()
-            ->newTable($installer->getTable('catalogrule_affected_product'))
-            ->addColumn(
-                'product_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true],
-                'Product Id'
-            )
-            ->setComment('CatalogRule Affected Product');
 
         $installer->getConnection()->createTable($table);
 

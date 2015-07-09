@@ -60,6 +60,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
     /**
      * Set wishlist table name
+     * @codeCoverageIgnore
      *
      * @param string $value
      * @return $this
@@ -72,6 +73,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
     /**
      * Retrieve wishlist table name
+     * @codeCoverageIgnore
      *
      * @return string
      */

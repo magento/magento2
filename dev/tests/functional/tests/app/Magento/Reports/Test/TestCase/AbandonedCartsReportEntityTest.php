@@ -86,7 +86,6 @@ class AbandonedCartsReportEntityTest extends Injectable
      */
     public function test($products, Customer $customer)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-31737');
         // Precondition
         $products = $this->createProducts($products);
         $customer->persist();

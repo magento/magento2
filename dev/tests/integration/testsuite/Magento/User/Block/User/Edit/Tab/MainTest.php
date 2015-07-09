@@ -8,7 +8,7 @@ namespace Magento\User\Block\User\Edit\Tab;
 /**
  * @magentoAppArea adminhtml
  */
-class MainTest extends \Magento\Backend\Utility\Controller
+class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @var \Magento\User\Block\User\Edit\Tab\Main
