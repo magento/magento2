@@ -6,16 +6,10 @@
 -->
 <!--@subject Please confirm your {{var store.getFrontendName()}} account @-->
 <!--@vars {
-"var store.getUrl('customer/account/confirm/', [_query:[id:$customer.id, key:$customer.confirmation, back_url:$back_url]])":"Confirmation URL",
-"store url=\"customer\/account\/\"":"Customer Account URL",
+"var store.getUrl('customer/account/confirm/', [_query:[id:$customer.id, key:$customer.confirmation, back_url:$back_url]])":"Account Confirmation URL",
+"var store.getUrl('customer/account/')":"Customer Account URL",
 "var customer.email":"Customer Email",
-"var customer.name":"Customer Name",
-"template config_path=\"design\/email\/footer_template\"":"Email Footer Template",
-"template config_path=\"design\/email\/header_template\"":"Email Header Template",
-"var logo_alt":"Email Logo Image Alt",
-"var logo_url":"Email Logo Image URL",
-"var store.getFrontendName()":"Store Name",
-"store url=\"\"":"Store URL"
+"var customer.name":"Customer Name"
 } @-->
 
 {{template config_path="design/email/header_template"}}

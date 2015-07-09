@@ -7,12 +7,8 @@
 <!--@subject  {{var store.getFrontendName()}}: Invoice # {{var invoice.increment_id}} for Order # {{var order.increment_id}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
-"store url=\"customer\/account\/\"":"Customer Account URL",
+"var store.getUrl('customer/account/')":"Customer Account URL",
 "var order.getCustomerName()":"Customer Name",
-"template config_path=\"design\/email\/footer_template\"":"Email Footer Template",
-"template config_path=\"design\/email\/header_template\"":"Email Header Template",
-"var logo_alt":"Email Logo Image Alt",
-"var logo_url":"Email Logo Image URL",
 "var comment":"Invoice Comment",
 "var invoice.increment_id":"Invoice Id",
 "layout area=\"frontend\" handle=\"sales_email_order_invoice_items\" invoice=$invoice order=$order":"Invoice Items Grid",
@@ -20,11 +16,8 @@
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
 "var order.shipping_description":"Shipping Description",
-"var order.getShippingDescription()":"Shipping Description",
-"var store.getFrontendName()":"Store Name",
-"store url=\"\"":"Store URL"
-} @-->
-
+"var order.getShippingDescription()":"Shipping Description"
+@-->
 {{template config_path="design/email/header_template"}}
 
 <table>

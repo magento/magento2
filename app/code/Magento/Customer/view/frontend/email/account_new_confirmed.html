@@ -6,17 +6,10 @@
 -->
 <!--@subject Welcome to {{var store.getFrontendName()}} @-->
 <!--@vars {
-"store url=\"customer\/account\/\"":"Customer Account URL",
+"var store.getUrl('customer/account/')":"Customer Account URL",
 "var customer.email":"Customer Email",
-"var customer.name":"Customer Name",
-"template config_path=\"design\/email\/footer_template\"":"Email Footer Template",
-"template config_path=\"design\/email\/header_template\"":"Email Header Template",
-"var logo_alt":"Email Logo Image Alt",
-"var logo_url":"Email Logo Image URL",
-"var store.getFrontendName()":"Store Name",
-"store url=\"\"":"Store URL"
-} @-->
-
+"var customer.name":"Customer Name"
+@-->
 {{template config_path="design/email/header_template"}}
 
 <p class="greeting">{{trans "%name," name=$customer.name}}</p>
