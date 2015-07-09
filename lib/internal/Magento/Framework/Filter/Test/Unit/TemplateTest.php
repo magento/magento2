@@ -149,7 +149,7 @@ EXPECTED_RESULT;
 
         $stub->expects($this->once())
             ->method('bar')
-            ->will($this->returnCallback(function($arg) {
+            ->will($this->returnCallback(function ($arg) {
                 return serialize($arg);
             }));
 

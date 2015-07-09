@@ -37,7 +37,7 @@ class EmailTemplateFile
      * @param string $locale
      * @param string $file
      * @param string|null $module
-     * @return bool|bool|string
+     * @return bool|string
      */
     public function getFile($area, ThemeInterface $themeModel, $locale, $file, $module = null)
     {

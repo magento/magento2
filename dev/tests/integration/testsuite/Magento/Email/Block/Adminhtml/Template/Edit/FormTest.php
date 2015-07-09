@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
+
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\TemplateTypesInterface;
 

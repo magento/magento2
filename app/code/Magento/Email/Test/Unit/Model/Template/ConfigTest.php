@@ -153,13 +153,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 ),
                 $templateOptions['label']
             );
-            $this->assertEquals(sprintf(
-                    '%s/%s',
-                    $templateId,
-                    $foundThemePath
-                ),
-                $templateOptions['value']
-            );
+            $this->assertEquals(sprintf('%s/%s', $templateId, $foundThemePath), $templateOptions['value']);
             $this->assertEquals($template['module'], $templateOptions['group']);
         }
     }

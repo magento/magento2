@@ -545,7 +545,8 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value raw parameters
      * @return array always a two-part array in the format [value, [param, ...]]
      */
-    protected function getTransParameters($value) {
+    protected function getTransParameters($value)
+    {
         if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
             return ['', []];  // malformed directive body; return without breaking list
         }
