@@ -26,10 +26,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $data
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
         $name,
         $primaryFieldName,
         $requestFieldName,
+        CollectionFactory $collectionFactory,
         array $meta = [],
         array $data = []
     ) {
