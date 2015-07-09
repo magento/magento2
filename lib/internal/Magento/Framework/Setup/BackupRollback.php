@@ -300,4 +300,48 @@ class BackupRollback
         }
         return $ignorePaths;
     }
+
+    /**
+     * Get disk availability for filesystem backup
+     *
+     * @param string $type
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getFSDiskSpace($type = Factory::TYPE_FILESYSTEM)
+    {
+        $filesystemSize = 0;
+        /** @var Helper $checkWritable */
+        $checkSize = $this->objectManager->create('Magento\Framework\Backup\Filesystem\Helper');
+        if ($type === Factory::TYPE_FILESYSTEM) {
+            $ignorePaths = $this->getCodeBackupIgnorePaths();
+        } elseif ($type === Factory::TYPE_MEDIA) {
+            $ignorePaths = $this->getMediaBackupIgnorePaths();
+        } else {
+            throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
+        }
+        $filesInfo = $checkSize->getInfo(
+            $this->directoryList->getRoot(),
+            Helper::INFO_SIZE,
+            $ignorePaths
+        );
+        if ($filesInfo['size']) {
+            $filesystemSize = $filesInfo['size'];
+        }
+        return $filesystemSize;
+    }
+
+    /**
+     * Get disk availability for database backup
+     *
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getDBDiskSpace()
+    {
+        $this->setAreaCode();
+        /** @var \Magento\Framework\Backup\Db $dbBackup */
+        $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
+        return $dbBackup->getDBSize();
+    }
 }
