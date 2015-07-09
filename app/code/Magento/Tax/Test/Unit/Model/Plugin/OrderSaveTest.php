@@ -90,7 +90,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     'getConvertingFromQuote',
                     'getItemAppliedTaxes',
                 ]
-            )->getMock();
+            )->getMockForAbstractClass();
 
         return $orderExtensionAttributeMock;
     }
