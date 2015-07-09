@@ -7,7 +7,6 @@
 namespace Magento\Setup\Validator;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\Math\Random;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Module\ConnectionFactory;
 
@@ -24,20 +23,13 @@ class DbValidator
     private $connectionFactory;
 
     /**
-     * @var Random
-     */
-    private $random;
-
-    /**
      * Constructor
      * 
      * @param ConnectionFactory $connectionFactory
-     * @param Random $random
      */
-    public function __construct(ConnectionFactory $connectionFactory, Random $random)
+    public function __construct(ConnectionFactory $connectionFactory)
     {
         $this->connectionFactory = $connectionFactory;
-        $this->random = $random;
     }
 
     /**
@@ -94,39 +86,17 @@ class DbValidator
                 }
             }
         }
-        if (!$this->checkDatabaseWrite($connection)) {
-            throw new \Magento\Setup\Exception('Database user does not have access to some write operations.');
-        }
-        return true;
-    }
 
-    /**
-     * Check database write permission
-     *
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @return bool
-     * @throws \Magento\Setup\Exception
-     */
-    private function checkDatabaseWrite(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
-    {
-        $tableName = $this->random->getRandomString(10);
-        $newTable = $connection->newTable($tableName)->addColumn('testCol', \Magento\Framework\DB\Ddl\Table::TYPE_TEXT);
-        try {
-            $connection->createTemporaryTable($newTable);
-            $connection->insert($tableName, ['testCol' => 'testing']);
-            $result = $connection->fetchAll(
-                'select * from ' . $tableName . ' where testCol = "testing"'
-            );
-            if (count($result) == 1) {
-                $connection->delete($tableName, ['testCol=?' => 'testing']);
-                $result = $connection->fetchAll('select * from ' . $tableName);
-                if (count($result) == 0) {
-                    return true;
-                }
+        $grantInfo = $connection->query('SHOW GRANTS FOR current_user()')->fetchAll(\PDO::FETCH_NUM);
+        foreach ($grantInfo as $grantRow) {
+            if (strpos($grantRow[0], 'ALL ON ' . $dbName) !== false
+                || strpos($grantRow[0], 'ALL ON *') !== false
+                || strpos($grantRow[0], 'ALL PRIVILEGES ON ' . $dbName) !== false
+                || strpos($grantRow[0], 'ALL PRIVILEGES ON *') !== false
+            ) {
+                return true;
             }
-        } catch (\Zend_Db_Exception $e) {
-            throw new \Magento\Setup\Exception('Database user does not have write access.');
         }
-        return false;
+        throw new \Magento\Setup\Exception('Database user does not have enough privileges.');
     }
 }
