@@ -1,0 +1,206 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Sales\Test\Unit\Model\Order;
+
+/**
+ * Class DataProviderTest
+ */
+class DataProviderTest extends \PHPUnit_Framework_TestCase
+{
+
+    /**
+     * @var \Magento\Sales\Model\Order\DataProvider
+     */
+    protected $dataProvider;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $collectionFactoryMock;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\Grid\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $collectionMock;
+
+    public function setUp()
+    {
+        $this->collectionFactoryMock = $this->getMockBuilder(
+            'Magento\Sales\Model\Resource\Order\Grid\CollectionFactory'
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->collectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Grid\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->collectionMock);
+
+        $this->dataProvider = new \Magento\Sales\Model\Order\DataProvider(
+            'data-provider-name',
+            'entity_id',
+            'entity_id',
+            $this->collectionFactoryMock,
+            [
+                'fieldSet' => [
+                    'fields' => [
+                        'field' => null
+                    ]
+                ]
+            ],
+            [
+                'config' => []
+            ]
+        );
+    }
+
+    public function testGetName()
+    {
+        $this->assertEquals($this->dataProvider->getName(), 'data-provider-name');
+    }
+
+    public function testGetPrimaryFieldName()
+    {
+        $this->assertEquals($this->dataProvider->getPrimaryFieldName(), 'entity_id');
+    }
+
+    public function testGetRequestFieldName()
+    {
+        $this->assertEquals($this->dataProvider->getRequestFieldName(), 'entity_id');
+    }
+
+    public function testGetMeta()
+    {
+        $this->assertEquals(
+            $this->dataProvider->getMeta(),
+            [
+                'fieldSet' => [
+                    'fields' => [
+                        'field' => null
+                    ]
+                ]
+            ]
+        );
+    }
+
+    public function testGetFieldSetMetaInfo()
+    {
+        $this->assertEquals(
+            $this->dataProvider->getFieldSetMetaInfo('fieldSet'),
+            [
+                'fields' => [
+                    'field' => null
+                ]
+            ]
+        );
+    }
+
+    public function testGetFieldsMetaInfo()
+    {
+        $this->assertEquals(
+            $this->dataProvider->getFieldsMetaInfo('fieldSet'),
+            [
+                'field' => null
+            ]
+        );
+    }
+
+    public function testGetFieldMetaInfo()
+    {
+        $this->assertEquals(
+            $this->dataProvider->getFieldMetaInfo('fieldSet', 'field'),
+            []
+        );
+    }
+
+    public function testAddFilter()
+    {
+        $this->collectionMock->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('field', ['condition' => 1])
+            ->willReturnSelf();
+        $this->dataProvider->addFilter('field', ['condition' => 1]);
+    }
+
+    public function testAddField()
+    {
+        $this->collectionMock->expects($this->once())
+            ->method('addFieldToSelect')
+            ->with('field', 'alias')
+            ->willReturnSelf();
+        $this->dataProvider->addField('field', 'alias');
+    }
+
+    public function testAddOrder()
+    {
+        $this->collectionMock->expects($this->once())
+            ->method('addOrder')
+            ->with('field', 'DESC')
+            ->willReturnSelf();
+        $this->dataProvider->addOrder('field', 'DESC');
+    }
+
+    public function testSetLimit()
+    {
+        $this->collectionMock->expects($this->once())
+            ->method('setPageSize')
+            ->with(10)
+            ->willReturnSelf();
+        $this->collectionMock->expects($this->once())
+            ->method('setCurPage')
+            ->with(10)
+            ->willReturnSelf();
+        $this->dataProvider->setLimit(10, 10);
+    }
+
+    public function testRemoveField()
+    {
+        $this->collectionMock->expects($this->once())
+            ->method('removeFieldFromSelect')
+            ->with('field', 'alias')
+            ->willReturnSelf();
+        $this->dataProvider->removeField('field', 'alias');
+    }
+
+    public function testRemoveAllFields()
+    {
+        $this->collectionMock->expects($this->once())
+            ->method('removeAllFieldsFromSelect')
+            ->willReturnSelf();
+        $this->dataProvider->removeAllFields();
+    }
+
+    public function testGetData()
+    {
+        $this->collectionMock->expects($this->once())
+            ->method('toArray')
+            ->willReturn(['data' => 'data']);
+        $this->assertEquals(
+            $this->dataProvider->getData(),
+            ['data' => 'data']
+        );
+    }
+
+    public function testCount()
+    {
+        $this->collectionMock->expects($this->once())
+            ->method('count')
+            ->willReturn(1);
+        $this->assertEquals(1, $this->dataProvider->count());
+    }
+
+    public function testGetConfigData()
+    {
+        $this->assertEquals(
+            [],
+            $this->dataProvider->getConfigData()
+        );
+    }
+}
