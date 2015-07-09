@@ -21,5 +21,5 @@ interface AttributeGroupSearchResultsInterface extends \Magento\Framework\Api\Se
      * @param \Magento\Eav\Api\Data\AttributeGroupInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }
