@@ -5,9 +5,6 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Search\Request\Dimension;
-
 /**
  * CatalogSearch Fulltext Index Engine resource model
  *
@@ -30,78 +27,22 @@ class Engine implements EngineInterface
     protected $catalogProductVisibility;
 
     /**
-     * Array of product collection factory names
-     *
-     * @var array
-     */
-    protected $productFactoryNames;
-
-    /**
-     * Catalog search data
-     *
-     * @var \Magento\CatalogSearch\Helper\Data
-     */
-    protected $catalogSearchData;
-
-    /**
-     * @var \Magento\Search\Model\IndexScopeResolver
+     * @var \Magento\Search\Model\ScopeResolver\IndexScopeResolver
      */
     private $indexScopeResolver;
-
-    /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected $connection;
-
-    /**
-     * @var string
-     */
-    protected $tableName;
 
     /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Search\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
-     * @param \Magento\Framework\App\Resource $resource
-     * @param string $tableName
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\CatalogSearch\Helper\Data $catalogSearchData,
-        \Magento\Search\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver,
-        \Magento\Framework\App\Resource $resource,
-        $tableName = 'catalogsearch_fulltext'
+        \Magento\Search\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
     ) {
         $this->catalogProductVisibility = $catalogProductVisibility;
-        $this->catalogSearchData = $catalogSearchData;
         $this->indexScopeResolver = $indexScopeResolver;
-        $this->connection = $resource->getConnection(\Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE);
-        $this->tableName = $resource->getTableName($tableName);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function saveIndex($dimensions, \Traversable $documents)
-    {
-        $data = [];
-        foreach ($documents as $entityId => $productAttributes) {
-            foreach ($productAttributes as $attributeId => $indexValue) {
-                $data[] = [
-                    'product_id' => (int)$entityId,
-                    'attribute_id' =>(int)$attributeId,
-                    'data_index' => $indexValue
-                ];
-            }
-        }
-
-        if ($data) {
-            $this->connection->insertOnDuplicate($this->resolveTableName($dimensions), $data, ['data_index']);
-        }
-
-        return $this;
     }
 
     /**
@@ -165,49 +106,8 @@ class Engine implements EngineInterface
     }
 
     /**
-     * @param Dimension[] $dimensions
-     * @return string
-     * @throws LocalizedException
-     */
-    private function resolveTableName($dimensions)
-    {
-        if (empty($this->tableName)) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('Empty main table name'));
-        }
-
-        return $this->indexScopeResolver->resolve($this->tableName, $dimensions);
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function deleteIndex($dimensions, \Traversable $documents)
-    {
-        $where = [];
-        $entityIds = iterator_to_array($documents);
-        if ($entityIds !== null) {
-            $where[] = $this->connection
-                ->quoteInto('product_id IN (?)', $entityIds);
-        }
-
-        $this->connection
-            ->delete($this->resolveTableName($dimensions), $where);
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function cleanIndex($dimensions)
-    {
-        $this->connection->delete($this->resolveTableName($dimensions));
-        return $this;
-    }
-
-    /**
      * Prepare index array as a string glued by separator
+     * Support 2 level array gluing
      *
      * @param array $index
      * @param string $separator
@@ -215,7 +115,11 @@ class Engine implements EngineInterface
      */
     public function prepareEntityIndex($index, $separator = ' ')
     {
-        return $this->catalogSearchData->prepareIndexdata($index, $separator);
+        $indexData = [];
+        foreach ($index as $attributeId => $value) {
+            $indexData[$attributeId] = is_array($value) ? implode($separator, $value) : $value;
+        }
+        return $indexData;
     }
 
     /**

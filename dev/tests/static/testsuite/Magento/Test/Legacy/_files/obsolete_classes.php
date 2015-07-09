@@ -3786,4 +3786,5 @@ return [
     ['Magento\GoogleShopping\Test\Unit\Model\MassOperationsTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\ObserverTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\ServiceTest']
+    ['Magento\CatalogSearch\Model\Resource\EngineProvider'],
 ];

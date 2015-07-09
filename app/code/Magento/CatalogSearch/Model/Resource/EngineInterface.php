@@ -9,8 +9,13 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
-interface EngineInterface extends \Magento\Framework\IndexerInterface
+interface EngineInterface
 {
+    /**
+     * Configuration path by which current indexer handler stored
+     */
+    const CONFIG_ENGINE_PATH = 'catalog/search/engine';
+
     /**
      * Retrieve allowed visibility values for current engine
      *

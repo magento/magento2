@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -157,6 +156,9 @@ class IndexerHandler implements IndexerInterface
     private function insertDocuments(array $documents, array $dimensions)
     {
         $documents = $this->prepareSearchableFields($documents);
+        if (empty($documents)) {
+            return;
+        }
         $this->getAdapter()->insertOnDuplicate(
             $this->getTableName($dimensions),
             $documents,

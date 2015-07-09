@@ -122,6 +122,8 @@ abstract class AbstractResource
     public function rollBack()
     {
         $this->_getWriteAdapter()->rollBack();
+        $adapterKey = spl_object_hash($this->_getWriteAdapter());
+        self::$_commitCallbacks[$adapterKey] = [];
         return $this;
     }
 
