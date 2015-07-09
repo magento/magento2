@@ -75,7 +75,7 @@ class IndexerHandlerFactory
         $indexer = $this->_objectManager->create($this->handlers[$currentHandler], $data);
 
         if (!$indexer instanceof IndexerInterface) {
-            throw new \InvalidArgumentException($indexer . ' doesn\'t implement ' . IndexerInterface::class);
+            throw new \InvalidArgumentException($indexer . ' doesn\'t implement \Magento\Framework\IndexerInterface');
         }
 
         if ($indexer && !$indexer->isAvailable()) {
