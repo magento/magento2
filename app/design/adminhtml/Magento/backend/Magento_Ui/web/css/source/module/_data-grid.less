@@ -13,6 +13,43 @@
 
 @import 'data-grid/_data-grid-header.less';
 
+//
+//  Variables
+//  ---------------------------------------------
+
+@data-grid__font-size: 1.3rem;
+
+@data-grid-tr__active__background-color: @action__hover__background-color;
+@data-grid-tr__hover__background-color: lighten(@action__hover__background-color, 1%);
+
+@data-grid-cell__border-width: .1rem;
+@data-grid-cell__padding-horizontal: 1rem;
+@data-grid-cell__padding-vertical: 1rem;
+
+@data-grid-td__border-color: @color-gray84;
+@data-grid-td__border-inner-style: dashed;
+@data-grid-td__border-outer-style: solid;
+@data-grid-td__even__background-color: @color-white-smoke;
+@data-grid-td__odd__background-color: @page__background-color;
+
+@data-grid-th__border-color: @color-darkie-gray;
+@data-grid-th__border-style: solid;
+@data-grid-th__background-color: @color-brownie;
+@data-grid-th__color: @color-white;
+@data-grid-th__padding-horizontal: @data-grid-cell__padding-horizontal;
+@data-grid-th__padding-vertical: @data-grid-cell__padding-vertical;
+@data-grid-th__hover__background-color: lighten(@data-grid-th__background-color, 5%);
+
+@data-grid-th-marker__width: .7rem;
+@data-grid-th-marker__required__color: lighten(@color-light-phoenix, 10%);
+
+@data-grid-checkbox-cell-inner__padding-top: 1.1rem;
+@data-grid-checkbox-cell-inner__padding-horizontal: 1.8rem;
+
+@data-grid-row-parent-marker__size: 1rem;
+
+//
+
 .admin__data-grid-outer-wrap {
     position: relative; // Used to keep spinner inside
 }
@@ -31,7 +68,7 @@
     right: 0;
     top: 0;
     position: absolute;
-    z-index: @overlay__z-index;
+    z-index: @data-grid-overlay__z-index;
 
     .grid-loader {
         background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
@@ -69,6 +106,9 @@
         &:nth-child(even) {
             td {
                 background-color: @data-grid-td__even__background-color;
+                &._dragging {
+                    background-color: fade(@data-grid-td__even__background-color, @data-grid-td__dragging__opacity); 
+                }
             }
         }
         &.data-grid-tr-no-data {
@@ -117,6 +157,17 @@
         &:last-child {
             border-right-style: @data-grid-td__border-outer-style;
         }
+        &._dragging {
+            color: fade(@table__color, @data-grid-td__dragging__opacity);
+            background-color: fade(@data-grid-td__odd__background-color, @data-grid-td__dragging__opacity);
+            a {
+                color: fade(@link__color, @data-grid-td__dragging__opacity);
+                &:hover {
+                    color: fade(@link__hover__color, @data-grid-td__dragging__opacity);
+                }
+            }
+        }
+        
         //  Action select data grid styles (can be action-select-secondary in future)
         .action-select-wrap {
             position: static;
@@ -160,11 +211,22 @@
         &:first-child {
             border-left-color: @data-grid-th__border-color;
         }
+        &._dragover-left {
+            box-shadow: inset 3px 0 0px 0px @color-white;
+        }
+        &._dragover-right {
+            box-shadow: inset -3px 0 0px 0px @color-white;
+        }
     }
     .data-grid-th {
         color: @data-grid-th__color;
         padding: @data-grid-th__padding-vertical @data-grid-th__padding-horizontal;
         vertical-align: middle;
+        &._draggable {
+            cursor: -webkit-grab;
+               cursor: -moz-grab;
+                    cursor: grab;
+        }
         &._sortable {
             background-clip: padding-box; // Fix for border overlay in Firefox
             cursor: pointer;
@@ -249,6 +311,45 @@
             }
             &:last-child {
                 border-right-color: @data-grid-td__border-color;
+            }
+        }
+    }
+    //  Draggable columns
+    &._hidden {
+        display: none;
+    }
+    &.data-grid-draggable {
+        background-color: @color-black;
+    }
+    &._dragging-copy {
+        background-color: @color-white;
+        box-shadow: @component__box-shadow__base;
+        left: 0;
+        opacity: .95;
+        position: fixed;
+        top: 0;
+        z-index: @data-grid-overlay__z-index;
+        .data-grid-th {
+            border: @data-grid-dragging-copy__border;
+            border-bottom: none;
+        }
+        .data-grid-th,
+        .data-grid-th._sortable {
+            cursor: -webkit-grabbing;
+               cursor: -moz-grabbing;
+                    cursor: grabbing;
+        }
+        tbody {
+            tr {
+                &:last-child {
+                    td {
+                        border-bottom: @data-grid-dragging-copy__border;
+                    }
+                }
+            }
+            td {
+                border-left: @data-grid-dragging-copy__border;
+                border-right: @data-grid-dragging-copy__border;
             }
         }
     }

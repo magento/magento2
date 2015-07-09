@@ -8,6 +8,7 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
@@ -56,6 +57,9 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
         $rid = $this->getRequest()->getParam('role_id', false);
         $resource = $this->getRequest()->getParam('resource', false);
         $roleUsers = $this->getRequest()->getParam('in_role_user', null);
@@ -74,41 +78,37 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         $role = $this->_initRole('role_id');
         if (!$role->getId() && $rid) {
             $this->messageManager->addError(__('This role no longer exists.'));
-            return $this->getDefaultResult();
+            return $resultRedirect->setPath('adminhtml/*/');
         }
 
-        $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
-        $role->setName($roleName)
-            ->setPid($this->getRequest()->getParam('parent_id', false))
-            ->setRoleType(RoleGroup::ROLE_TYPE)
-            ->setUserType(UserContextInterface::USER_TYPE_ADMIN);
-        $this->_eventManager->dispatch(
-            'admin_permissions_role_prepare_save',
-            ['object' => $role, 'request' => $this->getRequest()]
-        );
-        $role->save();
+        try {
+            $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
+            $role->setName($roleName)
+                ->setPid($this->getRequest()->getParam('parent_id', false))
+                ->setRoleType(RoleGroup::ROLE_TYPE)
+                ->setUserType(UserContextInterface::USER_TYPE_ADMIN);
+            $this->_eventManager->dispatch(
+                'admin_permissions_role_prepare_save',
+                ['object' => $role, 'request' => $this->getRequest()]
+            );
+            $role->save();
 
-        $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
+            $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
 
-        foreach ($oldRoleUsers as $oUid) {
-            $this->_deleteUserFromRole($oUid, $role->getId());
+            foreach ($oldRoleUsers as $oUid) {
+                $this->_deleteUserFromRole($oUid, $role->getId());
+            }
+
+            foreach ($roleUsers as $nRuid) {
+                $this->_addUserToRole($nRuid, $role->getId());
+            }
+            $this->messageManager->addSuccess(__('You saved the role.'));
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('An error occurred while saving this role.'));
         }
 
-        foreach ($roleUsers as $nRuid) {
-            $this->_addUserToRole($nRuid, $role->getId());
-        }
-        $this->messageManager->addSuccess(__('You saved the role.'));
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*/');
     }
 }

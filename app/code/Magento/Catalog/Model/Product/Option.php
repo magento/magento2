@@ -12,7 +12,6 @@ use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Resource\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -26,7 +25,8 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionInterface
+class Option extends \Magento\Framework\Model\AbstractExtensibleModel
+    implements \Magento\Catalog\Api\Data\ProductCustomOptionInterface
 {
     const OPTION_GROUP_TEXT = 'text';
 
@@ -116,6 +116,8 @@ class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductC
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param Option\Value $productOptionValue
      * @param Option\Type\Factory $optionFactory
      * @param \Magento\Framework\Stdlib\String $string
@@ -128,6 +130,8 @@ class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductC
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         Option\Value $productOptionValue,
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
         \Magento\Framework\Stdlib\String $string,
@@ -143,6 +147,8 @@ class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductC
         parent::__construct(
             $context,
             $registry,
+            $extensionFactory,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -406,7 +412,7 @@ class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductC
     }
 
     /**
-     * @return AbstractModel
+     * @return \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave()
@@ -844,6 +850,28 @@ class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductC
     {
         $this->_values = $values;
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

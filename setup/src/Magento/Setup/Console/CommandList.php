@@ -39,6 +39,7 @@ class CommandList
     {
         return [
             'Magento\Setup\Console\Command\AdminUserCreateCommand',
+            'Magento\Setup\Console\Command\BackupCommand',
             'Magento\Setup\Console\Command\ConfigSetCommand',
             'Magento\Setup\Console\Command\DbDataUpgradeCommand',
             'Magento\Setup\Console\Command\DbSchemaUpgradeCommand',
@@ -52,6 +53,7 @@ class CommandList
             'Magento\Setup\Console\Command\GenerateFixturesCommand',
             'Magento\Setup\Console\Command\I18nCollectPhrasesCommand',
             'Magento\Setup\Console\Command\I18nPackCommand',
+            'Magento\Setup\Console\Command\InfoBackupsListCommand',
             'Magento\Setup\Console\Command\InfoCurrencyListCommand',
             'Magento\Setup\Console\Command\InfoLanguageListCommand',
             'Magento\Setup\Console\Command\InfoTimezoneListCommand',
@@ -60,10 +62,12 @@ class CommandList
             'Magento\Setup\Console\Command\ModuleEnableCommand',
             'Magento\Setup\Console\Command\ModuleDisableCommand',
             'Magento\Setup\Console\Command\ModuleStatusCommand',
+            'Magento\Setup\Console\Command\ModuleUninstallCommand',
             'Magento\Setup\Console\Command\MaintenanceAllowIpsCommand',
             'Magento\Setup\Console\Command\MaintenanceDisableCommand',
             'Magento\Setup\Console\Command\MaintenanceEnableCommand',
             'Magento\Setup\Console\Command\MaintenanceStatusCommand',
+            'Magento\Setup\Console\Command\RollbackCommand',
             'Magento\Setup\Console\Command\UpgradeCommand',
             'Magento\Setup\Console\Command\UninstallCommand',
         ];

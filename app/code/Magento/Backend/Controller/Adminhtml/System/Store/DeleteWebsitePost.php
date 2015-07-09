@@ -6,11 +6,12 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -19,10 +20,10 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
         $model->load($itemId);
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultRedirectFactory->create();
+        $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if (!$model) {
-            $this->messageManager->addError(__('Unable to proceed. Please, try again'));
+            $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
@@ -34,8 +35,15 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
             return $redirectResult->setPath('*/*/editWebsite', ['website_id' => $itemId]);
         }
 
-        $model->delete();
-        $this->messageManager->addSuccess(__('The website has been deleted.'));
-        return $redirectResult->setPath('adminhtml/*/');
+        try {
+            $model->delete();
+            $this->messageManager->addSuccess(__('You deleted the website.'));
+            return $redirectResult->setPath('adminhtml/*/');
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Unable to delete website. Please, try again later.'));
+        }
+        return $redirectResult->setPath('*/*/editWebsite', ['website_id' => $itemId]);
     }
 }

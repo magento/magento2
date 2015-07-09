@@ -122,7 +122,7 @@ define([
                     dialog.open();
                 }, this),
                 error: function() {
-                    alert($.mage.__('Error: unknown error.'));
+                    alert($.mage.__('Something went wrong. That\'s all we know.'));
                 }
             });
         },

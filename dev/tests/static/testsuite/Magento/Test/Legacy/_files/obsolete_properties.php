@@ -166,6 +166,7 @@ return [
     ['_filesystem', 'Magento\Core\Model\Resource\Setup\Migration', '_directory'],
     ['_filesystem', 'Magento\Core\Model\Theme\Collection', '_directory'],
     ['_mediaBaseDirectory', 'Magento\MediaStorage\Model\Resource\File\Storage\File'],
+    ['_mediaBaseDirectory', 'Magento\MediaStorage\Model\File\Storage\Database\AbstractDatabase'],
     ['_dbHelper', 'Magento\MediaStorage\Model\Resource\File\Storage\File'],
     ['_filesystem', 'Magento\Core\Model\Theme\CopyService', '_directory'],
     ['_baseDir', 'Magento\Core\Model\Theme\Collection'],

@@ -112,7 +112,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
         $mockClassName = 'Mock_Action_Class';
         $actionClass = $this->getMockClass(
             'Magento\Framework\App\ActionInterface',
-            ['dispatch', 'getResponse', 'getDefaultResult'],
+            ['dispatch', 'getResponse'],
             [],
             $mockClassName
         );

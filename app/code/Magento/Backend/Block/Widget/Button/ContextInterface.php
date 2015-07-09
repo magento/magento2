@@ -13,6 +13,7 @@ interface ContextInterface
      *
      * @param \Magento\Backend\Block\Widget\Button\Item $item
      * @return bool
+     * @api
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item);
 }

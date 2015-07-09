@@ -228,7 +228,6 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation10">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create dynamic bundle</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
@@ -272,7 +271,7 @@
             <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%</data>
             <data name="product/data/price_type" xsi:type="string">Fixed</data>
             <data name="product/data/price/value" xsi:type="string">110</data>
-            <data name="product/data/price/preset" xsi:type="string">fixed-159</data>
+            <data name="product/data/price/preset" xsi:type="string">fixed-110</data>
             <data name="product/data/bundle_selections/preset" xsi:type="string">second</data>
             <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/preset" xsi:type="string">with_custom_options_2</data>

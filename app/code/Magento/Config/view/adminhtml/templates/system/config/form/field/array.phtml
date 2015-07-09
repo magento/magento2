@@ -75,6 +75,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                     templateValues = {
                 <?php foreach ($block->getColumns() as $columnName => $column): ?>
                     <?php echo $columnName ?>: '',
+                        'option_extra_attrs': {},
                     <?php endforeach; ?>
                         _id: '_' + d.getTime() + '_' + d.getMilliseconds()
                 };
