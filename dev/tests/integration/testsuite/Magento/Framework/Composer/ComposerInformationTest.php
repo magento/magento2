@@ -18,10 +18,15 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      */
     private $directoryList;
 
+    /**
+     * @var ComposerJsonFinder
+     */
+    private $composerJsonFinder;
+
     public function setUp()
     {
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-
+        $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
     }
 
     /**
@@ -51,7 +56,9 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupDirectoryMock($composerDir);
 
-        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+        $composerInfo = new ComposerInformation(
+            new MagentoComposerApplicationFactory($this->composerJsonFinder, $this->directoryList)
+        );
 
         $this->assertEquals("~5.5.0|~5.6.0", $composerInfo->getRequiredPhpVersion());
     }
@@ -64,7 +71,9 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRequiredExtensions($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+        $composerInfo = new ComposerInformation(
+            new MagentoComposerApplicationFactory($this->composerJsonFinder, $this->directoryList)
+        );
         $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv', 'intl'];
 
         $actualRequiredExtensions = $composerInfo->getRequiredExtensions();
@@ -81,7 +90,9 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRootRequiredPackagesAndTypes($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+        $composerInfo = new ComposerInformation(
+            new MagentoComposerApplicationFactory($this->composerJsonFinder, $this->directoryList)
+        );
 
         $requiredPackagesAndTypes = $composerInfo->getRootRequiredPackageTypesByName();
 
@@ -105,11 +116,11 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Composer file not found:
+     * @expectedExceptionMessage Composer file not found
      */
     public function testNoLock()
     {
         $this->setupDirectoryMock('notARealDirectory');
-        new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+        new ComposerInformation(new MagentoComposerApplicationFactory($this->composerJsonFinder, $this->directoryList));
     }
 }
