@@ -3,10 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Resource\Order\Shipment\Order\Grid;
+namespace Magento\Sales\Model\Resource\Grid\Order;
 
 /**
- * Flat sales order shipment collection
+ * Class Collection
+ * Collection for order related documents to display grids on order view page
  */
 class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
 {
@@ -14,6 +15,13 @@ class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
      * @var \Magento\Framework\Registry
      */
     protected $registryManager;
+
+    /**
+     * Order field for setOrderFilter
+     *
+     * @var string
+     */
+    protected $_orderField = 'order_id';
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
@@ -44,28 +52,19 @@ class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->registryManager = $registryManager;
-        $this->_eventPrefix = $eventPrefix;
-        $this->_eventObject = $eventObject;
-        $this->_init($model, $resourceModel);
-        $this->setMainTable($mainTable);
         parent::__construct(
             $entityFactory,
             $logger,
             $fetchStrategy,
             $eventManager,
+            $mainTable,
+            $eventPrefix,
+            $eventObject,
+            $resourceModel,
+            $model,
             $connection,
             $resource
         );
-    }
-
-    /**
-     * Retrieve order model instance
-     *
-     * @return \Magento\Sales\Model\Order
-     */
-    public function getOrder()
-    {
-        return $this->registryManager->registry('current_order');
     }
 
     /**
@@ -76,7 +75,7 @@ class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->setOrderFilter($this->getOrder());
+        $this->addFieldToFilter($this->_orderField, $this->registryManager->registry('current_order')->getId());
         return $this;
     }
 }
