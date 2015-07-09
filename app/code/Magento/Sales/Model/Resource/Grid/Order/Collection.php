@@ -75,7 +75,7 @@ class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addFieldToFilter($this->_orderField, $this->registryManager->registry('current_order')->getId());
+        //$this->addFieldToFilter($this->_orderField, $this->registryManager->registry('current_order')->getId());
         return $this;
     }
 }

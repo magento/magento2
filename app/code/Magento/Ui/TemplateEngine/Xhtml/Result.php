@@ -97,7 +97,7 @@ class Result implements ResultInterface
             $this->appendLayoutConfiguration();
             $result = $this->compiler->postprocessing($this->template->__toString());
         } catch (\Exception $e) {
-            $result = '';
+            $result = $e->getMessage();
         }
         return $result;
     }
