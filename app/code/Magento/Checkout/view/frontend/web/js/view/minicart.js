@@ -52,7 +52,7 @@ define([
                 "button": ":button.update-cart-item"
             },
             "confirmMessage": $.mage.__(
-                'Are you sure you want to remove this item from your Compare Products list?'
+                'Are you sure you would like to remove this item from the shopping cart?'
             )
         });
     }
