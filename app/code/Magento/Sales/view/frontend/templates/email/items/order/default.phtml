@@ -37,7 +37,7 @@ $_order = $_item->getOrder();
         <?= $block->getItemPrice($_item); ?>
     </td>
 </tr>
-<?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
+<?php if ($_item->getGiftMessageId() && $_giftMessage = $block->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
 <tr>
     <td colspan="3" class="item-extra">
         <table class="message-gift">
