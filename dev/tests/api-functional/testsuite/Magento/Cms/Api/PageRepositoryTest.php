@@ -222,13 +222,14 @@ class PageRepositoryTest extends WebapiAbstract
         $this->currentPage = $this->pageRepository->save($pageDataObject);
 
         $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
             ->create('Magento\Framework\Api\SearchCriteriaBuilder');
         $filter = $filterBuilder
             ->setField(PageInterface::IDENTIFIER)
             ->setValue($pageIdentifier)
             ->create();
-        $searchCriteriaBuilder->addFilter([$filter]);
+        $searchCriteriaBuilder->addFilters([$filter]);
 
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
