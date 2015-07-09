@@ -36,44 +36,6 @@
 
 </div>
 
-<div id="store-maintenance" class="rediness-check-item" ng-show="maintenance.visible">
-
-    <h3 class="readiness-check-title" ng-hide="maintenance.processed">
-        Putting store in maintenance mode...
-    </h3>
-
-    <div ng-show="maintenance.processed" ng-switch="maintenance.responseType">
-
-        <div ng-switch-when="success" ng-init="updateOnSuccess(maintenance)">
-
-            <span class="readiness-check-icon icon-success-round"></span>
-
-            <div class="readiness-check-content">
-                <h3 class="readiness-check-title">Store in maintenance mode</h3>
-                <p>
-                    Your store will stay in maintenance mode until you complete the process. Then, it will be lifted automatically.
-                </p>
-            </div>
-
-        </div>
-
-        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(maintenance)">
-
-            <span class="readiness-check-icon icon-failed-round"></span>
-
-            <div class="readiness-check-content">
-                <h3 class="readiness-check-title">Check store maintenance availability</h3>
-                <p>
-                    Cannot put your store in maintenance mode. Please fix that, and try again.
-                    Error received from server: {{maintenance.error}}
-                </p>
-            </div>
-        </div>
-
-    </div>
-
-</div>
-
 <div id="backup-check" class="rediness-check-item" ng-show="check.visible">
 
     <h3 class="readiness-check-title" ng-hide="check.processed">
@@ -104,6 +66,44 @@
                 <p>
                     Check available space in your disk for taking backups, and try again.
                     Error received from server: {{check.error}}
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="store-maintenance" class="rediness-check-item" ng-show="maintenance.visible">
+
+    <h3 class="readiness-check-title" ng-hide="maintenance.processed">
+        Putting store in maintenance mode...
+    </h3>
+
+    <div ng-show="maintenance.processed" ng-switch="maintenance.responseType">
+
+        <div ng-switch-when="success" ng-init="updateOnSuccess(maintenance)">
+
+            <span class="readiness-check-icon icon-success-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Store in maintenance mode</h3>
+                <p>
+                    Your store will stay in maintenance mode until you complete the process. Then, it will be lifted automatically.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(maintenance)">
+
+            <span class="readiness-check-icon icon-failed-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check store maintenance availability</h3>
+                <p>
+                    Cannot put your store in maintenance mode. Please fix that, and try again.
+                    Error received from server: {{maintenance.error}}
                 </p>
             </div>
         </div>

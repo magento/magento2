@@ -14,6 +14,7 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="nextState()"
+                ng-disabled="checkingInProgress() || hasErrors"
                 >Next</button>
         </div>
         <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
@@ -36,13 +37,6 @@
 <h2 class="page-title">{{$state.current.header}}</h2>
 
 <div ng-show="$state.is('root.create-backup')">
-    <div
-        class="message message-error"
-        ng-show="takeBackup.result.success === false && takeBackup.result !== undefined"
-        >
-        <span class="message-text">{{takeBackup.result.error}}</span>
-    </div>
-
     <form
         novalidate
         name="backup"
