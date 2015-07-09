@@ -7,7 +7,8 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
-use \Magento\Framework\Model\Resource\Db\AbstractDb as DbResource;
+use Magento\Framework\Model\Resource\Db\AbstractDb as DbResource;
+use Magento\Framework\Api\Filter;
 
 /**
  * Class Fulltext
@@ -37,21 +38,19 @@ class FulltextFilter implements FilterApplierInterface
      * Apply fulltext filters
      *
      * @param DbCollection $collection
-     * @param array $filters
+     * @param Filter $filter
      * @return void
      */
-    public function apply(DbCollection $collection, $filters)
+    public function apply(DbCollection $collection, Filter $filter)
     {
         $columns = $this->getFulltextIndexColumns($collection->getResource(), $collection->getMainTable());
         if (!$columns) {
             return;
         }
-        foreach ($filters as $filter) {
-            $collection->getSelect()
-                ->where(
-                    'MATCH(' . implode(',', $columns) . ') AGAINST(? IN BOOLEAN MODE)',
-                    $filter['condition']
-                );
-        }
+        $collection->getSelect()
+            ->where(
+                'MATCH(' . implode(',', $columns) . ') AGAINST(? IN BOOLEAN MODE)',
+                $filter->getValue()
+            );
     }
 }

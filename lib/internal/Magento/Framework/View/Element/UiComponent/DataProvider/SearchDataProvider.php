@@ -52,21 +52,19 @@ class SearchDataProvider implements DataProviderInterface
     protected $data = [];
 
     /**
-     * @var FilterPool
+     * @var Reporting
      */
-    protected $filterPool;
-
-    /**
-     * @var \Magento\Framework\Api\Search\FilterGroupBuilder
-     */
-    protected $filterGroup;
+    protected $reporting;
 
     /**
      * @var
      */
     protected $filterBuilder;
 
-    protected $searchCriteria;
+    /**
+     * @var \Magento\Framework\Api\Search\SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
 
     /**
      * @param $name
@@ -74,7 +72,6 @@ class SearchDataProvider implements DataProviderInterface
      * @param $requestFieldName
      * @param Collection $collection
      * @param FilterPool $filterPool
-     * @param \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder
      * @param array $meta
      * @param array $data
      */
@@ -82,19 +79,16 @@ class SearchDataProvider implements DataProviderInterface
         $name,
         $primaryFieldName,
         $requestFieldName,
-        Collection $collection,
-        FilterPool $filterPool,
-        \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder,
-//        \Magento\Framework\Api\Search\SearchCriteriaInterface $filterGroupBuilder,
+        Reporting $reporting,
+        \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder,
         array $meta = [],
         array $data = []
     ) {
         $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
-        $this->filterPool = $filterPool;
-        $this->filterGroupBuilder = $filterGroupBuilder;
-        $this->collection = $collection;
+        $this->reporting= $reporting;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->meta = $meta;
         $this->data = $data;
     }
@@ -182,9 +176,7 @@ class SearchDataProvider implements DataProviderInterface
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        $this->filterGroupBuilder->addFilter($filter);
-//            ->setFilters(
-//            array_merge($this->filterGroup->getFilters(), [])
+        $this->searchCriteriaBuilder->addFilter($filter);
     }
 
     /**
@@ -196,7 +188,7 @@ class SearchDataProvider implements DataProviderInterface
      */
     public function addField($field, $alias = null)
     {
-        $this->collection->addFieldToSelect($field, $alias);
+//        $this->collection->addFieldToSelect($field, $alias);
     }
 
     /**
@@ -208,7 +200,7 @@ class SearchDataProvider implements DataProviderInterface
      */
     public function addOrder($field, $direction)
     {
-        $this->collection->addOrder($field, $direction);
+        $this->searchCriteriaBuilder->addSortOrder($field, $direction);
     }
 
     /**
@@ -220,8 +212,8 @@ class SearchDataProvider implements DataProviderInterface
      */
     public function setLimit($offset, $size)
     {
-        $this->collection->setPageSize($size);
-        $this->collection->setCurPage($offset);
+        $this->searchCriteriaBuilder->setPageSize($size);
+        $this->searchCriteriaBuilder->setCurrentPage($offset);
     }
 
     /**
@@ -233,7 +225,7 @@ class SearchDataProvider implements DataProviderInterface
      */
     public function removeField($field, $isAlias = false)
     {
-        $this->collection->removeFieldFromSelect($field, $isAlias);
+//        $this->collection->removeFieldFromSelect($field, $isAlias);
     }
 
     /**
@@ -243,7 +235,7 @@ class SearchDataProvider implements DataProviderInterface
      */
     public function removeAllFields()
     {
-        $this->collection->removeAllFieldsFromSelect();
+//        $this->collection->removeAllFieldsFromSelect();
     }
 
     /**
@@ -253,15 +245,9 @@ class SearchDataProvider implements DataProviderInterface
      */
     public function getData()
     {
-//        $data = [];
-//        $searchResult = $this->reporting->search($searchCriteria);
-//        $documents = $searchResult->getItems();
-//        foreach ($documents as $document) {
-//            $data[] = $document->getCustomAttribures();
-//        }
-        //$this->filterPool->applyFilters($this->collection);
-        $this->filterGroupBuilder->create();
-        return $this->collection->toArray();
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchCriteria->setRequestName($this->name);
+        return $this->reporting->search($searchCriteria)->toArray();
     }
 
     /**
@@ -271,8 +257,7 @@ class SearchDataProvider implements DataProviderInterface
      */
     public function count()
     {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->count();
+        return 10;
     }
 
     /**
