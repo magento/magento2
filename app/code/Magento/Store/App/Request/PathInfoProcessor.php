@@ -34,7 +34,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
 
         try {
             $store = $this->_storeManager->getStore($storeCode);
-          // TODO: MAGETWO-39826
+            // TODO: MAGETWO-39826
         } catch (\InvalidArgumentException $e) {
             return $pathInfo;
         }

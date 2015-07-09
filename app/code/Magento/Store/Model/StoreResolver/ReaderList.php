@@ -23,14 +23,11 @@ class ReaderList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $resolverMap
      */
-    public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        $resolverMap = [
-            ScopeInterface::SCOPE_WEBSITE => '\Magento\Store\Model\StoreResolver\Website',
-            ScopeInterface::SCOPE_GROUP => '\Magento\Store\Model\StoreResolver\Group',
-            ScopeInterface::SCOPE_STORE => '\Magento\Store\Model\StoreResolver\Store',
-        ]
-    ) {
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $resolverMap = [
+        ScopeInterface::SCOPE_WEBSITE => '\Magento\Store\Model\StoreResolver\Website',
+        ScopeInterface::SCOPE_GROUP => '\Magento\Store\Model\StoreResolver\Group',
+        ScopeInterface::SCOPE_STORE => '\Magento\Store\Model\StoreResolver\Store',
+    ]) {
         $this->resolverMap = $resolverMap;
         $this->objectManager = $objectManager;
     }
