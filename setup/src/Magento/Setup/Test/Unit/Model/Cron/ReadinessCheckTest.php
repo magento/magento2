@@ -101,7 +101,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testRunReadinessCheck()
     {
-        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn (true);
+        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn(true);
         $this->write->expects($this->once())->method('isExist')->willReturn(false);
         $this->write->expects($this->never())->method('readFile');
         $expected = [
@@ -117,7 +117,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testRunReadinessCheckLastTimestamp()
     {
-        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn (true);
+        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn(true);
         $this->write->expects($this->once())->method('isExist')->willReturn(true);
         $this->write->expects($this->once())->method('readFile')->willReturn('{"current_timestamp": 50}');
         $expected = [
