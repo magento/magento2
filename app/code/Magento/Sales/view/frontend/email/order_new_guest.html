@@ -36,7 +36,8 @@
                     'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>'
 
                     store_email=$store_email
-                |raw}}{{depend store_phone}}
+                |raw}}
+                {{depend store_phone}}
                     {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}
                 {{/depend}}.
                 {{depend store_hours}}
