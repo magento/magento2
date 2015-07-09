@@ -75,8 +75,8 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      */
     public function getCommentsList($id)
     {
-        $this->searchCriteriaBuilder->addFilter(
-            ['eq' => $this->filterBuilder->setField('parent_id')->setValue($id)->create()]
+        $this->searchCriteriaBuilder->addFilters(
+            [$this->filterBuilder->setField('parent_id')->setValue($id)->setConditionType('eq')->create()]
         );
         $criteria = $this->searchCriteriaBuilder->create();
         return $this->creditmemoCommentRepository->getList($criteria);
