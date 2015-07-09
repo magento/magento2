@@ -50,58 +50,40 @@ class EngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider saveDataProvider
+     * @param null|string $expected
+     * @param array $data
+     * @dataProvider prepareEntityIndexDataProvider
      */
-    public function testSave($storeId, $entityIndexes, $expected)
+    public function testPrepareEntityIndex($expected, array $data)
     {
-        $dimension = $this->getMockBuilder('\Magento\Framework\Search\Request\Dimension')
-            ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
-            ->getMock();
-        $dimension->expects($this->any())->method('getName')->willReturn('scope');
-        $dimension->expects($this->any())->method('getValue')->willReturn($storeId);
-        if ($expected) {
-            $this->connection->expects($this->once())
-                ->method('insertOnDuplicate')
-                ->with(null, $expected, ['data_index'])
-                ->willReturnSelf();
-        }
-        $this->target->saveIndex([$dimension], $entityIndexes);
+        $this->assertEquals($expected, $this->target->prepareEntityIndex($data['index'], $data['separator']));
     }
 
-    public function saveDataProvider()
+    /**
+     * @return array
+     */
+    public function prepareEntityIndexDataProvider()
     {
         return [
-            'empty' => [
-                null,
-                new \ArrayIterator([]),
-                []
-            ],
-            'correctData' => [
-                13,
-                new \ArrayIterator([
-                    28 => [
-                        123 => 'Value of 123',
-                        845 => 'Value of 845',
-                        'options' => 'Some | Index | Value'
-                    ]
-                ]),
+            [
+                [],
                 [
-                    [
-                        'product_id' => 28,
-                        'attribute_id' => 123,
-                        'data_index' => 'Value of 123'
+                    'index' => [],
+                    'separator' => '--'
+                ],
+            ],
+            [
+                ['element1','element2','element3--element4'],
+                [
+                    'index' => [
+                        'element1',
+                        'element2',
+                        [
+                            'element3',
+                            'element4',
+                        ],
                     ],
-                    [
-                        'product_id' => 28,
-                        'attribute_id' => 845,
-                        'data_index' => 'Value of 845'
-                    ],
-                    [
-                        'product_id' => 28,
-                        'attribute_id' => 0,
-                        'data_index' => 'Some | Index | Value'
-                   ]
+                    'separator' => '--'
                 ]
             ]
         ];

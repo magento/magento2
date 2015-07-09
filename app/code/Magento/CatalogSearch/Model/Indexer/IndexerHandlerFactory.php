@@ -5,9 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\CatalogSearch\Model\Resource\EngineProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Resource;
 use Magento\Framework\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -34,37 +32,57 @@ class IndexerHandlerFactory
     private $scopeConfig;
 
     /**
+     * Configuration path by which current indexer handler stored
+     *
+     * @var string
+     */
+    private $configPath;
+
+    /**
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
      * @param ScopeConfigInterface $scopeConfig
+     * @param string $configPath
      * @param string[] $handlers
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ScopeConfigInterface $scopeConfig,
+        $configPath,
         array $handlers = []
     ) {
         $this->_objectManager = $objectManager;
-        $this->handlers = $handlers;
         $this->scopeConfig = $scopeConfig;
+        $this->configPath = $configPath;
+        $this->handlers = $handlers;
     }
 
     /**
-     * Create class instance with specified parameters
+     * Create indexer handler
      *
      * @param array $data
      * @return IndexerInterface
      */
     public function create(array $data = [])
     {
-        $currentEngine = $this->scopeConfig->getValue(EngineProvider::CONFIG_ENGINE_PATH, ScopeInterface::SCOPE_STORE);
-        $object = $this->_objectManager->create($this->handlers[$currentEngine], $data);
+        $currentHandler = $this->scopeConfig->getValue($this->configPath, ScopeInterface::SCOPE_STORE);
+        if (!isset($this->handlers[$currentHandler])) {
+            throw new \LogicException(
+                'There is no such indexer handler: ' . $currentHandler
+            );
+        }
+        $indexer = $this->_objectManager->create($this->handlers[$currentHandler], $data);
 
-        if (!$object instanceof IndexerInterface) {
-            throw new \InvalidArgumentException($object . ' doesn\'t implement ' . IndexerInterface::class);
+        if (!$indexer instanceof IndexerInterface) {
+            throw new \InvalidArgumentException($indexer . ' doesn\'t implement \Magento\Framework\IndexerInterface');
         }
 
-        return $object;
+        if ($indexer && !$indexer->isAvailable()) {
+            throw new \LogicException(
+                'Indexer handler is not available: ' . $indexer
+            );
+        }
+        return $indexer;
     }
 }

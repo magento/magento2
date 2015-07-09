@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogSearch\Test\Unit\Helper;
+namespace Magento\Search\Test\Unit\Helper;
 
 /**
- * Unit test for \Magento\CatalogSearch\Helper\Data
+ * Unit test for \Magento\Search\Helper\Data
  */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
@@ -55,23 +55,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->_contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->_scopeConfigMock);
 
-        $this->_model = new \Magento\CatalogSearch\Helper\Data(
+        $this->_model = new \Magento\Search\Helper\Data(
             $this->_contextMock,
             $this->_stringMock,
             $this->_queryFactoryMock,
             $this->_escaperMock,
             $this->_storeManagerMock
         );
-    }
-
-    /**
-     * @param null|string $expected
-     * @param array $data
-     * @dataProvider prepareIndexdataDataProvider
-     */
-    public function testPrepareIndexdata($expected, array $data)
-    {
-        $this->assertEquals($expected, $this->_model->prepareIndexdata($data['index'], $data['separator']));
     }
 
     public function testGetMinQueryLength()
@@ -100,35 +90,5 @@ class DataTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnValue($return));
         $this->assertEquals($return, $this->_model->getMaxQueryLength());
-    }
-
-    /**
-     * @return array
-     */
-    public function prepareIndexdataDataProvider()
-    {
-        return [
-            [
-                [],
-                [
-                    'index' => [],
-                    'separator' => '--'
-                ],
-            ],
-            [
-                ['element1','element2','element3--element4'],
-                [
-                    'index' => [
-                        'element1',
-                        'element2',
-                        [
-                            'element3',
-                            'element4',
-                        ],
-                    ],
-                    'separator' => '--'
-                ]
-            ]
-        ];
     }
 }
