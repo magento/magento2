@@ -48,7 +48,7 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('query')
             ->with('SHOW GRANTS FOR current_user()')
             ->willReturn($pdo);
-        $pdo->expects($this->once())->method('fetchAll')->willReturn([['GRANT ALL PRIVILEGES ON *.* TO']]);
+        $pdo->expects($this->once())->method('fetchAll')->willReturn([['GRANT ALL PRIVILEGES ON `name.*` TO']]);
         $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
     }
 
