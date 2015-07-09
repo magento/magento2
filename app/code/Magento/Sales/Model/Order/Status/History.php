@@ -49,7 +49,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -60,7 +60,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -126,6 +126,8 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     /**
      * Retrieve order instance
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Sales\Model\Order
      */
     public function getOrder()
@@ -175,6 +177,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
         return $this;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns comment
      *
@@ -263,7 +266,6 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
         return $this->getData(OrderStatusHistoryInterface::STATUS);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */

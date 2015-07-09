@@ -115,7 +115,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $directory
         );
         $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE, 'entity' => 'catalog_product']
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )->setSource(
             $source
         )->isDataValid();
@@ -443,10 +443,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         foreach ($options->getItems() as $option) {
             $lastOptionKey = $option->getType() . '|' . $option->getTitle();
             $actualOptionId++;
-            $actualOptions[$actualOptionId] = $lastOptionKey;
-            $actualData[$actualOptionId] = $this->_getOptionData($option);
-            if ($optionValues = $this->_getOptionValues($option)) {
-                $actualValues[$actualOptionId] = $optionValues;
+            if (!in_array($lastOptionKey, $actualOptions)) {
+                $actualOptions[$actualOptionId] = $lastOptionKey;
+                $actualData[$actualOptionId] = $this->_getOptionData($option);
+                if ($optionValues = $this->_getOptionValues($option)) {
+                    $actualValues[$actualOptionId] = $optionValues;
+                }
             }
         }
         return [
@@ -514,16 +516,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ],
             'Append behavior with new product' => [
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                '$importFile' => 'product_with_custom_options_new.csv',
-                '$sku' => 'simple_new',
-            ],
-            'Replace behavior with existing product' => [
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE,
-                '$importFile' => 'product_with_custom_options.csv',
-                '$sku' => 'simple',
-            ],
-            'Replace behavior with new product' => [
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE,
                 '$importFile' => 'product_with_custom_options_new.csv',
                 '$sku' => 'simple_new',
             ]
@@ -769,7 +761,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $errors = $this->_model->getErrorMessages();
         $expectedErrors = [
             "Please correct the value for 'multiselect_attribute'." => [2],
-            "Orphan rows that will be skipped due default row errors" => [3,4],
         ];
         foreach ($expectedErrors as $message => $invalidRows) {
             $this->assertArrayHasKey($message, $errors);
@@ -816,7 +807,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $id = $simpleProduct->getIdBySku('Configurable 03-option_0');
         $simpleProduct->load($id);
         $this->assertEquals('Option Label', $simpleProduct->getAttributeText('attribute_with_option'));
-        $this->assertEquals([2, 4], $simpleProduct->getAvailableInCategories());
     }
 
     /**

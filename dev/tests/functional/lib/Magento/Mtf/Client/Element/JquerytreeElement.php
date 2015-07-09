@@ -7,154 +7,138 @@
 namespace Magento\Mtf\Client\Element;
 
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 
 /**
- * Class JquerytreeElement
- * Typified element class for JqueryTree elements
+ * Typified element class for JqueryTree elements.
  */
 class JquerytreeElement extends Tree
 {
     /**
-     * Css class for finding tree nodes.
+     * Root element.
      *
      * @var string
      */
-    protected $nodeCssClass = ' > ul';
+    protected $rootElement = '//div[contains(@class, "tree x-tree jstree")]';
 
     /**
-     * Css class for detecting tree nodes.
+     * Pattern for level node.
      *
      * @var string
      */
-    protected $nodeSelector = 'li[data-id]';
+    protected $level = '/ul/li[contains(@class, "jstree")]';
 
     /**
-     * Css class for detecting tree nodes.
+     * Pattern for child element node.
      *
      * @var string
      */
-    protected $checkedNodeSelector = 'li.jstree-checked[data-id]';
+    protected $pattern = '/ul/li[contains(@class, "jstree") and a[text() = "%s"]]';
 
     /**
-     * Css class for fetching node's name.
+     * Pattern for child open node.
      *
      * @var string
      */
-    protected $nodeName = 'a';
+    protected $openNode = '//li[contains(@class, "jstree-open") and a[text() = "%s"]]';
 
     /**
-     * Array, which holds all selected elements paths.
+     * Pattern for child closed node.
      *
-     * @var array
+     * @var string
      */
-    protected $checkedNodesPaths = [];
+    protected $closedNode = '//li[contains(@class, "jstree-closed") and a[text() = "%s"]]';
 
     /**
-     * Returns structure of the jquerytree element.
+     * Selector for parent element.
      *
-     * @return array
+     * @var string
      */
-    public function getStructure()
+    protected $parentElement = './../../../a';
+
+    /**
+     * Selector for input.
+     *
+     * @var string
+     */
+    protected $input = '/a/ins[@class="jstree-checkbox"]';
+
+    /**
+     * Selected checkboxes.
+     *
+     * @var string
+     */
+    protected $selectedLabels = '//li[contains(@class, "jstree-checked")]/a';
+
+    /**
+     * Selected checkboxes by level.
+     *
+     * @var string
+     */
+    protected $selectedLabelsByLevel = '/ul/li[contains(@class, "jstree-checked")]/a';
+
+    /**
+     * Display children.
+     *
+     * @param string $element
+     * @return void
+     */
+    protected function displayChildren($element)
     {
-        return $this->_getNodeContent($this, 'div[class*=jstree] > ul');
-    }
-
-    /**
-     *  Recursive walks tree
-     *
-     * @param ElementInterface $node
-     * @param string $parentCssClass
-     * @return array
-     */
-    protected function _getNodeContent(ElementInterface $node, $parentCssClass)
-    {
-        $counter = 1;
-        $nextNodeSelector = $parentCssClass . " > " . $this->nodeSelector . ":nth-of-type($counter)";
-        $nodeArray = [];
-        //Get list of all children nodes to work with
-        $newNode = $node->find($nextNodeSelector);
-        while ($newNode->isVisible()) {
-            $nextCheckedNodeSelector = $parentCssClass . " > " . $this->checkedNodeSelector . ":nth-of-type($counter)";
-            $nodesNames = $newNode->find($this->nodeName);
-            $text = ltrim($nodesNames->getText());
-            $childNodeSelector = $nextNodeSelector . $this->nodeCssClass;
-            $nodesContents = $newNode->find($childNodeSelector);
-            $subNodes = null;
-            if ($nodesContents->isVisible()) {
-                $subNodes = $this->_getNodeContent($nodesContents, $childNodeSelector);
-            }
-            $nodeArray[] = [
-                'name' => $text,
-                'isChecked' => $node->find($nextCheckedNodeSelector)->isVisible() ? true : false,
-                'element' => $newNode,
-                'subnodes' => $subNodes,
-            ];
-            ++$counter;
-            $nextNodeSelector = $parentCssClass . " > " . $this->nodeSelector . ":nth-of-type($counter)";
-            $newNode = $node->find($nextNodeSelector);
+        $element = $this->find(sprintf($this->openNode, $element), Locator::SELECTOR_XPATH);
+        if ($element->isVisible()) {
+            return;
         }
-        return $nodeArray;
-    }
-
-    /**
-     * Retrieve array of checked nodes from structure array.
-     *
-     * @param array $structure
-     * @return array|null
-     */
-    protected function getCheckedNodes($structure)
-    {
-        $pathArray = [];
-        if ($structure['isChecked'] == true) {
-            array_push($pathArray, $structure['name']);
-            if (is_array($structure['subnodes'])) {
-                foreach ($structure['subnodes'] as $node) {
-                    array_push($pathArray, $this->getCheckedNodes($node));
-                }
-            }
-            return $pathArray;
+        $plusButton = $this->find(sprintf($this->closedNode, $element) . $this->input, Locator::SELECTOR_XPATH);
+        if ($plusButton->isVisible()) {
+            $plusButton->click();
+            $this->waitLoadChildren($element);
         }
-        return null;
     }
 
     /**
-     * Method for recursive walk array of checked elements.
-     * If element haven't subnodes, adds element's path to $checkedNodesPaths
+     * Get element label.
      *
-     * @param array $pathArray
-     * @param string $rootPath
+     * @param ElementInterface $element
      * @return string
      */
-    protected function getPathFromArray($pathArray, $rootPath = '')
+    protected function getElementLabel(ElementInterface $element)
     {
-        $path = '';
-        $rootPath = $rootPath == '' ? $pathArray[0] : $rootPath . '/' . $pathArray[0];
-        if (count($pathArray) > 1) {
-            for ($counter = 1; $counter < count($pathArray); $counter++) {
-                $path .= $this->getPathFromArray($pathArray[$counter], $rootPath);
-            }
-        } else {
-            $path = $rootPath;
-            $this->checkedNodesPaths[] = $path;
-        }
-        return $path;
+        return trim($element->getText());
     }
 
     /**
-     * Returns array of paths of all selected elements.
+     * Get structure.
      *
+     * @param int|null $level
      * @return array
      */
-    public function getValue()
+    public function getStructure($level = null)
     {
-        $pathsArray = [];
-        $structure = $this->getStructure();
-        foreach ($structure as $structureChunk) {
-            $pathsArray[] = $this->getCheckedNodes($structureChunk);
+        $nodesSelector = $this->getNodesSelector($level);
+        $nodes = $this->getElements($nodesSelector, Locator::SELECTOR_XPATH);
+
+        return $this->prepareValues($nodes);
+    }
+
+    /**
+     * Get nodes selector.
+     *
+     * @param int|null $level
+     * @return string
+     */
+    protected function getNodesSelector($level)
+    {
+        $selector = $this->rootElement;
+        if ($level !== null) {
+            for ($i = 1; $i < $level; $i++) {
+                $selector .= $this->level;
+            }
+            $selector .= $this->selectedLabelsByLevel;
+        } else {
+            $selector .= $this->selectedLabels;
         }
-        foreach ($pathsArray as $pathArray) {
-            $this->getPathFromArray($pathArray);
-        }
-        return array_filter($this->checkedNodesPaths);
+
+        return $selector;
     }
 }

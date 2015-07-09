@@ -31,7 +31,11 @@ class Dashboard extends \Magento\Backend\Block\Template
 
         $this->addChild('sales', 'Magento\Backend\Block\Dashboard\Sales');
 
-        if ($this->_scopeConfig->getValue(self::XML_PATH_ENABLE_CHARTS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+        $isChartEnabled = $this->_scopeConfig->getValue(
+            self::XML_PATH_ENABLE_CHARTS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        if ($isChartEnabled) {
             $block = $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Diagrams');
         } else {
             $block = $this->getLayout()->createBlock(
@@ -39,7 +43,10 @@ class Dashboard extends \Magento\Backend\Block\Template
             )->setTemplate(
                 'dashboard/graph/disabled.phtml'
             )->setConfigUrl(
-                $this->getUrl('adminhtml/system_config/edit', ['section' => 'admin'])
+                $this->getUrl(
+                    'adminhtml/system_config/edit',
+                    ['section' => 'admin', '_fragment' => 'admin_dashboard-link']
+                )
             );
         }
         $this->setChild('diagrams', $block);

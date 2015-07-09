@@ -43,7 +43,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -54,7 +54,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_productWebsiteFactory = $productWebsiteFactory;

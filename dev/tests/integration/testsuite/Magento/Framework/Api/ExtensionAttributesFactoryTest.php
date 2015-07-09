@@ -16,7 +16,11 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
         $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->factory = new ExtensionAttributesFactory($objectManager);
+
+        $this->factory = $objectManager->create(
+            'Magento\Framework\Api\ExtensionAttributesFactory',
+            ['objectManager' => $objectManager]
+        );
     }
 
     /**
@@ -49,5 +53,15 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
             'Magento\Wonderland\Api\Data\FakeRegionExtension',
             $this->factory->create('Magento\Wonderland\Model\Data\FakeRegion')
         );
+    }
+
+    public function testCreateWithLogicException()
+    {
+        $this->setExpectedException(
+            'LogicException',
+            "Class 'Magento\\Framework\\Api\\ExtensionAttributesFactoryTest' must implement an interface, "
+            . "which extends from 'Magento\\Framework\\Api\\ExtensibleDataInterface'"
+        );
+        $this->factory->create(get_class($this));
     }
 }

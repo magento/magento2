@@ -118,7 +118,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 'value' => $experimentCode,
                 'class' => 'textarea googleoptimizer',
                 'required' => false,
-                'note' => 'Note: Experiment code should be added to the original page only.'
+                'note' => 'Experiment code should be added to the original page only.'
             ]
         );
 

@@ -61,7 +61,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\HTTP\Header $httpHeader
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param array $ignoredUserAgents
@@ -78,7 +78,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
         array $data = []

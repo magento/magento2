@@ -12,19 +12,19 @@ namespace Magento\Catalog\Api\Data;
 interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
-     * Get product SKU
+     * Get SKU
      *
      * @return string
      */
-    public function getProductSku();
+    public function getSku();
 
     /**
-     * Set product SKU
+     * Set SKU
      *
      * @param string $sku
      * @return $this
      */
-    public function setProductSku($sku);
+    public function setSku($sku);
 
     /**
      * Get link type

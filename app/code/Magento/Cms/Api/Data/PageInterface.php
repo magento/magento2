@@ -37,7 +37,7 @@ interface PageInterface
     /**
      * Get ID
      *
-     * @return int
+     * @return int|null
      */
     public function getId();
 
@@ -51,112 +51,112 @@ interface PageInterface
     /**
      * Get title
      *
-     * @return string
+     * @return string|null
      */
     public function getTitle();
 
     /**
      * Get page layout
      *
-     * @return string
+     * @return string|null
      */
     public function getPageLayout();
 
     /**
      * Get meta keywords
      *
-     * @return string
+     * @return string|null
      */
     public function getMetaKeywords();
 
     /**
      * Get meta description
      *
-     * @return string
+     * @return string|null
      */
     public function getMetaDescription();
 
     /**
      * Get content heading
      *
-     * @return string
+     * @return string|null
      */
     public function getContentHeading();
 
     /**
      * Get content
      *
-     * @return string
+     * @return string|null
      */
     public function getContent();
 
     /**
      * Get creation time
      *
-     * @return string
+     * @return string|null
      */
     public function getCreationTime();
 
     /**
      * Get update time
      *
-     * @return string
+     * @return string|null
      */
     public function getUpdateTime();
 
     /**
      * Get sort order
      *
-     * @return string
+     * @return string|null
      */
     public function getSortOrder();
 
     /**
      * Get layout update xml
      *
-     * @return string
+     * @return string|null
      */
     public function getLayoutUpdateXml();
 
     /**
      * Get custom theme
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomTheme();
 
     /**
      * Get custom root template
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomRootTemplate();
 
     /**
      * Get custom layout update xml
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomLayoutUpdateXml();
 
     /**
      * Get custom theme from
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomThemeFrom();
 
     /**
      * Get custom theme to
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomThemeTo();
 
     /**
      * Is active
      *
-     * @return bool
+     * @return bool|null
      */
     public function isActive();
 

@@ -165,7 +165,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -187,7 +187,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = []
     ) {
@@ -270,6 +270,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param string $now
      * @return void
+     * @codeCoverageIgnore
      */
     public function setNow($now)
     {
@@ -425,6 +426,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param  int|array $productIds
      * @return void
+     * @codeCoverageIgnore
      */
     public function setProductsFilter($productIds)
     {
@@ -435,6 +437,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Returns products filter
      *
      * @return array|int|null
+     * @codeCoverageIgnore
      */
     public function getProductsFilter()
     {

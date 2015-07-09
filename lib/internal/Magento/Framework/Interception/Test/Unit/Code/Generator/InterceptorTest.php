@@ -11,12 +11,12 @@ namespace Magento\Framework\Interception\Test\Unit\Code\Generator;
 class InterceptorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $ioObjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $classGeneratorMock;
 
@@ -46,13 +46,13 @@ class InterceptorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->classGeneratorMock->expects($this->once())->method('setName')
-            ->will($this->returnValue($this->classGeneratorMock));
+            ->willReturnSelf();
         $this->classGeneratorMock->expects($this->once())->method('addProperties')
-            ->will($this->returnValue($this->classGeneratorMock));
+            ->willReturnSelf();
         $this->classGeneratorMock->expects($this->once())->method('addMethods')
-            ->will($this->returnValue($this->classGeneratorMock));
+            ->willReturnSelf();
         $this->classGeneratorMock->expects($this->once())->method('setClassDocBlock')
-            ->will($this->returnValue($this->classGeneratorMock));
+            ->willReturnSelf();
         $this->classGeneratorMock->expects($this->once())->method('generate')
             ->will($this->returnValue('source code example'));
         $model->expects($this->once())->method('_validateData')->will($this->returnValue(true));

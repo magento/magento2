@@ -1,0 +1,13 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko if: (visible()) -->
+    <!-- ko text: address().firstname --><!-- /ko --> <!-- ko text: address().lastname --><!-- /ko --><br/>
+    <!-- ko text: address().street --><!-- /ko --><br/>
+    <!-- ko text: address().city --><!-- /ko -->, <!-- ko text: address().region --><!-- /ko --> <!-- ko text: address().postcode --><!-- /ko --><br/>
+    <!-- ko text: getCountryName(address().countryId) --><!-- /ko --><br/>
+    <!-- ko text: address().telephone --><!-- /ko --><br/>
+<!-- /ko -->

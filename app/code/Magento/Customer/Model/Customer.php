@@ -218,7 +218,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param CustomerMetadataInterface $metadataService
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -240,7 +240,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -781,7 +781,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong transactional account email type'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please correct the transactional account email type.')
+            );
         }
 
         if (!$storeId) {
@@ -1010,11 +1012,11 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $errors = [];
         if (!\Zend_Validate::is(trim($this->getFirstname()), 'NotEmpty')) {
-            $errors[] = __('The first name cannot be empty.');
+            $errors[] = __('Please enter a first name.');
         }
 
         if (!\Zend_Validate::is(trim($this->getLastname()), 'NotEmpty')) {
-            $errors[] = __('The last name cannot be empty.');
+            $errors[] = __('Please enter a last name.');
         }
 
         if (!\Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
@@ -1024,15 +1026,15 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $entityType = $this->_config->getEntityType('customer');
         $attribute = $this->_config->getAttribute($entityType, 'dob');
         if ($attribute->getIsRequired() && '' == trim($this->getDob())) {
-            $errors[] = __('The Date of Birth is required.');
+            $errors[] = __('Please enter a date of birth.');
         }
         $attribute = $this->_config->getAttribute($entityType, 'taxvat');
         if ($attribute->getIsRequired() && '' == trim($this->getTaxvat())) {
-            $errors[] = __('The TAX/VAT number is required.');
+            $errors[] = __('Please enter a TAX/VAT number.');
         }
         $attribute = $this->_config->getAttribute($entityType, 'gender');
         if ($attribute->getIsRequired() && '' == trim($this->getGender())) {
-            $errors[] = __('Gender is required.');
+            $errors[] = __('Please enter a gender.');
         }
 
         $transport = new \Magento\Framework\Object(
@@ -1264,7 +1266,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new AuthenticationException(
-                __('Invalid password reset token.')
+                __('Please enter a valid password reset token.')
             );
         }
         $this->_getResource()->changeResetPasswordLinkToken($this, $passwordLinkToken);

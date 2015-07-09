@@ -50,7 +50,7 @@ class DbStatusCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this->setName('setup:db:status')
-            ->setDescription('Checks if update of DB schema or data is required');
+            ->setDescription('Checks if DB schema or data requires upgrade');
         parent::configure();
     }
 
@@ -60,7 +60,7 @@ class DbStatusCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln("<info>No information is available: the application is not installed.</info>");
+            $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
             return;
         }
         /** @var DbVersionInfo $dbVersionInfo */

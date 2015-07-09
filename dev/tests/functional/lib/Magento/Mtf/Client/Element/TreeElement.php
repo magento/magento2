@@ -6,40 +6,103 @@
 
 namespace Magento\Mtf\Client\Element;
 
+use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
+
 /**
- * Class TreeElement
- * Typified element class for Tree elements
+ * Typified element class for Tree elements.
  */
 class TreeElement extends Tree
 {
     /**
-     * Css class for finding tree nodes
+     * All selected checkboxes.
      *
      * @var string
      */
-    protected $nodeCssClass = '.x-tree-node > .x-tree-node-ct';
+    protected $selectedCheckboxes = '//input[@checked=""]';
 
     /**
-     * Css class for detecting tree nodes
+     * Selector for plus image.
      *
      * @var string
      */
-    protected $nodeSelector = '.x-tree-node';
+    protected $imagePlus = './div/img[contains(@class, "-plus")]';
 
     /**
-     * Css class for fetching node's name
+     * Selector for input.
      *
      * @var string
      */
-    protected $nodeName = 'div > a';
+    protected $input = '/div/a/span';
 
     /**
-     * Get structure of the tree element
+     * Selector for parent element.
      *
-     * @return array
+     * @var string
      */
-    public function getStructure()
+    protected $parentElement = './../../../../../div/a/span';
+
+    /**
+     * Selected checkboxes.
+     *
+     * @var string
+     */
+    protected $selectedLabels = '//input[@checked=""]/../a/span';
+
+    /**
+     * Pattern for child element node.
+     *
+     * @var string
+     */
+    protected $pattern = '//li[@class="x-tree-node" and div/a/span[contains(text(),"%s")]]';
+
+    /**
+     *  Regular pattern mask for node label.
+     *
+     * @var string
+     */
+    protected $regPatternLabel = '`(.+) \(.*`';
+
+    /**
+     * Clear data for element.
+     *
+     * @return void
+     */
+    public function clear()
     {
-        return $this->_getNodeContent($this, '.x-tree-root-node');
+        $checkboxes = $this->getElements($this->selectedCheckboxes, Locator::SELECTOR_XPATH, 'checkbox');
+        foreach ($checkboxes as $checkbox) {
+            $checkbox->setValue('No');
+        }
+    }
+
+    /**
+     * Display children.
+     *
+     * @param string $element
+     * @return void
+     */
+    protected function displayChildren($element)
+    {
+        $element = $this->find(sprintf($this->pattern, $element), Locator::SELECTOR_XPATH);
+        $plusButton = $element->find($this->imagePlus, Locator::SELECTOR_XPATH);
+        if ($plusButton->isVisible()) {
+            $plusButton->click();
+            $this->waitLoadChildren($element);
+        }
+    }
+
+    /**
+     * Get element label.
+     *
+     * @param ElementInterface $element
+     * @return string
+     */
+    protected function getElementLabel(ElementInterface $element)
+    {
+        $value = $element->getText();
+        preg_match($this->regPatternLabel, $value, $matches);
+
+        return trim($matches[1]);
     }
 }

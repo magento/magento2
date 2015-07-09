@@ -49,6 +49,9 @@ class Context extends \Magento\Backend\Block\Template\Context
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param \Magento\Framework\View\Element\Template\File\Resolver $resolver
+     * @param \Magento\Framework\View\Element\Template\File\Validator $validator
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Framework\Math\Random $mathRandom
@@ -56,7 +59,6 @@ class Context extends \Magento\Backend\Block\Template\Context
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @param Button\ToolbarInterface $toolbar
-     * @param \Magento\Framework\View\Page\Config $pageConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -84,6 +86,8 @@ class Context extends \Magento\Backend\Block\Template\Context
         \Magento\Framework\App\State $appState,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Page\Config $pageConfig,
+        \Magento\Framework\View\Element\Template\File\Resolver $resolver,
+        \Magento\Framework\View\Element\Template\File\Validator $validator,
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\Math\Random $mathRandom,
@@ -116,6 +120,8 @@ class Context extends \Magento\Backend\Block\Template\Context
             $appState,
             $storeManager,
             $pageConfig,
+            $resolver,
+            $validator,
             $authorization,
             $backendSession,
             $mathRandom,

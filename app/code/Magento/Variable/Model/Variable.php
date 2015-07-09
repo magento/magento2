@@ -38,7 +38,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Variable\Model\Resource\Variable $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -46,7 +46,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Escaper $escaper,
         \Magento\Variable\Model\Resource\Variable $resource,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_escaper = $escaper;
@@ -69,6 +69,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      *
      * @param integer $storeId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setStoreId($storeId)
     {
@@ -80,6 +81,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * Getter
      *
      * @return integer
+     * @codeCoverageIgnore
      */
     public function getStoreId()
     {
@@ -91,6 +93,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $code
      * @return $this
+     * @codeCoverageIgnore
      */
     public function loadByCode($code)
     {

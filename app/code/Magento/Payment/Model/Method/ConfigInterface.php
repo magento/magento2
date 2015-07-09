@@ -10,14 +10,6 @@ namespace Magento\Payment\Model\Method;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-interface ConfigInterface
+interface ConfigInterface extends \Magento\Payment\Gateway\ConfigInterface
 {
-    /**
-     * Config field getter
-     * The specified key can be either in camelCase or under_score format
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getConfigValue($key);
 }

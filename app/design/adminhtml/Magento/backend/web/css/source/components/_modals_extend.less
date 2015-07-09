@@ -1,0 +1,87 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Components -> Modals
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@modal-title__color: @text__color;
+
+@modal-popup-title__font-size: 2.4rem;
+
+@modal-slide-title__font-size: 2.1rem;
+
+@modal-action-close__color: @color-brownie-vanilla;
+@modal-action-close__font-size: 2rem;
+@modal-action-close__active__font-size: 1.8rem;
+@modal-action-close__hover__color: darken(@color-brownie-vanilla, 10%);
+
+//
+
+.modal-popup,
+.modal-slide {
+  .action-close {
+    color: @modal-action-close__color;
+    position: absolute;
+    right: 0;
+    top: 0;
+    &:active {
+      transform: none;
+      &:before {
+        font-size: @modal-action-close__active__font-size;
+      }
+    }
+    &:hover {
+      &:before {
+        color: @modal-action-close__hover__color;
+      }
+    }
+    &:before {
+      font-size: @modal-action-close__font-size;
+    }
+  }
+}
+
+.modal-popup {
+  .modal-title {
+    font-size: @modal-popup-title__font-size;
+    margin-right: @modal-popup-title__font-size + @modal-popup__padding + 1rem;
+  }
+  .action-close {
+    padding: @modal-popup__padding;
+    &:active {
+      padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+      padding-right: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+    }
+  }
+}
+
+.modal-slide {
+  .modal-title {
+    font-size: @modal-slide-title__font-size;
+    margin-right: @modal-slide-title__font-size + @modal-slide__padding + 1rem;
+  }
+  .action-close {
+    padding: @modal-slide-header__padding-vertical @modal-slide__padding;
+    &:active {
+      padding-top: @modal-slide-header__padding-vertical + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+      padding-right: @modal-slide__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+    }
+  }
+  .page-main-actions {
+    margin-top: @modal-slide-header__padding-vertical;
+    margin-bottom: @modal-slide-header__padding-vertical - @page-main-actions__padding;
+  }
+}
+
+.modal-title {
+  font-weight: @font-weight__regular;
+  margin-bottom: 0;
+  min-height: 1em;
+}

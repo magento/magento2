@@ -23,7 +23,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Col
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $registryManager
-     * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -32,7 +32,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Col
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\Registry $registryManager,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
@@ -66,30 +66,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Col
      */
     protected function _initSelect()
     {
-        parent::_initSelect();
-        $this->addFieldToSelect(
-            'entity_id'
-        )->addFieldToSelect(
-            'created_at'
-        )->addFieldToSelect(
-            'increment_id'
-        )->addFieldToSelect(
-            'order_currency_code'
-        )->addFieldToSelect(
-            'store_currency_code'
-        )->addFieldToSelect(
-            'base_currency_code'
-        )->addFieldToSelect(
-            'state'
-        )->addFieldToSelect(
-            'grand_total'
-        )->addFieldToSelect(
-            'base_grand_total'
-        )->addFieldToSelect(
-            'billing_name'
-        )->setOrderFilter(
-            $this->getOrder()
-        );
+        parent::_initSelect()->setOrderFilter($this->getOrder());
         return $this;
     }
 }

@@ -316,7 +316,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
 
-        /** @var \Magento\Customer\Api\Data\AddressInterface $item*/
+        /** @var \Magento\Customer\Api\Data\AddressInterface $item */
         foreach ($searchResults->getItems() as $item) {
             $this->assertEquals(
                 $expectedResult[$item->getId()]['city'],

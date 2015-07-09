@@ -52,13 +52,16 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                         <td data-th="<?php echo $block->escapeHtml(__('Add to Cart')) ?>" class="col actions" data-role="add-to-links">
                             <?php if ($product->isSaleable()): ?>
                                 <?php if ($isVisibleProduct): ?>
-                                    <button type="button" title="<?php echo __('Add to Cart') ?>" onclick="location.assign('<?php echo $block->getSharedItemAddToCartUrl($item) ?>')" class="action tocart">
+                                    <button type="button"
+                                            title="<?php echo __('Add to Cart') ?>"
+                                            data-post='<?php echo $block->getSharedItemAddToCartUrl($item); ?>'
+                                            class="action tocart">
                                         <span><?php echo __('Add to Cart') ?></span>
                                     </button>
                                 <?php endif ?>
                             <?php endif; ?>
                             <a href="#" data-post='<?php echo $block->getAddToWishlistParams($item); ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
-                                <span><?php echo __('Add to Wishlist') ?></span>
+                                <span><?php echo __('Add to Wish List') ?></span>
                             </a>
                         </td>
                     </tr>
@@ -72,7 +75,7 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                 <div class="primary">
                     <button type="button"
                             title="<?php echo __('Add All to Cart') ?>"
-                            onclick="location.assign('<?php echo $block->getUrl('*/*/allcart', ['_current' => true]) ?>')"
+                            data-post='<?php echo $block->getSharedAddAllToCartUrl(); ?>'
                             class="action tocart primary">
                         <span><?php echo __('Add All to Cart') ?></span>
                     </button>

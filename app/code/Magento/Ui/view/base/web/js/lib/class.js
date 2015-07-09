@@ -8,6 +8,9 @@ define([
 ], function (_, utils) {
     'use strict';
 
+    /**
+     * Checks if string has a '_super' substring.
+     */
     var superReg = /\b_super\b/;
 
     /**
@@ -49,10 +52,10 @@ define([
     }
 
     /**
-     * Analogue of Backbone.extend function.
+     * Creates new constructor based on a current prototype properties,
+     * extending them with properties specified in 'exender' object.
      *
-     * @param  {Object} extender - Object, that describes the prototype of
-     *      created constructor.
+     * @param {Object} [extender={}]
      * @returns {Function} New constructor.
      */
     function extend(extender) {
@@ -74,8 +77,6 @@ define([
             };
         }
 
-        defaults = utils.extend({}, parent.defaults, defaults);
-
         child.prototype = Object.create(parentProto);
         child.prototype.constructor = child;
 
@@ -85,44 +86,65 @@ define([
                 method;
         });
 
-        child.__super__ = parentProto;
-        child.extend = extend;
-        child.defaults = defaults;
-
-        return child;
+        return _.extend(child, {
+            __super__:  parentProto,
+            extend:     parent.extend,
+            defaults:   utils.extend({}, parent.defaults, defaults)
+        });
     }
 
     /**
-     * Constructor, which calls initialize with passed arguments.
+     * Constructor.
      */
     function Class() {
         this.initialize.apply(this, arguments);
     }
 
-    Class.prototype.initialize = function (options) {
-        this.initConfig(options);
+    _.extend(Class, {
+        defaults: {
+            ignoreTmpls: {
+                templates: true
+            }
+        },
+        extend: extend
+    });
 
-        return this;
-    };
+    _.extend(Class.prototype, {
+        /**
+         * Entry point to the initialization of consturctors' instance.
+         *
+         * @param {Object} [options={}]
+         * @returns {Class} Chainable.
+         */
+        initialize: function (options) {
+            this.initConfig(options);
 
-    Class.prototype.initConfig = function (options) {
-        var defaults = this.constructor.defaults,
-            config = utils.extend({}, defaults, options),
-            templates = config.templates;
+            return this;
+        },
 
-        delete config.templates;
+        /**
+         * Recursively extends data specified in constructors' 'defaults'
+         * property with provided options object. Evaluates resulting
+         * object using string templates (see: mage/utils/template.js).
+         *
+         * @param {Object} [options={}]
+         * @returns {Class} Chainable.
+         */
+        initConfig: function (options) {
+            var defaults    = this.constructor.defaults,
+                config      = utils.extend({}, defaults, options || {}),
+                ignored     = config.ignoreTmpls || {},
+                cached      = utils.omit(config, ignored);
 
-        config = utils.template(config, this);
+            config = utils.template(config, this);
 
-        config.templates = templates;
+            _.each(cached, function (value, key) {
+                utils.nested(config, key, value);
+            });
 
-        _.extend(this, config);
-
-        return this;
-    };
-
-    Class.extend = extend;
-    Class.defaults = {};
+            return _.extend(this, config);
+        }
+    });
 
     return Class;
 });

@@ -38,24 +38,32 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     protected $searchResultsFactory;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupListFactory
      * @param \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository
      * @param \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupListFactory,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory,
         \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository,
-        \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory
+        \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->groupResource = $groupResource;
         $this->groupListFactory = $groupListFactory;
         $this->groupFactory = $groupFactory;
         $this->setRepository = $setRepository;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -108,6 +116,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         }
 
         $collection = $this->groupListFactory->create();
+        $this->joinProcessor->process($collection);
         $collection->setAttributeSetFilter($attributeSetId);
         $collection->setSortOrder();
 

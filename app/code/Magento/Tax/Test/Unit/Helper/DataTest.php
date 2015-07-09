@@ -9,7 +9,6 @@
 namespace Magento\Tax\Test\Unit\Helper;
 
 use Magento\Framework\Object as MagentoObject;
-use Magento\TestFramework\Event\Magento;
 
 /**
  * Class DataTest
@@ -27,6 +26,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $priceCurrencyMock;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    protected $taxConfigMock;
+
     public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -37,12 +39,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrencyMock = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->taxConfigMock = $this->getMockBuilder('Magento\Tax\Model\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->helper = $objectManager->getObject(
             'Magento\Tax\Helper\Data',
             [
                 'orderTaxManagement' => $this->orderTaxManagementMock,
-                'priceCurrency' => $this->priceCurrencyMock
+                'priceCurrency' => $this->priceCurrencyMock,
+                'taxConfig' => $this->taxConfigMock
             ]
         );
     }
@@ -441,5 +447,62 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
 
         return $data;
+    }
+
+    /**
+     * @param bool $expected
+     * @param bool $displayBothPrices
+     * @param bool $priceIncludesTax
+     * @param bool $isCrossBorderTradeEnabled
+     * @param bool $displayPriceIncludingTax
+     * @dataProvider dataProviderIsCatalogPriceDisplayAffectedByTax
+     */
+    public function testIsCatalogPriceDisplayAffectedByTax($expected, $displayBothPrices, $priceIncludesTax,
+        $isCrossBorderTradeEnabled, $displayPriceIncludingTax)
+    {
+        if ($displayBothPrices == true) {
+            $this->taxConfigMock->expects($this->at(0))
+                ->method('getPriceDisplayType')
+                ->willReturn(3);
+        } else {
+            $this->taxConfigMock->expects($this->at(0))
+                ->method('getPriceDisplayType')
+                ->willReturn(2);
+
+            $this->taxConfigMock->expects($this->any())
+                ->method('priceIncludesTax')
+                ->willReturn($priceIncludesTax);
+
+            $this->taxConfigMock->expects($this->any())
+                ->method('crossBorderTradeEnabled')
+                ->willReturn($isCrossBorderTradeEnabled);
+
+            if ($displayPriceIncludingTax == true) {
+                $this->taxConfigMock->expects($this->at(3))
+                    ->method('getPriceDisplayType')
+                    ->willReturn(2);
+            } else {
+                $this->taxConfigMock->expects($this->at(2))
+                    ->method('getPriceDisplayType')
+                    ->willReturn(1);
+            }
+        }
+
+        $this->assertSame($expected, $this->helper->isCatalogPriceDisplayAffectedByTax(null));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderIsCatalogPriceDisplayAffectedByTax()
+    {
+        return [
+            [true , true, false, false, false],
+            [true , false, true, true, false],
+            [true , false, true, false, true],
+            [false , false, true, true, true],
+            [true , false, false, true, true],
+            [false , false, false, true, false]
+        ];
     }
 }

@@ -76,7 +76,7 @@ class ServiceDataAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
             'path' => 'path/to/app',
             'filePatterns' => ['di' => 'di.xml'],
         ];
-        $files = ['service_data_attributes' => []];
+        $files = ['extension_attributes' => []];
         $model = new ServiceDataAttributesGenerator(
             $this->directoryScannerMock,
             $this->serviceDataAttributesScannerMock,
@@ -91,7 +91,7 @@ class ServiceDataAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
             )->willReturn($files);
         $this->serviceDataAttributesScannerMock->expects($this->once())
             ->method('collectEntities')
-            ->with($files['service_data_attributes'])
+            ->with($files['extension_attributes'])
             ->willReturn([]);
 
         $model->doOperation();

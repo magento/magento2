@@ -6,11 +6,26 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    './storage',
-    'Magento_Ui/js/lib/collapsible',
-    'Magento_Ui/js/core/renderer/layout'
-], function (_, utils, registry, Storage, Collapsible, layout) {
+    'uiLayout',
+    'Magento_Ui/js/lib/collapsible'
+], function (_, utils, registry, layout, Collapsible) {
     'use strict';
+
+    /**
+     * Removes 'current' namespace from a 'path' string.
+     *
+     * @param {String} path
+     * @returns {String} Path without namespace.
+     */
+    function removeStateNs(path) {
+        path = typeof path == 'string' ? path.split('.') : [];
+
+        if (path[0] === 'current') {
+            path.shift();
+        }
+
+        return path.join('.');
+    }
 
     return Collapsible.extend({
         defaults: {
@@ -18,7 +33,6 @@ define([
             defaultIndex: 'default',
             activeIndex: 'default',
             hasChanges: false,
-            initialSet: true,
             templates: {
                 view: {
                     parent: '${ $.$data.name }',
@@ -29,14 +43,15 @@ define([
                 },
                 newView: {
                     label: 'New View',
-                    index: '${ Date.now() }',
+                    index: '_${ Date.now() }',
                     editing: true,
                     isNew: true
                 }
             },
             storageConfig: {
-                provider: '${ $.storageConfig.namespace }.bookmarks.storage',
-                name: '${ $.storageConfig.provider }'
+                provider: '${ $.storageConfig.name }',
+                name: '${ $.name }_storage',
+                component: 'Magento_Ui/js/grid/controls/bookmarks/storage'
             },
             views: {
                 default: {
@@ -59,10 +74,12 @@ define([
          */
         initialize: function () {
             utils.limit(this, 'saveSate', 2000);
-            utils.limit(this, 'checkChanges', 200);
             utils.limit(this, '_defaultPolyfill', 1000);
+            utils.limit(this, 'checkChanges', 50);
 
             this._super()
+                .restore()
+                .initStorage()
                 .initViews();
 
             return this;
@@ -86,11 +103,9 @@ define([
          * @returns {Bookmarks} Chainable.
          */
         initStorage: function () {
-            var storage = new Storage(this.storageConfig);
+            layout([this.storageConfig]);
 
-            registry.set(this.storageConfig.name, storage);
-
-            return this._super();
+            return this;
         },
 
         /**
@@ -179,7 +194,7 @@ define([
          */
         removeView: function (view) {
             if (view.active()) {
-                this.defaultView.active(true);
+                this.applyView(this.defaultIndex);
             }
 
             if (!view.isNew) {
@@ -218,18 +233,48 @@ define([
         /**
          * Activates specified view and applies its' data.
          *
-         * @param {View|String} view - View to be applied.
+         * @param {(View|String)} view - View to be applied.
          * @returns {Bookmarks} Chainable.
          */
         applyView: function (view) {
             if (typeof view === 'string') {
-                view = this.elems.findWhere({index: view});
+                view = this.elems.findWhere({
+                    index: view
+                });
             }
 
             view.active(true);
 
             this.activeView(view);
-            this.set('current', view.getData());
+            this.applyState('saved');
+
+            return this;
+        },
+
+        /**
+         * Applies specified views' data on a current data object.
+         *
+         * @param {String} state - Defines what state shultd be used: default or saved.
+         * @param {String} [path] - Path to the property whose value
+         *      will be inserted to a current data object.
+         * @returns {Bookmarks} Chainable.
+         */
+        applyState: function (state, path) {
+            var view,
+                value;
+
+            view = state === 'default' ?
+                this.defaultView :
+                this.activeView();
+
+            path  = removeStateNs(path);
+            value = view.getData(path);
+
+            if (!_.isUndefined(value)) {
+                path = path ? 'current.' + path : 'current';
+
+                this.set(path, value);
+            }
 
             return this;
         },
@@ -261,21 +306,14 @@ define([
         },
 
         /**
-         * Retrieves last saved data of a current view.
+         * Resets current state to a saved state of an active view.
          *
-         * @returns {Object}
+         * @returns {Bookmarks} Chainable.
          */
-        getSaved: function () {
-            return this.activeView().getData();
-        },
+        discardChanges: function () {
+            this.applyState('saved');
 
-        /**
-         * Retrieves default data.
-         *
-         * @returns {Object}
-         */
-        getDefault: function () {
-            return this.defaultView.getData();
+            return this;
         },
 
         /**

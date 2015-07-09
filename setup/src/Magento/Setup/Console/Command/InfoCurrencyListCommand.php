@@ -38,7 +38,7 @@ class InfoCurrencyListCommand extends Command
     protected function configure()
     {
         $this->setName('info:currency:list')
-            ->setDescription('Prints list of available currencies');
+            ->setDescription('Displays the list of available currencies');
 
         parent::configure();
     }

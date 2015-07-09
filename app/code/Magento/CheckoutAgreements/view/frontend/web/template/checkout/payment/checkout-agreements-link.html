@@ -1,0 +1,14 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="checkout-agreements" data-bind="visible: isVisible">
+    <!-- ko text: $t('You automatically accept') --><!-- /ko -->
+    <button type="button" class="action action-show" data-bind="click: showAgreements">
+        <span><!-- ko text: $t('terms and conditions') --><!-- /ko --></span>
+    </button>
+    <!-- ko text: $t('before placing the order') --><!-- /ko -->
+</div>
