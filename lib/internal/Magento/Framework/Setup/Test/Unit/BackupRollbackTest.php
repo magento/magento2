@@ -69,7 +69,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $helper = $this->getMock('Magento\Framework\Backup\Filesystem\Helper', [], [], '', false);
         $helper->expects($this->any())
             ->method('getInfo')
-            ->willReturn(['writable' => true]);
+            ->willReturn(['writable' => true, 'size' => 100]);
         $configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
         $configLoader->expects($this->any())
             ->method('load')
@@ -223,5 +223,18 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             ->willReturn('pathToFile/12345_db.tgz');
         $this->log->expects($this->once())
             ->method('logSuccess');
+    }
+
+    public function testGetFSDiskSpaceback()
+    {
+        $size = $this->model->getFSDiskSpace();
+        $this->assertEquals(100, $size);
+    }
+
+    public function testGetDBDiskSpace()
+    {
+        $this->database->expects($this->once())->method('getDBSize')->willReturn(100);
+        $size = $this->model->getDBDiskSpace();
+        $this->assertEquals(100, $size);
     }
 }

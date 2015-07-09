@@ -27,6 +27,7 @@ return [
             'Magento\Setup\Controller\Modules',
             'Magento\Setup\Controller\ComponentUpgrade',
             'Magento\Setup\Controller\ComponentUpgradeSuccess',
+            'Magento\Setup\Controller\BackupChecks',
         ],
         'instance' => [
             'preference' => [
