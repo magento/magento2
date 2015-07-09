@@ -127,11 +127,6 @@ class AccountManagement implements AccountManagementInterface
     private $customerMetadataService;
 
     /**
-     * @var \Magento\Framework\Url
-     */
-    private $url;
-
-    /**
      * @var PsrLogger
      */
     protected $logger;
@@ -267,7 +262,6 @@ class AccountManagement implements AccountManagementInterface
         $this->addressRepository = $addressRepository;
         $this->customerMetadataService = $customerMetadataService;
         $this->customerRegistry = $customerRegistry;
-        $this->url = $url;
         $this->logger = $logger;
         $this->encryptor = $encryptor;
         $this->configShare = $configShare;
@@ -409,7 +403,7 @@ class AccountManagement implements AccountManagementInterface
         try {
             switch ($template) {
                 case AccountManagement::EMAIL_REMINDER:
-                    $this->sendPasswordReminderEmail($customer, $newPasswordToken);
+                    $this->sendPasswordReminderEmail($customer);
                     break;
                 case AccountManagement::EMAIL_RESET:
                     $this->sendPasswordResetConfirmationEmail($customer);
@@ -1053,34 +1047,23 @@ class AccountManagement implements AccountManagementInterface
      * Send email with new customer password
      *
      * @param CustomerInterface $customer
-     * @param string $newPasswordToken
      * @return $this
      */
-    public function sendPasswordReminderEmail($customer, $newPasswordToken)
+    public function sendPasswordReminderEmail($customer)
     {
-        $this->url->setScope($customer->getStoreId());
-        //TODO : Fix how template is built. Maybe Framework Object or create new Email template data model?
-        // Check template to see what values need to be set in the data model to be passed
-        // Need to set the reset_password_url property of the object
-        $store = $this->storeManager->getStore($customer->getStoreId());
-        $resetUrl = $this->url->getUrl(
-            'customer/account/createPassword',
-            [
-                '_query' => ['id' => $customer->getId(), 'token' => $newPasswordToken],
-                '_store' => $customer->getStoreId(),
-                '_secure' => $store->isFrontUrlSecure(),
-            ]
-        );
+        $storeId = $this->storeManager->getStore()->getId();
+        if (!$storeId) {
+            $storeId = $this->getWebsiteStoreId($customer);
+        }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
-        $customerEmailData->setResetPasswordUrl($resetUrl);
 
         $this->sendEmailTemplate(
             $customer,
             self::XML_PATH_REMIND_EMAIL_TEMPLATE,
             self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            ['customer' => $customerEmailData, 'store' => $store],
-            $customer->getStoreId()
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
+            $storeId
         );
 
         return $this;
