@@ -7,40 +7,46 @@
 namespace Magento\CatalogSearch\Setup;
 
 
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
-class InstallData implements \Magento\Framework\Setup\InstallDataInterface
+class InstallData implements InstallDataInterface
 {
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
+     * @param ProductAttributeRepositoryInterface $attributeRepository
+     */
+    public function __construct(ProductAttributeRepositoryInterface $attributeRepository)
+    {
+        $this->attributeRepository = $attributeRepository;
+    }
+
     /**
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $connection = $setup->getConnection();
-        $this->setWeight('sku', 6, $connection);
-        $this->setWeight('name', 5, $connection);
+        $this->setWeight('sku', 6);
+        $this->setWeight('name', 5);
     }
-
 
     /**
      * @param string $attributeCode
      * @param int $weight
-     * @param AdapterInterface $connection
-     * @internal param $oldWeight
+     * @internal param AdapterInterface $connection
      */
-    private function setWeight($attributeCode, $weight, AdapterInterface $connection)
+    private function setWeight($attributeCode, $weight)
     {
-        $updateQuery = 'UPDATE catalog_eav_attribute SET search_weight = ?'
-            . ' WHERE attribute_id ='
-            . ' (SELECT eav_attribute.attribute_id FROM eav_attribute'
-            . ' LEFT JOIN eav_entity_type ON eav_attribute.entity_type_id = eav_entity_type.entity_type_id'
-            . ' WHERE eav_entity_type.entity_type_code = ?'
-            . ' AND eav_attribute.attribute_code = ?)';
-        $bindings = [$weight, 'catalog_product', $attributeCode];
-
-        $connection->query($updateQuery, $bindings);
+        $attribute = $this->attributeRepository->get($attributeCode);
+        $attribute->setSearchWeight($weight);
+        $this->attributeRepository->save($attribute);
     }
 }
