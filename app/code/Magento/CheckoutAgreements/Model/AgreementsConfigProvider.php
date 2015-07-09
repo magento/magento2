@@ -34,8 +34,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
     {
         if ($this->scopeConfiguration->isSetFlag(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
             return ['checkoutAgreementsEnabled' => true];
-        } else {
-            return [];
         }
+        return [];
     }
 }
