@@ -15,7 +15,7 @@ define([
      */
     $.widget('mage.productGallery', {
         options: {
-            imageSelector: '[data-role=image]',
+            DataSelector: '[data-role=image]',
             template: '[data-template=image]',
             types: null,
             initialized: false
@@ -169,7 +169,7 @@ define([
          */
         _removeItem: function (event, imageData) {
             var $imageContainer = this.findElement(imageData);
-            imageData.removed = true;
+            imageData.isRemoved = true;
             $imageContainer.addClass('removed').hide().find('.is-removed').val(1);
         },
 

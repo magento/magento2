@@ -122,7 +122,7 @@ define([
                 return imageData;
             });
             return _.reject(images, function (image) {
-                return image.removed == true;
+                return !!image.isRemoved;
             });
         },
         fillImagesSection: function () {
