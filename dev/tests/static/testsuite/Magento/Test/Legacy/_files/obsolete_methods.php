@@ -2334,5 +2334,8 @@ return [
         '_getConfig',
         'Magento\Store\Model\Store',
         'Magento\Store\Model\Store::getConfig',
-    ]
+    ],
+    ['getChilds', 'Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer', 'getChildren'],
+    ['getChilds', 'Magento\Bundle\Block\Sales\Order\Items\Renderer', 'getChildren'],
+    ['getChilds', 'Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems', 'getChildren'],
 ];
