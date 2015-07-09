@@ -561,6 +561,24 @@
             <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
         </arguments>
     </virtualType>
+    <virtualType name="OrderViewInvoiceGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Invoice\Orders\Grid\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="OrderViewShipmentGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Shipment\Order\Grid\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="OrderViewCreditmemoGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Creditmemo\Order\Grid\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Sales\Model\Order\Config">
         <arguments>
             <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
@@ -598,28 +616,28 @@
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Creditmemo</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Sales\Model\Resource\Order\Invoice\Orders\Grid\Collection">
+    <virtualType name="Magento\Sales\Model\Resource\Order\Invoice\Orders\Grid\Collection" type="Magento\Sales\Model\Resource\Grid\Order\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_invoice_grid</argument>
             <argument name="eventPrefix" xsi:type="string">sales_order_invoice_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">order_invoice_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Invoice</argument>
         </arguments>
-    </type>
-    <type name="\Magento\Sales\Model\Resource\Order\Shipment\Order\Grid\Collection">
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\Resource\Order\Shipment\Order\Grid\Collection" type="Magento\Sales\Model\Resource\Grid\Order\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_shipment_grid</argument>
             <argument name="eventPrefix" xsi:type="string">sales_order_shipment_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">order_shipment_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Shipment</argument>
         </arguments>
-    </type>
-    <type name="\Magento\Sales\Model\Resource\Order\Creditmemo\Order\Grid\Collection">
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\Resource\Order\Creditmemo\Order\Grid\Collection" type="Magento\Sales\Model\Resource\Grid\Order\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_creditmemo_grid</argument>
             <argument name="eventPrefix" xsi:type="string">sales_order_creditmemo_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">order_creditmemo_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Creditmemo</argument>
         </arguments>
-    </type>
+    </virtualType>
 </config>

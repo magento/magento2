@@ -11,6 +11,7 @@ use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 
 /**
  * Class Collection
+ * Collection for displaying grid of sales documents
  */
 class Collection extends AbstractCollection implements SearchResultInterface
 {
