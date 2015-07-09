@@ -8,7 +8,6 @@
  */
 namespace Magento\Store\Model;
 
-
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data;
 
@@ -41,7 +40,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * @param StoreFactory $storeFactory
-     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeFactory
+     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
      */
     public function __construct(
         StoreFactory $storeFactory,
