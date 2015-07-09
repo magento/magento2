@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Braintree\Block\PayPal\Shortcut $block */
+$clientToken = $block->getClientToken();
+$amount = $block->getAmount();
+$url = $block->getReviewPageUrl();
+$currency = $block->getCurrency();
+$locale = $block->getLocale();
+$merchantName = $block->getMerchantName();
+$containerId = $block->getContainerId();
+$submitFormId = $block->getSubmitFormId();
+$enableBillingAddress = $block->enableBillingAddress();
+$paymentMethodNonceId = $block->getPaymentMethodNonceId();
+$paymentDetailsId = $block->getPaymentDetailsId();
+$labelPosition = $block->getShowOrPosition();
+?>
+<div data-label="or" class="paypal checkout <?php echo $labelPosition ?> paypal-logo">
+
+<fieldset class="fieldset paypal items" id="braintree_paypal_shortcut">
+    <div id="<?php echo $containerId ?>"></div>
+    <form id="<?php echo $submitFormId ?>" action="<?php echo $url ?>" method="post" >
+        <input id="<?php echo $paymentMethodNonceId ?>" type="hidden" name="payment_method_nonce" />
+        <input id="<?php echo $paymentDetailsId ?>" type="hidden" name="details" />
+    </form>
+</fieldset>
+</div>
+
+<?php
+    $formData = [
+        "clientToken" => $clientToken,
+        'amount' => $amount,
+        'currency' => $currency,
+        'locale' =>  $locale,
+        'merchantName' => $merchantName,
+        'container' => $containerId,
+        'submitFormId' => $submitFormId,
+        'enableBillingAddress' => $enableBillingAddress,
+        'paymentMethodNonceId' => $paymentMethodNonceId,
+        'paymentDetailsId' => $paymentDetailsId
+    ];
+    $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($formData);
+?>
+<script type="text/x-magento-init">
+    {
+        "#<?php echo $containerId ?>": {
+            "braintreePayPalShortcut": <?php echo $serializedFormData ?>
+        }
+    }
+</script>
