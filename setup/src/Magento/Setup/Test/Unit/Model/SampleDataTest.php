@@ -10,7 +10,7 @@ use Magento\Setup\Model\SampleData;
 /**
  * Test Magento\Setup\Model\SampleData
  */
-class InstallerTest extends \PHPUnit_Framework_TestCase
+class SampleDataTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Setup\Model\SampleData
