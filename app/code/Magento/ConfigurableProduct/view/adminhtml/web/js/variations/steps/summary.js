@@ -19,6 +19,7 @@ define([
         attributesName: ko.observableArray([]),
         nextLabel: $.mage.__('Generate Products'),
         variationsComponent: uiRegistry.async('configurableVariations'),
+        variations: [],
         /**
          * @param attributes example [['b1', 'b2'],['a1', 'a2', 'a3'],['c1', 'c2', 'c3'],['d1']]
          * @returns {*} example [['b1','a1','c1','d1'],['b1','a1','c2','d1']...]
@@ -46,7 +47,8 @@ define([
         generateGrid: function (variations, getSectionValue) {
             //['a1','b1','c1','d1'] option = {label:'a1', value:'', section:{img:'',inv:'',pri:''}}
             var productName = this.variationsComponent().getProductValue('name');
-            this.variationsComponent().reset();
+            var productPrice = this.variationsComponent().getProductValue('price');
+            this.variations = [];
             return _.map(variations, function (options) {
                 var variation = [], images, sku, quantity, price;
                 images = getSectionValue('images', options);
@@ -62,8 +64,9 @@ define([
                     variation.push(option.label);
                 });
                 price = getSectionValue('price', options);
+                price = price || productPrice;
                 variation.push('$ ' + price);
-                this.variationsComponent().populateVariationMatrix(options, images, sku, quantity, price);
+                this.variations.push({options: options, images: images, sku: sku, quantity: quantity, price: price});
                 return variation;
             }, this);
         },
@@ -79,8 +82,7 @@ define([
             this.grid(this.generateGrid(this.generateVariation(this.attributes()), wizard.data.sectionHelper));
         },
         force: function (wizard) {
-            this.variationsComponent().attributes(this.attributes());
-            this.variationsComponent().render();
+            this.variationsComponent().render(this.variations, this.attributes());
             $('[data-role=step-wizard-dialog]').trigger('closeModal');
         },
         back: function (wizard) {
