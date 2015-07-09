@@ -8,9 +8,10 @@ define([
     "mage/template",
     "text!ui/template/modal/modal-popup.html",
     "text!ui/template/modal/modal-slide.html",
+    "text!ui/template/modal/modal-custom.html",
     "jquery/ui",
     "mage/translate"
-], function($, _, template, popupTpl, slideTpl){
+], function($, _, template, popupTpl, slideTpl, customTpl){
     "use strict";
 
     /**
@@ -23,6 +24,7 @@ define([
             modalClass: '',
             popupTpl: popupTpl,
             slideTpl: slideTpl,
+            customTpl: customTpl,
             modalVisibleClass: '_show',
             parentModalClass: '_has-modal',
             innerScrollClass: '_inner-scroll',
@@ -36,6 +38,7 @@ define([
             wrapperClass: 'modals-wrapper',
             overlayClass: 'modals-overlay',
             responsiveClass: 'modal-slide',
+            trigger: '',
             modalLeftMargin: 45,
             closeText: $.mage.__('Close'),
             buttons: [{
@@ -56,6 +59,7 @@ define([
             this._createButtons();
 
             this.modal.find(this.options.modalCloseBtn).on('click',  _.bind(this.closeModal, this));
+            $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
             this.element.on('openModal', _.bind(this.openModal, this));
             this.element.on('closeModal', _.bind(this.closeModal, this));
         },
@@ -81,6 +85,13 @@ define([
             var elems = this.modalWrapper.find('[data-type="slide"]');
 
             return elems.filter('.'+this.options.modalVisibleClass).length;
+        },
+        toggleModal: function() {
+            if (this.options.isOpen == true) {
+                this.closeModal();
+            } else {
+                this.openModal();
+            }
         },
         openModal: function() {
             var that = this;

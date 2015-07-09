@@ -72,7 +72,7 @@
     right: 0;
     top: 0;
     position: absolute;
-    z-index: @overlay__z-index;
+    z-index: @data-grid-overlay__z-index;
 
     .grid-loader {
         background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
@@ -268,6 +268,7 @@
     .data-grid-multiselect-cell {
         padding: @data-grid-th__padding-horizontal @data-grid-th__padding-vertical @data-grid-th__padding-horizontal - .1rem;
         text-align: center;
+        vertical-align: middle;
     }
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;
@@ -332,7 +333,7 @@
         opacity: .95;
         position: fixed;
         top: 0;
-        z-index: @overlay__z-index;
+        z-index: @data-grid-overlay__z-index;
         .data-grid-th {
             border: @data-grid-dragging-copy__border;
             border-bottom: none;

@@ -154,6 +154,13 @@ abstract class AbstractEntity
     protected $_processedRowsCount = 0;
 
     /**
+     * Need to log in import history
+     *
+     * @var bool
+     */
+    protected $logInHistory = false;
+
+    /**
      * Rows which will be skipped during import
      *
      * [Row number 1] => true,
@@ -549,7 +556,7 @@ abstract class AbstractEntity
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Source is not set'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The source is not set.'));
         }
         return $this->_source;
     }
@@ -671,6 +678,16 @@ abstract class AbstractEntity
     }
 
     /**
+     * Is import need to log in history.
+     *
+     * @return bool
+     */
+    public function isNeedToLogInHistory()
+    {
+        return $this->logInHistory;
+    }
+
+    /**
      * Validate data row
      *
      * @param array $rowData
@@ -719,7 +736,7 @@ abstract class AbstractEntity
             $absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames());
             if ($absentColumns) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Cannot find required columns: %1', implode(', ', $absentColumns))
+                    __('We can\'t find required columns: %1.', implode(', ', $absentColumns))
                 );
             }
 

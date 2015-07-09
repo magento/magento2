@@ -51,6 +51,19 @@
                                             <item name="displayArea" xsi:type="string">promotion</item>
                                         </item>
                                     </item>
+                                    <item name="sign-in-popup" xsi:type="array">
+                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/cart/authentication</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="displayArea" xsi:type="string">sign-in-popup</item>
+                                            <item name="template" xsi:type="string">Magento_Checkout/cart/authentication</item>
+                                        </item>
+                                        <item name="children" xsi:type="array">
+                                            <item name="messages" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Ui/js/view/messages</item>
+                                                <item name="displayArea" xsi:type="string">messages</item>
+                                            </item>
+                                        </item>
+                                    </item>
                                 </item>
                             </item>
                         </item>

@@ -21,14 +21,16 @@ class AttributeSelector extends SuggestElement
      */
     public function waitResult()
     {
-        $browser = $this;
-        $selector = $this->searchResult;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $element = $browser->find($selector);
-                return $element->isVisible() ? true : null;
-            }
-        );
+        try {
+            $this->waitUntil(
+                function () {
+                    return $this->find($this->searchResult)->isVisible() ? true : null;
+                }
+            );
+        } catch (\Exception $e) {
+            // In parallel run on windows change the focus is lost on element
+            // that causes disappearing of result suggest list.
+        }
     }
 
     /**

@@ -40,10 +40,10 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
                     $this->messageManager->addWarning($error);
                 }
                 $this->messageManager->addWarning(
-                    __('All possible rates were fetched, please click on "Save" to apply')
+                    __('Click "Save" to apply the rates we found.')
                 );
             } else {
-                $this->messageManager->addSuccess(__('All rates were fetched, please click on "Save" to apply'));
+                $this->messageManager->addSuccess(__('Click "Save" to apply the rates we found.'));
             }
 
             $backendSession->setRates($rates);

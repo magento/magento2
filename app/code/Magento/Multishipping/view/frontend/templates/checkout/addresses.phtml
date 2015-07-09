@@ -48,7 +48,7 @@
                         </td>
                         <td class="col address" data-th="<?php echo $block->escapeHtml(__('Send To'));?>">
                             <?php if ($_item->getProduct()->getIsVirtual()): ?>
-                                <div class="applicable"><?php echo __('Shipping selection is not applicable.'); ?></div>
+                                <div class="applicable"><?php echo __('A shipping selection is not applicable.'); ?></div>
                             <?php else: ?>
                                 <div class="field address">
                                     <label for="ship_<?php echo $_index ?>_<?php echo $_item->getQuoteItemId() ?>_address" class="label">
@@ -73,7 +73,7 @@
     </div>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" title="<?php echo __('Continue to Shipping Information') ?>" class="action primary continue<?php if ($block->isContinueDisabled()):?> disabled<?php endif; ?>" data-role="can-continue" data-flag="1"<?php if ($block->isContinueDisabled()):?> disabled="disabled"<?php endif; ?>><span><?php echo __('Continue to Shipping Information') ?></span></button>
+            <button type="submit" title="<?php echo __('Go to Shipping Information') ?>" class="action primary continue<?php if ($block->isContinueDisabled()):?> disabled<?php endif; ?>" data-role="can-continue" data-flag="1"<?php if ($block->isContinueDisabled()):?> disabled="disabled"<?php endif; ?>><span><?php echo __('Go to Shipping Information') ?></span></button>
         </div>
         <div class="secondary">
             <button type="submit" class="action update" data-role="can-continue" data-flag="0"><span><?php echo __('Update Qty &amp; Addresses') ?></span></button>

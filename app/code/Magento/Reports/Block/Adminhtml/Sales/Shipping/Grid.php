@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Adminhtml\Sales\Shipping;
 
 /**
@@ -17,12 +15,15 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Shipping;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
     /**
+     * Group by criteria
+     *
      * @var string
      */
     protected $_columnGroupBy = 'period';
 
     /**
-     * @return void
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -32,18 +33,17 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getResourceCollectionName()
     {
-        return $this->getFilterData()->getData(
-            'report_type'
-        ) ==
-            'created_at_shipment' ? 'Magento\Sales\Model\Resource\Report\Shipping\Collection\Shipment' : 'Magento\Sales\Model\Resource\Report\Shipping\Collection\Order';
+        return $this->getFilterData()->getData('report_type') == 'created_at_shipment'
+            ? 'Magento\Sales\Model\Resource\Report\Shipping\Collection\Shipment'
+            : 'Magento\Sales\Model\Resource\Report\Shipping\Collection\Order';
     }
 
     /**
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * {@inheritdoc}
      */
     protected function _prepareColumns()
     {

@@ -15,7 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCurrencySymbolSuccessSaveMessage extends AbstractConstraint
 {
-    const SUCCESS_SAVE_MESSAGE = 'The custom currency symbols were applied.';
+    const SUCCESS_SAVE_MESSAGE = 'You applied the custom currency symbols.';
 
     /**
      * Assert that after clicking on 'Save Currency Symbols' button success message appears.

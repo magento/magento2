@@ -128,14 +128,14 @@ class Confirm extends \Magento\Customer\Controller\Account
             if ($this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING) {
                 // @codingStandardsIgnoreStart
                 $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter you shipping address for proper VAT calculation',
+                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your shipping address for proper VAT calculation.',
                     $this->urlModel->getUrl('customer/address/edit')
                 );
                 // @codingStandardsIgnoreEnd
             } else {
                 // @codingStandardsIgnoreStart
                 $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter you billing address for proper VAT calculation',
+                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your billing address for proper VAT calculation.',
                     $this->urlModel->getUrl('customer/address/edit')
                 );
                 // @codingStandardsIgnoreEnd
