@@ -66,7 +66,7 @@ class Grid extends DataGrid
      *
      * @var string
      */
-    protected $previewCmsPage = ".//a[contains(@class, 'action-menu-item') and text() = '%s']";
+    protected $previewCmsPage = "..//a[contains(@class, 'action-menu-item') and text() = '%s']";
     
     /**
      * Search item and open it on Frontend.
@@ -81,8 +81,10 @@ class Grid extends DataGrid
         $this->search($filter);
         $rowItem = $this->_rootElement->find($this->rowItem);
         if ($rowItem->isVisible()) {
-            $rowItem->find('.action-select')->click();
-            $rowItem->find(sprintf($this->previewCmsPage, $itemName), Locator::SELECTOR_XPATH)->click();
+            $selector = sprintf('//tr[td="%s"]//*[@class="action-select"]', $filter['title']);
+            $selectedRow = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+            $selectedRow->click();
+            $selectedRow->find(sprintf($this->previewCmsPage, $itemName), Locator::SELECTOR_XPATH)->click();
         } else {
             throw new \Exception('Searched item was not found.');
         }

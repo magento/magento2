@@ -5,35 +5,35 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class MassHold extends \Magento\Sales\Controller\Adminhtml\Order
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+
+class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * Hold selected orders
      *
+     * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    protected function massAction(AbstractCollection $collection)
     {
-        $orderIds = $this->getRequest()->getPost('order_ids', []);
         $countHoldOrder = 0;
-
-        foreach ($orderIds as $orderId) {
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
-            if ($order->canHold()) {
-                $order->hold()->save();
-                $countHoldOrder++;
+        foreach ($collection->getItems() as $order) {
+            if (!$order->canHold()) {
+                continue;
             }
+            $order->hold();
+            $order->save();
+            $countHoldOrder++;
+        }
+        $countNonHoldOrder = $collection->count() - $countHoldOrder;
+
+        if ($countNonHoldOrder && $countHoldOrder) {
+            $this->messageManager->addError(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
+        } elseif ($countNonHoldOrder) {
+            $this->messageManager->addError(__('No order(s) were put on hold.'));
         }
 
-        $countNonHoldOrder = count($orderIds) - $countHoldOrder;
-
-        if ($countNonHoldOrder) {
-            if ($countHoldOrder) {
-                $this->messageManager->addError(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
-            } else {
-                $this->messageManager->addError(__('No order(s) were put on hold.'));
-            }
-        }
         if ($countHoldOrder) {
             $this->messageManager->addSuccess(__('You have put %1 order(s) on hold.', $countHoldOrder));
         }
