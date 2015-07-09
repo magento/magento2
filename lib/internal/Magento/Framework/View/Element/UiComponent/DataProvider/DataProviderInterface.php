@@ -96,7 +96,8 @@ interface DataProviderInterface
      * @param string $type
      * @return mixed
      */
-    public function addFilter($condition, $field = null, $type = 'regular');
+//    public function addFilter($condition, $field = null, $type = 'regular');
+    public function addFilter(\Magento\Framework\Api\Filter $filter);
 
     /**
      * Add ORDER BY to the end or to the beginning

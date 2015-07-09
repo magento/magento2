@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Filters\Type;
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-
+use Magento\Framework\Api\FilterBuilder;
 /**
  * Abstract class AbstractFilter
  */
@@ -32,22 +32,27 @@ abstract class AbstractFilter extends AbstractComponent
     protected $uiComponentFactory;
 
     /**
-     * Constructor
-     *
+     * @var
+     */
+    protected $filterBuilder;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
+     * @param FilterBuilder $filterBuilder
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
+        FilterBuilder $filterBuilder,
         array $components = [],
         array $data = []
     ) {
         $this->uiComponentFactory = $uiComponentFactory;
+        $this->filterBuilder = $filterBuilder;
         parent::__construct($context, $components, $data);
-
         $this->filterData = $this->getContext()->getRequestParam(static::FILTER_VAR);
     }
 }
