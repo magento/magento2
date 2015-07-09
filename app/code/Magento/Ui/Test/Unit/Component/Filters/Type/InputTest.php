@@ -104,7 +104,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
             );
             $dataProvider->expects($this->any())
                 ->method('addFilter')
-                ->with($name, $expectedCondition);
+                ->with($expectedCondition, $name);
 
             $this->contextMock->expects($this->any())
                 ->method('getDataProvider')
