@@ -6,6 +6,13 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Store\Api\StoreRepositoryInterface" type="Magento\Store\Model\StoreRepository"/>
+    <preference for="Magento\Store\Api\GroupRepositoryInterface" type="Magento\Store\Model\GroupRepository"/>
+    <preference for="Magento\Store\Api\WebsiteRepositoryInterface" type="Magento\Store\Model\WebsiteRepository"/>
+    <preference for="Magento\Store\Api\Data\StoreInterface" type="Magento\Store\Model\Store"/>
+    <preference for="Magento\Store\Api\Data\GroupInterface" type="Magento\Store\Model\Group"/>
+    <preference for="Magento\Store\Api\Data\WebsiteInterface" type="Magento\Store\Model\Website"/>
+    <preference for="Magento\Store\Model\StoreResolverInterface" type="Magento\Store\Model\StoreResolver"/>
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
     <preference for="Magento\Framework\App\Response\RedirectInterface" type="Magento\Store\App\Response\Redirect" />
@@ -97,7 +104,14 @@
     </type>
     <type name="Magento\Store\Model\StoreManager">
         <arguments>
-            <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreResolver">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="runMode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
+            <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Store\Model\Resource\Group\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">

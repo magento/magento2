@@ -96,7 +96,11 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCatalogPriceWithCustomStore()
     {
-        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface');
+        $storeMock->expects($this->once())->method('getId')->willReturn('store_id');
+        $currentStoreMock = $this->getMock('Magento\Store\Api\Data\StoreInterface');
+        $currentStoreMock->expects($this->once())->method('getId')->willReturn('current_store_id');
+
         $this->coreRegistryMock->expects($this->once())->method('unregister')->with('rule_data');
         $this->productMock->expects($this->once())->method('getStoreId')->will($this->returnValue('store_id'));
         $this->productMock->expects($this->once())->method('getWebsiteId')->will($this->returnValue('website_id'));
@@ -120,7 +124,11 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(15)
         );
-        $this->storeManagerMock->expects($this->exactly(2))->method('setCurrentStore');
+
+        $this->storeManagerMock->expects($this->at(0))->method('getStore')->willReturn($currentStoreMock);
+        $this->storeManagerMock->expects($this->at(1))->method('setCurrentStore')->with('store_id');
+        $this->storeManagerMock->expects($this->at(2))->method('setCurrentStore')->with('current_store_id');
+
         $this->assertEquals(15, $this->catalogPrice->getCatalogPrice($this->productMock, $storeMock, true));
     }
 

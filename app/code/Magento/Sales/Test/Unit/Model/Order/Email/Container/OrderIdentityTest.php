@@ -36,13 +36,7 @@ class OrderIdentityTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigInterfaceMock = $this->getMock(
             '\Magento\Framework\App\Config\ScopeConfigInterface'
         );
-        $this->storeManagerMock = $this->getMock(
-            '\Magento\Store\Model\Storage\DefaultStorage',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
         $this->storeMock = $this->getMock(
             '\Magento\Store\Model\Store',

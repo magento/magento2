@@ -27,11 +27,6 @@ abstract class AbstractHelper
     protected $_request;
 
     /**
-     * @var \Magento\Framework\Translate\InlineInterface
-     */
-    protected $translateInline;
-
-    /**
      * @var \Magento\Framework\Module\Manager
      */
     protected $_moduleManager;
@@ -83,7 +78,6 @@ abstract class AbstractHelper
      */
     public function __construct(Context $context)
     {
-        $this->translateInline = $context->getTranslateInline();
         $this->_moduleManager = $context->getModuleManager();
         $this->_logger = $context->getLogger();
         $this->_request = $context->getRequest();

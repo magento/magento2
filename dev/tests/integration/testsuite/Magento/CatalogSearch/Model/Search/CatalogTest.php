@@ -51,14 +51,10 @@ class CatalogTest extends \PHPUnit_Framework_TestCase
             ->setQuery($viewName)
             ->load()
             ->getResults();
-        $result = false;
+
         $product = array_shift($results);
-        if ($product
-            && $product['type'] == 'Product'
-            && $product['name'] == 'Simple Product One'
-        ) {
-            $result = true;
-        }
+        $result = $product && $product['type'] == 'Product' && $product['name'] == 'Simple Product One';
+
         $this->assertEquals(
             $expectedResult,
             $result,
