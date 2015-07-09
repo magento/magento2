@@ -231,8 +231,14 @@
             width: 0;
         }
         &:active,
-        &:hover {
+        &:hover,
+        &:focus {
             box-shadow: none;
+        }
+        &:focus {
+            ._keyfocus & {
+                box-shadow: @button__hover__box-shadow;
+            }
         }
         &[disabled],
         &.disabled {
