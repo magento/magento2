@@ -14,7 +14,7 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="nextState()"
-                ng-disabled="checkingInProgress() || hasErrors"
+                ng-disabled="checkingInProgress() || hasErrors && $state.is('root.create-backup.progress')"
                 >Next</button>
         </div>
         <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">

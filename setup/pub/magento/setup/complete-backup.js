@@ -145,11 +145,20 @@ angular.module('complete-backup', ['ngStorage'])
         }
 
         $scope.query = function(item) {
-            return $http.post(item.url, $scope.backupInfoPassed, {timeout: 3000000})
-                .success(function(data) { item.process(data) })
-                .error(function(data, status) {
-                    item.fail();
-                });
+            if (!$rootScope.hasErrors) {
+                return $http.post(item.url, $scope.backupInfoPassed, {timeout: 3000000})
+                    .success(function(data) { item.process(data) })
+                    .error(function(data, status) {
+                        item.fail();
+                    });
+            } else {
+                $scope.stopProgress();
+                $scope.completed = true;
+                $scope.maintenance.processed = true;
+                $scope.check.processed = true;
+                $scope.create.processed = true;
+                return void (0);
+            }
         };
 
         $scope.progress = function() {
