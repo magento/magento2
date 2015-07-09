@@ -167,6 +167,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $categoryRepository;
 
     /**
+     * @var \Magento\Customer\Api\GroupRepositoryInterface
+     */
+    protected $customerGroupRepository;
+
+    /**
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
+     */
+    protected $addressFactory;
+
+    /**
+     * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
+     */
+    protected $regionFactory;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Session $catalogSession
@@ -185,6 +200,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository
+     * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory
+     * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -205,7 +223,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         CustomerSession $customerSession,
         PriceCurrencyInterface $priceCurrency,
         ProductRepositoryInterface $productRepository,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository,
+        \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory,
+        \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogSession = $catalogSession;
@@ -224,6 +245,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->priceCurrency = $priceCurrency;
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->customerGroupRepository = $customerGroupRepository;
+        $this->addressFactory = $addressFactory;
+        $this->regionFactory = $regionFactory;
         parent::__construct($context);
     }
 
@@ -452,6 +476,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * @param array $taxAddress
+     * @return \Magento\Customer\Api\Data\AddressInterface|null
+     */
+    private function convertDefaultTaxAddress(array $taxAddress = null)
+    {
+        if (empty($taxAddress)) {
+            return null;
+        }
+        /** @var \Magento\Customer\Api\Data\AddressInterface $addressDataObject */
+        $addressDataObject = $this->addressFactory->create()
+            ->setCountryId($taxAddress['country_id'])
+            ->setPostcode($taxAddress['postcode']);
+
+        if (isset($taxAddress['region_id'])) {
+            $addressDataObject->setRegion($this->regionFactory->create()->setRegionId($taxAddress['region_id']));
+        }
+        return $addressDataObject;
+    }
+
+    /**
      * Get product price with all tax settings processing
      *
      * @param   \Magento\Catalog\Model\Product $product
@@ -466,6 +510,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return  float
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getTaxPrice(
         $product,
@@ -489,18 +534,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
 
             $shippingAddressDataObject = null;
-            if ($shippingAddress instanceof \Magento\Customer\Model\Address\AbstractAddress) {
+            if ($shippingAddress === null) {
+                $shippingAddressDataObject =
+                    $this->convertDefaultTaxAddress($this->_customerSession->getDefaultTaxShippingAddress());
+            } elseif ($shippingAddress instanceof \Magento\Customer\Model\Address\AbstractAddress) {
                 $shippingAddressDataObject = $shippingAddress->getDataModel();
             }
 
             $billingAddressDataObject = null;
-            if ($billingAddress instanceof \Magento\Customer\Model\Address\AbstractAddress) {
+            if ($billingAddress === null) {
+                $billingAddressDataObject =
+                    $this->convertDefaultTaxAddress($this->_customerSession->getDefaultTaxBillingAddress());
+            } elseif ($billingAddress instanceof \Magento\Customer\Model\Address\AbstractAddress) {
                 $billingAddressDataObject = $billingAddress->getDataModel();
             }
 
             $taxClassKey = $this->_taxClassKeyFactory->create();
             $taxClassKey->setType(TaxClassKeyInterface::TYPE_ID)
                 ->setValue($product->getTaxClassId());
+
+            if ($ctc === null && $this->_customerSession->getCustomerGroupId() != null) {
+                $ctc = $this->customerGroupRepository->getById($this->_customerSession->getCustomerGroupId())
+                    ->getTaxClassId();
+            }
 
             $customerTaxClassKey = $this->_taxClassKeyFactory->create();
             $customerTaxClassKey->setType(TaxClassKeyInterface::TYPE_ID)

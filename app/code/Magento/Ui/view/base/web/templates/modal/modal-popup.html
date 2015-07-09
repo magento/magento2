@@ -13,8 +13,10 @@
     data-type="<%= data.type %>">
     <div class="modal-inner-wrap">
         <header class="modal-header">
+            <% if(data.title){ %>
             <h1 class="modal-title"
                 data-role="title"><%= data.title %></h1>
+            <% } %>
             <button
                 class="action-close"
                 data-role="closeBtn"
@@ -25,6 +27,7 @@
         <div
             class="modal-content"
             data-role="content"></div>
+        <% if(data.buttons.length > 0){ %>
         <footer class="modal-footer">
             <% _.each(data.buttons, function(button) { %>
             <button
@@ -33,5 +36,6 @@
                 data-role="action"><span><%= button.text %></span></button>
             <% }); %>
         </footer>
+        <% } %>
     </div>
 </aside>

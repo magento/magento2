@@ -143,8 +143,8 @@ class Tax extends \Magento\Framework\View\Element\Template
                 if ($this->_source instanceof Order) {
                     // Adjust for the discount tax compensation
                     foreach ($this->_source->getAllItems() as $item) {
-                        $subtotalIncl += $item->getHiddenTaxAmount();
-                        $baseSubtotalIncl += $item->getBaseHiddenTaxAmount();
+                        $subtotalIncl += $item->getDiscountTaxCompensationAmount();
+                        $baseSubtotalIncl += $item->getBaseDiscountTaxCompensationAmount();
                     }
                 }
             }

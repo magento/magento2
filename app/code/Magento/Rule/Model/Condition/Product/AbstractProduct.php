@@ -153,7 +153,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
-        $attributes['attribute_set_id'] = __('Attribute Set');
+        $attributes['attribute_set_id'] = __('Product Template');
         $attributes['category_ids'] = __('Category');
     }
 

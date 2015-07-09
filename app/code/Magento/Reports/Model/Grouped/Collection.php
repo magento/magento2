@@ -25,6 +25,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set column to group by
+     * @codeCoverageIgnore
      *
      * @param string $column
      * @return $this
@@ -61,6 +62,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Setter for resource collection
+     * @codeCoverageIgnore
      *
      * @param DbCollection $collection
      * @return $this

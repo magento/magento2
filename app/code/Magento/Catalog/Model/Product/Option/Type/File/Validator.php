@@ -87,7 +87,7 @@ abstract class Validator
                 case \Zend_Validate_File_ImageSize::WIDTH_TOO_BIG:
                 case \Zend_Validate_File_ImageSize::HEIGHT_TOO_BIG:
                     $result[] = __(
-                        "Maximum allowed image size for '%1' is %2x%3 px.",
+                        "The maximum allowed image size for '%1' is %2x%3 px.",
                         $option->getTitle(),
                         $option->getImageSizeX(),
                         $option->getImageSizeY()

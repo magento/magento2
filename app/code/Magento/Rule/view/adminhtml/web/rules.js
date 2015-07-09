@@ -265,7 +265,7 @@ define([
             var new_type = elem.value;
             var new_elem = document.createElement('LI');
             new_elem.className = 'rule-param-wait';
-            new_elem.innerHTML = jQuery.mage.__('Please wait, loading...');
+            new_elem.innerHTML = jQuery.mage.__('This won\'t take long . . .');
             children_ul.insertBefore(new_elem, $(elem).up('li'));
 
             new Ajax.Request(this.newChildUrl, {
