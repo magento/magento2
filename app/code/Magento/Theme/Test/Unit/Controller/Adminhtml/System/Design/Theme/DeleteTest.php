@@ -1,177 +1,133 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
-class DeleteTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Theme\Controller\Adminhtml\System\Design\Theme\Delete;
+
+class DeleteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $name = 'Delete';
+    protected $registry;
 
-    public function testExecuteWithoutLoadedTheme()
+    /**
+     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fileFactory;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $repository;
+
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystem;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $messageManager;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $request;
+
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactory;
+
+    /**
+     * @var Delete
+     */
+    protected $controller;
+
+    public function setUp()
     {
-        $themeId = 23;
-        $this->_request->expects($this->at(0))
-            ->method('getParam')
-            ->with('id')
-            ->willReturn($themeId);
+        $context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')->getMock();
+        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')->getMock();
+        $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')->getMock();
+        $this->resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context->expects($this->any())
+            ->method('getRequest')
+            ->willReturn($this->request);
+        $context->expects($this->any())
+            ->method('getObjectManager')
+            ->willReturn($this->objectManager);
+        $context->expects($this->any())
+            ->method('getMessageManager')
+            ->willReturn($this->messageManager);
+        $context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactory);
 
-        $theme = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Design\ThemeInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['load', 'getId']
+        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')->disableOriginalConstructor()->getMock();
+        $this->fileFactory = $this->getMockBuilder('Magento\Framework\App\Response\Http\FileFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->repository = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var \Magento\Backend\App\Action\Context $context */
+        $this->controller = new Delete(
+            $context,
+            $this->registry,
+            $this->fileFactory,
+            $this->repository,
+            $this->filesystem
         );
-        $theme->expects($this->once())
-            ->method('load')
-            ->with($themeId)
-            ->willReturnSelf();
-        $theme->expects($this->once())
-            ->method('getId')
-            ->willReturn(null);
-
-        $this->_objectManagerMock
-            ->expects($this->once())
-            ->method('create')
-            ->with('Magento\Framework\View\Design\ThemeInterface')
-            ->willReturn($theme);
-        
-        $this->messageManager->expects($this->once())
-            ->method('addException');
-
-        $logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);
-        $logger->expects($this->once())
-            ->method('critical');
-        $this->_objectManagerMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('Psr\Log\LoggerInterface')
-            ->willReturn($logger);
-
-        $this->_request->expects($this->at(1))
-            ->method('getParam')
-            ->with('back', false)
-            ->willReturn(true);
-
-        $result = $this->getMockForAbstractClass(
-            'Magento\Framework\Controller\ResultInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['setPath']
-        );
-        $result->expects($this->once())
-            ->method('setPath')
-            ->with('adminhtml/system_design_editor/index/')
-            ->willReturnSelf();
-        $this->resultFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($result);
-
-        $this->assertSame($result, $this->_model->execute());
-    }
-
-    public function testExecuteWithNotVirtualTheme()
-    {
-        $themeId = 23;
-        $this->_request->expects($this->at(0))
-            ->method('getParam')
-            ->with('id')
-            ->willReturn($themeId);
-
-        $theme = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Design\ThemeInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['load', 'getId', 'isVirtual']
-        );
-        $theme->expects($this->once())
-            ->method('load')
-            ->with($themeId)
-            ->willReturnSelf();
-        $theme->expects($this->once())
-            ->method('getId')
-            ->willReturn($themeId);
-        $theme->expects($this->once())
-            ->method('isVirtual')
-            ->willReturn(false);
-
-        $this->_objectManagerMock
-            ->expects($this->once())
-            ->method('create')
-            ->with('Magento\Framework\View\Design\ThemeInterface')
-            ->willReturn($theme);
-
-        $this->messageManager->expects($this->once())
-            ->method('addException');
-
-        $logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);
-        $logger->expects($this->once())
-            ->method('critical');
-        $this->_objectManagerMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('Psr\Log\LoggerInterface')
-            ->willReturn($logger);
-
-        $this->_request->expects($this->at(1))
-            ->method('getParam')
-            ->with('back', false)
-            ->willReturn(true);
-
-        $result = $this->getMockForAbstractClass(
-            'Magento\Framework\Controller\ResultInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['setPath']
-        );
-        $result->expects($this->once())
-            ->method('setPath')
-            ->with('adminhtml/system_design_editor/index/')
-            ->willReturnSelf();
-        $this->resultFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($result);
-
-        $this->assertSame($result, $this->_model->execute());
     }
 
     public function testExecute()
     {
-        $themeId = 23;
-        $this->_request->expects($this->at(0))
+        $path = 'adminhtml/system_design_editor/index/';
+        $themeId = 1;
+        $theme = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
+            ->setMethods(['load', 'getId', 'isVirtual', 'delete'])
+            ->getMockForAbstractClass();
+        $this->request->expects($this->any())
             ->method('getParam')
-            ->with('id')
-            ->willReturn($themeId);
-
-        $theme = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Design\ThemeInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['load', 'getId', 'isVirtual', 'delete']
-        );
+            ->willReturnMap(
+                [
+                    ['id', null, $themeId],
+                    ['back', false, true],
+                ]
+            );
+        $redirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->with('Magento\Framework\View\Design\ThemeInterface')
+            ->willReturn($theme);
         $theme->expects($this->once())
             ->method('load')
             ->with($themeId)
+            ->willReturnSelf();
+        $theme->expects($this->once())
+            ->method('delete')
             ->willReturnSelf();
         $theme->expects($this->once())
             ->method('getId')
@@ -179,46 +135,126 @@ class DeleteTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\De
         $theme->expects($this->once())
             ->method('isVirtual')
             ->willReturn(true);
-
-        $this->_objectManagerMock
-            ->expects($this->once())
-            ->method('create')
-            ->with('Magento\Framework\View\Design\ThemeInterface')
-            ->willReturn($theme);
-
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
-            ->with('You deleted the theme.')
-            ->willThrowException(
-                new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase('Exception message')
-                )
-            );
-        $this->messageManager->expects($this->once())
-            ->method('addError');
-
-        $this->_request->expects($this->at(1))
-            ->method('getParam')
-            ->with('back', false)
-            ->willReturn(false);
-
-        $result = $this->getMockForAbstractClass(
-            'Magento\Framework\Controller\ResultInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['setPath']
-        );
-        $result->expects($this->once())
-            ->method('setPath')
-            ->with('adminhtml/*/')
             ->willReturnSelf();
         $this->resultFactory->expects($this->once())
             ->method('create')
-            ->willReturn($result);
+            ->with(ResultFactory::TYPE_REDIRECT)
+            ->willReturn($redirect);
+        $redirect->expects($this->once())
+            ->method('setPath')
+            ->with($path)
+            ->willReturnSelf();
 
-        $this->assertSame($result, $this->_model->execute());
+        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->controller->execute());
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidArgumentDataProvider()
+    {
+        return [
+            'themeId'   => [null, true],
+            'isVirtual' => [1, false],
+        ];
+    }
+
+    /**
+     * @param int|null $themeIdInModel
+     * @param bool $isVirtual
+     * @test
+     * @return void
+     * @dataProvider invalidArgumentDataProvider
+     */
+    public function testExecuteInvalidArgument($themeIdInModel, $isVirtual)
+    {
+        $path = 'adminhtml/*/';
+        $themeId = 1;
+        $theme = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
+            ->setMethods(['load', 'getId', 'isVirtual'])
+            ->getMockForAbstractClass();
+        $this->request->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['id', null, $themeId],
+                    ['back', false, false],
+                ]
+            );
+        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $redirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->with('Magento\Framework\View\Design\ThemeInterface')
+            ->willReturn($theme);
+        $theme->expects($this->once())
+            ->method('load')
+            ->with($themeId)
+            ->willReturnSelf();
+        $theme->expects($this->once())
+            ->method('getId')
+            ->willReturn($themeIdInModel);
+        $theme->expects($this->any())
+            ->method('isVirtual')
+            ->willReturn($isVirtual);
+        $this->resultFactory->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT)
+            ->willReturn($redirect);
+        $redirect->expects($this->once())
+            ->method('setPath')
+            ->with($path)
+            ->willReturnSelf();
+        $this->messageManager->expects($this->once())
+            ->method('addException');
+        $this->objectManager->expects($this->once())
+            ->method('get')
+            ->with('Psr\Log\LoggerInterface')
+            ->willReturn($logger);
+        $logger->expects($this->once())
+            ->method('critical');
+
+        $this->controller->execute();
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function testExecuteLocalizedException()
+    {
+        $path = 'adminhtml/*/';
+        $themeId = 1;
+        $this->request->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['id', null, $themeId],
+                    ['back', false, false],
+                ]
+            );
+        $redirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->with('Magento\Framework\View\Design\ThemeInterface')
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('localized exception')));
+        $this->resultFactory->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT)
+            ->willReturn($redirect);
+        $redirect->expects($this->once())
+            ->method('setPath')
+            ->with($path)
+            ->willReturnSelf();
+        $this->messageManager->expects($this->once())
+            ->method('addError');
+
+        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->controller->execute());
     }
 }
