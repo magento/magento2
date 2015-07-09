@@ -47,6 +47,6 @@ class ComponentGrid extends AbstractActionController
     public function componentsAction()
     {
         $components = $this->composerInformation->getRootRequiredPackageTypesByNameVersion();
-        return new JsonModel(['success' => true, 'components' => $components]);
+        return new JsonModel(['success' => true, 'components' => $components, 'total' => count($components)]);
     }
 }

@@ -64,8 +64,53 @@
     <?php echo $this->inlineScript() ?>
 </head>
 <body>
-<main class="container">
-    <?php echo $this->content; ?>
-</main>
+
+<div class="menu-wrapper">
+    <a
+        class="logo"
+        href="/"
+        data-edition="Community Edition">
+        <img class="logo-img"
+             src="./pub/images/logo.svg"
+             alt="Magento Admin Panel">
+    </a>
+    <nav ng-controller="navigationController"
+         id="menu"
+         class="admin__menu"
+         role="navigation">
+        <ul
+            id="nav"
+            role="menubar">
+            <li class="item-home level-0">
+                <a href="#">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li class="item-component level-0">
+                <a
+                    class="_active"
+                    href="#">
+                    <span>Component Manager</span>
+                </a>
+            </li>
+            <li class="item-upgrade level-0 _active">
+                <a href="#">
+                    <span>System Upgrade</span>
+                </a>
+            </li>
+            <li class="item-system-config level-0">
+                <a href="#">
+                    <span>System Config</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-wrapper">
+    <main class="container">
+        <?php echo $this->content; ?>
+    </main>
+</div>
 </body>
 </html>

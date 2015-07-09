@@ -60,6 +60,9 @@ class ComposerInformation
      */
     private $pathToCacheFile = 'update_composer_packages.json';
 
+    /** @var array */
+    private static $availableComponentTypesList = ['magento2-theme', 'magento2-language', 'magento2-module'];
+
     /**
      * Constructor
      *
@@ -183,11 +186,13 @@ class ComposerInformation
         $packages = [];
         /** @var PackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
-            $packages[$package->getName()] = [
-                'name' => $package->getName(),
-                'type' => $package->getType(),
-                'version' => $package->getVersion()
-            ];
+            if (in_array($package->getType(), self::$availableComponentTypesList)) {
+                $packages[$package->getName()] = [
+                    'name' => $package->getName(),
+                    'type' => $package->getType(),
+                    'version' => $package->getVersion()
+                ];
+            }
         }
         return $packages;
     }
