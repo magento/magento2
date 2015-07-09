@@ -195,23 +195,27 @@ class Curl extends AbstractCurl implements CustomerInterface
      */
     protected function prepareAddressData(array $curlData)
     {
+        $address = [];
         foreach (array_keys($curlData['address']) as $key) {
-            $curlData['address'][$key]['_deleted'] = '';
-            $curlData['address'][$key]['region'] = '';
-            if (!is_array($curlData['address'][$key]['street'])) {
-                $street = $curlData['address'][$key]['street'];
-                $curlData['address'][$key]['street'] = [];
-                $curlData['address'][$key]['street'][] = $street;
+            $addressKey = 'new_' . $key;
+            $address[$addressKey] = $curlData['address'][$key];
+            $address[$addressKey]['_deleted'] = '';
+            $address[$addressKey]['region'] = '';
+            if (!is_array($address[$addressKey]['street'])) {
+                $street = $address[$addressKey]['street'];
+                $address[$addressKey]['street'] = [];
+                $address[$addressKey]['street'][] = $street;
             }
-            if (isset($curlData['address'][$key]['default_billing'])) {
-                $value = $curlData['address'][$key]['default_billing'] === 'Yes' ? 'true' : 'false';
-                $curlData['address'][$key]['default_billing'] = $value;
+            if (isset($address[$addressKey]['default_billing'])) {
+                $value = $address[$addressKey]['default_billing'] === 'Yes' ? 'true' : 'false';
+                $address[$addressKey]['default_billing'] = $value;
             }
-            if (isset($curlData['address'][$key]['default_shipping'])) {
-                $value = $curlData['address'][$key]['default_shipping'] === 'Yes' ? 'true' : 'false';
-                $curlData['address'][$key]['default_shipping'] = $value;
+            if (isset($address[$addressKey]['default_shipping'])) {
+                $value = $address[$addressKey]['default_shipping'] === 'Yes' ? 'true' : 'false';
+                $address[$addressKey]['default_shipping'] = $value;
             }
         }
+        $curlData['address'] = $address;
 
         return $curlData;
     }

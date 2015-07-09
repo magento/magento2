@@ -5,6 +5,8 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\App\Utility\Classes;
+
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function testPaymentMethods()
@@ -19,12 +21,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 $nodes = $config->xpath('/config/default/payment/*/model') ?: [];
                 $formalModuleName = str_replace('_', '\\', $moduleName);
                 foreach ($nodes as $node) {
-                    $this->assertStringStartsWith(
-                        $formalModuleName . '\Model\\',
-                        (string)$node,
-                        "'{$node}' payment method is declared in '{$configFile}' module, " .
-                        "but doesn't belong to '{$moduleName}' module"
-                    );
+                    if (!Classes::isVirtual((string)$node)) {
+                        $this->assertStringStartsWith(
+                            $formalModuleName . '\Model\\',
+                            (string)$node,
+                            "'{$node}' payment method is declared in '{$configFile}' module, " .
+                            "but doesn't belong to '{$moduleName}' module"
+                        );
+                    }
                 }
             },
             $this->paymentMethodsDataProvider()

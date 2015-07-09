@@ -31,10 +31,7 @@ class AssertTaxRateForm extends AbstractConstraint
         TaxRate $taxRate,
         TaxRate $initialTaxRate = null
     ) {
-        $data = ($initialTaxRate !== null)
-            ? array_merge($initialTaxRate->getData(), $taxRate->getData())
-            : $taxRate->getData();
-        $data = $this->prepareData($data);
+        $data = $this->prepareData($taxRate, $initialTaxRate);
         $filter = [
             'code' => $data['code'],
         ];
@@ -53,11 +50,20 @@ class AssertTaxRateForm extends AbstractConstraint
     /**
      * Preparing data for verification
      *
-     * @param array $data
+     * @param TaxRate $taxRate
+     * @param TaxRate $initialTaxRate
      * @return array
      */
-    protected function prepareData(array $data)
+    protected function prepareData(TaxRate $taxRate, TaxRate $initialTaxRate = null)
     {
+        if ($initialTaxRate !== null) {
+            $data = array_merge($initialTaxRate->getData(), $taxRate->getData());
+            if ($taxRate->hasData('tax_country_id') && !$taxRate->hasData('tax_region_id')) {
+                unset($data['tax_region_id']);
+            }
+        } else {
+            $data = $taxRate->getData();
+        }
         if ($data['zip_is_range'] === 'Yes') {
             unset($data['tax_postcode']);
         } else {

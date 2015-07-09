@@ -297,11 +297,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null)
     {
-        if (!$this->agreementsValidator->isValid($agreements)) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Please agree to all the terms and conditions before placing the order.')
-            );
-        }
         $quote = $this->quoteRepository->getActive($cartId);
         if ($paymentMethod) {
             $paymentMethod->setChecks([
@@ -333,6 +328,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->checkoutSession->setLastSuccessQuoteId($quote->getId());
         $this->checkoutSession->setLastOrderId($order->getId());
         $this->checkoutSession->setLastRealOrderId($order->getIncrementId());
+        $this->checkoutSession->setLastOrderStatus($order->getStatus());
 
         $this->eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
         return $order->getId();
@@ -371,15 +367,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     protected function resolveItems(QuoteEntity $quote)
     {
-        $quoteItems = $quote->getAllItems();
-        for ($i = 0; $i < count($quoteItems) - 1; $i++) {
-            for ($j = 0; $j < count($quoteItems) - $i - 1; $j++) {
-                if ($quoteItems[$i]->getParentItemId() == $quoteItems[$j]->getId()) {
-                    $tempItem = $quoteItems[$i];
-                    $quoteItems[$i] = $quoteItems[$j];
-                    $quoteItems[$j] = $tempItem;
-                }
-            }
+        $quoteItems = [];
+        foreach ($quote->getAllItems() as $quoteItem) {
+            /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+            $quoteItems[$quoteItem->getId()] = $quoteItem;
         }
         $orderItems = [];
         foreach ($quoteItems as $quoteItem) {

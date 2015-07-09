@@ -8,21 +8,29 @@ namespace Magento\Payment\Gateway\Command;
 use Magento\Framework\ObjectManager\TMap;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\ObjectManager\TMapFactory;
 
 class CommandPool implements CommandPoolInterface
 {
     /**
-     * @var CommandInterface[]
+     * @var CommandInterface[] | TMap
      */
     private $commands;
 
     /**
-     * @param TMap $commands
+     * @param array $commands
+     * @param TMapFactory $tmapFactory
      */
     public function __construct(
-        TMap $commands
+        array $commands,
+        TMapFactory $tmapFactory
     ) {
-        $this->commands = $commands;
+        $this->commands = $tmapFactory->create(
+            [
+                'array' => $commands,
+                'type' => 'Magento\Payment\Gateway\CommandInterface'
+            ]
+        );
     }
 
     /**

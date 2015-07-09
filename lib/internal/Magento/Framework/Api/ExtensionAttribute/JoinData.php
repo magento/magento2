@@ -11,8 +11,13 @@ namespace Magento\Framework\Api\ExtensionAttribute;
  *
  * @codeCoverageIgnore
  */
-class JoinData
+class JoinData implements JoinDataInterface
 {
+    /**
+     * @var string
+     */
+    private $attributeCode;
+
     /**
      * @var string
      */
@@ -39,9 +44,24 @@ class JoinData
     private $selectFields;
 
     /**
-     * Get reference table name.
-     *
-     * @return string
+     * {@inheritdoc}
+     */
+    public function getAttributeCode()
+    {
+        return $this->attributeCode;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttributeCode($attributeCode)
+    {
+        $this->attributeCode = $attributeCode;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getReferenceTable()
     {
@@ -49,10 +69,7 @@ class JoinData
     }
 
     /**
-     * Set reference table name.
-     *
-     * @param string $referenceTable
-     * @return $this
+     * {@inheritdoc}
      */
     public function setReferenceTable($referenceTable)
     {
@@ -61,9 +78,7 @@ class JoinData
     }
 
     /**
-     * Get reference table alias.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getReferenceTableAlias()
     {
@@ -71,10 +86,7 @@ class JoinData
     }
 
     /**
-     * Set reference table alias.
-     *
-     * @param string $referenceTableAlias
-     * @return $this
+     * {@inheritdoc}
      */
     public function setReferenceTableAlias($referenceTableAlias)
     {
@@ -83,9 +95,7 @@ class JoinData
     }
 
     /**
-     * Get reference field.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getReferenceField()
     {
@@ -93,10 +103,7 @@ class JoinData
     }
 
     /**
-     * Set reference field.
-     *
-     * @param string $referenceField
-     * @return $this
+     * {@inheritdoc}
      */
     public function setReferenceField($referenceField)
     {
@@ -105,9 +112,7 @@ class JoinData
     }
 
     /**
-     * Get join field.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getJoinField()
     {
@@ -115,10 +120,7 @@ class JoinData
     }
 
     /**
-     * Set join field.
-     *
-     * @param string $joinField
-     * @return $this
+     * {@inheritdoc}
      */
     public function setJoinField($joinField)
     {
@@ -127,9 +129,7 @@ class JoinData
     }
 
     /**
-     * Get select fields.
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getSelectFields()
     {
@@ -137,10 +137,7 @@ class JoinData
     }
 
     /**
-     * Set select field.
-     *
-     * @param string[] $selectFields
-     * @return $this
+     * {@inheritdoc}
      */
     public function setSelectFields(array $selectFields)
     {

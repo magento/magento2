@@ -9,25 +9,34 @@
 
 & when (@media-common = true) {
 
-.load.indicator {
-    .loader();
-    position: absolute;
-    > span {
-        display: none;
-    }
-}
-
-.loading-mask {
-    .loading-mask();
-    background: rgba(255, 255, 255, .5);
-    .loader {
-        > img {
-            .loading-mask();
-        }
-        > p {
+    .load.indicator {
+        .loader();
+        position: absolute;
+        > span {
             display: none;
         }
     }
-}
 
+    .loading-mask {
+        .loading-mask();
+        background: rgba(255, 255, 255, .5);
+        .loader {
+            > img {
+                .loading-mask();
+            }
+            > p {
+                display: none;
+            }
+        }
+    }
+
+    body {
+        > .loading-mask {
+            z-index: @loader-overlay__z-index;
+        }
+    }
+
+    ._block-content-loading {
+        position: relative;
+    }
 }

@@ -124,6 +124,6 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        return __('Add New Review');
+        return __('New Review');
     }
 }

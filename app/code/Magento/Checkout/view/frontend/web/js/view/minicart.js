@@ -6,13 +6,17 @@ define([
     'uiComponent',
     'Magento_Customer/js/customer-data',
     'jquery',
-    'ko'
-], function (Component, customerData, $, ko) {
+    'ko',
+    'mage/url',
+    'sidebar'
+], function (Component, customerData, $, ko, url) {
     'use strict';
 
     var sidebarInitialized = false;
-    var minicart = $("[data-block='minicart']");
+    var addToCartCalls = 0;
+    url.setBaseUrl(window.checkout.baseUrl);
 
+    var minicart = $("[data-block='minicart']");
     minicart.on('dropdowndialogopen', function () {
         initSidebar();
     });
@@ -26,7 +30,7 @@ define([
             return false;
         }
         sidebarInitialized = true;
-        minicart.mage('sidebar', {
+        minicart.sidebar({
             "targetElement": "div.block.block-minicart",
             "url": {
                 "checkout": window.checkout.checkoutUrl,
@@ -54,7 +58,7 @@ define([
                 "button": ":button.update-cart-item"
             },
             "confirmMessage": $.mage.__(
-                'Are you sure you would like to remove this item from the shopping cart?'
+                'Are you sure you want to remove this item from your Compare Products list?'
             )
         });
     }
@@ -62,15 +66,23 @@ define([
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
         initialize: function () {
+            var self = this;
             this._super();
             this.cart = customerData.get('cart');
             this.cart.subscribe(function () {
+                addToCartCalls--;
+                this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
                 initSidebar();
+            }, this);
+            $('[data-block="minicart"]').on('contentLoading', function(event) {
+                addToCartCalls++;
+                self.isLoading(true);
             });
         },
+        isLoading: ko.observable(false),
         initSidebar: initSidebar,
-        closeSidebar: function(element) {
+        closeSidebar: function() {
             var minicart = $('[data-block="minicart"]');
             minicart.on('click', '[data-action="close"]', function(event) {
                 event.stopPropagation();

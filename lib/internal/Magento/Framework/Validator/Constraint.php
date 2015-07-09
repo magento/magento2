@@ -40,6 +40,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param mixed $value
      * @return boolean
+     * @api
      */
     public function isValid($value)
     {
@@ -72,6 +73,7 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      * Get constraint alias
      *
      * @return string
+     * @api
      */
     public function getAlias()
     {

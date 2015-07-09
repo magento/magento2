@@ -21,7 +21,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
 $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 ?>
 <?php if (!$_productCollection->count()): ?>
-<p class="message note"><?php echo __('There are no products matching the selection.') ?></p>
+<p class="message note"><?php echo __('We can\'t find products matching the selection.') ?></p>
 <?php else: ?>
 <?php echo $block->getToolbarHtml() ?>
 <?php echo $block->getAdditionalHtml() ?>

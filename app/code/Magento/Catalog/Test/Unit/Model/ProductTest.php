@@ -1277,7 +1277,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptions()
     {
-        $optionInstanceMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+        $optionInstanceMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $joinProcessorMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1286,6 +1289,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product',
             [
                 'catalogProductOption' => $optionInstanceMock,
+                'joinProcessor' => $joinProcessorMock
             ]
         );
         $productModel->setHasOptions(true);
@@ -1315,12 +1319,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('setProduct')
             ->with($productModel)
             ->willReturn($option1Id);
-        $options = [$optionMock1, $optionMock2];
+        $optionColl = $this->objectManagerHelper->getCollectionMock(
+            'Magento\Catalog\Model\Resource\Product\Option\Collection',
+            [$optionMock1, $optionMock2]
+        );
 
         $optionInstanceMock->expects($this->once())
             ->method('getProductOptionCollection')
             ->with($productModel)
-            ->willReturn($options);
+            ->willReturn($optionColl);
+
+        $joinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($this->isInstanceOf('Magento\Catalog\Model\Resource\Product\Option\Collection'));
 
         $expectedOptions = [
             $option1Id => $optionMock1,
@@ -1358,5 +1369,42 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
+    }
+
+    public function testGetFinalPrice()
+    {
+        $finalPrice = 11;
+        $qty = 1;
+        $this->model->setQty($qty);
+        $productTypePriceMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Type\Price',
+            ['getFinalPrice'],
+            [],
+            '',
+            false
+        );
+        
+        $productTypePriceMock->expects($this->any())
+            ->method('getFinalPrice')
+            ->with($qty, $this->model)
+            ->will($this->returnValue($finalPrice));
+
+        $this->productTypeInstanceMock->expects($this->any())
+            ->method('priceFactory')
+            ->with($this->model->getTypeId())
+            ->will($this->returnValue($productTypePriceMock));
+
+        $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
+        $this->model->setFinalPrice(9.99);
+    }
+
+    public function testGetFinalPricePreset()
+    {
+        $finalPrice = 9.99;
+        $qty = 1;
+        $this->model->setQty($qty);
+        $this->model->setFinalPrice($finalPrice);
+        $this->productTypeInstanceMock->expects($this->never())->method('priceFactory');
+        $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
     }
 }
