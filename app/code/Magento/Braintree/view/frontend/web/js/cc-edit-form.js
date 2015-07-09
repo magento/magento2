@@ -44,6 +44,15 @@ define([
         _create: function () {
             if (!this.preventDoubleInit()) {
                 var self = this;
+                this.ccTypes = {
+                    VI: [new RegExp('^4[0-9]{12}([0-9]{3})?$'), new RegExp('^[0-9]{3}$')],
+                    MC: [new RegExp('^5[1-5][0-9]{14}$'), new RegExp('^[0-9]{3}$')],
+                    AE: [new RegExp('^3[47][0-9]{13}$'), new RegExp('^[0-9]{4}$')],
+                    DI: [new RegExp('^6011[0-9]{12}$'), new RegExp('^[0-9]{3}$')],
+                    JCB: [new RegExp('^(3[0-9]{15}|(2131|1800)[0-9]{11})$'), new RegExp('^[0-9]{3,4}$')],
+                    OT: [false, new RegExp('^([0-9]{3}|[0-9]{4})?$')]
+                };
+
                 self.options.braintreeClient = new braintree.api.Client({clientToken: this.options.clientToken});
                 $(self.options.formId).on('submit', function (e) {
                     e.preventDefault();
@@ -57,6 +66,23 @@ define([
                 $(self.options.billingAddressCountry).on('change', function (e) {
                     self.populateCountrySpecificCCType();
                 });
+
+                $(self.options.creditCardNumber).on('input', function () {
+                    var ccNumber = $(this).val(),
+                        ccTypeField = $(self.options.creditCardTypeId).find('options');
+                    ccNumber = ccNumber.replace(/\D/g,''); //remove all but the digits
+                    for(var ccType in self.ccTypes) {
+                        if(self.ccTypes.hasOwnProperty(ccType)) {
+                            var ccRegex = self.ccTypes[ccType][0];
+                            if(ccRegex && ccNumber.match(ccRegex)) {
+                                if ($(self.options.creditCardTypeId).find('option').length>0) {
+                                        $(self.options.creditCardTypeId).val(ccType);
+                                }
+                            }
+                        }
+                    }
+                });
+
                 $(self.options.billingAddressCountry).trigger('change');
             }
 
