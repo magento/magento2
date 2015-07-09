@@ -43,7 +43,7 @@ class SampleDataTest extends \PHPUnit_Framework_TestCase
 
     public function testInstall()
     {
-        if (!class_exists('Magento\SampleData\Model')) {
+        if (!class_exists('Magento\SampleData\Model\Logger')) {
             $this->markTestSkipped('Sample Data module does not exist');
         }
         $areaCode = 'adminhtml';
