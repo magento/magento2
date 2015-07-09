@@ -7,10 +7,8 @@ namespace Magento\Sales\Model\Resource\Order\Creditmemo\Order\Grid;
 
 /**
  * Flat sales order creditmemo collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Collection
+class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
 {
     /**
      * @var \Magento\Framework\Registry
@@ -23,8 +21,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Col
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $registryManager
-     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
-     * @param null $connection
+     * @param null|\Zend_Db_Adapter_Abstract $mainTable
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $eventPrefix
+     * @param string $eventObject
+     * @param string $resourceModel
+     * @param string $model
+     * @param string|null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -32,18 +34,25 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Col
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\Registry $registryManager,
+        $mainTable,
+        $eventPrefix,
+        $eventObject,
+        $resourceModel,
+        $model = 'Magento\Sales\Model\Resource\Grid\Document',
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->registryManager = $registryManager;
+        $this->_eventPrefix = $eventPrefix;
+        $this->_eventObject = $eventObject;
+        $this->_init($model, $resourceModel);
+        $this->setMainTable($mainTable);
         parent::__construct(
             $entityFactory,
             $logger,
             $fetchStrategy,
             $eventManager,
-            $entitySnapshot,
             $connection,
             $resource
         );
