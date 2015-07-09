@@ -36,7 +36,7 @@ class Variable
     /**
      * Replaces the placeholder variables into the given path
      *
-     * @param $path
+     * @param string $path
      * @return mixed
      */
     public function convertVariableNotation($path)
@@ -57,10 +57,11 @@ class Variable
     /**
      * Retrieves the value of a given placeholder
      *
-     * @param $placeholder
+     * @param string $placeholder
      * @return string
      */
-    public function getPlaceholderValue($placeholder) {
+    public function getPlaceholderValue($placeholder)
+    {
         $context = $this->assetRepo->getStaticViewFileContext();
 
         switch ($placeholder) {

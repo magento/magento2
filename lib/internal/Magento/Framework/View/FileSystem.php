@@ -151,7 +151,7 @@ class FileSystem
      * @param string $module
      * @return string|bool
      */
-    public function getEmailTemplateFileName($fileId, array $params = [], $module)
+    public function getEmailTemplateFileName($fileId, array $params, $module)
     {
         $this->_assetRepo->updateDesignParams($params);
         return $this->_emailTemplateFileResolution

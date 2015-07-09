@@ -31,7 +31,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      *
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
-    private $themesDirectory;
+    protected $themesDirectory;
 
     /**
      * @var \Magento\Framework\View\FileSystem
@@ -64,7 +64,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
     public function getAvailableTemplates()
     {
         $templates = [];
-        foreach ($this->_dataStorage->get() as $templateId => $fields) {
+        foreach (array_keys($this->_dataStorage->get()) as $templateId) {
             $templates[] = [
                 'value' => $templateId,
                 'label' => $this->getTemplateLabel($templateId),

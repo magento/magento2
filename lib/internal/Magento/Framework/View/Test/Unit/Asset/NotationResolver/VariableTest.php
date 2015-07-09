@@ -22,7 +22,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     private $assetRepo;
 
     /**
-     * @var NotationResolver\Variable
+     * @var \Magento\Framework\View\Asset\NotationResolver\Variable
      */
     private $object;
 
@@ -32,7 +32,9 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $path = 'frontend/Magento/blank/en_US';
 
         $this->context = $this->getMock(
-            '\Magento\Framework\View\Asset\File\Context', null, [$baseUrl, DirectoryList::STATIC_VIEW, $path]
+            '\Magento\Framework\View\Asset\File\Context',
+            null,
+            [$baseUrl, DirectoryList::STATIC_VIEW, $path]
         );
 
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
@@ -48,14 +50,16 @@ class VariableTest extends \PHPUnit_Framework_TestCase
      * @param $expectedResult
      * @dataProvider convertVariableNotationDataProvider
      */
-    public function testConvertVariableNotation($path, $expectedResult) {
+    public function testConvertVariableNotation($path, $expectedResult)
+    {
         $this->assertEquals($expectedResult, $this->object->convertVariableNotation($path));
     }
 
     /**
      * @return array
      */
-    public function convertVariableNotationDataProvider() {
+    public function convertVariableNotationDataProvider()
+    {
         return [
             ['{{base_url_path}}/file.ext', 'http://example.com/pub/static/frontend/Magento/blank/en_US/file.ext'],
         ];
