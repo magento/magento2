@@ -43,7 +43,7 @@ class Range extends AbstractFilter
     {
         $condition = $this->getCondition();
         if ($condition !== null) {
-            $this->getContext()->getDataProvider()->addFilter($this->getName(), $condition);
+            $this->getContext()->getDataProvider()->addFilter($condition, $this->getName());
         }
     }
 

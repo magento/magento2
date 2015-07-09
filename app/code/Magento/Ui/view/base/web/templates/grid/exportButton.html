@@ -1,0 +1,55 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div
+    class="admin__action-dropdown-wrap admin__data-grid-action-export"
+    data-bind="css: {_active: opened, _disabled: !collapsible}, outerClick: close">
+    <button
+        class="admin__action-dropdown"
+        type="button"
+        data-bind="click: toggleOpened"
+        data-toggle="dropdown"
+        aria-haspopup="true">
+        <span class="admin__action-dropdown-text" data-bind="text: $t('Export')"></span>
+    </button>
+    <div class="admin__action-dropdown-menu admin__data-grid-action-export-menu">
+        <!-- ko foreach: options -->
+        <div class="admin__field admin__field-option">
+            <input
+                class="admin__control-radio"
+                data-bind="
+                    attr: {
+                        id: 'export-field-' + value + $index(),
+                        name: 'export'
+                    },
+                    checkedValue: value,
+                    checked: $parent.checked"
+                type="radio"/>
+            <label
+                class="admin__field-label"
+                data-bind="
+                    text: label,
+                    attr: {
+                        for:  'export-field-' + value + $index()
+                    }"></label>
+        </div>
+        <!-- /ko -->
+        <div class="admin__action-dropdown-footer-main-actions">
+            <button
+                class="action-tertiary"
+                data-bind="click: close"
+                type="button">
+                <span data-bind="text: $t('Cancel')"></span>
+            </button>
+            <button class="action-secondary"
+                type="button"
+                data-bind="click: applyOption">
+                <span data-bind="text: $t('Export')"></span>
+            </button>
+        </div>
+    </div>
+</div>
