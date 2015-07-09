@@ -15,7 +15,7 @@ interface ResponseInterface
     /**
      * Return Aggregation Collection
      *
-     * @return AggregationInterface
+     * @return \Magento\Framework\Api\Search\AggregationInterface
      */
     public function getAggregations();
 }
