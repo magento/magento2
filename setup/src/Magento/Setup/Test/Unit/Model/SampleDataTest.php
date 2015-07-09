@@ -35,17 +35,24 @@ class SampleDataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerInterface = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->loggerInterface = $this->getMockForAbstractClass('Magento\Framework\Setup\LoggerInterface');
+        $this->objectManagerInterface = $this->getMock(
+            'Magento\Framework\ObjectManagerInterface',
+            [
+                'get',
+                'create',
+                'configure'
+            ],
+            [],
+            '',
+            false
+        );
+        $this->loggerInterface = $this->getMock('Magento\Framework\Setup\LoggerInterface');
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->sampleDataInstall = new SampleData($this->directoryList);
     }
 
     public function testInstall()
     {
-        if (!class_exists('Magento\SampleData\Model\Logger')) {
-            $this->markTestSkipped('Sample Data module does not exist');
-        }
         $areaCode = 'adminhtml';
         $userName = 'admin';
         $modules = ['module_1', 'module_2'];
