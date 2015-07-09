@@ -182,6 +182,7 @@ class ConfigProvider extends CcGenericConfigProvider
                     'creditCardExpYear' => (int)$this->dataHelper->getTodayYear(),
                     'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig(),
                     'isFraudDetectionEnabled' => $this->config->isFraudDetectionEnabled(),
+                    'isCcDetectionEnabled' => $this->config->isCcDetectionEnabled(),
                     'availableCardTypes' => $this->getCcAvailableCcTypes(),
                     'braintreeDataJs'=> $this->config->getBraintreeDataJs(),
                     'ajaxGenerateNonceUrl' => $this->getAjaxGenerateNonceUrl(),
