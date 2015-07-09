@@ -328,7 +328,7 @@
                 <p ng-show="updater.expanded">
                     Please, download and install Updater application.
                 </p>
-                <p ng-show="updater.expanded">If you need more help please visit documentation page.</p>
+                <p ng-show="updater.expanded">For additional assistance, see</p>
             </div>
 
         </div>
@@ -348,7 +348,7 @@
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Check Cron Scripts</h3>
                 <p>
-                    Cron Script Readiness Check Passed.
+                    Cron script readiness check passed.
                 </p>
                 <p ng-show="cronScript.notice" ng-bind-html="cronScript.setupNoticeMessage">
                 </p>
@@ -362,7 +362,7 @@
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Check Cron Scripts</h3>
                 <p>
-                    Cron Script Readiness Check Failed.
+                    Cron script readiness check failed.
                     <a href="#cron-script" ng-click="updateOnExpand(cronScript)">
                         <span ng-hide="cronScript.expanded">Show detail</span>
                         <span ng-show="cronScript.expanded">Hide detail</span>
@@ -372,19 +372,19 @@
                 </p>
                 <p ng-show="cronScript.expanded" ng-bind-html="cronScript.updaterErrorMessage">
                 </p>
-                <p ng-show="cronScript.expanded">If you need more help please visit documentation page.</p>
+                <p ng-show="cronScript.expanded">For additional assistance, see</p>
             </div>
         </div>
     </div>
 </div>
 
-<div id="component-dependency" class="rediness-check-item" ng-show="componentdependency.visible">
-    <h3 class="readiness-check-title" ng-hide="componentdependency.processed">
+<div id="component-dependency" class="rediness-check-item" ng-show="componentDependency.visible">
+    <h3 class="readiness-check-title" ng-hide="componentDependency.processed">
         Checking Component Dependency...
     </h3>
 
-    <div ng-show="componentdependency.processed" ng-switch="componentdependency.responseType">
-        <div ng-switch-when="success" ng-init="updateOnSuccess(componentdependency)">
+    <div ng-show="componentDependency.processed" ng-switch="componentDependency.responseType">
+        <div ng-switch-when="success" ng-init="updateOnSuccess(componentDependency)">
             <span class="readiness-check-icon icon-success-round"></span>
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Check Component Dependency</h3>
@@ -394,20 +394,20 @@
             </div>
         </div>
 
-        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(componentdependency)">
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(componentDependency)">
             <span class="readiness-check-icon icon-failed-round"></span>
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Check Component Dependency</h3>
                 <p>
                     We found conflicting component dependencies.
-                    <a href="#component-dependency" ng-click="updateOnExpand(componentdependency)">
-                        <span ng-hide="componentdependency.expanded">Show detail</span>
-                        <span ng-show="componentdependency.expanded">Hide detail</span>
+                    <a href="#component-dependency" ng-click="updateOnExpand(componentDependency)">
+                        <span ng-hide="componentDependency.expanded">Show detail</span>
+                        <span ng-show="componentDependency.expanded">Hide detail</span>
                     </a>
                 </p>
-                <p ng-show="componentdependency.expanded" ng-bind-html="componentdependency.errorMessage">
+                <p ng-show="componentDependency.expanded" ng-bind-html="componentDependency.errorMessage">
                 </p>
-                <p ng-show="componentdependency.expanded">If you need more help please visit documentation page.</p>
+                <p ng-show="componentDependency.expanded">For additional assistance, see</p>
             </div>
         </div>
     </div>
