@@ -9,7 +9,6 @@ namespace Magento\Authorizenet\Controller\Directpost\Payment;
 use Magento\Authorizenet\Controller\Directpost\Payment;
 use Magento\Authorizenet\Helper\DataFactory;
 use Magento\Checkout\Model\Type\Onepage;
-use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Object;
@@ -140,7 +139,7 @@ class Place extends Payment
      */
     protected function getCustomerSession()
     {
-        return $this->_objectManager->get('Magento\Customer\Model\Session');
+        return $this->_objectManager->get('Magento\Checkout\Model\Cart')->getCustomerSession();
     }
 
     /**
