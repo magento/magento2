@@ -71,11 +71,16 @@ class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
      * Apply sorting and filtering to collection
      *
      * @return $this
+     * @throws \Exception
      */
     protected function _initSelect()
     {
         parent::_initSelect();
-        //$this->addFieldToFilter($this->_orderField, $this->registryManager->registry('current_order')->getId());
+        $order = $this->registryManager->registry('current_order');
+        if (!$order) {
+            throw new \Exception('Cannot perform operation without order filter');
+        }
+        $this->addFieldToFilter($this->_orderField, $this->registryManager->registry('current_order')->getId());
         return $this;
     }
 }
