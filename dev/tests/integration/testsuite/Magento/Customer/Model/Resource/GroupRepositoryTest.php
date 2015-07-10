@@ -197,10 +197,10 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList($filters, $filterGroup, $expectedResult)
     {
         foreach ($filters as $filter) {
-            $this->searchCriteriaBuilder->addFilter([$filter]);
+            $this->searchCriteriaBuilder->addFilters([$filter]);
         }
         if ($filterGroup !== null) {
-            $this->searchCriteriaBuilder->addFilter($filterGroup);
+            $this->searchCriteriaBuilder->addFilters($filterGroup);
         }
 
         $searchResults = $this->groupRepository->getList($this->searchCriteriaBuilder->create());
