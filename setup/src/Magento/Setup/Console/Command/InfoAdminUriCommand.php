@@ -49,7 +49,7 @@ class InfoAdminUriCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(
-            "\nAdmin Panel URI: /"
+            "\nAdmin URI: /"
             . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
             . "\n"
         );
