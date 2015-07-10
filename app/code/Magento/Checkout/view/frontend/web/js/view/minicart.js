@@ -7,14 +7,12 @@ define([
     'Magento_Customer/js/customer-data',
     'jquery',
     'ko',
-    'mage/url',
     'sidebar'
-], function (Component, customerData, $, ko, url) {
+], function (Component, customerData, $, ko) {
     'use strict';
 
     var sidebarInitialized = false;
     var addToCartCalls = 0;
-    url.setBaseUrl(window.checkout.baseUrl);
 
     var minicart = $("[data-block='minicart']");
     minicart.on('dropdowndialogopen', function () {
@@ -58,7 +56,7 @@ define([
                 "button": ":button.update-cart-item"
             },
             "confirmMessage": $.mage.__(
-                'Are you sure you want to remove this item from your Compare Products list?'
+                'Are you sure you would like to remove this item from the shopping cart?'
             )
         });
     }
