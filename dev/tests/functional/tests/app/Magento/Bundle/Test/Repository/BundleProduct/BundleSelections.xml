@@ -433,7 +433,7 @@
                 <item name="1" xsi:type="array">
                     <item name="title" xsi:type="string">Radio Button Option</item>
                     <item name="type" xsi:type="string">Radio Buttons</item>
-                    <item name="required" xsi:type="string">Yes</item>
+                    <item name="required" xsi:type="string">No</item>
                     <item name="assigned_products" xsi:type="array">
                         <item name="0" xsi:type="array">
                             <item name="search_data" xsi:type="array">

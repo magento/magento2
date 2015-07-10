@@ -76,7 +76,7 @@
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage"/>
             <constraint name="Magento\User\Test\Constraint\AssertUserInGrid"/>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut"/>
-            <constraint name="Magento\User\Test\Constraint\AssertUserFailedLoginMessage"/>
+            <constraint name="Magento\User\Test\Constraint\AssertUserFailedLoginByPermissionMessage"/>
         </variation>
         <variation name="CreateAdminUserEntityTestVariation6">
             <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>

@@ -11,23 +11,21 @@ use Magento\User\Test\Fixture\User;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertUserFailedLoginMessage
+ * Verify incorrect credentials message while login to admin.
  */
-class AssertUserFailedLoginMessage extends AbstractConstraint
+class AssertUserFailedLoginByPermissionMessage extends AbstractConstraint
 {
-    const FAILED_LOGIN_MESSAGE = 'This account is inactive.';
+    const FAILED_LOGIN_MESSAGE = 'You need more permissions to access this.';
 
     /**
-     * Verify incorrect credentials message while login to admin
+     * Verify incorrect credentials message while login to admin.
      *
      * @param AdminAuthLogin $adminAuth
      * @param User $customAdmin
      * @return void
      */
-    public function processAssert(
-        AdminAuthLogin $adminAuth,
-        User $customAdmin
-    ) {
+    public function processAssert(AdminAuthLogin $adminAuth, User $customAdmin)
+    {
         $adminAuth->open();
         $adminAuth->getLoginBlock()->fill($customAdmin);
         $adminAuth->getLoginBlock()->submit();
@@ -40,7 +38,7 @@ class AssertUserFailedLoginMessage extends AbstractConstraint
     }
 
     /**
-     * Returns error message equals expected message
+     * Returns error message equals expected message.
      *
      * @return string
      */

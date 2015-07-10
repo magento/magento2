@@ -40,14 +40,14 @@ class SalesRefundsReportEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Refunds report page
+     * Refunds report page.
      *
      * @var RefundsReport
      */
     protected $refundsReport;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param RefundsReport $refundsReport
      * @return void
@@ -58,7 +58,7 @@ class SalesRefundsReportEntityTest extends Injectable
     }
 
     /**
-     * Refunds report
+     * Refunds report.
      *
      * @param OrderInjectable $order
      * @param array $refundsReport

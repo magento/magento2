@@ -81,10 +81,12 @@ class Grid extends DataGrid
      *
      * @var string
      */
-    protected $firstRowSelector = '//tbody/tr[1]//a';
+    protected $firstRowSelector = '//tbody/tr[1]/td[@data-action="grid-row-edit"]';
 
     /**
      * Start to create new order.
+     *
+     * @return void
      */
     public function addNewOrder()
     {

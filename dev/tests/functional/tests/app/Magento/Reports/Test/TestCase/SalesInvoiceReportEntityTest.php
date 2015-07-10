@@ -41,7 +41,7 @@ class SalesInvoiceReportEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Sales invoice report
+     * Sales invoice report.
      *
      * @param SalesInvoiceReport $salesInvoiceReport
      * @param OrderInjectable $order

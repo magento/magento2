@@ -32,14 +32,14 @@ class OrderedProductsReportEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Ordered Products Report
+     * Ordered Products Report.
      *
      * @var OrderedProductsReport
      */
     protected $orderedProducts;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param OrderedProductsReport $orderedProducts
      * @return void
@@ -50,7 +50,7 @@ class OrderedProductsReportEntityTest extends Injectable
     }
 
     /**
-     * Search order products report
+     * Search order products report.
      *
      * @param OrderInjectable $order
      * @param array $customersReport

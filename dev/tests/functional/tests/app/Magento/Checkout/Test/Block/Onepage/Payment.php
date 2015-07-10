@@ -50,7 +50,7 @@ class Payment extends Block
     protected $placeOrder = '.action.primary.checkout';
     
     /**
-     * Wait element
+     * Wait element.
      *
      * @var string
      */
@@ -120,6 +120,8 @@ class Payment extends Block
 
     /*
      * Press "Place Order" button.
+     *
+     * @return void
     */
     public function placeOrder()
     {

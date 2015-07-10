@@ -52,7 +52,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends Abs
 
         $checkoutCart->getProceedToCheckoutBlock()->proceedToCheckout();
         $cmsIndex->getCmsPageBlock()->waitPageInit();
-        $checkoutOnepage->getPaymentMethodsBlock()->selectPaymentMethod(['method' => 'checkmo']);
+        $checkoutOnepage->getPaymentBlock()->selectPaymentMethod(['method' => 'checkmo']);
         $actualPrices = [];
         $actualPrices = $this->getReviewPrices($actualPrices, $product);
         $actualPrices = $this->getReviewTotals($actualPrices);
@@ -61,7 +61,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends Abs
         $message = 'Prices on order review should be equal to defined in dataset.';
         \PHPUnit_Framework_Assert::assertEquals($prices, array_filter($actualPrices), $message);
 
-        $checkoutOnepage->getPaymentMethodsBlock()->placeOrder();
+        $checkoutOnepage->getPaymentBlock()->placeOrder();
         $checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         $checkoutOnepageSuccess->getSuccessBlock()->openOrder();
         $actualPrices = [];

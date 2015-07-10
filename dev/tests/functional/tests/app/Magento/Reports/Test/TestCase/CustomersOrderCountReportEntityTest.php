@@ -35,14 +35,14 @@ class CustomersOrderCountReportEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Order count report page
+     * Order count report page.
      *
      * @var CustomerOrdersReport
      */
     protected $customerOrdersReport;
 
     /**
-     * Inject page
+     * Inject page.
      *
      * @param CustomerOrdersReport $customerOrdersReport
      * @return void
@@ -53,7 +53,7 @@ class CustomersOrderCountReportEntityTest extends Injectable
     }
 
     /**
-     * Order count report view
+     * Order count report view.
      *
      * @param Customer $customer
      * @param string $orders
