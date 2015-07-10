@@ -5,6 +5,9 @@
  */
 namespace Magento\Payment\Gateway\Data;
 
+/**
+ * Interface OrderAdapterInterface
+ */
 interface OrderAdapterInterface
 {
     /**
