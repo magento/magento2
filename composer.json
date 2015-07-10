@@ -183,13 +183,11 @@
             "components/jquery": [
                 "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",
-                "lib/web/jquery/jquery-migrate.js",
-                "lib/web/jquery/jquery-migrate.min.js"
+                "lib/web/jquery/jquery-migrate.js"
             ],
             "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
             "components/jqueryui": [
-                "lib/web/jquery/jquery-ui.js",
-                "lib/web/jquery/jquery-ui.min.js"
+                "lib/web/jquery/jquery-ui.js"
             ],
             "twbs/bootstrap": [
                 "lib/web/jquery/jquery.tabs.js"
