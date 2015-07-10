@@ -41,13 +41,12 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
             $parts = $this->emailConfig->parseTemplateIdParts($templateId);
             $templateId = $parts['templateId'];
             $theme = $parts['theme'];
+
             if ($theme) {
-                // If loading template from a theme folder, set theme so that appropriate template gets loaded
                 $template->setForcedTheme($templateId, $theme);
             }
-
-            // Since the $template model doesn't have its area set, set it so that theme loads from appropriate area
             $template->setForcedArea($templateId);
+
             $template->loadDefault($templateId);
             $template->setData('orig_template_code', $templateId);
             $template->setData('template_variables', \Zend_Json::encode($template->getVariablesOptionArray(true)));

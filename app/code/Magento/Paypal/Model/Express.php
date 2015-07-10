@@ -335,6 +335,9 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getConfigData($field, $storeId = null)
     {
+        if ('order_place_redirect_url' === $field) {
+            return $this->getOrderPlaceRedirectUrl();
+        }
         return $this->_pro->getConfig()->getValue($field);
     }
 
