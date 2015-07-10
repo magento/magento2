@@ -8,6 +8,7 @@ namespace Magento\Authorizenet\Test\Unit\Controller\Directpost\Payment;
 use Magento\Authorizenet\Controller\Directpost\Payment\Place;
 use Magento\Authorizenet\Helper\DataFactory;
 use Magento\Authorizenet\Model\Directpost\Session as DirectpostSession;
+use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Context;
@@ -99,24 +100,30 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      */
     protected $jsonHelperMock;
 
+    /**
+     * @var Cart|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cartMock;
+
     public function setUp()
     {
+        $this->cartMock = $this
+            ->getMockBuilder('Magento\Checkout\Model\Cart')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->requestMock = $this
             ->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->getMockForAbstractClass();
-
         $this->responseMock = $this
             ->getMockBuilder('Magento\Framework\App\ResponseInterface')
             ->setMethods(['representJson'])
             ->getMockForAbstractClass();
         $this->responseMock->expects($this->any())
             ->method('representJson');
-
         $this->jsonHelperMock = $this
             ->getMockBuilder('Magento\Framework\Json\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->directpostSessionMock = $this
             ->getMockBuilder('Magento\Authorizenet\Model\Directpost\Session')
             ->setMethods(['setQuoteId'])
@@ -124,7 +131,6 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->directpostSessionMock->expects($this->any())
             ->method('setQuoteId');
-
         $this->quoteMock = $this
             ->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
@@ -133,14 +139,12 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->eventManagerMock = $this
             ->getMockBuilder('Magento\Framework\Event\ManagerInterface')
             ->getMockForAbstractClass();
         $this->eventManagerMock->expects($this->any())
             ->method('dispatch')
             ->with('checkout_directpost_placeOrder');
-
         $this->checkoutSessionMock = $this
             ->getMockBuilder('Magento\Checkout\Model\Session')
             ->disableOriginalConstructor()
@@ -148,7 +152,6 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
             ->will($this->returnValue($this->quoteMock));
-
         $this->objectManagerMock = $this
             ->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->getMockForAbstractClass();
@@ -157,10 +160,9 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([
                 ['Magento\Authorizenet\Model\Directpost\Session', $this->directpostSessionMock],
                 ['Magento\Checkout\Model\Session', $this->checkoutSessionMock],
-                ['Magento\Customer\Model\Session', $this->customerSessionMock],
                 ['Magento\Framework\Json\Helper\Data', $this->jsonHelperMock],
+                ['Magento\Checkout\Model\Cart', $this->cartMock],
             ]);
-
         $this->contextMock = $this
             ->getMockBuilder('Magento\Framework\App\Action\Context')
             ->disableOriginalConstructor()
@@ -177,7 +179,6 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
             ->will($this->returnValue($this->eventManagerMock));
-
         $this->coreRegistryMock = $this
             ->getMockBuilder('Magento\Framework\Registry')
             ->disableOriginalConstructor()
@@ -229,6 +230,10 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($quoteId));
 
+        $this->cartMock->expects($this->any())
+            ->method('getCustomerSession')
+            ->will($this->returnValue($this->customerSessionMock));
+
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
             ->will($this->returnValue($isLoggedIn));
@@ -272,6 +277,10 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($quoteId));
+
+        $this->cartMock->expects($this->any())
+            ->method('getCustomerSession')
+            ->will($this->returnValue($this->customerSessionMock));
 
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
