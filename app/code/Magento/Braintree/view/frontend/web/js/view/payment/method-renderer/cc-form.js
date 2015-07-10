@@ -238,6 +238,11 @@ define(
                     configBraintree.useVault :
                     false;
             },
+            isCcDetectionEnabled: function() {
+                return configBraintree ?
+                    configBraintree.isCcDetectionEnabled :
+                    false;
+            },
             getStoredCards: function() {
                 var availableTypes = this.getCcAvailableTypes();
                 var storedCards = this.storedCards();
