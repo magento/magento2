@@ -43,9 +43,8 @@ class Select extends AbstractFilter
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        OptionSourceInterface $optionsProvider = null,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
-
+        OptionSourceInterface $optionsProvider = null,
         array $components = [],
         array $data = []
     ) {
