@@ -2300,5 +2300,6 @@ return [
         'setHelper',
         'Magento\Authorizenet\Model\Directpost',
         'Magento\Authorizenet\Model\Directpost::setDataHelper()'
-    ]
+    ],
+    ['prepareIndexdata', 'Magento\Search\Helper\Data'],
 ];
