@@ -9,6 +9,9 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * Class OrderAdapter
+ */
 class OrderAdapter implements OrderAdapterInterface
 {
     /**

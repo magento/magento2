@@ -42,7 +42,6 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['get'])
             ->getMockForAbstractClass();
         $this->configMock = $this->getMockBuilder('Magento\Payment\Model\Method\ConfigInterface')
-            ->setMethods(['getValue'])
             ->getMockForAbstractClass();
 
         $this->setToExpectedCallsInConstructor(
