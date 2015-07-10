@@ -8,7 +8,6 @@ namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection as Collection;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 
 /**
