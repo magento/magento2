@@ -41,19 +41,6 @@
         right: 0;
         top: 1px;
 
-        &:hover {
-            .css(z-index, @checkout-tooltip__hover__z-index);
-            cursor: pointer;
-            .field-tooltip-content {
-                display: block;
-            }
-            .field-tooltip-action {
-                &:before {
-                    .css(color, @checkout-tooltip-icon__hover__color);
-                }
-            }
-        }
-
         .field-tooltip-action {
             .icon-font(
             @checkout-tooltip-icon__content,
@@ -63,12 +50,10 @@
             @_icon-font-color-hover: @checkout-tooltip-icon__hover__color,
             @_icon-font-color-active: false
             );
-            &:focus {
+
+            &._active {
                 &:before {
                     .css(color, @checkout-tooltip-icon__hover__color);
-                }
-                + .field-tooltip-content {
-                    display: block;
                 }
             }
         }
