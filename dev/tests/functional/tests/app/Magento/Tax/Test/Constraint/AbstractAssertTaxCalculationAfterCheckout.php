@@ -116,7 +116,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
      * Prepare expected prices prices.
      *
      * @param array $prices
-     * @return array $prices
+     * @return array
      */
     protected function preparePrices($prices)
     {
