@@ -79,7 +79,7 @@ class BackupActionItems extends AbstractActionController
             if (isset($params['options']['db']) && $params['options']['db']) {
                 $totalSize += $this->backupHandler->getDBDiskSpace();
             }
-            $this->fileSystem->isDiskSpaceAvailable($backupDir, $totalSize);
+            $this->fileSystem->validateAvailableDiscSpace($backupDir, $totalSize);
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,

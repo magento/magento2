@@ -109,7 +109,7 @@ class Filesystem extends AbstractBackup
                 new \Magento\Framework\Phrase('Not enough permissions to read files for backup')
             );
         }
-        $this->isDiskSpaceAvailable($this->getBackupsDir(), $filesInfo['size']);
+        $this->validateAvailableDiscSpace($this->getBackupsDir(), $filesInfo['size']);
 
         $tarTmpPath = $this->_getTarTmpPath();
 
@@ -140,14 +140,14 @@ class Filesystem extends AbstractBackup
     }
 
     /**
-     * Check if disk space is available for creating backup
+     * Validate if disk space is available for creating backup
      *
-     * @param $backupDir
-     * @param $size
+     * @param string $backupDir
+     * @param int $size
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isDiskSpaceAvailable($backupDir, $size)
+    public function validateAvailableDiscSpace($backupDir, $size)
     {
         $freeSpace = disk_free_space($backupDir);
         $requiredSpace = 2 * $size;
