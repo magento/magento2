@@ -9,6 +9,7 @@ namespace Magento\Authorizenet\Controller\Directpost\Payment;
 use Magento\Authorizenet\Controller\Directpost\Payment;
 use Magento\Authorizenet\Helper\DataFactory;
 use Magento\Checkout\Model\Type\Onepage;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Object;
@@ -16,6 +17,11 @@ use Magento\Framework\Registry;
 use Magento\Payment\Model\IframeConfigProvider;
 use Magento\Quote\Api\CartManagementInterface;
 
+/**
+ * Class Place
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Place extends Payment
 {
     /**
