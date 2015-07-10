@@ -330,10 +330,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $fixtureCustomerId = 1;
-        /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = $objectManager->create('Magento\Customer\Model\Customer');
         $fixtureSecondAddressId = 2;
-        $customer->load($fixtureCustomerId)->setDefaultShipping($fixtureSecondAddressId)->save();
+        $customer = $customerRepository->getById($fixtureCustomerId)
+            ->setDefaultShipping($fixtureSecondAddressId)
+            ->setDefaultShipping($fixtureSecondAddressId);
+        $customerRepository->save($customer);
         $customerData = $customerRepository->getById($fixtureCustomerId);
         $this->assertEmpty(
             $quote->getBillingAddress()->getId(),
