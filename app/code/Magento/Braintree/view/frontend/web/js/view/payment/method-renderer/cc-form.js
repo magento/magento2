@@ -6,6 +6,7 @@ define(
     [
         'ko',
         'Magento_Payment/js/view/payment/cc-form',
+        'Magento_Checkout/js/action/set-payment-information',
         'Magento_Checkout/js/model/quote',
         'braintree',
         'underscore',
@@ -13,10 +14,35 @@ define(
         'Magento_Ui/js/model/messageList',
         'mage/translate'
     ],
-    function (ko, Component, quote, braintreeClientSDK, _, $, messageList, $t) {
+    function (ko, Component, setPaymentInformationAction, quote, braintreeClientSDK, _, $, messageList, $t) {
         'use strict';
         var configBraintree= window.checkoutConfig.payment.braintree;
         return Component.extend({
+
+            placeOrderHandler: null,
+            validateHandler: null,
+            setPlaceOrderHandler: function(handler) {
+                this.placeOrderHandler = handler;
+            },
+            setValidateHandler: function(handler) {
+                this.validateHandler = handler;
+            },
+            isShowLegend: function() {
+                return true;
+            },
+            getSource: function () {
+                return window.checkoutConfig.payment.iframe.source[this.getCode()];
+            },
+            getControllerName: function() {
+                return window.checkoutConfig.payment.iframe.controllerName[this.getCode()];
+            },
+            getPlaceOrderUrl: function() {
+                return window.checkoutConfig.payment.iframe.placeOrderUrl[this.getCode()];
+            },
+
+            isActive: function() {
+                return true;
+            },
             defaults: {
                 template: 'Magento_Braintree/payment/cc-form',
                 isCcFormShown: true,
@@ -79,60 +105,64 @@ define(
              * Prepare and process payment information
              */
             preparePayment: function () {
-                var self = this,
-                    cardInfo = null;
+                if (this.validateHandler()) {
+                    var self = this,
+                        cardInfo = null;
 
-                messageList.clear();
-                this.quoteBaseGrandTotals = quote.totals().base_grand_total;
+                    messageList.clear();
+                    this.quoteBaseGrandTotals = quote.totals().base_grand_total;
 
-                this.isPaymentProcessing = $.Deferred();
-                $.when(this.isPaymentProcessing).done(
-                    function () {
-                        self.placeOrder();
-                    }
-                ).fail(
-                    function (result) {
-                        self.handleError(result);
-                    }
-                );
+                    this.isPaymentProcessing = $.Deferred();
+                    $.when(this.isPaymentProcessing).done(
 
-                this.getFraudAdditionalData();
+                        function () {
+                            self.placeOrder();
+                        }
+                    ).fail(
+                        function (result) {
+                            self.handleError(result);
+                        }
+                    );
 
-                if (this.selectedCardToken()) {
-                    if (self.show3dSecure) {
-                        self.verify3DSWithToken();
-                    } else {
-                        this.isPaymentProcessing.resolve();
-                    }
+                    this.getFraudAdditionalData();
 
-                    return;
-                }
-
-                cardInfo = {
-                    number: this.creditCardNumber(),
-                    expirationMonth: this.creditCardExpMonth(),
-                    expirationYear: this.creditCardExpYear(),
-                    cvv: this.creditCardVerificationNumber()
-                };
-                this.braintreeClient.tokenizeCard(cardInfo, function (error, nonce) {
-                    if (error) {
-                        this.isPaymentProcessing.reject(error);
+                    if (this.selectedCardToken()) {
+                        if (self.show3dSecure) {
+                            self.verify3DSWithToken();
+                        } else {
+                            this.isPaymentProcessing.resolve();
+                        }
 
                         return;
                     }
 
-                    self.paymentMethodNonce(nonce);
+                    cardInfo = {
+                        number: this.creditCardNumber(),
+                        expirationMonth: this.creditCardExpMonth(),
+                        expirationYear: this.creditCardExpYear(),
+                        cvv: this.creditCardVerificationNumber()
+                    };
+                    this.braintreeClient.tokenizeCard(cardInfo, function (error, nonce) {
+                        if (error) {
+                            this.isPaymentProcessing.reject(error);
 
-                    if (self.show3dSecure) {
-                        self.verify3DS();
-                    } else {
-                        self.isPaymentProcessing.resolve();
-                    }
-                });
+                            return;
+                        }
+
+                        self.paymentMethodNonce(nonce);
+
+                        if (self.show3dSecure) {
+                            self.verify3DS();
+                        } else {
+                            self.isPaymentProcessing.resolve();
+                        }
+                    });
+                }
             },
             /**
              * @override
              */
+
             getData: function () {
                 return {
                     'method': this.item.method,
@@ -148,6 +178,7 @@ define(
                     }
                 };
             },
+
             /**
              * Display error message on the top of the page and reset payment method nonce.
              * @param {*} error - error message
@@ -277,6 +308,9 @@ define(
                     }
                 }
                 return availableTypes;
+            },
+            context: function() {
+                return this;
             },
             /**
              * Get fraud control token.
