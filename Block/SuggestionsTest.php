@@ -8,7 +8,6 @@ namespace Magento\AdvancedSearch\Block;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Search\Model\QueryResult;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
-use Magento\Solr\Model\DataProvider\Suggestions as SuggestionsDataProvider;
 use Magento\Framework\View\LayoutInterface;
 
 /**
@@ -16,32 +15,26 @@ use Magento\Framework\View\LayoutInterface;
  */
 class SuggestionsTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Suggestions */
+    /** @var \Magento\AdvancedSearch\Block\Suggestions */
     protected $block;
 
     protected function setUp()
     {
-        $suggestions = $this->getMock(SuggestedQueriesInterface::CLASS);
-        $suggestions->expects($this->any())->method('getItems')->willReturn([
+        $suggestedQueries = $this->getMock(SuggestedQueriesInterface::CLASS);
+        $suggestedQueries->expects($this->any())->method('getItems')->willReturn([
             new QueryResult('test item', 1),
             new QueryResult("<script>alert('Test');</script>", 1)
         ]);
 
-        Bootstrap::getObjectManager()->removeSharedInstance(SuggestionsDataProvider::CLASS);
-        Bootstrap::getObjectManager()->addSharedInstance($suggestions, SuggestionsDataProvider::CLASS);
-
-        $this->block = Bootstrap::getObjectManager()->get(LayoutInterface::CLASS)->createBlock(Suggestions::CLASS);
-        $this->block->setNameInLayout('suggestions');
-    }
-
-    protected function tearDown()
-    {
-        Bootstrap::getObjectManager()->removeSharedInstance(SuggestionsDataProvider::CLASS);
+        $this->block = Bootstrap::getObjectManager()->create('Magento\AdvancedSearch\Block\Suggestions', [
+            'searchDataProvider' => $suggestedQueries,
+            'title' => 'title',
+        ]);
     }
 
     public function testRenderEscaping()
     {
-        $html = $this->block->getBlockHtml('suggestions');
+        $html = $this->block->toHtml();
 
         $this->assertContains('test+item', $html);
         $this->assertContains('test item', $html);
