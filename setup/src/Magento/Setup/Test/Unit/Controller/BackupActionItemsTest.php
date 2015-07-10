@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\BackupChecks;
+use \Magento\Setup\Controller\BackupActionItems;
 use \Magento\Setup\Controller\ResponseTypeInterface;
 
-class BackupChecksTest extends \PHPUnit_Framework_TestCase
+class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
@@ -32,9 +32,14 @@ class BackupChecksTest extends \PHPUnit_Framework_TestCase
     private $directoryList;
 
     /**
+     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filesystem;
+
+    /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\BackupChecks
+     * @var \Magento\Setup\Controller\BackupActionItems
      */
     private $controller;
 
@@ -53,7 +58,41 @@ class BackupChecksTest extends \PHPUnit_Framework_TestCase
         $objectManager->expects($this->once())->method('create')->willReturn($this->backupRollback);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $this->log = $this->getMock('Magento\Setup\Model\WebLogger', [], [], '', false);
-        $this->controller = new BackupChecks($this->objectManagerProvider, $this->log, $this->directoryList);
+        $this->filesystem = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
+        $this->controller = new BackupActionItems(
+            $this->objectManagerProvider,
+            $this->log,
+            $this->directoryList,
+            $this->filesystem
+        );
+    }
+
+    public function testCheckAction()
+    {
+        $this->directoryList->expects($this->once())->method('getPath')->willReturn(__DIR__);
+        $this->filesystem->expects($this->once())->method('isDiskSpaceAvailable');
+        $jsonModel = $this->controller->checkAction();
+        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $variables = $jsonModel->getVariables();
+        $this->assertArrayHasKey('responseType', $variables);
+        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
+        $this->assertArrayHasKey('size', $variables);
+        $this->assertEquals(true, $variables['size']);
+    }
+
+    public function testCheckActionWithError()
+    {
+        $this->directoryList->expects($this->once())->method('getPath')->willReturn(__DIR__);
+        $this->filesystem->expects($this->once())->method('isDiskSpaceAvailable')->will(
+            $this->throwException(new \Exception("Test error message"))
+        );
+        $jsonModel = $this->controller->checkAction();
+        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $variables = $jsonModel->getVariables();
+        $this->assertArrayHasKey('responseType', $variables);
+        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
+        $this->assertArrayHasKey('error', $variables);
+        $this->assertEquals("Test error message", $variables['error']);
     }
 
     public function testCreateAction()
@@ -65,16 +104,5 @@ class BackupChecksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
         $this->assertArrayHasKey('files', $variables);
         $this->assertEquals([], $variables['files']);
-    }
-
-    public function testCheckAction()
-    {
-        $this->directoryList->expects($this->once())->method('getPath')->willReturn(__DIR__);
-        $jsonModel = $this->controller->checkAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
-        $variables = $jsonModel->getVariables();
-        $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
-        $this->assertArrayHasKey('error', $variables);
     }
 }

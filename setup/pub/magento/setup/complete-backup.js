@@ -65,7 +65,7 @@ angular.module('complete-backup', ['ngStorage'])
         };
         $scope.items = {
             'backup-check': {
-                url:'index.php/backup-checks/check',
+                url:'index.php/backup-action-items/check',
                 show: function() {
                     $scope.startProgress();
                     $scope.check.visible = true;
@@ -81,7 +81,7 @@ angular.module('complete-backup', ['ngStorage'])
                 }
             },
             'store-maintenance': {
-                url:'index.php/complete-backup/maintenance',
+                url:'index.php/maintenance/index',
                 show: function() {
                     $scope.startProgress();
                     $scope.maintenance.visible = true;
@@ -97,7 +97,7 @@ angular.module('complete-backup', ['ngStorage'])
                 }
             },
             'backup-create': {
-                url:'index.php/backup-checks/create',
+                url:'index.php/backup-action-items/create',
                 show: function() {
                     $scope.startProgress();
                     $scope.create.visible = true;
