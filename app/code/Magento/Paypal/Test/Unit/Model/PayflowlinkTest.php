@@ -46,7 +46,6 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
             'Magento\Store\Model\StoreManagerInterface'
         );
         $this->paypalConfig = $this->getMockBuilder('Magento\Paypal\Model\Config')
-            ->setMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
             ->disableOriginalConstructor()
             ->getMock();
 
