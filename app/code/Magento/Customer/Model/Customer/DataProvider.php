@@ -12,6 +12,7 @@ use Magento\Customer\Model\Customer;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
@@ -27,6 +28,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var Config
      */
     protected $eavConfig;
+
+    /**
+     * @var FilterPool
+     */
+    protected $filterPool;
 
     /**
      * @var array
@@ -73,6 +79,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param EavValidationRules $eavValidationRules
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
+     * @param FilterPool $filterPool
      * @param array $meta
      * @param array $data
      */
@@ -83,6 +90,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         EavValidationRules $eavValidationRules,
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
+        FilterPool $filterPool,
         array $meta = [],
         array $data = []
     ) {
@@ -91,6 +99,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection = $customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
+        $this->filterPool = $filterPool;
         $this->meta['customer']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
@@ -108,6 +117,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * @inheritdoc
+     */
+    public function addFilter($condition, $field = null, $type = 'regular')
+    {
+        $this->filterPool->registerNewFilter($condition, $field, $type);
+    }
+
+    /**
      * Get data
      *
      * @return array
@@ -117,7 +134,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-
+        $this->filterPool->applyFilters($this->collection);
         $items = $this->collection->getItems();
         /** @var Customer $customer */
         foreach ($items as $customer) {
@@ -139,6 +156,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         return $this->loadedData;
+    }
+
+    /**
+     * Retrieve count of loaded items
+     *
+     * @return int
+     */
+    public function count()
+    {
+        $this->filterPool->applyFilters($this->collection);
+        return $this->collection->count();
     }
 
     /**
