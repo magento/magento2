@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
-<div id="authorizationPopup" data-bind="scope:'authorizationPopup'">
+<li id="authenticationPopup" data-bind="scope:'authenticationPopup'">
     <script>
-        window.authorizationPopup = <?php echo \Zend_Json::encode($block->getConfig()); ?>;
+        window.authenticationPopup = <?php echo \Zend_Json::encode($block->getConfig()); ?>;
     </script>
     <!-- ko template: getTemplate() --><!-- /ko -->
     <script type="text/x-magento-init">
         {
-            "#authorizationPopup": {
+            "#authenticationPopup": {
                 "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
             },
             "*": {
@@ -19,4 +19,4 @@
             }
         }
     </script>
-</div>
+</li>

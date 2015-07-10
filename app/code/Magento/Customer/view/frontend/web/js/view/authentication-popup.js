@@ -19,8 +19,8 @@ define(
     function($, ko, Component, loginAction, customerData, authenticationPopup, $t, url) {
         'use strict';
         return Component.extend({
-            registerUrl: window.authorizationPopup.customerRegisterUrl,
-            forgotPasswordUrl: window.authorizationPopup.customerForgotPasswordUrl,
+            registerUrl: window.authenticationPopup.customerRegisterUrl,
+            forgotPasswordUrl: window.authenticationPopup.customerForgotPasswordUrl,
             modalWindow: null,
             isLoading: ko.observable(false),
 
@@ -31,7 +31,7 @@ define(
             initialize: function() {
                 var self = this;
                 this._super();
-                url.setBaseUrl(window.authorizationPopup.baseUrl);
+                url.setBaseUrl(window.authenticationPopup.baseUrl);
                 loginAction.registerLoginCallback(function() {
                     self.isLoading(false);
                 });
