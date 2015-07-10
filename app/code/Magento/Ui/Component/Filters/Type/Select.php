@@ -54,16 +54,6 @@ class Select extends AbstractFilter
     }
 
     /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getComponentName()
-    {
-        return static::NAME;
-    }
-
-    /**
      * Prepare component configuration
      *
      * @return void

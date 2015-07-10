@@ -9,11 +9,17 @@ use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\Api\FilterBuilder;
+
 /**
  * Abstract class AbstractFilter
  */
 abstract class AbstractFilter extends AbstractComponent
 {
+    /**
+     * Component name
+     */
+    const NAME = 'filter';
+
     /**
      * Filter variable name
      */
@@ -54,5 +60,15 @@ abstract class AbstractFilter extends AbstractComponent
         $this->filterBuilder = $filterBuilder;
         parent::__construct($context, $components, $data);
         $this->filterData = $this->getContext()->getRequestParam(static::FILTER_VAR);
+    }
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
     }
 }

@@ -13,22 +13,44 @@ use Magento\Framework\Object;
  */
 class Document extends Object implements DocumentInterface
 {
+    /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var \Magento\Framework\Api\AttributeValueFactory
+     */
     protected $attributeValueFactory;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory
+     */
     public function __construct(
         \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory
     ) {
         $this->attributeValueFactory = $attributeValueFactory;
     }
-    protected $id;
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     * @return $this
+     */
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
     }
 
     /**
