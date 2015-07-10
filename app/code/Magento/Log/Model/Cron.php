@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Log\Model;
+
 /**
  * Log Cron Model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-namespace Magento\Log\Model;
-
 class Cron extends \Magento\Framework\Model\AbstractModel
 {
     const XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE = 'system/log/error_email_template';
