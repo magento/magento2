@@ -69,11 +69,6 @@ class DependencyReadinessCheck
         $this->file->copy($composerJson, $this->directoryList->getPath(DirectoryList::VAR_DIR) .  '/composer.json');
         $workingDir = $this->directoryList->getPath(DirectoryList::VAR_DIR);
         try {
-            // run require
-            $this->composerApp->runComposerCommand(
-                ['command' => 'require', 'packages' => $packages, '--no-update' => true],
-                $workingDir
-            );
             $this->composerApp->runUpdateDryRun($packages, $workingDir);
             return ['success' => true];
         } catch (\RuntimeException $e) {

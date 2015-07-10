@@ -61,10 +61,7 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testRunReadinessCheckFailed()
     {
-        $this->composerApp->expects($this->at(0))
-            ->method('runComposerCommand')
-            ->with(['command' => 'require', 'packages' => [], '--no-update' => true], 'var');
-        $this->composerApp->expects($this->at(1))
+        $this->composerApp->expects($this->once())
             ->method('runUpdateDryRun')
             ->with([], 'var')
             ->willThrowException(new \RuntimeException('Failed' . PHP_EOL . 'dependency readiness check'));
@@ -74,10 +71,7 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testRunReadinessCheck()
     {
-        $this->composerApp->expects($this->at(0))
-            ->method('runComposerCommand')
-            ->with(['command' => 'require', 'packages' => [], '--no-update' => true], 'var');
-        $this->composerApp->expects($this->at(1))
+        $this->composerApp->expects($this->once())
             ->method('runUpdateDryRun')
             ->with([], 'var')
             ->willReturn('Success');
