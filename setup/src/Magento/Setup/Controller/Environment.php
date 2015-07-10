@@ -93,7 +93,7 @@ class Environment extends AbstractActionController
         if ($type == 'installer') {
             $data = $this->phpReadinessCheck->checkPhpVersion();
         } elseif ($type == 'updater') {
-           $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_VERSION_VERIFIED);
+            $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_VERSION_VERIFIED);
         }
         return new JsonModel($data);
     }
