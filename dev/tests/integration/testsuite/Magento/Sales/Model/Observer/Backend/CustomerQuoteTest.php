@@ -16,7 +16,7 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
      * Ensure that customer group is updated in customer quote, when it is changed for the customer.
      *
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_from_repository.php
      */
     public function testCustomerSaveQuoteObserver()
     {
