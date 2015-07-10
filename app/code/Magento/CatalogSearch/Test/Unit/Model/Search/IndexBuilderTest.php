@@ -242,7 +242,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->with(
                 ['cea' => 'catalog_eav_attribute'],
                 'search_index.attribute_id = cea.attribute_id',
-                ['search_weight']
+                []
             )
             ->will($this->returnSelf());
         $this->select->expects($this->at(3))
