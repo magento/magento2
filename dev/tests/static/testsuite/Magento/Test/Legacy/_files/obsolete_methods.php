@@ -2311,4 +2311,5 @@ return [
         'Magento\Customer\Controller\Adminhtml\Index',
         'Magento\Customer\Controller\Adminhtml\Index::initCurrentCustomer',
     ],
+    ['prepareIndexdata', 'Magento\Search\Helper\Data'],
 ];

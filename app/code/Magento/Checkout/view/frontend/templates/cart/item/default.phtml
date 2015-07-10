@@ -93,6 +93,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                 <div class="control qty">
                     <input id="cart-<?php echo $_item->getId() ?>-qty"
                            name="cart[<?php echo $_item->getId() ?>][qty]"
+                           data-cart-item-id="<?php echo $_item->getSku() ?>"
                            value="<?php echo $block->getQty() ?>"
                            type="number"
                            size="4"
