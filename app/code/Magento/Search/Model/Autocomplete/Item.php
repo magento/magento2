@@ -10,6 +10,7 @@ class Item extends \Magento\Framework\Object implements ItemInterface
 {
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTitle()
     {
