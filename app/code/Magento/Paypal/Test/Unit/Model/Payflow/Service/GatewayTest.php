@@ -59,7 +59,6 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
     public function testPostRequestOk()
     {
         $configInterfaceMock = $this->getMockBuilder('\Magento\Payment\Model\Method\ConfigInterface')
-            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $zendResponseMock = $this->getMockBuilder('\Zend_Http_Response')
             ->setMethods(['getBody'])
@@ -96,7 +95,6 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
     public function testPostRequestFail()
     {
         $configInterfaceMock = $this->getMockBuilder('\Magento\Payment\Model\Method\ConfigInterface')
-            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $zendResponseMock = $this->getMockBuilder('\Zend_Http_Response')
             ->setMethods(['getBody'])
