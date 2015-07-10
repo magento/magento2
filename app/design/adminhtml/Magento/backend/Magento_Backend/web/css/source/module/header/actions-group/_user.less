@@ -21,6 +21,9 @@
 @user-account-menu__hover__background-color: @action__hover__background-color;
 @user-account-menu__active__background-color: darken(@color-blue-clear-sky, 5%);
 
+@user-account-action__color: @text__color;
+@user-account-action__hover__color: @text__color;
+
 //
 
 .admin-user {
@@ -40,7 +43,7 @@
     .admin__action-dropdown {
         .action-toggle-triangle(
             @_dropdown__padding-right: @user-account__padding-right;
-            @_triangle__color: @action-dropdown__color;
+            @_triangle__color: @user-account-action__color;
             @_triangle__hover__color: @action-dropdown__hover__color;
             @_triangle__right: 1.3rem;
         );
@@ -52,12 +55,18 @@
             @_icon-user__size: 2rem;
 
             &:extend(.abs-icon all);
+            color: @user-account-action__color;
             content: @icon-account__content;
             font-size: @_icon-user__size;
             left: 1.1rem;
             margin-top: -(@_icon-user__size / 2) - .1rem;
             position: absolute;
             top: 50%;
+        }
+        &:hover {
+            &:before {
+                color: @user-account-action__hover__color;
+            }
         }
     }
     //  User account menu
