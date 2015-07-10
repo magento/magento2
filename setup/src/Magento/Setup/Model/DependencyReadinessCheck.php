@@ -74,7 +74,7 @@ class DependencyReadinessCheck
                 ['command' => 'require', 'packages' => $packages, '--no-update' => true],
                 $workingDir
             );
-            $this->composerApp->runComposerCommand(['command' => 'update', '--dry-run' => true], $workingDir);
+            $this->composerApp->runUpdateDryRun($packages, $workingDir);
             return ['success' => true];
         } catch (\RuntimeException $e) {
             $message = str_replace(PHP_EOL, '<br/>', htmlspecialchars($e->getMessage()));
