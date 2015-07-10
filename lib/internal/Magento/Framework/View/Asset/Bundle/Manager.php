@@ -86,6 +86,8 @@ class Manager
     }
 
     /**
+     * Check if asset file in excluded directory
+     *
      * @param string $directoryPath
      * @param LocalInterface $asset
      * @return bool
@@ -106,6 +108,8 @@ class Manager
     }
 
     /**
+     * Check if asset file is excluded
+     *
      * @param string $filePath
      * @param LocalInterface $asset
      * @return bool
@@ -121,6 +125,8 @@ class Manager
     }
 
     /**
+     * Compare asset module with excluded module
+     *
      * @param array $filePathInfo
      * @param LocalInterface $asset
      * @return bool
@@ -137,6 +143,8 @@ class Manager
     }
 
     /**
+     * Get excluded module and path from complex string
+     *
      * @param string $path
      * @return array|bool
      */
