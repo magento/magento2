@@ -36,7 +36,7 @@ class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->agreementCollFactoryMock = $this->getMock(
             '\Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
