@@ -136,7 +136,7 @@
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="saveAddress" xsi:type="string">Yes</data>
             <data name="checkoutMethod" xsi:type="string">register</data>
-            <data name="billingAddress/dataSet" xsi:type="string">US_address_1_without_email</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">

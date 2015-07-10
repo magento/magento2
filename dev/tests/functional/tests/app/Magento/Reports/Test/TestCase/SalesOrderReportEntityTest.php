@@ -41,14 +41,14 @@ class SalesOrderReportEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Sales Report page
+     * Sales Report page.
      *
      * @var SalesReport
      */
     protected $salesReport;
 
     /**
-     * Inject page
+     * Inject page.
      *
      * @param SalesReport $salesReport
      * @return void
@@ -59,7 +59,7 @@ class SalesOrderReportEntityTest extends Injectable
     }
 
     /**
-     * Sales order report
+     * Sales order report.
      *
      * @param OrderInjectable $order
      * @param array $salesReport

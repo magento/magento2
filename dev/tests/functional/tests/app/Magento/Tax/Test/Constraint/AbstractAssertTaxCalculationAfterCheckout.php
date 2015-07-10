@@ -123,6 +123,9 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
         if (isset($prices['category_price'])) {
             unset($prices['category_price']);
         }
+        if (isset($prices['category_special_price'])) {
+            unset($prices['category_special_price']);
+        }
         if (isset($prices['category_price_excl_tax'])) {
             unset($prices['category_price_excl_tax']);
         }
@@ -132,6 +135,9 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
 
         if (isset($prices['product_view_price'])) {
             unset($prices['product_view_price']);
+        }
+        if (isset($prices['product_view_special_price'])) {
+            unset($prices['product_view_special_price']);
         }
         if (isset($prices['product_view_price_excl_tax'])) {
             unset($prices['product_view_price_excl_tax']);

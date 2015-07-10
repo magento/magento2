@@ -244,7 +244,7 @@ abstract class AbstractReview extends Block
     /**
      * Get Tax text from Order Totals.
      *
-     * @return array|string
+     * @return string|null
      */
     public function getTax()
     {
