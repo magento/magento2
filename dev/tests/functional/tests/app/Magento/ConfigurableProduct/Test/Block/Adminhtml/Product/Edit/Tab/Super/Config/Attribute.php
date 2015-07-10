@@ -14,6 +14,8 @@ use Magento\Mtf\ObjectManager;
 
 /**
  * Attribute block in Variation section.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Attribute extends Form
 {
@@ -274,7 +276,7 @@ class Attribute extends Form
 
         if (isset($attribute['label'])) {
             // label is not editable anymore
-//            $attributeBlock->find($this->attributeLabel)->setValue($attribute['label']);
+            // $attributeBlock->find($this->attributeLabel)->setValue($attribute['label']);
         }
         foreach ($attribute['options'] as $option) {
             $count++;
