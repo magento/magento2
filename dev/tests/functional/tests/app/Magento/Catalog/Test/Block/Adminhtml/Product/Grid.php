@@ -15,6 +15,11 @@ use \Magento\Ui\Test\Block\Adminhtml\DataGrid;
 class Grid extends DataGrid
 {
     /**
+     * @var string
+     */
+    protected $rowPattern = './/tr[%s]';
+
+    /**
      * Filters array mapping.
      *
      * @var array
