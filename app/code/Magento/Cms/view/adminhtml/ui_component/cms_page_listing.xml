@@ -352,7 +352,6 @@
                     </item>
                 </argument>
             </filterInput>
-
         </filters>
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
