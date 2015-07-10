@@ -299,14 +299,14 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSearchCustomers($filters, $filterGroup, $expectedResult)
     {
-        /** @var \Magento\Framework\Api\SearchCriteriBuilder $searchBuilder */
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = Bootstrap::getObjectManager()
             ->create('Magento\Framework\Api\SearchCriteriaBuilder');
         foreach ($filters as $filter) {
-            $searchBuilder->addFilter([$filter]);
+            $searchBuilder->addFilters([$filter]);
         }
         if ($filterGroup !== null) {
-            $searchBuilder->addFilter($filterGroup);
+            $searchBuilder->addFilters($filterGroup);
         }
 
         $searchResults = $this->customerRepository->getList($searchBuilder->create());
@@ -338,7 +338,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setConditionType('like')
             ->setValue('First%')
             ->create();
-        $searchBuilder->addFilter([$firstnameFilter]);
+        $searchBuilder->addFilters([$firstnameFilter]);
         // Search ascending order
         $sortOrderBuilder = $objectManager->create('Magento\Framework\Api\SortOrderBuilder');
         $sortOrder = $sortOrderBuilder
