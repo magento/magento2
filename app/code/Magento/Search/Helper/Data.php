@@ -246,23 +246,6 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Join index array to string by separator
-     * Support 2 level array gluing
-     *
-     * @param array $index
-     * @param string $separator
-     * @return string
-     */
-    public function prepareIndexdata($index, $separator = ' ')
-    {
-        $indexData = [];
-        foreach ($index as $attributeId => $value) {
-            $indexData[$attributeId] = is_array($value) ? implode($separator, $value) : $value;
-        }
-        return $indexData;
-    }
-
-    /**
      * @return string
      */
     public function getQueryParamName()
