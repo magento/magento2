@@ -146,7 +146,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             [
                 'customer' => $this->getTable('customer_entity')
             ],
-            'main_table.customer_id',
+            'main_table.customer_id = customer.entity_id',
             [
                 'customer_lastname' => 'lastname',
                 'customer_firstname' => 'firstname'
