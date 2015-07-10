@@ -116,6 +116,10 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id'
             )
             ->addIndex(
+                $installer->getIdxName('search_query', 'is_processed'),
+                'is_processed'
+            )
+            ->addIndex(
                 $installer->getIdxName('search_query', 'synonym_for'),
                 'synonym_for'
             )
