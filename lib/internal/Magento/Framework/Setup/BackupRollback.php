@@ -64,23 +64,33 @@ class BackupRollback
     private $file;
 
     /**
+     * Filesystem Helper
+     *
+     * @var Helper
+     */
+    private $fsHelper;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
      * @param LoggerInterface $log
      * @param DirectoryList $directoryList
      * @param File $file
+     * @param Helper $fsHelper
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         LoggerInterface $log,
         DirectoryList $directoryList,
-        File $file
+        File $file,
+        Helper $fsHelper
     ) {
         $this->objectManager = $objectManager;
         $this->log = $log;
         $this->directoryList = $directoryList;
         $this->file = $file;
+        $this->fsHelper = $fsHelper;
         $this->backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR)
             . '/' . self::DEFAULT_BACKUP_DIRECTORY;
     }
@@ -153,11 +163,9 @@ class BackupRollback
             $granularType = 'Media';
             $fsRollback->setName('media');
         } else {
-            throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
+            throw new LocalizedException(new Phrase("This backup type '$type' is not supported."));
         }
-        /** @var Helper $checkWritable */
-        $checkWritable = $this->objectManager->create('Magento\Framework\Backup\Filesystem\Helper');
-        $filesInfo = $checkWritable->getInfo(
+        $filesInfo = $this->fsHelper->getInfo(
             $this->directoryList->getRoot(),
             Helper::INFO_WRITABLE,
             $ignorePaths
@@ -311,16 +319,14 @@ class BackupRollback
     public function getFSDiskSpace($type = Factory::TYPE_FILESYSTEM)
     {
         $filesystemSize = 0;
-        /** @var Helper $checkWritable */
-        $checkSize = $this->objectManager->create('Magento\Framework\Backup\Filesystem\Helper');
         if ($type === Factory::TYPE_FILESYSTEM) {
             $ignorePaths = $this->getCodeBackupIgnorePaths();
         } elseif ($type === Factory::TYPE_MEDIA) {
             $ignorePaths = $this->getMediaBackupIgnorePaths();
         } else {
-            throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
+            throw new LocalizedException(new Phrase("This backup type '$type' is not supported."));
         }
-        $filesInfo = $checkSize->getInfo(
+        $filesInfo = $this->fsHelper->getInfo(
             $this->directoryList->getRoot(),
             Helper::INFO_SIZE,
             $ignorePaths
@@ -339,7 +345,6 @@ class BackupRollback
      */
     public function getDBDiskSpace()
     {
-        $this->setAreaCode();
         /** @var \Magento\Framework\Backup\Db $dbBackup */
         $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
         return $dbBackup->getDBSize();

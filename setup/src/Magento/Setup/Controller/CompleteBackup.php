@@ -13,23 +13,6 @@ use Zend\View\Model\ViewModel;
 class CompleteBackup extends AbstractActionController
 {
     /**
-     * Handler for maintenance mode
-     *
-     * @var MaintenanceMode
-     */
-    private $maintenanceMode;
-
-    /**
-     * Constructor
-     *
-     * @param MaintenanceMode $maintenanceMode
-     */
-    public function __construct(MaintenanceMode $maintenanceMode)
-    {
-        $this->maintenanceMode = $maintenanceMode;
-    }
-
-    /**
      * @return array|ViewModel
      */
     public function indexAction()
@@ -49,25 +32,5 @@ class CompleteBackup extends AbstractActionController
         $view->setTemplate('/magento/setup/complete-backup/progress.phtml');
         $view->setTerminal(true);
         return $view;
-    }
-
-    /**
-     * Puts store in maintenance mode
-     *
-     * @return JsonModel
-     */
-    public function maintenanceAction()
-    {
-        try {
-            $this->maintenanceMode->set(true);
-            return new JsonModel(['responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]);
-        } catch (\Exception $e) {
-            return new JsonModel(
-                [
-                    'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
-                    'error' => $e->getMessage()
-                ]
-            );
-        }
     }
 }

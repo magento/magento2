@@ -40,6 +40,10 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filesystem;
+    /**
+     * @var \Magento\Framework\Backup\Filesystem\Helper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $helper;
 
     /**
      * @var \Magento\Framework\Backup\Db|\PHPUnit_Framework_MockObject_MockObject
@@ -66,8 +70,8 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
         $this->database = $this->getMock('Magento\Framework\Backup\Db', [], [], '', false);
-        $helper = $this->getMock('Magento\Framework\Backup\Filesystem\Helper', [], [], '', false);
-        $helper->expects($this->any())
+        $this->helper = $this->getMock('Magento\Framework\Backup\Filesystem\Helper', [], [], '', false);
+        $this->helper->expects($this->any())
             ->method('getInfo')
             ->willReturn(['writable' => true, 'size' => 100]);
         $configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
@@ -83,7 +87,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
-                ['Magento\Framework\Backup\Filesystem\Helper', [], $helper],
+                ['Magento\Framework\Backup\Filesystem\Helper', [], $this->helper],
                 ['Magento\Framework\Backup\Filesystem', [], $this->filesystem],
                 ['Magento\Framework\Backup\Db', [], $this->database],
             ]));
@@ -91,7 +95,8 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             $this->objectManager,
             $this->log,
             $this->directoryList,
-            $this->file
+            $this->file,
+            $this->helper
         );
     }
 
