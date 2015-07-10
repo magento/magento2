@@ -81,6 +81,6 @@ class WebConfiguration extends Form
 
     public function getAdminUriCheck()
     {
-        return $this->_rootElement->find($this->adminUriCheck, Locator::SELECTOR_CSS)->getText();
+        return $this->_rootElement->find($this->adminUriCheck)->getAttribute('ng-init');
     }
 }
