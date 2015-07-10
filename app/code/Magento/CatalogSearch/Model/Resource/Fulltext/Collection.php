@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Response\Aggregation\Value;
 use Magento\Framework\Search\Response\QueryResponse;
 
@@ -253,12 +254,17 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     public function getFacetedData($field)
     {
         $this->_renderFilters();
-        $aggregations = $this->queryResponse->getAggregations();
-        $values = $aggregations->getBucket($field . '_bucket')->getValues();
         $result = [];
-        foreach ($values as $value) {
-            $metrics = $value->getMetrics();
-            $result[$metrics['value']] = $metrics;
+        $aggregations = $this->queryResponse->getAggregations();
+        $bucket = $aggregations->getBucket($field . '_bucket');
+        if ($bucket) {
+            $result = [];
+            foreach ($bucket->getValues() as $value) {
+                $metrics = $value->getMetrics();
+                $result[$metrics['value']] = $metrics;
+            }
+        } else {
+            throw new StateException('Bucket do not exists');
         }
         return $result;
     }
