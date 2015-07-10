@@ -10,10 +10,8 @@ use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 /**
  * Class DateRange
  */
-class DateRange extends AbstractFilter
+class DateRange extends Range
 {
-    const NAME = 'filter_range';
-
     const COMPONENT = 'date';
 
     /**
@@ -22,16 +20,6 @@ class DateRange extends AbstractFilter
      * @var DataTypeDate
      */
     protected $wrappedComponent;
-
-    /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getComponentName()
-    {
-        return static::NAME;
-    }
 
     /**
      * Prepare component configuration
@@ -45,31 +33,10 @@ class DateRange extends AbstractFilter
             static::COMPONENT,
             ['context' => $this->getContext()]
         );
+
         $this->wrappedComponent->prepare();
 
-        $this->applyFilter();
-
         parent::prepare();
-    }
-
-    /**
-     * Apply filter
-     *
-     * @return void
-     */
-    protected function applyFilter()
-    {
-        if (isset($this->filterData[$this->getName()])) {
-            $value = $this->filterData[$this->getName()];
-
-            if (isset($value['from'])) {
-                $this->applyFilterByType('gteq', $value['from']);
-            }
-
-            if (isset($value['to'])) {
-                $this->applyFilterByType('lteq', $value['to']);
-            }
-        }
     }
 
     /**

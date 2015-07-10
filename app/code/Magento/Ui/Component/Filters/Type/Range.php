@@ -13,16 +13,6 @@ class Range extends AbstractFilter
     const NAME = 'filter_range';
 
     /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getComponentName()
-    {
-        return static::NAME;
-    }
-
-    /**
      * Prepare component configuration
      *
      * @return void
