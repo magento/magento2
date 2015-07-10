@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection as Collection;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 
 /**
@@ -52,19 +55,24 @@ class DataProvider implements DataProviderInterface
     protected $reporting;
 
     /**
-     * @var
+     * @var FilterBuilder
      */
     protected $filterBuilder;
 
     /**
-     * @var \Magento\Framework\Api\Search\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * @param $name
-     * @param $primaryFieldName
-     * @param $requestFieldName
+     * @var RequestInterface
+     */
+    protected $resuest;
+
+    /**
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
      * @param Reporting $reporting
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $meta
@@ -76,9 +84,13 @@ class DataProvider implements DataProviderInterface
         $requestFieldName,
         Reporting $reporting,
         SearchCriteriaBuilder $searchCriteriaBuilder,
+        RequestInterface $request,
+        FilterBuilder $filterBuilder,
         array $meta = [],
         array $data = []
     ) {
+        $this->resuest = $request;
+        $this->filterBuilder = $filterBuilder;
         $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
@@ -86,6 +98,30 @@ class DataProvider implements DataProviderInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->meta = $meta;
         $this->data = $data;
+        $this->prepareUpdateUrl();
+    }
+
+    protected function prepareUpdateUrl()
+    {
+        if (!isset($this->data['config']['filter_url_params'])) {
+            return;
+        }
+        foreach ($this->data['config']['filter_url_params'] as $paramName => $paramValue) {
+            if ('*' == $paramValue) {
+                $paramValue = $this->resuest->getParam($paramName);
+            }
+            if ($paramValue) {
+                $this->data['config']['update_url'] = sprintf(
+                    '%s%s/%s',
+                    $this->data['config']['update_url'],
+                    $paramName,
+                    $paramValue
+                );
+                $this->addFilter(
+                    $this->filterBuilder->setField($paramName)->setValue($paramValue)->setConditionType('eq')->create()
+                );
+            }
+        }
     }
 
     /**

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource\Grid\Order;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class Collection
@@ -12,9 +13,9 @@ namespace Magento\Sales\Model\Resource\Grid\Order;
 class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
 {
     /**
-     * @var \Magento\Framework\Registry
+     * @var RequestInterface
      */
-    protected $registryManager;
+    protected $request;
 
     /**
      * Order field for setOrderFilter
@@ -28,7 +29,7 @@ class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Registry $registryManager
+     * @param RequestInterface $request
      * @param null|\Zend_Db_Adapter_Abstract $mainTable
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $eventPrefix
      * @param string $eventObject
@@ -42,7 +43,7 @@ class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Registry $registryManager,
+        RequestInterface $request,
         $mainTable,
         $eventPrefix,
         $eventObject,
@@ -51,7 +52,7 @@ class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
-        $this->registryManager = $registryManager;
+        $this->request = $request;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -76,11 +77,10 @@ class Collection extends \Magento\Sales\Model\Resource\Grid\Collection
     protected function _initSelect()
     {
         parent::_initSelect();
-        $order = $this->registryManager->registry('current_order');
-        if (!$order) {
-            throw new \Exception('Cannot perform operation without order filter');
+        $order = $this->request->getParam('current_order');
+        if ($order) {
+            $this->addFieldToFilter($this->_orderField, $order->getId());
         }
-        $this->addFieldToFilter($this->_orderField, $this->registryManager->registry('current_order')->getId());
         return $this;
     }
 }
