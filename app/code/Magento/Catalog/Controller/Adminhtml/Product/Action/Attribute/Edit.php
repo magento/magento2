@@ -38,6 +38,5 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend(__('Update Attributes'));
         return $resultPage;
-
     }
 }
