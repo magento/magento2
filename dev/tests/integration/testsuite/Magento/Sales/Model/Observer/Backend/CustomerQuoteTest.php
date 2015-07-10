@@ -20,9 +20,10 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomerSaveQuoteObserver()
     {
-        /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
-        $customer->load(1);
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $repository */
+        $repository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customer = $repository->getById(1);
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
@@ -41,7 +42,8 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
          * \Magento\Sales\Model\Observer\Backend\CustomerQuote::dispatch() is an observer of this event.
          */
         $newCustomerGroupId = 2;
-        $customer->setGroupId($newCustomerGroupId)->save();
+        $customer->setGroupId($newCustomerGroupId);
+        $repository->save($customer);
 
         $quote->load('test01', 'reserved_order_id');
         $this->assertEquals(
