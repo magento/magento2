@@ -89,7 +89,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify the basic content of an empty cart.
      *
-     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_from_repository.php
      */
     public function testToHtmlEmptyCart()
     {
@@ -100,7 +100,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify the Html content for a single item in the customer's cart.
      *
-     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_from_repository.php
      * @magentoDataFixture Magento/Customer/_files/quote.php
      */
     public function testToHtmlCartItem()
