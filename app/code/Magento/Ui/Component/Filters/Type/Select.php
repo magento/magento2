@@ -103,25 +103,17 @@ class Select extends AbstractFilter
      */
     protected function applyFilter()
     {
-        $condition = $this->getCondition();
-        if ($condition !== null) {
-            $this->getContext()->getDataProvider()->addFilter($condition, $this->getName());
-        }
-    }
+        if (isset($this->filterData[$this->getName()])) {
+            $value = $this->filterData[$this->getName()];
 
-    /**
-     * Get condition by data type
-     *
-     * @return array|null
-     */
-    public function getCondition()
-    {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        $condition = null;
-        if (!empty($value) || is_numeric($value)) {
-            $condition = ['eq' => $value];
-        }
+            if (!empty($value) || is_numeric($value)) {
+                $filter = $this->filterBuilder->setConditionType('eq')
+                    ->setField($this->getName())
+                    ->setValue($value)
+                    ->create();
 
-        return $condition;
+                $this->getContext()->getDataProvider()->addFilter($filter);
+            }
+        }
     }
 }
