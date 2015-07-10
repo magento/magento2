@@ -2301,6 +2301,7 @@ return [
         'Magento\Authorizenet\Model\Directpost',
         'Magento\Authorizenet\Model\Directpost::setDataHelper()'
     ],
+    ['prepareIndexdata', 'Magento\Search\Helper\Data'],
     ['isAssetMinification', 'Magento\Framework\View\Asset\ConfigInterface', 'Magento\Framework\View\Asset\Minification::isEnabled'],
     ['isAssetMinification', 'Magento\Framework\View\Asset\Config', 'Magento\Framework\View\Asset\Minification::isEnabled'],
 ];
