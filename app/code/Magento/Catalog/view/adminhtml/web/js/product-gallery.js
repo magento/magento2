@@ -15,7 +15,7 @@ define([
      */
     $.widget('mage.productGallery', {
         options: {
-            DataSelector: '[data-role=image]',
+            imageSelector: '[data-role=image]',
             template: '[data-template=image]',
             types: null,
             initialized: false
