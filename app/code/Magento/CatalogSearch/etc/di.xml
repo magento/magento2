@@ -11,6 +11,14 @@
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor" />
     <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider" />
     <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
+        <arguments>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Indexer\IndexerHandler</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
@@ -71,7 +79,7 @@
     </type>
     <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineProvider::CONFIG_ENGINE_PATH</argument>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="intervals" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\Framework\Search\Adapter\Mysql\Aggregation\Interval</item>
             </argument>
@@ -80,7 +88,7 @@
     </type>
     <type name="Magento\Framework\Search\Dynamic\DataProviderFactory">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineProvider::CONFIG_ENGINE_PATH</argument>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="dataProviders" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider</item>
             </argument>
@@ -220,7 +228,7 @@
     </type>
     <type name="Magento\Search\Model\AdapterFactory">
         <arguments>
-            <argument name="path" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineProvider::CONFIG_ENGINE_PATH</argument>
+            <argument name="path" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="scopeType" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>

@@ -26,5 +26,5 @@ interface BookmarkSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      * @param \Magento\Ui\Api\Data\BookmarkInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }
