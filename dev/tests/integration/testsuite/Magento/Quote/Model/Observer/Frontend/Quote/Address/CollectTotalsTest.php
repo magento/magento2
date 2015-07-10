@@ -31,16 +31,13 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $objectManager->create('Magento\Customer\Model\Customer');
-        $customer->load(1);
-        $customer->setDisableAutoGroupChange(1);
-        $customer->setGroupId(2);
-        $customer->save();
-
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+
+        $customer = $customerRepository->getById(1)
+            ->setDisableAutoGroupChange(1)
+            ->setGroupId(2);
+        $customerRepository->save($customer);
         $customerData = $customerRepository->getById($customer->getId());
 
         /** @var $quote \Magento\Quote\Model\Quote */
@@ -71,20 +68,18 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
 
-        /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $objectManager->create('Magento\Customer\Model\Customer');
-        $customer->load(1);
-        $customer->setDisableAutoGroupChange(0);
-        $customer->setGroupId(2);
-        $customer->save();
+        $customer = $customerRepository->getById(1)
+            ->setDisableAutoGroupChange(1)
+            ->setGroupId(2);
+        $customerRepository->save($customer);
 
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
         $customerRegistry = $objectManager->get('Magento\Customer\Model\CustomerRegistry');
         $customerRegistry->remove($customer->getId());
 
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $customerData = $customerRepository->getById($customer->getId());
 
         /** @var $quote \Magento\Quote\Model\Quote */
