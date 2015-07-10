@@ -108,6 +108,10 @@
     z-index: 4;
 }
 
+#product-variations-matrix .action-upload img.variation {
+    border: 0;
+}
+
 #product-variations-matrix .action-upload span,
 #product-variations-matrix .action-choose span {
     display: none;
