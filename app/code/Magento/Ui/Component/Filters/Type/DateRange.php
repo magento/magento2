@@ -59,45 +59,37 @@ class DateRange extends AbstractFilter
      */
     protected function applyFilter()
     {
-        $condition = $this->getCondition();
-        if ($condition !== null) {
-            $this->getContext()->getDataProvider()->addFilter($condition, $this->getName());
+        if (isset($this->filterData[$this->getName()])) {
+            $value = $this->filterData[$this->getName()];
+
+            if (isset($value['from'])) {
+                $this->applyFilterByType('gteq', $value['from']);
+            }
+
+            if (isset($value['to'])) {
+                $this->applyFilterByType('lteq', $value['to']);
+            }
         }
     }
 
     /**
-     * Get condition by data type
+     * Apply filter by its type
      *
-     * @return array|null
+     * @param string $type
+     * @param string $value
+     * @return void
      */
-    public function getCondition()
+    protected function applyFilterByType($type, $value)
     {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        if (!empty($value['from']) || !empty($value['to'])) {
-            if (!empty($value['from'])) {
-                $value['orig_from'] = $value['from'];
-                $value['from'] = $this->wrappedComponent->convertDate(
-                    $value['from'],
-                    $this->wrappedComponent->getLocale()
-                );
-            } else {
-                unset($value['from']);
-            }
-            if (!empty($value['to'])) {
-                $value['orig_to'] = $value['to'];
-                $value['to'] = $this->wrappedComponent->convertDate(
-                    $value['to'],
-                    $this->wrappedComponent->getLocale()
-                );
-            } else {
-                unset($value['to']);
-            }
-            $value['datetime'] = true;
-            $value['locale'] = $this->wrappedComponent->getLocale();
-        } else {
-            $value = null;
-        }
+        if (!empty($value)) {
+            $value = $this->wrappedComponent->convertDate($value);
 
-        return $value;
+            $filter = $this->filterBuilder->setConditionType($type)
+                ->setField($this->getName())
+                ->setValue($value->format('Y-m-d H:i:s'))
+                ->create();
+
+            $this->getContext()->getDataProvider()->addFilter($filter);
+        }
     }
 }

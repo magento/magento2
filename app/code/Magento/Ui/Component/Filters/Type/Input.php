@@ -73,13 +73,17 @@ class Input extends AbstractFilter
      */
     protected function applyFilter()
     {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        if ($value) {
-            $filter = $this->filterBuilder->setConditionType('eq')
-                ->setField($this->getName())
-                ->setValue($value)
-                ->create();
-            $this->getContext()->getDataProvider()->addFilter($filter);
+        if (isset($this->filterData[$this->getName()])) {
+            $value = $this->filterData[$this->getName()];
+
+            if (!empty($value)) {
+                $filter = $this->filterBuilder->setConditionType('eq')
+                    ->setField($this->getName())
+                    ->setValue($value)
+                    ->create();
+
+                $this->getContext()->getDataProvider()->addFilter($filter);
+            }
         }
     }
 }
