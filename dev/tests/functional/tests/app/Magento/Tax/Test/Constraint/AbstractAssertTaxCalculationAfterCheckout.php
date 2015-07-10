@@ -120,33 +120,19 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
      */
     protected function preparePrices($prices)
     {
-        if (isset($prices['category_price'])) {
-            unset($prices['category_price']);
-        }
-        if (isset($prices['category_special_price'])) {
-            unset($prices['category_special_price']);
-        }
-        if (isset($prices['category_price_excl_tax'])) {
-            unset($prices['category_price_excl_tax']);
-        }
-        if (isset($prices['category_price_incl_tax'])) {
-            unset($prices['category_price_incl_tax']);
-        }
-
-        if (isset($prices['product_view_price'])) {
-            unset($prices['product_view_price']);
-        }
-        if (isset($prices['product_view_special_price'])) {
-            unset($prices['product_view_special_price']);
-        }
-        if (isset($prices['product_view_price_excl_tax'])) {
-            unset($prices['product_view_price_excl_tax']);
-        }
-        if (isset($prices['product_view_price_incl_tax'])) {
-            unset($prices['product_view_price_incl_tax']);
-        }
-
-        return $prices;
+        return array_diff_key(
+            $prices,
+            array_flip([
+                'category_price',
+                'category_special_price',
+                'category_price_excl_tax',
+                'category_price_incl_tax',
+                'product_view_price',
+                'product_view_special_price',
+                'product_view_price_excl_tax',
+                'product_view_price_incl_tax'
+            ])
+        );
     }
 
     /**
