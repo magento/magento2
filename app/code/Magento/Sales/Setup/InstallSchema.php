@@ -474,6 +474,12 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true],
             'Email Sent'
         )->addColumn(
+            'send_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
+            'Send Email'
+        )->addColumn(
             'forced_shipment_with_invoice',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
@@ -759,7 +765,7 @@ class InstallSchema implements InstallSchemaInterface
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'total_item_count',
@@ -851,10 +857,10 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName(
                 'sales_order',
-                ['increment_id'],
+                ['increment_id', 'store_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            ['increment_id'],
+            ['increment_id', 'store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
             $installer->getIdxName('sales_order', ['created_at']),
@@ -871,6 +877,12 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_order', ['updated_at']),
             ['updated_at']
+        )->addIndex(
+            $installer->getIdxName('sales_order', ['send_email']),
+            ['send_email']
+        )->addIndex(
+            $installer->getIdxName('sales_order', ['email_sent']),
+            ['email_sent']
         )->addForeignKey(
             $installer->getFkName('sales_order', 'customer_id', 'customer_entity', 'entity_id'),
             'customer_id',
@@ -981,13 +993,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'billing_address',
@@ -1070,10 +1082,10 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName(
                 'sales_order_grid',
-                ['increment_id'],
+                ['increment_id', 'store_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            ['increment_id'],
+            ['increment_id', 'store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
             $installer->getIdxName('sales_order_grid', ['shipping_name']),
@@ -1309,7 +1321,7 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'entity_name',
@@ -2150,6 +2162,12 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true],
             'Email Sent'
         )->addColumn(
+            'send_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
+            'Send Email'
+        )->addColumn(
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
@@ -2189,13 +2207,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'packages',
@@ -2209,6 +2227,18 @@ class InstallSchema implements InstallSchemaInterface
             '2m',
             [],
             'Shipping Label Content'
+        )->addColumn(
+            'customer_note',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            null,
+            [],
+            'Customer Note'
+        )->addColumn(
+            'customer_note_notify',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
+            'Customer Note Notify'
         )->addIndex(
             $installer->getIdxName('sales_shipment', ['store_id']),
             ['store_id']
@@ -2218,10 +2248,10 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName(
                 'sales_shipment',
-                ['increment_id'],
+                ['increment_id', 'store_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            ['increment_id'],
+            ['increment_id', 'store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
             $installer->getIdxName('sales_shipment', ['order_id']),
@@ -2232,6 +2262,12 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_shipment', ['updated_at']),
             ['updated_at']
+        )->addIndex(
+            $installer->getIdxName('sales_shipment', ['send_email']),
+            ['send_email']
+        )->addIndex(
+            $installer->getIdxName('sales_shipment', ['email_sent']),
+            ['email_sent']
         )->addForeignKey(
             $installer->getFkName('sales_shipment', 'order_id', 'sales_order', 'entity_id'),
             'order_id',
@@ -2368,13 +2404,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addIndex(
             $installer->getIdxName(
@@ -2420,6 +2456,9 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_shipment_grid', ['created_at']),
             ['created_at']
+        )->addIndex(
+            $installer->getIdxName('sales_shipment_grid', ['updated_at']),
+            ['updated_at']
         )->addIndex(
             $installer->getIdxName('sales_shipment_grid', ['order_created_at']),
             ['order_created_at']
@@ -2612,13 +2651,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addIndex(
             $installer->getIdxName('sales_shipment_track', ['parent_id']),
@@ -2679,7 +2718,7 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addIndex(
             $installer->getIdxName('sales_shipment_comment', ['created_at']),
@@ -2854,6 +2893,12 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true],
             'Email Sent'
         )->addColumn(
+            'send_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
+            'Send Email'
+        )->addColumn(
             'can_void_flag',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
@@ -2911,13 +2956,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'discount_tax_compensation_amount',
@@ -2967,6 +3012,18 @@ class InstallSchema implements InstallSchemaInterface
             255,
             [],
             'Discount Description'
+        )->addColumn(
+            'customer_note',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            null,
+            [],
+            'Customer Note'
+        )->addColumn(
+            'customer_note_notify',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
+            'Customer Note Notify'
         )->addIndex(
             $installer->getIdxName('sales_invoice', ['store_id']),
             ['store_id']
@@ -2982,14 +3039,23 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName(
                 'sales_invoice',
-                ['increment_id'],
+                ['increment_id', 'store_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            ['increment_id'],
+            ['increment_id', 'store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
             $installer->getIdxName('sales_invoice', ['created_at']),
             ['created_at']
+        )->addIndex(
+            $installer->getIdxName('sales_invoice', ['updated_at']),
+            ['updated_at']
+        )->addIndex(
+            $installer->getIdxName('sales_invoice', ['send_email']),
+            ['send_email']
+        )->addIndex(
+            $installer->getIdxName('sales_invoice', ['email_sent']),
+            ['email_sent']
         )->addForeignKey(
             $installer->getFkName('sales_invoice', 'order_id', 'sales_order', 'entity_id'),
             'order_id',
@@ -3154,8 +3220,14 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
+        )->addColumn(
+            'updated_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            'Updated At'
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['store_id']),
             ['store_id']
@@ -3182,6 +3254,9 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['created_at']),
             ['created_at']
+        )->addIndex(
+            $installer->getIdxName('sales_invoice_grid', ['updated_at']),
+            ['updated_at']
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['order_created_at']),
             ['order_created_at']
@@ -3425,7 +3500,7 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addIndex(
             $installer->getIdxName('sales_invoice_comment', ['created_at']),
@@ -3618,6 +3693,12 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true],
             'Email Sent'
         )->addColumn(
+            'send_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
+            'Send Email'
+        )->addColumn(
             'creditmemo_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
@@ -3687,13 +3768,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'discount_tax_compensation_amount',
@@ -3737,6 +3818,18 @@ class InstallSchema implements InstallSchemaInterface
             255,
             [],
             'Discount Description'
+        )->addColumn(
+            'customer_note',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            null,
+            [],
+            'Customer Note'
+        )->addColumn(
+            'customer_note_notify',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
+            'Customer Note Notify'
         )->addIndex(
             $installer->getIdxName('sales_creditmemo', ['store_id']),
             ['store_id']
@@ -3749,10 +3842,10 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName(
                 'sales_creditmemo',
-                ['increment_id'],
+                ['increment_id', 'store_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            ['increment_id'],
+            ['increment_id', 'store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
             $installer->getIdxName('sales_creditmemo', ['state']),
@@ -3760,6 +3853,15 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_creditmemo', ['created_at']),
             ['created_at']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo', ['updated_at']),
+            ['updated_at']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo', ['send_email']),
+            ['send_email']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo', ['email_sent']),
+            ['email_sent']
         )->addForeignKey(
             $installer->getFkName('sales_creditmemo', 'order_id', 'sales_order', 'entity_id'),
             'order_id',
@@ -3798,8 +3900,14 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
+        )->addColumn(
+            'updated_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            'Updated At'
         )->addColumn(
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -3937,6 +4045,9 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['created_at']),
             ['created_at']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['updated_at']),
+            ['updated_at']
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['order_created_at']),
             ['order_created_at']
@@ -4198,7 +4309,7 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_comment', ['created_at']),
@@ -4596,7 +4707,7 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addIndex(
             $installer->getIdxName(
