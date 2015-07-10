@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
 class IndexerStateTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAfterSetStatus()
+    public function testAfterSave()
     {
         $testableIndex = \Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID;
         $changedIndex = \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
@@ -21,7 +21,7 @@ class IndexerStateTest extends \PHPUnit_Framework_TestCase
 
         $testableState->expects($this->exactly(2))->method('getIndexerId')->will($this->returnValue($testableIndex));
 
-        $testableState->expects($this->once())->method('getStatus')->will($this->returnValue($testableStatus));
+        $testableState->expects($this->exactly(2))->method('getStatus')->will($this->returnValue($testableStatus));
 
         $state = $this->getMockBuilder(
             'Magento\Indexer\Model\Indexer\State'
@@ -44,6 +44,6 @@ class IndexerStateTest extends \PHPUnit_Framework_TestCase
         );
 
         $model = new \Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState($state);
-        $this->assertInstanceOf('\Magento\Indexer\Model\Indexer\State', $model->afterSetStatus($testableState));
+        $this->assertInstanceOf('\Magento\Indexer\Model\Indexer\State', $model->afterSave($testableState));
     }
 }

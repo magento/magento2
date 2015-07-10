@@ -91,8 +91,6 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->indexBuilder->expects($this->once())->method('build')->willReturn($subSelect);
         $subSelect->expects($this->once())->method('columns')->with('score condition');
-        $this->request->expects($this->once())->method('getSize')->willReturn(1000);
-        $subSelect->expects($this->once())->method('limit')->with(1000);
 
         $result = $this->queryContainer->addMatchQuery($this->select, $this->query, Bool::QUERY_CONDITION_MUST);
         $this->assertEquals($this->select, $result);
