@@ -134,7 +134,7 @@ class Manager
     protected function compareModules($filePathInfo, $asset)
     {
         /** @var $asset LocalInterface */
-        if (($filePathInfo['excludedModule'] == 'Lib' && $asset->getModule() == '')
+        if (($filePathInfo['excludedModule'] == 'Magento_Lib' && $asset->getModule() == '')
             || ($filePathInfo['excludedModule'] == $asset->getModule())
         ) {
             return true;
