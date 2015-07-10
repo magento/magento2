@@ -80,7 +80,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $items = $this->getCollection()->toArray();
 
         return [
-            'totalRecords' => count($items),
+            'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
     }
@@ -104,12 +104,12 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * {@inheritdoc}
      */
-    public function addFilter($field, $condition = null)
+    public function addFilter($condition, $field = null, $type = 'regular')
     {
         if (isset($this->addFilterStrategies[$field])) {
             $this->addFilterStrategies[$field]->addFilter($this->getCollection(), $field, $condition);
         } else {
-            parent::addFilter($field, $condition);
+            parent::addFilter($condition, $field);
         }
     }
 }

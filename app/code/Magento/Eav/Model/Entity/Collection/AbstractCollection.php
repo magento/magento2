@@ -1582,9 +1582,10 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
      *
      * @param string $field
+     * @param string $alias
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
      */
-    public function addFieldToSelect($field)
+    public function addFieldToSelect($field, $alias = null)
     {
         return $this->addAttributeToSelect($field);
     }

@@ -141,7 +141,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter($field, $condition = null)
+    public function addFilter($condition, $field = null, $type = 'regular')
     {
         $this->getCollection()->addFieldToFilter($field, $condition);
     }

@@ -25,10 +25,10 @@ interface SourceProviderInterface extends \Traversable
 
     /**
      * @param string $fieldName
-     * @param string $alias
+     * @param null|string $alias
      * @return $this
      */
-    public function addFieldToSelect($fieldName, $alias);
+    public function addFieldToSelect($fieldName, $alias = null);
 
     /**
      * Get \Magento\Framework\DB\Select instance and applies fields to select if needed
