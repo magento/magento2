@@ -18,26 +18,26 @@ use Magento\Framework\Api\SortOrderBuilder;
 class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
 {
     /**
+     * @var SortOrderBuilder
+     */
+    protected $sortOrderBuilder;
+
+    /**
      * @var FilterGroupBuilder
      */
-    protected $_filterGroupBuilder;
-    protected $sortOrderBuilder;
     protected $filterGroupBuilder;
-    protected $searchGroup;
+
     /**
      * @param ObjectFactory $objectFactory
      * @param FilterGroupBuilder $filterGroupBuilder
+     * @param SortOrderBuilder $sortOrderBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
         FilterGroupBuilder $filterGroupBuilder,
-        SortOrderBuilder $sortOrderBuilder,
-        FilterGroupBuilder $filterGroupBuilder
+        SortOrderBuilder $sortOrderBuilder
     ) {
-        parent::__construct(
-            $objectFactory
-        );
-        $this->_filterGroupBuilder = $filterGroupBuilder;
+        parent::__construct($objectFactory);
         $this->sortOrderBuilder = $sortOrderBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
     }

@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Resource\Grid;
 
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Object;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Class Document
@@ -14,28 +15,22 @@ use Magento\Framework\Object;
 class Document extends Object implements DocumentInterface
 {
     /**
-     * @var int
+     * @var string|int
      */
     protected $id;
 
     /**
-     * @var \Magento\Framework\Api\AttributeValueFactory
+     * @var AttributeValueFactory
      */
     protected $attributeValueFactory;
 
-    /**
-     * Constructor
-     *
-     * @param \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory
-     */
-    public function __construct(
-        \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory
-    ) {
+    public function __construct(AttributeValueFactory $attributeValueFactory)
+    {
         $this->attributeValueFactory = $attributeValueFactory;
     }
 
     /**
-     * @return int
+     * @return int|string
      */
     public function getId()
     {
@@ -44,13 +39,11 @@ class Document extends Object implements DocumentInterface
 
     /**
      * @param int $id
-     * @return $this
+     * @return void
      */
     public function setId($id)
     {
         $this->id = $id;
-
-        return $this;
     }
 
     /**
