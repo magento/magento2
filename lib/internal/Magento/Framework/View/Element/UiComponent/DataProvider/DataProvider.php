@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection as Collection;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 
 /**
  * Class DataProvider
@@ -33,11 +33,6 @@ class DataProvider implements DataProviderInterface
      * @var string
      */
     protected $requestFieldName;
-
-    /**
-     * @var Collection
-     */
-    protected $collection;
 
     /**
      * @var array
@@ -70,8 +65,8 @@ class DataProvider implements DataProviderInterface
      * @param $name
      * @param $primaryFieldName
      * @param $requestFieldName
-     * @param Collection $collection
-     * @param FilterPool $filterPool
+     * @param Reporting $reporting
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $meta
      * @param array $data
      */
@@ -80,25 +75,25 @@ class DataProvider implements DataProviderInterface
         $primaryFieldName,
         $requestFieldName,
         Reporting $reporting,
-        \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         array $meta = [],
         array $data = []
     ) {
         $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
-        $this->reporting= $reporting;
+        $this->reporting = $reporting;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->meta = $meta;
         $this->data = $data;
     }
 
     /**
-     * @return Collection
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
      */
     public function getCollection()
     {
-        return $this->collection;
+        return $this->searchData();
     }
 
     /**
@@ -245,9 +240,20 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
+        return $this->searchData()->toArray();
+    }
+
+    /**
+     * Search data
+     *
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
+     */
+    protected function searchData()
+    {
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchCriteria->setRequestName($this->name);
-        return $this->reporting->search($searchCriteria)->toArray();
+
+        return $this->reporting->search($searchCriteria);
     }
 
     /**

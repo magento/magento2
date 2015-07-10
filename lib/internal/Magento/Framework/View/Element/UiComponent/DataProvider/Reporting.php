@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\Search\ReportingInterface;
@@ -19,13 +18,15 @@ class Reporting implements ReportingInterface
      * @var CollectionFactory
      */
     protected $collectionFactory;
+
     /**
      * @var array
      */
     protected $filterPool;
 
     /**
-     * @param array $appliers
+     * @param CollectionFactory $collectionFactory
+     * @param FilterPool $filterPool
      */
     public function __construct(
         CollectionFactory $collectionFactory,
