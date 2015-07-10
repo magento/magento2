@@ -107,8 +107,10 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
             'main_table.attribute_id = eav_entity_attribute.attribute_id',
             []
         );
+        $entityType = $this->eavConfig->getEntityType($entityTypeCode);
+        $additionalTable = $entityType->getAdditionalAttributeTable();
         $attributeCollection->join(
-            ['additional_table' => $attributeCollection->getTable('catalog_eav_attribute')],
+            ['additional_table' => $attributeCollection->getTable($additionalTable)],
             'main_table.attribute_id = additional_table.attribute_id',
             []
         );
