@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
@@ -36,7 +36,7 @@ class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->agreementCollFactoryMock = $this->getMock(
             '\Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
