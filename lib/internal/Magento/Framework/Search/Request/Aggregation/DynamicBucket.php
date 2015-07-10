@@ -31,6 +31,7 @@ class DynamicBucket implements BucketInterface
      * @param string $name
      * @param string $field
      * @param string $method
+     * @codeCoverageIgnore
      */
     public function __construct($name, $field, $method)
     {
@@ -57,6 +58,7 @@ class DynamicBucket implements BucketInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getField()
     {
@@ -67,6 +69,7 @@ class DynamicBucket implements BucketInterface
      * Get method
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getMethod()
     {
@@ -75,6 +78,7 @@ class DynamicBucket implements BucketInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getMetrics()
     {

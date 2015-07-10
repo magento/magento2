@@ -269,7 +269,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             ->setValue('Test Rule')
             ->create();
 
-        $this->searchCriteriaBuilder->addFilter([$filter]);
+        $this->searchCriteriaBuilder->addFilters([$filter]);
 
         $fixtureRule = $this->getFixtureTaxRules()[1];
 
@@ -324,7 +324,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             ->setValue(0)
             ->create();
 
-        $this->searchCriteriaBuilder->addFilter([$filter, $sortFilter]);
+        $this->searchCriteriaBuilder->addFilters([$filter, $sortFilter]);
 
         $fixtureRule = $this->getFixtureTaxRules()[1];
 
@@ -522,7 +522,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $filter = $this->filterBuilder->setField('code')
             ->setValue($fixtureRule->getCode())
             ->create();
-        $this->searchCriteriaBuilder->addFilter([$filter]);
+        $this->searchCriteriaBuilder->addFilters([$filter]);
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
