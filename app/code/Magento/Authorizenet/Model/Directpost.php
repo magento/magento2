@@ -898,4 +898,26 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         }
         return $this;
     }
+
+    /**
+     * Sets method code
+     *
+     * @param string $methodCode
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return void
+     */
+    public function setMethodCode($methodCode)
+    {
+    }
+
+    /**
+     * Sets path pattern
+     *
+     * @param string $pathPattern
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return void
+     */
+    public function setPathPattern($pathPattern)
+    {
+    }
 }
