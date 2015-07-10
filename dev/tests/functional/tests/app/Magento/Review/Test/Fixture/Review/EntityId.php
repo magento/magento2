@@ -6,32 +6,17 @@
 
 namespace Magento\Review\Test\Fixture\Review;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class EntityId
- * Source for entity id fixture
+ * Source for entity id fixture.
  */
-class EntityId extends InjectableFixture
+class EntityId extends DataSource
 {
     /**
-     * Configuration settings
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
-     * Id of the created entity
-     *
-     * @var int
-     */
-    protected $data = null;
-
-    /**
-     * The created entity
+     * The created entity.
      *
      * @var FixtureInterface
      */
@@ -47,9 +32,9 @@ class EntityId extends InjectableFixture
     {
         $this->params = $params;
 
-        if (isset($data['dataSet'])) {
-            list($typeFixture, $dataSet) = explode('::', $data['dataSet']);
-            $fixture = $fixtureFactory->createByCode($typeFixture, ['dataSet' => $dataSet]);
+        if (isset($data['dataset'])) {
+            list($typeFixture, $dataset) = explode('::', $data['dataset']);
+            $fixture = $fixtureFactory->createByCode($typeFixture, ['dataset' => $dataset]);
             if (!$fixture->hasData('id')) {
                 $fixture->persist();
             }
@@ -60,40 +45,7 @@ class EntityId extends InjectableFixture
     }
 
     /**
-     * Persist data
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return id of the created entity
-     *
-     * @param string|null $key [optional]
-     * @return int
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Get entity
+     * Get entity.
      *
      * @return FixtureInterface|null
      */
