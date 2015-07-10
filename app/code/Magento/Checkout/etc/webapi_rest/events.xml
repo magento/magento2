@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="sales_quote_address_collect_totals_before">
-        <observer name="sales_customer_validate_vat_number" instance="Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals" method="dispatch" />
+    <event name="sales_quote_save_after">
+        <observer name="set_checkout_quote_id" instance="Magento\Checkout\Model\Observer" method="salesQuoteSaveAfter" />
     </event>
 </config>
