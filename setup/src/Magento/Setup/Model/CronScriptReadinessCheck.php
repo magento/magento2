@@ -96,7 +96,15 @@ class CronScriptReadinessCheck
                     return ['success' => false, 'error' => 'Internal Error'];
             }
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            return ['success' => false, 'error' => 'Cron Job has not been configured yet'];
+            $error = 'Cron Job has not been configured yet';
+            if ($type == self::SETUP) {
+                $error .= '<br/>PHP Version, PHP Settings and PHP Extensions Check' .
+                    ' will fail because they depend on this check';
+            }
+            return [
+                'success' => false,
+                'error' => $error
+            ];
         }
 
         if (isset($jsonData[ReadinessCheck::KEY_READINESS_CHECKS])
@@ -107,7 +115,15 @@ class CronScriptReadinessCheck
             }
             return ['success' => false, 'error' => $jsonData[ReadinessCheck::KEY_READINESS_CHECKS]['error']];
         }
-        return ['success' => false, 'error' => 'Cron Job has not been configured yet'];
+        $error = 'Cron Job has not been configured yet';
+        if ($type == self::SETUP) {
+            $error .= '<br/>PHP Version, PHP Settings and PHP Extensions Check' .
+                ' will fail because they depend on this check';
+        }
+        return [
+            'success' => false,
+            'error' => $error
+        ];
     }
 
     /**

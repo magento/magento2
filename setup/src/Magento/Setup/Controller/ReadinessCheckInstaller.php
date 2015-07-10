@@ -10,6 +10,8 @@ use Zend\View\Model\ViewModel;
 
 class ReadinessCheckInstaller extends AbstractActionController
 {
+    const INSTALLER = 'installer';
+
     /**
      * @return array|ViewModel
      */
@@ -18,7 +20,7 @@ class ReadinessCheckInstaller extends AbstractActionController
         $view = new ViewModel;
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/readiness-check.phtml');
-        $view->setVariable('actionFrom', 'installer');
+        $view->setVariable('actionFrom', self::INSTALLER);
         return $view;
     }
 

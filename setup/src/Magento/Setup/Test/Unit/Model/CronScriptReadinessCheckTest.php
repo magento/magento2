@@ -35,14 +35,24 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->read->expects($this->once())
             ->method('readFile')
             ->willThrowException(new FileSystemException(new Phrase('')));
-        $expected = ['success' => false, 'error' => 'Cron Job has not been configured yet'];
+        $expected = [
+            'success' => false,
+            'error' => 'Cron Job has not been configured yet' .
+                '<br/>PHP Version, PHP Settings and PHP Extensions Check' .
+                ' will fail because they depend on this check'
+        ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
 
     public function testCheckSetupNoCronConfigured()
     {
         $this->read->expects($this->once())->method('readFile')->willReturn('');
-        $expected = ['success' => false, 'error' => 'Cron Job has not been configured yet'];
+        $expected = [
+            'success' => false,
+            'error' => 'Cron Job has not been configured yet' .
+                '<br/>PHP Version, PHP Settings and PHP Extensions Check' .
+                ' will fail because they depend on this check'
+        ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
 
