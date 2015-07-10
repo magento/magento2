@@ -251,6 +251,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                         'US' => ['VI', 'AE', 'MA'],
                     ],
                     'isFraudDetectionEnabled' => true,
+                    'isCcDetectionEnabled' => true,
                     'getBraintreeDataJs' => 'https://js.braintreegateway.com/v1/braintree-data.js'
                 ],
                 'vault_data' => [],
@@ -270,6 +271,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                                 'US' => ['VI', 'AE', 'MA'],
                             ],
                             'isFraudDetectionEnabled' => true,
+                            'isCcDetectionEnabled' => true,
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
                             'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
@@ -287,6 +289,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                         'US' => ['VI', 'AE', 'MA'],
                     ],
                     'isFraudDetectionEnabled' => true,
+                    'isCcDetectionEnabled' => true,
                     'getBraintreeDataJs' => 'https://js.braintreegateway.com/v1/braintree-data.js'
                 ],
                 'vault_data' => [
@@ -343,6 +346,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                                 'US' => ['VI', 'AE', 'MA'],
                             ],
                             'isFraudDetectionEnabled' => true,
+                            'isCcDetectionEnabled' => true,
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
                             'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
@@ -360,6 +364,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                         'US' => ['VI', 'AE', 'MA'],
                     ],
                     'isFraudDetectionEnabled' => true,
+                    'isCcDetectionEnabled' => true,
                     'getBraintreeDataJs' => 'https://js.braintreegateway.com/v1/braintree-data.js'
                 ],
                 'vault_data' => [
@@ -416,6 +421,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                                 'US' => ['VI', 'AE', 'MA'],
                             ],
                             'isFraudDetectionEnabled' => true,
+                            'isCcDetectionEnabled' => true,
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
                             'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
@@ -433,6 +439,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                         'US' => ['VI', 'AE', 'MA'],
                     ],
                     'isFraudDetectionEnabled' => true,
+                    'isCcDetectionEnabled' => true,
                     'getBraintreeDataJs' => 'https://js.braintreegateway.com/v1/braintree-data.js'
                 ],
                 'vault_data' => [
@@ -458,6 +465,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                                 'US' => ['VI', 'AE', 'MA'],
                             ],
                             'isFraudDetectionEnabled' => true,
+                            'isCcDetectionEnabled' => true,
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
                             'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
