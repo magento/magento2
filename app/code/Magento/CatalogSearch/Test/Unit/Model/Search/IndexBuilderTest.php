@@ -69,8 +69,13 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->request = $this->getMockBuilder('\Magento\Framework\Search\RequestInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['getIndex', 'getDimensions'])
+            ->setMethods(['getIndex', 'getDimensions', 'getQuery'])
             ->getMockForAbstractClass();
+        $this->request->expects($this->once())
+            ->method('getQuery')
+            ->willReturn(
+                $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')->getMockForAbstractClass()
+            );
 
         $this->config = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
@@ -157,7 +162,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getDimensions')
             ->willReturn($dimensions);
 
-        $this->mockBuild($index, $tableSuffix);
+        $this->mockBuild($index, $tableSuffix, false);
 
         $this->config->expects($this->once())
             ->method('isSetFlag')
@@ -168,11 +173,11 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $website = $this->getMockBuilder('Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
         $website->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
-        $this->select->expects($this->at(4))
+        $this->select->expects($this->at(2))
             ->method('where')
             ->with('(someName=someValue)')
             ->willReturnSelf();
-        $this->select->expects($this->at(5))
+        $this->select->expects($this->at(3))
             ->method('joinLeft')
             ->with(
                 ['stock_index' => 'cataloginventory_stock_status'],
@@ -181,7 +186,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 []
             )
             ->willReturnSelf();
-        $this->select->expects($this->at(6))
+        $this->select->expects($this->at(4))
             ->method('where')
             ->with('stock_index.stock_status = ?', 1)
             ->will($this->returnSelf());
@@ -190,7 +195,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->select, $result);
     }
 
-    protected function mockBuild($index, $tableSuffix)
+    protected function mockBuild($index, $tableSuffix, $hasFilters = false)
     {
         $this->request->expects($this->atLeastOnce())
             ->method('getIndex')
@@ -220,7 +225,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->select->expects($this->once())
+        $this->select->expects($this->at(0))
             ->method('from')
             ->with(
                 ['search_index' => $index . '_' . $tableSuffix],
@@ -231,28 +236,29 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->at(1))
             ->method('joinLeft')
             ->with(
-                ['category_index' => 'catalog_category_product_index'],
-                'search_index.entity_id = category_index.product_id',
-                []
-            )
-            ->will($this->returnSelf());
-
-        $this->select->expects($this->at(2))
-            ->method('joinLeft')
-            ->with(
                 ['cea' => 'catalog_eav_attribute'],
                 'search_index.attribute_id = cea.attribute_id',
                 []
             )
             ->will($this->returnSelf());
-        $this->select->expects($this->at(3))
-            ->method('joinLeft')
-            ->with(
-                ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
-                'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
-                []
-            )
-            ->willReturnSelf();
+        if ($hasFilters) {
+            $this->select->expects($this->at(2))
+                ->method('joinLeft')
+                ->with(
+                    ['category_index' => 'catalog_category_product_index'],
+                    'search_index.entity_id = category_index.product_id',
+                    []
+                )
+                ->will($this->returnSelf());
+            $this->select->expects($this->at(3))
+                ->method('joinLeft')
+                ->with(
+                    ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
+                    'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                    []
+                )
+                ->willReturnSelf();
+        }
     }
 
     /**
