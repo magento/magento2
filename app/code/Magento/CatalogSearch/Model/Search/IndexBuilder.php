@@ -12,6 +12,9 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\Search\Request\Query\Bool;
+use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
 use Magento\Store\Model\ScopeInterface;
@@ -82,20 +85,24 @@ class IndexBuilder implements IndexBuilderInterface
                 ['entity_id' => 'entity_id']
             )
             ->joinLeft(
-                ['category_index' => $this->resource->getTableName('catalog_category_product_index')],
-                'search_index.entity_id = category_index.product_id',
-                []
-            )
-            ->joinLeft(
                 ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
                 'search_index.attribute_id = cea.attribute_id',
                 []
-            )
-            ->joinLeft(
-                ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
-                'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
-                []
             );
+
+        if ($this->isNeedToAddFilters($request)) {
+            $select
+                ->joinLeft(
+                    ['category_index' => $this->resource->getTableName('catalog_category_product_index')],
+                    'search_index.entity_id = category_index.product_id',
+                    []
+                )
+                ->joinLeft(
+                    ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
+                    'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                    []
+                );
+        }
 
         $select = $this->processDimensions($request, $select);
 
@@ -112,8 +119,8 @@ class IndexBuilder implements IndexBuilderInterface
                     $this->storeManager->getWebsite()->getId()
                 ),
                 []
-            )
-                ->where('stock_index.stock_status = ?', 1);
+            );
+            $select->where('stock_index.stock_status = ?', 1);
         }
 
         return $select;
@@ -177,5 +184,44 @@ class IndexBuilder implements IndexBuilderInterface
     private function getSelect()
     {
         return $this->getReadConnection()->select();
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @return bool
+     */
+    private function isNeedToAddFilters(RequestInterface $request)
+    {
+        return $this->hasFilters($request->getQuery());
+    }
+
+    /**
+     * @param QueryInterface $query
+     * @return bool
+     */
+    private function hasFilters(QueryInterface $query)
+    {
+        $hasFilters = false;
+        switch ($query->getType()) {
+            case RequestQueryInterface::TYPE_BOOL:
+                /** @var \Magento\Framework\Search\Request\Query\Bool $query */
+                foreach ($query->getMust() as $subQuery) {
+                    $hasFilters |= $this->hasFilters($subQuery);
+                }
+                foreach ($query->getShould() as $subQuery) {
+                    $hasFilters |= $this->hasFilters($subQuery);
+                }
+                foreach ($query->getMustNot() as $subQuery) {
+                    $hasFilters |= $this->hasFilters($subQuery);
+                }
+                break;
+            case RequestQueryInterface::TYPE_FILTER:
+                $hasFilters |= true;
+                break;
+            default:
+                $hasFilters |= false;
+                break;
+        }
+        return $hasFilters;
     }
 }
