@@ -70,7 +70,7 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
     public function testCheckAction()
     {
         $this->directoryList->expects($this->once())->method('getPath')->willReturn(__DIR__);
-        $this->filesystem->expects($this->once())->method('isDiskSpaceAvailable');
+        $this->filesystem->expects($this->once())->method('validateAvailableDiscSpace');
         $jsonModel = $this->controller->checkAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -83,7 +83,7 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
     public function testCheckActionWithError()
     {
         $this->directoryList->expects($this->once())->method('getPath')->willReturn(__DIR__);
-        $this->filesystem->expects($this->once())->method('isDiskSpaceAvailable')->will(
+        $this->filesystem->expects($this->once())->method('validateAvailableDiscSpace')->will(
             $this->throwException(new \Exception("Test error message"))
         );
         $jsonModel = $this->controller->checkAction();
