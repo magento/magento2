@@ -36,7 +36,7 @@ define(
 
             },
             validate: function () {
-                var form = '#purchaseorder';
+                var form = 'form[data-role=purchaseorder-form]';
                 return $(form).validation() && $(form).validation('isValid');
             }
         });

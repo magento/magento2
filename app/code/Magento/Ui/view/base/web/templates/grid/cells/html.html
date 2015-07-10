@@ -8,6 +8,8 @@
     data-bind="
         visible: visible,
         css: { _dragging: dragging },
-        click: isClickable(row) ? redirect.bind($data, getClickUrl(row)) : false,
+        click: hasFieldAction() ?
+            applyFieldAction.bind($data, $parentContext.$index()) :
+            false,
         html: getLabel(row[field.index])"
     data-action="grid-row-edit"></td>

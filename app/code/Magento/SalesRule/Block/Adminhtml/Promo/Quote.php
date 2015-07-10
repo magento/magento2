@@ -20,7 +20,7 @@ class Quote extends \Magento\Backend\Block\Widget\Grid\Container
     protected function _construct()
     {
         $this->_controller = 'promo_quote';
-        $this->_headerText = __('Shopping Cart Price Rules');
+        $this->_headerText = __('Cart Price Rules');
         $this->_addButtonLabel = __('Add New Rule');
         parent::_construct();
     }

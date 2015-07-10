@@ -88,7 +88,7 @@
             <data name="user/data/is_active" xsi:type="string">Active</data>
             <data name="isDuplicated" xsi:type="string">-</data>
             <data name="user/data/current_password" xsi:type="string">%current_password%</data>
-            <constraint name="Magento\User\Test\Constraint\AssertUserInvalidEmailMessage"/>
+            <constraint name="Magento\User\Test\Constraint\AssertUserInvalidEmailHostnameMessage"/>
         </variation>
     </testCase>
 </config>

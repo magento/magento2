@@ -180,7 +180,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addFilter')
+            ->method('addFilters')
             ->with([$filterMock])
             ->willReturnSelf();
         $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);

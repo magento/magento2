@@ -5,11 +5,17 @@
 define([
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/core/renderer/layout',
+    'uiLayout',
     'Magento_Ui/js/lib/collapsible'
 ], function (_, utils, layout, Collapsible) {
     'use strict';
 
+    /**
+     * Extracts and formats preview of an element.
+     *
+     * @param {Object} elem - Element whose preview should be extracted.
+     * @returns {Object} Formatted data.
+     */
     function extractPreview(elem) {
         return {
             label: elem.label,
@@ -34,11 +40,16 @@ define([
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
-            applied: {
-                placeholder: true
+            applied: {},
+            filters: {},
+            chipsConfig: {
+                name: '${ $.name }_chips',
+                provider: '${ $.chipsConfig.name }',
+                component: 'Magento_Ui/js/grid/filters/chips'
             },
-            filters: {
-                placeholder: true
+            listens: {
+                active: 'extractPreviews',
+                applied: 'cancel extractActive'
             },
             links: {
                 applied: '${ $.storageConfig.path }'
@@ -46,9 +57,8 @@ define([
             exports: {
                 applied: '${ $.provider }:params.filters'
             },
-            listens: {
-                active: 'updatePreviews',
-                applied: 'cancel extractActive'
+            modules: {
+                chips: '${ $.chipsConfig.provider }'
             }
         },
 
@@ -58,9 +68,8 @@ define([
          * @returns {Filters} Chainable.
          */
         initialize: function () {
-            this._processedColumns = {};
-
             this._super()
+                .initChips()
                 .cancel()
                 .extractActive();
 
@@ -78,6 +87,19 @@ define([
                     active: [],
                     previews: []
                 });
+
+            return this;
+        },
+
+        /**
+         * Initializes chips component.
+         *
+         * @returns {Filters} Chainable.
+         */
+        initChips: function () {
+            layout([this.chipsConfig]);
+
+            this.chips('insertChild', this.name);
 
             return this;
         },
@@ -129,7 +151,21 @@ define([
          * @returns {Filters} Chainable.
          */
         cancel: function () {
+            this.convertToObject();
             this.set('filters', utils.copy(this.applied));
+
+            return this;
+        },
+
+        /**
+         * Convert empty array to empty object.
+         *
+         * @returns {Filters} Chainable.
+         */
+        convertToObject: function() {
+            if ( _.isArray(this.applied) && _.isEmpty(this.applied) ) {
+                this.applied = {};
+            }
 
             return this;
         },
@@ -185,12 +221,12 @@ define([
         },
 
         /**
-         * Updates previews of a specified filters.
+         * Extract previews of a specified filters.
          *
          * @param {Array} filters - Filters to be processed.
          * @returns {Filters} Chainable.
          */
-        updatePreviews: function (filters) {
+        extractPreviews: function (filters) {
             var previews = filters.map(extractPreview);
 
             this.previews(_.compact(previews));

@@ -137,18 +137,6 @@
                     <comment>Alternative text for next link in pagination menu. If empty, default arrow image will used.</comment>
                 </field>
             </group>
-            <group id="email" translate="label" type="text" sortOrder="510" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Transactional Emails</label>
-                <field id="logo" translate="label" type="image" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Logo Image</label>
-                    <comment>Allowed file types: jpg, jpeg, gif, png</comment>
-                    <backend_model>Magento\Config\Model\Config\Backend\Email\Logo</backend_model>
-                    <base_url type="media" scope_info="1">email/logo</base_url>
-                </field>
-                <field id="logo_alt" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Logo Image Alt</label>
-                </field>
-            </group>
         </section>
         <section id="dev" translate="label" type="text" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Developer</label>
@@ -286,6 +274,9 @@
                 </field>
                 <field id="phone" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Store Phone Number</label>
+                </field>
+                <field id="hours" translate="label" type="text" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Store Hours of Operation</label>
                 </field>
                 <field id="country_id" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Country</label>

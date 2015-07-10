@@ -178,6 +178,9 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
             switch ($key) {
                 case StoreConfigurationDataMapper::KEY_BASE_URL:
                     /** @var Validator $url */
+                    if (strcmp($value, '{{base_url}}') == 0) {
+                        break;
+                    }
                     $url = $this->objectManager->get('Magento\Framework\Url\Validator');
                     if (!$url->isValid($value)) {
                         $errorMsgs = $url->getMessages();

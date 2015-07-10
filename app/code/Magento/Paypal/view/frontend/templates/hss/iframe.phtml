@@ -1,0 +1,12 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<div id="iframe-warning" class="message notice">
+    <div><?php echo __('Please do not refresh the page until you complete payment.') ?></div>
+</div>
+<iframe id="hss-iframe" data-container="paypal-iframe" class="paypal iframe" scrolling="no" frameborder="0" border="0"
+        src="<?php echo $block->getFrameActionUrl() ?>" height="610" width="100%"></iframe>
