@@ -216,19 +216,19 @@
         <item type="file">requirejs/require.js</item>
         <item type="file">date-format-normalizer.js</item>
         <item type="file">legacy-build.min.js</item>
-        <item type="directory">modernizr</item>
-        <item type="directory">tiny_mce</item>
-        <item type="directory">varien</item>
-        <item type="directory">jquery/editableMultiselect</item>
-        <item type="directory">jquery/jstree</item>
-        <item type="directory">jquery/fileUploader</item>
-        <item type="directory">css</item>
-        <item type="directory">lib</item>
-        <item type="directory">extjs</item>
-        <item type="directory">prototype</item>
-        <item type="directory">scriptaculous</item>
-        <item type="directory">mage/requirejs</item>
-        <item type="directory">mage/adminhtml</item>
-        <item type="directory">mage/backend</item>
+        <item type="directory">Lib::modernizr</item>
+        <item type="directory">Lib::tiny_mce</item>
+        <item type="directory">Lib::varien</item>
+        <item type="directory">Lib::jquery/editableMultiselect</item>
+        <item type="directory">Lib::jquery/jstree</item>
+        <item type="directory">Lib::jquery/fileUploader</item>
+        <item type="directory">Lib::css</item>
+        <item type="directory">Lib::lib</item>
+        <item type="directory">Lib::extjs</item>
+        <item type="directory">Lib::prototype</item>
+        <item type="directory">Lib::scriptaculous</item>
+        <item type="directory">Lib::mage/requirejs</item>
+        <item type="directory">Lib::mage/adminhtml</item>
+        <item type="directory">Lib::mage/backend</item>
     </exclude>
 </view>
