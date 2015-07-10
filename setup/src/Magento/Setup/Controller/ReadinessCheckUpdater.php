@@ -10,6 +10,8 @@ use Zend\View\Model\ViewModel;
 
 class ReadinessCheckUpdater extends AbstractActionController
 {
+    const UPDATER = 'updater';
+
     /**
      * @return array|ViewModel
      */
@@ -18,7 +20,7 @@ class ReadinessCheckUpdater extends AbstractActionController
         $view = new ViewModel;
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/readiness-check.phtml');
-        $view->setVariable('actionFrom', 'updater');
+        $view->setVariable('actionFrom', self::UPDATER);
         return $view;
     }
 

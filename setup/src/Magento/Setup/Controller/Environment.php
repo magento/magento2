@@ -90,10 +90,10 @@ class Environment extends AbstractActionController
     {
         $type = $this->getRequest()->getContent();
         $data = [];
-        if ($type == 'installer') {
+        if ($type == ReadinessCheckInstaller::INSTALLER) {
             $data = $this->phpReadinessCheck->checkPhpVersion();
-        } elseif ($type == 'updater') {
-           $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_VERSION_VERIFIED);
+        } elseif ($type == ReadinessCheckUpdater::UPDATER) {
+            $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_VERSION_VERIFIED);
         }
         return new JsonModel($data);
     }
@@ -107,9 +107,9 @@ class Environment extends AbstractActionController
     {
         $type = $this->getRequest()->getContent();
         $data = [];
-        if ($type == 'installer') {
+        if ($type == ReadinessCheckInstaller::INSTALLER) {
             $data = $this->phpReadinessCheck->checkPhpSettings();
-        } elseif ($type == 'updater') {
+        } elseif ($type == ReadinessCheckUpdater::UPDATER) {
             $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_SETTINGS_VERIFIED);
         }
         return new JsonModel($data);
@@ -124,9 +124,9 @@ class Environment extends AbstractActionController
     {
         $type = $this->getRequest()->getContent();
         $data = [];
-        if ($type == 'installer') {
+        if ($type == ReadinessCheckInstaller::INSTALLER) {
             $data = $this->phpReadinessCheck->checkPhpExtensions();
-        } elseif ($type == 'updater') {
+        } elseif ($type == ReadinessCheckUpdater::UPDATER) {
             $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED);
         }
         return new JsonModel($data);

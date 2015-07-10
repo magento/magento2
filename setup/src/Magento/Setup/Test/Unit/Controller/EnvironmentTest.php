@@ -6,6 +6,8 @@
 namespace Magento\Setup\Test\Unit\Controller;
 
 use Magento\Setup\Controller\Environment;
+use Magento\Setup\Controller\ReadinessCheckInstaller;
+use Magento\Setup\Controller\ReadinessCheckUpdater;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Zend\View\Model\JsonModel;
 
@@ -81,8 +83,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
-        $contentArray = 'installer';
-        $request->expects($this->any())->method('getContent')->willReturn($contentArray);
+        $content = ReadinessCheckInstaller::INSTALLER;
+        $request->expects($this->any())->method('getContent')->willReturn($content);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpVersion');
         $this->environment->setEvent($mvcEvent);
         $this->environment->dispatch($request, $response);
@@ -100,8 +102,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
-        $contentArray = 'updater';
-        $request->expects($this->any())->method('getContent')->willReturn($contentArray);
+        $content = ReadinessCheckUpdater::UPDATER;
+        $request->expects($this->any())->method('getContent')->willReturn($content);
         $this->phpReadinessCheck->expects($this->never())->method('checkPhpVersion');
         $read = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($read);
@@ -124,8 +126,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
-        $contentArray = 'installer';
-        $request->expects($this->any())->method('getContent')->willReturn($contentArray);
+        $content = ReadinessCheckInstaller::INSTALLER;
+        $request->expects($this->any())->method('getContent')->willReturn($content);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpSettings');
         $this->environment->setEvent($mvcEvent);
         $this->environment->dispatch($request, $response);
@@ -143,8 +145,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
-        $contentArray = 'updater';
-        $request->expects($this->any())->method('getContent')->willReturn($contentArray);
+        $content = ReadinessCheckUpdater::UPDATER;
+        $request->expects($this->any())->method('getContent')->willReturn($content);
         $this->phpReadinessCheck->expects($this->never())->method('checkPhpSettings');
         $read = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($read);
@@ -167,8 +169,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
-        $contentArray = 'installer';
-        $request->expects($this->any())->method('getContent')->willReturn($contentArray);
+        $content = ReadinessCheckInstaller::INSTALLER;
+        $request->expects($this->any())->method('getContent')->willReturn($content);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions');
         $this->environment->setEvent($mvcEvent);
         $this->environment->dispatch($request, $response);
@@ -186,8 +188,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
-        $contentArray = 'updater';
-        $request->expects($this->any())->method('getContent')->willReturn($contentArray);
+        $content = ReadinessCheckUpdater::UPDATER;
+        $request->expects($this->any())->method('getContent')->willReturn($content);
         $this->phpReadinessCheck->expects($this->never())->method('checkPhpExtensions');
         $read = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($read);
