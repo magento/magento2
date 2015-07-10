@@ -146,7 +146,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.corp.ebay.com:magento-ogre/composer-lib.git",
-                "reference": "4c9cd7c5f1b9134bef575cd02b22c603a546ced9"
+                "reference": "1492904e16cdd15c1c2b3076e2d8381ccd406576"
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
@@ -167,7 +167,7 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2015-07-10 22:15:13"
+            "time": "2015-07-10 22:27:17"
         },
         {
             "name": "magento/magento-composer-installer",
