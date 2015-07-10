@@ -40,18 +40,13 @@ class Search extends \Magento\Ui\Component\Filters\Type\AbstractFilter
      */
     protected function applyFilter()
     {
-        $keyword = $this->getContext()->getRequestParam('search');
-        if ($keyword) {
-            $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-            if ($value) {
-                $filter = $this->filterBuilder->setConditionType('fulltext')
-                    ->setField($this->getName())
-                    ->setValue($value)
-                    ->create();
-                $this->getContext()->getDataProvider()->addFilter($filter);
-            }
-//            $this->getContext()->getDataProvider()->addFilter($keyword, null, 'fulltext');
+        $value = $this->getContext()->getRequestParam('search');
+        if ($value) {
+            $filter = $this->filterBuilder->setConditionType('fulltext')
+                ->setField($this->getName())
+                ->setValue($value)
+                ->create();
+            $this->getContext()->getDataProvider()->addFilter($filter);
         }
-
     }
 }
