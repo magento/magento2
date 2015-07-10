@@ -1192,7 +1192,7 @@ class InstallSchema implements InstallSchemaInterface
             'customer_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false],
+            [],
             'Customer Id'
         )->addColumn(
             'session_id',

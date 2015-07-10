@@ -993,13 +993,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+            [],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            [],
             'Updated At'
         )->addColumn(
             'billing_address',
@@ -2404,13 +2404,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+            [],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            [],
             'Updated At'
         )->addIndex(
             $installer->getIdxName(
@@ -3220,13 +3220,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+            [],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            [],
             'Updated At'
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['store_id']),
@@ -3900,13 +3900,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+            [],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            [],
             'Updated At'
         )->addColumn(
             'order_id',
