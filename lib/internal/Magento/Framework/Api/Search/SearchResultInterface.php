@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Search;
+
 use Magento\Framework\Api\SearchResultsInterface;
 
-/**
- * Interface SearchResultInterface
- */
 interface SearchResultInterface extends SearchResultsInterface
 {
     /**#@+
@@ -19,10 +17,12 @@ interface SearchResultInterface extends SearchResultsInterface
     const ITEMS = 'items';
     const AGGREGATIONS = 'aggregations';
     /**#@-*/
+
     /**
      * @return \Magento\Framework\Api\Search\DocumentInterface[]
      */
     public function getItems();
+
     /**
      * Set items list.
      *
@@ -30,15 +30,18 @@ interface SearchResultInterface extends SearchResultsInterface
      * @return $this
      */
     public function setItems(array $items = null);
+
     /**
-     * @return \Magento\Framework\Search\AggregationInterface
+     * @return \Magento\Framework\Api\Search\AggregationInterface
      */
     public function getAggregations();
+
     /**
-     * @param \Magento\Framework\Search\AggregationInterface $aggregations
+     * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return $this
      */
     public function setAggregations($aggregations);
+
     /**
      * Get search criteria.
      *

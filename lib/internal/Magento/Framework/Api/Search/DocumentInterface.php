@@ -5,17 +5,17 @@
  */
 namespace Magento\Framework\Api\Search;
 
-/**
- * Interface DocumentInterface
- * @package Magento\Framework\Api\Search
- */
-interface DocumentInterface
+use Magento\Framework\Api\CustomAttributesDataInterface;
+
+interface DocumentInterface extends CustomAttributesDataInterface
 {
     const ID = 'id';
+
     /**
      * @return int
      */
     public function getId();
+
     /**
      * @param int $id
      * @return $this

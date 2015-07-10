@@ -16,8 +16,10 @@ return [
             'indexer_id' => 'indexer_internal_name',
             'view_id' => 'view01',
             'action_class' => 'Index\Class\Name',
-            'title' => 'Indexer public name',
-            'description' => 'Indexer public description',
+            'title' => __('Indexer public name'),
+            'description' => __('Indexer public description'),
+            'primary' => null,
+            'fieldsets' => []
         ],
         'test_indexer' => [
             'indexer_id' => 'test_indexer',
@@ -25,6 +27,7 @@ return [
             'action_class' => '',
             'title' => '',
             'description' => '',
+            'primary' => null,
         ],
     ]
 ];

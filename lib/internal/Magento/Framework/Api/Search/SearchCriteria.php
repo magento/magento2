@@ -8,13 +8,11 @@ namespace Magento\Framework\Api\Search;
 use Magento\Framework\Api\SearchCriteria as BaseSearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
-/**
- * Class SearchCriteria
- */
 class SearchCriteria extends BaseSearchCriteria implements SearchCriteriaInterface
 {
     const SEARCH_TERM = 'search_term';
     const REQUEST_NAME = 'request_name';
+
     /**
      * {@inheritdoc}
      */
@@ -22,6 +20,7 @@ class SearchCriteria extends BaseSearchCriteria implements SearchCriteriaInterfa
     {
         return $this->_get(self::SEARCH_TERM);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -29,6 +28,7 @@ class SearchCriteria extends BaseSearchCriteria implements SearchCriteriaInterfa
     {
         return $this->setData(self::SEARCH_TERM, $searchTerm);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -36,6 +36,7 @@ class SearchCriteria extends BaseSearchCriteria implements SearchCriteriaInterfa
     {
         return $this->_get(self::REQUEST_NAME);
     }
+
     /**
      * {@inheritdoc}
      */
