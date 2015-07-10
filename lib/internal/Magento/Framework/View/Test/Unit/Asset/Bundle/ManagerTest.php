@@ -110,7 +110,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($configView);
         $configView->expects($this->once())
             ->method('getExcludedFiles')
-            ->willReturn(['Lib:' . ':file/path.js']);
+            ->willReturn(['Magento_Lib::file/path.js']);
 
         $this->assertFalse($this->manager->addAsset($this->asset));
     }
@@ -152,7 +152,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
         $configView->expects($this->once())
             ->method('getExcludedDir')
-            ->willReturn(['Lib:' . ':file']);
+            ->willReturn(['Magento_Lib::file']);
 
         $this->assertFalse($this->manager->addAsset($this->asset));
     }
