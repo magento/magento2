@@ -13,6 +13,7 @@ use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
@@ -45,6 +46,11 @@ class DataProvider implements DataProviderInterface
      * @var Config
      */
     protected $eavConfig;
+
+    /**
+     * @var FilterPool
+     */
+    protected $filterPool;
 
     /**
      * @var array
@@ -103,6 +109,7 @@ class DataProvider implements DataProviderInterface
      * @param EavValidationRules $eavValidationRules
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
+     * @param FilterPool $filterPool
      * @param array $meta
      * @param array $data
      */
@@ -113,6 +120,7 @@ class DataProvider implements DataProviderInterface
         EavValidationRules $eavValidationRules,
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
+        FilterPool $filterPool,
         array $meta = [],
         array $data = []
     ) {
@@ -123,6 +131,7 @@ class DataProvider implements DataProviderInterface
         $this->collection = $customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
+        $this->filterPool = $filterPool;
         $this->meta = $meta;
         $this->meta['customer']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
@@ -212,9 +221,9 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter($field, $condition = null)
+    public function addFilter($condition, $field = null, $type = 'regular')
     {
-        $this->collection->addFieldToFilter($field, $condition);
+        $this->filterPool->registerNewFilter($condition, $field, $type);
     }
 
     /**
@@ -288,7 +297,7 @@ class DataProvider implements DataProviderInterface
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-
+        $this->filterPool->applyFilters($this->collection);
         $items = $this->collection->getItems();
         /** @var Customer $customer */
         foreach ($items as $customer) {
@@ -319,6 +328,7 @@ class DataProvider implements DataProviderInterface
      */
     public function count()
     {
+        $this->filterPool->applyFilters($this->collection);
         return $this->collection->count();
     }
 
