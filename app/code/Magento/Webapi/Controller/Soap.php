@@ -74,8 +74,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
     protected $rendererFactory;
 
     /**
-     * Initialize dependencies.
-     *
      * @param Soap\Request $request
      * @param Response $response
      * @param \Magento\Webapi\Model\Soap\Wsdl\Generator $wsdlGenerator
@@ -84,7 +82,9 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param PathProcessor $pathProcessor
+     * @param \Magento\Framework\Webapi\Rest\Response\RendererFactory $rendererFactory
      * @param \Magento\Framework\App\AreaList $areaList
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Webapi\Controller\Soap\Request $request,
@@ -131,15 +131,14 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
                 $this->_setResponseBody($responseBody);
             } else if ($this->_isWsdlListRequest()) {
                 $servicesList = [];
-                foreach ($this->_wsdlGenerator->getListOfServices() as $serviceName => $serviceData) {
+                foreach (array_keys($this->_wsdlGenerator->getListOfServices()) as $serviceName) {
                     $servicesList[$serviceName]['wsdl_endpoint'] = $this->_soapServer->getEndpointUri()
                         . '?' . \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_WSDL . '&services=' . $serviceName;
                 }
                 $renderer = $this->rendererFactory->get();
                 $this->_setResponseContentType($renderer->getMimeType());
                 $this->_setResponseBody($renderer->render($servicesList));
-            }
-            else {
+            } else {
                 $this->_soapServer->handle();
             }
         } catch (\Exception $e) {
