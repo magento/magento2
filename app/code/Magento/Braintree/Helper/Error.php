@@ -93,7 +93,9 @@ class Error extends \Magento\Framework\App\Helper\AbstractHelper
     public function parseBraintreeError($result)
     {
         $message = null;
-        if ($this->isNonceUsedMoreThanOnceError($result)) {
+        if ($this->isCreditCardApiError($result)) {
+            $message = __($this->isCreditCardApiError($result));
+        } elseif ($this->isNonceUsedMoreThanOnceError($result)) {
             $message = __("The processor declined your transaction, please re-enter your payment information");
         } elseif (isset($result->transaction) && $result->transaction && $result->transaction->status) {
             if ($result->transaction->status == self::STATUS_GATEWAY_REJECTED) {
@@ -151,6 +153,23 @@ class Error extends \Magento\Framework\App\Helper\AbstractHelper
         foreach ($errors as $error) {
             if ($error->code  == self::NONCE_USED_MORE_THAN_ONCE) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * If result error is related to input validation
+     *
+     * @param \Braintree_Result_Error $result
+     * @return boolean
+     */
+    public function isCreditCardApiError($result)
+    {
+        $errors = $result->errors->deepAll();
+        foreach ($errors as $error) {
+            if (($error->code > 80000) && ($error->code < 90000)) {
+                return $error->message;
             }
         }
         return false;
