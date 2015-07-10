@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8726fdb788926ee0f168f4c362d4b7b7",
+    "hash": "ae13877e6598dc25b3b045dbef0f3fa6",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2278,16 +2278,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.9",
+            "version": "v1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "ef528b9d3f1dd66197baabf8f77c8402c62bb9fc"
+                "reference": "f2c2c5527113f346d77eb790e62395fe8de58c4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/ef528b9d3f1dd66197baabf8f77c8402c62bb9fc",
-                "reference": "ef528b9d3f1dd66197baabf8f77c8402c62bb9fc",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/f2c2c5527113f346d77eb790e62395fe8de58c4f",
+                "reference": "f2c2c5527113f346d77eb790e62395fe8de58c4f",
                 "shasum": ""
             },
             "require": {
@@ -2328,7 +2328,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2015-06-13 09:30:19"
+            "time": "2015-07-08 21:03:30"
         },
         {
             "name": "league/climate",
