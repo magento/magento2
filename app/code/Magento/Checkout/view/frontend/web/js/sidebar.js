@@ -6,7 +6,7 @@
 /*global confirm:true*/
 define([
     "jquery",
-    'Magento_Checkout/js/model/cart/authentication-popup',
+    'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
     "jquery/ui",
     "mage/decorate"
