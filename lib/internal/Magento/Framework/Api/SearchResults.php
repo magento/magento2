@@ -9,7 +9,7 @@ namespace Magento\Framework\Api;
 /**
  * SearchResults Service Data Object used for the search service requests
  */
-class SearchResults extends AbstractSimpleObject
+class SearchResults extends AbstractSimpleObject implements SearchResultsInterface
 {
     const KEY_ITEMS = 'items';
     const KEY_SEARCH_CRITERIA = 'search_criteria';
@@ -49,10 +49,10 @@ class SearchResults extends AbstractSimpleObject
     /**
      * Set search criteria
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return $this
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         return $this->setData(self::KEY_SEARCH_CRITERIA, $searchCriteria);
     }
