@@ -5,7 +5,7 @@
 
 define([
         'jquery',
-        'Magento_Checkout/js/model/cart/authentication-popup',
+        'Magento_Customer/js/model/authentication-popup',
         'Magento_Customer/js/customer-data'
     ],
     function($, authenticationPopup, customerData) {
@@ -19,7 +19,7 @@ define([
                     authenticationPopup.showModal();
                     return false;
                 }
-                location.href = window.checkout.checkoutUrl;
+                location.href = window.authenticationPopup.checkoutUrl;
             });
 
         };
