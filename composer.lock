@@ -146,7 +146,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.corp.ebay.com:magento-ogre/composer-lib.git",
-                "reference": "6db12b6977a52aaa69b2628e773f69045c43005b"
+                "reference": "67140cfdf7aed8087480c5bffb032a2c602b4586"
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
@@ -167,7 +167,7 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2015-07-06 16:32:34"
+            "time": "2015-07-10 06:48:12"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -2206,16 +2206,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.9",
+            "version": "v1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "ef528b9d3f1dd66197baabf8f77c8402c62bb9fc"
+                "reference": "f2c2c5527113f346d77eb790e62395fe8de58c4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/ef528b9d3f1dd66197baabf8f77c8402c62bb9fc",
-                "reference": "ef528b9d3f1dd66197baabf8f77c8402c62bb9fc",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/f2c2c5527113f346d77eb790e62395fe8de58c4f",
+                "reference": "f2c2c5527113f346d77eb790e62395fe8de58c4f",
                 "shasum": ""
             },
             "require": {
@@ -2256,7 +2256,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2015-06-13 09:30:19"
+            "time": "2015-07-08 21:03:30"
         },
         {
             "name": "league/climate",
