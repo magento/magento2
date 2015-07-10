@@ -141,6 +141,7 @@ class TranslationFilesTest extends TranslationFiles
      */
     public function testPhrasePlaceHolders($placePath)
     {
+        $this->markTestSkipped('MAGETWO-26083');
         $files = $this->getCsvFiles($placePath);
 
         $failures = [];
