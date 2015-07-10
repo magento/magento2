@@ -52,7 +52,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      * @param \Magento\Framework\Api\Filter[] $filter
      * @return $this
      */
-    public function addFilter(array $filter)
+    public function addFilters(array $filter)
     {
         $this->data[SearchCriteria::FILTER_GROUPS][] = $this->_filterGroupBuilder->setFilters($filter)->create();
         return $this;

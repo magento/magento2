@@ -26,5 +26,5 @@ interface AddressSearchResultsInterface extends \Magento\Framework\Api\SearchRes
      * @param \Magento\Customer\Api\Data\AddressInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }
