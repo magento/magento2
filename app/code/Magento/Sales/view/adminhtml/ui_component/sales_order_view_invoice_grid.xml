@@ -22,6 +22,9 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="filter_url_params" xsi:type="array">
+                        <item name="order_id" xsi:type="string">*</item>
+                    </item>
                 </item>
             </argument>
         </argument>
@@ -109,35 +112,14 @@
                     </item>
                 </item>
             </argument>
-            <filterRange name="increment_id">
+            <filterInput name="increment_id">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">increment_id</item>
-                        <item name="label" xsi:type="string" translate="true">Invoice</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_view_invoice_grid.sales_order_view_invoice_grid.listing_top.listing_filters</item>
-                        </item>
+                        <item name="label" xsi:type="string" translate="true">Invoice #</item>
                     </item>
                 </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
+            </filterInput>
             <filterRange name="created_at" class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -169,35 +151,14 @@
                     </argument>
                 </filterDate>
             </filterRange>
-            <filterRange name="order_increment_id">
+            <filterInput name="order_increment_id">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">order_increment_id</item>
                         <item name="label" xsi:type="string" translate="true">Order #</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_view_invoice_grid.sales_order_view_invoice_grid.listing_top.listing_filters</item>
-                        </item>
                     </item>
                 </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
+            </filterInput>
             <filterRange name="order_created_at" class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
