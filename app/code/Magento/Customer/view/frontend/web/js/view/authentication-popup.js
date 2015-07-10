@@ -11,21 +11,27 @@ define(
         'Magento_Ui/js/form/form',
         'Magento_Customer/js/action/login',
         'Magento_Customer/js/customer-data',
-        'Magento_Checkout/js/model/cart/authentication-popup',
+        'Magento_Customer/js/model/authentication-popup',
         'mage/translate',
+        'mage/url',
         'mage/validation'
     ],
-    function($, ko, Component, loginAction, customerData, authenticationPopup, $t) {
+    function($, ko, Component, loginAction, customerData, authenticationPopup, $t, url) {
         'use strict';
         return Component.extend({
-            registerUrl: window.checkout.customerRegisterUrl,
-            forgotPasswordUrl: window.checkout.customerForgotPasswordUrl,
+            registerUrl: window.authorizationPopup.customerRegisterUrl,
+            forgotPasswordUrl: window.authorizationPopup.customerForgotPasswordUrl,
             modalWindow: null,
             isLoading: ko.observable(false),
+
+            defaults: {
+                template: 'Magento_Customer/authentication-popup'
+            },
 
             initialize: function() {
                 var self = this;
                 this._super();
+                url.setBaseUrl(window.authorizationPopup.baseUrl);
                 loginAction.registerLoginCallback(function() {
                     self.isLoading(false);
                 });
