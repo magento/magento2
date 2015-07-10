@@ -177,8 +177,14 @@ EXPECTED_RESULT;
                     'b' => 'bee',
                     'd' => 'dee',
                 ],
-                'a:3:{s:7:"param_1";s:7:"value_1";s:7:"param_2";s:5:"lorem";s:7:"param_3";a:2:{s:1:"a";s:3:"bee";'
-                    . 's:1:"c";s:3:"dee";}}',
+                serialize([
+                    'param_1' => 'value_1',
+                    'param_2' => 'lorem',
+                    'param_3' => [
+                        'a' => 'bee',
+                        'c' => 'dee',
+                    ],
+                ]),
             ],
         ];
     }

@@ -7,6 +7,21 @@
 //  Sales Module Styles
 //  _____________________________________________
 
+.email-summary {
+    h1 {
+        margin-bottom: @indent__xs;
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    //  Shrink order number in order email so it will fit on single line on small screens
+    .email-summary {
+        h1 {
+            font-size: ceil(1.7 * @font-size__base) !important; // 24px
+        }
+    }
+}
+
 //
 //  Order Summary
 // ----------------------------------------------
@@ -16,22 +31,27 @@
 
     tr {
         > td {
-            padding: @email-content__padding__base;
+            padding: @email-content__padding__base @email-content__padding__base @email-content__padding__base 0;
             width: 50%;
 
             h3 {
-                margin-top: @email-content__padding__base;
+                margin-top: 0;
             }
         }
 
+        //  Prevent extra spacing on Payment & Shipping Method row
         & + tr {
             > td {
-                padding: 0 @email-content__padding__base @email-content__padding__base;
-
-                h3 {
-                    margin-top: 0;
-                }
+                padding: 0 0 @email-content__padding__base;
             }
+        }
+    }
+
+    .payment-method {
+        margin-bottom: @indent__s;
+
+        .title {
+            font-weight: @font-weight__regular;
         }
     }
 }
@@ -44,6 +64,13 @@
     .order-details {
         td {
             display: block;
+            padding: @email-content__padding__base 0 !important;
+            width: auto !important;
+
+            h3 {
+                margin-top: 0 !important;
+                margin-bottom: @indent__xs !important;
+            }
         }
     }
 }
