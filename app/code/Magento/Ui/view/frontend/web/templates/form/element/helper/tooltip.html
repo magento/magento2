@@ -4,10 +4,20 @@
  * See COPYING.txt for license details.
  */
 -->
- <div class="field-tooltip toggle">
-    <a class="field-tooltip-action action-help" target="_blank" data-bind="attr: {href: tooltip.link}">
-    </a>
-    <div class="field-tooltip-content">
+ <div class="field-tooltip toggle" data-block="field-tooltip-block">
+    <a class="field-tooltip-action action-help"
+       target="_blank"
+       data-trigger="field-tooltip-action"
+       data-bind="attr: {href: tooltip.link}"></a>
+    <div class="field-tooltip-content"
+         data-bind="mageInit: {
+            'dropdownDialog':{
+                'appendTo': '[data-block=field-tooltip-block]',
+                'triggerTarget': '[data-trigger=field-tooltip-action]',
+                'closeOnMouseLeave': false,
+                'triggerClass': '_active',
+                'buttons': []
+            }}">
         <!-- ko text: tooltip.description --><!-- /ko -->
     </div>
 </div>
