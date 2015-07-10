@@ -31,10 +31,7 @@ define(
                 if (this.placeOrder()) {
                     this.isInAction(true);
                     // capture all click events
-                    document.addEventListener('click', function(event) {
-                        event.stopImmediatePropagation();
-                        event.preventDefault();
-                    }, true);
+                    document.addEventListener('click', iframe.stopEventPropagation, true);
                 }
             }
         });
