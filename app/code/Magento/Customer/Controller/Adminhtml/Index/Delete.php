@@ -16,7 +16,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $customerId= $this->initCurrentCustomer();
+        $customerId = $this->initCurrentCustomer();
         if (!empty($customerId)) {
             try {
                 $this->_customerRepository->deleteById($customerId);
