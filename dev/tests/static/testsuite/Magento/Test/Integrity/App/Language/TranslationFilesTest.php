@@ -5,6 +5,11 @@
  */
 namespace Magento\Test\Integrity\App\Language;
 
+use Magento\Framework\App\Utility\Files;
+use Magento\Setup\Module\I18n;
+use Magento\Setup\Module\I18n\Pack\Writer;
+use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -45,11 +50,8 @@ class TranslationFilesTest extends TranslationFiles
     {
         $parser = $this->prepareParser();
 
-        $optionResolverFactory = new \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory();
-        $optionResolver = $optionResolverFactory->create(
-            \Magento\Framework\App\Utility\Files::init()->getPathToSource(),
-            true
-        );
+        $optionResolverFactory = new ResolverFactory();
+        $optionResolver = $optionResolverFactory->create(Files::init()->getPathToSource(), true);
 
         $parser->parse($optionResolver->getOptions());
 
@@ -77,9 +79,8 @@ class TranslationFilesTest extends TranslationFiles
     protected function buildFilePath($phrase, $context)
     {
         $path = $this->getContext()->buildPathToLocaleDirectoryByContext($phrase->getContextType(), $context);
-        return \Magento\Framework\App\Utility\Files::init()->getPathToSource() . '/'
-        . $path . \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE
-        . '.' . \Magento\Setup\Module\I18n\Pack\Writer\File\Csv::FILE_EXTENSION;
+        $sourcePath = Files::init()->getPathToSource();
+        return $sourcePath . '/' . $path . I18n\Locale::DEFAULT_SYSTEM_LOCALE . '.' . Writer\File\Csv::FILE_EXTENSION;
     }
 
     /**
@@ -88,7 +89,7 @@ class TranslationFilesTest extends TranslationFiles
     protected function getContext()
     {
         if ($this->context === null) {
-            $this->context = new \Magento\Setup\Module\I18n\Context();
+            $this->context = new I18n\Context();
         }
         return $this->context;
     }
@@ -98,22 +99,19 @@ class TranslationFilesTest extends TranslationFiles
      */
     protected function prepareParser()
     {
-        $filesCollector = new \Magento\Setup\Module\I18n\FilesCollector();
+        $filesCollector = new I18n\FilesCollector();
 
-        $phraseCollector = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
-            new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer()
+        $phraseCollector = new I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
+            new I18n\Parser\Adapter\Php\Tokenizer()
         );
         $adapters = [
-            'php' => new \Magento\Setup\Module\I18n\Parser\Adapter\Php($phraseCollector),
-            'js' =>  new \Magento\Setup\Module\I18n\Parser\Adapter\Js(),
-            'xml' => new \Magento\Setup\Module\I18n\Parser\Adapter\Xml(),
+            'php' => new I18n\Parser\Adapter\Php($phraseCollector),
+            'js' =>  new I18n\Parser\Adapter\Js(),
+            'xml' => new I18n\Parser\Adapter\Xml(),
+            'html' => new I18n\Parser\Adapter\Html(),
         ];
 
-        $parserContextual = new \Magento\Setup\Module\I18n\Parser\Contextual(
-            $filesCollector,
-            new \Magento\Setup\Module\I18n\Factory(),
-            new \Magento\Setup\Module\I18n\Context()
-        );
+        $parserContextual = new I18n\Parser\Contextual($filesCollector, new I18n\Factory(), new I18n\Context());
         foreach ($adapters as $type => $adapter) {
             $parserContextual->addAdapter($type, $adapter);
         }
@@ -123,7 +121,7 @@ class TranslationFilesTest extends TranslationFiles
 
     /**
      * @param string $text
-     * @return mixed
+     * @return string
      */
     protected function eliminateSpecialChars($text)
     {
@@ -139,7 +137,6 @@ class TranslationFilesTest extends TranslationFiles
      */
     public function testPhrasePlaceHolders($placePath)
     {
-        $this->markTestSkipped('MAGETWO-26083');
         $files = $this->getCsvFiles($placePath);
 
         $failures = [];
