@@ -94,6 +94,7 @@ angular.module('readiness-check', [])
         $scope.items = {
             'php-version': {
                 url:'index.php/environment/php-version',
+                params: $scope.actionFrom,
                 show: function() {
                     $scope.startProgress();
                     $scope.version.visible = true;
@@ -110,6 +111,7 @@ angular.module('readiness-check', [])
             },
             'php-settings': {
                 url:'index.php/environment/php-settings',
+                params: $scope.actionFrom,
                 show: function() {
                     $scope.startProgress();
                     $scope.settings.visible = true;
@@ -126,6 +128,7 @@ angular.module('readiness-check', [])
             },
             'php-extensions': {
                 url:'index.php/environment/php-extensions',
+                params: $scope.actionFrom,
                 show: function() {
                     $scope.startProgress();
                     $scope.extensions.visible = true;

@@ -31,9 +31,19 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
     private $write;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PhpReadinessCheck
+     */
+    private $phpReadinessCheck;
+
+    /**
      * @var ReadinessCheck
      */
     private $readinessCheck;
+
+    /**
+     * @var array
+     */
+    private $expected;
 
     public function setUp()
     {
@@ -52,12 +62,25 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->write = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->write);
-        $this->readinessCheck = new ReadinessCheck($this->dbValidator, $this->deploymentConfig, $this->filesystem);
+        $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
+        $this->readinessCheck = new ReadinessCheck(
+            $this->dbValidator,
+            $this->deploymentConfig,
+            $this->filesystem,
+            $this->phpReadinessCheck
+        );
+        $this->phpReadinessCheck->expects($this->once())->method('checkPhpVersion')->willReturn(['success' => true]);
+        $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(['success' => true]);
+        $this->phpReadinessCheck->expects($this->once())->method('checkPhpSettings')->willReturn(['success' => true]);
+        $this->expected = [
+            ReadinessCheck::KEY_PHP_VERSION_VERIFIED => ['success' => true],
+            ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED => ['success' => true],
+            ReadinessCheck::KEY_PHP_SETTINGS_VERIFIED => ['success' => true],
+        ];
     }
 
     public function testRunReadinessCheckNoDbAccess()
     {
-
         $this->dbValidator->expects($this->once())
             ->method('checkDatabaseConnection')
             ->willThrowException(new \Magento\Setup\Exception('Connection failure'));
@@ -69,6 +92,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => false,
                 'error' => 'Connection failure'
             ],
+            ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -90,6 +114,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => false,
                 'error' => 'Database user username does not have write access.'
             ],
+            ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -106,6 +131,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->write->expects($this->never())->method('readFile');
         $expected = [
             ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
+            ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -122,6 +148,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->write->expects($this->once())->method('readFile')->willReturn('{"current_timestamp": 50}');
         $expected = [
             ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
+            ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
             ReadinessCheck::KEY_LAST_TIMESTAMP => 50,
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100,
         ];

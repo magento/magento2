@@ -10,8 +10,11 @@ use Magento\Framework\Filesystem;
 use Magento\Setup\Model\Cron\ReadinessCheck;
 
 /**
- * This class is used by Readiness check page to check if Setup cron command
- * and Updater cron script are running properly
+ * This class is used by Readiness check page to verify if Setup cron command
+ * and Updater cron script are running properly.
+ * This includes verifying file permission in Updater Cron and db privileges in Setup Cron.
+ * It also verifies Cron time interval configuration.
+ * This class only verifies the status files created by both Cron jobs. No actual checking logic is done in this class.
  */
 class CronScriptReadinessCheck
 {
