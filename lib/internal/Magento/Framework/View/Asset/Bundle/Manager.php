@@ -72,7 +72,7 @@ class Manager
             $this->excluded
         );
         foreach ($excludedFiles as $file) {
-            if ($this->isExcludedFile($asset, $file)) {
+            if ($this->isExcludedFile($file, $asset)) {
                 return true;
             }
         }
