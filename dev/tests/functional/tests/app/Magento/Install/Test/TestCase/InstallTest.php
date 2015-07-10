@@ -133,11 +133,11 @@ class InstallTest extends Injectable
         $this->installPage->getDatabaseBlock()->fill($installConfig);
         $this->installPage->getDatabaseBlock()->clickNext();
         // Step 3: Web Configuration.
+        $assertAdminUri->processAssert($this->installPage);
         $this->installPage->getWebConfigBlock()->clickAdvancedOptions();
         $this->installPage->getWebConfigBlock()->fill($installConfig);
         $this->installPage->getWebConfigBlock()->clickNext();
         // Step 4: Customize Your Store
-        $assertAdminUri->processAssert($this->installPage);
         $this->installPage->getCustomizeStoreBlock()->fill($installConfig);
         $this->installPage->getCustomizeStoreBlock()->clickNext();
         // Step 5: Create Admin Account.
