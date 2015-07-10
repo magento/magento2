@@ -67,5 +67,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 );
             $connection->createTable($table);
         }
+        if (version_compare($context->getVersion(), '2.0.2') < 0) {
+            $connection->dropTable('catalogsearch_fulltext_index_default');
+        }
     }
 }
