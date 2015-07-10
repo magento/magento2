@@ -37,6 +37,7 @@
         "pelago/emogrifier": "0.1.1",
         "tubalmartin/cssmin": "2.4.8-p4",
         "magento/magento-composer-installer": "*",
+        "braintree/braintree_php": "2.39.0",
         "symfony/console": "~2.3 <2.7"
     },
     "require-dev": {
@@ -68,6 +69,7 @@
         "magento/module-authorizenet": "self.version",
         "magento/module-backend": "self.version",
         "magento/module-backup": "self.version",
+        "magento/module-braintree": "self.version",
         "magento/module-bundle": "self.version",
         "magento/module-bundle-import-export": "self.version",
         "magento/module-cache-invalidate": "self.version",
