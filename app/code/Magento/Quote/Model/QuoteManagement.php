@@ -482,6 +482,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param Quote $quote
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareCustomerQuote($quote)
     {
