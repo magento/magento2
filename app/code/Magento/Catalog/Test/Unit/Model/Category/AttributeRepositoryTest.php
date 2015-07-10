@@ -114,7 +114,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
             3
         )->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
-        $this->searchBuilderMock->expects($this->once())->method('addFilter')->with([$filterMock])->willReturnSelf();
+        $this->searchBuilderMock->expects($this->once())->method('addFilters')->with([$filterMock])->willReturnSelf();
         $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $this->searchBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
         $itemMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
