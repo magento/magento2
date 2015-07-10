@@ -78,6 +78,6 @@
             <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
         </filters>
         <from>0</from>
-        <size>10</size>
+        <size>10000</size>
     </request>
 </requests>
