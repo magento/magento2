@@ -91,12 +91,9 @@ interface DataProviderInterface
     /**
      * Add field filter to collection
      *
-     * @param string|int|array|null $condition
-     * @param null|string|array $field
-     * @param string $type
+     * @param \Magento\Framework\Api\Filter $filter
      * @return mixed
      */
-//    public function addFilter($condition, $field = null, $type = 'regular');
     public function addFilter(\Magento\Framework\Api\Filter $filter);
 
     /**
