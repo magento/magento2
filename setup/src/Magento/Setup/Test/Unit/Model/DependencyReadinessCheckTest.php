@@ -65,8 +65,8 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ->method('runComposerCommand')
             ->with(['command' => 'require', 'packages' => [], '--no-update' => true], 'var');
         $this->composerApp->expects($this->at(1))
-            ->method('runComposerCommand')
-            ->with(['command' => 'update', '--dry-run' => true], 'var')
+            ->method('runUpdateDryRun')
+            ->with([], 'var')
             ->willThrowException(new \RuntimeException('Failed' . PHP_EOL . 'dependency readiness check'));
         $expected = ['success' => false, 'error' => 'Failed<br/>dependency readiness check'];
         $this->assertEquals($expected, $this->dependencyReadinessCheck->runReadinessCheck([]));
@@ -78,8 +78,8 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ->method('runComposerCommand')
             ->with(['command' => 'require', 'packages' => [], '--no-update' => true], 'var');
         $this->composerApp->expects($this->at(1))
-            ->method('runComposerCommand')
-            ->with(['command' => 'update', '--dry-run' => true], 'var')
+            ->method('runUpdateDryRun')
+            ->with([], 'var')
             ->willReturn('Success');
         $expected = ['success' => true];
         $this->assertEquals($expected, $this->dependencyReadinessCheck->runReadinessCheck([]));
