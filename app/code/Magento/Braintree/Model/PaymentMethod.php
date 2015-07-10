@@ -952,6 +952,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      */
     public function getConfigData($field, $storeId = null)
     {
+        if ('order_place_redirect_url' === $field) {
+            return $this->getOrderPlaceRedirectUrl();
+        }
         return $this->config->getConfigData($field, $storeId);
     }
 }

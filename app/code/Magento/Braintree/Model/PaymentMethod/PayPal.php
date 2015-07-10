@@ -135,6 +135,9 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      */
     public function getConfigData($field, $storeId = null)
     {
+        if ('order_place_redirect_url' === $field) {
+            return $this->getOrderPlaceRedirectUrl();
+        }
         return $this->payPalConfig->getConfigData($field, $storeId);
     }
 
