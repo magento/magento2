@@ -9,10 +9,12 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
+use Magento\Setup\Model\PhpReadinessCheck;
 use Magento\Setup\Validator\DbValidator;
 
 /**
- * This class is used by setup:cron:run command to check if this command can be run properly
+ * This class is used by setup:cron:run command to check if this command can be run properly. It also checks if PHP
+ * version, settings and extensions are correct.
  */
 class ReadinessCheck
 {
@@ -25,7 +27,11 @@ class ReadinessCheck
      * Keys used in status file
      */
     const KEY_READINESS_CHECKS = 'readiness_checks';
+    const KEY_PHP_CHECKS = 'php_checks';
     const KEY_DB_WRITE_PERMISSION_VERIFIED = 'db_write_permission_verified';
+    const KEY_PHP_VERSION_VERIFIED = 'php_version_verified';
+    const KEY_PHP_SETTINGS_VERIFIED = 'php_settings_verified';
+    const KEY_PHP_EXTENSIONS_VERIFIED = 'php_extensions_verified';
     const KEY_ERROR = 'error';
     const KEY_CURRENT_TIMESTAMP = 'current_timestamp';
     const KEY_LAST_TIMESTAMP = 'last_timestamp';
@@ -47,17 +53,27 @@ class ReadinessCheck
     private $filesystem;
 
     /**
+     * @var PhpReadinessCheck
+     */
+    private $phpReadinessCheck;
+
+    /**
      * Constructor
      *
      * @param DbValidator $dbValidator
      * @param DeploymentConfig $deploymentConfig
      * @param Filesystem $filesystem
      */
-    public function __construct(DbValidator $dbValidator, DeploymentConfig $deploymentConfig, Filesystem $filesystem)
-    {
+    public function __construct(
+        DbValidator $dbValidator,
+        DeploymentConfig $deploymentConfig,
+        Filesystem $filesystem,
+        PhpReadinessCheck $phpReadinessCheck
+    ) {
         $this->dbValidator = $dbValidator;
         $this->deploymentConfig = $deploymentConfig;
         $this->filesystem = $filesystem;
+        $this->phpReadinessCheck = $phpReadinessCheck;
     }
 
     /**
@@ -67,8 +83,16 @@ class ReadinessCheck
      */
     public function runReadinessCheck()
     {
-        $success = true;
         $resultJsonRawData = [self::KEY_READINESS_CHECKS => []];
+        // checks PHP
+        $phpVersionCheckResult = $this->phpReadinessCheck->checkPhpVersion();
+        $phpExtensionsCheckResult = $this->phpReadinessCheck->checkPhpExtensions();
+        $phpSettingsCheckResult = $this->phpReadinessCheck->checkPhpSettings();
+        $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_VERSION_VERIFIED] = $phpVersionCheckResult;
+        $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_EXTENSIONS_VERIFIED] = $phpExtensionsCheckResult;
+        $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_SETTINGS_VERIFIED] = $phpSettingsCheckResult;
+        // checks Database privileges
+        $success = true;
         $errorMsg = '';
         $write = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $dbInfo = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
@@ -89,7 +113,7 @@ class ReadinessCheck
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_DB_WRITE_PERMISSION_VERIFIED] = false;
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_ERROR] = $errorMsg;
         }
-
+        // updates timestamp
         if ($write->isExist(self::SETUP_CRON_JOB_STATUS_FILE)) {
             $jsonData = json_decode($write->readFile(self::SETUP_CRON_JOB_STATUS_FILE), true);
             if (isset($jsonData[self::KEY_CURRENT_TIMESTAMP])) {
