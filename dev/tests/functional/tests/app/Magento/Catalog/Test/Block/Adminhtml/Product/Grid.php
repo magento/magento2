@@ -62,6 +62,16 @@ class Grid extends DataGrid
     ];
 
     /**
+     * Temporary solution for fix grid loader
+     *
+     * {@inheritdoc}
+     */
+    public function waitLoader()
+    {
+        parent::waitLoader();
+        sleep(4);
+    }
+    /**
      * Update attributes for selected items
      *
      * @param array $items
