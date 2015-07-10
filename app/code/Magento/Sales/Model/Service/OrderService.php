@@ -89,8 +89,8 @@ class OrderService implements OrderManagementInterface
      */
     public function getCommentsList($id)
     {
-        $this->criteriaBuilder->addFilter(
-            ['eq' => $this->filterBuilder->setField('parent_id')->setValue($id)->create()]
+        $this->criteriaBuilder->addFilters(
+            [$this->filterBuilder->setField('parent_id')->setValue($id)->setConditionType('eq')->create()]
         );
         $criteria = $this->criteriaBuilder->create();
         return $this->historyRepository->getList($criteria);
