@@ -94,7 +94,6 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
     /**
      * {@inheritDoc}
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveAddressInformation(
@@ -107,18 +106,9 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
-        if ($quote->isVirtual()) {
-            throw new NoSuchEntityException(
-                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
-            );
-        }
-
-        if (0 == $quote->getItemsCount()) {
-            throw new InputException(__('Shipping method is not applicable for empty cart'));
-        }
+        $this->validateQuote($quote);
 
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
-        $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
         $this->addressValidator->validate($address);
         $quote->setShippingAddress($address);
@@ -128,7 +118,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
         }
-        $address->setSameAsBilling($sameAsBilling);
+
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
 
@@ -139,6 +129,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $address->setShippingMethod($carrierCode . '_' . $methodCode);
 
         try {
+            /** TODO: refactor this code. Eliminate save operation */
             $address->save();
             $address->collectTotals();
         } catch (\Exception $e) {
@@ -174,5 +165,26 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $paymentDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
         $paymentDetails->setTotals($this->cartTotalsRepository->get($cartId));
         return $paymentDetails;
+    }
+
+    /**
+     * Validate quote
+     *
+     * @param \Magento\Quote\Model\Quote $quote
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @return void
+     */
+    protected function validateQuote(\Magento\Quote\Model\Quote $quote)
+    {
+        if ($quote->isVirtual()) {
+            throw new NoSuchEntityException(
+                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
+            );
+        }
+
+        if (0 == $quote->getItemsCount()) {
+            throw new InputException(__('Shipping method is not applicable for empty cart'));
+        }
     }
 }
