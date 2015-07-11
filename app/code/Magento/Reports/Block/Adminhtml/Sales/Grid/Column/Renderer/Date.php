@@ -78,7 +78,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
             } else {
                 $date = $this->_localeDate->date(new \DateTime($data), null, false);
             }
-            return \IntlDateFormatter::formatObject($date, $format);
+            return \IntlDateFormatter::formatObject($date, $format, $this->_localeResolver->getLocale());
         }
         return $this->getColumn()->getDefault();
     }
