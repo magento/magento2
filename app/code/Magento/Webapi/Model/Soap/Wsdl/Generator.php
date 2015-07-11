@@ -180,7 +180,7 @@ class Generator
     {
         foreach ($this->customAttributeTypeLocator->getAllServiceDataInterfaces() as $customAttributeClass) {
             $typeName = $this->_typeProcessor->register($customAttributeClass);
-            $wsdl->addComplexType($typeName);
+            $wsdl->addComplexType($this->_typeProcessor->getArrayItemType($typeName));
         }
         return $wsdl;
     }
