@@ -286,17 +286,9 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAllowedExtensionsByType()
     {
-        switch ($this->getStorageType()) {
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT:
-                $extensions = ['ttf', 'otf', 'eot', 'svg', 'woff'];
-                break;
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE:
-                $extensions = ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
-                break;
-            default:
-                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid type'));
-        }
-        return $extensions;
+        return $this->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
+                ? ['ttf', 'otf', 'eot', 'svg', 'woff']
+                : ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
     }
 
     /**
@@ -307,18 +299,9 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getStorageTypeName()
     {
-        switch ($this->getStorageType()) {
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT:
-                $name = self::FONTS;
-                break;
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE:
-                $name = self::IMAGES;
-                break;
-            default:
-                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid type'));
-        }
-
-        return $name;
+        return $this->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
+            ? self::FONTS
+            : self::IMAGES;
     }
 
     /**

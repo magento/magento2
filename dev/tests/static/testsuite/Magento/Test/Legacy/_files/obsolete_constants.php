@@ -729,5 +729,7 @@ return [
         'Magento\Framework\App\ScopeInterface',
         'Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT',
     ],
-    ['METHOD_WPS', 'Magento\Paypal\Model\Config']
+    ['METHOD_WPS', 'Magento\Paypal\Model\Config'],
+    ['EXCEPTION_CODE_NOT_SALABLE', 'Magento\Wishlist\Model\Item'],
+    ['EXCEPTION_CODE_HAS_REQUIRED_OPTIONS', 'Magento\Wishlist\Model\Item'],
 ];
