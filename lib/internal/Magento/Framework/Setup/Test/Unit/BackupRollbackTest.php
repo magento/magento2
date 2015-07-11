@@ -40,6 +40,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filesystem;
+
     /**
      * @var \Magento\Framework\Backup\Filesystem\Helper|\PHPUnit_Framework_MockObject_MockObject
      */
