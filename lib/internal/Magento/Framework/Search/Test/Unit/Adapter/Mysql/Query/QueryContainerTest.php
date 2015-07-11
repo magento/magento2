@@ -32,9 +32,6 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scoreBuilder = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\ScoreBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->matchContainerFactory = $this->getMockBuilder(
             'Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory'
         )
@@ -65,7 +62,12 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDerivedQueries()
     {
-        $this->testBuild();
+        $this->matchContainerFactory->expects($this->once())->method('create')
+            ->willReturn('asdf');
+
+        $result = $this->queryContainer->addMatchQuery($this->select, $this->requestQuery, Bool::QUERY_CONDITION_MUST);
+        $this->assertEquals($this->select, $result);
+
         $queries = $this->queryContainer->getDerivedQueries();
         $this->assertCount(1, $queries);
         $this->assertEquals('asdf', reset($queries));
