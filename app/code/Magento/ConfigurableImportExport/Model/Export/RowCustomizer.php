@@ -38,17 +38,11 @@ class RowCustomizer implements RowCustomizerInterface
             foreach ($productAttributesOptions as $productAttributeOption) {
                 $this->configurableData[$product->getId()] = [];
                 $variations = [];
-                $variationsPrices = [];
                 $variationsLabels = [];
+
                 foreach ($productAttributeOption as $optValues) {
                     $variations[$optValues['sku']][] =
                         $optValues['attribute_code'] . '=' . $optValues['option_title'];
-                    $priceType = $optValues['pricing_is_percent'] ? 'percent' : 'fixed';
-                    $variationsPrices[] =
-                        'name=' . $optValues['attribute_code'] . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                        'value=' . $optValues['option_title'] . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                        'price=' . $optValues['pricing_value'] . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                        'price_type=' . $priceType;
                     if (!empty($optValues['super_attribute_label'])) {
                         $variationsLabels[$optValues['attribute_code']] =
                             $optValues['attribute_code'] . '=' . $optValues['super_attribute_label'];
@@ -61,13 +55,10 @@ class RowCustomizer implements RowCustomizerInterface
                         . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
                 }
                 $variations = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variations);
-                $variationsPrices = array_unique($variationsPrices);
-                $variationsPrices = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variationsPrices);
                 $variationsLabels = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $variationsLabels);
 
                 $this->configurableData[$product->getId()] = [
                     'configurable_variations' => $variations,
-                    'configurable_variation_prices' => $variationsPrices,
                     'configurable_variation_labels' => $variationsLabels,
                 ];
             }
@@ -88,7 +79,6 @@ class RowCustomizer implements RowCustomizerInterface
                 $columns,
                 [
                     'configurable_variations',
-                    'configurable_variation_prices',
                     'configurable_variation_labels',
                 ]
             );
