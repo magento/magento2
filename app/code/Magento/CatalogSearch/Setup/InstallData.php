@@ -22,6 +22,7 @@ class InstallData implements InstallDataInterface
 
     /**
      * @param IndexerInterfaceFactory $indexerFactory
+     * @param ProductAttributeRepositoryInterface $attributeRepository
      */
     public function __construct(
         IndexerInterfaceFactory $indexerFactory,
@@ -58,7 +59,7 @@ class InstallData implements InstallDataInterface
     /**
      * @param string $attributeCode
      * @param int $weight
-     * @internal param AdapterInterface $connection
+     * @return void
      */
     private function setWeight($attributeCode, $weight)
     {
