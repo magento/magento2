@@ -23,20 +23,12 @@ class InstallData implements InstallDataInterface
     /**
      * @param IndexerInterfaceFactory $indexerFactory
      */
-    public function __construct(IndexerInterfaceFactory $indexerFactory,
-        ProductAttributeRepositoryInterface $attributeRepository)
-    {
+    public function __construct(
+        IndexerInterfaceFactory $indexerFactory,
+        ProductAttributeRepositoryInterface $attributeRepository
+    ) {
         $this->indexerFactory = $indexerFactory;
         $this->attributeRepository = $attributeRepository;
-    }
-
-    /**
-     * @param string $indexerId
-     * @return \Magento\Indexer\Model\IndexerInterface
-     */
-    private function getIndexer($indexerId)
-    {
-        return $this->indexerFactory->create()->load($indexerId);
     }
 
     /**
@@ -52,6 +44,15 @@ class InstallData implements InstallDataInterface
         $this->setWeight('sku', 6);
         $this->setWeight('name', 5);
         $this->getIndexer('catalogsearch_fulltext')->reindexAll();
+    }
+
+    /**
+     * @param string $indexerId
+     * @return \Magento\Indexer\Model\IndexerInterface
+     */
+    private function getIndexer($indexerId)
+    {
+        return $this->indexerFactory->create()->load($indexerId);
     }
 
     /**
