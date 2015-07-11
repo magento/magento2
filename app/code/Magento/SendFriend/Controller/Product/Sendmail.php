@@ -17,12 +17,18 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
     protected $categoryRepository;
 
     /**
+     * @var \Magento\Catalog\Model\Session
+     */
+    protected $catalogSession;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\SendFriend\Model\SendFriend $sendFriend
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Catalog\Model\Session $catalogSession
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -30,10 +36,12 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\SendFriend\Model\SendFriend $sendFriend,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
+        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
+        \Magento\Catalog\Model\Session $catalogSession
     ) {
         parent::__construct($context, $coreRegistry, $formKeyValidator, $sendFriend, $productRepository);
         $this->categoryRepository = $categoryRepository;
+        $this->catalogSession = $catalogSession;
     }
 
     /**
@@ -79,8 +87,6 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
         $this->sendFriend->setRecipients($this->getRequest()->getPost('recipients'));
         $this->sendFriend->setProduct($product);
 
-        /* @var $session \Magento\Catalog\Model\Session */
-        $catalogSession = $this->_objectManager->get('Magento\Catalog\Model\Session');
         try {
             $validate = $this->sendFriend->validate();
             if ($validate === true) {
@@ -105,7 +111,7 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
         }
 
         // save form data
-        $catalogSession->setSendfriendFormData($data);
+        $this->catalogSession->setSendfriendFormData($data);
 
         $url = $this->_url->getUrl('sendfriend/product/send', ['_current' => true]);
         $resultRedirect->setUrl($this->_redirect->error($url));

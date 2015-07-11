@@ -2724,6 +2724,27 @@ class InstallSchema implements InstallSchemaInterface
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Is Required In Admin Store'
             )
+            ->addColumn(
+                'is_used_in_grid',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is Used in Grid'
+            )
+            ->addColumn(
+                'is_visible_in_grid',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is Visible in Grid'
+            )
+            ->addColumn(
+                'is_filterable_in_grid',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is Filterable in Grid'
+            )
             ->addIndex(
                 $installer->getIdxName('catalog_eav_attribute', ['used_for_sort_by']),
                 ['used_for_sort_by']

@@ -6,29 +6,44 @@
  */
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
-class Place extends \Magento\Authorizenet\Controller\Directpost\Payment
+use Magento\Authorizenet\Controller\Directpost\Payment;
+use Magento\Authorizenet\Helper\DataFactory;
+use Magento\Checkout\Model\Type\Onepage;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Object;
+use Magento\Framework\Registry;
+use Magento\Payment\Model\IframeConfigProvider;
+use Magento\Quote\Api\CartManagementInterface;
+
+/**
+ * Class Place
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Place extends Payment
 {
     /**
-     * @var \Magento\Quote\Api\CartManagementInterface
+     * @var CartManagementInterface
      */
     protected $cartManagement;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Authorizenet\Helper\DataFactory $dataFactory
-     * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param DataFactory $dataFactory
+     * @param CartManagementInterface $cartManagement
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Authorizenet\Helper\DataFactory $dataFactory,
-        \Magento\Quote\Api\CartManagementInterface $cartManagement
+        Context $context,
+        Registry $coreRegistry,
+        DataFactory $dataFactory,
+        CartManagementInterface $cartManagement
     ) {
         $this->eventManager = $context->getEventManager();
         $this->cartManagement = $cartManagement;
@@ -44,10 +59,12 @@ class Place extends \Magento\Authorizenet\Controller\Directpost\Payment
     {
         $paymentParam = $this->getRequest()->getParam('payment');
         $controller = $this->getRequest()->getParam('controller');
+
         if (isset($paymentParam['method'])) {
             $this->_getDirectPostSession()->setQuoteId($this->_getCheckout()->getQuote()->getId());
+            $this->_getCheckout()->getQuote()->setCheckoutMethod($this->getCheckoutMethod());
 
-            if ($controller == \Magento\Payment\Model\IframeConfigProvider::CHECKOUT_IDENTIFIER) {
+            if ($controller == IframeConfigProvider::CHECKOUT_IDENTIFIER) {
                 return $this->placeCheckoutOrder();
             }
 
@@ -64,10 +81,32 @@ class Place extends \Magento\Authorizenet\Controller\Directpost\Payment
             );
         } else {
             $result = ['error_messages' => __('Please choose a payment method.'), 'goto_section' => 'payment'];
-            $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
-            );
+            $this->getResponse()->representJson($this->getJsonHelper()->jsonEncode($result));
         }
+    }
+
+    /**
+     * Get quote checkout method
+     *
+     * @return string
+     */
+    protected function getCheckoutMethod()
+    {
+        $checkoutMethod = $this->_getCheckout()->getQuote()->getCheckoutMethod();
+
+        if ($this->getCustomerSession()->isLoggedIn()) {
+            $checkoutMethod = Onepage::METHOD_CUSTOMER;
+        }
+
+        if (!$checkoutMethod) {
+            if ($this->getCheckoutHelper()->isAllowedGuestCheckout($this->_getCheckout()->getQuote())) {
+                $checkoutMethod = Onepage::METHOD_GUEST;
+            } else {
+                $checkoutMethod = Onepage::METHOD_REGISTER;
+            }
+        }
+
+        return $checkoutMethod;
     }
 
     /**
@@ -77,7 +116,7 @@ class Place extends \Magento\Authorizenet\Controller\Directpost\Payment
      */
     protected function placeCheckoutOrder()
     {
-        $result = new \Magento\Framework\Object();
+        $result = new Object();
         try {
             $this->cartManagement->placeOrder($this->_getCheckout()->getQuote()->getId());
             $result->setData('success', true);
@@ -92,8 +131,30 @@ class Place extends \Magento\Authorizenet\Controller\Directpost\Payment
             $result->setData('error', true);
             $result->setData('error_messages', __('Cannot place order.'));
         }
-        $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
-        );
+        $this->getResponse()->representJson($this->getJsonHelper()->jsonEncode($result));
+    }
+
+    /**
+     * @return \Magento\Customer\Model\Session
+     */
+    protected function getCustomerSession()
+    {
+        return $this->_objectManager->get('Magento\Checkout\Model\Cart')->getCustomerSession();
+    }
+
+    /**
+     * @return \Magento\Checkout\Helper\Data
+     */
+    protected function getCheckoutHelper()
+    {
+        return $this->_objectManager->get('Magento\Checkout\Helper\Data');
+    }
+
+    /**
+     * @return \Magento\Framework\Json\Helper\Data
+     */
+    protected function getJsonHelper()
+    {
+        return $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
     }
 }
