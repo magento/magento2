@@ -7,10 +7,11 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="minicart">
-            <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.cart.item.price.sidebar" template="checkout/cart/item/price/sidebar.phtml">
+        <referenceBlock name="customer_account_navigation">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-my-credit-cards" ifconfig="payment/braintree/use_vault">
                 <arguments>
-                    <argument name="zone" xsi:type="string">cart</argument>
+                    <argument name="path" xsi:type="string">braintree/creditcard/index</argument>
+                    <argument name="label" xsi:type="string">My Credit Cards</argument>
                 </arguments>
             </block>
         </referenceBlock>
