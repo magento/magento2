@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <payment>
+            <braintree>
+                <model>Magento\Braintree\Model\PaymentMethod</model>
+                <title>Credit Card (Braintree)</title>
+                <payment_action>authorize</payment_action>
+                <active>0</active>
+                <cctypes>AE,VI,MC,DI,JCB</cctypes>
+                <useccv>1</useccv>
+                <verify_3dsecure>0</verify_3dsecure>
+                <order_status>processing</order_status>
+                <environment>sandbox</environment>
+                <allowspecific>0</allowspecific>
+                <fraudprotection>0</fraudprotection>
+                <capture_action>invoice</capture_action>
+                <data_js><![CDATA[https://js.braintreegateway.com/v1/braintree-data.js]]></data_js>
+                <duplicate_card>0</duplicate_card>
+                <masked_fields>cvv,number</masked_fields>
+                <usecache>0</usecache>
+                <enable_cc_detection>1</enable_cc_detection>
+            </braintree>
+            <braintree_paypal>
+                <model>Magento\Braintree\Model\PaymentMethod\PayPal</model>
+                <title>PayPal (Braintree)</title>
+                <payment_action>authorize</payment_action>
+                <active>0</active>
+                <allowspecific>0</allowspecific>
+                <order_status>processing</order_status>
+                <dispaly_on_shopping_cart>1</dispaly_on_shopping_cart>
+                <require_billing_address>0</require_billing_address>
+            </braintree_paypal>
+        </payment>
+    </default>
+</config>
