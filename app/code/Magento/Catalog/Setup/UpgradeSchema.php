@@ -60,5 +60,46 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             $installer->endSetup();
         }
+
+        if (version_compare($context->getVersion(), '2.0.0.3') < 0) {
+            $setup->startSetup();
+
+            $connection = $setup->getConnection();
+            $connection->addColumn(
+                $setup->getTable('catalog_eav_attribute'),
+                'is_used_in_grid',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => '0',
+                    'comment' => 'Is Used In Grid'
+                ]
+            );
+            $connection->addColumn(
+                $setup->getTable('catalog_eav_attribute'),
+                'is_visible_in_grid',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => '0',
+                    'comment' => 'Is Visible in Grid'
+                ]
+            );
+            $connection->addColumn(
+                $setup->getTable('catalog_eav_attribute'),
+                'is_filterable_in_grid',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => '0',
+                    'comment' => 'Is Filterable in Grid'
+                ]
+            );
+
+            $setup->endSetup();
+        }
     }
 }
