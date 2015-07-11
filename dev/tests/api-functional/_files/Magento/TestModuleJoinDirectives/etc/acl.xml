@@ -9,8 +9,8 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_TestJoinDirectives::all" title="TestJoinDirectives" sortOrder="1">
-                    <resource id="Magento_TestJoinDirectives::getList" title="GetList" sortOrder="10"/>
+                <resource id="Magento_TestModuleJoinDirectives::all" title="TestJoinDirectives" sortOrder="1">
+                    <resource id="Magento_TestModuleJoinDirectives::getList" title="GetList" sortOrder="10"/>
                 </resource>
             </resource>
         </resources>
