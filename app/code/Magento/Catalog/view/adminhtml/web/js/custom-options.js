@@ -139,6 +139,10 @@ define([
                             $(this).closest('.ui-dialog').css('margin-top', topMargin);
 
                             $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
+
+                            $('#productGrid_massaction-form button').on('click', function () {
+                                $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
+                            });
                         },
                         close: function () {
                             $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
@@ -195,17 +199,12 @@ define([
                             }]
                     });
                     importContainer.load(
-                        this.options.productGridUrl, {
-                            form_key: this.options.formKey
-                        },
+                        this.options.productGridUrl,
+                        {form_key: this.options.formKey},
                         function () {
                             importContainer.dialog('open');
                         }
                     );
-                },
-
-                'click #productGrid_massaction-form button': function () {
-                    $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
                 },
 
                 /**
