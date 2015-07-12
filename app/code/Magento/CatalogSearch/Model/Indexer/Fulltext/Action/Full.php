@@ -449,7 +449,7 @@ class Full
             $attributes = $productAttributes->getItems();
 
             $this->eventManager->dispatch(
-                'catelogsearch_searchable_attributes_load_after',
+                'catalogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engineProvider->get(), 'attributes' => $attributes]
             );
 
