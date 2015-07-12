@@ -21,9 +21,9 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
     public function testCustomerSaveQuoteObserver()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $repository */
-        $repository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\CustomerRepositoryInterface');
-        $customer = $repository->getById(1);
+        /** @var \Magento\Customer\Model\CustomerRegistry $registry */
+        $registry = Bootstrap::getObjectManager()->create('Magento\Customer\Model\CustomerRegistry');
+        $customer = $registry->retrieveByEmail('customer@example.com');
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
@@ -43,6 +43,8 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
          */
         $newCustomerGroupId = 2;
         $customer->setGroupId($newCustomerGroupId);
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $repository */
+        $repository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $repository->save($customer);
 
         $quote->load('test01', 'reserved_order_id');

@@ -11,7 +11,6 @@ $customer = $objectManager->create('Magento\Customer\Api\Data\CustomerInterface'
 
 /** @var Magento\Customer\Api\Data\CustomerInterface $customer */
 $customer->setWebsiteId(1)
-    ->setId(1)
     ->setEmail('customer@example.com')
     ->setGroupId(1)
     ->setStoreId(1)
