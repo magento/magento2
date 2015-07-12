@@ -58,16 +58,16 @@ class CustomerQuote
         try {
             $quote = $this->quoteRepository->getForCustomer($customer->getId());
             if ($customer->getGroupId() !== $quote->getCustomerGroupId()) {
-            /**
-             * It is needed to process customer's quotes for all websites
-             * if customer accounts are shared between all of them
-             */
-            /** @var $websites \Magento\Store\Model\Website[] */
-            $websites = $this->config->isWebsiteScope()
-                ? [$this->storeManager->getWebsite($customer->getWebsiteId())]
-                : $this->storeManager->getWebsites();
+                /**
+                 * It is needed to process customer's quotes for all websites
+                 * if customer accounts are shared between all of them
+                 */
+                /** @var $websites \Magento\Store\Model\Website[] */
+                $websites = $this->config->isWebsiteScope()
+                    ? [$this->storeManager->getWebsite($customer->getWebsiteId())]
+                    : $this->storeManager->getWebsites();
 
-            foreach ($websites as $website) {
+                foreach ($websites as $website) {
                     $quote->setWebsite($website);
                     $quote->setCustomerGroupId($customer->getGroupId());
                     $quote->collectTotals();
