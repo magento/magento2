@@ -72,10 +72,9 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         // unix timestamp given - simply instantiate date object
         if (is_scalar($date) && preg_match('/^[0-9]+$/', $date)) {
             $date = (new \DateTime())->setTimestamp($date);
-            // international format
         } elseif (!($date instanceof \DateTime)) {
+            // normalized format expecting Y-m-d[ H:i:s]  - time is optional
             $date = new \DateTime($date);
-            // parse this date in current locale, do not apply GMT offset
         }
         return $date->format('Y-m-d H:i:s');
     }

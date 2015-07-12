@@ -139,6 +139,30 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getIsUsedInGrid()
+    {
+        return (bool)$this->getData(self::IS_USED_IN_GRID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsVisibleInGrid()
+    {
+        return (bool)$this->getData(self::IS_VISIBLE_IN_GRID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsFilterableInGrid()
+    {
+        return (bool)$this->getData(self::IS_FILTERABLE_IN_GRID);
+    }
+
+    /**
      * Set whether it is used in search results layered navigation
      *
      * @param bool $isFilterableInSearch
