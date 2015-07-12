@@ -101,7 +101,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * Verify the Html content for a single item in the customer's cart.
      *
      * @magentoDataFixture Magento/Customer/_files/customer_from_repository.php
-     * @magentoDataFixture Magento/Customer/_files/quote.php
+     * @magentoDataFixture Magento/Customer/_files/quote_for_customer_by_repository.php
      */
     public function testToHtmlCartItem()
     {
