@@ -10,6 +10,8 @@
 
 namespace Magento\Backend\App;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Backend config accessor
  */
@@ -36,7 +38,7 @@ class Config implements ConfigInterface
      */
     public function getValue($path)
     {
-        return $this->_scopePool->getScope(\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, null)->getValue($path);
+        return $this->_scopePool->getScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)->getValue($path);
     }
 
     /**
@@ -48,7 +50,7 @@ class Config implements ConfigInterface
      */
     public function setValue($path, $value)
     {
-        $this->_scopePool->getScope(\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, null)->setValue($path, $value);
+        $this->_scopePool->getScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)->setValue($path, $value);
     }
 
     /**
@@ -59,6 +61,6 @@ class Config implements ConfigInterface
      */
     public function isSetFlag($path)
     {
-        return !!$this->_scopePool->getScope(\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, null)->getValue($path);
+        return !!$this->_scopePool->getScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)->getValue($path);
     }
 }

@@ -213,9 +213,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->initProductLayout($resultPage, $product, $params);
 
-        if ($controller instanceof \Magento\Catalog\Controller\Product\View\ViewInterface) {
-            $resultPage->getLayout()->initMessages($this->messageGroups);
-        } else {
+        if (!$controller instanceof \Magento\Catalog\Controller\Product\View\ViewInterface) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Bad controller interface for showing product')
             );

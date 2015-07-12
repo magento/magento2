@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
 
-use \Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\Framework\App\Cache\Type\FrontendPool;
 
 class PoolTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,9 +45,9 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $deploymentConfig->expects(
             $this->any()
         )->method(
-            'getSegment'
+            'getConfigData'
         )->with(
-            \Magento\Framework\App\DeploymentConfig\CacheConfig::CONFIG_KEY
+            FrontendPool::KEY_CACHE
         )->will(
             $this->returnValue(['frontend' => ['resource2' => ['r2d1' => 'value1', 'r2d2' => 'value2']]])
         );
@@ -90,9 +91,9 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $deploymentConfig->expects(
             $this->once()
         )->method(
-            'getSegment'
+            'getConfigData'
         )->with(
-            \Magento\Framework\App\DeploymentConfig\CacheConfig::CONFIG_KEY
+            FrontendPool::KEY_CACHE
         )->will(
             $this->returnValue($fixtureCacheConfig)
         );

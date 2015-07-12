@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest;
 
+use Magento\Framework\Phrase;
+
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Webapi\Rest\Response */
@@ -61,7 +63,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         /** Init \Magento\Framework\Webapi\Exception */
         $apiException = new \Magento\Framework\Webapi\Exception(
-            'Exception message.',
+            new Phrase('Exception message.'),
             0,
             \Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED
         );
@@ -98,7 +100,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
         );
         /** Set exception to Rest response to get in to the _renderMessages method. */
-        $this->responseRest->setException(new \Magento\Framework\Webapi\Exception('Message.'));
+        $this->responseRest->setException(new \Magento\Framework\Webapi\Exception(new Phrase('Message.')));
         $this->responseRest->sendResponse();
     }
 
@@ -108,7 +110,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testSendResponseRenderMessagesHttpNotAcceptable()
     {
         $exception = new \Magento\Framework\Webapi\Exception(
-            'Message',
+            new Phrase('Message'),
             0,
             \Magento\Framework\Webapi\Exception::HTTP_NOT_ACCEPTABLE
         );
@@ -132,7 +134,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         /** Set exception to Rest response to get in to the _renderMessages method. */
         $this->responseRest->setException(
             new \Magento\Framework\Webapi\Exception(
-                'Message.',
+                new Phrase('Message.'),
                 0,
                 \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST
             )
@@ -162,7 +164,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         );
         $exceptionMessage = 'Message';
         $exceptionHttpCode = \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST;
-        $exception = new \Magento\Framework\Webapi\Exception($exceptionMessage, 0, $exceptionHttpCode);
+        $exception = new \Magento\Framework\Webapi\Exception(new Phrase($exceptionMessage), 0, $exceptionHttpCode);
         $this->errorProcessorMock->expects(
             $this->any()
         )->method(

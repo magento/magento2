@@ -83,7 +83,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
         $this->validatorFactoryMock = $this->getMock(
             'Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory',
-            [],
+            ['create'],
             [],
             '',
             false);
@@ -180,7 +180,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addFilter')
+            ->method('addFilters')
             ->with([$filterMock])
             ->willReturnSelf();
         $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);

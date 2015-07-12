@@ -22,7 +22,7 @@ class CurrencySymbolForm extends Form
      *
      * @var string
      */
-    protected $currencyRow = '//tr[td/label[@for="custom_currency_symbol%s"]]';
+    protected $currencyRow = '//div[input[@id="custom_currency_symbol%s"]]';
 
     /**
      * Fill the root form
@@ -34,6 +34,10 @@ class CurrencySymbolForm extends Form
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         $element = $this->_rootElement->find(sprintf($this->currencyRow, $fixture->getCode()), Locator::SELECTOR_XPATH);
-        return parent::fill($fixture, $element);
+        $data = $fixture->getData();
+        unset($data['code']);
+        $mapping = $this->dataMapping($data);
+        $this->_fill($mapping, $element);
+        return $this;
     }
 }

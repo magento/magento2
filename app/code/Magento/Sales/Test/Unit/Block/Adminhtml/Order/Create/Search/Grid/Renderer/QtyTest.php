@@ -37,7 +37,7 @@ class QtyTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $expected = '<input type="text" name="id_name" value="" disabled="disabled" ' .
-            'class="input-text inline_css input-inactive" />';
+            'class="input-text admin__control-text inline_css input-inactive" />';
         $this->typeConfigMock->expects(
             $this->any()
         )->method(

@@ -93,7 +93,7 @@ interface ProcessorInterface
      * Load layout updates by handles
      *
      * @param array|string $handles
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return ProcessorInterface
      */
     public function load($handles = []);

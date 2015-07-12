@@ -15,6 +15,7 @@ use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Webapi\Controller\Soap\Request as SoapRequest;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
+use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Handler of requests to SOAP server.
@@ -48,6 +49,9 @@ class Handler
     /** @var DataObjectProcessor */
     protected $_dataObjectProcessor;
 
+    /** @var MethodsMap */
+    protected $methodsMapProcessor;
+
     /**
      * Initialize dependencies.
      *
@@ -58,6 +62,7 @@ class Handler
      * @param SimpleDataObjectConverter $dataObjectConverter
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param DataObjectProcessor $dataObjectProcessor
+     * @param MethodsMap $methodsMapProcessor
      */
     public function __construct(
         SoapRequest $request,
@@ -66,7 +71,8 @@ class Handler
         AuthorizationInterface $authorization,
         SimpleDataObjectConverter $dataObjectConverter,
         ServiceInputProcessor $serviceInputProcessor,
-        DataObjectProcessor $dataObjectProcessor
+        DataObjectProcessor $dataObjectProcessor,
+        MethodsMap $methodsMapProcessor
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
@@ -75,6 +81,7 @@ class Handler
         $this->_dataObjectConverter = $dataObjectConverter;
         $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_dataObjectProcessor = $dataObjectProcessor;
+        $this->methodsMapProcessor = $methodsMapProcessor;
     }
 
     /**
@@ -149,7 +156,7 @@ class Handler
     protected function _prepareResponseData($data, $serviceClassName, $serviceMethodName)
     {
         /** @var string $dataType */
-        $dataType = $this->_dataObjectProcessor->getMethodReturnType($serviceClassName, $serviceMethodName);
+        $dataType = $this->methodsMapProcessor->getMethodReturnType($serviceClassName, $serviceMethodName);
         $result = null;
         if (is_object($data)) {
             $result = $this->_dataObjectConverter

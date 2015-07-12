@@ -40,6 +40,7 @@ class DateTime
      * @param string|\DateTime|bool|null $date
      * @param boolean $includeTime
      * @return string|null
+     * @api
      */
     public function formatDate($date, $includeTime = true)
     {
@@ -67,5 +68,32 @@ class DateTime
     public function isEmptyDate($date)
     {
         return preg_replace('#[ 0:-]#', '', $date) === '';
+    }
+
+    /**
+     * Wrapper for native gmdate function
+     *
+     * @param string $format
+     * @param int $time
+     * @return string The given time in given format
+     *
+     * @codeCoverageIgnore
+     */
+    public function gmDate($format, $time)
+    {
+        return gmdate($format, $time);
+    }
+
+    /**
+     * Wrapper for native strtotime function
+     *
+     * @param string $timeStr
+     * @return int
+     *
+     * @codeCoverageIgnore
+     */
+    public function strToTime($timeStr)
+    {
+        return strtotime($timeStr);
     }
 }

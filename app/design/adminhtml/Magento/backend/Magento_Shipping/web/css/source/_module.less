@@ -1,0 +1,126 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Order Shipment
+//  ---------------------------------------------
+
+.order-shipment-table {
+    &:extend(.abs-order-tables all);
+    &:extend(.abs-order-tbody-border all);
+}
+
+//
+//  Packaging for Shipping Popup
+// --------------------------------------
+
+//  ToDo UI: refactor the popup to jQuery UI, edit the styles
+.packaging-window {
+    background: @color-white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
+    left: 50%;
+    margin: -20rem 0 0 -47rem;
+    position: fixed;
+    top: 50%;
+    width: 100rem;
+    z-index: 1000;
+    .message-warning {
+        margin: 0 0 @indent__s;
+    }
+    .admin__control-select {
+        width: 13rem;
+        &.measures {
+            width: 9rem;
+        }
+    }
+    .packaging-content {
+        height: auto !important;
+        max-height: 40rem;
+        overflow-x: hidden;
+        overflow: auto;
+        padding: @indent__base @indent__base 0;
+        position: relative;
+        .options-weight {
+            vertical-align: top;
+        }
+    }
+    .popup-window-title {
+        &:extend(.abs-clearfix all);
+        padding: @indent__base;
+        .title {
+            font-size: 1.9rem;
+            display: block;
+        }
+        .actions {
+            float: right;
+        }
+    }
+    .popup-fieldset-title {
+        &:extend(.abs-clearfix all);
+        .title {
+            display: block;
+            font-weight: 700;
+            padding-top: @indent__s;
+        }
+        .actions {
+            float: right;
+        }
+        margin: 0 0 @indent__base;
+    }
+    .popup-window-buttons-set {
+        padding: @indent__base;
+        text-align: right;
+    }
+    .package-add-products {
+        margin: @indent__base 0 0;
+        .data-grid {
+            padding: 0;
+            button {
+                vertical-align: middle;
+            }
+        }
+    }
+    .col-total-weight {
+        .admin__control-text {
+            margin: 0 0 .5rem;
+        }
+    }
+    .col-qty-edit {
+        .admin__control-text {
+            &:extend(.abs-control-qty all);
+        }
+    }
+    .col-actions {
+        width: 13rem;
+        .action-delete {
+            padding-top: 0;
+        }
+    }
+    .admin__table-primary {
+        .action-delete {
+            margin-top: -.7rem;
+            padding: 0;
+            &:extend(.abs-action-delete all);
+        }
+    }
+    .action-secondary {
+        &:extend(.abs-action-l all);
+        float: right;
+        margin: 0 0 0 @popup__padding__horizontal;
+    }
+    .action-close {
+        &:extend(.abs-action-tertiary all);
+        font-size: @button__large__font-size;
+        margin: 0 0 0 @popup__padding__horizontal;
+        padding: @button__large__padding-vertical 0;
+        &:before {
+            content: normal;
+        }
+        span {
+            position: static;
+            overflow: auto;
+        }
+    }
+}

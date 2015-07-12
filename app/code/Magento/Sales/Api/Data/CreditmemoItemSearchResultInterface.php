@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases. A credit memo item is an invoiced item for which
  * a merchant creates a credit memo.
+ * @api
  */
 interface CreditmemoItemSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -28,5 +29,5 @@ interface CreditmemoItemSearchResultInterface extends \Magento\Framework\Api\Sea
      * @param \Magento\Sales\Api\Data\CreditmemoItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

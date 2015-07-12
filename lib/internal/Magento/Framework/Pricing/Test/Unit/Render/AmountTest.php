@@ -127,6 +127,15 @@ class AmountTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->model->formatCurrency($amount, $includeContainer, $precision));
     }
 
+    public function testGetDisplayCurrencySymbol()
+    {
+        $currencySymbol = '$';
+        $this->priceCurrency->expects($this->once())
+            ->method('getCurrencySymbol')
+            ->willReturn($currencySymbol);
+        $this->assertEquals($currencySymbol, $this->model->getDisplayCurrencySymbol());
+    }
+
     /**
      * Test case for getAdjustmentRenders method through toHtml()
      */

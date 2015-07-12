@@ -100,22 +100,18 @@ class Save extends \Magento\Backend\App\Action
                 return;
             }
 
-            $shipment->register();
-            $comment = '';
             if (!empty($data['comment_text'])) {
                 $shipment->addComment(
                     $data['comment_text'],
                     isset($data['comment_customer_notify']),
                     isset($data['is_visible_on_front'])
                 );
-                if (isset($data['comment_customer_notify'])) {
-                    $comment = $data['comment_text'];
-                }
+
+                $shipment->setCustomerNote($data['comment_text']);
+                $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
             }
 
-            if (!empty($data['send_email'])) {
-                $shipment->setEmailSent(true);
-            }
+            $shipment->register();
 
             $shipment->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
             $responseAjax = new \Magento\Framework\Object();
@@ -128,7 +124,9 @@ class Save extends \Magento\Backend\App\Action
 
             $this->_saveShipment($shipment);
 
-            $this->shipmentSender->send($shipment, !empty($data['send_email']), $comment);
+            if (!empty($data['send_email'])) {
+                $this->shipmentSender->send($shipment);
+            }
 
             $shipmentCreatedMessage = __('The shipment has been created.');
             $labelCreatedMessage = __('You created the shipping label.');

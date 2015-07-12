@@ -10,106 +10,82 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $_objectManager;
 
+    /**
+     * @var \Magento\Checkout\Block\Cart\Sidebar
+     */
+    protected $model;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlBuilderMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $viewMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfigMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $checkoutSessionMock;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-    }
 
-    public function testDeserializeRenders()
-    {
-        $childBlock = $this->getMock('Magento\Framework\View\Element\AbstractBlock', [], [], '', false);
-        /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
-            ['createBlock', 'getChildName', 'setChild'],
+        $this->layoutMock = $this->getMock('\Magento\Framework\View\Layout', [], [], '', false);
+        $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
+        $this->urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->viewMock = $this->getMock('\Magento\Catalog\Model\Product\Image\View', [], [], '', false);
+        $this->scopeConfigMock = $this->getMock(
+            '\Magento\Framework\App\Config\ScopeConfigInterface',
+            [],
             [],
             '',
             false
         );
 
-        $rendererList = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\Sidebar',
-            [
-                'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
-                    ['layout' => $layout]
-                )
-            ]
-        );
-        $layout->expects(
-            $this->at(0)
-        )->method(
-            'createBlock'
-        )->with(
-            'Magento\Framework\View\Element\RendererList'
-        )->will(
-            $this->returnValue($rendererList)
-        );
-        $layout->expects(
-            $this->at(4)
-        )->method(
-            'createBlock'
-        )->with(
-            'some-block',
-            '.some-template',
-            ['data' => ['template' => 'some-type']]
-        )->will(
-            $this->returnValue($childBlock)
-        );
-        $layout->expects(
-            $this->at(5)
-        )->method(
-            'getChildName'
-        )->with(
-            null,
-            'some-template'
-        )->will(
-            $this->returnValue(false)
-        );
-        $layout->expects($this->at(6))->method('setChild')->with(null, null, 'some-template');
-
-        /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
-        $block = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\Sidebar',
-            [
-                'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
-                    ['layout' => $layout]
-                )
-            ]
-        );
-
-        $block->deserializeRenders('some-template|some-block|some-type');
-    }
-
-    public function testGetIdentities()
-    {
-        /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
-        $block = $this->_objectManager->getObject('Magento\Checkout\Block\Cart\Sidebar');
-
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['__wakeup', 'getIdentities'],
+        $contextMock = $this->getMock(
+            '\Magento\Framework\View\Element\Template\Context',
+            ['getLayout', 'getUrlBuilder', 'getStoreManager', 'getScopeConfig'],
             [],
             '',
             false
         );
-        $identities = [0 => 1, 1 => 2, 2 => 3];
-        $product->expects($this->exactly(2))
-            ->method('getIdentities')
-            ->will($this->returnValue($identities));
+        $contextMock->expects($this->once())
+            ->method('getLayout')
+            ->will($this->returnValue($this->layoutMock));
+        $contextMock->expects($this->once())
+            ->method('getUrlBuilder')
+            ->will($this->returnValue($this->urlBuilderMock));
+        $contextMock->expects($this->once())
+            ->method('getStoreManager')
+            ->will($this->returnValue($this->storeManagerMock));
+        $contextMock->expects($this->once())
+            ->method('getScopeConfig')
+            ->will($this->returnValue($this->scopeConfigMock));
 
-        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
-        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
-
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
-        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $quote->expects($this->once())->method('getAllVisibleItems')->will($this->returnValue([$item]));
-
-        $block->setData('custom_quote', $quote);
-        $this->assertEquals($product->getIdentities(), $block->getIdentities());
+        $this->model = $this->_objectManager->getObject(
+            'Magento\Checkout\Block\Cart\Sidebar',
+            ['context' => $contextMock, 'imageView' => $this->viewMock, 'checkoutSession' => $this->checkoutSessionMock]
+        );
     }
 
     public function testGetTotalsHtml()
@@ -124,30 +100,70 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->method('toHtml')
             ->will($this->returnValue($totalsHtml));
 
-        $layoutMock = $this->getMockBuilder('\Magento\Framework\View\Layout')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $layoutMock->expects($this->once())
+        $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('checkout.cart.minicart.totals')
             ->will($this->returnValue($totalsBlockMock));
 
-        $contextMock = $this->getMockBuilder('\Magento\Framework\View\Element\Template\Context')
-            ->disableOriginalConstructor()
-            ->setMethods(['getLayout'])
-            ->getMock();
+        $this->assertEquals($totalsHtml, $this->model->getTotalsHtml());
+    }
 
-        $contextMock->expects($this->once())
-            ->method('getLayout')
-            ->will($this->returnValue($layoutMock));
+    public function testGetConfig()
+    {
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
 
-        /** @var \Magento\Checkout\Block\Cart\SideBar $sidebarBlock */
-        $sidebarBlock = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\SideBar',
-            ['context' => $contextMock]
-        );
+        $shoppingCartUrl = 'http://url.com/cart';
+        $checkoutUrl = 'http://url.com/checkout';
+        $updateItemQtyUrl = 'http://url.com/updateItemQty';
+        $removeItemUrl = 'http://url.com/removeItem';
+        $baseUrl = 'http://url.com/';
+        $imageTemplate = 'Magento_Catalog/product/image_with_borders';
 
-        $this->assertEquals($totalsHtml, $sidebarBlock->getTotalsHtml());
+        $expectedResult = [
+            'shoppingCartUrl' => $shoppingCartUrl,
+            'checkoutUrl' => $checkoutUrl,
+            'updateItemQtyUrl' => $updateItemQtyUrl,
+            'removeItemUrl' => $removeItemUrl,
+            'imageTemplate' => $imageTemplate,
+            'baseUrl' => $baseUrl
+        ];
+
+        $valueMap = [
+            ['checkout/cart', [], $shoppingCartUrl],
+            ['checkout', [], $checkoutUrl],
+            ['checkout/sidebar/updateItemQty', [], $updateItemQtyUrl],
+            ['checkout/sidebar/removeItem', [], $removeItemUrl]
+        ];
+
+        $this->urlBuilderMock->expects($this->exactly(4))
+            ->method('getUrl')
+            ->willReturnMap($valueMap);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
+        $this->viewMock->expects($this->once())->method('isWhiteBorders')->willReturn(false);
+
+        $this->assertEquals($expectedResult, $this->model->getConfig());
+    }
+
+    public function testGetIsNeedToDisplaySideBar()
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(
+                \Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->willReturn(true);
+
+        $this->assertTrue($this->model->getIsNeedToDisplaySideBar());
+    }
+
+    public function testGetTotalsCache()
+    {
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $totalsMock = ['totals'];
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $quoteMock->expects($this->once())->method('getTotals')->willReturn($totalsMock);
+
+        $this->assertEquals($totalsMock, $this->model->getTotalsCache());
     }
 }

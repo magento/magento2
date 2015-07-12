@@ -19,7 +19,6 @@ class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
             \Magento\Multishipping\Model\Checkout\Type\Multishipping\State::STEP_SELECT_ADDRESSES
         );
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
         if ($addressForm = $this->_view->getLayout()->getBlock('customer_address_edit')) {
             $addressForm->setTitle(
                 __('Create Shipping Address')

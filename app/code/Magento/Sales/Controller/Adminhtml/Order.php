@@ -45,11 +45,6 @@ class Order extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
@@ -70,7 +65,6 @@ class Order extends \Magento\Backend\App\Action
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -81,7 +75,6 @@ class Order extends \Magento\Backend\App\Action
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -90,7 +83,6 @@ class Order extends \Magento\Backend\App\Action
         $this->_fileFactory = $fileFactory;
         $this->_translateInline = $translateInline;
         $this->resultPageFactory = $resultPageFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->resultRawFactory = $resultRawFactory;
@@ -132,47 +124,10 @@ class Order extends \Magento\Backend\App\Action
     }
 
     /**
-     * Acl check for admin
-     *
      * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _isAllowed()
     {
-        $action = strtolower($this->getRequest()->getActionName());
-        switch ($action) {
-            case 'hold':
-                $aclResource = 'Magento_Sales::hold';
-                break;
-            case 'unhold':
-                $aclResource = 'Magento_Sales::unhold';
-                break;
-            case 'email':
-                $aclResource = 'Magento_Sales::email';
-                break;
-            case 'cancel':
-                $aclResource = 'Magento_Sales::cancel';
-                break;
-            case 'view':
-                $aclResource = 'Magento_Sales::actions_view';
-                break;
-            case 'addcomment':
-                $aclResource = 'Magento_Sales::comment';
-                break;
-            case 'creditmemos':
-                $aclResource = 'Magento_Sales::creditmemo';
-                break;
-            case 'reviewpayment':
-                $aclResource = 'Magento_Sales::review_payment';
-                break;
-            case 'address':
-            case 'addresssave':
-                $aclResource = 'Magento_Sales::actions_edit';
-                break;
-            default:
-                $aclResource = 'Magento_Sales::sales_order';
-                break;
-        }
-        return $this->_authorization->isAllowed($aclResource);
+        return $this->_authorization->isAllowed('Magento_Sales::sales_order');
     }
 }

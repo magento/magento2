@@ -109,7 +109,6 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             'directory_id',
             $dirStorageTable,
             'directory_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'File Storage'

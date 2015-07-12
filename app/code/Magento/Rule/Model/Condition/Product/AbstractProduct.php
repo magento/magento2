@@ -153,7 +153,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
-        $attributes['attribute_set_id'] = __('Attribute Set');
+        $attributes['attribute_set_id'] = __('Product Template');
         $attributes['category_ids'] = __('Category');
     }
 
@@ -413,27 +413,6 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             default:
                 return 'text';
         }
-    }
-
-    /**
-     * Retrieve value element
-     *
-     * @return \Magento\Framework\Data\Form\Element\AbstractElement
-     */
-    public function getValueElement()
-    {
-        $element = parent::getValueElement();
-        if (is_object($this->getAttributeObject())) {
-            switch ($this->getAttributeObject()->getFrontendInput()) {
-                case 'date':
-                    $element->setImage($this->_assetRepo->getUrl('images/grid-cal.png'));
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        return $element;
     }
 
     /**

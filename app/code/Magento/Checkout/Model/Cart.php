@@ -228,8 +228,10 @@ class Cart extends Object implements CartInterface
     {
         $quote = $this->getQuote()->setCheckoutMethod('');
         $this->_checkoutSession->setCartWasUpdated(true);
+        // TODO: Move this logic to Multishipping module as plug-in.
         // reset for multiple address checkout
-        if ($this->_checkoutSession->getCheckoutState() !== Session::CHECKOUT_STATE_BEGIN) {
+        if ($this->_checkoutSession->getCheckoutState() !== Session::CHECKOUT_STATE_BEGIN
+            && $this->_checkoutSession->getCheckoutState() !== null) {
             $quote->removeAllAddresses()->removePayment();
             $this->_checkoutSession->resetCheckout();
         }
@@ -499,9 +501,7 @@ class Cart extends Object implements CartInterface
             if ($qty > 0) {
                 $item->setQty($qty);
 
-                $itemInQuote = $this->getQuote()->getItemById($item->getId());
-
-                if (!$itemInQuote && $item->getHasError()) {
+                if ($item->getHasError()) {
                     throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
                 }
 
@@ -517,7 +517,7 @@ class Cart extends Object implements CartInterface
 
         if ($qtyRecalculatedFlag) {
             $this->messageManager->addNotice(
-                __('Some products quantities were recalculated because of quantity increment mismatch.')
+                __('We adjusted product quantities to fit the required increments.')
             );
         }
 
@@ -525,6 +525,7 @@ class Cart extends Object implements CartInterface
             'checkout_cart_update_items_after',
             ['cart' => $this, 'info' => $infoDataObject]
         );
+
         return $this;
     }
 

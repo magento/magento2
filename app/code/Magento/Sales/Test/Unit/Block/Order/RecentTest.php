@@ -10,7 +10,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Sales\Block\Order\Recent
      */
-    protected $model;
+    protected $block;
 
     /**
      * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -84,7 +84,6 @@ class RecentTest extends \PHPUnit_Framework_TestCase
             [
                 'addAttributeToSelect',
                 'addFieldToFilter',
-                'joinAttribute',
                 'addAttributeToFilter',
                 'addAttributeToSort',
                 'setPageSize',
@@ -95,65 +94,39 @@ class RecentTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
+        $this->orderCollectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($orderCollection));
         $orderCollection->expects($this->at(0))
             ->method('addAttributeToSelect')
             ->with($this->equalTo('*'))
             ->will($this->returnSelf());
         $orderCollection->expects($this->at(1))
-            ->method('joinAttribute')
-            ->with(
-                'shipping_firstname',
-                'order_address/firstname',
-                'shipping_address_id',
-                $this->equalTo(null),
-                'left'
-            )
-            ->will($this->returnSelf());
-        $orderCollection->expects($this->at(2))
-            ->method('joinAttribute')
-            ->with(
-                'shipping_lastname',
-                'order_address/lastname',
-                'shipping_address_id',
-                $this->equalTo(null),
-                'left'
-            )
-            ->will($this->returnSelf());
-
-        $orderCollection->expects($this->at(3))
             ->method('addAttributeToFilter')
-            ->with(
-                $attribute[0],
-                $this->equalTo($customerId)
-            )
-            ->will($this->returnSelf());
-        $orderCollection->expects($this->at(4))
+            ->with($attribute[0], $this->equalTo($customerId))
+            ->willReturnSelf();
+        $orderCollection->expects($this->at(2))
             ->method('addAttributeToFilter')
             ->with($attribute[1], $this->equalTo(['in' => $statuses]))
             ->will($this->returnSelf());
-        $orderCollection->expects($this->at(5))
+        $orderCollection->expects($this->at(3))
             ->method('addAttributeToSort')
             ->with('created_at', 'desc')
             ->will($this->returnSelf());
-        $orderCollection->expects($this->at(6))
+        $orderCollection->expects($this->at(4))
             ->method('setPageSize')
             ->with('5')
             ->will($this->returnSelf());
-        $orderCollection->expects($this->at(7))
+        $orderCollection->expects($this->at(5))
             ->method('load')
             ->will($this->returnSelf());
-
-        $this->orderCollectionFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->will($this->returnValue($orderCollection));
-
-        $this->model = new \Magento\Sales\Block\Order\Recent(
+        $this->block = new \Magento\Sales\Block\Order\Recent(
             $this->context,
             $this->orderCollectionFactory,
             $this->customerSession,
             $this->orderConfig,
             $data
         );
-        $this->assertEquals($orderCollection, $this->model->getOrders());
+        $this->assertEquals($orderCollection, $this->block->getOrders());
     }
 }

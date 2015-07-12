@@ -21,4 +21,12 @@ interface CustomOptionPriceInterface
      * @return array
      */
     public function getOptions();
+
+    /**
+     * Return the minimal or maximal price for custom options
+     *
+     * @param bool $getMin
+     * @return float
+     */
+    public function getCustomOptionRange($getMin);
 }

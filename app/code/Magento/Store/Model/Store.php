@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\Model\AbstractModel;
@@ -48,6 +49,8 @@ class Store extends AbstractModel implements
 
     const XML_PATH_STORE_STORE_PHONE = 'general/store_information/phone';
 
+    const XML_PATH_STORE_STORE_HOURS = 'general/store_information/hours';
+
     const XML_PATH_STORE_IN_URL = 'web/url/use_store';
 
     const XML_PATH_USE_REWRITES = 'web/seo/use_rewrites';
@@ -55,7 +58,7 @@ class Store extends AbstractModel implements
     const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
 
     const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
-    
+
     const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
 
     const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
@@ -320,7 +323,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param string $currencyInstalled
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -344,7 +347,7 @@ class Store extends AbstractModel implements
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         $currencyInstalled,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = []
     ) {
@@ -433,8 +436,8 @@ class Store extends AbstractModel implements
         $storeCodeRule = new \Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/');
         $storeCodeRule->setMessage(
             __(
-                'The store code may contain only letters (a-z), numbers (0-9) or underscore(_),'
-                . ' the first character must be a letter'
+                'The store code may contain only letters (a-z), numbers (0-9) or underscore (_),'
+                . ' and the first character must be a letter.'
             ),
             \Zend_Validate_Regex::NOT_MATCH
         );
@@ -479,7 +482,7 @@ class Store extends AbstractModel implements
     {
         $data = $this->_config->getValue($path, ScopeInterface::SCOPE_STORE, $this->getCode());
         if (!$data) {
-            $data = $this->_config->getValue($path, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
+            $data = $this->_config->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         }
         return $data === false ? null : $data;
     }
@@ -755,7 +758,12 @@ class Store extends AbstractModel implements
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        if (!$secureBaseUrl) {
+        if (!$secureBaseUrl ||
+            !$this->_config->getValue(
+                self::XML_PATH_SECURE_IN_FRONTEND,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        ) {
             return false;
         }
 
@@ -783,7 +791,7 @@ class Store extends AbstractModel implements
         if ($configValue == self::PRICE_SCOPE_GLOBAL) {
             return $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             );
         } else {
             return $this->_getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);

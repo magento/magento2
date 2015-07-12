@@ -16,4 +16,18 @@
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Controller\Ajax\Login">
+        <plugin name="configurable_product" type="Magento\Captcha\Model\Customer\Plugin\AjaxLogin" sortOrder="50" />
+    </type>
+    <type name="Magento\Captcha\Model\Customer\Plugin\AjaxLogin">
+        <arguments>
+            <argument name="formIds" xsi:type="array">
+                <item name="user_login" xsi:type="string">user_login</item>
+                <item name="guest_checkout" xsi:type="string">guest_checkout</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Sidebar">
+        <plugin name="login_captcha" type="\Magento\Captcha\Model\Cart\ConfigPlugin" sortOrder="50" />
+    </type>
 </config>

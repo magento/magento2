@@ -66,7 +66,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                     );
                     $this->messageManager->addSuccess($message);
                 }
-                return $this->_goBack();
+                return $this->_goBack($this->_url->getUrl('checkout/cart'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
@@ -86,7 +86,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                 return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We cannot update the item.'));
+            $this->messageManager->addException($e, __('We can\'t update the item right now.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             return $this->_goBack();
         }

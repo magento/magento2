@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Xml;
 
-use \Magento\Framework\Exception;
-
 class Parser
 {
     /**
@@ -149,6 +147,7 @@ class Parser
     /**
      * @param string $string
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadXML($string)
     {
@@ -158,9 +157,12 @@ class Parser
 
         try {
             $this->getDom()->loadXML($string);
-        } catch (\Magento\Framework\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             restore_error_handler();
-            throw new \Magento\Framework\Exception($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase($e->getMessage()),
+                $e
+            );
         }
 
         if ($this->errorHandlerIsActive) {
@@ -177,14 +179,14 @@ class Parser
      * @param string $errorStr
      * @param string $errorFile
      * @param int $errorLine
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function errorHandler($errorNo, $errorStr, $errorFile, $errorLine)
     {
         if ($errorNo != 0) {
             $message = "{$errorStr} in {$errorFile} on line {$errorLine}";
-            throw new \Magento\Framework\Exception($message);
+            throw new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase($message));
         }
     }
 }

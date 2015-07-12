@@ -20,8 +20,6 @@
 <?php endif ?>
 <script>
 require(["prototype", "mage/adminhtml/events"], function(){
-
-<!--
     subscriberController = {
         checkCheckboxes: function(controlCheckbox) {
             var elements = $('subscriberGrid').getElementsByClassName('subscriberCheckbox');
@@ -51,10 +49,8 @@ require(["prototype", "mage/adminhtml/events"], function(){
                               evalScripts: true,
                               onComplete:subscriberGridJsObject.initGrid.bind(subscriberGridJsObject)});
         }
-    }
+    };
 
     varienGlobalEvents.attachEventHandler('gridRowClick', subscriberController.rowClick.bind(subscriberController));
-//-->
-
 });
 </script>

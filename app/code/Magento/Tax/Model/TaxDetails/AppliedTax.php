@@ -13,12 +13,21 @@ use Magento\Tax\Api\Data\AppliedTaxInterface;
  */
 class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_TAX_RATE_KEY = 'tax_rate_key';
+    const KEY_PERCENT      = 'percent';
+    const KEY_AMOUNT       = 'amount';
+    const KEY_RATES        = 'rates';
+    /**#@-*/
+
     /**
      * {@inheritdoc}
      */
     public function getTaxRateKey()
     {
-        return $this->getData(AppliedTaxInterface::KEY_TAX_RATE_KEY);
+        return $this->getData(self::KEY_TAX_RATE_KEY);
     }
 
     /**
@@ -26,7 +35,7 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      */
     public function getPercent()
     {
-        return $this->getData(AppliedTaxInterface::KEY_PERCENT);
+        return $this->getData(self::KEY_PERCENT);
     }
 
     /**
@@ -34,7 +43,7 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      */
     public function getAmount()
     {
-        return $this->getData(AppliedTaxInterface::KEY_AMOUNT);
+        return $this->getData(self::KEY_AMOUNT);
     }
 
     /**
@@ -42,7 +51,7 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      */
     public function getRates()
     {
-        return $this->getData(AppliedTaxInterface::KEY_RATES);
+        return $this->getData(self::KEY_RATES);
     }
 
     /**
@@ -53,7 +62,7 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      */
     public function setTaxRateKey($taxRateKey)
     {
-        return $this->setData(AppliedTaxInterface::KEY_TAX_RATE_KEY, $taxRateKey);
+        return $this->setData(self::KEY_TAX_RATE_KEY, $taxRateKey);
     }
 
     /**
@@ -64,7 +73,7 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      */
     public function setPercent($percent)
     {
-        return $this->setData(AppliedTaxInterface::KEY_PERCENT, $percent);
+        return $this->setData(self::KEY_PERCENT, $percent);
     }
 
     /**
@@ -75,7 +84,7 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      */
     public function setAmount($amount)
     {
-        return $this->setData(AppliedTaxInterface::KEY_AMOUNT, $amount);
+        return $this->setData(self::KEY_AMOUNT, $amount);
     }
 
     /**
@@ -86,7 +95,7 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      */
     public function setRates(array $rates = null)
     {
-        return $this->setData(AppliedTaxInterface::KEY_RATES, $rates);
+        return $this->setData(self::KEY_RATES, $rates);
     }
 
     /**

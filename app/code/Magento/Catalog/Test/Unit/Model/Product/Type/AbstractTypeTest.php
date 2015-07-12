@@ -119,11 +119,12 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSetAttributes()
     {
-        $this->productResource->expects($this->any())->method('loadAllAttributes')->will(
+        $this->productResource->expects($this->once())->method('loadAllAttributes')->will(
             $this->returnValue($this->productResource)
         );
-        $this->productResource->expects($this->any())->method('getSortedAttributes')->will($this->returnValue(5));
-        $this->model->getSetAttributes($this->product);
+        $this->productResource->expects($this->once())->method('getSortedAttributes')->will($this->returnValue(5));
+        $this->assertEquals(5, $this->model->getSetAttributes($this->product));
+        //Call the method for a second time, the cached copy should be used
         $this->assertEquals(5, $this->model->getSetAttributes($this->product));
     }
 

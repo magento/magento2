@@ -5,13 +5,19 @@
  */
 namespace Magento\LayeredNavigation\Block\Navigation;
 
+use Magento\Catalog\Model\Layer\Filter\FilterInterface;
+
+/**
+ * Interface FilterRendererInterface
+ * @api
+ */
 interface FilterRendererInterface
 {
     /**
      * Render filter
      *
-     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
+     * @param FilterInterface $filter
      * @return string
      */
-    public function render(\Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter);
+    public function render(FilterInterface $filter);
 }

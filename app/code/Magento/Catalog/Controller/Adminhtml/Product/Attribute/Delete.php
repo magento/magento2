@@ -9,31 +9,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * Constructor
-     *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
-        parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
-        $this->resultRedirectFactory = $resultRedirectFactory;
-    }
-
-    /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
@@ -46,13 +21,13 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             // entity type check
             $model->load($id);
             if ($model->getEntityTypeId() != $this->_entityTypeId) {
-                $this->messageManager->addError(__('This attribute cannot be deleted.'));
+                $this->messageManager->addError(__('We can\'t delete the attribute.'));
                 return $resultRedirect->setPath('catalog/*/');
             }
 
             try {
                 $model->delete();
-                $this->messageManager->addSuccess(__('The product attribute has been deleted.'));
+                $this->messageManager->addSuccess(__('You deleted the product attribute.'));
                 return $resultRedirect->setPath('catalog/*/');
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());

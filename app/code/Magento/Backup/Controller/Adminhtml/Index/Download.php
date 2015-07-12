@@ -16,11 +16,6 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
     protected $resultRawFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Backup\Factory $backupFactory
@@ -28,7 +23,6 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
      * @param \Magento\Backup\Model\BackupFactory $backupModelFactory
      * @param \Magento\Framework\App\MaintenanceMode $maintenanceMode
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -37,8 +31,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Backup\Model\BackupFactory $backupModelFactory,
         \Magento\Framework\App\MaintenanceMode $maintenanceMode,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         parent::__construct(
             $context,
@@ -49,7 +42,6 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
             $maintenanceMode
         );
         $this->resultRawFactory = $resultRawFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

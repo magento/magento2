@@ -35,7 +35,7 @@ class AgreementReview extends Review
      *
      * @var string
      */
-    protected $agreementCheckbox = './/input[contains(@id, "agreement")]';
+    protected $agreementCheckbox = 'input[name^=checkoutAgreements]';
 
     /**
      * Get notification massage
@@ -55,7 +55,7 @@ class AgreementReview extends Review
      */
     public function setAgreement($value)
     {
-        $this->_rootElement->find($this->agreementCheckbox, Locator::SELECTOR_XPATH, 'checkbox')->setValue($value);
+        $this->_rootElement->find($this->agreementCheckbox, Locator::SELECTOR_CSS, 'checkbox')->setValue($value);
     }
 
     /**

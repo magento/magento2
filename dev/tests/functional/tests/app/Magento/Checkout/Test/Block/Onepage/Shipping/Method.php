@@ -10,9 +10,7 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Method
  * One page checkout status shipping method block
- *
  */
 class Method extends Block
 {
@@ -21,7 +19,7 @@ class Method extends Block
      *
      * @var string
      */
-    protected $shippingMethod = '//dt[text()="%s"]/following-sibling::*//label/span[contains(text(), "%s")]';
+    protected $shippingMethod = './/tbody//tr[td[contains(., "%s")] and td[contains(., "%s")]]//input';
 
     /**
      * Continue checkout button
@@ -38,15 +36,24 @@ class Method extends Block
     protected $waitElement = '.loading-mask';
 
     /**
-     * Select shipping method
+     * Block wait element
+     *
+     * @var string
+     */
+    protected $blockWaitElement = '._block-content-loading';
+
+    /**
+     * Select shipping method.
      *
      * @param array $method
      * @return void
      */
     public function selectShippingMethod(array $method)
     {
-        $selector = sprintf($this->shippingMethod, $method['shipping_service'], $method['shipping_method']);
-        $this->waitForElementVisible($selector, Locator::SELECTOR_XPATH);
+        // Code under test uses JavaScript setTimeout at this point as well.
+        sleep(3);
+        $selector = sprintf($this->shippingMethod, $method['shipping_method'], $method['shipping_service']);
+        $this->waitForElementNotVisible($this->blockWaitElement);
         $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
     }
 

@@ -3,11 +3,26 @@
  * See COPYING.txt for license details.
  */
 define([
-    'mage/utils',
+    'mageUtils',
+    'underscore',
     './storage',
     './events'
-], function (utils, Storage, Events) {
+], function (utils, _, Storage, Events) {
     'use strict';
+
+    function async(name, registry, method) {
+        var args = _.toArray(arguments).slice(3);
+
+        if (_.isString(method)) {
+            registry.get(name, function (component) {
+                component[method].apply(component, args);
+            });
+        } else if (_.isFunction(method)) {
+            registry.get(name, method);
+        } else if (!args.length) {
+            return registry.get(name);
+        }
+    }
 
     function Registry() {
         this.storage = new Storage();
@@ -20,9 +35,10 @@ define([
         /**
          * Retrieves data from registry.
          *
-         * @param {(String|Array)} elems - An array of elements' names or
-         *      a string of names divided by spaces.
-         * @param {Function} [callback] - Callback function that will be triggered
+         * @param {(String|Array)} elems -
+         *      An array of elements' names or a string of names divided by spaces.
+         * @param {Function} [callback] -
+         *      Callback function that will be triggered
          *      when all of the elements are registered.
          * @returns {Array|*|Undefined}
          *      Returns either an array of elements
@@ -34,18 +50,18 @@ define([
 
             elems = utils.stringToArray(elems) || [];
 
-            if (typeof callback == 'function') {
+            if (typeof callback !== 'undefined') {
                 this.events.wait(elems, callback);
             } else {
                 records = this.storage.get(elems);
 
-                return elems.length === 1 ?
-                    records[0] :
-                    records;
+                return elems.length > 1 ?
+                    records :
+                    records[0];
             }
         },
 
-        /**
+       /**
          * Sets data to registry.
          *
          * @param {String} elem - Elements' name.
@@ -61,8 +77,8 @@ define([
 
         /**
          * Removes specified elements from a storage.
-         * @param {(String|Array)} elems - An array of elements' names or
-         *      a string of names divided by spaces.
+         * @param {(String|Array)} elems -
+         *      An array of elements' names or a string of names divided by spaces.
          * @returns {registry} Chainable.
          */
         remove: function (elems) {
@@ -76,14 +92,18 @@ define([
        /**
          * Checks whether specified elements has been registered.
          *
-         * @param {(String|Array)} elems - An array of elements' names or
-         *      a string of names divided by spaces.
+         * @param {(String|Array)} elems -
+         *      An array of elements' names or a string of names divided by spaces.
          * @returns {Boolean}
          */
         has: function (elems) {
             elems = utils.stringToArray(elems);
 
             return this.storage.has(elems);
+        },
+
+        async: function (name) {
+            return async.bind(null, name, this);
         },
 
         create: function () {

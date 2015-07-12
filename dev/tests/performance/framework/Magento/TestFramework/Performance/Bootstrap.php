@@ -47,7 +47,7 @@ class Bootstrap
     /**
      * Ensure reports directory exists, empty, and has write permissions
      *
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function cleanupReports()
     {
@@ -57,9 +57,11 @@ class Bootstrap
             if ($filesystemAdapter->isExists($reportDir)) {
                 $filesystemAdapter->deleteDirectory($reportDir);
             }
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FileSystemException $e) {
             if (file_exists($reportDir)) {
-                throw new \Magento\Framework\Exception("Cannot cleanup reports directory '{$reportDir}'.");
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase("Cannot cleanup reports directory '%1'.", $reportDir)
+                );
             }
         }
         mkdir($reportDir, 0777, true);

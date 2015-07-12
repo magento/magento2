@@ -60,8 +60,11 @@ class DeleteAttributeStep implements TestStepInterface
      */
     public function run()
     {
-        $filter = ['attribute_code' => $this->attribute->getAttributeCode()];
-        if ($this->catalogProductAttributeIndex->open()->getGrid()->isRowVisible($filter)) {
+        $filter = $this->attribute->hasData('attribute_code')
+            ? ['attribute_code' => $this->attribute->getAttributeCode()]
+            : ['frontend_label' => $this->attribute->getFrontendLabel()];
+        $this->catalogProductAttributeIndex->open();
+        if ($this->catalogProductAttributeIndex->getGrid()->isRowVisible($filter)) {
             $this->catalogProductAttributeIndex->getGrid()->searchAndOpen($filter);
             $this->catalogProductAttributeNew->getPageActions()->delete();
         }

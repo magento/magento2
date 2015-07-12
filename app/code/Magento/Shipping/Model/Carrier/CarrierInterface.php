@@ -11,6 +11,7 @@ interface CarrierInterface
      * Check if carrier has shipping tracking option available
      *
      * @return boolean
+     * @api
      */
     public function isTrackingAvailable();
 
@@ -18,6 +19,7 @@ interface CarrierInterface
      * Get allowed shipping methods
      *
      * @return array
+     * @api
      */
     public function getAllowedMethods();
 }

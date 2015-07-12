@@ -10,7 +10,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Payment information model
  */
-class Info extends AbstractExtensibleModel
+class Info extends AbstractExtensibleModel implements InfoInterface
 {
     /**
      * Additional information container
@@ -39,7 +39,7 @@ class Info extends AbstractExtensibleModel
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -50,7 +50,7 @@ class Info extends AbstractExtensibleModel
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_paymentData = $paymentData;

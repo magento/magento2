@@ -13,12 +13,19 @@ use Magento\Tax\Api\Data\TaxClassKeyInterface;
  */
 class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_TYPE  = 'type';
+    const KEY_VALUE = 'value';
+    /**#@-*/
+
     /**
      * {@inheritdoc}
      */
     public function getType()
     {
-        return $this->getData(TaxClassKeyInterface::KEY_TYPE);
+        return $this->getData(self::KEY_TYPE);
     }
 
     /**
@@ -26,7 +33,7 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
      */
     public function getValue()
     {
-        return $this->getData(TaxClassKeyInterface::KEY_VALUE);
+        return $this->getData(self::KEY_VALUE);
     }
 
     /**
@@ -37,7 +44,7 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
      */
     public function setType($type)
     {
-        return $this->setData(TaxClassKeyInterface::KEY_TYPE, $type);
+        return $this->setData(self::KEY_TYPE, $type);
     }
 
     /**
@@ -48,7 +55,7 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
      */
     public function setValue($value)
     {
-        return $this->setData(TaxClassKeyInterface::KEY_VALUE, $value);
+        return $this->setData(self::KEY_VALUE, $value);
     }
 
     /**

@@ -9,6 +9,8 @@
  */
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class Config
 {
     /**
@@ -173,7 +175,7 @@ class Config
     protected function _assignThemeToDefaultScope($themeId, &$isReassigned)
     {
         $configPath = \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID;
-        $this->_configWriter->save($configPath, $themeId, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
+        $this->_configWriter->save($configPath, $themeId, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         $isReassigned = true;
         return $this;
     }

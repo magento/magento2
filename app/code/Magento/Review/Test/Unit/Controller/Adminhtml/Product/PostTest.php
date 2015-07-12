@@ -3,110 +3,95 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Review\Test\Unit\Controller\Adminhtml\Product;
+
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PostTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Review\Controller\Adminhtml\Product
+     * @var \Magento\Review\Controller\Adminhtml\Product\Post
      */
-    protected $_model;
+    protected $postController;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context
      */
-    protected $_objectManagerHelper;
-
+    protected $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_registryMock;
+    protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_requestMock;
+    protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_responseMock;
+    protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManagerMock;
+    protected $storeModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\Review|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_messageManagerMock;
+    protected $reviewMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\ReviewFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeManagerInterfaceMock;
+    protected $reviewFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\Rating|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeModelMock;
+    protected $ratingMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\RatingFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_reviewModelMock;
+    protected $ratingFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_reviewFactoryMock;
+    protected $resultFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_ratingModelMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_ratingFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_resourceReviewMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_helperMock;
-
+    protected $resultRedirectMock;
 
     protected function setUp()
     {
         $this->_prepareMockObjects();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->_model = $objectManagerHelper->getObject(
+        $this->context = $objectManagerHelper->getObject(
+            'Magento\Backend\App\Action\Context',
+            [
+                'request' => $this->requestMock,
+                'objectManager' => $this->objectManagerMock,
+                'resultFactory' => $this->resultFactoryMock
+            ]
+        );
+        $this->postController = $objectManagerHelper->getObject(
             'Magento\Review\Controller\Adminhtml\Product\Post',
             [
-                'coreRegistry' => $this->_registryMock,
-                'reviewFactory' => $this->_reviewFactoryMock,
-                'ratingFactory' => $this->_ratingFactoryMock,
-                'request' => $this->_requestMock,
-                'response' => $this->_responseMock,
-                'objectManager' => $this->_objectManagerMock,
-                'messageManager' => $this->_messageManagerMock,
-                'helper' => $this->_helperMock
+                'reviewFactory' => $this->reviewFactoryMock,
+                'ratingFactory' => $this->ratingFactoryMock,
+                'context' => $this->context
             ]
         );
 
@@ -117,50 +102,57 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareMockObjects()
     {
-        $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->_requestMock = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
-            ->disableOriginalConstructor()->getMock();
-        $this->_responseMock = $this->getMock(
-            '\Magento\Framework\App\ResponseInterface', ['setRedirect', 'sendResponse']
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $this->storeModelMock = $this->getMock(
+            'Magento\Store\Model\Store',
+            ['__wakeup', 'getId'],
+            [],
+            '',
+            false
         );
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_messageManagerMock = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
-        $this->_storeModelMock = $this->getMock(
-            'Magento\Store\Model\Store', ['__wakeup', 'getId'], [], '', false
-        );
-        $this->_reviewModelMock = $this->getMock(
+        $this->reviewMock = $this->getMock(
             'Magento\Review\Model\Review',
             ['__wakeup', 'create', 'save', 'getId', 'getResource', 'aggregate'],
             [],
             '',
             false
         );
-
-        $this->_reviewFactoryMock = $this->getMock(
+        $this->reviewFactoryMock = $this->getMock(
             'Magento\Review\Model\ReviewFactory',
             ['create'],
             [],
             '',
             false
         );
-
-        $this->_ratingModelMock = $this->getMock(
+        $this->ratingMock = $this->getMock(
             'Magento\Review\Model\Rating',
             ['__wakeup', 'setRatingId', 'setReviewId', 'addOptionVote'],
             [],
             '',
-            false);
-
-        $this->_ratingFactoryMock = $this->getMock(
+            false
+        );
+        $this->ratingFactoryMock = $this->getMock(
             'Magento\Review\Model\RatingFactory',
             ['create'],
             [],
             '',
             false
         );
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_helperMock = $this->getMock('\Magento\Backend\Helper\Data', [], [], '', false);
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT, [])
+            ->willReturn($this->resultRedirectMock);
     }
 
     /**
@@ -168,41 +160,55 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     public function testPostAction()
     {
-        $this->_requestMock->expects($this->at(0))->method('getParam')
-            ->will($this->returnValue(1));
-        $this->_requestMock->expects($this->at(2))->method('getParam')
-            ->will($this->returnValue(['1' => '1']));
-        $this->_requestMock->expects($this->once())->method('getPostValue')
-            ->will($this->returnValue(['status_id' => 1]));
-        $this->_objectManagerMock->expects($this->at(0))->method('get')
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['product_id', false, 1],
+                    ['ratings', [], ['1' => '1']]
+                ]
+            );
+        $this->requestMock->expects($this->once())
+            ->method('getPostValue')
+            ->willReturn(['status_id' => 1]);
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
             ->with('Magento\Store\Model\StoreManagerInterface')
-            ->will($this->returnValue($this->_storeManagerInterfaceMock));
-        $this->_reviewFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($this->_reviewModelMock));
-        $this->_ratingFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($this->_ratingModelMock));
-        $this->_storeManagerInterfaceMock->expects($this->once())->method('hasSingleStore')
-            ->will($this->returnValue(true));
-        $this->_storeManagerInterfaceMock->expects($this->once())->method('getStore')
-            ->will($this->returnValue($this->_storeModelMock));
-        $this->_storeModelMock->expects($this->once())->method('getId')
-            ->will($this->returnValue(1));
-        $this->_reviewModelMock->expects($this->once())->method('save')
-            ->will($this->returnValue($this->_reviewModelMock));
-        $this->_reviewModelMock->expects($this->once())->method('getId')
-            ->will($this->returnValue(1));
-        $this->_reviewModelMock->expects($this->once())->method('aggregate')
-            ->will($this->returnValue($this->_reviewModelMock));
-        $this->_ratingModelMock->expects($this->once())->method('setRatingId')
-            ->will($this->returnSelf());
-        $this->_ratingModelMock->expects($this->once())->method('setReviewId')
-            ->will($this->returnSelf());
-        $this->_ratingModelMock->expects($this->once())->method('addOptionVote')
-            ->will($this->returnSelf());
-        $this->_helperMock->expects($this->once())->method('geturl')
-            ->will($this->returnValue('url'));
+            ->willReturn($this->storeManagerMock);
+        $this->reviewFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->reviewMock);
+        $this->ratingFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->ratingMock);
+        $this->storeManagerMock->expects($this->once())
+            ->method('hasSingleStore')
+            ->willReturn(true);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeModelMock);
+        $this->storeModelMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->reviewMock->expects($this->once())
+            ->method('save')
+            ->willReturn($this->reviewMock);
+        $this->reviewMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->reviewMock->expects($this->once())
+            ->method('aggregate')
+            ->willReturn($this->reviewMock);
+        $this->ratingMock->expects($this->once())
+            ->method('setRatingId')
+            ->willReturnSelf();
+        $this->ratingMock->expects($this->once())
+            ->method('setReviewId')
+            ->willReturnSelf();
+        $this->ratingMock->expects($this->once())
+            ->method('addOptionVote')
+            ->willReturnSelf();
 
-        $this->_model->execute();
+        $this->assertSame($this->resultRedirectMock, $this->postController->execute());
     }
-
 }

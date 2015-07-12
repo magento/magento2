@@ -9,10 +9,11 @@ namespace Magento\Integration\Controller\Adminhtml;
 /**
  * \Magento\Integration\Controller\Adminhtml\Integration
  *
+ * @magentoDataFixture Magento/Integration/_files/integration_all_permissions.php
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  */
-class IntegrationTest extends \Magento\Backend\Utility\Controller
+class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /** @var \Magento\Integration\Model\Integration  */
     private $_integration;
@@ -20,7 +21,10 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
     protected function setUp()
     {
         parent::setUp();
-        $this->_createDummyIntegration();
+        /** @var $integration \Magento\Integration\Model\Integration */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $integration = $objectManager->create('Magento\Integration\Model\Integration');
+        $this->_integration = $integration->load('Fixture Integration', 'name');
     }
 
     public function testIndexAction()
@@ -99,21 +103,5 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains('backend/admin/integration/index/'));
-    }
-
-    /**
-     * Creates a dummy integration for use in dispatched methods under testing
-     */
-    private function _createDummyIntegration()
-    {
-        /** @var $factory \Magento\Integration\Model\IntegrationFactory */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $factory = $objectManager->create('Magento\Integration\Model\IntegrationFactory');
-        $this->_integration = $factory->create()->setName(md5(rand()))->save();
-
-        /** Grant permissions to integrations */
-        /** @var \Magento\Integration\Service\V1\AuthorizationService $authorizationService */
-        $authorizationService = $objectManager->create('Magento\Integration\Service\V1\AuthorizationService');
-        $authorizationService->grantAllPermissions($this->_integration->getId());
     }
 }

@@ -3,15 +3,153 @@
  * See COPYING.txt for license details.
  */
 
+define('globalNavigationScroll', [
+    'jquery'
+], function ($) {
+    'use strict';
+
+    var win = $(window),
+        subMenuClass = '.submenu',
+        overlapClassName = '_overlap',
+        fixedClassName = '_fixed',
+        menu = $('.menu-wrapper'),
+        content = $('.page-wrapper'),
+        menuItems = $('#nav').children('li'),
+        subMenus = menuItems.children(subMenuClass),
+        winHeight,
+        menuHeight = menu.height(),
+        menuHeightRest = 0,
+        menuScrollMax = 0,
+        submenuHeight = 0,
+        contentHeight,
+        winTop = 0,
+        winTopLast = 0,
+        scrollStep = 0,
+        nextTop = 0;
+
+    /**
+     * Check if menu is fixed
+     * @returns {boolean}
+     */
+    function isMenuFixed() {
+        return (menuHeight < contentHeight) && (contentHeight > winHeight);
+    }
+
+    /**
+     * Check if class exist than add or do nothing
+     * @param {jQuery} el
+     * @param $class string
+     */
+    function checkAddClass(el, $class) {
+        if (!el.hasClass($class)) {
+            el.addClass($class);
+        }
+    }
+
+    /**
+     * Check if class exist than remove or do nothing
+     * @param {jQuery} el
+     * @param $class string
+     */
+    function checkRemoveClass(el, $class) {
+        if (el.hasClass($class)) {
+            el.removeClass($class);
+        }
+    }
+
+    /**
+     * Calculate and apply menu position
+     */
+    function positionMenu() {
+
+        //  Spotting positions and heights
+        winHeight = win.height();
+        contentHeight = content.height();
+        winTop = win.scrollTop();
+        scrollStep = winTop - winTopLast;
+        menuHeightRest = menuHeight - winTop; // is a visible menu height
+
+        if (isMenuFixed()) { // fixed menu cases
+
+            checkAddClass(menu, fixedClassName);
+
+            if (menuHeight > winHeight) { // smart scroll cases
+
+                if (winTop > winTopLast) { //  scroll down
+
+                    menuScrollMax = menuHeight - winHeight;
+
+                    nextTop < (menuScrollMax - scrollStep) ?
+                        nextTop += scrollStep : nextTop = menuScrollMax;
+
+                    menu.css('top', -nextTop);
+
+                } else if (winTop < winTopLast) { // scroll up
+
+                    nextTop > -scrollStep ?
+                        nextTop += scrollStep : nextTop = 0;
+
+                    menu.css('top', -nextTop);
+
+                }
+
+            }
+
+        } else { // static menu cases
+            checkRemoveClass(menu, fixedClassName);
+        }
+
+        //  Save previous window scrollTop
+        winTopLast = winTop;
+
+    }
+
+    positionMenu(); // page start calculation
+
+    //  Change position on scroll
+    win.on('scroll', function () {
+        positionMenu();
+    });
+
+    win.on('resize', function () {
+
+        winHeight = win.height();
+
+        //  Reset position if fixed and out of smart scroll
+        if ((menuHeight < contentHeight) && (menuHeight <= winHeight)) {
+            menu.removeAttr('style');
+            //  Remove overlap classes from submenus and clear overlap adding event
+            subMenus.removeClass(overlapClassName);
+            menuItems.off();
+        }
+
+    });
+
+    //  Add event to menuItems to check submenu overlap
+    menuItems.on('click', function () {
+        
+        var submenu = $(this).children(subMenuClass);
+        submenuHeight = submenu.height();
+
+        if (isMenuFixed() && (submenuHeight > winHeight)) {
+            checkAddClass(submenu, overlapClassName);
+        }
+    });
+
+});
+
 define('globalNavigation', [
     'jquery',
-    'jquery/ui'
+    'jquery/ui',
+    'globalNavigationScroll'
 ], function ($) {
     'use strict';
 
     $.widget('mage.globalNavigation', {
         options: {
             selectors: {
+                menu: '#nav',
+                currentItem: '._current',
                 topLevelItem: '.level-0',
                 topLevelHref: '> a',
                 subMenu: '> .submenu',
@@ -25,59 +163,79 @@ define('globalNavigation', [
 
             this.menu      = this.element;
             this.menuLinks = $(selectors.topLevelHref, selectors.topLevelItem);
+            this.closeActions = $(selectors.closeSubmenuBtn);
 
             this._initOverlay()
                 ._bind();
         },
 
         _initOverlay: function () {
-            var wrapper = $('<div />').addClass('admin__scope');
-
             this.overlay = $(this.options.overlayTmpl).appendTo('body').hide(0);
-
-            /**
-             * @todo fix LESS and remove next line and wrapper definition
-             */
-            this.overlay.wrap(wrapper);
 
             return this;
         },
 
         _bind: function () {
-            var lighten = this._lighten.bind(this),
-                open    = this._open.bind(this),
-                darken  = this._darken.bind(this);
+            var focus = this._focus.bind(this),
+                open = this._open.bind(this),
+                blur = this._blur.bind(this),
+                keyboard = this._keyboard.bind(this);
 
             this.menuLinks
-                .on('focus', lighten)
-                .on('click', open)
-                .on('blur',  darken);
+                .on('focus', focus)
+                .on('click', open);
+
+            this.menuLinks.last().on('blur', blur);
+
+            this.closeActions.on('keydown', keyboard);
         },
 
-        _lighten: function (e) {
-            var selectors = this.options.selectors,
-                menuItem  = $(e.target).closest(selectors.topLevelItem);
 
-            menuItem
-                .addClass('_active')
-                .siblings(selectors.topLevelItem)
-                .removeClass('_active');
-        },
-
-        _darken: function (e) {
+        /**
+         * Remove active class from current menu item
+         * Turn back active class to current page menu item
+         */
+        _blur: function(e){
             var selectors = this.options.selectors,
-                menuItem  = $(e.target).closest(selectors.topLevelItem);
+                menuItem  = $(e.target).closest(selectors.topLevelItem),
+                currentItem = $(selectors.menu).find(selectors.currentItem);
 
             menuItem.removeClass('_active');
+            currentItem.addClass('_active');
+        },
+
+        /**
+         * Add focus to active menu item
+         */
+        _keyboard: function(e) {
+            var selectors = this.options.selectors,
+                menuItem  = $(e.target).closest(selectors.topLevelItem);
+
+            if(e.which === 13) {
+                this._close(e);
+                $(selectors.topLevelHref, menuItem).focus();
+            }
+        },
+
+        /**
+         * Toggle active state on focus
+         */
+        _focus: function (e) {
+            var selectors = this.options.selectors,
+                menuItem  = $(e.target).closest(selectors.topLevelItem);
+
+            menuItem.addClass('_active')
+                    .siblings(selectors.topLevelItem)
+                    .removeClass('_active');
         },
 
         _closeSubmenu: function (e) {
             var selectors = this.options.selectors,
-                menuItem  = $(e.target).closest(selectors.topLevelItem);
+                currentItem = $(selectors.menu).find(selectors.currentItem);
 
             this._close(e);
 
-            $(selectors.topLevelHref, menuItem).focus();
+            currentItem.addClass('_active');
         },
 
         _open: function (e) {
@@ -92,33 +250,36 @@ define('globalNavigation', [
                 e.preventDefault();
             }
 
-            menuItem
-                .addClass('_hover _recent')
-                .siblings(menuItemSelector)
-                .removeClass('_hover _recent');
+            menuItem.addClass('_show')
+                    .siblings(menuItemSelector)
+                    .removeClass('_show');
 
             subMenu.attr('aria-expanded', 'true');
 
             closeBtn.on('click', close);
 
             this.overlay.show(0).on('click', close);
+            this.menuLinks.last().off('blur');
         },
 
         _close: function (e) {
             var selectors   = this.options.selectors,
-                menuItem    = this.menu.find(selectors.topLevelItem + '._hover._recent'),
+                menuItem    = this.menu.find(selectors.topLevelItem + '._show'),
                 subMenu     = $(selectors.subMenu, menuItem),
-                closeBtn    = subMenu.find(selectors.closeSubmenuBtn);
+                closeBtn    = subMenu.find(selectors.closeSubmenuBtn),
+                blur        = this._blur.bind(this);
 
             e.preventDefault();
 
             this.overlay.hide(0).off('click');
 
+            this.menuLinks.last().on('blur', blur);
+
             closeBtn.off('click');
 
             subMenu.attr('aria-expanded', 'false');
 
-            menuItem.removeClass('_hover _recent');
+            menuItem.removeClass('_show _active');
         }
     });
 

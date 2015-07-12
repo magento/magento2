@@ -22,11 +22,6 @@ class Save extends \Magento\Backend\App\Action
     protected $creditmemoSender;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
@@ -35,19 +30,16 @@ class Save extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param CreditmemoSender $creditmemoSender
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
         CreditmemoSender $creditmemoSender,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         $this->creditmemoSender = $creditmemoSender;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
@@ -85,20 +77,19 @@ class Save extends \Magento\Backend\App\Action
             if ($creditmemo) {
                 if (!$creditmemo->isValidGrandTotal()) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Credit memo\'s total must be positive.')
+                        __('The credit memo\'s total must be positive.')
                     );
                 }
 
-                $comment = '';
                 if (!empty($data['comment_text'])) {
                     $creditmemo->addComment(
                         $data['comment_text'],
                         isset($data['comment_customer_notify']),
                         isset($data['is_visible_on_front'])
                     );
-                    if (isset($data['comment_customer_notify'])) {
-                        $comment = $data['comment_text'];
-                    }
+
+                    $creditmemo->setCustomerNote($data['comment_text']);
+                    $creditmemo->setCustomerNoteNotify(isset($data['comment_customer_notify']));
                 }
 
                 if (isset($data['do_refund'])) {
@@ -115,9 +106,6 @@ class Save extends \Magento\Backend\App\Action
                 }
 
                 $creditmemo->register();
-                if (!empty($data['send_email'])) {
-                    $creditmemo->setEmailSent(true);
-                }
 
                 $creditmemo->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
                 $transactionSave = $this->_objectManager->create(
@@ -131,7 +119,10 @@ class Save extends \Magento\Backend\App\Action
                     $transactionSave->addObject($creditmemo->getInvoice());
                 }
                 $transactionSave->save();
-                $this->creditmemoSender->send($creditmemo, !empty($data['send_email']), $comment);
+
+                if (!empty($data['send_email'])) {
+                    $this->creditmemoSender->send($creditmemo);
+                }
 
                 $this->messageManager->addSuccess(__('You created the credit memo.'));
                 $this->_getSession()->getCommentText(true);
@@ -147,7 +138,7 @@ class Save extends \Magento\Backend\App\Action
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->messageManager->addError(__('Cannot save the credit memo.'));
+            $this->messageManager->addError(__('We can\'t save the credit memo right now.'));
         }
         $resultRedirect->setPath('sales/*/new', ['_current' => true]);
         return $resultRedirect;

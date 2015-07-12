@@ -14,15 +14,15 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test class for Magento\User\Controller\Adminhtml\User\InvalidateToken.
  */
-class InvalidateTokenTest extends \Magento\Backend\Utility\Controller
+class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/User/_files/user_with_role.php
      */
     public function testInvalidateSingleToken()
     {
-        /** @var \Magento\Integration\Service\V1\AdminTokenService $tokenService */
-        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\AdminTokenService');
+        /** @var \Magento\Integration\Api\AdminTokenServiceInterface $tokenService */
+        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Api\AdminTokenServiceInterface');
         /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
         $tokenModel = Bootstrap::getObjectManager()->get('Magento\Integration\Model\Oauth\Token');
         /** @var \Magento\User\Model\User $userModel */
@@ -47,8 +47,8 @@ class InvalidateTokenTest extends \Magento\Backend\Utility\Controller
      */
     public function testInvalidateMultipleTokens()
     {
-        /** @var \Magento\Integration\Service\V1\AdminTokenService $tokenService */
-        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\AdminTokenService');
+        /** @var \Magento\Integration\Api\AdminTokenServiceInterface $tokenService */
+        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Api\AdminTokenServiceInterface');
 
         /** @var \Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory $tokenModelCollectionFactory */
         $tokenModelCollectionFactory = Bootstrap::getObjectManager()->get(

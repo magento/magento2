@@ -34,6 +34,7 @@ class Msrp
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
+     * @api
      */
     public function canApplyToProduct($product)
     {

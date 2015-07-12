@@ -198,19 +198,19 @@ class Associated implements FixtureInterface
                         'id' => '%id%',
                         'name' => '%item1_simple::getProductName%',
                         'position' => '%position%',
-                        'qty' => 17,
+                        'qty' => 3,
                     ],
                     [
                         'id' => '%id%',
                         'name' => '%item1_simple::getProductName%',
                         'position' => '%position%',
-                        'qty' => 36,
+                        'qty' => 1,
                     ],
                     [
                         'id' => '%id%',
                         'name' => '%item1_simple::getProductName%',
                         'position' => '%position%',
-                        'qty' => 20,
+                        'qty' => 2,
                     ],
                 ],
                 'products' => [

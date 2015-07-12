@@ -15,10 +15,10 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Fixture\DataFixture;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search;
 
 /**
  * Product form on backend product page.
@@ -100,6 +100,7 @@ class ProductForm extends FormTabs
      */
     public function fill(FixtureInterface $product, SimpleElement $element = null, FixtureInterface $category = null)
     {
+        $this->waitPageToLoad();
         $dataConfig = $product->getDataConfig();
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
 
@@ -116,7 +117,6 @@ class ProductForm extends FormTabs
             if ($category) {
                 $tabs['product-details']['category_ids']['value'] = $category->getName();
             }
-            $this->showAdvancedSettings();
             $this->fillTabs($tabs, $element);
 
             if ($product->hasData('custom_attribute')) {
@@ -161,6 +161,20 @@ class ProductForm extends FormTabs
     }
 
     /**
+     * Open tab.
+     *
+     * @param string $tabName
+     * @return Tab
+     */
+    public function openTab($tabName)
+    {
+        if (!$this->isTabVisible($tabName)) {
+            $this->showAdvancedSettings();
+        }
+        return parent::openTab($tabName);
+    }
+
+    /**
      * Show Advanced Setting.
      *
      * @return void
@@ -175,15 +189,27 @@ class ProductForm extends FormTabs
     }
 
     /**
-     * Open tab.
+     * Wait page to load.
      *
-     * @param string $tabName
-     * @return Tab
+     * @return void
      */
-    public function openTab($tabName)
+    protected function waitPageToLoad()
     {
-        $this->showAdvancedSettings();
-        return parent::openTab($tabName);
+        $browser = $this->browser;
+        $element = $this->advancedSettingContent;
+        $advancedSettingTrigger = $this->advancedSettingTrigger;
+
+        $this->_rootElement->waitUntil(
+            function () use ($browser, $advancedSettingTrigger) {
+                return $browser->find($advancedSettingTrigger)->isVisible() == true ? true : null;
+            }
+        );
+
+        $this->_rootElement->waitUntil(
+            function () use ($browser, $element) {
+                return $browser->find($element)->isVisible() == false ? true : null;
+            }
+        );
     }
 
     /**
@@ -223,20 +249,31 @@ class ProductForm extends FormTabs
      */
     public function checkAttributeInSearchAttributeForm(CatalogProductAttribute $productAttribute)
     {
+        $this->waitPageToLoad();
+        return $this->getAttributesSearchForm()->isExistAttributeInSearchResult($productAttribute);
+    }
+
+    /**
+     * Get attributes search form.
+     *
+     * @return Search
+     */
+    protected function getAttributesSearchForm()
+    {
         return $this->_rootElement->find(
             $this->attributeSearch,
             Locator::SELECTOR_CSS,
             'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search'
-        )->isExistAttributeInSearchResult($productAttribute);
+        );
     }
 
     /**
-     * Check tab visibility on Product form.
+     * Check custom tab visibility on Product form.
      *
      * @param string $tabName
      * @return bool
      */
-    public function isTabVisible($tabName)
+    public function isCustomTabVisible($tabName)
     {
         $tabName = strtolower($tabName);
         $selector = sprintf($this->customTab, $tabName);
@@ -270,7 +307,7 @@ class ProductForm extends FormTabs
         $data = [];
         $tabs = $this->getFieldsByTabs($product);
         foreach ($tabs as $tabName => $fields) {
-            $tab = $this->getTabElement($tabName);
+            $tab = $this->getTab($tabName);
             $this->openTab($tabName);
             $errors = $tab->getJsErrors();
             if (!empty($errors)) {
@@ -313,7 +350,6 @@ class ProductForm extends FormTabs
      */
     public function getAttributeForm()
     {
-        /** @var AttributeForm $attributeForm */
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
             ['element' => $this->browser->find('body')]
@@ -343,7 +379,7 @@ class ProductForm extends FormTabs
      */
     public function addNewAttribute($tabName = 'product-details')
     {
-        $tab = $this->getTabElement($tabName);
+        $tab = $this->getTab($tabName);
         if ($tab instanceof ProductTab) {
             $this->openTab($tabName);
             $tab->addNewAttribute($tabName);

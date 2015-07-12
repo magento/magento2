@@ -11,6 +11,13 @@ namespace Magento\Weee\Model;
 class Observer extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Tax data
+     *
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $_taxData;
+
+    /**
      * @var \Magento\Catalog\Model\Product\Type
      */
     protected $_productType;
@@ -43,10 +50,11 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param Tax $weeeTax
      * @param \Magento\Weee\Helper\Data $weeeData
+     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -56,14 +64,16 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\View\LayoutInterface $layout,
         Tax $weeeTax,
         \Magento\Weee\Helper\Data $weeeData,
+        \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_layout = $layout;
         $this->_weeeTax = $weeeTax;
+        $this->_taxData = $taxData;
         $this->_productType = $productType;
         $this->_weeeData = $weeeData;
         $this->productTypeConfig = $productTypeConfig;
@@ -192,6 +202,52 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         $types = $response->getTypes();
         $types['weee'] = 'Magento\Weee\Block\Element\Weee\Tax';
         $response->setTypes($types);
+        return $this;
+    }
+
+    /**
+     * Modify the options config for the front end to resemble the weee final price
+     *
+     * @param   \Magento\Framework\Event\Observer $observer
+     * @return  $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getPriceConfiguration(\Magento\Framework\Event\Observer $observer)
+    {
+        if ($this->_weeeData->isEnabled()) {
+            $priceConfigObj=$observer->getData('configObj');
+            $priceConfig=$priceConfigObj->getConfig();
+            try {
+                if (is_array($priceConfig)) {
+                    foreach ($priceConfig as $keyConfigs => $configs) {
+                        if (is_array($configs)) {
+                            foreach ($configs as $keyConfig => $config) {
+                                $calcPrice = 'finalPrice';
+                                if ($this->_taxData->priceIncludesTax() &&
+                                    $this->_taxData->displayPriceExcludingTax()
+                                ) {
+                                    $calcPrice = 'basePrice';
+                                }
+                                if (array_key_exists('prices', $configs)) {
+                                    $priceConfig[$keyConfigs]['prices']['weeePrice'] = [
+                                        'amount' => $configs['prices'][$calcPrice]['amount'],
+                                    ];
+                                } else {
+                                    foreach ($configs as $keyConfig => $config) {
+                                        $priceConfig[$keyConfigs][$keyConfig]['prices']['weeePrice'] = [
+                                            'amount' => $config['prices'][$calcPrice]['amount'],
+                                        ];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                $priceConfigObj->setConfig($priceConfig);
+            } catch (Exception $e) {
+                return $this;
+            }
+        }
         return $this;
     }
 }

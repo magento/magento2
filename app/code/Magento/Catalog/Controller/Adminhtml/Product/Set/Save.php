@@ -14,11 +14,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     protected $layoutFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
@@ -27,19 +22,16 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context, $coreRegistry);
         $this->layoutFactory = $layoutFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultJsonFactory = $resultJsonFactory;
     }
 
@@ -90,7 +82,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                 }
                 if (!$model->getId()) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('This attribute set no longer exists.')
+                        __('This product template no longer exists.')
                     );
                 }
                 $data = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
@@ -108,12 +100,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                 $model->initFromSkeleton($this->getRequest()->getParam('skeleton_set'));
             }
             $model->save();
-            $this->messageManager->addSuccess(__('You saved the attribute set.'));
+            $this->messageManager->addSuccess(__('You saved the product template.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $hasError = true;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('An error occurred while saving the attribute set.'));
+            $this->messageManager->addException($e, __('Something went wrong while saving the product template.'));
             $hasError = true;
         }
 

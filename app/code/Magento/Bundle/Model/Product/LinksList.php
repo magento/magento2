@@ -61,8 +61,9 @@ class LinksList
                 '\Magento\Bundle\Api\Data\LinkInterface'
             );
             $productLink->setIsDefault($selection->getIsDefault())
+                ->setId($selection->getSelectionId())
                 ->setQty($selection->getSelectionQty())
-                ->setIsDefined($selection->getSelectionCanChangeQty())
+                ->setCanChangeQuantity($selection->getSelectionCanChangeQty())
                 ->setPrice($selectionPrice)
                 ->setPriceType($selectionPriceType);
             $productLinks[] = $productLink;

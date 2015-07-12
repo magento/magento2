@@ -8,6 +8,7 @@ namespace Magento\Framework\Api\Code\Generator;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 
 /**
  * Code generator for data object extensions.
@@ -19,9 +20,9 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     const EXTENSION_SUFFIX = 'Extension';
 
     /**
-     * @var \Magento\Framework\Api\Config\Reader
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config
      */
-    protected $configReader;
+    protected $config;
 
     /**
      * @var array
@@ -31,7 +32,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Api\Config\Reader $configReader
+     * @param \Magento\Framework\Api\ExtensionAttribute\Config $config
      * @param string|null $sourceClassName
      * @param string|null $resultClassName
      * @param Io $ioObject
@@ -39,7 +40,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * @param DefinedClasses $definedClasses
      */
     public function __construct(
-        \Magento\Framework\Api\Config\Reader $configReader,
+        \Magento\Framework\Api\ExtensionAttribute\Config $config,
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
@@ -47,7 +48,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
         DefinedClasses $definedClasses = null
     ) {
         $sourceClassName .= 'Interface';
-        $this->configReader = $configReader;
+        $this->config = $config;
         parent::__construct(
             $sourceClassName,
             $resultClassName,
@@ -79,14 +80,15 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     protected function _getClassMethods()
     {
         $methods = [];
-        foreach ($this->getCustomAttributes() as $attributeName => $attributeType) {
+        foreach ($this->getCustomAttributes() as $attributeName => $attributeMetadata) {
+            $attributeType = $attributeMetadata[Converter::DATA_TYPE];
             $propertyName = SimpleDataObjectConverter::snakeCaseToCamelCase($attributeName);
             $getterName = 'get' . ucfirst($propertyName);
             $setterName = 'set' . ucfirst($propertyName);
             $methods[] = [
                 'name' => $getterName,
                 'body' => "return \$this->_get('{$attributeName}');",
-                'docblock' => ['tags' => [['name' => 'return', 'description' => $attributeType]]],
+                'docblock' => ['tags' => [['name' => 'return', 'description' => $attributeType . '|null']]],
             ];
             $methods[] = [
                 'name' => $setterName,
@@ -146,15 +148,16 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     protected function getCustomAttributes()
     {
         if (!isset($this->allCustomAttributes)) {
-            $this->allCustomAttributes = $this->configReader->read();
+            $this->allCustomAttributes = $this->config->get();
         }
         $dataInterface = ltrim($this->getSourceClassName(), '\\');
         if (isset($this->allCustomAttributes[$dataInterface])) {
-            foreach ($this->allCustomAttributes[$dataInterface] as $attributeName => $attributeType) {
+            foreach ($this->allCustomAttributes[$dataInterface] as $attributeName => $attributeMetadata) {
+                $attributeType = $attributeMetadata[Converter::DATA_TYPE];
                 if (strpos($attributeType, '\\') !== false) {
                     /** Add preceding slash to class names, while leaving primitive types as is */
                     $attributeType = $this->_getFullyQualifiedClassName($attributeType);
-                    $this->allCustomAttributes[$dataInterface][$attributeName] =
+                    $this->allCustomAttributes[$dataInterface][$attributeName][Converter::DATA_TYPE] =
                         $this->_getFullyQualifiedClassName($attributeType);
                 }
             }

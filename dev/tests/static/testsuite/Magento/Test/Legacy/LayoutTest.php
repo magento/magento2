@@ -316,7 +316,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setListOrders',
             'setMAPTemplate',
             'setMethodFormTemplate',
-            'setMethodInfo',
             'setMyClass',
             'setPageLayout',
             'setPageTitle',
@@ -350,7 +349,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setWrapperClass',
             'unsetChild',
             'unsetChildren',
-            'updateButton'
+            'updateButton',
+            'setIsProductListingContext'
         ];
     }
 }

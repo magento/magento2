@@ -93,6 +93,7 @@ class Auth
      * If auth storage was not defined outside - returns default object of auth storage
      *
      * @return \Magento\Backend\Model\Auth\StorageInterface
+     * @codeCoverageIgnore
      */
     public function getAuthStorage()
     {
@@ -126,6 +127,7 @@ class Auth
      * Return credential storage object
      *
      * @return null|\Magento\Backend\Model\Auth\Credential\StorageInterface
+     * @codeCoverageIgnore
      */
     public function getCredentialStorage()
     {
@@ -143,7 +145,7 @@ class Auth
     public function login($username, $password)
     {
         if (empty($username) || empty($password)) {
-            self::throwException(__('Please correct the user name or password.'));
+            self::throwException(__('You did not sign in correctly or your account is temporarily disabled.'));
         }
 
         try {
@@ -160,7 +162,7 @@ class Auth
             }
 
             if (!$this->getAuthStorage()->getUser()) {
-                self::throwException(__('Please correct the user name or password.'));
+                self::throwException(__('You did not sign in correctly or your account is temporarily disabled.'));
             }
         } catch (PluginAuthenticationException $e) {
             $this->_eventManager->dispatch(
@@ -173,7 +175,9 @@ class Auth
                 'backend_auth_user_login_failed',
                 ['user_name' => $username, 'exception' => $e]
             );
-            self::throwException(__('Please correct the user name or password.'));
+            self::throwException(
+                __($e->getMessage()? : 'You did not sign in correctly or your account is temporarily disabled.')
+            );
         }
     }
 

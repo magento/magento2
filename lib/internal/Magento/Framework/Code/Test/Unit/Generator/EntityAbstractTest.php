@@ -151,17 +151,17 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      * @param bool $willWriteCode
      *
      * @dataProvider generateDataProvider
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::generate
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::getErrors
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getSourceClassName
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getResultClassName
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getDefaultResultClassName
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_generateCode
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_addError
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_validateData
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getClassDocBlock
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getGeneratedCode
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_fixCodeStyle
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::generate
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::getErrors
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::getSourceClassName
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getResultClassName
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getDefaultResultClassName
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_generateCode
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_addError
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_validateData
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getClassDocBlock
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getGeneratedCode
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_fixCodeStyle
      */
     public function testGenerate(
         $errors = [],

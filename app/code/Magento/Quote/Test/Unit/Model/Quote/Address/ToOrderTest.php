@@ -84,7 +84,7 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
 
         $object = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $object->expects($this->exactly(4))->method('getQuote')->willReturn($quote);
+        $object->expects($this->exactly(5))->method('getQuote')->willReturn($quote);
         $quote->expects($this->once())->method('getId')->willReturn($quoteId);
         $quote->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(

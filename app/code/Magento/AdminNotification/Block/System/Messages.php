@@ -123,6 +123,7 @@ class Messages extends \Magento\Backend\Block\Template
                     'autoOpen' => false,
                     'width' => '75%',
                     'modal' => true,
+                    'minHeight' => '0',
                     'dialogClass' => 'ui-dialog-active ui-popup-message',
                     'ajaxUrl' => $this->_getMessagesUrl()
                 ],

@@ -78,3 +78,5 @@ lib/internal/Magento/Framework/Url/SecurityInfo.php
 lib/internal/Magento/Framework/Url/RouteParamsResolver.php
 lib/internal/Magento/Framework/View/Url/Config.php
 lib/internal/Magento/Framework/View/Asset/Config.php
+
+lib/internal/Magento/Framework/Locale/Format.php

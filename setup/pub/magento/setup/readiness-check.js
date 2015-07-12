@@ -23,6 +23,13 @@ angular.module('readiness-check', [])
         $rootScope.checkingInProgress = function() {
             return $scope.progressCounter > 0;
         };
+        $scope.requestFailedHandler = function(obj) {
+            obj.processed = true;
+            obj.isRequestError = true;
+            $scope.hasErrors = true;
+            $rootScope.hasErrors = true;
+            $scope.stopProgress();
+        };
 
         $scope.completed = false;
         $scope.hasErrors = false;
@@ -30,22 +37,26 @@ angular.module('readiness-check', [])
         $scope.version = {
             visible: false,
             processed: false,
-            expanded: false
+            expanded: false,
+            isRequestError: false
         };
-        $scope.rawpost = {
+        $scope.settings = {
             visible: false,
             processed: false,
-            expanded: false
+            expanded: false,
+            isRequestError: false
         };
         $scope.extensions = {
             visible: false,
             processed: false,
-            expanded: false
+            expanded: false,
+            isRequestError: false
         };
         $scope.permissions = {
             visible: false,
             processed: false,
-            expanded: false
+            expanded: false,
+            isRequestError: false
         };
 
         $scope.items = {
@@ -60,19 +71,25 @@ angular.module('readiness-check', [])
                     angular.extend($scope.version, data);
                     $scope.updateOnProcessed($scope.version.responseType);
                     $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.version);
                 }
             },
-            'php-rawpost': {
-                url:'index.php/environment/php-rawpost',
+            'php-settings': {
+                url:'index.php/environment/php-settings',
                 show: function() {
                     $scope.startProgress();
-                    $scope.rawpost.visible = true;
+                    $scope.settings.visible = true;
                 },
                 process: function(data) {
-                    $scope.rawpost.processed = true;
-                    angular.extend($scope.rawpost, data);
-                    $scope.updateOnProcessed($scope.rawpost.responseType);
+                    $scope.settings.processed = true;
+                    angular.extend($scope.settings, data);
+                    $scope.updateOnProcessed($scope.settings.responseType);
                     $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.settings);
                 }
             },
             'php-extensions': {
@@ -86,6 +103,9 @@ angular.module('readiness-check', [])
                     angular.extend($scope.extensions, data);
                     $scope.updateOnProcessed($scope.extensions.responseType);
                     $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.extensions);
                 }
             },
             'file-permissions': {
@@ -99,12 +119,16 @@ angular.module('readiness-check', [])
                     angular.extend($scope.permissions, data);
                     $scope.updateOnProcessed($scope.permissions.responseType);
                     $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.permissions);
                 }
             }
         };
 
         $scope.isCompleted = function() {
             return $scope.version.processed
+                && $scope.settings.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed;
         };
@@ -133,8 +157,11 @@ angular.module('readiness-check', [])
         };
 
         $scope.query = function(item) {
-            return $http.get(item.url)
-                .success(function(data) { item.process(data) });
+            return $http.get(item.url, {timeout: 3000})
+                .success(function(data) { item.process(data) })
+                .error(function(data, status) {
+                    item.fail();
+                });
         };
 
         $scope.progress = function() {

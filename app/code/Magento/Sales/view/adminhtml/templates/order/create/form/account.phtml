@@ -4,15 +4,17 @@
  * See COPYING.txt for license details.
  */
  ?>
-<div class="fieldset-wrapper-title <?php echo $block->getHeaderCssClass() ?>">
-	<span class="title"><?php echo $block->getHeaderText() ?></span>
-	<div class="actions"></div>
+
+<div class="admin__page-section-title <?php echo $block->getHeaderCssClass() ?>">
+    <span class="title"><?php echo $block->getHeaderText() ?></span>
+    <div class="actions"></div>
 </div>
-<div class="form-inline" id="customer_account_fieds">
+<div id="customer_account_fieds" class="admin__page-section-content">
     <?php echo $block->getForm()->getHtml() ?>
 </div>
+
 <script>
-	require(["prototype", "Magento_Sales/order/create/form"], function(){
-		order.accountFieldsBind($('customer_account_fieds'));
-	});
+    require(["prototype", "Magento_Sales/order/create/form"], function(){
+        order.accountFieldsBind($('customer_account_fieds'));
+    });
 </script>

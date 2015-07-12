@@ -6,6 +6,10 @@
 
 // @codingStandardsIgnoreFile
 
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 ?>
 <?php if (!$block->getQuote()->isVirtual()): ?>
     <?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getInline('onepage_checkout', $block->getQuote(), $block->getDontDisplayContainer()) ?>

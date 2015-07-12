@@ -6,10 +6,10 @@
 
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 
-use \Magento\Framework\App\DeploymentConfig\Writer;
-use \Magento\Framework\App\DeploymentConfig\SegmentInterface;
-
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,22 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $dirRead;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $formatter;
+
+    /**
+     * @var ConfigFilePool
+     */
+    private $configFilePool;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
 
     protected function setUp()
     {
@@ -40,59 +55,128 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->formatter = $this->getMockForAbstractClass(
             'Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface'
         );
-        $this->object = new Writer($this->reader, $filesystem, $this->formatter);
-        $this->reader->expects($this->any())->method('getFile')->willReturn('test.php');
+        $this->configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->object = new Writer(
+            $this->reader,
+            $filesystem,
+            $this->configFilePool,
+            $this->deploymentConfig,
+            $this->formatter
+        );
+        $this->reader->expects($this->any())->method('getFiles')->willReturn('test.php');
         $this->dirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $this->dirRead = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->dirRead->expects($this->any())
+            ->method('getAbsolutePath');
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::CONFIG)
             ->willReturn($this->dirWrite);
+        $filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($this->dirRead);
     }
 
-    public function testCreate()
+    public function testSaveConfig()
     {
-        $segments = [
-            $this->createSegment('foo', 'bar'),
-            $this->createSegment('baz', ['value1', 'value2']),
+        $configFiles = [
+            ConfigFilePool::APP_CONFIG => 'test_conf.php',
+            'test_key' => 'test2_conf.php'
         ];
-        $expected = ['foo' => 'bar', 'baz' => ['value1', 'value2']];
-        $this->formatter->expects($this->once())->method('format')->with($expected)->willReturn('formatted');
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('test.php', 'formatted');
-        $this->object->create($segments);
+
+        $testSetExisting = [
+            ConfigFilePool::APP_CONFIG => [
+                'foo' => 'bar',
+                'key' => 'value',
+                'baz' => [
+                    'test' => 'value',
+                    'test1' => 'value1'
+                ]
+            ],
+        ];
+
+        $testSetUpdate = [
+            ConfigFilePool::APP_CONFIG => [
+                'baz' => [
+                    'test' => 'value2'
+                ]
+            ],
+        ];
+
+        $testSetExpected = [
+            ConfigFilePool::APP_CONFIG => [
+                'foo' => 'bar',
+                'key' => 'value',
+                'baz' => [
+                    'test' => 'value2',
+                    'test1' => 'value1'
+                ]
+            ],
+        ];
+
+        $this->deploymentConfig->expects($this->once())->method('resetData');
+        $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
+        $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
+        $this->reader->expects($this->once())->method('load')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
+        $this->formatter
+            ->expects($this->once())
+            ->method('format')
+            ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
+            ->willReturn([]);
+        $this->dirWrite->expects($this->once())->method('writeFile')->with('test_conf.php', []);
+
+        $this->object->saveConfig($testSetUpdate);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage An instance of SegmentInterface is expected
-     */
-    public function testCreateException()
+    public function testSaveConfigOverride()
     {
-        $this->object->create(['some_bogus_data']);
-    }
+        $configFiles = [
+            ConfigFilePool::APP_CONFIG => 'test_conf.php',
+            'test_key' => 'test2_conf.php'
+        ];
 
-    public function testUpdate()
-    {
-        $segment = $this->createSegment('key', ['nested_key' => 'value']);
-        $preExisting = ['foo' => 'bar', 'key' => 'value', 'baz' => 1];
-        $this->reader->expects($this->once())->method('load')->willReturn($preExisting);
-        $expected = ['foo' => 'bar', 'key' => ['nested_key' => 'value'], 'baz' => 1];
-        $this->formatter->expects($this->once())->method('format')->with($expected)->willReturn('formatted');
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('test.php', 'formatted');
-        $this->object->update($segment);
-    }
+        $testSetExisting = [
+            ConfigFilePool::APP_CONFIG => [
+                'foo' => 'bar',
+                'key' => 'value',
+                'baz' => [
+                    'test' => 'value',
+                    'test1' => 'value1'
+                ]
+            ],
+        ];
 
-    /**
-     * Creates a segment mock
-     *
-     * @param string $key
-     * @param mixed $data
-     * @return SegmentInterface
-     */
-    private function createSegment($key, $data)
-    {
-        $result = $this->getMockForAbstractClass('Magento\Framework\App\DeploymentConfig\SegmentInterface');
-        $result->expects($this->atLeastOnce())->method('getKey')->willReturn($key);
-        $result->expects($this->atLeastOnce())->method('getData')->willReturn($data);
-        return $result;
+        $testSetUpdate = [
+            ConfigFilePool::APP_CONFIG => [
+                'baz' => [
+                    'test' => 'value2'
+                ]
+            ],
+        ];
+
+        $testSetExpected = [
+            ConfigFilePool::APP_CONFIG => [
+                'foo' => 'bar',
+                'key' => 'value',
+                'baz' => [
+                    'test' => 'value2',
+                ]
+            ],
+        ];
+
+        $this->deploymentConfig->expects($this->once())->method('resetData');
+        $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
+        $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
+        $this->reader->expects($this->once())->method('load')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
+        $this->formatter
+            ->expects($this->once())
+            ->method('format')
+            ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
+            ->willReturn([]);
+        $this->dirWrite->expects($this->once())->method('writeFile')->with('test_conf.php', []);
+
+        $this->object->saveConfig($testSetUpdate, true);
     }
 }

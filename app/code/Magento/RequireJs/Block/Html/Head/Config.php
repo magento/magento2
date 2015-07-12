@@ -58,14 +58,9 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
+        $after = RequireJsConfig::REQUIRE_JS_FILE_NAME;
         $requireJsConfig = $this->fileManager->createRequireJsConfigAsset();
         $assetCollection = $this->pageConfig->getAssetCollection();
-
-        $assetCollection->insert(
-            $requireJsConfig->getFilePath(),
-            $requireJsConfig,
-            RequireJsConfig::REQUIRE_JS_FILE_NAME
-        );
 
         if ($this->bundleConfig->isBundlingJsFiles()) {
             $bundleAssets = $this->fileManager->createBundleJsPool();
@@ -81,9 +76,20 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
                         RequireJsConfig::REQUIRE_JS_FILE_NAME
                     );
                 }
-                $assetCollection->insert($staticAsset->getFilePath(), $staticAsset, RequireJsConfig::CONFIG_FILE_NAME);
+                $assetCollection->insert(
+                    $staticAsset->getFilePath(),
+                    $staticAsset,
+                    reset($bundleAssets)->getFilePath()
+                );
+                $after = $staticAsset->getFilePath();
             }
         }
+
+        $assetCollection->insert(
+            $requireJsConfig->getFilePath(),
+            $requireJsConfig,
+            $after
+        );
 
         return parent::_prepareLayout();
     }

@@ -152,7 +152,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     public function testLogin()
     {
         $jsonRequest = '{"username":"customer@example.com", "password":"password"}';
-        $loginSuccessResponse = '{"message":"Login successful."}';
+        $loginSuccessResponse = '{"errors": false, "message":"Login successful."}';
 
         $this->request
             ->expects($this->any())
@@ -194,13 +194,17 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRaw->expects($this->never())->method('setHttpResponseCode');
 
+        $result = [
+            'errors' => false,
+            'message' => __('Login successful.')
+        ];
+
         $this->resultJson
             ->expects($this->once())
             ->method('setData')
-            ->with(['message' => 'Login successful.'])
+            ->with($result)
             ->willReturn($loginSuccessResponse);
-
-        $this->object->execute();
+        $this->assertEquals($loginSuccessResponse, $this->object->execute());
     }
 
     public function testLoginFailure()
@@ -223,7 +227,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('isXmlHttpRequest')
             ->willReturn(true);
 
-        $this->resultJsonFactory->expects($this->never())
+        $this->resultJsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
 
@@ -246,14 +250,16 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSession->expects($this->never())->method('regenerateId');
 
+        $result = [
+            'errors' => true,
+            'message' => __('Invalid login or password.')
+        ];
         $this->resultJson
-            ->expects($this->never())
+            ->expects($this->once())
             ->method('setData')
-            ->with(['message' => 'Invalid login or password.'])
+            ->with($result)
             ->willReturn($loginFailureResponse);
 
-        $this->resultRaw->expects($this->once())->method('setHttpResponseCode')->with(401);
-
-        $this->object->execute();
+        $this->assertEquals($loginFailureResponse, $this->object->execute());
     }
 }

@@ -3,15 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\ImportExport\Controller\Adminhtml;
+
+use Magento\Backend\App\Action;
 
 /**
  * Export controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Controller\Adminhtml;
-
-class Export extends \Magento\Backend\App\Action
+class Export extends Action
 {
     /**
      * Check access (in the ACL) for current user

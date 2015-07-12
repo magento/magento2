@@ -9,6 +9,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 {
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -21,6 +22,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
     /**
      * @return array
+     * @api
      */
     public function getProductIds()
     {

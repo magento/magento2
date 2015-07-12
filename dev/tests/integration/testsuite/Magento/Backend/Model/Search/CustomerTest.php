@@ -10,12 +10,12 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDataFixture Magento/Customer/_files/three_customers.php
+ * @magentoDataFixture Magento/Customer/_files/customer_address.php
  */
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @dataProvider loadDataProvider
      */
     public function testLoad($query, $limit, $start, $expectedResult)

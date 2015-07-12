@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config\Reader;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
@@ -66,7 +67,7 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
     /**
      * Read configuration by code
      *
-     * @param string $code
+     * @param null|string $code
      * @return array
      * @throws NoSuchEntityException
      */
@@ -74,7 +75,7 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
     {
         if (empty($code)) {
             $store = $this->_storeManager->getStore();
-        } elseif (($code == \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT)) {
+        } elseif (($code == ScopeConfigInterface::SCOPE_TYPE_DEFAULT)) {
             $store = $this->_storeManager->getDefaultStoreView();
         } else {
             $store = $this->_storeFactory->create();

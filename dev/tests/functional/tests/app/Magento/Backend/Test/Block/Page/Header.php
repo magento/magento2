@@ -20,7 +20,7 @@ class Header extends Block
      *
      * @var string
      */
-    protected $adminAccountLink = '.admin-user-account';
+    protected $adminAccountLink = '.admin-user-account-text';
 
     /**
      * Selector for Log Out Link.

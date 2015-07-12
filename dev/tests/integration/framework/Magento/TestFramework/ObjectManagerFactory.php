@@ -54,7 +54,7 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
         $objectManager->configure($this->_primaryConfigData);
         $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
         $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\Filesystem\DirectoryList');
-        $deploymentConfig = $this->createDeploymentConfig($directoryList, $arguments);
+        $deploymentConfig = $this->createDeploymentConfig($directoryList, $this->configFilePool, $arguments);
         $this->factory->setArguments($arguments);
         $objectManager->addSharedInstance($deploymentConfig, 'Magento\Framework\App\DeploymentConfig');
         $objectManager->addSharedInstance(
@@ -95,7 +95,6 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
                     'Magento\Framework\Stdlib\CookieManagerInterface' => 'Magento\TestFramework\CookieManager',
                     'Magento\Framework\ObjectManager\DynamicConfigInterface' =>
                         '\Magento\TestFramework\ObjectManager\Configurator',
-                    'Magento\Framework\Stdlib\Cookie' => 'Magento\TestFramework\Cookie',
                     'Magento\Framework\App\RequestInterface' => 'Magento\TestFramework\Request',
                     'Magento\Framework\App\Request\Http' => 'Magento\TestFramework\Request',
                     'Magento\Framework\App\ResponseInterface' => 'Magento\TestFramework\Response',

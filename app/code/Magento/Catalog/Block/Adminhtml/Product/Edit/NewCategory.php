@@ -56,7 +56,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Framework\Data\Form $form */
-        $form = $this->_formFactory->create(['data' => ['id' => 'new_category_form']]);
+        $form = $this->_formFactory->create(['data' => ['id' => 'new_category_form', 'class' => 'admin__scope-old']]);
         $form->setUseContainer($this->getUseContainer());
 
         $form->addField('new_category_messages', 'note', []);

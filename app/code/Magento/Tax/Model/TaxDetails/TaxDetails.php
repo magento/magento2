@@ -13,12 +13,22 @@ use Magento\Tax\Api\Data\TaxDetailsInterface;
  */
 class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_SUBTOTAL      = 'subtotal';
+    const KEY_TAX_AMOUNT    = 'tax_amount';
+    const KEY_APPLIED_TAXES = 'applied_taxes';
+    const KEY_ITEMS         = 'items';
+    const KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
+    /**#@-*/
+
     /**
      * {@inheritdoc}
      */
     public function getSubtotal()
     {
-        return $this->getData(TaxDetailsInterface::KEY_SUBTOTAL);
+        return $this->getData(self::KEY_SUBTOTAL);
     }
 
     /**
@@ -26,7 +36,7 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
      */
     public function getTaxAmount()
     {
-        return $this->getData(TaxDetailsInterface::KEY_TAX_AMOUNT);
+        return $this->getData(self::KEY_TAX_AMOUNT);
     }
 
     /**
@@ -34,7 +44,7 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
      */
     public function getDiscountTaxCompensationAmount()
     {
-        return $this->getData(TaxDetailsInterface::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT);
+        return $this->getData(self::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -42,7 +52,7 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
      */
     public function getAppliedTaxes()
     {
-        return $this->getData(TaxDetailsInterface::KEY_APPLIED_TAXES);
+        return $this->getData(self::KEY_APPLIED_TAXES);
     }
 
     /**
@@ -50,7 +60,7 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
      */
     public function getItems()
     {
-        return $this->getData(TaxDetailsInterface::KEY_ITEMS);
+        return $this->getData(self::KEY_ITEMS);
     }
 
     /**
@@ -61,7 +71,7 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
      */
     public function setSubtotal($subtotal)
     {
-        return $this->setData(TaxDetailsInterface::KEY_SUBTOTAL, $subtotal);
+        return $this->setData(self::KEY_SUBTOTAL, $subtotal);
     }
 
     /**
@@ -72,7 +82,7 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
      */
     public function setTaxAmount($taxAmount)
     {
-        return $this->setData(TaxDetailsInterface::KEY_TAX_AMOUNT, $taxAmount);
+        return $this->setData(self::KEY_TAX_AMOUNT, $taxAmount);
     }
 
     /**
@@ -84,7 +94,7 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
     public function setDiscountTaxCompensationAmount($discountTaxCompensationAmount)
     {
         return $this->setData(
-            TaxDetailsInterface::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT,
+            self::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT,
             $discountTaxCompensationAmount
         );
     }
@@ -97,7 +107,7 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
      */
     public function setAppliedTaxes(array $appliedTaxes = null)
     {
-        return $this->setData(TaxDetailsInterface::KEY_APPLIED_TAXES, $appliedTaxes);
+        return $this->setData(self::KEY_APPLIED_TAXES, $appliedTaxes);
     }
 
     /**
@@ -108,7 +118,7 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
      */
     public function setItems(array $items = null)
     {
-        return $this->setData(TaxDetailsInterface::KEY_ITEMS, $items);
+        return $this->setData(self::KEY_ITEMS, $items);
     }
 
     /**

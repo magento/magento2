@@ -27,14 +27,11 @@ Magento/CatalogInventory/Model/Source
 Magento/CatalogSearch/Model/Resource/Helper
 Magento/CatalogSearch/Model/Resource/Advanced
 Magento/CatalogSearch/Model/Resource/Search
-Magento/Centinel/Controller
-Magento/Centinel/Model/State
 Magento/Checkout/Block/Multishipping
 Magento/Checkout/Model/Type
 Magento/Catalog/Model/Template
 Magento/Cms/Model
 Magento/GiftMessage/Model
-Magento/GoogleShopping/Model/Attribute
 Magento/GroupedProduct/Model/Resource/Product/Type/Grouped
 Magento/Sales/Block/Order
 Magento/Sales/Controller/Adminhtml/Order
@@ -166,3 +163,4 @@ Magento/Reports/Setup
 Magento/Sales/Setup
 Magento/SalesRule/Setup
 Magento/Eav/Setup
+setup/src/Magento/Setup/Fixtures

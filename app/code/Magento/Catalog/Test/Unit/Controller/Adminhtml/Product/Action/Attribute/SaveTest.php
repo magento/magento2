@@ -93,10 +93,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $stockItemRepository;
 
+    /**
+     * @var  \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactory;
+
     protected function setUp()
     {
-        $this->prepareContext();
-
         $this->attributeHelper = $this->getMock(
             'Magento\Catalog\Helper\Product\Edit\Action\Attribute',
             ['getProductIds', 'getSelectedStoreId', 'getStoreWebsiteId'],
@@ -121,13 +124,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultRedirectFactory->expects($this->atLeastOnce())
+        $this->resultRedirectFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($resultRedirect);
+
+        $this->prepareContext();
 
         $this->object = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save',
@@ -136,7 +141,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'attributeHelper' => $this->attributeHelper,
                 'stockIndexerProcessor' => $this->stockIndexerProcessor,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
-                'resultRedirectFactory' => $resultRedirectFactory
             ]
         );
     }
@@ -189,33 +193,32 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'getFormKeyValidator',
                 'getTitle',
                 'getLocaleResolver',
+                'getResultRedirectFactory'
             ],
             [],
             '',
             false
         );
-        $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
-        $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($this->response));
-        $this->context->expects($this->any())->method('getObjectManager')
-            ->will($this->returnValue($this->objectManager));
-        $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
-        $this->context->expects($this->any())->method('getUrl')->will($this->returnValue($this->url));
-        $this->context->expects($this->any())->method('getRedirect')->will($this->returnValue($this->redirect));
-        $this->context->expects($this->any())->method('getActionFlag')->will($this->returnValue($this->actionFlag));
-        $this->context->expects($this->any())->method('getView')->will($this->returnValue($this->view));
-        $this->context->expects($this->any())->method('getMessageManager')
-            ->will($this->returnValue($this->messageManager));
-        $this->context->expects($this->any())->method('getSession')->will($this->returnValue($this->session));
-        $this->context->expects($this->any())->method('getAuthorization')
-            ->will($this->returnValue($this->authorization));
-        $this->context->expects($this->any())->method('getAuth')->will($this->returnValue($this->auth));
-        $this->context->expects($this->any())->method('getHelper')->will($this->returnValue($this->helper));
-        $this->context->expects($this->any())->method('getBackendUrl')->will($this->returnValue($this->backendUrl));
-        $this->context->expects($this->any())->method('getFormKeyValidator')
-            ->will($this->returnValue($this->formKeyValidator));
-        $this->context->expects($this->any())->method('getTitle')->will($this->returnValue($this->title));
-        $this->context->expects($this->any())->method('getLocaleResolver')
-            ->will($this->returnValue($this->localeResolver));
+        $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $this->context->expects($this->any())->method('getResponse')->willReturn($this->response);
+        $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($this->eventManager);
+        $this->context->expects($this->any())->method('getUrl')->willReturn($this->url);
+        $this->context->expects($this->any())->method('getRedirect')->willReturn($this->redirect);
+        $this->context->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlag);
+        $this->context->expects($this->any())->method('getView')->willReturn($this->view);
+        $this->context->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
+        $this->context->expects($this->any())->method('getSession')->willReturn($this->session);
+        $this->context->expects($this->any())->method('getAuthorization')->willReturn($this->authorization);
+        $this->context->expects($this->any())->method('getAuth')->willReturn($this->auth);
+        $this->context->expects($this->any())->method('getHelper')->willReturn($this->helper);
+        $this->context->expects($this->any())->method('getBackendUrl')->willReturn($this->backendUrl);
+        $this->context->expects($this->any())->method('getFormKeyValidator')->willReturn($this->formKeyValidator);
+        $this->context->expects($this->any())->method('getTitle')->willReturn($this->title);
+        $this->context->expects($this->any())->method('getLocaleResolver')->willReturn($this->localeResolver);
+        $this->context->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactory);
 
         $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',

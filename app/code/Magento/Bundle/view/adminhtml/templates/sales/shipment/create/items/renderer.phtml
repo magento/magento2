@@ -43,8 +43,8 @@
         <?php if (!$_item->getOrderItem()->getParentItem()): ?>
         <td class="col-product">
             <div class="product-title"><?php echo $block->escapeHtml($_item->getName()) ?></div>
-            <div>
-                <strong><?php echo __('SKU') ?>:</strong>
+            <div class="product-sku-block">
+                <span><?php echo __('SKU') ?>:</span>
                 <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
             </div>
         </td>
@@ -60,7 +60,10 @@
         </td>
         <td class="col-qty last">
             <?php if ($block->isShipmentSeparately($_item)): ?>
-                <input type="text" class="input-text" name="shipment[items][<?php echo $_item->getOrderItemId() ?>]" value="<?php echo $_item->getQty()*1 ?>" />
+                <input type="text"
+                       class="input-text admin__control-text"
+                       name="shipment[items][<?php echo $_item->getOrderItemId() ?>]"
+                       value="<?php echo $_item->getQty()*1 ?>" />
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>

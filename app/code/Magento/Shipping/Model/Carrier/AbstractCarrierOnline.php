@@ -157,6 +157,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $code
      * @return $this
+     * @api
      */
     public function setActiveFlag($code = 'active')
     {
@@ -179,6 +180,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $tracking
      * @return string|false
+     * @api
      */
     public function getTrackingInfo($tracking)
     {
@@ -249,6 +251,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param RateRequest $request
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @api
      */
     public function getAllItems(RateRequest $request)
     {
@@ -279,12 +282,12 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Processing additional validation to check if carrier applicable.
      *
-     * @param RateRequest $request
-     * @return $this|bool|Error
+     * @param \Magento\Framework\Object $request
+     * @return $this|bool|\Magento\Framework\Object
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function proccessAdditionalValidation(RateRequest $request)
+    public function proccessAdditionalValidation(\Magento\Framework\Object $request)
     {
         //Skip by item validation if there is no items in request
         if (!count($this->getAllItems($request))) {
@@ -523,6 +526,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @todo implement rollback logic
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @api
      */
     public function rollBack($data)
     {
@@ -572,6 +576,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param null|string $countyDest
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @api
      */
     public function isGirthAllowed($countyDest = null)
     {
@@ -581,6 +586,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * @param \Magento\Framework\Object|null $request
      * @return $this
+     * @api
      */
     public function setRawRequest($request)
     {
@@ -594,6 +600,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $cost
      * @param string $method
      * @return float|string
+     * @api
      */
     public function getMethodPrice($cost, $method = '')
     {
@@ -615,6 +622,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $customSimplexml
      *
      * @return \SimpleXMLElement|bool
+     * @api
      */
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {

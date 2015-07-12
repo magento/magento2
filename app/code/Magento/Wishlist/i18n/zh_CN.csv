@@ -1,5 +1,5 @@
 Back,返回
-Product,产品
+Product Name,产品
 Quantity,Quantity
 Configure,Configure
 "You added %1 to your shopping cart.","You added %1 to your shopping cart."
@@ -101,5 +101,5 @@ Message,信息
 "My Wish List Link","My Wish List Link"
 "Display Wish List Summary","Display Wish List Summary"
 "No Items Found","No Items Found"
-"User description",用户描述
+"User Description",用户描述
 "Product Details and Comment",产品详情与评论

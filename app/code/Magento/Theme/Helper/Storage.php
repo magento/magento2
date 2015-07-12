@@ -179,7 +179,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Get storage type
      *
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getStorageType()
     {
@@ -189,7 +189,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         ];
         $type = (string)$this->_getRequest()->getParam(self::PARAM_CONTENT_TYPE);
         if (!in_array($type, $allowedTypes)) {
-            throw new \Magento\Framework\Exception('Invalid type');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid type'));
         }
         return $type;
     }
@@ -282,43 +282,26 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Get allowed extensions by type
      *
      * @return string[]
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAllowedExtensionsByType()
     {
-        switch ($this->getStorageType()) {
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT:
-                $extensions = ['ttf', 'otf', 'eot', 'svg', 'woff'];
-                break;
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE:
-                $extensions = ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
-                break;
-            default:
-                throw new \Magento\Framework\Exception('Invalid type');
-        }
-        return $extensions;
+        return $this->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
+                ? ['ttf', 'otf', 'eot', 'svg', 'woff']
+                : ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
     }
 
     /**
      * Get storage type name for display.
      *
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getStorageTypeName()
     {
-        switch ($this->getStorageType()) {
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT:
-                $name = self::FONTS;
-                break;
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE:
-                $name = self::IMAGES;
-                break;
-            default:
-                throw new \Magento\Framework\Exception('Invalid type');
-        }
-
-        return $name;
+        return $this->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
+            ? self::FONTS
+            : self::IMAGES;
     }
 
     /**

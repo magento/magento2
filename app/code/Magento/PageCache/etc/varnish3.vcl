@@ -54,7 +54,7 @@ sub vcl_recv {
     std.collect(req.http.Cookie);
 
     # static files are always cacheable. remove SSL flag and cookie
-    if (req.url ~ "^/(pub/)?(media|static)/.*\.(png|jpg|jpeg|gif|css|js|swf|ico|woff|svg)$") {
+    if (req.url ~ "^/(pub/)?(media|static)/.*\.(ico|css|js|jpg|jpeg|png|gif|tiff|bmp|gz|tgz|bz2|tbz|mp3|ogg|svg|swf|woff|woff2|eot|ttf|otf)$") {
         unset req.http.Https;
         unset req.http.Cookie;
     }
@@ -96,7 +96,7 @@ sub vcl_fetch {
     # images, css and js are cacheable by default so we have to remove cookie also
     if (beresp.ttl > 0s && (req.request == "GET" || req.request == "HEAD")) {
         unset beresp.http.set-cookie;
-        if (req.url !~ "\.(css|js|jpg|png|gif|tiff|bmp|gz|tgz|bz2|tbz|mp3|ogg|svg|swf|woff)(\?|$)") {
+            if (req.url !~ "\.(ico|css|js|jpg|jpeg|png|gif|tiff|bmp|mp3|ogg|svg|swf|woff|woff2|eot|ttf|otf)(\?|$)") {
             set beresp.http.Pragma = "no-cache";
             set beresp.http.Expires = "-1";
             set beresp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";

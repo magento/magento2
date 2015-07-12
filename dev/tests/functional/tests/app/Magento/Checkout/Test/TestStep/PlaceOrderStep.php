@@ -6,47 +6,46 @@
 
 namespace Magento\Checkout\Test\TestStep;
 
-use Magento\Checkout\Test\Constraint\AssertOrderTotalOnReviewPage;
+use Magento\Checkout\Test\Constraint\AssertGrandTotalOrderReview;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class PlaceOrderStep
- * Place order in one page checkout
+ * Place order in one page checkout.
  */
 class PlaceOrderStep implements TestStepInterface
 {
     /**
-     * Onepage checkout page
+     * Onepage checkout page.
      *
      * @var CheckoutOnepage
      */
     protected $checkoutOnepage;
 
     /**
-     * Assert that Order Grand Total is correct on checkout page review block
+     * Assert that Order Grand Total is correct on checkout page review block.
      *
-     * @var AssertOrderTotalOnReviewPage
+     * @var AssertGrandTotalOrderReview
      */
-    protected $assertOrderTotalOnReviewPage;
+    protected $assertGrandTotalOrderReview;
 
     /**
-     * One page checkout success page
+     * One page checkout success page.
      *
      * @var CheckoutOnepageSuccess
      */
     protected $checkoutOnepageSuccess;
 
     /**
-     * Grand total price
+     * Price array.
      *
-     * @var string
+     * @var array
      */
-    protected $grandTotal;
+    protected $prices;
 
     /**
-     * Checkout method
+     * Checkout method.
      *
      * @var string
      */
@@ -55,36 +54,36 @@ class PlaceOrderStep implements TestStepInterface
     /**
      * @construct
      * @param CheckoutOnepage $checkoutOnepage
-     * @param AssertOrderTotalOnReviewPage $assertOrderTotalOnReviewPage
+     * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param string $checkoutMethod
-     * @param string|null $grandTotal
+     * @param array $prices
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
-        AssertOrderTotalOnReviewPage $assertOrderTotalOnReviewPage,
+        AssertGrandTotalOrderReview $assertGrandTotalOrderReview,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         $checkoutMethod,
-        $grandTotal = null
+        array $prices = []
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->assertOrderTotalOnReviewPage = $assertOrderTotalOnReviewPage;
-        $this->grandTotal = $grandTotal;
+        $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
+        $this->prices = $prices;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->checkoutMethod = $checkoutMethod;
     }
 
     /**
-     * Place order after checking order totals on review step
+     * Place order after checking order totals on review step.
      *
      * @return array
      */
     public function run()
     {
-        if ($this->grandTotal !== null) {
-            $this->assertOrderTotalOnReviewPage->processAssert($this->checkoutOnepage, $this->grandTotal);
+        if (isset($this->prices['grandTotal'])) {
+            $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
-        $this->checkoutOnepage->getReviewBlock()->placeOrder();
+        $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
 
         return ['orderId' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId()];
     }

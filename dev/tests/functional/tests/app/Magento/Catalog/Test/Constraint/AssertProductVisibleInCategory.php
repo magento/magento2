@@ -52,9 +52,9 @@ class AssertProductVisibleInCategory extends AbstractConstraint
         $cmsIndex->open();
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
 
-        $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
+        $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {
-            $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
+            $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         }
 
         if (($product->getVisibility() === 'Search') || ($this->getStockStatus($product) === 'Out of Stock')) {

@@ -16,9 +16,11 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     protected $_file;
 
     /**
+     * Delimiter.
+     *
      * @var string
      */
-    protected $_delimiter = '';
+    protected $_delimiter = ',';
 
     /**
      * @var string
@@ -44,10 +46,12 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     ) {
         try {
             $this->_file = $directory->openFile($directory->getRelativePath($file), 'r');
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \LogicException("Unable to open file: '{$file}'");
         }
-        $this->_delimiter = $delimiter;
+        if ($delimiter) {
+            $this->_delimiter = $delimiter;
+        }
         $this->_enclosure = $enclosure;
         parent::__construct($this->_getNextRow());
     }

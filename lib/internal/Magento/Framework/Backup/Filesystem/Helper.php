@@ -51,7 +51,7 @@ class Helper
      * @param array $skipPaths
      * @param bool $removeRoot
      * @return void
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function rm($path, $skipPaths = [], $removeRoot = false)

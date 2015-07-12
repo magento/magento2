@@ -138,7 +138,6 @@ class InstallSchema implements InstallSchemaInterface
                 'role_id',
                 $installer->getTable('authorization_role'),
                 'role_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )->setComment(
                 'Admin Rule Table'

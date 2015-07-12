@@ -36,25 +36,17 @@ class Statistics extends \Magento\Backend\App\Action
     protected $reportTypes;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param [] $reportTypes
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         array $reportTypes
     ) {
         $this->_dateFilter = $dateFilter;
         $this->reportTypes = $reportTypes;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

@@ -75,7 +75,8 @@ class ToOrder
             '\Magento\Sales\Api\Data\OrderInterface'
         );
         $order->setStoreId($object->getQuote()->getStoreId())
-            ->setQuoteId($object->getQuote()->getId());
+            ->setQuoteId($object->getQuote()->getId())
+            ->setIncrementId($object->getQuote()->getReservedOrderId());
 
         $this->objectCopyService->copyFieldsetToTarget('sales_convert_quote', 'to_order', $object->getQuote(), $order);
         $this->eventManager->dispatch(

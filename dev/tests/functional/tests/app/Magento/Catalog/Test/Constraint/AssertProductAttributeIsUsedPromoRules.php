@@ -14,6 +14,8 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertProductAttributeIsUsedPromoRules extends AbstractConstraint
 {
     /**
+     * Assert that product attribute can be used on promo rules conditions.
+     *
      * @return void
      */
     public function processAssert()

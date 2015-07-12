@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api;
 
+/**
+ * Interface ShippingAddressManagementInterface
+ * @api
+ */
 interface ShippingAddressManagementInterface
 {
     /**

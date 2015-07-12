@@ -14,7 +14,7 @@ use Magento\Framework\App\Action\Action;
  * Catalog products compare block
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
+class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
      * Product Compare items collection
@@ -110,7 +110,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
             $context,
             $data
         );
-        $this->_isScopePrivate = true;
     }
 
     /**
@@ -255,7 +254,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
                 [
                     'price_id' => 'product-price-' . $product->getId() . $idSuffix,
                     'display_minimal_price' => true,
-                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
+                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
                 ]
             );
         }

@@ -19,6 +19,14 @@ use Magento\Tax\Api\Data\TaxClassInterface;
 class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxClassInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_ID   = 'class_id';
+    const KEY_NAME = 'class_name';
+    const KEY_TYPE = 'class_type';
+    /**#@-*/
+
     /**
      * Defines Customer Tax Class string
      */
@@ -41,7 +49,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      * @param AttributeValueFactory $customAttributeFactory
      * @param TaxClass\Factory $classFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -51,7 +59,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
         AttributeValueFactory $customAttributeFactory,
         \Magento\Tax\Model\TaxClass\Factory $classFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(

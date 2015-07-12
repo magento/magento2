@@ -47,7 +47,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
         $this->_wishlistConfig = $wishlistConfig;
         $this->_wishlistSession = $wishlistSession;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
     }
 
     /**

@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Model\Resource\Product\Sold;
 
-class Collection extends \Magento\Reports\Model\Resource\Product\Collection
+class Collection extends \Magento\Reports\Model\Resource\Order\Collection
 {
     /**
      * Set Date range to collection
@@ -35,6 +35,46 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     }
 
     /**
+     * Add ordered qty's
+     *
+     * @param string $from
+     * @param string $to
+     * @return $this
+     */
+    public function addOrderedQty($from = '', $to = '')
+    {
+        $adapter = $this->getConnection();
+        $orderTableAliasName = $adapter->quoteIdentifier('order');
+
+        $orderJoinCondition = [
+            $orderTableAliasName . '.entity_id = order_items.order_id',
+            $adapter->quoteInto("{$orderTableAliasName}.state <> ?", \Magento\Sales\Model\Order::STATE_CANCELED),
+        ];
+
+        if ($from != '' && $to != '') {
+            $fieldName = $orderTableAliasName . '.created_at';
+            $orderJoinCondition[] = $this->prepareBetweenSql($fieldName, $from, $to);
+        }
+
+        $this->getSelect()->reset()->from(
+            ['order_items' => $this->getTable('sales_order_item')],
+            ['ordered_qty' => 'SUM(order_items.qty_ordered)', 'order_items_name' => 'order_items.name']
+        )->joinInner(
+            ['order' => $this->getTable('sales_order')],
+            implode(' AND ', $orderJoinCondition),
+            []
+        )->where(
+            'parent_item_id IS NULL'
+        )->group(
+            'order_items.product_id'
+        )->having(
+            'SUM(order_items.qty_ordered) > ?',
+            0
+        );
+        return $this;
+    }
+
+    /**
      * Set store filter to collection
      *
      * @param array $storeIds
@@ -49,29 +89,38 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     }
 
     /**
-     * Add website product limitation
+     * Set order
      *
+     * @param string $attribute
+     * @param string $dir
      * @return $this
      */
-    protected function _productLimitationJoinWebsite()
+    public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {
-        $filters = $this->_productLimitationFilters;
-        $conditions = ['product_website.product_id=e.entity_id'];
-        if (isset($filters['website_ids'])) {
-            $conditions[] = $this->getConnection()->quoteInto(
-                'product_website.website_id IN(?)',
-                $filters['website_ids']
-            );
-
-            $subQuery = $this->getConnection()->select()->from(
-                ['product_website' => $this->getTable('catalog_product_website')],
-                ['product_website.product_id']
-            )->where(
-                join(' AND ', $conditions)
-            );
-            $this->getSelect()->where('e.entity_id IN( ' . $subQuery . ' )');
+        if (in_array($attribute, ['orders', 'ordered_qty'])) {
+            $this->getSelect()->order($attribute . ' ' . $dir);
+        } else {
+            parent::setOrder($attribute, $dir);
         }
 
         return $this;
+    }
+
+    /**
+     * Prepare between sql
+     *
+     * @param string $fieldName Field name with table suffix ('created_at' or 'main_table.created_at')
+     * @param string $from
+     * @param string $to
+     * @return string Formatted sql string
+     */
+    protected function prepareBetweenSql($fieldName, $from, $to)
+    {
+        return sprintf(
+            '(%s BETWEEN %s AND %s)',
+            $fieldName,
+            $this->getConnection()->quote($from),
+            $this->getConnection()->quote($to)
+        );
     }
 }

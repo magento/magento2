@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 use Magento\Framework\Registry;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 
 class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
@@ -19,25 +18,17 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Status
     protected $resultPageFactory;
 
     /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Context $context
      * @param Registry $coreRegistry
      * @param PageFactory $resultPageFactory
-     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        PageFactory $resultPageFactory,
-        RedirectFactory $resultRedirectFactory
+        PageFactory $resultPageFactory
     ) {
         parent::__construct($context, $coreRegistry);
         $this->resultPageFactory = $resultPageFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

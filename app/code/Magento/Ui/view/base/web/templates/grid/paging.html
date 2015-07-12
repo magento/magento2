@@ -1,0 +1,50 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="col-xs-3">
+    <div class="admin__control-support-text">
+        <span data-bind="text: totalRecords"></span> records found
+        <!-- ko if: totalSelected -->
+        (<span data-bind="text: totalSelected"></span> selected)
+        <!-- /ko -->
+    </div>
+</div>
+
+<div class="col-xs-7 admin__data-grid-pager-wrap">
+    <select
+        id="perPage"
+        class="admin__control-select"
+        data-bind="options: options,
+                   value: pageSize,
+                   optionsValue: 'value',
+                   optionsText: 'label'"></select>
+    <label class="admin__control-support-text" for="perPage">per page</label>
+
+    <div class="admin__data-grid-pager">
+        <button
+            class="action-previous"
+            type="button"
+            data-bind="css: { disabled: isFirst() },
+                   click: prev">
+            <span>Previous page</span>
+        </button>
+        <input
+            id="pageCurrent"
+            class="admin__control-text"
+            data-bind="value: _current"
+            type="number" />
+        <label class="admin__control-support-text" for="pageCurrent">
+            of <span data-bind="text: pages"></span>
+        </label>
+        <button
+            class="action-next"
+            data-bind="css: { disabled: isLast() },
+                       click: next">
+            <span>Next page</span>
+        </button>
+    </div>
+
+</div>

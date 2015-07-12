@@ -11,46 +11,45 @@ use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Page\Page;
 
 /**
- * Class CatalogCategory
- * Manage categories page in backend
+ * Manage categories page in backend.
  */
 class CatalogCategory extends Page
 {
     /**
-     * URL for category page
+     * URL for category page.
      */
     const MCA = 'catalog/category';
 
     /**
-     * Category Edit Form on the Backend
+     * Category Edit Form on the Backend.
      *
      * @var string
      */
     protected $formBlock = '#category-edit-container';
 
     /**
-     * Categories tree block
+     * Categories tree block.
      *
      * @var string
      */
     protected $treeBlock = '.categories-side-col';
 
     /**
-     * Get messages block
+     * Get messages block.
      *
      * @var string
      */
     protected $messagesBlock = '#messages .messages';
 
     /**
-     * Backend abstract block
+     * Backend abstract block.
      *
      * @var string
      */
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Init page. Set page url
+     * Init page. Set page url.
      */
     protected function _init()
     {
@@ -58,7 +57,7 @@ class CatalogCategory extends Page
     }
 
     /**
-     * Open page using browser and waiting until loader will be disappeared
+     * Open page using browser and waiting until loader will be disappeared.
      *
      * @param array $params
      * @return $this
@@ -72,7 +71,7 @@ class CatalogCategory extends Page
     }
 
     /**
-     * Get Category edit form
+     * Get Category edit form.
      *
      * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Edit\CategoryForm
      */
@@ -84,7 +83,7 @@ class CatalogCategory extends Page
     }
 
     /**
-     * Category Tree container on the Backend
+     * Category Tree container on the Backend.
      *
      * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Tree
      */
@@ -97,19 +96,19 @@ class CatalogCategory extends Page
     }
 
     /**
-     * Get messages block
+     * Get messages block.
      *
-     * @return \Magento\Core\Test\Block\Messages
+     * @return \Magento\Backend\Test\Block\Messages
      */
     public function getMessagesBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCoreMessages(
+        return Factory::getBlockFactory()->getMagentoBackendMessages(
             $this->_browser->find($this->messagesBlock, Locator::SELECTOR_CSS)
         );
     }
 
     /**
-     * Get abstract block
+     * Get abstract block.
      *
      * @return \Magento\Backend\Test\Block\Template
      */

@@ -44,7 +44,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
             }
 
             if (!$backup->getTime()) {
-                throw new \Magento\Framework\Backup\Exception\CantLoadSnapshot();
+                throw new \Magento\Framework\Backup\Exception\CantLoadSnapshot(__('Can\'t load snapshot archive'));
             }
 
             $type = $backup->getType();
@@ -84,12 +84,12 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
                         __(
                             'You need more permissions to activate maintenance mode right now.'
                         ) . ' ' . __(
-                            'To continue with the rollback, you need to either deselect ' .
-                            '"Put store on the maintenance mode" or update your permissions.'
+                            'To complete the rollback, please deselect '
+                            . '"Put store into maintenance mode" or update your permissions.'
                         )
                     );
                     $backupManager->setErrorMessage(
-                        __('Something went wrong putting your store into maintenance mode.')
+                        __('Something went wrong while putting your store into maintenance mode.')
                     );
                     return $this->getResponse()->representJson($response->toJson());
                 }
@@ -120,17 +120,17 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
 
             $response->setRedirectUrl($this->getUrl('*'));
         } catch (\Magento\Framework\Backup\Exception\CantLoadSnapshot $e) {
-            $errorMsg = __('The backup file was not found.');
+            $errorMsg = __('We can\'t find the backup file.');
         } catch (\Magento\Framework\Backup\Exception\FtpConnectionFailed $e) {
-            $errorMsg = __('We couldn\'t connect to the FTP.');
+            $errorMsg = __('We can\'t connect to the FTP right now.');
         } catch (\Magento\Framework\Backup\Exception\FtpValidationFailed $e) {
-            $errorMsg = __('Failed to validate FTP');
+            $errorMsg = __('Failed to validate FTP.');
         } catch (\Magento\Framework\Backup\Exception\NotEnoughPermissions $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
-            $errorMsg = __('Not enough permissions to perform rollback.');
+            $errorMsg = __('You need more permissions to perform a rollback.');
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
-            $errorMsg = __('Failed to rollback');
+            $errorMsg = __('Failed to rollback.');
         }
 
         if (!empty($errorMsg)) {

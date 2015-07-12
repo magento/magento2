@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
     <fixture name="cmsPage" module="Magento_Cms" type="flat" entity_type="cms_page" collection="Magento\Cms\Model\Resource\Page\Grid\Collection" identifier="identifier"
              repository_class="Magento\Cms\Test\Repository\CmsPage" handler_interface="Magento\Cms\Test\Handler\CmsPage\CmsPageInterface" class="Magento\Cms\Test\Fixture\CmsPage">
         <dataset name="default">

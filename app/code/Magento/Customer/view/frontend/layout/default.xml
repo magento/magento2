@@ -15,10 +15,35 @@
             </block>
             <block class="Magento\Customer\Block\Account\RegisterLink" name="register-link">
                 <arguments>
-                    <argument name="label" xsi:type="string" translate="true">Register</argument>
+                    <argument name="label" xsi:type="string" translate="true">Create an Account</argument>
                 </arguments>
             </block>
-            <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link" template="account/link/authorization.phtml"/>
+            <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link"
+                   template="account/link/authorization.phtml"/>
+            <block class="Magento\Customer\Block\Account\AuthenticationPopup" name="authentication-popup" as="authentication-popup" template="account/authentication-popup.phtml">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="authenticationPopup" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Customer/js/view/authentication-popup</item>
+                                <item name="children" xsi:type="array">
+                                    <item name="messages" xsi:type="array">
+                                        <item name="component" xsi:type="string">Magento_Ui/js/view/messages</item>
+                                        <item name="displayArea" xsi:type="string">messages</item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
         </referenceBlock>
+        <referenceContainer name="content">
+            <block name="customer.section.config" class="Magento\Customer\Block\SectionConfig"
+                   template="Magento_Customer::js/section-config.phtml"/>
+            <block name="customer.customer.data"
+                   class="Magento\Customer\Block\CustomerData"
+                   template="Magento_Customer::js/customer-data.phtml"/>
+        </referenceContainer>
     </body>
 </page>

@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchResultsInterface;
  *
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package.
+ * @api
  */
 interface ShipmentSearchResultInterface extends SearchResultsInterface
 {
@@ -28,5 +29,5 @@ interface ShipmentSearchResultInterface extends SearchResultsInterface
      * @param \Magento\Sales\Api\Data\ShipmentInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

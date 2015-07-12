@@ -16,9 +16,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentSender|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $shipmentSenderMock;
+    protected $shipmentCommentSenderMock;
 
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -69,8 +69,8 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->shipmentSenderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender\ShipmentSender',
+        $this->shipmentCommentSenderMock = $this->getMock(
+            'Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender',
             ['send', '__wakeup'],
             [],
             '',
@@ -139,7 +139,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\AddComment(
             $contextMock,
             $this->shipmentLoaderMock,
-            $this->shipmentSenderMock,
+            $this->shipmentCommentSenderMock,
             $this->resultLayoutFactoryMock
         );
     }
@@ -210,7 +210,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->will($this->returnValue($this->shipmentMock));
         $this->shipmentMock->expects($this->once())->method('addComment');
-        $this->shipmentSenderMock->expects($this->once())->method('send');
+        $this->shipmentCommentSenderMock->expects($this->once())->method('send');
         $this->shipmentMock->expects($this->once())->method('save');
         $layoutMock = $this->getMock('Magento\Framework\View\Layout', ['getBlock'], [], '', false);
         $blockMock = $this->getMock('Magento\Shipping\Block\Adminhtml\View\Comments', ['toHtml'], [], '', false);
@@ -318,7 +318,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->will($this->returnValue($this->shipmentMock));
         $this->shipmentMock->expects($this->once())->method('addComment');
-        $this->shipmentSenderMock->expects($this->once())->method('send');
+        $this->shipmentCommentSenderMock->expects($this->once())->method('send');
         $this->shipmentMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
         $this->exceptionResponse();
 

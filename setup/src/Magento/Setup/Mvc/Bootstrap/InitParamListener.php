@@ -30,7 +30,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     /**
      * A CLI parameter for injecting bootstrap variables
      */
-    const BOOTSTRAP_PARAM = 'magento_init_params';
+    const BOOTSTRAP_PARAM = 'magento-init-params';
 
     /**
      * List of ZF event listeners
@@ -38,45 +38,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @var \Zend\Stdlib\CallbackHandler[]
      */
     private $listeners = [];
-
-    /**
-     * Registers itself to every command in console routes
-     *
-     * @param array $config
-     * @return array
-     */
-    public static function attachToConsoleRoutes($config)
-    {
-        if (isset($config['console']['router']['routes'])) {
-            foreach ($config['console']['router']['routes'] as &$route) {
-                $route['options']['route'] .= ' [--' . self::BOOTSTRAP_PARAM . '=]';
-            }
-        }
-        return $config;
-    }
-
-    /**
-     * Adds itself to CLI usage instructions
-     *
-     * @return array
-     */
-    public static function getConsoleUsage()
-    {
-        $result = [''];
-        $result[] = [
-            '[--' . self::BOOTSTRAP_PARAM . sprintf('=%s]', escapeshellarg('<query>')),
-            'Add to any command to customize Magento initialization parameters',
-        ];
-        $mode = State::PARAM_MODE;
-        $dirs = AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
-        $examples = [
-            "{$mode}=developer",
-            "{$dirs}[base][path]=/var/www/example.com",
-            "{$dirs}[cache][path]=/var/tmp/cache",
-        ];
-        $result[] = ['', sprintf('For example: %s', escapeshellarg(implode('&', $examples)))];
-        return $result;
-    }
 
     /**
      * {@inheritdoc}

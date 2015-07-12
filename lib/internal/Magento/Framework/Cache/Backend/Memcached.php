@@ -21,7 +21,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
      * Constructor
      *
      * @param array $options @see \Zend_Cache_Backend_Memcached::__construct()
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(array $options = [])
     {
@@ -29,8 +29,10 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
 
         if (!isset($options['slab_size']) || !is_numeric($options['slab_size'])) {
             if (isset($options['slab_size'])) {
-                throw new \Magento\Framework\Exception(
-                    "Invalid value for the node <slab_size>. Expected to be positive integer."
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        "Invalid value for the node <slab_size>. Expected to be positive integer."
+                    )
                 );
             }
 

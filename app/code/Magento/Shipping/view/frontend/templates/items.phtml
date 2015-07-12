@@ -25,7 +25,7 @@
     <a href="<?php echo $block->getPrintShipmentUrl($_shipment) ?>"
        onclick="this.target='_blank'"
        class="action print">
-        <span><?php echo __('Print Shipment') ?></span
+        <span><?php echo __('Print Shipment') ?></span>
     </a>
     <a href="#"
        data-mage-init='{"popupWindow": {"windowURL":"<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_shipment) ?>","windowName":"trackshipment","width":800,"height":600,"top":0,"left":0,"resizable":1,"scrollbars":1}}'

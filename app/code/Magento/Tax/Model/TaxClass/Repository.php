@@ -15,8 +15,8 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException as ModelException;
-use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\ClassModelRegistry;
 use Magento\Tax\Model\Resource\TaxClass\Collection as TaxClassCollection;
 use Magento\Tax\Model\Resource\TaxClass\CollectionFactory as TaxClassCollectionFactory;
@@ -63,12 +63,18 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     protected $taxClassResource;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param TaxClassCollectionFactory $taxClassCollectionFactory
      * @param \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory
      * @param ClassModelRegistry $classModelRegistry
      * @param \Magento\Tax\Model\Resource\TaxClass $taxClassResource
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -76,7 +82,8 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         TaxClassCollectionFactory $taxClassCollectionFactory,
         \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory,
         ClassModelRegistry $classModelRegistry,
-        \Magento\Tax\Model\Resource\TaxClass $taxClassResource
+        \Magento\Tax\Model\Resource\TaxClass $taxClassResource,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
@@ -84,6 +91,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $this->searchResultsFactory = $searchResultsFactory;
         $this->classModelRegistry = $classModelRegistry;
         $this->taxClassResource = $taxClassResource;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -164,19 +172,19 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $exception = new InputException();
 
         if (!\Zend_Validate::is(trim($taxClass->getClassName()), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_NAME]));
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => ClassModel::KEY_NAME]));
         }
 
         $classType = $taxClass->getClassType();
         if (!\Zend_Validate::is(trim($classType), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_TYPE]));
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => ClassModel::KEY_TYPE]));
         } elseif ($classType !== TaxClassManagementInterface::TYPE_CUSTOMER
             && $classType !== TaxClassManagementInterface::TYPE_PRODUCT
         ) {
             $exception->addError(
                 __(
                     InputException::INVALID_FIELD_VALUE,
-                    ['fieldName' => TaxClassInterface::KEY_TYPE, 'value' => $classType]
+                    ['fieldName' => ClassModel::KEY_TYPE, 'value' => $classType]
                 )
             );
         }
@@ -195,6 +203,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $searchResults->setSearchCriteria($searchCriteria);
         /** @var TaxClassCollection $collection */
         $collection = $this->taxClassCollectionFactory->create();
+        $this->joinProcessor->process($collection);
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }

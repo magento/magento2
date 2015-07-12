@@ -48,6 +48,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected $taxClassCollectionFactory;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensionAttributesJoinProcessorMock;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -85,13 +90,23 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->taxClassResourceMock = $this->getMock('\Magento\Tax\Model\Resource\TaxClass', [], [], '', false);
+
+        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+            '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
+            ['process'],
+            [],
+            '',
+            false
+        );
+
         $this->model = $this->objectManager->getObject(
             'Magento\Tax\Model\TaxClass\Repository',
             [
                 'classModelRegistry' => $this->classModelRegistryMock,
                 'taxClassResource' => $this->taxClassResourceMock,
                 'searchResultsFactory' => $this->searchResultFactory,
-                'taxClassCollectionFactory' => $this->taxClassCollectionFactory
+                'taxClassCollectionFactory' => $this->taxClassCollectionFactory,
+                'joinProcessor' => $this->extensionAttributesJoinProcessorMock
             ]
         );
     }
@@ -187,6 +202,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $collection = $this->getMock('\Magento\Tax\Model\Resource\TaxClass\Collection', [], [], '', false);
         $sortOrder = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
 
+        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($collection);
+
         $searchCriteria->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroup]);
         $filterGroup->expects($this->once())->method('getFilters')->willReturn([$filter]);
         $filter->expects($this->atLeastOnce())->method('getConditionType')->willReturn('eq');
@@ -203,6 +222,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $collection->expects($this->any())->method('getSize')->willReturn(2);
         $collection->expects($this->any())->method('setItems')->with([$taxClassOne, $taxClassTwo]);
+        $collection->expects($this->any())->method('getItems')->willReturn([$taxClassOne, $taxClassTwo]);
         $collection->expects($this->once())->method('setCurPage')->with(0);
         $collection->expects($this->once())->method('setPageSize')->with(20);
 

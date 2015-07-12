@@ -8,6 +8,7 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
+use Magento\Framework\Locale\Currency;
 use Magento\Framework\Locale\CurrencyInterface;
 
 class CurrencyTest extends \PHPUnit_Framework_TestCase
@@ -68,7 +69,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultCurrency()
     {
-        $expectedDefaultCurrency = CurrencyInterface::DEFAULT_CURRENCY;
+        $expectedDefaultCurrency = Currency::DEFAULT_CURRENCY;
         $retrievedDefaultCurrency = $this->testCurrencyObject->getDefaultCurrency();
         $this->assertEquals($expectedDefaultCurrency, $retrievedDefaultCurrency);
     }

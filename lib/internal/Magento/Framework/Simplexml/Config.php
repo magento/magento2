@@ -118,12 +118,12 @@ class Config
      */
     public function getNode($path = null)
     {
-        if (!$this->_xml instanceof Element) {
+        if (!$this->getXml() instanceof Element) {
             return false;
         } elseif ($path === null) {
-            return $this->_xml;
+            return $this->getXml();
         } else {
-            return $this->_xml->descend($path);
+            return $this->getXml()->descend($path);
         }
     }
 
@@ -135,11 +135,12 @@ class Config
      */
     public function getXpath($xpath)
     {
-        if (empty($this->_xml)) {
+        $xml = $this->getXml();
+        if (empty($xml)) {
             return false;
         }
 
-        if (!($result = @$this->_xml->xpath($xpath))) {
+        if (!($result = @$xml->xpath($xpath))) {
             return false;
         }
 
@@ -476,7 +477,7 @@ class Config
         if (!empty($string)) {
             $xml = simplexml_load_string($string, $this->_elementClass);
             if ($xml) {
-                $this->_xml = $xml;
+                $this->setXml($xml);
                 return true;
             }
         }
@@ -493,7 +494,7 @@ class Config
     {
         $xml = simplexml_import_dom($dom, $this->_elementClass);
         if ($xml) {
-            $this->_xml = $xml;
+            $this->setXml($xml);
             return true;
         }
 
@@ -510,7 +511,7 @@ class Config
      */
     public function setNode($path, $value, $overwrite = true)
     {
-        $this->_xml->setNode($path, $value, $overwrite);
+        $this->getXml()->setNode($path, $value, $overwrite);
         return $this;
     }
 
@@ -574,5 +575,15 @@ class Config
     public function __destruct()
     {
         $this->_xml = null;
+    }
+
+    /**
+     * Getter for xml element
+     *
+     * @return Element
+     */
+    protected function getXml()
+    {
+        return $this->_xml;
     }
 }

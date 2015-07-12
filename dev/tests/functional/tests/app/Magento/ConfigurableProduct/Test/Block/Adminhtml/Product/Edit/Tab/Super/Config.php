@@ -8,40 +8,41 @@ namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Supe
 
 use Magento\Backend\Test\Block\Template;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Catalog\Test\Fixture\CatalogCategory;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Config
- * Adminhtml catalog super product configurable tab
+ * Adminhtml catalog super product configurable tab.
  */
 class Config extends Tab
 {
     /**
-     * Selector for trigger show/hide "Variations" tab
+     * Selector for trigger show/hide "Variations" tab.
      *
      * @var string
      */
-    protected $variationsTabTrigger = '[data-panel="product-variations"] .title span';
+    protected $variationsTabTrigger = '[data-target="#super_config-content"][data-toggle="collapse"] span';
+
+    /** @var string */
+    protected $createConfigurationsButton = '[data-action=open-steps-wizard]';
 
     /**
-     * Selector for content "Variations" tab
+     * Selector for content "Variations" tab.
      *
      * @var string
      */
     protected $variationsTabContent = '#super_config-content';
 
     /**
-     * Selector for button "Generate Variations"
+     * Selector for button "Generate Products".
      *
      * @var string
      */
-    protected $generateVariations = '[data-ui-id="product-variations-generator-generate"]';
+    protected $generateVariations = '[data-role=step-wizard-next]';
 
     /**
-     * Selector for variations matrix
+     * Selector for variations matrix.
      *
      * @var string
      */
@@ -55,35 +56,35 @@ class Config extends Tab
     protected $template = './ancestor::body';
 
     /**
-     * Selector for variations tab wrapper
+     * Selector for variations tab wrapper.
      *
      * @var string
      */
     protected $variationsTabWrapper = '#super_config-wrapper';
 
     /**
-     * Attribute element selector
+     * Attribute element selector.
      *
      * @var string
      */
     protected $attributeElement = '.entry-edit.have-price';
 
     /**
-     * Delete variation button selector
+     * Delete variation button selector.
      *
      * @var string
      */
     protected $deleteVariationButton = '.action-delete';
 
     /**
-     * Variations content selector
+     * Variations content selector.
      *
      * @var string
      */
     protected $variationsContent = '#product_info_tabs_super_config_content';
 
     /**
-     * Fill variations fieldset
+     * Fill variations fieldset.
      *
      * @param array $fields
      * @param SimpleElement|null $element
@@ -104,6 +105,7 @@ class Config extends Tab
         foreach ($attributesValue as $key => $value) {
             $attributesValue[$key] = array_merge($value, $attributes['attributes_data'][$key]);
         }
+        $this->_rootElement->find($this->createConfigurationsButton)->click();
         $this->getAttributeBlock()->fillAttributes($attributesValue);
         if (!empty($attributes['matrix'])) {
             $this->generateVariations();
@@ -114,7 +116,7 @@ class Config extends Tab
     }
 
     /**
-     * Show "Variations" tab content
+     * Show "Variations" tab content.
      *
      * @return void
      */
@@ -129,18 +131,18 @@ class Config extends Tab
     }
 
     /**
-     * Generate variations
+     * Generate variations.
      *
      * @return void
      */
     public function generateVariations()
     {
-        $this->_rootElement->find($this->generateVariations)->click();
+        $this->browser->find($this->generateVariations)->click();
         $this->getTemplateBlock()->waitLoader();
     }
 
     /**
-     * Get block of attributes
+     * Get block of attributes.
      *
      * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute
      */
@@ -153,7 +155,7 @@ class Config extends Tab
     }
 
     /**
-     * Get block of variations
+     * Get block of variations.
      *
      * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix
      */
@@ -179,7 +181,7 @@ class Config extends Tab
     }
 
     /**
-     * Get data of tab
+     * Get data of tab.
      *
      * @param array|null $fields
      * @param SimpleElement|null $element
@@ -199,7 +201,7 @@ class Config extends Tab
     }
 
     /**
-     * Delete all attributes
+     * Delete all attributes.
      *
      * @return void
      */

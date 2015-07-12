@@ -165,7 +165,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'menuConfig' => $this->_menuConfigMock,
                 'authSession' => $this->_authSessionMock,
                 'encryptor' => $this->_encryptor,
-                'routeParamsResolver' => $this->_paramsResolverMock
+                'routeParamsResolverFactory' => $this->_paramsResolverMock
             ]
         );
         $this->_paramsResolverMock->expects(
@@ -186,7 +186,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'menuConfig' => $this->_menuConfigMock,
                 'authSession' => $this->_authSessionMock,
                 'encryptor' => $this->_encryptor,
-                'routeParamsResolver' => $this->_paramsResolverMock
+                'routeParamsResolverFactory' => $this->_paramsResolverMock
             ]
         );
 
@@ -259,7 +259,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             [
                 'backendHelper' => $helperMock,
                 'authSession' => $this->_authSessionMock,
-                'routeParamsResolver' => $this->_paramsResolverMock
+                'routeParamsResolverFactory' => $this->_paramsResolverMock
             ]
         );
         $urlModel->getAreaFrontName();

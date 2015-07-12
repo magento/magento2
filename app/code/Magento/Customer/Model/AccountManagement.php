@@ -31,7 +31,7 @@ use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Psr\Log\LoggerInterface as PsrLogger;
-use Magento\Framework\Mail\Exception as MailException;
+use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -326,11 +326,13 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Activate a customer account using a key that was sent in a confirmation e-mail.
+     * Activate a customer account using a key that was sent in a confirmation email.
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $confirmationKey
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException
      */
     private function activateCustomer($customer, $confirmationKey)
     {
@@ -420,10 +422,12 @@ class AccountManagement implements AccountManagementInterface
                         )
                     );
             }
+            return true;
         } catch (MailException $e) {
             // If we are not able to send a reset password email, this should be ignored
             $this->logger->critical($e);
         }
+        return false;
     }
 
     /**
@@ -479,6 +483,8 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function createAccountWithPasswordHash(
         CustomerInterface $customer,
@@ -492,7 +498,7 @@ class AccountManagement implements AccountManagementInterface
             $websiteId = $customer->getWebsiteId();
 
             if ($this->isCustomerInStore($websiteId, $customer->getStoreId())) {
-                throw new InputException(__('Customer already exists in this store.'));
+                throw new InputException(__('This customer already exists in this store.'));
             }
             // Existing password hash will be used from secured customer data registry when saving customer
         }
@@ -507,19 +513,26 @@ class AccountManagement implements AccountManagementInterface
             $customer->setStoreId($storeId);
         }
 
+        $customerAddresses = $customer->getAddresses() ?: [];
+        $customer->setAddresses(null);
         try {
             // If customer exists existing hash will be used by Repository
             $customer = $this->customerRepository->save($customer, $hash);
         } catch (AlreadyExistsException $e) {
             throw new InputMismatchException(
-                __('Customer with the same email already exists in associated website.')
+                __('A customer with the same email already exists in an associated website.')
             );
         } catch (LocalizedException $e) {
             throw $e;
         }
-
-        foreach ($customer->getAddresses() as $address) {
-            $this->addressRepository->save($address);
+        try {
+            foreach ($customerAddresses as $address) {
+                $address->setCustomerId($customer->getId());
+                $this->addressRepository->save($address);
+            }
+        } catch (InputException $e) {
+            $this->customerRepository->delete($customer);
+            throw $e;
         }
         $customer = $this->customerRepository->getById($customer->getId());
         $newLinkToken = $this->mathRandom->getUniqueHash();
@@ -618,7 +631,7 @@ class AccountManagement implements AccountManagementInterface
         $hash = $customerSecure->getPasswordHash();
         if (!$this->encryptor->validateHash($currentPassword, $hash)) {
             throw new InvalidEmailOrPasswordException(
-                __('Password doesn\'t match for this account.'));
+                __('The password doesn\'t match this account.'));
         }
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
@@ -648,13 +661,13 @@ class AccountManagement implements AccountManagementInterface
         if ($length < self::MIN_PASSWORD_LENGTH) {
             throw new InputException(
                 __(
-                    'The password must have at least %1 characters.',
+                    'Please enter a password with at least %1 characters.',
                     self::MIN_PASSWORD_LENGTH
                 )
             );
         }
         if ($this->stringHelper->strlen(trim($password)) != $length) {
-            throw new InputException(__('The password can not begin or end with a space.'));
+            throw new InputException(__('The password can\'t begin or end with a space.'));
         }
     }
 
@@ -804,7 +817,9 @@ class AccountManagement implements AccountManagementInterface
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong transactional account email type'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please correct the transactional account email type.')
+            );
         }
 
         if (!$storeId) {
@@ -1047,12 +1062,13 @@ class AccountManagement implements AccountManagementInterface
         //TODO : Fix how template is built. Maybe Framework Object or create new Email template data model?
         // Check template to see what values need to be set in the data model to be passed
         // Need to set the reset_password_url property of the object
+        $store = $this->storeManager->getStore($customer->getStoreId());
         $resetUrl = $this->url->getUrl(
             'customer/account/createPassword',
             [
                 '_query' => ['id' => $customer->getId(), 'token' => $newPasswordToken],
                 '_store' => $customer->getStoreId(),
-                '_nosid' => true,
+                '_secure' => $store->isFrontUrlSecure(),
             ]
         );
 
@@ -1063,7 +1079,7 @@ class AccountManagement implements AccountManagementInterface
             $customer,
             self::XML_PATH_REMIND_EMAIL_TEMPLATE,
             self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($customer->getStoreId())],
+            ['customer' => $customerEmailData, 'store' => $store],
             $customer->getStoreId()
         );
 

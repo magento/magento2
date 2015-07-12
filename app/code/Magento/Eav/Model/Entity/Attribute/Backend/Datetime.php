@@ -30,7 +30,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * necessary for further process, else date string
      *
      * @param \Magento\Framework\Object $object
-     * @throws \Magento\Eav\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function beforeSave($object)
@@ -41,7 +41,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             try {
                 $value = $this->formatDate($object->getData($attributeName));
             } catch (\Exception $e) {
-                throw new \Magento\Eav\Exception(__('Invalid date'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid date'));
             }
 
             if (is_null($value)) {
@@ -72,10 +72,9 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         // unix timestamp given - simply instantiate date object
         if (is_scalar($date) && preg_match('/^[0-9]+$/', $date)) {
             $date = (new \DateTime())->setTimestamp($date);
-            // international format
         } elseif (!($date instanceof \DateTime)) {
+            // normalized format expecting Y-m-d[ H:i:s]  - time is optional
             $date = new \DateTime($date);
-            // parse this date in current locale, do not apply GMT offset
         }
         return $date->format('Y-m-d H:i:s');
     }

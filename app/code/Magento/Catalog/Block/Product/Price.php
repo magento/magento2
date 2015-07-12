@@ -9,7 +9,7 @@ namespace Magento\Catalog\Block\Product;
 /**
  * Product price block
  */
-class Price extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
+class Price extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
 {
     /**
      * @var null

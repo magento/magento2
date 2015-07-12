@@ -30,7 +30,7 @@ class Config extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * Retrieve all options for the source from configuration
      *
-     * @throws \Magento\Eav\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
      */
     public function getAllOptions()
@@ -39,7 +39,7 @@ class Config extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $this->_options = [];
 
             if (empty($this->_optionsData)) {
-                throw new \Magento\Eav\Exception(__('No options found.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('No options found.'));
             }
             foreach ($this->_optionsData as $option) {
                 $this->_options[] = ['value' => $option['value'], 'label' => __($option['label'])];

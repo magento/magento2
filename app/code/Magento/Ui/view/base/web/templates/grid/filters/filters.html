@@ -1,0 +1,65 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-filters-actions-wrap">
+    <div class="data-grid-filters-action-wrap">
+        <button
+            class="action-default _active"
+            data-action="grid-filter-expand"
+            data-bind="click: toggleOpened, attr: { disabled: !hasVisible() }, css: { _active: isOpened() }">
+            <span data-bind="text: $t('Filters')"></span>
+        </button>
+    </div>
+</div>
+
+<!-- ko scope: chips -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!-- /ko -->
+
+<div
+    class="admin__data-grid-filters-wrap"
+    data-bind="css: { _show: isOpened() }"
+    data-part="filter-form">
+
+    <fieldset class="admin__fieldset admin__data-grid-filters">
+        <legend class="admin__filters-legend">
+            <span data-bind="text: $t('Advanced filter')"></span>
+        </legend>
+        <!-- ko foreach: elems -->
+            <!-- ko if: $data.isGroup -->
+            <fieldset class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data)">
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            </fieldset>
+            <!-- /ko -->
+
+            <!-- ko ifnot: $data.isGroup -->
+            <div class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data)">
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            </div>
+            <!-- /ko -->
+        <!-- /ko -->
+    </fieldset>
+
+    <div class="admin__data-grid-filters-footer">
+        <div class="admin__footer-main-actions">
+            <button
+                class="action-tertiary"
+                type="button"
+                data-action="grid-filter-cancel"
+                data-bind="click: function(){ $data.close().cancel(); }">
+                <span data-bind="text: $t('Cancel')"></span>
+            </button>
+            <button
+                class="action-secondary"
+                type="button"
+                data-action="grid-filter-apply"
+                data-bind="click: function(){ $data.close().apply(); }">
+                <span data-bind="text: $t('Apply Filters')"></span>
+            </button>
+        </div>
+    </div>
+
+</div>

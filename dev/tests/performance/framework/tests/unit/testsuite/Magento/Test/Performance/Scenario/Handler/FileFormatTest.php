@@ -59,12 +59,12 @@ class FileFormatTest extends \PHPUnit_Framework_TestCase
         $this->_object->run($this->_scenario, $reportFile);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception
-     * @expectedExceptionMessage Unable to run scenario 'Scenario', format is not supported.
-     */
     public function testRunUnsupportedFormat()
     {
+        $this->setExpectedException(
+            'Magento\Framework\Exception\LocalizedException',
+            new \Magento\Framework\Phrase("Unable to run scenario '%1', format is not supported", ['Scenario'])
+        );
         $scenario = new \Magento\TestFramework\Performance\Scenario(
             'Scenario',
             'scenario.txt',

@@ -6,37 +6,44 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Mtf\Factory\Factory;
-use Magento\Mtf\TestCase\Functional;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
 
 /**
- * Reset password on frontend
+ * Precondition:
+ * 1. Customer is created.
+ *
+ * Steps:
+ * 1. Open forgot password page.
+ * 2. Fill email.
+ * 3. Click forgot password button.
+ * 4. Check forgot password message.
+ *
+ * @group Customer_(CS)
+ * @ZephyrId MAGETWO-37145
  */
-class ForgotPasswordOnFrontendTest extends Functional
+class ForgotPasswordOnFrontendTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
-     * Reset password on frontend
+     * Create customer.
+     *
+     * @param Customer $customer
+     * @param CustomerAccountForgotPassword $forgotPassword
+     * @return void
      */
-    public function testForgotPassword()
+    public function test(Customer $customer, CustomerAccountForgotPassword $forgotPassword)
     {
-        // Create Customer
-        $customer = $this->objectManager->getInstance()->create(
-            'Magento\Customer\Test\Fixture\Customer',
-            ['dataSet' => 'customer_US_1']
-        );
+        // Precondition
         $customer->persist();
 
-        $customerAccountLoginPage = Factory::getPageFactory()->getCustomerAccountLogin();
-        $forgotPasswordPage = Factory::getPageFactory()->getCustomerAccountForgotpassword();
-        $forgotPasswordPage->open();
-
-        $forgotPasswordPage->getForgotPasswordForm()->resetForgotPassword($customer);
-
-        //Verifying
-        $message = sprintf(
-            'If there is an account associated with %s you will receive an email with a link to reset your password.',
-            $customer->getEmail()
-        );
-        $this->assertContains($message, $customerAccountLoginPage->getMessages()->getSuccessMessages());
+        // Steps
+        $forgotPassword->open();
+        $forgotPassword->getForgotPasswordForm()->resetForgotPassword($customer);
     }
 }

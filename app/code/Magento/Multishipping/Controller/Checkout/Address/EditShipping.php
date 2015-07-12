@@ -17,7 +17,6 @@ class EditShipping extends \Magento\Multishipping\Controller\Checkout\Address
             \Magento\Multishipping\Model\Checkout\Type\Multishipping\State::STEP_SHIPPING
         );
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
         if ($addressForm = $this->_view->getLayout()->getBlock('customer_address_edit')) {
             $addressForm->setTitle(
                 __('Edit Shipping Address')

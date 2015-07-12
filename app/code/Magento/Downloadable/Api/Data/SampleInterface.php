@@ -5,6 +5,8 @@
  */
 namespace Magento\Downloadable\Api\Data;
 
+use \Magento\Downloadable\Api\Data\File\ContentInterface;
+
 /**
  * @codeCoverageIgnore
  */
@@ -81,6 +83,21 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setSampleFile($sampleFile);
+
+    /**
+     * Retrieve sample file content
+     *
+     * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null
+     */
+    public function getSampleFileContent();
+
+    /**
+     * Set sample file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
+     * @return $this
+     */
+    public function setSampleFileContent(ContentInterface $sampleFileContent = null);
 
     /**
      * Return URL or NULL when type is 'file'

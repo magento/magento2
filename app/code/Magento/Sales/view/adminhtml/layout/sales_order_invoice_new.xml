@@ -8,6 +8,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="sales_order_item_price"/>
     <body>
+        <referenceContainer name="admin.scope.col.wrap" htmlClass="admin__old" /> <!-- ToDo UI: remove this wrapper with old styles removal. The class name "admin__old" is for tests only, we shouldn't use it in any way -->
+
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\Create" name="sales_invoice_create">
                 <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Form" name="form" template="order/invoice/create/form.phtml">
@@ -22,6 +24,8 @@
                         <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml">
                             <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="order/totals/tax.phtml"/>
                         </block>
+                        <container name="submit_before" label="Submit Before"/>
+                        <container name="submit_after" label="Submit After"/>
                     </block>
                 </block>
             </block>

@@ -14,10 +14,10 @@ store name = $_order->getStore()->getGroup()->getName()
 ?>
 <?php $_order = $block->getOrder() ?>
 <div>
-<?php echo __('Customer Name: %1', $_order->getCustomerFirstname() ? $_order->getCustomerName() : $_order->getBillingAddress()->getName()) ?><br />
-<?php echo __('Purchased From: %1', $_order->getStore()->getGroup()->getName()) ?><br />
+<?php echo __('Customer Name: %1', $block->escapeHtml($_order->getCustomerFirstname() ? $_order->getCustomerName() : $_order->getBillingAddress()->getName())) ?><br />
+<?php echo __('Purchased From: %1', $block->escapeHtml($_order->getStore()->getGroup()->getName())) ?><br />
 </div>
-<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #bebcb7; background:#f8f7f5;">
+<table cellpadding="0" border="0" width="100%" style="border:1px solid #bebcb7; background:#f8f7f5;">
     <thead>
         <tr>
             <th align="left" bgcolor="#d9e5ee" style="padding:3px 9px">Item</th>

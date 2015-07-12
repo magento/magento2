@@ -11,26 +11,17 @@ define([
     /**
      * Formats path of type "path.to.template" to RequireJS compatible
      * @param  {String} path
-     * @returns {String} - formatted template path
+     * @return {String} - formatted template path
      */
     function formatTemplatePath(path) {
         return 'text!' + path.replace(/^([^\/]+)/g, '$1/template') + '.html';
     }
 
     /**
-     * Waits for all items in passed array of promises to resolve.
-     * @param  {Array} promises - array of promises
-     * @returns {Deferred} - promise of promises to resolve
-     */
-    function waitFor(promises) {
-        return $.when.apply($, promises);
-    }
-
-    /**
      * Removes license from incoming template
      *
      * @param  {String} tmpl
-     * @returns {String} - template without license
+     * @return {String} - template without license
      */
     function removeLicense(tmpl) {
         var regEx = /<!--[\s\S]*?-->/;
@@ -44,7 +35,7 @@ define([
      * Loads template by path, resolves promise with it if defined
      *
      * @param  {String} path
-     * @params  {Deferred} promise
+     * @param  {Deferred} promise
      */
     function load(path, promise) {
         require([path], function (template) {
@@ -59,12 +50,11 @@ define([
          * Loops over arguments and loads template for each.
          * @return {Deferred} - promise of templates to be loaded
          */
-        loadTemplate: function () {
-            var isLoaded = $.Deferred(),
-                templates = _.toArray(arguments);
+        loadTemplate: function (source) {
+            var isLoaded = $.Deferred();
 
-            waitFor(templates.map(this._loadTemplate)).done(function () {
-                isLoaded.resolve.apply(isLoaded, arguments);
+            this._loadTemplate(source).done(function (tmpl) {
+                isLoaded.resolve(tmpl);
             });
 
             return isLoaded.promise();

@@ -14,7 +14,6 @@ return [
         'price_type' => 'fixed',
         'sku' => 'sku1',
         'max_characters' => 10,
-        'values' => [],
     ],
     [
         'title' => 'area option',
@@ -25,7 +24,6 @@ return [
         'price_type' => 'percent',
         'sku' => 'sku2',
         'max_characters' => 20,
-        'values' => []
     ],
     [
         'title' => 'file option',
@@ -38,7 +36,6 @@ return [
         'file_extension' => 'jpg, png, gif',
         'image_size_x' => 10,
         'image_size_y' => 20,
-        'values' => []
     ],
     [
         'title' => 'drop_down option',
@@ -137,8 +134,6 @@ return [
         'price' => 80.0,
         'price_type' => 'fixed',
         'sku' => 'date option sku',
-        'values' => []
-
     ],
     [
         'title' => 'date_time option',
@@ -148,7 +143,6 @@ return [
         'price' => 90.0,
         'price_type' => 'fixed',
         'sku' => 'date_time option sku',
-        'values' => []
     ],
     [
         'title' => 'time option',
@@ -158,6 +152,5 @@ return [
         'price' => 100.0,
         'price_type' => 'fixed',
         'sku' => 'time option sku',
-        'values' => []
     ],
 ];

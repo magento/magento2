@@ -20,7 +20,7 @@ class Totals extends Block
      *
      * @var string
      */
-    protected $submitOrder = '.order-totals-bottom button';
+    protected $submitOrder = '.order-totals-actions button';
 
     /**
      * Click 'Submit Order' button

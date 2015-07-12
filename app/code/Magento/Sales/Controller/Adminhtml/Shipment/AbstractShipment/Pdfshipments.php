@@ -10,32 +10,28 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 
-abstract class Pdfshipments extends \Magento\Backend\App\Action
+abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * @var FileFactory
      */
     protected $_fileFactory;
-
     /**
-     * @var RedirectFactory
+     * Resource collection
+     *
+     * @var string
      */
-    protected $resultRedirectFactory;
+    protected $collection = 'Magento\Sales\Model\Resource\Order\Shipment\Grid\Collection';
 
     /**
      * @param Context $context
      * @param FileFactory $fileFactory
-     * @param RedirectFactory $resultRedirectFactory
      */
-    public function __construct(
-        Context $context,
-        FileFactory $fileFactory,
-        RedirectFactory $resultRedirectFactory
-    ) {
+    public function __construct(Context $context, FileFactory $fileFactory)
+    {
         $this->_fileFactory = $fileFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -48,36 +44,24 @@ abstract class Pdfshipments extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return ResponseInterface|\Magento\Backend\Model\View\Result\Redirect
+     * @param AbstractCollection $collection
+     * @return $this|ResponseInterface
+     * @throws \Exception
      */
-    public function execute()
+    public function massAction(AbstractCollection $collection)
     {
-        $shipmentIds = $this->getRequest()->getPost('shipment_ids');
-        if (!empty($shipmentIds)) {
-            $shipments = $this->_objectManager->create(
-                'Magento\Sales\Model\Resource\Order\Shipment\Collection'
-            )->addAttributeToSelect(
-                '*'
-            )->addAttributeToFilter(
-                'entity_id',
-                ['in' => $shipmentIds]
-            )->load();
-            if (!isset($pdf)) {
-                $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Shipment')->getPdf($shipments);
-            } else {
-                $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Shipment')->getPdf($shipments);
-                $pdf->pages = array_merge($pdf->pages, $pages->pages);
-            }
-            $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
-            return $this->_fileFactory->create(
-                'packingslip' . $date . '.pdf',
-                $pdf->render(),
-                DirectoryList::VAR_DIR,
-                'application/pdf'
-            );
+        if (!isset($pdf)) {
+            $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Shipment')->getPdf($collection);
+        } else {
+            $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Shipment')->getPdf($collection);
+            $pdf->pages = array_merge($pdf->pages, $pages->pages);
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setPath('sales/*/');
+        $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
+        return $this->_fileFactory->create(
+            'packingslip' . $date . '.pdf',
+            $pdf->render(),
+            DirectoryList::VAR_DIR,
+            'application/pdf'
+        );
     }
 }

@@ -16,7 +16,7 @@ class ConfigBasedIntegrationManager
     /**
      * Integration service
      *
-     * @var \Magento\Integration\Service\V1\IntegrationInterface
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
      */
     protected $_integrationService;
 
@@ -29,11 +29,11 @@ class ConfigBasedIntegrationManager
 
     /**
      * @param Config $integrationConfig
-     * @param \Magento\Integration\Service\V1\IntegrationInterface $integrationService
+     * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      */
     public function __construct(
         Config $integrationConfig,
-        \Magento\Integration\Service\V1\IntegrationInterface $integrationService
+        \Magento\Integration\Api\IntegrationServiceInterface $integrationService
     ) {
         $this->_integrationService = $integrationService;
         $this->_integrationConfig = $integrationConfig;

@@ -7,62 +7,10 @@
 //  Imports
 //  _____________________________________________
 
+@import 'actions/_actions-dropdown.less';
 @import 'actions/_actions-split.less';
-
-//
-//  Variables
-//  _____________________________________________
-
-//  Base button
-@button__background-color: @color-gray89;
-@button__border-color: @color-gray68;
-@button__color: @color-brownie;
-@button__font-family: @font-family__base;
-@button__font-size: @font-size__base;
-@button__padding-top: .5em;
-@button__padding-bottom: .57em;
-@button__padding-horizontal: 1em;
-@button__padding-vertical__l: .6875em;
-
-@button__active__background-color: darken(@button__background-color, 5%);
-@button__hover__background-color: darken(@button__background-color, 3%);
-@button__hover__border-color: @color-blue-pure;
-@button__hover__box-shadow: 0 0 0 1px @button__hover__border-color;
-
-@button__large__font-size: 1.6rem;
-@button__large__padding-horizontal: 1.45em;
-@button__large__padding-vertical: .7em;
-
-//  Primary button
-@button-primary__background-color: @primary__color;
-@button-primary__color: @color-white;
-@button-primary__hover__background-color: @color-phoenix-brown-almost;
-@button-primary__hover__border-color: @color-phoenix-brown;
-
-//  Secondary button
-@button-secondary__background-color: @color-brownie;
-@button-secondary__border-color: @color-brownie;
-@button-secondary__color: @color-white;
-@button-secondary__active__background-color: @color-very-dark-gray-black2;
-@button-secondary__hover__background-color: @color-very-dark-gray-black2;
-
-//
-//  Utilities
-//  _____________________________________________
-
-.action-reset () {
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    margin: 0;
-    padding: 0;
-    &:hover {
-        background-color: transparent;
-        border: none;
-        box-shadow: none;
-    }
-}
+@import 'actions/_actions-select.less';
+@import 'actions/_actions-multiselect.less';
 
 //
 //  Extends
@@ -73,15 +21,16 @@
 }
 
 .abs-action-pattern {
-    border: 1px solid;
+    border: @button__border-size @button__border-style;
     border-radius: 0; // ToDo UI: Delete with admin scope
     display: inline-block;
     font-family: @button__font-family;
     font-size: @button__font-size;
     font-weight: @font-weight__semibold;
+    line-height: @button__line-height;
     padding: @button__padding-top @button__padding-horizontal @button__padding-bottom;
     text-align: center;
-    vertical-align: baseline; // ToDo UI: Delete with admin scope
+    vertical-align: baseline;
     &[disabled],
     &.disabled {
         cursor: default;
@@ -95,6 +44,29 @@
     letter-spacing: .025em;
     padding-bottom: @button__padding-vertical__l;
     padding-top: @button__padding-vertical__l;
+}
+
+.abs-action-delete {
+    &:extend(.abs-action-reset all);
+    &:extend(.abs-icon all);
+    display: inline-block;
+    font-size: 1.6rem;
+    margin-left: 1.2rem;
+    padding-top: .7rem;
+    text-decoration: none;
+    vertical-align: middle;
+    &:after {
+        color: @color-very-dark-gray;
+        content: @icon-delete__content;
+    }
+    &:hover {
+        &:after {
+            color: @color-very-dark-gray-black2;
+        }
+    }
+    > span {
+        &:extend(.abs-visually-hidden all);
+    }
 }
 
 .abs-action-default {
@@ -117,6 +89,149 @@
     .action-quaternary();
 }
 
+.abs-action-menu {
+    .action-menu();
+}
+
+//  Triangle Wrap
+.abs-action-wrap-triangle {
+    position: relative;
+    .action-default {
+        width: 100%;
+        &:before,
+        &:after {
+            border-style: solid;
+            content: '';
+            height: 0;
+            position: absolute;
+            top: 0;
+            width: 0;
+        }
+        &:active,
+        &:hover,
+        &:focus {
+            box-shadow: none;
+        }
+        &:focus {
+            ._keyfocus & {
+                box-shadow: @button__hover__box-shadow;
+            }
+        }
+        &[disabled],
+        &.disabled {
+            .ie9 &,
+            .ie10 & {
+                background-color: @button-triangle__base__disabled__background-color;
+                opacity: 1;
+                text-shadow: none;
+            }
+        }
+    }
+}
+
+//  Right Triangle
+.abs-action-wrap-triangle-right {
+    display: inline-block;
+    padding-right: @button-triangle__base__size - .1;
+    position: relative;
+
+    .action-default {
+        &:before,
+        &:after {
+            border-color: transparent transparent transparent @button__background-color;
+            border-width: @button-triangle__base__size 0 (@button-triangle__base__size - .1) @button-triangle__base__size;
+            left: 100%;
+            margin-left: -(@button-triangle__base__size);
+        }
+        &:before {
+            border-left-color: @button-triangle__base__border-color;
+            right: -1px;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-left-color: @button__hover__background-color;
+            }
+        }
+        //  Disabled state for IE9, IE10
+        &.disabled,
+        &[disabled] {
+            &:after {
+                .ie9 &,
+                .ie10 & {
+                    border-color: transparent transparent transparent @button-triangle__base__disabled__background-color;
+                }
+            }
+        }
+    }
+
+    .action-primary {
+        &:after {
+            border-color: transparent transparent transparent @button-primary__background-color;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-left-color: @button-primary__hover__background-color;
+            }
+        }
+    }
+}
+
+//  Left Triangle
+.abs-action-wrap-triangle-left {
+    display: inline-block;
+    padding-left: @button-triangle__base__size - .1;
+
+    .action-default {
+        text-indent: -(@button-triangle__base__size) / 2;
+        &:before,
+        &:after {
+            border-color: transparent @button__background-color transparent transparent;
+            border-width: @button-triangle__base__size @button-triangle__base__size (@button-triangle__base__size - .1) 0;
+            margin-right: -(@button-triangle__base__size);
+            right: 100%;
+        }
+        &:before {
+            border-right-color: @button-triangle__base__border-color;
+            left: -1px;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-right-color: @button__hover__background-color;
+            }
+        }
+        //  Disabled state for IE9, IE10
+        &.disabled,
+        &[disabled] {
+            &:after {
+                .ie9 &,
+                .ie10 & {
+                    border-color: transparent @button-triangle__base__disabled__background-color transparent transparent;
+                }
+            }
+        }
+    }
+
+    .action-primary {
+        &:after {
+            border-color: transparent @button-primary__background-color transparent transparent;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-right-color: @button-primary__hover__background-color;
+            }
+        }
+    }
+}
+
+
 //
 //  Default action
 //  ---------------------------------------------
@@ -127,7 +242,9 @@ button {
     background: @button__background-color;
     border-color: @button__border-color;
     color: @button__color;
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
         background-color: @button__hover__background-color;
         color: @button__color;
         text-decoration: none;
@@ -145,7 +262,8 @@ button {
     color: @button-primary__color;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
     &:hover,
-    &:active {
+    &:active,
+    &:focus {
         background-color: @button-primary__hover__background-color;
         border-color: @button-primary__hover__border-color;
         box-shadow: @button__hover__box-shadow;
@@ -171,8 +289,10 @@ button {
     color: @button-secondary__color;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
     &:hover,
-    &:active {
+    &:active,
+    &:focus {
         background-color: @button-secondary__hover__background-color;
+        border-color: @button-secondary__hover__border-color;
         box-shadow: @button__hover__box-shadow;
         color: @button-secondary__color;
         text-decoration: none;
@@ -193,7 +313,8 @@ button {
     border-color: transparent;
     text-shadow: none;
     &:active,
-    &:hover {
+    &:hover,
+    &:focus {
         background-color: transparent;
         border-color: transparent;
         box-shadow: none;
@@ -203,7 +324,8 @@ button {
 .action-tertiary {
     color: @link__color;
     &:active,
-    &:hover {
+    &:hover,
+    &:focus {
         color: @link__hover__color;
         text-decoration: underline;
     }
@@ -212,8 +334,92 @@ button {
 .action-quaternary {
     color: @text__color;
     &:active,
-    &:hover {
+    &:hover,
+    &:focus {
         color: darken(@text__color, 10%);
+    }
+}
+
+//
+//  Specific actions
+//  ---------------------------------------------
+
+.action-close {
+    > span {
+        .hidden();
+    }
+    &:extend(.abs-action-reset all);
+    &:active {
+        .scale();
+    }
+    &:before {
+        &:extend(.abs-icon all);
+        content: @icon-close-mage__content;
+        .transition(color);
+    }
+    &:hover {
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
+
+//
+//  Action menu
+//  ---------------------------------------------
+
+//  Used in actions split, action select and all other simple (one line) action menu list
+.action-menu {
+    .appearing__off();
+    background-color: @page-wrapper__background-color;
+    border: 1px solid @action__active__border-color;
+    border-radius: 1px;
+    box-shadow: @component__box-shadow__base;
+    color: @text__color;
+    display: block; // ToDo UI: Should be deleted with old styles
+    font-weight: @font-weight__regular;
+    left: 0;
+    list-style: none;
+    margin: 2px 0 0; // Action box-shadow + 1px indent
+    min-width: 0; // ToDo UI: Should be deleted with old styles
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    transition: opacity @appearing__transition-duration @apperaing__transition-timing-function;
+    &._active {
+        .appearing__on();
+    }
+    > li {
+        display: block;
+        border: none; // ToDo UI: Should be deleted with old styles
+        padding: 0;
+        transition: background-color .1s linear;
+        > a {
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        &:hover {
+            background-color: @action-menu__hover__background-color;
+        }
+        &:active {
+            background-color: darken(@action-menu__hover__background-color, 10%);
+        }
+    }
+    .item,
+    .action-menu-item {
+        display: block;
+        padding: .6875em 1em;
+        cursor: pointer;
+    }
+    a {
+        &.action-menu-item {
+            color: @text__color;
+            &:focus {
+                background-color: @action-menu__hover__background-color;
+                box-shadow: none;
+            }
+        }
     }
 }
 

@@ -46,11 +46,9 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $writeAdapter = $this->_getWriteAdapter();
+        $salesAdapter = $this->_resources->getConnection('sales_read');
+
         $writeAdapter->beginTransaction();
 
         try {
@@ -66,14 +64,16 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 $subSelect = null;
             }
 
-            $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
-            // convert dates from UTC to current admin timezone
+            $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect, false, $salesAdapter);
+            // convert dates to current admin timezone
             $periodExpr = $writeAdapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['e' => $this->getTable('sales_order')],
                     'e.' . $aggregationField,
                     $from,
-                    $to
+                    $to,
+                    null,
+                    $salesAdapter
                 )
             );
 
@@ -87,31 +87,29 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 'tax_base_amount_sum' => 'SUM(tax.base_amount * e.base_to_global_rate)',
             ];
 
-            $select = $writeAdapter->select();
-            $select->from(
+            $select = $writeAdapter->select()->from(
                 ['tax' => $this->getTable('sales_order_tax')],
                 $columns
             )->joinInner(
                 ['e' => $this->getTable('sales_order')],
                 'e.entity_id = tax.order_id',
                 []
-            )->useStraightJoin();
-
-            $select->where(
+            )->useStraightJoin()->where(
                 'e.state NOT IN (?)',
                 [\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT, \Magento\Sales\Model\Order::STATE_NEW]
             );
 
             if ($subSelect !== null) {
-                $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
+                $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period', $salesAdapter));
             }
 
             $select->group([$periodExpr, 'e.store_id', 'code', 'tax.percent', 'e.status']);
 
-            $insertQuery = $writeAdapter->insertFromSelect($select, $this->getMainTable(), array_keys($columns));
-            $writeAdapter->query($insertQuery);
+            $aggregatedData = $salesAdapter->fetchAll($select);
 
-            $select->reset();
+            if ($aggregatedData) {
+                $writeAdapter->insertArray($this->getMainTable(), array_keys($columns), $aggregatedData);
+            }
 
             $columns = [
                 'period' => 'period',
@@ -123,10 +121,10 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 'tax_base_amount_sum' => 'SUM(tax_base_amount_sum)',
             ];
 
-            $select->from($this->getMainTable(), $columns)->where('store_id <> ?', 0);
+            $select->reset()->from($this->getMainTable(), $columns)->where('store_id <> ?', 0);
 
             if ($subSelect !== null) {
-                $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
+                $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period', $salesAdapter));
             }
 
             $select->group(['period', 'code', 'percent', 'order_status']);

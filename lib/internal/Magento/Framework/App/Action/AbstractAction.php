@@ -20,15 +20,25 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
     protected $_response;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\App\ResponseInterface $response
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory
+     */
+    protected $resultFactory;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\App\ResponseInterface $response
+        \Magento\Framework\App\Action\Context $context
     ) {
-        $this->_request = $request;
-        $this->_response = $response;
+        $this->_request = $context->getRequest();
+        $this->_response = $context->getResponse();
+        $this->resultRedirectFactory = $context->getResultRedirectFactory();
+        $this->resultFactory = $context->getResultFactory();
     }
 
     /**

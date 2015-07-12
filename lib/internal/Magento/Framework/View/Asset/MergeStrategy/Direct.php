@@ -60,7 +60,7 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
      * @param \Magento\Framework\View\Asset\MergeableInterface[] $assetsToMerge
      * @param \Magento\Framework\View\Asset\LocalInterface $resultAsset
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function composeMergedContent(array $assetsToMerge, Asset\LocalInterface $resultAsset)
     {

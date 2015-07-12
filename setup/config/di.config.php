@@ -20,7 +20,6 @@ return [
             'Magento\Setup\Controller\CreateAdminAccount',
             'Magento\Setup\Controller\Install',
             'Magento\Setup\Controller\Success',
-            'Magento\Setup\Controller\ConsoleController',
             'Magento\Setup\Controller\Modules',
         ],
         'instance' => [
@@ -29,6 +28,8 @@ return [
                 'Zend\ServiceManager\ServiceLocatorInterface' => 'ServiceManager',
                 'Magento\Framework\DB\LoggerInterface' => 'Magento\Framework\DB\Logger\Null',
                 'Magento\Framework\Locale\ConfigInterface' => 'Magento\Framework\Locale\Config',
+                'Magento\Framework\Module\ModuleRegistryInterface' => 'Magento\Framework\Module\Registrar',
+                'Magento\Framework\Filesystem\DriverInterface' => 'Magento\Framework\Filesystem\Driver\File',
             ],
         ],
     ],

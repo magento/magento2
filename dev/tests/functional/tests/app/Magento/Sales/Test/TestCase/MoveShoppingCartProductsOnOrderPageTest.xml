@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\MoveShoppingCartProductsOnOrderPageTest">
+        <variation name="MoveShoppingCartProductsOnOrderPageTestVariation1">
+            <data name="product" xsi:type="string">catalogProductSimple::default</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
+        </variation>
+        <variation name="MoveShoppingCartProductsOnOrderPageTestVariation2" firstConstraint="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInItemsOrderedGrid" method="test">
+            <data name="product" xsi:type="string">configurableProduct::default</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInItemsOrderedGrid" />
+        </variation>
+    </testCase>
+</config>

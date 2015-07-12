@@ -5,16 +5,35 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\Quote\Api\Data\PaymentInterface;
+
+/**
+ * Interface CartManagementInterface
+ * @api
+ */
 interface CartManagementInterface
 {
     /**
-     * Enables an administrative or guest user to create an empty cart and quote for an anonymous customer.
-     *
-     * @param int $storeId
-     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
-     * @return int Cart ID.
+     * Checkout types: Checkout as Guest
      */
-    public function createEmptyCart($storeId);
+    const METHOD_GUEST = 'guest';
+
+    /**
+     * Creates an empty cart and quote for a guest.
+     *
+     * @return int Cart ID.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
+     */
+    public function createEmptyCart();
+
+    /**
+     * Creates an empty cart and quote for a specified customer.
+     *
+     * @param int $customerId The customer ID.
+     * @return int Cart ID.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
+     */
+    public function createEmptyCartForCustomer($customerId);
 
     /**
      * Returns information for the cart for a specified customer.
@@ -39,7 +58,10 @@ interface CartManagementInterface
      * Places an order for a specified cart.
      *
      * @param int $cartId The cart ID.
+     * @param int[]|null $agreements
+     * @param PaymentInterface|null $paymentMethod
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
-    public function placeOrder($cartId);
+    public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null);
 }

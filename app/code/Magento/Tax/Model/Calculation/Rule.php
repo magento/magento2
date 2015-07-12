@@ -21,21 +21,14 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * Tax rule field key.
      */
-    const KEY_ID = 'id';
-
-    const KEY_CODE = 'code';
-
+    const KEY_ID       = 'id';
+    const KEY_CODE     = 'code';
     const KEY_PRIORITY = 'priority';
-
     const KEY_POSITION = 'position';
-
     const KEY_CUSTOMER_TAX_CLASS_IDS = 'customer_tax_class_ids';
-
-    const KEY_PRODUCT_TAX_CLASS_IDS = 'product_tax_class_ids';
-
-    const KEY_TAX_RATE_IDS = 'tax_rate_ids';
-
-    const KEY_CALCULATE_SUBTOTAL = 'calculate_subtotal';
+    const KEY_PRODUCT_TAX_CLASS_IDS  = 'product_tax_class_ids';
+    const KEY_TAX_RATE_IDS           = 'tax_rate_ids';
+    const KEY_CALCULATE_SUBTOTAL     = 'calculate_subtotal';
     /**#@-*/
 
     /**
@@ -78,7 +71,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param \Magento\Tax\Model\Calculation $calculation
      * @param Rule\Validator $validator
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -91,7 +84,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         \Magento\Tax\Model\Calculation $calculation,
         \Magento\Tax\Model\Calculation\Rule\Validator $validator,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_calculation = $calculation;

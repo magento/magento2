@@ -247,7 +247,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             );
             try {
                 $stores = $this->_getStoresListRestrictedByEntityStores($this->_getEntityStores());
-            } catch (\Magento\UrlRewrite\Model\EntityNotAssociatedWithWebsiteException $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $stores = [];
                 $storeElement->setAfterElementHtml($e->getMessage());
             }

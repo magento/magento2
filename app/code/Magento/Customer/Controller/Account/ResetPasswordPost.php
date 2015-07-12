@@ -10,7 +10,6 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 
 class ResetPasswordPost extends \Magento\Customer\Controller\Account
@@ -24,7 +23,6 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $accountManagement
      * @param CustomerRepositoryInterface $customerRepository
@@ -32,14 +30,13 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
-        RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         AccountManagementInterface $accountManagement,
         CustomerRepositoryInterface $customerRepository
     ) {
         $this->accountManagement = $accountManagement;
         $this->customerRepository = $customerRepository;
-        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
+        parent::__construct($context, $customerSession, $resultPageFactory);
     }
 
     /**
@@ -64,7 +61,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
             return $resultRedirect;
         }
         if (iconv_strlen($password) <= 0) {
-            $this->messageManager->addError(__('New password field cannot be empty.'));
+            $this->messageManager->addError(__('Please enter a new password.'));
             $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
             return $resultRedirect;
         }
@@ -72,11 +69,11 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
         try {
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
             $this->accountManagement->resetPassword($customerEmail, $resetPasswordToken, $password);
-            $this->messageManager->addSuccess(__('Your password has been updated.'));
+            $this->messageManager->addSuccess(__('You updated your password.'));
             $resultRedirect->setPath('*/*/login');
             return $resultRedirect;
         } catch (\Exception $exception) {
-            $this->messageManager->addError(__('There was an error saving the new password.'));
+            $this->messageManager->addError(__('Something went wrong while saving the new password.'));
             $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
             return $resultRedirect;
         }

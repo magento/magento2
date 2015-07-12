@@ -29,13 +29,15 @@ class AssertCatalogSearchResult extends AbstractConstraint
     public function processAssert(CatalogSearchQuery $catalogSearch, AdvancedResult $resultPage)
     {
         $product = $catalogSearch->getDataFieldConfig('query_text')['source']->getProduct();
-        $name = $product->getName();
-        $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($name);
+        $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
         while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage()) {
-            $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($name);
+            $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
         }
 
-        \PHPUnit_Framework_Assert::assertTrue($isProductVisible, "A product with name '$name' was not found.");
+        \PHPUnit_Framework_Assert::assertTrue(
+            $isProductVisible,
+            "A product with name '" . $product->getName() . "' was not found."
+        );
     }
 
     /**

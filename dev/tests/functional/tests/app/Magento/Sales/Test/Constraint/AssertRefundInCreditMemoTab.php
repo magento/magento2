@@ -13,12 +13,12 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that refund is present in the tab with ID and refunded amount(depending on full/partial refund)
+ * Assert that refund is present in the tab with ID and refunded amount(depending on full/partial refund).
  */
 class AssertRefundInCreditMemoTab extends AbstractConstraint
 {
     /**
-     * Assert that refund is present in the tab with ID and refunded amount(depending on full/partial refund)
+     * Assert that refund is present in the tab with ID and refunded amount(depending on full/partial refund).
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
@@ -36,26 +36,23 @@ class AssertRefundInCreditMemoTab extends AbstractConstraint
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
         $salesOrderView->getOrderForm()->openTab('creditmemos');
         /** @var Grid $grid */
-        $grid = $salesOrderView->getOrderForm()->getTabElement('creditmemos')->getGridBlock();
+        $grid = $salesOrderView->getOrderForm()->getTab('creditmemos')->getGridBlock();
         $amount = $order->getPrice();
         foreach ($ids['creditMemoIds'] as $key => $creditMemoId) {
             $filter = [
                 'id' => $creditMemoId,
                 'amount_from' => $amount[$key]['grand_creditmemo_total'],
-                'amount_to' => $amount[$key]['grand_creditmemo_total'],
+                'amount_to' => $amount[$key]['grand_creditmemo_total']
             ];
-            $grid->search($filter);
-            $filter['amount_from'] = number_format($amount[$key]['grand_creditmemo_total'], 2);
-            $filter['amount_to'] = number_format($amount[$key]['grand_creditmemo_total'], 2);
             \PHPUnit_Framework_Assert::assertTrue(
-                $grid->isRowVisible($filter, false, false),
+                $grid->isRowVisible($filter, true, false),
                 'Credit memo is absent on credit memos tab.'
             );
         }
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

@@ -9,7 +9,8 @@ namespace Magento\User\Test\Handler\Role;
 use Magento\Backend\Test\Handler\Extractor;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Config;
+use Magento\Mtf\Config\DataInterface;
+use Magento\Mtf\System\Event\EventManagerInterface;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -28,15 +29,16 @@ class Curl extends AbstractCurl implements RoleInterface
 
     /**
      * @constructor
-     * @param Config $configuration
+     * @param DataInterface $configuration
+     * @param EventManagerInterface $eventManager
      */
-    public function __construct(Config $configuration)
+    public function __construct(DataInterface $configuration, EventManagerInterface $eventManager)
     {
         $this->mappingData = array_merge(
             (null !== $this->mappingData) ? $this->mappingData : [],
             $this->additionalMappingData
         );
-        parent::__construct($configuration);
+        parent::__construct($configuration, $eventManager);
     }
 
     /**
@@ -61,7 +63,7 @@ class Curl extends AbstractCurl implements RoleInterface
         }
 
         $url = 'admin/user_role/roleGrid/sort/role_id/dir/desc/';
-        $regExpPattern = '/col\-role_id[\s\W]*(\d+)\s*<.td>\s*<[^<>]*?>' . $data['rolename'] . '/siu';
+        $regExpPattern = '/col\-role_id[^\>]+\>\s*(\d+)\s*<.td>\s*<[^<>]*?>\s*' . $data['rolename'] . '/siu';
 
         $extractor = new Extractor($url, $regExpPattern);
 

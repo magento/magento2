@@ -21,7 +21,7 @@
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="description" output="1">
                     <arguments>
-                        <header>User description</header>
+                        <header>User Description</header>
                         <index>description</index>
                         <type>text</type>
                     </arguments>

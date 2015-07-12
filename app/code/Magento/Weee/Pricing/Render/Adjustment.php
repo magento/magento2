@@ -62,6 +62,14 @@ class Adjustment extends AbstractAdjustment
     }
 
     /**
+     * @return float
+     */
+    public function getRawFinalAmount()
+    {
+        return $this->finalAmount;
+    }
+
+    /**
      * Obtain adjustment code
      *
      * @return string

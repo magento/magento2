@@ -9,7 +9,6 @@ use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\View\Result\LayoutFactory;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 
 /**
  * Adminhtml sales transactions controller
@@ -36,28 +35,20 @@ class Transactions extends \Magento\Backend\App\Action
     protected $resultLayoutFactory;
 
     /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param Registry $coreRegistry
      * @param PageFactory $resultPageFactory
      * @param LayoutFactory $resultLayoutFactory
-     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Registry $coreRegistry,
         PageFactory $resultPageFactory,
-        LayoutFactory $resultLayoutFactory,
-        RedirectFactory $resultRedirectFactory
+        LayoutFactory $resultLayoutFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultLayoutFactory = $resultLayoutFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -95,13 +86,6 @@ class Transactions extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'fetch':
-                return $this->_authorization->isAllowed('Magento_Sales::transactions_fetch');
-                break;
-            default:
-                return $this->_authorization->isAllowed('Magento_Sales::transactions');
-                break;
-        }
+        return $this->_authorization->isAllowed('Magento_Sales::transactions');
     }
 }

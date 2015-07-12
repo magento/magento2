@@ -9,6 +9,8 @@
  */
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class ConfigFixture
 {
     /**
@@ -73,7 +75,7 @@ class ConfigFixture
                 )->setValue(
                     $configPath,
                     $value,
-                    \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 );
             }
         } else {

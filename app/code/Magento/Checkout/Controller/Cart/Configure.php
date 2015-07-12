@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Framework;
+use Magento\Framework\Controller\ResultFactory;
 
 class Configure extends \Magento\Checkout\Controller\Cart
 {
@@ -22,8 +23,6 @@ class Configure extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
         Framework\App\Action\Context $context,
@@ -31,9 +30,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        \Magento\Checkout\Model\Cart $cart,
-        Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Checkout\Model\Cart $cart
     ) {
         parent::__construct(
             $context,
@@ -41,10 +38,8 @@ class Configure extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart,
-            $resultRedirectFactory
+            $cart
         );
-        $this->resultPageFactory = $resultPageFactory;
     }
 
     /**
@@ -65,7 +60,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
         try {
             if (!$quoteItem || $productId != $quoteItem->getProduct()->getId()) {
                 $this->messageManager->addError(__("We can't find the quote item."));
-                return $this->resultRedirectFactory->create()->setPath('checkout/cart');
+                return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('checkout/cart');
             }
 
             $params = new \Magento\Framework\Object();
@@ -73,7 +68,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
             $params->setConfigureMode(true);
             $params->setBuyRequest($quoteItem->getBuyRequest());
 
-            $resultPage = $this->resultPageFactory->create();
+            $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
             $this->_objectManager->get('Magento\Catalog\Helper\Product\View')
                 ->prepareAndRender(
                     $resultPage,

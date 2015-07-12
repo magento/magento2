@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
 /**
- * Shopping cart gift message repository object.
+ * Shopping cart gift message repository object for registered customer
  */
 class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
 {
@@ -107,7 +107,7 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
         if ($quote->isVirtual()) {
             throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
         }
-        if (!$this->helper->getIsMessagesAvailable('quote', $quote, $this->storeManager->getStore())) {
+        if (!$this->helper->isMessagesAllowed('quote', $quote, $this->storeManager->getStore())) {
             throw new CouldNotSaveException(__('Gift Message is not available'));
         }
         $this->giftMessageManager->setMessage($quote, 'quote', $giftMessage);

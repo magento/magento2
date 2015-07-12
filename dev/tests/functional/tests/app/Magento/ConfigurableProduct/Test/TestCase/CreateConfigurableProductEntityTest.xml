@@ -113,7 +113,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
-        <variation name="CreateConfigurableProductEntityTestVariation6" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+        <variation name="CreateConfigurableProductEntityTestVariation6">
             <data name="description" xsi:type="string">MAGETWO-13361: Create Configurable Product with Creating New Category and New Attribute (Required Fields Only)</data>
             <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_searchable_options</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>

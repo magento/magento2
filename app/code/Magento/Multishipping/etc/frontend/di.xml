@@ -17,7 +17,6 @@
         <arguments>
             <argument name="specifications" xsi:type="array">
                 <item name="enabled" xsi:type="string">Magento\Multishipping\Model\Payment\Method\Specification\Enabled</item>
-                <item name="3dsecure" xsi:type="string">Magento\Multishipping\Model\Payment\Method\Specification\Is3DSecure</item>
             </argument>
         </arguments>
     </virtualType>
@@ -37,7 +36,7 @@
     <type name="Magento\Checkout\Controller\Cart\UpdatePost">
         <plugin name="multishipping_disabler" type="Magento\Multishipping\Controller\Checkout\Plugin" sortOrder="50" />
     </type>
-    <type name="Magento\Checkout\Controller\Onepage\Index">
+    <type name="Magento\Checkout\Controller\Index\Index">
         <plugin name="multishipping_disabler" type="Magento\Multishipping\Controller\Checkout\Plugin" sortOrder="50" />
     </type>
     <type name="Magento\Checkout\Model\Cart">

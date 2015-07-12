@@ -23,7 +23,7 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Stdlib\ArrayUtils::ksortMultibyte
+     * @covers \Magento\Framework\Stdlib\ArrayUtils::ksortMultibyte
      * @dataProvider ksortMultibyteDataProvider
      */
     public function testKsortMultibyte($input, $locale)
@@ -47,7 +47,7 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Stdlib\ArrayUtils::decorateArray
+     * @covers \Magento\Framework\Stdlib\ArrayUtils::decorateArray
      */
     public function testDecorateArray()
     {
@@ -72,9 +72,6 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
             new \Magento\Framework\Object($decorated[1]),
             new \Magento\Framework\Object($decorated[2]),
         ];
-        foreach ($decoratedVo as $obj) {
-            $obj->setDataChanges(true); // hack for assertion
-        }
         $this->assertEquals($decoratedVo, $this->_arrayUtils->decorateArray($sample, ''));
     }
 }

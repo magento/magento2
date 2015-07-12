@@ -7,12 +7,13 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Items to Ship') ?></span>
     </div>
-    <div class="grid">
-        <table cellspacing="0" class="data order-tables">
+    <div class="admin__table-wrapper">
+        <table class="data-table admin__table-primary order-shipment-table">
             <thead>
                 <tr class="headings">
                     <th class="col-product"><span><?php echo __('Product') ?></span></th>
@@ -34,44 +35,83 @@
             <?php endforeach; ?>
         </table>
     </div>
-</div>
-<div class="clearfix">
-    <div class="order-comments-history">
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Shipment Comments') ?></span></div>
-            <fieldset>
-                <div id="order-history_form">
-                    <label class="normal" for="shipment_comment_text"><?php echo __('Shipment Comments') ?></label>
-                    <textarea id="shipment_comment_text" name="shipment[comment_text]" rows="3" cols="5"><?php echo $block->getShipment()->getCommentText(); ?></textarea>
+</section>
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Shipment Total') ?></span>
+    </div>
+    <div class="admin__page-section-content order-comments-history">
+        <div class="admin__page-section-item">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php echo __('Shipment Comments') ?></span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <div id="order-history_form" class="admin__field">
+                    <label class="admin__field-label"
+                           for="shipment_comment_text">
+                        <span><?php echo __('Comment Text') ?></span></label>
+                    <div class="admin__field-control">
+                        <textarea id="shipment_comment_text"
+                                  class="admin__control-textarea"
+                                  name="shipment[comment_text]"
+                                  rows="3"
+                                  cols="5"><?php echo $block->getShipment()->getCommentText(); ?></textarea>
+                    </div>
                 </div>
-            </fieldset>
+            </div>
         </div>
     </div>
-    <div class="order-totals">
-        <div class="fieldset-wrapper">
+    <div class="admin__page-section-item order-totals order-totals-actions">
+        <div class="admin__page-section-item-title">
+            <span class="title"><?php echo __('Shipment Options') ?></span>
+        </div>
+        <div class="admin__page-section-item-content">
             <?php if ($block->canCreateShippingLabel()): ?>
-                <div class="field choice field-create">
-                    <input id="create_shipping_label" name="shipment[create_shipping_label]" value="1" type="checkbox"
+                <div class="field choice admin__field admin__field-option field-create">
+                    <input id="create_shipping_label"
+                           class="admin__control-checkbox"
+                           name="shipment[create_shipping_label]"
+                           value="1"
+                           type="checkbox"
                            onclick="toggleCreateLabelCheckbox();"/>
-                    <label class="normal" for="create_shipping_label"><?php echo __('Create Shipping Label') ?></label>
+                    <label class="admin__field-label"
+                           for="create_shipping_label">
+                        <span><?php echo __('Create Shipping Label') ?></span></label>
                 </div>
             <?php endif ?>
-            <div class="field choice field-append">
-                <input id="notify_customer" name="shipment[comment_customer_notify]" value="1" type="checkbox"/>
-                <label class="normal" for="notify_customer"><?php echo __('Append Comments') ?></label>
+
+            <div class="field choice admin__field admin__field-option field-append">
+                <input id="notify_customer"
+                       class="admin__control-checkbox"
+                       name="shipment[comment_customer_notify]"
+                       value="1"
+                       type="checkbox"/>
+                <label class="admin__field-label"
+                       for="notify_customer">
+                    <span><?php echo __('Append Comments') ?></span></label>
             </div>
+
             <?php if ($block->canSendShipmentEmail()): ?>
-                <div class="field choice field-email">
-                    <input id="send_email" name="shipment[send_email]" value="1" type="checkbox"/>
-                    <label class="normal" for="send_email"><?php echo __('Email Copy of Shipment') ?></label>
+                <div class="field choice admin__field admin__field-option field-email">
+                    <input id="send_email"
+                           class="admin__control-checkbox"
+                           name="shipment[send_email]"
+                           value="1"
+                           type="checkbox"/>
+                    <label class="admin__field-label"
+                           for="send_email">
+                        <span><?php echo __('Email Copy of Shipment') ?></span></label>
                 </div>
             <?php endif; ?>
-            <div class="actions">
+            <?php echo $block->getChildHtml('submit_before') ?>
+            <div class="order-history-comments-actions actions">
                 <?php echo $block->getChildHtml('submit_button') ?>
+                <?php echo $block->getChildHtml('submit_after') ?>
             </div>
         </div>
     </div>
-</div>
+</section>
 <script>
 require([
     "jquery",

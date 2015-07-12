@@ -18,11 +18,15 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
         $loggerMock = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
         $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
 
-        $this->model = new \Magento\Eav\Model\Attribute\Data\Multiselect($timezoneMock, $loggerMock, $localeResolverMock);
+        $this->model = new \Magento\Eav\Model\Attribute\Data\Multiselect(
+            $timezoneMock,
+            $loggerMock,
+            $localeResolverMock
+        );
     }
 
     /**
-     * covers \Magento\Eav\Model\Attribute\Data\Multiselect::extractValue
+     * @covers \Magento\Eav\Model\Attribute\Data\Multiselect::extractValue
      *
      * @param mixed $param
      * @param mixed $expectedResult
@@ -62,7 +66,7 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Eav\Model\Attribute\Data\Multiselect::outputValue
+     * @covers \Magento\Eav\Model\Attribute\Data\Multiselect::outputValue
      *
      * @param string $format
      * @param mixed $expectedResult

@@ -7,6 +7,8 @@ namespace Magento\Integration\Block\Adminhtml;
 
 /**
  * Integration block.
+ *
+ * @codeCoverageIgnore
  */
 class Integration extends \Magento\Backend\Block\Widget\Grid\Container
 {

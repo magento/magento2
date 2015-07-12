@@ -6,6 +6,7 @@
 namespace Magento\ImportExport\Model\Import\Entity;
 
 use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\ImportExport\Model\Import as ImportExport;
 
 /**
  * Import entity abstract model
@@ -201,6 +202,34 @@ abstract class AbstractEntity
      * @var \Magento\ImportExport\Model\Resource\Helper
      */
     protected $_resourceHelper;
+
+    /**
+     * Count if created items
+     *
+     * @var int
+     */
+    protected $countItemsCreated = 0;
+
+    /**
+     * Count if updated items
+     *
+     * @var int
+     */
+    protected $countItemsUpdated = 0;
+
+    /**
+     * Count if deleted items
+     *
+     * @var int
+     */
+    protected $countItemsDeleted = 0;
+
+    /**
+     * Need to log in import history
+     *
+     * @var bool
+     */
+    protected $logInHistory = false;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -544,7 +573,7 @@ abstract class AbstractEntity
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Source is not set'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The source is not set.'));
         }
         return $this->_source;
     }
@@ -658,6 +687,16 @@ abstract class AbstractEntity
     }
 
     /**
+     * Is import need to log in history.
+     *
+     * @return bool
+     */
+    public function isNeedToLogInHistory()
+    {
+        return $this->logInHistory;
+    }
+
+    /**
      * Validate data row.
      *
      * @param array $rowData
@@ -697,6 +736,7 @@ abstract class AbstractEntity
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateData()
     {
@@ -704,34 +744,36 @@ abstract class AbstractEntity
             // do all permanent columns exist?
             if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Cannot find required columns: %1', implode(', ', $absentColumns))
+                    __('We can\'t find required columns: %1.', implode(', ', $absentColumns))
                 );
             }
 
-            // check attribute columns names validity
-            $columnNumber = 0;
-            $emptyHeaderColumns = [];
-            $invalidColumns = [];
-            foreach ($this->getSource()->getColNames() as $columnName) {
-                $columnNumber++;
-                if (!$this->isAttributeParticular($columnName)) {
-                    if (trim($columnName) == '') {
-                        $emptyHeaderColumns[] = $columnNumber;
-                    } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
-                        $invalidColumns[] = $columnName;
+            if (ImportExport::BEHAVIOR_DELETE != $this->getBehavior()) {
+                // check attribute columns names validity
+                $columnNumber = 0;
+                $emptyHeaderColumns = [];
+                $invalidColumns = [];
+                foreach ($this->getSource()->getColNames() as $columnName) {
+                    $columnNumber++;
+                    if (!$this->isAttributeParticular($columnName)) {
+                        if (trim($columnName) == '') {
+                            $emptyHeaderColumns[] = $columnNumber;
+                        } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
+                            $invalidColumns[] = $columnName;
+                        }
                     }
                 }
-            }
 
-            if ($emptyHeaderColumns) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Columns number: "%1" have empty headers', implode('", "', $emptyHeaderColumns))
-                );
-            }
-            if ($invalidColumns) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Column names: "%1" are invalid', implode('", "', $invalidColumns))
-                );
+                if ($emptyHeaderColumns) {
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Columns number: "%1" have empty headers', implode('", "', $emptyHeaderColumns))
+                    );
+                }
+                if ($invalidColumns) {
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Column names: "%1" are invalid', implode('", "', $invalidColumns))
+                    );
+                }
             }
 
             // initialize validation related attributes
@@ -741,5 +783,35 @@ abstract class AbstractEntity
             $this->_dataValidated = true;
         }
         return $this;
+    }
+
+    /**
+     * Get count of created items
+     *
+     * @return int
+     */
+    public function getCreatedItemsCount()
+    {
+        return $this->countItemsCreated;
+    }
+
+    /**
+     * Get count of updated items
+     *
+     * @return int
+     */
+    public function getUpdatedItemsCount()
+    {
+        return $this->countItemsUpdated;
+    }
+
+    /**
+     * Get count of deleted items
+     *
+     * @return int
+     */
+    public function getDeletedItemsCount()
+    {
+        return $this->countItemsDeleted;
     }
 }

@@ -49,6 +49,7 @@ class Head implements Layout\GeneratorInterface
     protected $serviceAssetProperties = [
         'src',
         'src_type',
+        'content_type',
     ];
 
     /**
@@ -108,7 +109,7 @@ class Head implements Layout\GeneratorInterface
             if (isset($data['src_type']) && in_array($data['src_type'], $this->remoteAssetTypes)) {
                 $this->pageConfig->addRemotePageAsset(
                     $name,
-                    self::VIRTUAL_CONTENT_TYPE_LINK,
+                    isset($data['content_type']) ? $data['content_type'] : self::VIRTUAL_CONTENT_TYPE_LINK,
                     $this->getAssetProperties($data)
                 );
             } else {

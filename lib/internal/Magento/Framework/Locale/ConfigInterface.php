@@ -5,19 +5,24 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Provides access to locale-related config information
+ *
+ * @api
+ */
 interface ConfigInterface
 {
     /**
      * Get list pre-configured allowed locales
      *
-     * @return array
+     * @return string[]
      */
     public function getAllowedLocales();
 
     /**
      * Get list pre-configured allowed currencies
      *
-     * @return array
+     * @return string[]
      */
     public function getAllowedCurrencies();
 }

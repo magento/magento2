@@ -447,6 +447,7 @@ class Config
                     1
                 );
             }
+            $attribute->setEntityType($entityType)->setEntityTypeId($entityType->getId());
             $this->_addAttributeReference($code, $code, $entityTypeCode);
             $this->_save($attribute, $attributeKey);
         }

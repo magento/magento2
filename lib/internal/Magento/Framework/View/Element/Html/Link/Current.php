@@ -110,7 +110,19 @@ class Current extends \Magento\Framework\View\Element\Template
             $html .= $this->getTitle()
                 ? ' title="' . $this->escapeHtml((string)new \Magento\Framework\Phrase($this->getTitle())) . '"'
                 : '';
-            $html .= '>' . $this->escapeHtml((string)new \Magento\Framework\Phrase($this->getLabel())) . '</a></li>';
+            $html .= '>';
+
+            if ($this->getIsHighlighted()) {
+                $html .= '<strong>';
+            }
+
+            $html .= $this->escapeHtml((string)new \Magento\Framework\Phrase($this->getLabel()));
+
+            if ($this->getIsHighlighted()) {
+                $html .= '</strong>';
+            }
+
+            $html .= '</a></li>';
         }
 
         return $html;

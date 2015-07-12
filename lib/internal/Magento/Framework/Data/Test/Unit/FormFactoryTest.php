@@ -29,7 +29,7 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage WrongClass doesn't extend \Magento\Framework\Data\Form
      */
     public function testWrongTypeException()

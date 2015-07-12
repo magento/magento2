@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="taxRate" module="Magento_Tax" type="flat" entity_type="tax_calculation_rate" collection="Magento\Tax\Model\Resource\Calculation\Rate\Collection" identifier="code" repository_class="Magento\Tax\Test\Repository\TaxRate" handler_interface="Magento\Tax\Test\Handler\TaxRate\TaxRateInterface" class="Magento\Tax\Test\Fixture\TaxRate">
     <dataset name="default">
         <field name="code" xsi:type="string">Tax Rate %isolation%</field>

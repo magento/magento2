@@ -1,5 +1,5 @@
 Back,Retour
-Product,Produit
+Product Name,Produit
 Quantity,Quantity
 Configure,Configure
 "You added %1 to your shopping cart.","You added %1 to your shopping cart."
@@ -101,5 +101,5 @@ Message,Message
 "My Wish List Link","My Wish List Link"
 "Display Wish List Summary","Display Wish List Summary"
 "No Items Found","No Items Found"
-"User description","Description utilisateur"
+"User Description","Description utilisateur"
 "Product Details and Comment","Détails et commentaires sur le produit"

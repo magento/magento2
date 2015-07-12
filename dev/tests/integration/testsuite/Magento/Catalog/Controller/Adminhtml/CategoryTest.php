@@ -8,7 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class CategoryTest extends \Magento\Backend\Utility\Controller
+class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
@@ -18,8 +18,9 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
      * @param array $inputData
      * @param array $defaultAttributes
      * @param array $attributesSaved
+     * @param bool $isSuccess
      */
-    public function testSaveAction($inputData, $defaultAttributes, $attributesSaved = [])
+    public function testSaveAction($inputData, $defaultAttributes, $attributesSaved = [], $isSuccess = true)
     {
         /** @var $store \Magento\Store\Model\Store */
         $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
@@ -31,10 +32,12 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParam('id', 2);
         $this->dispatch('backend/catalog/category/save');
 
-        $this->assertSessionMessages(
-            $this->equalTo(['You saved the category.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
+        if ($isSuccess) {
+            $this->assertSessionMessages(
+                $this->equalTo(['You saved the category.']),
+                \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            );
+        }
 
         /** @var $category \Magento\Catalog\Model\Category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -214,8 +217,8 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
                         'is_anchor' => '1',
                         'custom_apply_to_products' => '0',
                         'custom_design' => 'Magento/blank',
-                        'custom_design_from' => '',
-                        'custom_design_to' => '',
+                        'custom_design_from' => '5/21/2015',
+                        'custom_design_to' => '5/29/2015',
                         'page_layout' => '',
                         'custom_layout_update' => '',
                     ],
@@ -257,10 +260,58 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
                     'meta_keywords' => 'Custom keywords',
                     'meta_description' => 'Custom meta description',
                     'custom_layout_update' => null,
-                    'custom_design_from' => null,
-                    'custom_design_to' => null,
+                    'custom_design_from' => '2015-05-21 00:00:00',
+                    'custom_design_to' => '2015-05-29 00:00:00',
                     'filter_price_range' => null
                 ],
+            ],
+            'incorrect datefrom' => [
+                [
+                    'general' => [
+                        'id' => '2',
+                        'path' => '1/2',
+                        'name' => 'Custom Name',
+                        'is_active' => '0',
+                        'description' => 'Custom Description',
+                        'meta_title' => 'Custom Title',
+                        'meta_keywords' => 'Custom keywords',
+                        'meta_description' => 'Custom meta description',
+                        'include_in_menu' => '0',
+                        'url_key' => 'default-category',
+                        'display_mode' => 'PRODUCTS',
+                        'landing_page' => '1',
+                        'is_anchor' => '1',
+                        'custom_apply_to_products' => '0',
+                        'custom_design' => 'Magento/blank',
+                        'custom_design_from' => '5/29/2015',
+                        'custom_design_to' => '5/21/2015',
+                        'page_layout' => '',
+                        'custom_layout_update' => '',
+                    ],
+                    'use_config' => [0 => 'available_sort_by', 1 => 'default_sort_by', 2 => 'filter_price_range'],
+                ],
+                [
+                    'name' => false,
+                    'default_sort_by' => false,
+                    'display_mode' => false,
+                    'meta_title' => false,
+                    'custom_design' => false,
+                    'page_layout' => false,
+                    'is_active' => false,
+                    'include_in_menu' => false,
+                    'landing_page' => false,
+                    'custom_apply_to_products' => false,
+                    'available_sort_by' => false,
+                    'description' => false,
+                    'meta_keywords' => false,
+                    'meta_description' => false,
+                    'custom_layout_update' => false,
+                    'custom_design_from' => false,
+                    'custom_design_to' => false,
+                    'filter_price_range' => false
+                ],
+                [],
+                false
             ]
         ];
     }
@@ -282,7 +333,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         );
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
-            $this->equalTo(['Unable to save the category']),
+            $this->equalTo(['Something went wrong while saving the category.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

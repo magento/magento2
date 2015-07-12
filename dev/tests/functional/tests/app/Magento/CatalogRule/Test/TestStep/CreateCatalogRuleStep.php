@@ -29,16 +29,25 @@ class CreateCatalogRuleStep implements TestStepInterface
     protected $fixtureFactory;
 
     /**
+     * Delete all catalog rules step.
+     *
+     * @var $deleteAllCatalogRule
+     */
+    protected $deleteAllCatalogRule;
+
+    /**
      * Preparing step properties
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param string $catalogRule
+     * @param DeleteAllCatalogRulesStep $deleteRule
      */
-    public function __construct(FixtureFactory $fixtureFactory, $catalogRule)
+    public function __construct(FixtureFactory $fixtureFactory, DeleteAllCatalogRulesStep $deleteRule, $catalogRule)
     {
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogRule = $catalogRule;
+        $this->deleteAllCatalogRule = $deleteRule;
     }
 
     /**
@@ -58,5 +67,15 @@ class CreateCatalogRuleStep implements TestStepInterface
             $result['catalogRule'] = $catalogRule;
         }
         return $result;
+    }
+
+    /**
+     * Delete all catalog rule.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->deleteAllCatalogRule->run();
     }
 }

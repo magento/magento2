@@ -12,8 +12,8 @@
 <?php if ($_item): ?>
     <?php $_childHtml = trim($block->getChildHtml('', false));?>
     <?php if ($_childHtml): ?>
-        <tr class="border">
-            <td colspan="8">
+        <tr class="row-gift-options">
+            <td colspan="7">
                 <a class="action-link" href="#" id="gift_options_link_<?php echo $_item->getId() ?>"><?php echo __('Gift Options') ?></a>
                 <script>
 require([

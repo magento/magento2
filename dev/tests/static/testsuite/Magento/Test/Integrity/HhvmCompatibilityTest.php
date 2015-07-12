@@ -36,6 +36,7 @@ class HhvmCompatibilityTest extends \PHPUnit_Framework_TestCase
         'mime_magic.magicfile',
         'display_errors',
         'default_socket_timeout',
+        'pcre.recursion_limit',
     ];
 
     public function testAllowedIniGetSetDirectives()

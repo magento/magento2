@@ -150,7 +150,7 @@ class Configuration implements StockConfigurationInterface
      */
     public function getDefaultWebsiteId()
     {
-        return (int) $this->storeManager->getWebsite(true)->getId();
+        return (int) $this->storeManager->getWebsite()->getId();
     }
 
     /**

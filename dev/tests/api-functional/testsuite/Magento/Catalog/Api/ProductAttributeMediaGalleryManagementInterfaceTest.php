@@ -6,6 +6,7 @@
  */
 namespace Magento\Catalog\Api;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestFramework\TestCase\WebapiAbstract
@@ -40,7 +41,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $this->createServiceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/products/media',
+                'resourcePath' => '/V1/products/simple/media',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -104,27 +105,19 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     public function testCreate()
     {
         $requestData = [
-            "sku" => 'simple',
-            "custom_attributes" => [
-                "media_gallery" => [
-                    'attribute_code' => 'media_gallery',
-                    'value' => [
-                        'id' => null,
-                        'label' => 'Image Text',
-                        'position' => 1,
-                        'types' => ['image'],
-                        'disabled' => false,
-                        'content' => [
-                            'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                            'mime_type' => 'image/jpeg',
-                            'name' => 'test_image'
-                        ]
-                    ]
-                ],
-            ],
+            'id' => null,
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                ImageContentInterface::BASE64_ENCODED_DATA => base64_encode(file_get_contents($this->testImagePath)),
+                ImageContentInterface::TYPE => 'image/jpeg',
+                ImageContentInterface::NAME => 'test_image.jpg'
+            ]
         ];
 
-        $actualResult = $this->_webApiCall($this->createServiceInfo, ['product' => $requestData]);
+        $actualResult = $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
         $targetProduct = $this->getTargetSimpleProduct();
         $mediaGallery = $targetProduct->getData('media_gallery');
 
@@ -144,28 +137,26 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     public function testCreateWithNotDefaultStoreId()
     {
         $requestData = [
-            'sku' => 'simple',
-            'store_id' => 1,
-            "custom_attributes" => [
-                "media_gallery" => [
-                    'attribute_code' => 'media_gallery',
-                    'value' => [
-                        'id' => null,
-                        'label' => 'Image Text',
-                        'position' => 1,
-                        'types' => ['image'],
-                        'disabled' => false,
-                        'content' => [
-                            'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                            'mime_type' => 'image/jpeg',
-                            'name' => 'test_image',
-                        ]
-                    ]
-                ],
+            'id' => null,
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                'base64_encoded_data' => base64_encode(file_get_contents($this->testImagePath)),
+                'type' => 'image/jpeg',
+                'name' => 'test_image.jpg',
             ]
         ];
 
-        $actualResult = $this->_webApiCall($this->createServiceInfo, ['product' => $requestData]);
+        $actualResult = $this->_webApiCall(
+            $this->createServiceInfo,
+            [
+                'sku' => 'simple',
+                'entry' => $requestData,
+                'storeId' => 1,
+            ]
+        );
         $targetProduct = $this->getTargetSimpleProduct();
         $mediaGallery = $targetProduct->getData('media_gallery');
         $this->assertCount(1, $mediaGallery['images']);
@@ -287,28 +278,19 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     public function testCreateThrowsExceptionIfThereIsNoStoreWithProvidedStoreId()
     {
         $requestData = [
-            'sku' => 'simple',
-            'store_id' => 9999, // target store view does not exist
-            "custom_attributes" => [
-                "media_gallery" => [
-                    'attribute_code' => 'media_gallery',
-                    'value' => [
-                        'id' => null,
-                        'label' => 'Image Text',
-                        'position' => 1,
-                        'types' => ['image'],
-                        'disabled' => false,
-                        'content' => [
-                            'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                            'mime_type' => 'image/jpeg',
-                            'name' => 'test_image',
-                        ]
-                    ]
-                ],
+            'id' => null,
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                'base64_encoded_data' => base64_encode(file_get_contents($this->testImagePath)),
+                'type' => 'image/jpeg',
+                'name' => 'test_image.jpg',
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['product' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData, 'storeId' => 99999]);
     }
 
     /**
@@ -320,28 +302,19 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $encodedContent = 'not_a_base64_encoded_content';
         $requestData = [
-            'sku' => 'simple',
-            'store_id' => 0,
-            "custom_attributes" => [
-                "media_gallery" => [
-                    'attribute_code' => 'media_gallery',
-                    'value' => [
-                        'id' => null,
-                        'label' => 'Image Text',
-                        'position' => 1,
-                        'types' => ['image'],
-                        'disabled' => false,
-                        'content' => [
-                            'entry_data' => $encodedContent,
-                            'mime_type' => 'image/jpeg',
-                            'name' => 'test_image',
-                        ]
-                    ]
-                ],
+            'id' => null,
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                'base64_encoded_data' => $encodedContent,
+                'type' => 'image/jpeg',
+                'name' => 'test_image.jpg',
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['product' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**
@@ -353,28 +326,19 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $encodedContent = base64_encode('not_an_image');
         $requestData = [
-            'sku' => 'simple',
-            'store_id' => 0,
-            "custom_attributes" => [
-                "media_gallery" => [
-                    'attribute_code' => 'media_gallery',
-                    'value' => [
-                        'id' => null,
-                        'label' => 'Image Text',
-                        'position' => 1,
-                        'types' => ['image'],
-                        'disabled' => false,
-                        'content' => [
-                            'entry_data' => $encodedContent,
-                            'mime_type' => 'image/jpeg',
-                            'name' => 'test_image',
-                        ]
-                    ]
-                ],
+            'id' => null,
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                'base64_encoded_data' => $encodedContent,
+                'type' => 'image/jpeg',
+                'name' => 'test_image.jpg',
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['product' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**
@@ -386,28 +350,19 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $encodedContent = base64_encode(file_get_contents($this->testImagePath));
         $requestData = [
-            'sku' => 'simple',
-            'store_id' => 0,
-            "custom_attributes" => [
-                "media_gallery" => [
-                    'attribute_code' => 'media_gallery',
-                    'value' => [
-                        'id' => null,
-                        'label' => 'Image Text',
-                        'position' => 1,
-                        'types' => ['image'],
-                        'disabled' => false,
-                        'content' => [
-                            'entry_data' => $encodedContent,
-                            'mime_type' => 'wrong_mime_type',
-                            'name' => 'test_image',
-                        ]
-                    ]
-                ],
+            'id' => null,
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                'base64_encoded_data' => $encodedContent,
+                'type' => 'wrong_mime_type',
+                'name' => 'test_image.jpg',
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['product' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**
@@ -416,31 +371,22 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/media';
+        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media';
 
         $requestData = [
-            'sku' => 'wrong_product_sku',
-            'store_id' => 0,
-            "custom_attributes" => [
-                "media_gallery" => [
-                    'attribute_code' => 'media_gallery',
-                    'value' => [
-                        'id' => null,
-                        'label' => 'Image Text',
-                        'position' => 1,
-                        'types' => ['image'],
-                        'disabled' => false,
-                        'content' => [
-                            'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                            'mime_type' => 'image/jpeg',
-                            'name' => 'test_image',
-                        ]
-                    ]
-                ],
+            'id' => null,
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                'base64_encoded_data' => base64_encode(file_get_contents($this->testImagePath)),
+                'type' => 'image/jpeg',
+                'name' => 'test_image.jpg',
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['product' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**
@@ -451,28 +397,19 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     public function testCreateThrowsExceptionIfProvidedImageNameContainsForbiddenCharacters()
     {
         $requestData = [
-            'sku' => 'wrong_product_sku',
-            'store_id' => 0,
-            "custom_attributes" => [
-                "media_gallery" => [
-                    'attribute_code' => 'media_gallery',
-                    'value' => [
-                        'id' => null,
-                        'label' => 'Image Text',
-                        'position' => 1,
-                        'types' => ['image'],
-                        'disabled' => false,
-                        'content' => [
-                            'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                            'mime_type' => 'image/jpeg',
-                            'name' => 'test/\\{}|:"<>', // Cannot contain \ / : * ? " < > |
-                        ]
-                    ]
-                ],
+            'id' => null,
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                'base64_encoded_data' => base64_encode(file_get_contents($this->testImagePath)),
+                'type' => 'image/jpeg',
+                'name' => 'test/\\{}|:"<>', // Cannot contain \ / : * ? " < > |
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['product' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**

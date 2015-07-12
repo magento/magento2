@@ -8,8 +8,10 @@
 namespace Magento\Framework\Webapi;
 
 use Magento\Framework\Exception\ErrorMessage;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
-class Exception extends \RuntimeException
+class Exception extends LocalizedException
 {
     /**#@+
      * Error HTTP response codes.
@@ -74,7 +76,7 @@ class Exception extends \RuntimeException
     /**
      * Initialize exception with HTTP code.
      *
-     * @param string $message
+     * @param \Magento\Framework\Phrase $phrase
      * @param int $code Error code
      * @param int $httpCode
      * @param array $details Additional exception details
@@ -85,7 +87,7 @@ class Exception extends \RuntimeException
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        $message,
+        Phrase $phrase,
         $code = 0,
         $httpCode = self::HTTP_BAD_REQUEST,
         array $details = [],
@@ -97,7 +99,8 @@ class Exception extends \RuntimeException
         if ($httpCode < 400 || $httpCode > 599) {
             throw new \InvalidArgumentException(sprintf('The specified HTTP code "%d" is invalid.', $httpCode));
         }
-        parent::__construct($message, $code);
+        parent::__construct($phrase);
+        $this->code = $code;
         $this->_httpCode = $httpCode;
         $this->_details = $details;
         $this->_name = $name;

@@ -36,8 +36,8 @@ class OauthHelper
     {
         $integration = self::_createIntegration('all');
         $objectManager = Bootstrap::getObjectManager();
-        /** @var $oauthService \Magento\Integration\Service\V1\Oauth */
-        $oauthService = $objectManager->get('Magento\Integration\Service\V1\Oauth');
+        /** @var $oauthService \Magento\Integration\Api\OauthServiceInterface */
+        $oauthService = $objectManager->get('Magento\Integration\Api\OauthServiceInterface');
         $consumer = $oauthService->loadConsumer($integration->getConsumerId());
         $url = TESTS_BASE_URL;
         $consumer->setCallbackUrl($url);
@@ -111,8 +111,8 @@ class OauthHelper
         if (!self::$_apiCredentials) {
             $integration = $integrationModel === null ? self::_createIntegration($resources) : $integrationModel;
             $objectManager = Bootstrap::getObjectManager();
-            /** @var \Magento\Integration\Service\V1\Oauth $oauthService */
-            $oauthService = $objectManager->get('Magento\Integration\Service\V1\Oauth');
+            /** @var \Magento\Integration\Api\OauthServiceInterface $oauthService */
+            $oauthService = $objectManager->get('Magento\Integration\Api\OauthServiceInterface');
             $oauthService->createAccessToken($integration->getConsumerId());
             $accessToken = $oauthService->getAccessToken($integration->getConsumerId());
             if (!$accessToken) {
@@ -175,8 +175,8 @@ class OauthHelper
     protected static function _createIntegration($resources)
     {
         $objectManager = Bootstrap::getObjectManager();
-        /** @var $integrationService \Magento\Integration\Service\V1\IntegrationInterface */
-        $integrationService = $objectManager->get('Magento\Integration\Service\V1\IntegrationInterface');
+        /** @var $integrationService \Magento\Integration\Api\IntegrationServiceInterface */
+        $integrationService = $objectManager->get('Magento\Integration\Api\IntegrationServiceInterface');
 
         $params = ['name' => 'Integration' . microtime()];
 
@@ -189,7 +189,7 @@ class OauthHelper
         $integration->setStatus(\Magento\Integration\Model\Integration::STATUS_ACTIVE)->save();
 
         /** Magento cache must be cleared to activate just created ACL role. */
-        $varPath = realpath('../../../var');
+        $varPath = realpath(BP . '/var');
         if (!$varPath) {
             throw new LogicException("Magento cache cannot be cleared after new ACL role creation.");
         } else {

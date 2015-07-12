@@ -9,7 +9,6 @@ namespace Magento\CatalogRule\Test\Handler\CatalogRule;
 use Magento\Backend\Test\Handler\Conditions;
 use Magento\CatalogRule\Test\Handler\CatalogRule;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -44,10 +43,10 @@ class Curl extends Conditions implements CatalogRuleInterface
      */
     protected $mappingData = [
         'simple_action' => [
-            'By Percentage of the Original Price' => 'by_percent',
-            'By Fixed Amount' => 'by_fixed',
-            'To Percentage of the Original Price' => 'to_percent',
-            'To Fixed Amount' => 'to_fixed',
+            'Apply as percentage of original' => 'by_percent',
+            'Apply as fixed amount' => 'by_fixed',
+            'Adjust final price to this percentage' => 'to_percent',
+            'Adjust final price to discount value' => 'to_fixed',
         ],
         'is_active' => [
             'Active' => 1,
@@ -159,7 +158,7 @@ class Curl extends Conditions implements CatalogRuleInterface
         $response = $curl->read();
         $curl->close();
 
-        $pattern = '/col-rule_id\W*(\d+)<.td><[^<>]*?>' . $data['name'] . '/siu';
+        $pattern = '/col\-rule_id[\s\W]*(\d+).*?' . $data['name'] . '/siu';
         preg_match($pattern, $response, $matches);
         if (empty($matches)) {
             throw new \Exception('Cannot find Catalog Price Rule id! Response: ' . $response);

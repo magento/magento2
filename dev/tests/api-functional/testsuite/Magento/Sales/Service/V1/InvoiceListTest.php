@@ -43,7 +43,7 @@ class InvoiceListTest extends WebapiAbstract
             'Magento\Framework\Api\FilterBuilder'
         );
 
-        $searchCriteriaBuilder->addFilter(
+        $searchCriteriaBuilder->addFilters(
             [
                 $filterBuilder
                     ->setField('state')

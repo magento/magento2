@@ -8,165 +8,115 @@
 
 namespace Magento\Checkout\Block\Cart;
 
-use Magento\Framework\View\Block\IdentityInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
- * Wishlist sidebar block
+ * Cart sidebar block
  */
-class Sidebar extends AbstractCart implements IdentityInterface
+class Sidebar extends AbstractCart
 {
     /**
-     * Xml pah to chackout sidebar count value
+     * Xml pah to checkout sidebar count value
      */
-    const XML_PATH_CHECKOUT_SIDEBAR_COUNT = 'checkout/sidebar/count';
+    const XML_PATH_CHECKOUT_SIDEBAR_DISPLAY = 'checkout/sidebar/display';
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Url
+     * @var \Magento\Catalog\Model\Product\Image\View
      */
-    protected $_catalogUrl;
-
-    /**
-     * @var \Magento\Checkout\Model\Cart
-     */
-    protected $_checkoutCart;
-
-    /**
-     * @var \Magento\Checkout\Helper\Data
-     */
-    protected $_checkoutHelper;
+    protected $imageView;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
-     * @param \Magento\Checkout\Model\Cart $checkoutCart
-     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Catalog\Model\Product\Image\View $imageView
+     * @param \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Model\Resource\Url $catalogUrl,
-        \Magento\Checkout\Model\Cart $checkoutCart,
-        \Magento\Checkout\Helper\Data $checkoutHelper,
+        \Magento\Catalog\Model\Product\Image\View $imageView,
+        \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
         array $data = []
     ) {
-        $this->_checkoutHelper = $checkoutHelper;
-        $this->_catalogUrl = $catalogUrl;
-        $this->_checkoutCart = $checkoutCart;
-        parent::__construct($context, $customerSession, $checkoutSession, $data);
-        $this->_isScopePrivate = true;
-    }
-
-    /**
-     * Retrieve count of display recently added items
-     *
-     * @return int
-     */
-    public function getItemCount()
-    {
-        $count = $this->getData('item_count');
-        if (is_null($count)) {
-            $count = $this->_scopeConfig->getValue(
-                self::XML_PATH_CHECKOUT_SIDEBAR_COUNT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-            $this->setData('item_count', $count);
+        if (isset($data['jsLayout'])) {
+            $this->jsLayout = array_merge_recursive($jsLayoutDataProvider->getData(), $data['jsLayout']);
+            unset($data['jsLayout']);
+        } else {
+            $this->jsLayout = $jsLayoutDataProvider->getData();
         }
-        return $count;
+        parent::__construct($context, $customerSession, $checkoutSession, $data);
+        $this->_isScopePrivate = false;
+        $this->imageView = $imageView;
     }
 
     /**
-     * Get array of last added items
+     * Returns minicart config
      *
-     * @param int|null $count
      * @return array
      */
-    public function getRecentItems($count = null)
+    public function getConfig()
     {
-        if ($count === null) {
-            $count = $this->getItemCount();
-        }
-
-        $items = [];
-        if (!$this->getSummaryCount()) {
-            return $items;
-        }
-
-        $i = 0;
-        $allItems = array_reverse($this->getItems());
-        foreach ($allItems as $item) {
-            /* @var $item \Magento\Quote\Model\Quote\Item */
-            if (!$item->getProduct()->isVisibleInSiteVisibility()) {
-                $productId = $item->getProduct()->getId();
-                $products = $this->_catalogUrl->getRewriteByProductStore([$productId => $item->getStoreId()]);
-                if (!isset($products[$productId])) {
-                    continue;
-                }
-                $urlDataObject = new \Magento\Framework\Object($products[$productId]);
-                $item->getProduct()->setUrlDataObject($urlDataObject);
-            }
-
-            $items[] = $item;
-            if (++$i == $count) {
-                break;
-            }
-        }
-
-        return $items;
+        return [
+            'shoppingCartUrl' => $this->getShoppingCartUrl(),
+            'checkoutUrl' => $this->getCheckoutUrl(),
+            'updateItemQtyUrl' => $this->getUpdateItemQtyUrl(),
+            'removeItemUrl' => $this->getRemoveItemUrl(),
+            'imageTemplate' => $this->getImageHtmlTemplate(),
+            'baseUrl' => $this->getBaseUrl()
+        ];
     }
 
     /**
-     * Get shopping cart subtotal.
-     *
-      * @return  float
+     * @return string
      */
-    public function getSubtotal()
+    public function getImageHtmlTemplate()
     {
-        $subtotal = 0;
-        $totals = $this->getTotals();
-        if (isset($totals['subtotal'])) {
-            $subtotal = $totals['subtotal']->getValue();
-        }
-        return $subtotal;
-    }
-
-    /**
-     * Get shopping cart items qty based on configuration (summary qty or items qty)
-     *
-     * @return int|float
-     */
-    public function getSummaryCount()
-    {
-        if ($this->getData('summary_qty')) {
-            return $this->getData('summary_qty');
-        }
-        return $this->_checkoutCart->getSummaryQty();
-    }
-
-    /**
-     * Check if one page checkout is available
-     *
-     * @return bool
-     */
-    public function isPossibleOnepageCheckout()
-    {
-        return $this->_checkoutHelper->canOnepageCheckout() && !$this->getQuote()->getHasError();
+        return $this->imageView->isWhiteBorders()
+            ? 'Magento_Catalog/product/image'
+            : 'Magento_Catalog/product/image_with_borders';
     }
 
     /**
      * Get one page checkout page url
      *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @return string
      */
     public function getCheckoutUrl()
     {
-        return $this->getUrl('checkout/onepage');
+        return $this->getUrl('checkout');
+    }
+
+    /**
+     * Get shoppinc cart page url
+     *
+     * @return string
+     */
+    public function getShoppingCartUrl()
+    {
+        return $this->getUrl('checkout/cart');
+    }
+
+    /**
+     * Get update cart item url
+     *
+     * @return string
+     */
+    public function getUpdateItemQtyUrl()
+    {
+        return $this->getUrl('checkout/sidebar/updateItemQty');
+    }
+
+    /**
+     * Get remove cart item url
+     *
+     * @return string
+     */
+    public function getRemoveItemUrl()
+    {
+        return $this->getUrl('checkout/sidebar/removeItem');
     }
 
     /**
@@ -178,23 +128,9 @@ class Sidebar extends AbstractCart implements IdentityInterface
     public function getIsNeedToDisplaySideBar()
     {
         return (bool)$this->_scopeConfig->getValue(
-            'checkout/sidebar/display',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            self::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY,
+            ScopeInterface::SCOPE_STORE
         );
-    }
-
-    /**
-     * Return customer quote items
-     *
-     * @return array
-     */
-    public function getItems()
-    {
-        if ($this->getCustomQuote()) {
-            return $this->getCustomQuote()->getAllVisibleItems();
-        }
-
-        return parent::getItems();
     }
 
     /**
@@ -212,80 +148,22 @@ class Sidebar extends AbstractCart implements IdentityInterface
     }
 
     /**
-     * Get cache key informative items
-     *
-     * @return array
-     */
-    public function getCacheKeyInfo()
-    {
-        $cacheKeyInfo = parent::getCacheKeyInfo();
-        $cacheKeyInfo['item_renders'] = $this->_serializeRenders();
-        return $cacheKeyInfo;
-    }
-
-    /**
-     * Serialize renders
+     * Retrieve subtotal block html
      *
      * @return string
      */
-    protected function _serializeRenders()
-    {
-        $result = [];
-        foreach ($this->getLayout()->getChildBlocks(
-            $this->_getRendererList()->getNameInLayout()
-        ) as $alias => $block) {
-            /** @var $block \Magento\Framework\View\Element\Template */
-            $result[] = implode('|', [$alias, get_class($block), $block->getTemplate()]);
-        }
-        return implode('|', $result);
-    }
-
-    /**
-     * De-serialize renders from string
-     *
-     * @param string $renders
-     * @return $this
-     */
-    public function deserializeRenders($renders)
-    {
-        if (!is_string($renders)) {
-            return $this;
-        }
-        $rendererList = $this->addChild('renderer.list', 'Magento\Framework\View\Element\RendererList');
-
-        $renders = explode('|', $renders);
-        while (!empty($renders)) {
-            $template = array_pop($renders);
-            $block = array_pop($renders);
-            $alias = array_pop($renders);
-            if (!$template || !$block || !$alias) {
-                continue;
-            }
-
-            if (!$rendererList->getChildBlock($alias)) {
-                $rendererList->addChild($alias, $block, ['template' => $template]);
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Retrieve block cache tags
-     *
-     * @return array
-     */
-    public function getIdentities()
-    {
-        $identities = [];
-        /** @var $item \Magento\Quote\Model\Quote\Item */
-        foreach ($this->getItems() as $item) {
-            $identities = array_merge($identities, $item->getProduct()->getIdentities());
-        }
-        return $identities;
-    }
-
     public function getTotalsHtml()
     {
         return $this->getLayout()->getBlock('checkout.cart.minicart.totals')->toHtml();
+    }
+
+    /**
+     * Return base url.
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl();
     }
 }

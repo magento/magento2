@@ -224,6 +224,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             if ($this->helperData->isRegionRequired($value)) {
                 $option['is_region_required'] = true;
             }
+            if ($this->helperData->isZipCodeOptional($value)) {
+                $option['is_zipcode_optional'] = true;
+            }
             $options[] = $option;
         }
 

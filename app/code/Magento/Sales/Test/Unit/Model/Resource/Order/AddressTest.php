@@ -45,11 +45,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $gridPoolMock;
 
+    /**
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entitySnapshotMock;
+
     public function setUp()
     {
         $this->addressMock = $this->getMock(
             'Magento\Sales\Model\Order\Address',
-            ['__wakeup', 'getOrderId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder'],
+            ['__wakeup', 'getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder'],
             [],
             '',
             false
@@ -89,6 +94,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
+            [],
+            [],
+            '',
+            false
+        );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($this->adapterMock));
@@ -105,7 +117,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             [
                 'resource' => $this->appResourceMock,
                 'validator' => $this->validatorMock,
-                'gridPool' => $this->gridPoolMock
+                'gridPool' => $this->gridPoolMock,
+                'entitySnapshot' => $this->entitySnapshotMock
             ]
         );
     }
@@ -119,21 +132,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->equalTo($this->addressMock))
             ->will($this->returnValue([]));
-        $this->addressMock->expects($this->any())
-            ->method('hasDataChanges')
-            ->will($this->returnValue(true));
-        $this->addressMock->expects($this->exactly(2))
-            ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
-        $this->orderMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
-        $this->addressMock->expects($this->exactly(2))
-            ->method('getOrderId')
-            ->will($this->returnValue(2));
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->addressMock)
+            ->willReturn(true);
+        $this->addressMock->expects($this->exactly(3))
+            ->method('getParentId')
+            ->will($this->returnValue(1));
         $this->gridPoolMock->expects($this->once())
             ->method('refreshByOrderId')
-            ->with($this->equalTo(2))
+            ->with($this->equalTo(1))
             ->will($this->returnSelf());
 
         $this->addressResource->save($this->addressMock);
@@ -143,10 +151,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * test _beforeSaveMethod via save() with failed validation
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save address:
+     * @expectedExceptionMessage We can't save the address:
      */
     public function testSaveValidationFailed()
     {
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->addressMock)
+            ->willReturn(true);
         $this->addressMock->expects($this->any())
             ->method('hasDataChanges')
             ->will($this->returnValue(true));

@@ -32,6 +32,8 @@ AdminOrder.prototype = {
         this.productPriceBase = {};
         this.collectElementsValue = true;
         this.isOnlyVirtualProduct = false;
+        this.excludedPaymentMethods = [];
+        this.summarizePrice = true;
         Event.observe(window, 'load',  (function(){
             this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
             this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
@@ -74,6 +76,13 @@ AdminOrder.prototype = {
             this.areasLoaded();
             this.itemsArea.onLoad();
         }).bind(this));
+
+        jQuery('#edit_form')
+            .on('submitOrder', function(){
+                jQuery(this).trigger('realOrder');
+            })
+            .on('realOrder', this._realSubmit.bind(this));
+
     },
 
     areasLoaded: function(){
@@ -92,6 +101,10 @@ AdminOrder.prototype = {
 
     setAddresses : function(addresses){
         this.addresses = addresses;
+    },
+
+    addExcludedPaymentMethod : function(method){
+        this.excludedPaymentMethods.push(method);
     },
 
     setCustomerId : function(id){
@@ -327,6 +340,7 @@ AdminOrder.prototype = {
     },
 
     switchPaymentMethod : function(method){
+        jQuery('#edit_form').trigger('changePaymentMethod', [method]);
         this.setPaymentMethod(method);
         var data = {};
         data['order[payment_method]'] = method;
@@ -354,6 +368,7 @@ AdminOrder.prototype = {
         }
 
         if ($('payment_form_'+method)){
+            jQuery('#' + this.getAreaId('billing_method')).trigger('contentUpdated');
             this.paymentMethod = method;
             var form = 'payment_form_'+method;
             [form + '_before', form, form + '_after'].each(function(el) {
@@ -393,6 +408,9 @@ AdminOrder.prototype = {
             } else {
                 return false;
             }
+        }
+        if (this.isPaymentValidationAvailable() == false) {
+            return false;
         }
         var data = {};
         var fields = $('payment_form_' + currentMethod).select('input', 'select');
@@ -507,7 +525,11 @@ AdminOrder.prototype = {
                             qtyElement.value = confirmedCurrentQty.value;
                         }
                         // calc and set product price
-                        var productPrice = parseFloat(this._calcProductPrice() + this.productPriceBase[productId]);
+                        var productPrice = this._calcProductPrice();
+                        if (this._isSummarizePrice()) {
+                            productPrice += this.productPriceBase[productId];
+                        }
+                        productPrice = parseFloat(productPrice);
                         priceColl.innerHTML = this.currencySymbol + productPrice.toFixed(2);
                         // and set checkbox checked
                         grid.setCheckboxChecked(checkbox, true);
@@ -530,6 +552,15 @@ AdminOrder.prototype = {
         }
     },
 
+    /**
+     * Is need to summarize price
+     */
+    _isSummarizePrice: function(elm) {
+        if (elm && elm.hasAttribute('summarizePrice')) {
+            this.summarizePrice = parseInt(elm.readAttribute('summarizePrice'));
+        }
+        return this.summarizePrice;
+    },
     /**
      * Calc product price through its options
      */
@@ -555,7 +586,11 @@ AdminOrder.prototype = {
                 if (elms[i].type == 'select-one' || elms[i].type == 'select-multiple') {
                     for(var ii = 0; ii < elms[i].options.length; ii++) {
                         if (elms[i].options[ii].selected) {
-                            productPrice += getPrice(elms[i].options[ii]);
+                            if (this._isSummarizePrice(elms[i].options[ii])) {
+                                productPrice += getPrice(elms[i].options[ii]);
+                            } else {
+                                productPrice = getPrice(elms[i].options[ii]);
+                            }
                         }
                     }
                 }
@@ -563,7 +598,11 @@ AdminOrder.prototype = {
                         || ((elms[i].type == 'file' || elms[i].type == 'text' || elms[i].type == 'textarea' || elms[i].type == 'hidden')
                             && Form.Element.getValue(elms[i]))
                 ) {
-                    productPrice += getPrice(elms[i]);
+                    if (this._isSummarizePrice(elms[i])) {
+                        productPrice += getPrice(elms[i]);
+                    } else {
+                        productPrice = getPrice(elms[i]);
+                    }
                 }
             }
             return productPrice;
@@ -668,6 +707,7 @@ AdminOrder.prototype = {
         if (confirm(confirmMessage)) {
             this.collectElementsValue = false;
             order.sidebarApplyChanges({'sidebar[empty_customer_cart]': 1});
+            this.collectElementsValue = true;
         }
     },
 
@@ -1036,13 +1076,28 @@ AdminOrder.prototype = {
         if (!params.form_key) {
             params.form_key = FORM_KEY;
         }
-        var data = this.serializeData('order-billing_method');
-        if (data) {
-            data.each(function(value) {
-                params[value[0]] = value[1];
-            });
+
+        if (this.isPaymentValidationAvailable()) {
+            var data = this.serializeData('order-billing_method');
+            if (data) {
+                data.each(function(value) {
+                    params[value[0]] = value[1];
+                });
+            }
+        } else {
+            params['payment[method]'] = this.paymentMethod;
         }
         return params;
+    },
+
+    /**
+     * Prevent from sending credit card information to server for some payment methods
+     *
+     * @returns {boolean}
+     */
+    isPaymentValidationAvailable : function(){
+        return ((typeof this.paymentMethod) == 'undefined'
+            || this.excludedPaymentMethods.indexOf(this.paymentMethod) == -1);
     },
 
     serializeData : function(container){
@@ -1067,7 +1122,11 @@ AdminOrder.prototype = {
 
     submit : function()
     {
-        // Temporary solution will be replaced after refactoring order functionality
+        jQuery('#edit_form').trigger('processStart');
+        jQuery('#edit_form').trigger('submitOrder');
+    },
+
+    _realSubmit: function () {
         var disableAndSave = function() {
             disableElements('save');
             jQuery('#edit_form').on('invalid-form.validate', function() {
@@ -1289,7 +1348,7 @@ ControlButton.prototype = {
     initialize: function(label){
         this._label = label;
         this._node = new Element('button', {
-            'class': 'scalable action-add',
+            'class': 'action-secondary action-add',
             'type':  'button'
         });
     },

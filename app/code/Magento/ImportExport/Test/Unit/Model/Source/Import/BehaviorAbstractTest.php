@@ -49,7 +49,7 @@ class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\
     /**
      * Test for toOptionArray method
      *
-     * covers \Magento\ImportExport\Model\Source\Import\AbstractBehavior::toOptionArray
+     * @covers \Magento\ImportExport\Model\Source\Import\AbstractBehavior::toOptionArray
      */
     public function testToOptionArray()
     {

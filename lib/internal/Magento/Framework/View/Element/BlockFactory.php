@@ -42,7 +42,7 @@ class BlockFactory
         $blockName = ltrim($blockName, '\\');
         $block = $this->objectManager->create($blockName, $arguments);
         if (!$block instanceof BlockInterface) {
-            throw new \LogicException($blockName . ' does not implemented BlockInterface');
+            throw new \LogicException($blockName . ' does not implement BlockInterface');
         }
         if ($block instanceof Template) {
             $block->setTemplateContext($block);

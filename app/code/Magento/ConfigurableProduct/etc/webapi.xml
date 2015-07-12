@@ -43,12 +43,6 @@
             <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
-    <route url="/V1/configurable-products/options/types" method="GET">
-        <service class="Magento\ConfigurableProduct\Api\OptionTypesListInterface" method="getItems" />
-        <resources>
-            <resource ref="Magento_Catalog::products" />
-        </resources>
-    </route>
     <route url="/V1/configurable-products/:sku/options" method="POST">
         <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="save" />
         <resources>

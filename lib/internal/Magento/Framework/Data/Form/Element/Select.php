@@ -39,7 +39,7 @@ class Select extends AbstractElement
      */
     public function getElementHtml()
     {
-        $this->addClass('select');
+        $this->addClass('select admin__control-select');
 
         $html = '';
         if ($this->getBeforeElementHtml()) {
@@ -152,7 +152,9 @@ class Select extends AbstractElement
             'disabled',
             'readonly',
             'tabindex',
-            'data-form-part'
+            'data-form-part',
+            'data-role',
+            'data-action'
         ];
     }
 }

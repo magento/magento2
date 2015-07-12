@@ -27,7 +27,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     protected function _extractCustomerData()
     {
         $customerData = [];
-        if ($this->getRequest()->getPost('account')) {
+        if ($this->getRequest()->getPost('customer')) {
             $serviceAttributes = [
                 CustomerInterface::DEFAULT_BILLING,
                 CustomerInterface::DEFAULT_SHIPPING,
@@ -40,12 +40,15 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 'adminhtml_customer',
                 \Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
                 $serviceAttributes,
-                'account'
+                'customer'
             );
         }
 
         if (isset($customerData['disable_auto_group_change'])) {
-            $customerData['disable_auto_group_change'] = (int)$customerData['disable_auto_group_change'];
+            $customerData['disable_auto_group_change'] = (int) filter_var(
+                $customerData['disable_auto_group_change'],
+                FILTER_VALIDATE_BOOLEAN
+            );
         }
 
         return $customerData;
@@ -113,7 +116,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         $extractedCustomerData[CustomerInterface::DEFAULT_BILLING] = null;
         $extractedCustomerData[CustomerInterface::DEFAULT_SHIPPING] = null;
         foreach ($addressIdList as $addressId) {
-            $scope = sprintf('account/customer_address/%s', $addressId);
+            $scope = sprintf('address/%s', $addressId);
             $addressData = $this->_extractData(
                 $this->getRequest(),
                 'adminhtml_customer_address',
@@ -151,10 +154,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      */
     protected function _extractCustomerAddressData(array & $extractedCustomerData)
     {
-        $customerData = $this->getRequest()->getPost('account');
-        $addresses = isset($customerData['customer_address']) ? $customerData['customer_address'] : [];
+        $addresses = $this->getRequest()->getPost('address');
         $result = [];
-        if ($addresses) {
+        if (is_array($addresses)) {
             if (isset($addresses['_template_'])) {
                 unset($addresses['_template_']);
             }
@@ -177,8 +179,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     public function execute()
     {
         $returnToEdit = false;
-        $customerId = (int)$this->getRequest()->getParam('id');
         $originalRequestData = $this->getRequest()->getPostValue();
+        $customerId = isset($originalRequestData['customer']['entity_id'])
+            ? $originalRequestData['customer']['entity_id']
+            : null;
         if ($originalRequestData) {
             try {
                 // optional fields might be set in request for future processing by observers in other modules
@@ -265,7 +269,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             } catch (\Exception $exception) {
-                $this->messageManager->addException($exception, __('An error occurred while saving the customer.'));
+                $this->messageManager->addException($exception, __('Something went wrong while saving the customer.'));
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             }

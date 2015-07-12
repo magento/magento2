@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupNew;
 use Magento\Mtf\TestCase\Injectable;
@@ -30,6 +30,7 @@ class CreateCustomerGroupEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
+    const STABLE = 'no';
     /* end tags */
 
     /**
@@ -61,10 +62,10 @@ class CreateCustomerGroupEntityTest extends Injectable
     /**
      * Create customer group
      *
-     * @param CustomerGroupInjectable $customerGroup
+     * @param CustomerGroup $customerGroup
      */
     public function testCreateCustomerGroup(
-        CustomerGroupInjectable $customerGroup
+        CustomerGroup $customerGroup
     ) {
         //Steps
         $this->customerGroupIndex->open();

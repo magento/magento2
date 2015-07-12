@@ -80,9 +80,10 @@ class LinkRepositoryTest extends WebapiAbstract
     protected function getTargetProduct($isScopeGlobal = false)
     {
         $objectManager = Bootstrap::getObjectManager();
-        $product = $objectManager->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
         if ($isScopeGlobal) {
-            $product->setStoreId(0);
+            $product = $objectManager->get('Magento\Catalog\Model\ProductFactory')->create()->setStoreId(0)->load(1);
+        } else {
+            $product = $objectManager->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
         }
 
         return $product;
@@ -114,18 +115,18 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => true,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Title',
                 'sort_order' => 1,
                 'price' => 10.1,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
                 'link_type' => 'file',
-                'link_file' => [
+                'link_file_content' => [
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'image.jpg',
                 ],
-                'sample_file' => [
+                'sample_file_content' => [
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'image.jpg',
                 ],
@@ -137,15 +138,15 @@ class LinkRepositoryTest extends WebapiAbstract
         $globalScopeLink = $this->getTargetLink($this->getTargetProduct(true), $newLinkId);
         $link = $this->getTargetLink($this->getTargetProduct(), $newLinkId);
         $this->assertNotNull($link);
-        $this->assertEquals($requestData['linkContent']['title'], $link->getTitle());
-        $this->assertEquals($requestData['linkContent']['title'], $globalScopeLink->getTitle());
-        $this->assertEquals($requestData['linkContent']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['linkContent']['price'], $link->getPrice());
-        $this->assertEquals($requestData['linkContent']['price'], $globalScopeLink->getPrice());
-        $this->assertEquals($requestData['linkContent']['shareable'], $link->getIsShareable());
-        $this->assertEquals($requestData['linkContent']['number_of_downloads'], $link->getNumberOfDownloads());
-        $this->assertEquals($requestData['linkContent']['link_type'], $link->getLinkType());
-        $this->assertEquals($requestData['linkContent']['sample_type'], $link->getSampleType());
+        $this->assertEquals($requestData['link']['title'], $link->getTitle());
+        $this->assertEquals($requestData['link']['title'], $globalScopeLink->getTitle());
+        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertEquals($requestData['link']['price'], $link->getPrice());
+        $this->assertEquals($requestData['link']['price'], $globalScopeLink->getPrice());
+        $this->assertEquals($requestData['link']['is_shareable'], $link->getIsShareable());
+        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertEquals($requestData['link']['link_type'], $link->getLinkType());
+        $this->assertEquals($requestData['link']['sample_type'], $link->getSampleType());
         $this->assertStringEndsWith('.jpg', $link->getSampleFile());
         $this->assertStringEndsWith('.jpg', $link->getLinkFile());
         $this->assertNull($link->getLinkUrl());
@@ -160,11 +161,11 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Store View Title',
                 'sort_order' => 1,
                 'price' => 150,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
                 'link_url' => 'http://www.example.com/',
                 'link_type' => 'url',
@@ -177,15 +178,15 @@ class LinkRepositoryTest extends WebapiAbstract
         $link = $this->getTargetLink($this->getTargetProduct(), $newLinkId);
         $globalScopeLink = $this->getTargetLink($this->getTargetProduct(true), $newLinkId);
         $this->assertNotNull($link);
-        $this->assertEquals($requestData['linkContent']['title'], $link->getTitle());
-        $this->assertEquals($requestData['linkContent']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['linkContent']['price'], $link->getPrice());
-        $this->assertEquals($requestData['linkContent']['shareable'], $link->getIsShareable());
-        $this->assertEquals($requestData['linkContent']['number_of_downloads'], $link->getNumberOfDownloads());
-        $this->assertEquals($requestData['linkContent']['link_url'], $link->getLinkUrl());
-        $this->assertEquals($requestData['linkContent']['link_type'], $link->getLinkType());
-        $this->assertEquals($requestData['linkContent']['sample_url'], $link->getSampleUrl());
-        $this->assertEquals($requestData['linkContent']['sample_type'], $link->getSampleType());
+        $this->assertEquals($requestData['link']['title'], $link->getTitle());
+        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertEquals($requestData['link']['price'], $link->getPrice());
+        $this->assertEquals($requestData['link']['is_shareable'], $link->getIsShareable());
+        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertEquals($requestData['link']['link_url'], $link->getLinkUrl());
+        $this->assertEquals($requestData['link']['link_type'], $link->getLinkType());
+        $this->assertEquals($requestData['link']['sample_url'], $link->getSampleUrl());
+        $this->assertEquals($requestData['link']['sample_type'], $link->getSampleType());
         $this->assertEmpty($globalScopeLink->getTitle());
         $this->assertEmpty($globalScopeLink->getPrice());
     }
@@ -198,11 +199,11 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link with URL resources',
                 'sort_order' => 1,
                 'price' => 10.1,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
                 'link_url' => 'http://www.example.com/',
                 'link_type' => 'url',
@@ -214,15 +215,15 @@ class LinkRepositoryTest extends WebapiAbstract
         $newLinkId = $this->_webApiCall($this->createServiceInfo, $requestData);
         $link = $this->getTargetLink($this->getTargetProduct(), $newLinkId);
         $this->assertNotNull($link);
-        $this->assertEquals($requestData['linkContent']['title'], $link->getTitle());
-        $this->assertEquals($requestData['linkContent']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['linkContent']['price'], $link->getPrice());
-        $this->assertEquals($requestData['linkContent']['shareable'], $link->getIsShareable());
-        $this->assertEquals($requestData['linkContent']['number_of_downloads'], $link->getNumberOfDownloads());
-        $this->assertEquals($requestData['linkContent']['link_url'], $link->getLinkUrl());
-        $this->assertEquals($requestData['linkContent']['link_type'], $link->getLinkType());
-        $this->assertEquals($requestData['linkContent']['sample_type'], $link->getSampleType());
-        $this->assertEquals($requestData['linkContent']['sample_url'], $link->getSampleUrl());
+        $this->assertEquals($requestData['link']['title'], $link->getTitle());
+        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertEquals($requestData['link']['price'], $link->getPrice());
+        $this->assertEquals($requestData['link']['is_shareable'], $link->getIsShareable());
+        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertEquals($requestData['link']['link_url'], $link->getLinkUrl());
+        $this->assertEquals($requestData['link']['link_type'], $link->getLinkType());
+        $this->assertEquals($requestData['link']['sample_type'], $link->getSampleType());
+        $this->assertEquals($requestData['link']['sample_url'], $link->getSampleUrl());
     }
 
     /**
@@ -235,12 +236,15 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link with URL resources',
                 'sort_order' => 1,
                 'price' => 10.1,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
+                'link_type' => 'invalid',
+                'sample_type' => 'url',
+                'sample_url' => 'http://www.example.com',
             ],
         ];
 
@@ -257,16 +261,16 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
                 'price' => 10,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
                 'link_type' => 'url',
                 'link_url' => 'http://www.example.com/',
                 'sample_type' => 'file',
-                'sample_file' => [
+                'sample_file_content' => [
                     'file_data' => 'not_a_base64_encoded_content',
                     'name' => 'image.jpg',
                 ],
@@ -286,17 +290,19 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
                 'price' => 10,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
                 'link_type' => 'file',
-                'link_file' => [
+                'link_file_content' => [
                     'file_data' => 'not_a_base64_encoded_content',
                     'name' => 'image.jpg',
                 ],
+                'sample_type' => 'url',
+                'sample_url' => 'http://www.example.com/',
             ],
         ];
 
@@ -313,17 +319,19 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Title',
                 'sort_order' => 15,
                 'price' => 10,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
                 'link_type' => 'file',
-                'link_file' => [
+                'link_file_content' => [
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'name/with|forbidden{characters',
                 ],
+                'sample_type' => 'url',
+                'sample_url' => 'http://www.example.com/',
             ],
         ];
 
@@ -340,16 +348,16 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
                 'price' => 10,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
                 'link_type' => 'url',
                 'link_url' => 'http://www.example.com/',
                 'sample_type' => 'file',
-                'sample_file' => [
+                'sample_file_content' => [
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'name/with|forbidden{characters',
                 ],
@@ -369,14 +377,16 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
                 'price' => 10,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
                 'link_type' => 'url',
                 'link_url' => 'http://example<.>com/',
+                'sample_type' => 'url',
+                'sample_url' => 'http://www.example.com/',
             ],
         ];
 
@@ -393,11 +403,11 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
                 'price' => 150,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 0,
                 'sample_type' => 'url',
                 'sample_url' => 'http://example<.>com/',
@@ -420,11 +430,11 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
                 'price' => $linkPrice,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 0,
                 'sample_type' => 'url',
                 'sample_url' => 'http://example.com/',
@@ -442,7 +452,6 @@ class LinkRepositoryTest extends WebapiAbstract
     public function getInvalidLinkPrice()
     {
         return [
-            ['string_value'],
             [-1.5],
         ];
     }
@@ -458,11 +467,11 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => $sortOrder,
                 'price' => 10,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => 0,
                 'sample_type' => 'url',
                 'sample_url' => 'http://example.com/',
@@ -494,11 +503,11 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => 0,
                 'price' => 10,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => $numberOfDownloads,
                 'sample_type' => 'url',
                 'sample_url' => 'http://example.com/',
@@ -530,11 +539,11 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'simple',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => 50,
                 'price' => 200,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => 10,
                 'sample_type' => 'url',
                 'sample_url' => 'http://example.com/',
@@ -555,11 +564,11 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'sku' => 'wrong-sku',
-            'linkContent' => [
+            'link' => [
                 'title' => 'Link Title',
                 'sort_order' => 15,
                 'price' => 200,
-                'shareable' => true,
+                'is_shareable' => true,
                 'number_of_downloads' => 100,
                 'sample_type' => 'url',
                 'sample_url' => 'http://example.com/',
@@ -580,24 +589,26 @@ class LinkRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => false,
-            'linkId' => $linkId,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
+                'id' => $linkId,
                 'title' => 'Updated Title',
                 'sort_order' => 2,
                 'price' => 100.10,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => 50,
+                'link_type' => 'url',
+                'sample_type' => 'url',
             ],
         ];
         $this->assertEquals($linkId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $link = $this->getTargetLink($this->getTargetProduct(), $linkId);
         $this->assertNotNull($link);
-        $this->assertEquals($requestData['linkContent']['title'], $link->getTitle());
-        $this->assertEquals($requestData['linkContent']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['linkContent']['price'], $link->getPrice());
-        $this->assertEquals($requestData['linkContent']['shareable'], (bool)$link->getIsShareable());
-        $this->assertEquals($requestData['linkContent']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertEquals($requestData['link']['title'], $link->getTitle());
+        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertEquals($requestData['link']['price'], $link->getPrice());
+        $this->assertEquals($requestData['link']['is_shareable'], (bool)$link->getIsShareable());
+        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
     }
 
     /**
@@ -611,14 +622,16 @@ class LinkRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => true,
-            'linkId' => $linkId,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
+                'id' => $linkId,
                 'title' => 'Updated Title',
                 'sort_order' => 2,
                 'price' => 100.10,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => 50,
+                'link_type' => 'url',
+                'sample_type' => 'url',
             ],
         ];
 
@@ -629,11 +642,11 @@ class LinkRepositoryTest extends WebapiAbstract
         // Title and price were set on store view level in fixture so they must be the same
         $this->assertEquals($originalLink->getTitle(), $link->getTitle());
         $this->assertEquals($originalLink->getPrice(), $link->getPrice());
-        $this->assertEquals($requestData['linkContent']['title'], $globalScopeLink->getTitle());
-        $this->assertEquals($requestData['linkContent']['price'], $globalScopeLink->getPrice());
-        $this->assertEquals($requestData['linkContent']['sort_order'], $link->getSortOrder());
-        $this->assertEquals($requestData['linkContent']['shareable'], (bool)$link->getIsShareable());
-        $this->assertEquals($requestData['linkContent']['number_of_downloads'], $link->getNumberOfDownloads());
+        $this->assertEquals($requestData['link']['title'], $globalScopeLink->getTitle());
+        $this->assertEquals($requestData['link']['price'], $globalScopeLink->getPrice());
+        $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
+        $this->assertEquals($requestData['link']['is_shareable'], (bool)$link->getIsShareable());
+        $this->assertEquals($requestData['link']['number_of_downloads'], $link->getNumberOfDownloads());
     }
 
     /**
@@ -645,14 +658,16 @@ class LinkRepositoryTest extends WebapiAbstract
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/1';
         $requestData = [
             'isGlobalScopeContent' => true,
-            'linkId' => 1,
             'sku' => 'wrong-sku',
-            'linkContent' => [
+            'link' => [
+                'id' => 1,
                 'title' => 'Updated Title',
                 'sort_order' => 2,
                 'price' => 100.10,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => 50,
+                'link_type' => 'url',
+                'sample_type' => 'url',
             ],
         ];
         $this->_webApiCall($this->updateServiceInfo, $requestData);
@@ -670,14 +685,16 @@ class LinkRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => true,
-            'linkId' => 9999,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
+                'id' => $linkId,
                 'title' => 'Title',
                 'sort_order' => 2,
                 'price' => 100.10,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => 50,
+                'link_type' => 'url',
+                'sample_type' => 'url',
             ],
         ];
 
@@ -697,14 +714,16 @@ class LinkRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => false,
-            'linkId' => $linkId,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
+                'id' => $linkId,
                 'title' => 'Updated Link Title',
                 'sort_order' => 2,
                 'price' => $linkPrice,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => 50,
+                'link_type' => 'url',
+                'sample_type' => 'url',
             ],
         ];
 
@@ -724,14 +743,16 @@ class LinkRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => false,
-            'linkId' => $linkId,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
+                'id' => $linkId,
                 'title' => 'Updated Link Title',
                 'sort_order' => $sortOrder,
                 'price' => 100.50,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => 50,
+                'link_type' => 'url',
+                'sample_type' => 'url',
             ],
         ];
         $this->_webApiCall($this->updateServiceInfo, $requestData);
@@ -750,14 +771,16 @@ class LinkRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => false,
-            'linkId' => $linkId,
             'sku' => 'downloadable-product',
-            'linkContent' => [
+            'link' => [
+                'id' => $linkId,
                 'title' => 'Updated Link Title',
                 'sort_order' => 200,
                 'price' => 100.50,
-                'shareable' => false,
+                'is_shareable' => false,
                 'number_of_downloads' => $numberOfDownloads,
+                'link_type' => 'url',
+                'sample_type' => 'url',
             ],
         ];
         $this->_webApiCall($this->updateServiceInfo, $requestData);
@@ -771,7 +794,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $linkId = $this->getTargetLink($this->getTargetProduct())->getId();
         $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-links/{$linkId}";
         $requestData = [
-            'linkId' => $linkId,
+            'id' => $linkId,
         ];
 
         $this->assertTrue($this->_webApiCall($this->deleteServiceInfo, $requestData));
@@ -788,7 +811,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $linkId = 9999;
         $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-links/{$linkId}";
         $requestData = [
-            'linkId' => $linkId,
+            'id' => $linkId,
         ];
 
         $this->_webApiCall($this->deleteServiceInfo, $requestData);
@@ -897,25 +920,11 @@ class LinkRepositoryTest extends WebapiAbstract
             ]
         ];
 
-        $sampleExpectation = [
-            'fields' => [
-                'title' => 'Downloadable Product Sample Title',
-                'sort_order' => 0,
-                'sample_file' => '/f/u/jellyfish_1_4.jpg',
-                'sample_type' => 'file'
-            ]
-        ];
-
         return [
             'links' => [
                 '/downloadable-links',
-                'GetLinks',
+                'GetList',
                 $linkExpectation,
-            ],
-            'samples' => [
-                '/downloadable-links/samples',
-                'GetSamples',
-                $sampleExpectation,
             ],
         ];
     }

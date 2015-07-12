@@ -7,6 +7,7 @@ namespace Magento\Bundle\Pricing\Price;
 
 /**
  * Option price interface
+ * @api
  */
 interface BundleOptionPriceInterface
 {

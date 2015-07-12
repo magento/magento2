@@ -33,27 +33,39 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
                         $message = __('The payment has been denied.');
                         break;
                     case 'update':
-                        $order->getPayment()->registerPaymentReviewAction(
-                            \Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE,
-                            true
-                        );
-                        $message = __('The payment update has been made.');
+                        $order->getPayment()->update();
+                        if ($order->getPayment()->getIsTransactionApproved()) {
+                            $message = __('Transaction has been approved.');
+                        } else if ($order->getPayment()->getIsTransactionDenied()) {
+                            $message = __('Transaction has been voided/declined.');
+                        } else {
+                            $message = __('There is no update for the transaction.');
+                        }
                         break;
                     default:
                         throw new \Exception(sprintf('Action "%s" is not supported.', $action));
                 }
                 $order->save();
                 $this->messageManager->addSuccess($message);
+            } else {
+                $resultRedirect->setPath('sales/*/');
+                return $resultRedirect;
             }
-            $resultRedirect->setPath('sales/*/');
-            return $resultRedirect;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We couldn\'t update the payment.'));
+            $this->messageManager->addError(__('We can\'t update the payment right now.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);
         return $resultRedirect;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::review_payment');
     }
 }

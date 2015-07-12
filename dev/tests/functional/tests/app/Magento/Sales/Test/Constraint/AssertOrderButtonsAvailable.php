@@ -6,27 +6,26 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\SalesOrder;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderButtonsAvailable
- * Assert  that specified in data set buttons exist on order page in backend
+ * Assert that specified in data set buttons exist on order page in backend.
  */
 class AssertOrderButtonsAvailable extends AbstractConstraint
 {
     /**
-     * Assert that specified in data set buttons exist on order page in backend
+     * Assert that specified in data set buttons exist on order page in backend.
      *
-     * @param SalesOrder $salesOrder
+     * @param SalesOrderView $salesOrderView
      * @param string $orderButtonsAvailable
      * @return void
      */
-    public function processAssert(SalesOrder $salesOrder, $orderButtonsAvailable)
+    public function processAssert(SalesOrderView $salesOrderView, $orderButtonsAvailable)
     {
         $buttons = explode(',', $orderButtonsAvailable);
         $absentButtons = [];
-        $actionsBlock = $salesOrder->getOrderActionsBlock();
+        $actionsBlock = $salesOrderView->getPageActions();
 
         foreach ($buttons as $button) {
             $button = trim($button);
@@ -42,7 +41,7 @@ class AssertOrderButtonsAvailable extends AbstractConstraint
     }
 
     /**
-     * Returns string representation of successful assertion
+     * Returns string representation of successful assertion.
      *
      * @return string
      */

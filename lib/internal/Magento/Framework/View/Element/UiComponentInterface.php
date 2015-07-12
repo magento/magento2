@@ -5,98 +5,122 @@
  */
 namespace Magento\Framework\View\Element;
 
-use Magento\Framework\View\Element\UiComponent\Context as RenderContext;
-use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Class UiComponentInterface
+ * Interface UiComponentInterface
  */
 interface UiComponentInterface extends BlockInterface
 {
     /**
-     * Update component data
-     *
-     * @param array $arguments
-     * @return string
-     */
-    public function update(array $arguments = []);
-
-    /**
-     * Prepare component data
-     *
-     * @return void
-     */
-    public function prepare();
-
-    /**
-     * Render component
-     *
-     * @param array $data
-     * @return string
-     */
-    public function render(array $data = []);
-
-    /**
-     * Render label
-     *
-     * @return mixed|string
-     */
-    public function renderLabel();
-
-    /**
-     * Getting template for rendering content
-     *
-     * @return string|false
-     */
-    public function getContentTemplate();
-
-    /**
-     * Getting template for rendering label
-     *
-     * @return string|false
-     */
-    public function getLabelTemplate();
-
-    /**
-     * Getting instance name
+     * Get component instance name
      *
      * @return string
      */
     public function getName();
 
     /**
-     * Getting parent name component instance
+     * Get component name
      *
      * @return string
      */
-    public function getParentName();
+    public function getComponentName();
 
     /**
-     * Get render context
+     * Get component configuration
      *
-     * @return RenderContext
+     * @return array
      */
-    public function getRenderContext();
+    public function getConfiguration();
 
     /**
-     * Get elements
+     * Render component
+     *
+     * @return string
+     */
+    public function render();
+
+    /**
+     * Add component
+     *
+     * @param string $name
+     * @param UiComponentInterface $component
+     * @return void
+     */
+    public function addComponent($name, UiComponentInterface $component);
+
+    /**
+     * @param string $name
+     * @return UiComponentInterface
+     */
+    public function getComponent($name);
+
+    /**
+     * Get child components
      *
      * @return UiComponentInterface[]
      */
-    public function getElements();
+    public function getChildComponents();
 
     /**
-     * Set elements
+     * Get template
      *
-     * @param array $elements
+     * @return string
+     */
+    public function getTemplate();
+
+    /**
+     * Get component context
+     *
+     * @return ContextInterface
+     */
+    public function getContext();
+
+    /**
+     * Render child component
+     *
+     * @param string $name
+     * @return string
+     */
+    public function renderChildComponent($name);
+
+    /**
+     * Component data setter
+     *
+     * @param string|array $key
+     * @param mixed $value
+     * @return void
+     */
+    public function setData($key, $value = null);
+
+    /**
+     * Component data getter
+     *
+     * @param string $key
+     * @param string|int $index
      * @return mixed
      */
-    public function setElements(array $elements);
+    public function getData($key = '', $index = null);
 
     /**
-     * Get configuration builder
+     * Prepare component configuration
      *
-     * @return ConfigBuilderInterface
+     * @return void
      */
-    public function getConfigBuilder();
+    public function prepare();
+
+    /**
+     * Prepare Data Source
+     *
+     * @param array $dataSource
+     * @return void
+     */
+    public function prepareDataSource(array & $dataSource);
+
+    /**
+     * Get Data Source data
+     *
+     * @return array
+     */
+    public function getDataSourceData();
 }

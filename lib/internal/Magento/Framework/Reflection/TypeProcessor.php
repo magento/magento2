@@ -6,12 +6,14 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\ParameterReflection;
-use Magento\Framework\Phrase;
 
 /**
  * Type processor of config reader properties
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TypeProcessor
 {
@@ -108,6 +110,9 @@ class TypeProcessor
     public function register($type)
     {
         $typeName = $this->normalizeType($type);
+        if (null === $typeName) {
+            return null;
+        }
         if (!$this->isTypeSimple($typeName) && !$this->isTypeAny($typeName)) {
             $typeSimple = $this->getArrayItemType($type);
             if (!(class_exists($typeSimple) || interface_exists($typeSimple))) {
@@ -288,6 +293,9 @@ class TypeProcessor
      */
     public function normalizeType($type)
     {
+        if ($type == 'null') {
+            return null;
+        }
         $normalizationMap = [
             self::STRING_TYPE => self::NORMALIZED_STRING_TYPE,
             self::INT_TYPE => self::NORMALIZED_INT_TYPE,
@@ -465,20 +473,51 @@ class TypeProcessor
      *
      * @param ParameterReflection $param
      * @return string
+     * @throws \LogicException
      */
     public function getParamType(ParameterReflection $param)
     {
         $type = $param->getType();
+        if ($param->getType() == 'null') {
+            throw new \LogicException(sprintf(
+                '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
+                . ' First declared type should not be null. E.g. string|null',
+                $param->getName(),
+                $param->getDeclaringClass()->getName(),
+                $param->getDeclaringFunction()->name
+            ));
+        }
         if ($type == 'array') {
             // try to determine class, if it's array of objects
             $docBlock = $param->getDeclaringFunction()->getDocBlock();
             $pattern = "/\@param\s+([\w\\\_]+\[\])\s+\\\${$param->getName()}\n/";
+            $matches = [];
             if (preg_match($pattern, $docBlock->getContents(), $matches)) {
                 return $matches[1];
             }
             return "{$type}[]";
         }
         return $type;
+    }
+
+    /**
+     * Get parameter description
+     *
+     * @param ParameterReflection $param
+     * @return string|null
+     */
+    public function getParamDescription(ParameterReflection $param)
+    {
+        $docBlock = $param->getDeclaringFunction()->getDocBlock();
+        $docBlockLines = explode("\n", $docBlock->getContents());
+        $pattern = "/\@param\s+([\w\\\_\[\]\|]+)\s+(\\\${$param->getName()})\s(.*)/";
+        $matches = [];
+
+        foreach ($docBlockLines as $line) {
+            if (preg_match($pattern, $line, $matches)) {
+                return $matches[3];
+            }
+        }
     }
 
     /**
@@ -493,20 +532,7 @@ class TypeProcessor
     {
         $getterName = 'get' . $camelCaseProperty;
         $boolGetterName = 'is' . $camelCaseProperty;
-        if ($class->hasMethod($getterName)) {
-            $methodName = $getterName;
-        } elseif ($class->hasMethod($boolGetterName)) {
-            $methodName = $boolGetterName;
-        } else {
-            throw new \Exception(
-                sprintf(
-                    'Property :"%s" does not exist in the provided class: "%s".',
-                    $camelCaseProperty,
-                    $class->getName()
-                )
-            );
-        }
-        return $methodName;
+        return $this->findAccessorMethodName($class, $camelCaseProperty, $getterName, $boolGetterName);
     }
 
     /**
@@ -539,10 +565,31 @@ class TypeProcessor
     {
         $setterName = 'set' . $camelCaseProperty;
         $boolSetterName = 'setIs' . $camelCaseProperty;
-        if ($class->hasMethod($setterName)) {
-            $methodName = $setterName;
-        } elseif ($class->hasMethod($boolSetterName)) {
-            $methodName = $boolSetterName;
+        return $this->findAccessorMethodName($class, $camelCaseProperty, $setterName, $boolSetterName);
+    }
+
+    /**
+     * Find the accessor method name for a property from the given class
+     *
+     * @param ClassReflection $class
+     * @param string $camelCaseProperty
+     * @param string $accessorName
+     * @param bool $boolAccessorName
+     * @return string processed method name
+     * @throws \Exception If $camelCaseProperty has no corresponding setter method
+     */
+    protected function findAccessorMethodName(
+        ClassReflection $class,
+        $camelCaseProperty,
+        $accessorName,
+        $boolAccessorName
+    ) {
+        if ($this->classHasMethod($class, $accessorName)) {
+            $methodName = $accessorName;
+            return $methodName;
+        } elseif ($this->classHasMethod($class, $boolAccessorName)) {
+            $methodName = $boolAccessorName;
+            return $methodName;
         } else {
             throw new \Exception(
                 sprintf(
@@ -552,6 +599,19 @@ class TypeProcessor
                 )
             );
         }
-        return $methodName;
+    }
+
+    /**
+     * Checks if method is defined
+     *
+     * Case sensitivity of the method is taken into account.
+     *
+     * @param ClassReflection $class
+     * @param string $methodName
+     * @return bool
+     */
+    protected function classHasMethod(ClassReflection $class, $methodName)
+    {
+        return $class->hasMethod($methodName) && ($class->getMethod($methodName)->getName() == $methodName);
     }
 }

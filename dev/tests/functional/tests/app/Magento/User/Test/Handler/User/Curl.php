@@ -9,7 +9,6 @@ namespace Magento\User\Test\Handler\User;
 use Magento\Backend\Test\Handler\Extractor;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -47,7 +46,7 @@ class Curl extends AbstractCurl implements UserInterface
         }
 
         $url = 'admin/user/roleGrid/sort/user_id/dir/desc';
-        $regExpPattern = '/col-user_id[\s\W]*(\d+)\s*<.td>\s*<[^<>]*?>' . $data['username'] . '/siu';
+        $regExpPattern = '/col-user_id[^\>]+\>\s*(\d+)\s*<.td>\s*<[^<>]*?>\s*' . $data['username'] . '/siu';
         $extractor = new Extractor($url, $regExpPattern);
 
         return ['user_id' => $extractor->getData()[1]];

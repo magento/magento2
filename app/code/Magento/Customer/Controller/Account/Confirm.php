@@ -10,7 +10,6 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -19,6 +18,7 @@ use Magento\Customer\Helper\Address;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Confirm
@@ -48,7 +48,6 @@ class Confirm extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
@@ -62,7 +61,6 @@ class Confirm extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
-        RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
@@ -77,7 +75,7 @@ class Confirm extends \Magento\Customer\Controller\Account
         $this->customerRepository = $customerRepository;
         $this->addressHelper = $addressHelper;
         $this->urlModel = $urlFactory->create();
-        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
+        parent::__construct($context, $customerSession, $resultPageFactory);
     }
 
     /**
@@ -88,7 +86,7 @@ class Confirm extends \Magento\Customer\Controller\Account
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if ($this->_getSession()->isLoggedIn()) {
             $resultRedirect->setPath('*/*/');
@@ -114,10 +112,9 @@ class Confirm extends \Magento\Customer\Controller\Account
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('There was an error confirming the account'));
         }
-        // die unhappy
+
         $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
-        $resultRedirect->setUrl($this->_redirect->error($url));
-        return $resultRedirect;
+        return $resultRedirect->setUrl($this->_redirect->error($url));
     }
 
     /**
@@ -131,14 +128,14 @@ class Confirm extends \Magento\Customer\Controller\Account
             if ($this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING) {
                 // @codingStandardsIgnoreStart
                 $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter you shipping address for proper VAT calculation',
+                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your shipping address for proper VAT calculation.',
                     $this->urlModel->getUrl('customer/address/edit')
                 );
                 // @codingStandardsIgnoreEnd
             } else {
                 // @codingStandardsIgnoreStart
                 $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter you billing address for proper VAT calculation',
+                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your billing address for proper VAT calculation.',
                     $this->urlModel->getUrl('customer/address/edit')
                 );
                 // @codingStandardsIgnoreEnd

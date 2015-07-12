@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Test\Unit\Model\Resource\Block\Grid;
 
-use Magento\Cms\Model\Resource\Block\Grid\Collection;
+use Magento\Cms\Model\Resource\Block\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,11 +42,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
-            'Magento\Cms\Model\Resource\Block\Grid\Collection',
+            'Magento\Cms\Model\Resource\Block\Collection',
             ['resource' => $resource, 'connection' => $connection]
         );
 
-        $this->collection = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\Grid\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\Collection')
             ->setConstructorArgs($arguments)
             ->setMethods(['addFilter', '_translateCondition', 'getMainTable'])
             ->getMock();

@@ -41,7 +41,13 @@ class Parser
         if (!$this->converter) {
             $arrayNodeConfig = new ArrayNodeConfig(
                 new NodePathMatcher(),
-                ['argument/param' => 'name', 'argument(/item)+' => 'name', 'argument(/item)+/param' => 'name'],
+                [
+                    'argument/param' => 'name',
+                    'argument(/item)+' => 'name',
+                    'argument(/item)+/param' => 'name',
+                    'argument(/argument)+' => 'name',
+                    'argument((/argument)+(/item)+)+' => 'name',
+                ],
                 ['argument/updater']
             );
             $this->converter = new FlatConverter($arrayNodeConfig);

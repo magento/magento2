@@ -5,6 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Tax;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
@@ -19,7 +20,7 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
         $cacheTypeList->expects($this->once())
             ->method('cleanType')
             ->with('block_html')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
@@ -27,12 +28,23 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $request->expects($this->once())
             ->method('getParam')
-            ->will($this->returnValue('tax'));
+            ->willReturn('tax');
 
-        $response = $this->getMockBuilder('\Magento\Framework\App\Response\Http')
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
-            ->setMethods(['setRedirect'])
             ->getMock();
+        $resultRedirect->expects($this->once())
+            ->method('setRefererUrl')
+            ->willReturnSelf();
+
+        $resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultFactory->expects($this->once())
+            ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
+            ->willReturn($resultRedirect);
 
         $config = $this->getMockBuilder('\Magento\Config\Model\Resource\Config')
             ->disableOriginalConstructor()
@@ -40,8 +52,8 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $config->expects($this->once())
             ->method('saveConfig')
-            ->with('tax/notification/ignore_tax', 1, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, 0)
-            ->will($this->returnValue(null));
+            ->with('tax/notification/ignore_tax', 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0)
+            ->willReturn(null);
 
         $manager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
             ->disableOriginalConstructor()
@@ -49,7 +61,7 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $manager->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($config));
+            ->willReturn($config);
 
         $notification = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Tax\IgnoreTaxNotification',
@@ -57,11 +69,11 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
                 'objectManager' => $manager,
                 'cacheTypeList' => $cacheTypeList,
                 'request' => $request,
-                'response' => $response
+                'resultFactory' => $resultFactory
             ]
         );
 
         // No exception thrown
-        $notification->execute();
+        $this->assertSame($resultRedirect, $notification->execute());
     }
 }

@@ -47,6 +47,8 @@ class Copy
      * @param array|\Magento\Framework\Object $target
      * @param string $root
      * @return array|\Magento\Framework\Object|null the value of $target
+     *
+     * @api
      */
     public function copyFieldsetToTarget($fieldset, $aspect, $source, $target, $root = 'global')
     {
@@ -76,9 +78,35 @@ class Copy
             }
         }
 
-        $eventName = sprintf('core_copy_fieldset_%s_%s', $fieldset, $aspect);
-        $this->_eventManager->dispatch($eventName, ['target' => $target, 'source' => $source, 'root' => $root]);
+        $target = $this->dispatchCopyFieldSetEvent($fieldset, $aspect, $source, $target, $root, $targetIsArray);
 
+        return $target;
+    }
+
+    /**
+     * Dispatch copy fieldset event
+     *
+     * @param string $fieldset
+     * @param string $aspect
+     * @param array|\Magento\Framework\Object $source
+     * @param array|\Magento\Framework\Object $target
+     * @param string $root
+     * @param bool $targetIsArray
+     * @return \Magento\Framework\Object|mixed
+     */
+    protected function dispatchCopyFieldSetEvent($fieldset, $aspect, $source, $target, $root, $targetIsArray)
+    {
+        $eventName = sprintf('core_copy_fieldset_%s_%s', $fieldset, $aspect);
+        if ($targetIsArray) {
+            $target = new \Magento\Framework\Object($target);
+        }
+        $this->_eventManager->dispatch(
+            $eventName,
+            ['target' => $target, 'source' => $source, 'root' => $root]
+        );
+        if ($targetIsArray) {
+            $target = $target->getData();
+        }
         return $target;
     }
 
@@ -91,6 +119,8 @@ class Copy
      * @param array|\Magento\Framework\Object $source
      * @param string $root
      * @return array $data
+     *
+     * @api
      */
     public function getDataFromFieldset($fieldset, $aspect, $source, $root = 'global')
     {

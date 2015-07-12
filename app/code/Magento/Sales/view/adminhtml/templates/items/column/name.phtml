@@ -14,33 +14,38 @@
 ?>
 
 <?php if ($_item = $block->getItem()): ?>
-    <div id="order_item_<?php echo $_item->getId() ?>_title" class="product-title"><?php echo $block->escapeHtml($_item->getName()) ?></div>
-    <strong><?php echo __('SKU') ?>:</strong> <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))); ?>
+    <div id="order_item_<?php echo $_item->getId() ?>_title"
+         class="product-title">
+        <?php echo $block->escapeHtml($_item->getName()) ?>
+    </div>
+
+    <div class="product-sku-block">
+        <span><?php echo __('SKU') ?>:</span> <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))); ?>
+    </div>
+
     <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">
-        <?php foreach ($block->getOrderOptions() as $_option): ?>
-            <dt><?php echo $_option['label'] ?></dt>
-            <dd>
-            <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
-                <?php echo $block->getCustomizedOptionValue($_option); ?>
-            <?php else: ?>
-                <?php $_option = $block->getFormattedOption($_option['value']); ?>
-                <?php echo $_option['value']; ?><?php if (isset($_option['remainder']) && $_option['remainder']): ?><span id="<?php echo $_dots = 'dots' . uniqid()?>"> ...</span><span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_option['remainder'] ?></span>
-                    <script>
-require(['prototype'], function(){
-
-    $('<?php echo $_id ?>').hide();
-    $('<?php echo $_id ?>').up().observe('mouseover', function(){$('<?php echo $_id ?>').show();});
-    $('<?php echo $_id ?>').up().observe('mouseover', function(){$('<?php echo $_dots?>').hide();});
-    $('<?php echo $_id ?>').up().observe('mouseout',  function(){$('<?php echo $_id ?>').hide();});
-    $('<?php echo $_id ?>').up().observe('mouseout',  function(){$('<?php echo $_dots ?>').show();});
-
-});
-</script>
-                <?php endif; ?>
-            <?php endif; ?>
-            </dd>
-        <?php endforeach; ?>
+            <?php foreach ($block->getOrderOptions() as $_option): ?>
+                <dt><?php echo $_option['label'] ?>:</dt>
+                <dd>
+                    <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
+                        <?php echo $block->getCustomizedOptionValue($_option); ?>
+                    <?php else: ?>
+                        <?php $_option = $block->getFormattedOption($_option['value']); ?>
+                        <?php echo $_option['value']; ?><?php if (isset($_option['remainder']) && $_option['remainder']): ?><span id="<?php echo $_dots = 'dots' . uniqid()?>"> ...</span><span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_option['remainder'] ?></span>
+                            <script>
+                                require(['prototype'], function() {
+                                    $('<?php echo $_id ?>').hide();
+                                    $('<?php echo $_id ?>').up().observe('mouseover', function(){$('<?php echo $_id ?>').show();});
+                                    $('<?php echo $_id ?>').up().observe('mouseover', function(){$('<?php echo $_dots?>').hide();});
+                                    $('<?php echo $_id ?>').up().observe('mouseout',  function(){$('<?php echo $_id ?>').hide();});
+                                    $('<?php echo $_id ?>').up().observe('mouseout',  function(){$('<?php echo $_dots ?>').show();});
+                                });
+                            </script>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </dd>
+            <?php endforeach; ?>
         </dl>
     <?php endif; ?>
     <?php echo $block->escapeHtml($_item->getDescription()) ?>

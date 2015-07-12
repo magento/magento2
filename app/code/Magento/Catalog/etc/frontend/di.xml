@@ -42,4 +42,18 @@
         <plugin name="catalog-session-depersonalize"
                 type="Magento\Catalog\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
     </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="compare-products" xsi:type="string">Magento\Catalog\CustomerData\CompareProducts</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
+        <arguments>
+            <argument name="instancesByType" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Helper\Product\Configuration</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

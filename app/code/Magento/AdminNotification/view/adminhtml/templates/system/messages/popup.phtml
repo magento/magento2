@@ -9,7 +9,7 @@
 ?>
 <?php /** @var $block \Magento\AdminNotification\Block\System\Messages\UnreadMessagePopup */ ?>
 
-<div id="system_messages_list" class="admin__scope" title="<?php echo $block->escapeHtml($block->getPopupTitle()); ?>">
+<div id="system_messages_list" title="<?php echo $block->escapeHtml($block->getPopupTitle()); ?>">
     <ul class="message-system-list">
         <?php foreach ($block->getUnreadMessages() as $message): ?>
             <li class="message message-warning <?php echo $block->getItemClass($message);?>">
@@ -31,6 +31,7 @@ require([
             resizable: false,
             width: '75%',
             modal: true,
+            minHeight: '0',
             dialogClass: 'ui-popup-message',
             position: {
                 my: 'left+12.5% top',

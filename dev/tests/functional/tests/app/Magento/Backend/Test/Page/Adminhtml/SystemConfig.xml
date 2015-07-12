@@ -9,6 +9,6 @@
   <page name="SystemConfig" area="Adminhtml" mca="admin/system_config" module="Magento_Backend">
     <block name="pageActions" class="Magento\Backend\Test\Block\System\Config\PageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="form" class="Magento\Backend\Test\Block\System\Config\Form" locator="#config-edit-form" strategy="css selector"/>
-    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>
+    <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages" strategy="css selector"/>
   </page>
 </config>

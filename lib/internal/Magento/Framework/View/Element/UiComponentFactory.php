@@ -6,9 +6,12 @@
 namespace Magento\Framework\View\Element;
 
 use Magento\Framework\Object;
-use Magento\Framework\View\Element\UiComponent\Context as RenderContext;
-use Magento\Framework\View\LayoutFactory;
-use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
+use Magento\Framework\View\Element\UiComponent\ContextFactory;
 
 /**
  * Class UiComponentFactory
@@ -16,172 +19,164 @@ use Magento\Framework\View\LayoutInterface;
 class UiComponentFactory extends Object
 {
     /**
-     * Ui element view
+     * Object manager
      *
-     * @var UiComponentInterface
+     * @var ObjectManagerInterface
      */
-    protected $view;
+    protected $objectManager;
 
     /**
-     * Render context
+     * UI component manager
      *
-     * @var RenderContext
+     * @var ManagerInterface
      */
-    protected $renderContext;
+    protected $componentManager;
 
     /**
-     * Layout Interface
+     * Argument interpreter
      *
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var InterpreterInterface
      */
-    protected $layoutFactory;
+    protected $argumentInterpreter;
 
     /**
-     * @var LayoutInterface
+     * @var ContextFactory
      */
-    protected $layout;
-
-    /**
-     * @var bool
-     */
-    protected $layoutLoaded = false;
+    protected $contextFactory;
 
     /**
      * Constructor
      *
-     * @param RenderContext $renderContext
-     * @param LayoutFactory $layoutFactory
+     * @param ObjectManagerInterface $objectManager
+     * @param ManagerInterface $componentManager
+     * @param InterpreterInterface $argumentInterpreter
+     * @param ContextFactory $contextFactory
      * @param array $data
      */
     public function __construct(
-        RenderContext $renderContext,
-        LayoutFactory $layoutFactory,
+        ObjectManagerInterface $objectManager,
+        ManagerInterface $componentManager,
+        InterpreterInterface $argumentInterpreter,
+        ContextFactory $contextFactory,
         array $data = []
     ) {
-        $this->renderContext = $renderContext;
-        $this->renderContext->setRender($this);
-        $this->layoutFactory = $layoutFactory;
+        $this->objectManager = $objectManager;
+        $this->componentManager = $componentManager;
+        $this->argumentInterpreter = $argumentInterpreter;
+        $this->contextFactory = $contextFactory;
         parent::__construct($data);
     }
 
     /**
-     * Get component name
+     * Create child components
      *
-     * @return string
+     * @param array $bundleComponents
+     * @param ContextInterface $renderContext
+     * @param string $identifier
+     * @return UiComponentInterface
      */
-    public function getComponent()
-    {
-        return $this->getData('configuration/component');
-    }
-
-    /**
-     * Get layout handle
-     *
-     * @return string
-     */
-    public function getLayoutHandle()
-    {
-        return $this->getData('configuration/name');
-    }
-
-    /**
-     * @param LayoutInterface $layout
-     * @return void
-     */
-    public function setLayout(LayoutInterface $layout)
-    {
-        if (!$this->renderContext->getPageLayout()) {
-            $this->renderContext->setPageLayout($layout);
+    protected function createChildComponent(
+        array $bundleComponents,
+        ContextInterface $renderContext,
+        $identifier
+    ) {
+        list($className, $arguments) = $this->argumentsResolver($identifier, $bundleComponents);
+        if (isset($arguments['data']['disabled']) && $arguments['data']['disabled'] === 'true') {
+            return null;
         }
+        $components = [];
+        foreach ($bundleComponents['children'] as $childrenIdentifier => $childrenData) {
+            $children = $this->createChildComponent(
+                $childrenData,
+                $renderContext,
+                $childrenIdentifier
+            );
+            $components[$childrenIdentifier] = $children;
+        }
+        $components = array_filter($components);
+        $arguments['components'] = $components;
+        if (!isset($arguments['context'])) {
+            $arguments['context'] = $renderContext;
+        }
+
+        return $this->objectManager->create($className, $arguments);
     }
 
     /**
-     * Create Ui Component instance
+     * Resolve arguments
      *
-     * @param string $componentName
-     * @param string $handleName
+     * @param string $identifier
+     * @param array $componentData
+     * @return array
+     */
+    protected function argumentsResolver($identifier, array $componentData)
+    {
+        $attributes = $componentData[ManagerInterface::COMPONENT_ATTRIBUTES_KEY];
+        $className = $attributes['class'];
+        unset($attributes['class']);
+        $arguments = $componentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY];
+
+        if (!isset($arguments['data'])) {
+            $arguments['data'] = [];
+        }
+
+        $arguments['data'] = array_merge($arguments['data'], ['name' => $identifier], $attributes);
+        return [$className, $arguments];
+    }
+
+    /**
+     * Create component object
+     *
+     * @param string $identifier
+     * @param string $name
      * @param array $arguments
      * @return UiComponentInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function createUiComponent($componentName, $handleName, array $arguments = [])
+    public function create($identifier, $name = null, array $arguments = [])
     {
-        if (!$this->layout) {
-            $this->renderContext->setNamespace($handleName);
-            $this->layout = $this->layoutFactory->create();
-            $this->renderContext->setLayout($this->layout);
-            $this->layout->getUpdate()->addHandle('ui_components');
-            $this->layout->getUpdate()->addHandle($handleName);
-            $this->loadLayout();
-            $this->layoutLoaded = true;
-        }
-
-        $view = $this->getUiElementView($componentName);
-        $view->update($arguments);
-        if ($this->layoutLoaded) {
-            $this->prepare($view);
-        }
-
-        return $view;
-    }
-
-    /**
-     * Prepare UI Component data
-     *
-     * @param object $view
-     * @return void
-     */
-    protected function prepare($view)
-    {
-        if ($view instanceof UiComponentInterface) {
-            $view->prepare();
-        }
-        foreach ($view->getLayout()->getChildNames($view->getNameInLayout()) as $childAlias) {
-            $name = $view->getLayout()->getChildName($view->getNameInLayout(), $childAlias);
-            if ($view->getLayout()->isContainer($name)) {
-                foreach ($view->getLayout()->getChildNames($name) as $childName) {
-                    $child = $view->getLayout()->getBlock($childName);
-                    $this->prepare($child);
-                }
-            } else {
-                $child = $view->getChildBlock($childAlias);
-                if ($child) {
-                    $this->prepare($child);
-                }
+        if ($name === null) {
+            $bundleComponents = $this->componentManager->prepareData($identifier)->getData($identifier);
+            if (empty($bundleComponents)) {
+                throw new LocalizedException(new \Magento\Framework\Phrase('You use an empty set.'));
             }
-        }
-    }
-
-    /**
-     * Get UI Element View
-     *
-     * @param string $uiElementName
-     * @return UiComponentInterface
-     * @throws \InvalidArgumentException
-     */
-    public function getUiElementView($uiElementName)
-    {
-        /** @var UiComponentInterface $view */
-        $view = $this->layout->getBlock($uiElementName);
-        if (!$view instanceof UiComponentInterface) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'UI Element "%s" must implement \Magento\Framework\View\Element\UiComponentInterface',
-                    $uiElementName
-                )
+            list($className, $componentArguments) = $this->argumentsResolver(
+                $identifier,
+                $bundleComponents[$identifier]
             );
-        }
-        return $view;
-    }
+            $componentArguments = array_merge($componentArguments, $arguments);
+            if (!isset($componentArguments['context'])) {
+                $componentArguments['context'] = $this->contextFactory->create([
+                    'namespace' => $identifier
+                ]);
+            }
+            $componentContext = $componentArguments['context'];
+            $components = [];
+            foreach ($bundleComponents[$identifier]['children'] as $childrenIdentifier => $childrenData) {
+                $children = $this->createChildComponent(
+                    $childrenData,
+                    $componentContext,
+                    $childrenIdentifier
+                );
+                $components[$childrenIdentifier] = $children;
+            }
+            $components = array_filter($components);
+            $componentArguments['components'] = $components;
 
-    /**
-     * Load layout
-     *
-     * @return void
-     */
-    protected function loadLayout()
-    {
-        $this->layout->getUpdate()->load();
-        $this->layout->generateXml();
-        $this->layout->generateElements();
+            /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
+            $component = $this->objectManager->create($className, array_merge($componentArguments, $arguments));
+
+            return $component;
+        } else {
+            $defaultData = $this->componentManager->createRawComponentData($name, true);
+            list($className, $componentArguments) = $this->argumentsResolver($identifier, $defaultData);
+            /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
+            $component = $this->objectManager->create(
+                $className,
+                array_merge_recursive($componentArguments, $arguments)
+            );
+
+            return $component;
+        }
     }
 }

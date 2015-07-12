@@ -9,20 +9,19 @@ namespace Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid;
 use Magento\Mtf\Block\Form;
 
 /**
- * Class TokensPopup
- * Integration tokens popup container
+ * Integration tokens popup container.
  */
 class TokensPopup extends Form
 {
     /**
-     * Selector for "Done" button
+     * Selector for "Done" button.
      *
      * @var string
      */
-    protected $doneButtonSelector = '.primary[role="button"]';
+    protected $doneButtonSelector = '.action-primary[role="button"]';
 
     /**
-     * Click Done button on Integration tokens popup window
+     * Click Done button on Integration tokens popup window.
      *
      * @return void
      */

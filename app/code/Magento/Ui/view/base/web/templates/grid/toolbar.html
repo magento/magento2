@@ -1,0 +1,24 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="admin__data-grid-header">
+    <div class="admin__data-grid-header-row">
+        <div class="admin__data-grid-actions-wrap">
+            <!-- ko foreach: getRegion('dataGridActions') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+        </div>
+        <!-- ko foreach: getRegion('dataGridFilters') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+    </div>
+    <div class="admin__data-grid-header-row row row-gutter">
+        <!-- ko foreach: getRegion('bottom') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+    </div>
+</div>

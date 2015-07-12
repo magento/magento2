@@ -8,7 +8,7 @@
 
 ?>
 <!-- TODO: refactor form styles and js -->
-<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog admin__scope" id="rollback-warning" style="display: none;">
+<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="rollback-warning" style="display: none;">
     <div class="popup">
         <div class="popup-inner">
             <div class="popup-header">
@@ -17,8 +17,8 @@
             <div class="popup-content">
                 <div class="messages">
                     <div class="message message-warning">
-                        <p><?php echo __('Any data created since the backup was made will be lost including admin users, customers and orders.')?></p>
-                        <p><?php echo __('Are you sure you want to proceed?')?></p>
+                        <p><?php echo __('You will lose any data created since the backup was made, including admin users, customers and orders.')?></p>
+                        <p><?php echo __('Are you sure you want to continue?')?></p>
                     </div>
                 </div>
 
@@ -31,7 +31,7 @@
     </div>
 </div>
 
-<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog admin__scope" id="backup-warning" style="display: none;">
+<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="backup-warning" style="display: none;">
     <div class="popup">
         <div class="popup-inner">
             <div class="popup-header">
@@ -40,7 +40,7 @@
             <div class="popup-content">
                 <div class="messages">
                     <div class="message message-warning">
-                        <?php echo __("It will take time to create a backup. ")?><?php echo __('Please wait until the action ends.')?><br>
+                        <?php echo __("It will take time to create a backup. ")?><?php echo __('Please wait while we create your backup.')?><br>
                         <?php echo __('Are you sure you want to continue?')?>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
     </div>
 </div>
 
-<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog admin__scope" id="backup-options" style="display: none;">
+<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="backup-options" style="display: none;">
     <div class="popup">
         <div class="popup-inner">
             <div class="popup-header">
@@ -103,7 +103,7 @@
     </div>
  </div>
 
-<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog admin__scope" id="rollback-request-password" style="display: none;">
+<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="rollback-request-password" style="display: none;">
     <div class="popup popup-notice">
         <div class="popup-inner">
             <div class="popup-header">
@@ -115,7 +115,7 @@
                     <div class="message message-warning">
                         <?php echo __('Please enter the password to confirm rollback.')?><br>
                         <?php echo __('This action cannot be undone.')?>
-                        <p><?php echo __('Are you sure you want to proceed?')?></p>
+                        <p><?php echo __('Are you sure you want to continue?')?></p>
                     </div>
                 </div>
                 <form action="" method="post" id="rollback-form" class="form-inline">

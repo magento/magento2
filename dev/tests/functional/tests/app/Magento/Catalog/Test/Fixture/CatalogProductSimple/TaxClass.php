@@ -9,7 +9,6 @@ namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Tax\Test\Fixture\TaxClass as FixtureTaxClass;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -89,7 +88,7 @@ class TaxClass implements FixtureInterface
     protected function setTaxClassId($taxClassName)
     {
         $url = $_ENV['app_backend_url'] . 'tax/rule/new/';
-        $config = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->create('Magento\Mtf\Config');
+        $config = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->create('Magento\Mtf\Config\DataInterface');
         $curl = new BackendDecorator(new CurlTransport(), $config);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], []);

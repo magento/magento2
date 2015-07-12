@@ -170,6 +170,10 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
             $priceKey = 'price';
         }
 
+        $cgi = ($customerGroupId === 'all'
+            ? $this->groupManagement->getAllCustomersGroup()->getId()
+            : $customerGroupId);
+
         $prices = [];
         foreach ($product->getData('tier_price') as $price) {
             if ((is_numeric($customerGroupId) && intval($price['cust_group']) === intval($customerGroupId))
@@ -178,7 +182,8 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
                 /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
                 $tierPrice = $this->priceFactory->create();
                 $tierPrice->setValue($price[$priceKey])
-                    ->setQty($price['price_qty']);
+                    ->setQty($price['price_qty'])
+                    ->setCustomerGroupId($cgi);
                 $prices[] = $tierPrice;
             }
         }

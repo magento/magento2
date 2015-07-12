@@ -70,7 +70,7 @@ class Block extends \Magento\Framework\View\Element\Template implements \Magento
             /** @var \Magento\Cms\Model\Block $block */
             $block = $this->_blockFactory->create();
             $block->setStoreId($storeId)->load($blockId);
-            if ($block->getIsActive()) {
+            if ($block->isActive()) {
                 $this->setText(
                     $this->_filterProvider->getBlockFilter()->setStoreId($storeId)->filter($block->getContent())
                 );

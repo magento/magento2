@@ -85,7 +85,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     );
                 }
             },
-            $files->getPhpFiles(false, true, false)
+            $files->getPhpFiles(false, true, false, true, false)
         );
     }
 

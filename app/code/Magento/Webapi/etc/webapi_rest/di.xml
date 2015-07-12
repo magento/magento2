@@ -33,32 +33,6 @@
     <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Webapi\Controller\Rest" />
     <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed" />
     <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false" />
-    <type name="Magento\Framework\Webapi\Rest\Response\RendererFactory">
-        <arguments>
-            <argument name="renders" xsi:type="array">
-                <item name="default" xsi:type="array">
-                    <item name="type" xsi:type="string">*/*</item>
-                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Response\Renderer\Json</item>
-                </item>
-                <item name="application_json" xsi:type="array">
-                    <item name="type" xsi:type="string">application/json</item>
-                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Response\Renderer\Json</item>
-                </item>
-                <item name="text_xml" xsi:type="array">
-                    <item name="type" xsi:type="string">text/xml</item>
-                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Response\Renderer\Xml</item>
-                </item>
-                <item name="application_xml" xsi:type="array">
-                    <item name="type" xsi:type="string">application/xml</item>
-                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Response\Renderer\Xml</item>
-                </item>
-                <item name="application_xhtml_xml" xsi:type="array">
-                    <item name="type" xsi:type="string">application/xhtml+xml</item>
-                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Response\Renderer\Xml</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Webapi\Controller\Rest">
         <arguments>
             <argument name="request" xsi:type="object">Magento\Framework\Webapi\Rest\Request\Proxy</argument>
@@ -71,4 +45,25 @@
     <type name="Magento\Framework\Authorization">
         <plugin name="guestAuthorization" type="Magento\Webapi\Model\Plugin\GuestAuthorization" />
     </type>
+
+    <!-- Configuration to check that the permissions are checked on fields -->
+    <virtualType name="Magento\Framework\Reflection\ExtensionAttributesProcessorPermissionChecked" type="Magento\Framework\Reflection\ExtensionAttributesProcessor">
+        <arguments>
+            <argument name="isPermissionChecked" xsi:type="boolean">true</argument>
+            <argument name="dataObjectProcessor" xsi:type="object">Magento\Framework\Reflection\DataObjectProcessor\Proxy</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\Reflection\DataObjectProcessorPermissionChecked" type="Magento\Framework\Reflection\DataObjectProcessor">
+        <arguments>
+            <argument name="extensionAttributesProcessor" xsi:type="object">Magento\Framework\Reflection\ExtensionAttributesProcessorPermissionChecked</argument>
+            <argument name="customAttributesProcessor" xsi:type="object">Magento\Framework\Reflection\CustomAttributesProcessor\Proxy</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\Webapi\ServiceOutputProcessor">
+        <arguments>
+            <argument name="dataObjectProcessor" xsi:type="object">Magento\Framework\Reflection\DataObjectProcessorPermissionChecked</argument>
+        </arguments>
+    </type>
+    <!-- End of configuration to check that permissions are checked on fields -->
 </config>

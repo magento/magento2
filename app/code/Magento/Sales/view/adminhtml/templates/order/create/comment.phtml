@@ -7,11 +7,19 @@
 // @codingStandardsIgnoreFile
 
  ?>
-<!--<h4 class="icon-head fieldset-legend <?php echo $block->getHeaderCssClass() ?>"><?php echo $block->getHeaderText() ?></h4>-->
-<label for="order-comment"><?php echo __('Order Comments') ?></label><br />
-<textarea style="width:98%; height:8em;" id="order-comment" name="order[comment][customer_note]" rows="2" cols="15"><?php echo $block->getCommentNote() ?></textarea>
+
+<?php /* <h4 class="icon-head fieldset-legend <?php echo $block->getHeaderCssClass() ?>"><?php echo $block->getHeaderText() ?></h4> */ ?>
+<div class="admin__field field-comment">
+    <label for="order-comment" class="admin__field-label"><span><?php echo __('Order Comments') ?></span></label>
+    <div class="admin__field-control">
+        <textarea
+            id="order-comment"
+            name="order[comment][customer_note]"
+            class="admin__control-textarea"><?php echo $block->getCommentNote() ?></textarea>
+    </div>
+</div>
 <script>
-	require(["Magento_Sales/order/create/form"], function(){
-		order.commentFieldsBind('order-comment')
-	});
+    require(["Magento_Sales/order/create/form"], function(){
+        order.commentFieldsBind('order-comment')
+    });
 </script>

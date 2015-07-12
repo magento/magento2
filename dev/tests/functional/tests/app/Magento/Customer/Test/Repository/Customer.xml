@@ -55,17 +55,6 @@
             <field name="gender" xsi:type="string">Male</field>
         </dataset>
 
-        <dataset name="johndoe_with_balance">
-            <field name="firstname" xsi:type="string">John</field>
-            <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
-            <field name="password" xsi:type="string">123123q</field>
-            <field name="password_confirmation" xsi:type="string">123123q</field>
-            <field name="dob" xsi:type="string">01/01/1990</field>
-            <field name="gender" xsi:type="string">Male</field>
-            <field name="amount_delta" xsi:type="string">501</field>
-        </dataset>
-
         <dataset name="defaultBackend">
             <field name="website_id" xsi:type="string">Main Website</field>
             <field name="firstname" xsi:type="string">John</field>
@@ -85,22 +74,6 @@
             <field name="address" xsi:type="array">
                 <item name="presets" xsi:type="string">US_address</item>
             </field>
-        </dataset>
-
-        <dataset name="customer_US">
-            <field name="firstname" xsi:type="string">John</field>
-            <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
-            <field name="password" xsi:type="string">123123q</field>
-            <field name="password_confirmation" xsi:type="string">123123q</field>
-        </dataset>
-
-        <dataset name="customer_UK">
-            <field name="firstname" xsi:type="string">Jane</field>
-            <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
-            <field name="password" xsi:type="string">123123q</field>
-            <field name="password_confirmation" xsi:type="string">123123q</field>
         </dataset>
 
         <dataset name="johndoe_unique">
@@ -155,7 +128,7 @@
             <field name="password" xsi:type="string">123123q</field>
             <field name="password_confirmation" xsi:type="string">123123q</field>
             <field name="address" xsi:type="array">
-                <item name="presets" xsi:type="string">address_US_1</item>
+                <item name="presets" xsi:type="string">US_address_1</item>
             </field>
         </dataset>
 
@@ -169,29 +142,18 @@
             <field name="password" xsi:type="string">123123q</field>
             <field name="password_confirmation" xsi:type="string">123123q</field>
             <field name="address" xsi:type="array">
-                <item name="presets" xsi:type="string">address_US_1</item>
+                <item name="presets" xsi:type="string">US_address_1</item>
             </field>
         </dataset>
 
-        <dataset name="customer_US_1">
+        <dataset name="customer_US">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe%isolation%</field>
             <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
             <field name="password" xsi:type="string">123123q</field>
             <field name="password_confirmation" xsi:type="string">123123q</field>
             <field name="address" xsi:type="array">
-                <item name="presets" xsi:type="string">address_US_1</item>
-            </field>
-        </dataset>
-
-        <dataset name="customer_UK_1">
-            <field name="firstname" xsi:type="string">John</field>
-            <field name="lastname" xsi:type="string">Doe%isolation%</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
-            <field name="password" xsi:type="string">123123q</field>
-            <field name="password_confirmation" xsi:type="string">123123q</field>
-            <field name="address" xsi:type="array">
-                <item name="presets" xsi:type="string">address_UK</item>
+                <item name="presets" xsi:type="string">US_address_1</item>
             </field>
         </dataset>
 
@@ -202,7 +164,18 @@
             <field name="password" xsi:type="string">123123q</field>
             <field name="password_confirmation" xsi:type="string">123123q</field>
             <field name="address" xsi:type="array">
-                <item name="presets" xsi:type="string">address_UK_default_billing_address</item>
+                <item name="presets" xsi:type="string">UK_address_default_billing</item>
+            </field>
+        </dataset>
+
+        <dataset name="customer_UK_address_with_VAT">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe%isolation%</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="address" xsi:type="array">
+                <item name="presets" xsi:type="string">UK_address_with_VAT</item>
             </field>
         </dataset>
     </repository>

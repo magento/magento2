@@ -6,7 +6,10 @@
 
 namespace Magento\Catalog\Api\Data;
 
-interface ProductCustomOptionInterface
+/**
+ * @api
+ */
+interface ProductCustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Get product SKU
@@ -198,4 +201,21 @@ interface ProductCustomOptionInterface
      * @return $this
      */
     public function setValues(array $values = null);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
+    );
 }

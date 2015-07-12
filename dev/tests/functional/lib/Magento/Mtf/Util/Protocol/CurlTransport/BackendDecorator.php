@@ -6,7 +6,7 @@
 
 namespace Magento\Mtf\Util\Protocol\CurlTransport;
 
-use Magento\Mtf\Config;
+use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
@@ -40,7 +40,7 @@ class BackendDecorator implements CurlInterface
     /**
      * System config
      *
-     * @var Config
+     * @var DataInterface
      */
     protected $configuration;
 
@@ -48,9 +48,9 @@ class BackendDecorator implements CurlInterface
      * Constructor
      *
      * @param CurlTransport $transport
-     * @param Config $configuration
+     * @param DataInterface $configuration
      */
-    public function __construct(CurlTransport $transport, Config $configuration)
+    public function __construct(CurlTransport $transport, DataInterface $configuration)
     {
         $this->transport = $transport;
         $this->configuration = $configuration;
@@ -65,11 +65,10 @@ class BackendDecorator implements CurlInterface
      */
     protected function authorize()
     {
-        $url = $_ENV['app_backend_url'] .
-            $this->configuration->getParameter('application/backendLoginUrl');
+        $url = $_ENV['app_backend_url'] . $this->configuration->get('application/0/backendLoginUrl/0/value');
         $data = [
-            'login[username]' => $this->configuration->getParameter('application/backendLogin'),
-            'login[password]' => $this->configuration->getParameter('application/backendPassword'),
+            'login[username]' => $this->configuration->get('application/0/backendLogin/0/value'),
+            'login[password]' => $this->configuration->get('application/0/backendPassword/0/value'),
         ];
         $this->transport->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $this->read();

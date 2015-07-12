@@ -11,6 +11,7 @@ namespace Magento\Sales\Api\Data;
  * An order is a document that a web store issues to a customer. Magento generates a sales order that lists the product
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
+ * @api
  */
 interface OrderAddressSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -27,5 +28,5 @@ interface OrderAddressSearchResultInterface extends \Magento\Framework\Api\Searc
      * @param \Magento\Sales\Api\Data\OrderAddressInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

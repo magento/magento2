@@ -51,8 +51,7 @@
 }
 
 .wrap-words() {
-    word-break: break-all;
-    word-break: break-word;
+    word-wrap: break-word;
     .hyphens();
 }
 
@@ -379,7 +378,7 @@
         .css(margin, 0 0 @indent__s);
         .css(line-height, @line-height__base);
         .css(padding, @indent__s);
-        word-break: break-all;
+        word-wrap: break-word;
         word-wrap: break-word;
         code {
             padding: 0;

@@ -6,6 +6,10 @@
  */
 /*jshint browser:true*/
 /*global alert*/
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 define([
     'jquery',
     'mage/template',
@@ -117,7 +121,7 @@ define([
             var methods = this.element.find('[name^="payment["]');
 
             if (methods.length === 0) {
-                alert($.mage.__("We can't complete your order because you don't have a payment method available."));
+                alert($.mage.__('We can\'t complete your order because you don\'t have a payment method set up.'));
 
                 return false;
             }
@@ -128,7 +132,7 @@ define([
                 return true;
             }
 
-            alert($.mage.__('Please specify payment method.'));
+            alert($.mage.__('Please choose a payment method.'));
 
             return false;
         },

@@ -58,7 +58,7 @@
                 </div>
                 <div class="box-content">
                     <?php $_shipping = $_invoice->getShippingAddress() ?>
-                    <address><?php echo $_shipping->format('html') ?></address>
+                    <address><?php echo $block->formatAddress($_shipping, 'html') ?></address>
                 </div>
             </div>
 
@@ -81,7 +81,7 @@
                 </div>
                 <div class="box-content">
                     <?php $_billing = $_invoice->getbillingAddress() ?>
-                    <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+                    <address><?php echo $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
                 </div>
             </div>
 

@@ -21,7 +21,7 @@
 
                 <?php foreach ($rates as $rate): ?>
                 <tr class="summary-details-<?php echo $taxIter; ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
-                    <td class="a-right" style="<?php echo $block->getTotal()->getStyle() ?>" colspan="<?php echo $block->getColspan(); ?>">
+                    <td class="admin__total-mark" style="<?php echo $block->getTotal()->getStyle() ?>" colspan="<?php echo $block->getColspan(); ?>">
                         <?php echo $block->escapeHtml($rate['title']); ?>
                         <?php if (!is_null($rate['percent'])): ?>
                             (<?php echo (float)$rate['percent']; ?>%)
@@ -29,7 +29,7 @@
                         <br />
                     </td>
                     <?php if ($isFirst): ?>
-                        <td style="<?php echo $block->getTotal()->getStyle() ?>" class="a-right" rowspan="<?php echo count($rates); ?>">
+                        <td style="<?php echo $block->getTotal()->getStyle() ?>" class="admin__total-amount" rowspan="<?php echo count($rates); ?>">
                             <?php echo $block->formatPrice($amount); ?>
                         </td>
                     <?php endif; ?>
@@ -41,12 +41,12 @@
 <?php endif;?>
 <?php $class = "{$block->getTotal()->getCode()} " . ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() ? 'summary-total' : ''); ?>
 <tr<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?> onclick="expandDetails(this, '.summary-details-<?php echo $taxIter;?>')"<?php endif; ?> class="<?php echo $class;?> row-totals">
-    <td style="<?php echo $block->getTotal()->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getTotal()->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
             <div class="summary-collapse"><?php echo $block->getTotal()->getTitle() ?></div>
         <?php else: ?>
             <?php echo $block->getTotal()->getTitle() ?>
         <?php endif;?>
     </td>
-    <td style="<?php echo $block->getTotal()->getStyle() ?>" class="a-right"><?php echo $block->formatPrice($block->getTotal()->getValue()) ?></td>
+    <td style="<?php echo $block->getTotal()->getStyle() ?>" class="admin__total-amount"><?php echo $block->formatPrice($block->getTotal()->getValue()) ?></td>
 </tr>

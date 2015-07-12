@@ -23,7 +23,7 @@ class AssertAdvancedSearchProductsResult extends AbstractConstraint
     /**
      * Text for error messages
      */
-    const ERROR_MESSAGE = 'No items were found using the following search criteria.';
+    const ERROR_MESSAGE = 'We can\'t find any items matching these search criteria.';
 
     /**
      * Search results page
@@ -69,9 +69,9 @@ class AssertAdvancedSearchProductsResult extends AbstractConstraint
         foreach ($searchResult as $sku => $product) {
             /** @var CatalogProductSimple $product */
             $name = $product->getName();
-            $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($product->getName());
+            $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
             while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage()) {
-                $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($product->getName());
+                $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
             }
             if (!$isProductVisible) {
                 $errors[] = '- failed to find the product (SKU - "'

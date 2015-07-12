@@ -22,10 +22,6 @@ class View extends \Magento\Sales\Controller\Adminhtml\Order
             try {
                 $resultPage = $this->_initAction();
                 $resultPage->getConfig()->getTitle()->prepend(__('Orders'));
-            } catch (\Magento\Framework\App\Action\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
-                $resultRedirect->setPath('sales/order/index');
-                return $resultRedirect;
             } catch (\Exception $e) {
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->messageManager->addError(__('Exception occurred during order load'));
@@ -37,5 +33,13 @@ class View extends \Magento\Sales\Controller\Adminhtml\Order
         }
         $resultRedirect->setPath('sales/*/');
         return $resultRedirect;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::actions_view');
     }
 }

@@ -5,24 +5,28 @@
  * See COPYING.txt for license details.
  */
 -->
-<mapping strict="1">
-    <wrapper>shipping</wrapper>
+<mapping strict="0">
+    <wrapper>shippingAddress</wrapper>
     <fields>
+        <email>
+            <selector>#customer-email</selector>
+        </email>
         <firstname />
         <lastname />
-        <email />
         <company />
         <street>
-            <selector>[id='billing:street1']</selector>
+            <selector>[name='shippingAddress[street][0]']</selector>
         </street>
         <city />
         <region_id>
             <input>select</input>
         </region_id>
-        <postcode />
         <country_id>
             <input>select</input>
         </country_id>
         <telephone />
+        <postcode>
+            <selector>[name='shippingAddress[postcode]']</selector>
+        </postcode>
     </fields>
 </mapping>

@@ -12,16 +12,27 @@ use Magento\Framework\App\State;
  */
 class Oyejorge implements \Magento\Framework\Css\PreProcessor\AdapterInterface
 {
+    const ERROR_MESSAGE_PREFIX = 'CSS compilation from LESS ';
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
     /**
      * @var \Magento\Framework\App\State
      */
     protected $appState;
 
     /**
-     * @param \Magento\Framework\App\State $appState
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param State $appState
      */
-    public function __construct(State $appState)
-    {
+    public function __construct(
+        \Psr\Log\LoggerInterface $logger,
+        State $appState
+    ) {
+        $this->logger = $logger;
         $this->appState = $appState;
     }
 
@@ -32,8 +43,14 @@ class Oyejorge implements \Magento\Framework\Css\PreProcessor\AdapterInterface
     public function process($sourceFilePath)
     {
         $options = ['relativeUrls' => false, 'compress' => $this->appState->getMode() !== State::MODE_DEVELOPER];
-        $parser = new \Less_Parser($options);
-        $parser->parseFile($sourceFilePath, '');
-        return $parser->getCss();
+        try {
+            $parser = new \Less_Parser($options);
+            $parser->parseFile($sourceFilePath, '');
+            return $parser->getCss();
+        } catch (\Exception $e) {
+            $errorMessage = self::ERROR_MESSAGE_PREFIX . $e->getMessage();
+            $this->logger->critical($errorMessage);
+            return $errorMessage;
+        }
     }
 }

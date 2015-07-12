@@ -14,14 +14,14 @@ use Magento\Framework\View\Layout\ProcessorInterface;
 
 /**
  * Class BuilderTest
- * covers \Magento\Framework\View\Layout\Builder
+ * @covers \Magento\Framework\View\Layout\Builder
  */
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     const CLASS_NAME = 'Magento\Framework\View\Layout\Builder';
 
     /**
-     * covers \Magento\Framework\View\Layout\Builder::build()
+     * @covers \Magento\Framework\View\Layout\Builder::build()
      */
     public function testBuild()
     {

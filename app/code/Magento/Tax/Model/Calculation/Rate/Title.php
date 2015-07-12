@@ -17,9 +17,16 @@ namespace Magento\Tax\Model\Calculation\Rate;
 
 use Magento\Tax\Api\Data\TaxRateTitleInterface;
 
-class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Tax\Api\Data\TaxRateTitleInterface
+class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateTitleInterface
 {
+    /**#@+
+     *
+     * Tax rate field key.
+     */
+    const KEY_STORE_ID = 'store_id';
+    const KEY_VALUE_ID = 'value';
+    /**#@-*/
+
     /**
      * @return void
      */

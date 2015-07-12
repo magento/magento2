@@ -33,7 +33,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\User\Model\User */
     protected $_userMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Locale\Validator */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Validator\locale */
     protected $_validatorMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Locale\Manager */
@@ -80,7 +80,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
 
-        $this->_validatorMock = $this->getMockBuilder('Magento\Framework\Locale\Validator')
+        $this->_validatorMock = $this->getMockBuilder('Magento\Framework\Validator\Locale')
             ->disableOriginalConstructor()
             ->setMethods(['isValid'])
             ->getMock();
@@ -94,35 +94,29 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->_requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->_responseMock));
-        $contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->_objectManagerMock));
-        $contextMock->expects($this->any())
-            ->method('getFrontController')
-            ->will($this->returnValue($frontControllerMock));
-
-        $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($this->_helperMock));
-        $contextMock->expects($this->any())
-            ->method('getMessageManager')
-            ->will($this->returnValue($this->_messagesMock));
-        $contextMock->expects($this->any())->method('getTranslator')->will($this->returnValue($this->_translatorMock));
-
-        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultRedirectFactory->expects($this->atLeastOnce())
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultFactory->expects($this->atLeastOnce())
             ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
 
-        $args = ['context' => $contextMock, 'resultRedirectFactory' => $resultRedirectFactory];
+        $contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_responseMock);
+        $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManagerMock);
+        $contextMock->expects($this->any())->method('getFrontController')->willReturn($frontControllerMock);
+        $contextMock->expects($this->any())->method('getHelper')->willReturn($this->_helperMock);
+        $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->_messagesMock);
+        $contextMock->expects($this->any())->method('getTranslator')->willReturn($this->_translatorMock);
+        $contextMock->expects($this->once())->method('getResultFactory')->willReturn($resultFactory);
+
+        $args = ['context' => $contextMock];
 
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_controller = $testHelper->getObject('Magento\Backend\Controller\Adminhtml\System\Account\Save', $args);
@@ -142,7 +136,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Backend\Block\System\Account\Edit\Form::IDENTITY_VERIFICATION_PASSWORD_FIELD => 'current_password',
         ];
 
-        $testedMessage = 'The account has been saved.';
+        $testedMessage = 'You saved the account.';
 
         $this->_authSessionMock->expects($this->any())->method('getUser')->will($this->returnValue($this->_userMock));
 
@@ -181,7 +175,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-            $this->equalTo('Magento\Framework\Locale\Validator')
+            $this->equalTo('Magento\Framework\Validator\Locale')
         )->will(
             $this->returnValue($this->_validatorMock)
         );

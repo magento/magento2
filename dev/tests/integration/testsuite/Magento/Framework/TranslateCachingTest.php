@@ -6,14 +6,33 @@
 namespace Magento\Framework;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Phrase;
 
 class TranslateCachingTest extends \PHPUnit_Framework_TestCase
 {
-    public static function tearDownAfterClass()
+    /**
+     * @var \Magento\Framework\Phrase\RendererInterface
+     */
+    protected $renderer;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    protected function setUp()
     {
-        $objectManager = Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->renderer = Phrase::getRenderer();
+        Phrase::setRenderer($this->objectManager->get('\Magento\Framework\Phrase\RendererInterface'));
+    }
+
+    protected function tearDown()
+    {
+        Phrase::setRenderer($this->renderer);
+
         /** @var \Magento\Framework\App\Cache\Type\Translate $cache */
-        $cache = $objectManager->get('Magento\Framework\App\Cache\Type\Translate');
+        $cache = $this->objectManager->get('Magento\Framework\App\Cache\Type\Translate');
         $cache->clean();
     }
 
@@ -22,27 +41,26 @@ class TranslateCachingTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadDataCaching()
     {
-        $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Translate $model */
-        $model = $objectManager->get('Magento\Framework\Translate');
+        $model = $this->objectManager->get('Magento\Framework\Translate');
 
         $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND); // this is supposed to cache the fixture
-        $this->assertEquals('Fixture Db Translation', new \Magento\Framework\Phrase('Fixture String'));
+        $this->assertEquals('Fixture Db Translation', new Phrase('Fixture String'));
 
         /** @var \Magento\Translation\Model\Resource\String $translateString */
-        $translateString = $objectManager->create('Magento\Translation\Model\Resource\String');
+        $translateString = $this->objectManager->create('Magento\Translation\Model\Resource\String');
         $translateString->saveTranslate('Fixture String', 'New Db Translation');
 
         $this->assertEquals(
             'Fixture Db Translation',
-            new \Magento\Framework\Phrase('Fixture String'),
+            new Phrase('Fixture String'),
             'Translation is expected to be cached'
         );
 
         $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND, true);
         $this->assertEquals(
             'New Db Translation',
-            new \Magento\Framework\Phrase('Fixture String'),
+            new Phrase('Fixture String'),
             'Forced load should not use cache'
         );
     }

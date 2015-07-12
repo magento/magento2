@@ -11,84 +11,87 @@
 <?php $_order = $_invoice->getOrder() ?>
 <?php echo $block->getChildHtml('order_info') ?>
 
-<?php /* opening div is in app\code\Magento\Sales\view\adminhtml\order\view\info.phtml */?>
-
-<?php if (!$_order->getIsVirtual()): ?>
-<div class="clearfix"> <?php /* if opening div from app\code\Magento\Sales\view\adminhtml\order\view\info.phtml was closed there */?>
-<?php endif; ?>
-
-    <div class="order-payment-method<?php if ($_order->getIsVirtual()): ?> order-payment-method-virtual<?php endif; ?>">
-        <?php /*Billing Address */ ?>
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title">
+<section class="admin__page-section order-view-billing-shipping">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Payment &amp; Shipping Method') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-payment-method<?php if ($_order->getIsVirtual()): ?> order-payment-method-virtual<?php endif; ?> admin__fieldset-wrapper">
+            <?php /*Billing Address */ ?>
+            <div class="admin__page-section-item-title">
                 <span class="title"><?php echo __('Payment Information') ?></span>
             </div>
-            <div><?php echo $block->getChildHtml('order_payment') ?></div>
-            <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
-            <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
-        </div>
-    </div>
-
-    <?php if (!$_order->getIsVirtual()): ?>
-    <div class="order-shipping-address">
-        <?php /*Shipping Address */ ?>
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title">
-                <span class="title"><?php echo __('Shipping Information') ?></span>
+            <div class="admin__page-section-item-content">
+                <div class="order-payment-method-title"><?php echo $block->getChildHtml('order_payment') ?></div>
+                <div class="order-payment-currency">
+                    <?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?>
+                </div>
+                <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
             </div>
-            <div class="shipping-description-wrapper">
-                <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
-                <div class="shipping-description-content">
-                    <?php echo __('Total Shipping Charges'); ?>:
+        </div>
 
-                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
-                        <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
-                    <?php else: ?>
-                        <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
-                    <?php endif; ?>
-                    <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
+        <?php if (!$_order->getIsVirtual()): ?>
+            <div class="admin__page-section-item order-shipping-address">
+                <?php /*Shipping Address */ ?>
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?php echo __('Shipping Information') ?></span>
+                </div>
+                <div class="admin__page-section-item-content shipping-description-wrapper">
+                    <div class="shipping-description-title">
+                        <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
+                    </div>
+                    <div class="shipping-description-content">
+                        <?php echo __('Total Shipping Charges'); ?>:
 
-                    <?php echo $_excl; ?>
-                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                        (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                    <?php endif; ?>
-                    <div><?php echo $block->getChildHtml('shipment_tracking') ?></div>
+                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
+                            <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
+                        <?php else: ?>
+                            <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                        <?php endif; ?>
+                        <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
+
+                        <?php echo $_excl; ?>
+                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                            (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                        <?php endif; ?>
+                        <div><?php echo $block->getChildHtml('shipment_tracking') ?></div>
+                    </div>
                 </div>
             </div>
-        </div>
+        <?php endif; ?>
+
     </div>
-    <?php endif; ?>
+</section>
 
-</div>
-
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Items Invoiced') ?></span>
     </div>
 
-    <div id="invoice_item_container">
+    <div id="invoice_item_container" class="admin__page-section-content">
         <?php echo $block->getChildHtml('invoice_items') ?>
     </div>
-</div>
+</section>
 
-<div class="clearfix">
-    <div class="order-comments-history">
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title">
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Order Total') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-comments-history">
+            <div class="admin__page-section-item-title">
                 <span class="title"><?php echo __('Invoice History') ?></span>
             </div>
-            <fieldset>
+            <div class="admin__page-section-item-content">
                 <?php echo $block->getChildHtml('order_comments') ?>
-            </fieldset>
+            </div>
         </div>
-    </div>
 
-    <div class="order-totals">
-        <div class="fieldset-wrapper" id="history_form">
-            <div class="fieldset-wrapper-title">
+        <div id="history_form" class="admin__page-section-item order-totals">
+            <div class="admin__page-section-item-title">
                 <span class="title"><?php echo __('Invoice Totals') ?></span>
             </div>
             <?php echo $block->getChildHtml('invoice_totals') ?>
         </div>
     </div>
-</div>
+</section>

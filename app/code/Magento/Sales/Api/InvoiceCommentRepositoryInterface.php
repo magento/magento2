@@ -10,6 +10,7 @@ namespace Magento\Sales\Api;
  *
  * An invoice is a record of the receipt of payment for an order. An invoice can include comments that detail the
  * invoice history.
+ * @api
  */
 interface InvoiceCommentRepositoryInterface
 {
@@ -17,7 +18,7 @@ interface InvoiceCommentRepositoryInterface
      * Lists invoice comments that match specified search criteria.
      *
      * @param \Magento\Framework\Api\SearchCriteria $criteria The search criteria.
-     * @return \Magento\Sales\Api\Data\InvoiceSearchResultInterface Invoice search result interface.
+     * @return \Magento\Sales\Api\Data\InvoiceCommentSearchResultInterface Invoice search result interface.
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $criteria);
 

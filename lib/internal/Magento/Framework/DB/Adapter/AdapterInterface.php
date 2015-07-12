@@ -130,6 +130,16 @@ interface AdapterInterface
     public function createTemporaryTable(Table $table);
 
     /**
+     * Create temporary table from other table
+     *
+     * @param string $temporaryTableName
+     * @param string $originTableName
+     * @param bool $ifNotExists
+     * @return \Zend_Db_Statement_Interface
+     */
+    public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false);
+
+    /**
      * Drop temporary table from database
      *
      * @param string $tableName
@@ -375,7 +385,6 @@ interface AdapterInterface
         $refTableName,
         $refColumnName,
         $onDelete = self::FK_ACTION_CASCADE,
-        $onUpdate = self::FK_ACTION_CASCADE,
         $purge = false,
         $schemaName = null,
         $refSchemaName = null
@@ -508,14 +517,6 @@ interface AdapterInterface
      * @return \Zend_Db_Statement_Interface
      */
     public function query($sql, $bind = []);
-
-    /**
-     * Executes a SQL statement(s)
-     *
-     * @param string $sql
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    public function multiQuery($sql);
 
     /**
      * Fetches all SQL result rows as a sequential array.
@@ -927,6 +928,17 @@ interface AdapterInterface
      */
     public function getTableName($tableName);
 
+
+    /**
+     * Build a trigger name based on table name and trigger details
+     *
+     * @param string $tableName  The table that is the subject of the trigger
+     * @param string $time  Either "before" or "after"
+     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @return string
+     */
+    public function getTriggerName($tableName, $time, $event);
+
     /**
      * Retrieve valid index name
      * Check index name length and allowed symbols
@@ -986,7 +998,7 @@ interface AdapterInterface
      * @param \Magento\Framework\DB\Select $select
      * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
-     * @throws \Magento\Framework\DB\DBException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100);
 

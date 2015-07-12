@@ -7,6 +7,9 @@ namespace Magento\Backend\App\Action\Plugin;
 
 use Magento\Framework\Exception\AuthenticationException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Authentication
 {
     /**
@@ -46,24 +49,48 @@ class Authentication
     protected $messageManager;
 
     /**
+     * @var \Magento\Backend\Model\UrlInterface
+     */
+    protected $backendUrl;
+
+    /**
+     * @var \Magento\Backend\App\BackendAppList
+     */
+    protected $backendAppList;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\App\BackendAppList $backendAppList
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\Model\UrlInterface $url,
         \Magento\Framework\App\ResponseInterface $response,
         \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\App\BackendAppList $backendAppList
     ) {
         $this->_auth = $auth;
         $this->_url = $url;
         $this->_response = $response;
         $this->_actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
+        $this->backendUrl = $backendUrl;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->backendAppList = $backendAppList;
     }
 
     /**
@@ -90,6 +117,18 @@ class Authentication
                 $this->_processNotLoggedInUser($request);
             } else {
                 $this->_auth->getAuthStorage()->prolong();
+
+                $backendApp = null;
+                if ($request->getParam('app')) {
+                    $backendApp = $this->backendAppList->getCurrentApp();
+                }
+
+                if ($backendApp) {
+                    $resultRedirect = $this->resultRedirectFactory->create();
+                    $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($this->backendUrl->getBaseUrl());
+                    $baseUrl = $baseUrl . $backendApp->getStartupPage();
+                    return $resultRedirect->setUrl($baseUrl);
+                }
             }
         }
         $this->_auth->getAuthStorage()->refreshAcl();
@@ -108,46 +147,25 @@ class Authentication
         if ($request->getPost('login') && $this->_performLogin($request)) {
             $isRedirectNeeded = $this->_redirectIfNeededAfterLogin($request);
         }
-        if (!$isRedirectNeeded && !$request->getParam('forwarded')) {
+        if (!$isRedirectNeeded && !$request->isForwarded()) {
             if ($request->getParam('isIframe')) {
-                $request->setParam(
-                    'forwarded',
-                    true
-                )->setRouteName(
-                    'adminhtml'
-                )->setControllerName(
-                    'auth'
-                )->setActionName(
-                    'deniedIframe'
-                )->setDispatched(
-                    false
-                );
+                $request->setForwarded(true)
+                    ->setRouteName('adminhtml')
+                    ->setControllerName('auth')
+                    ->setActionName('deniedIframe')
+                    ->setDispatched(false);
             } elseif ($request->getParam('isAjax')) {
-                $request->setParam(
-                    'forwarded',
-                    true
-                )->setRouteName(
-                    'adminhtml'
-                )->setControllerName(
-                    'auth'
-                )->setActionName(
-                    'deniedJson'
-                )->setDispatched(
-                    false
-                );
+                $request->setForwarded(true)
+                    ->setRouteName('adminhtml')
+                    ->setControllerName('auth')
+                    ->setActionName('deniedJson')
+                    ->setDispatched(false);
             } else {
-                $request->setParam(
-                    'forwarded',
-                    true
-                )->setRouteName(
-                    'adminhtml'
-                )->setControllerName(
-                    'auth'
-                )->setActionName(
-                    'login'
-                )->setDispatched(
-                    false
-                );
+                $request->setForwarded(true)
+                    ->setRouteName('adminhtml')
+                    ->setControllerName('auth')
+                    ->setActionName('login')
+                    ->setDispatched(false);
             }
         }
     }

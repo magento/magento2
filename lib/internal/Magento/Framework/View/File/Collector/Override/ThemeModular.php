@@ -12,7 +12,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\View\File\Factory;
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Source of view files that explicitly override modular files of ancestor themes
@@ -61,7 +61,7 @@ class ThemeModular implements CollectorInterface
      * @param ThemeInterface $theme
      * @param string $filePath
      * @return array|\Magento\Framework\View\File[]
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
@@ -90,12 +90,10 @@ class ThemeModular implements CollectorInterface
             $moduleFull = $matches['module'];
             $ancestorThemeCode = $matches['themeVendor'] . '/' . $matches['themeName'];
             if (!isset($themes[$ancestorThemeCode])) {
-                throw new Exception(
-                    sprintf(
-                        "Trying to override modular view file '%s' for theme '%s', which is not ancestor of theme '%s'",
-                        $filename,
-                        $ancestorThemeCode,
-                        $theme->getCode()
+                throw new LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        "Trying to override modular view file '%1' for theme '%2', which is not ancestor of theme '%3'",
+                        [$filename, $ancestorThemeCode, $theme->getCode()]
                     )
                 );
             }

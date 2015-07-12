@@ -27,10 +27,8 @@
 
         <main class="page-content" id="anchor-content">
             <?php echo $block->getChildHtml('main-top'); ?>
-            <div class="admin__scope">
-                <div class="messages" id="messages" data-container-for="messages">
-                    <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
-                </div>
+            <div class="messages" id="messages" data-container-for="messages">
+                <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
             </div>
             <?php echo $block->getChildHtml('page_main_actions'); ?>
             <?php if ($block->getChildHtml('left')): ?>

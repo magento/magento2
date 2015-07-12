@@ -29,7 +29,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @var array
      */
-    protected $_availableOrder = [];
+    protected $_availableOrder = null;
 
     /**
      * List of available view types
@@ -147,19 +147,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Init Toolbar
-     *
-     * @return null
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->_orderField = $this->_productListHelper->getDefaultSortField();
-        $this->_availableOrder = $this->_catalogConfig->getAttributeUsedForSortByArray();
-        $this->_availableMode = $this->_productListHelper->getAvailableViewMode();
-    }
-
-    /**
      * Disable list state params memorizing
      *
      * @return $this
@@ -241,7 +228,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         }
 
         $orders = $this->getAvailableOrders();
-        $defaultOrder = $this->_orderField;
+        $defaultOrder = $this->getOrderField();
 
         if (!isset($orders[$defaultOrder])) {
             $keys = array_keys($orders);
@@ -295,6 +282,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function setDefaultOrder($field)
     {
+        $this->loadAvailableOrders();
         if (isset($this->_availableOrder[$field])) {
             $this->_orderField = $field;
         }
@@ -322,6 +310,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function getAvailableOrders()
     {
+        $this->loadAvailableOrders();
         return $this->_availableOrder;
     }
 
@@ -346,6 +335,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function addOrderToAvailableOrders($order, $value)
     {
+        $this->loadAvailableOrders();
         $this->_availableOrder[$order] = $value;
         return $this;
     }
@@ -358,6 +348,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function removeOrderFromAvailableOrders($order)
     {
+        $this->loadAvailableOrders();
         if (isset($this->_availableOrder[$order])) {
             unset($this->_availableOrder[$order]);
         }
@@ -411,7 +402,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         if ($mode) {
             return $mode;
         }
-        $defaultMode = $this->_productListHelper->getDefaultViewMode($this->_availableMode);
+        $defaultMode = $this->_productListHelper->getDefaultViewMode($this->getModes());
         $mode = $this->_toolbarModel->getMode();
         if (!$mode || !isset($this->_availableMode[$mode])) {
             $mode = $defaultMode;
@@ -439,6 +430,9 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function getModes()
     {
+        if ($this->_availableMode === []) {
+            $this->_availableMode = $this->_productListHelper->getAvailableViewMode();
+        }
         return $this->_availableMode;
     }
 
@@ -450,6 +444,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function setModes($modes)
     {
+        $this->getModes();
         if (!isset($this->_availableMode)) {
             $this->_availableMode = $modes;
         }
@@ -690,5 +685,31 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         ];
         $options = array_replace_recursive($options, $customOptions);
         return json_encode(['productListToolbarForm' => $options]);
+    }
+
+    /**
+     * Get order field
+     *
+     * @return null|string
+     */
+    protected function getOrderField()
+    {
+        if ($this->_orderField === null) {
+            $this->_orderField = $this->_productListHelper->getDefaultSortField();
+        }
+        return $this->_orderField;
+    }
+
+    /**
+     * Load Available Orders
+     *
+     * @return $this
+     */
+    private function loadAvailableOrders()
+    {
+        if ($this->_availableOrder === null) {
+            $this->_availableOrder = $this->_catalogConfig->getAttributeUsedForSortByArray();
+        }
+        return $this;
     }
 }

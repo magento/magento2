@@ -15,6 +15,7 @@ interface CustomerRepositoryInterface
     /**
      * Create customer.
      *
+     * @api
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $passwordHash
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -27,6 +28,7 @@ interface CustomerRepositoryInterface
     /**
      * Retrieve customer.
      *
+     * @api
      * @param string $email
      * @param int|null $websiteId
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -38,6 +40,7 @@ interface CustomerRepositoryInterface
     /**
      * Retrieve customer.
      *
+     * @api
      * @param int $customerId
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified ID does not exist.
@@ -48,6 +51,7 @@ interface CustomerRepositoryInterface
     /**
      * Retrieve customers which match a specified criteria.
      *
+     * @api
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -57,6 +61,7 @@ interface CustomerRepositoryInterface
     /**
      * Delete customer.
      *
+     * @api
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -66,6 +71,7 @@ interface CustomerRepositoryInterface
     /**
      * Delete customer by ID.
      *
+     * @api
      * @param int $customerId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException

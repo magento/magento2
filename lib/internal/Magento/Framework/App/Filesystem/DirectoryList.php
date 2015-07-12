@@ -91,6 +91,11 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const SESSION = 'session';
 
     /**
+     * Directory for Setup application
+     */
+    const SETUP = 'setup';
+
+    /**
      * Dependency injection related file directory
      */
     const DI = 'di';
@@ -104,6 +109,11 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
      * Temporary directory for uploading files by end-user
      */
     const UPLOAD = 'upload';
+
+    /**
+     * Directory to store composer related files (config, cache etc.) in case if composer runs by Magento Application
+     */
+    const COMPOSER_HOME = 'composer_home';
 
     /**
      * A suffix for temporary materialization directory where pre-processed files will be written (if necessary)
@@ -139,6 +149,8 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::UPLOAD => [parent::PATH => 'pub/media/upload', parent::URL_PATH => 'pub/media/upload'],
             self::TMP_MATERIALIZATION_DIR => [parent::PATH => 'var/view_preprocessed'],
             self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed/html'],
+            self::SETUP => [parent::PATH => 'setup/src'],
+            self::COMPOSER_HOME => [parent::PATH => 'var/composer_home'],
         ];
         return parent::getDefaultConfig() + $result;
     }

@@ -8,6 +8,10 @@ namespace Magento\Tax\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * Tax rule interface.
+ * @api
+ */
 interface TaxRuleInterface extends ExtensibleDataInterface
 {
     /**

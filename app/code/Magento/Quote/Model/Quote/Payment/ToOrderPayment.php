@@ -67,11 +67,9 @@ class ToOrderPayment
             '\Magento\Sales\Api\Data\OrderPaymentInterface'
         );
         $orderPayment->setAdditionalInformation(
-            serialize(
-                array_merge(
-                    $object->getAdditionalInformation(),
-                    [Substitution::INFO_KEY_TITLE => $object->getMethodInstance()->getTitle()]
-                )
+            array_merge(
+                $object->getAdditionalInformation(),
+                [Substitution::INFO_KEY_TITLE => $object->getMethodInstance()->getTitle()]
             )
         );
         // set directly on the model

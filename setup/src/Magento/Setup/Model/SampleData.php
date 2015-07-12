@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\LoggerInterface;
 
 /**
  * Sample data installer
@@ -20,19 +21,21 @@ class SampleData
     /**
      * Path to the sample data application
      */
-    const PATH = 'dev/tools/Magento/Tools/SampleData';
+    const PATH = '/Magento/SampleData';
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * Filesystem Directory List
+     *
+     * @var DirectoryList
      */
-    private $rootDir;
+    private $directoryList;
 
     /**
-     * @param Filesystem $filesystem
+     * @param DirectoryList $directoryList
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(DirectoryList $directoryList)
     {
-        $this->rootDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -42,7 +45,48 @@ class SampleData
      */
     public function isDeployed()
     {
-        return $this->rootDir->isExist(self::PATH);
+        return file_exists($this->directoryList->getPath(DirectoryList::MODULES) . self::PATH);
+    }
+
+    /**
+     * Get state object or null if state object cannot be initialized
+     *
+     * @return null|\Magento\SampleData\Helper\State
+     */
+    protected function getState()
+    {
+        if ($this->isDeployed() && class_exists('Magento\SampleData\Helper\State')) {
+            return new \Magento\SampleData\Helper\State();
+        }
+        return null;
+    }
+
+    /**
+     * Check whether installation of sample data was successful
+     *
+     * @return bool
+     */
+    public function isInstalledSuccessfully()
+    {
+        $state = $this->getState();
+        if (!$state) {
+            return false;
+        }
+        return \Magento\SampleData\Helper\State::STATE_FINISHED == $state->getState();
+    }
+
+    /**
+     * Check whether there was unsuccessful attempt to install Sample data
+     *
+     * @return bool
+     */
+    public function isInstallationError()
+    {
+        $state = $this->getState();
+        if (!$state) {
+            return false;
+        }
+        return \Magento\SampleData\Helper\State::STATE_STARTED == $state->getState();
     }
 
     /**
@@ -50,14 +94,19 @@ class SampleData
      *
      * @param ObjectManagerInterface $objectManager
      * @param LoggerInterface $logger
-     * @param string $adminUserName
+     * @param string $userName
+     * @param array $modules
      * @throws \Exception
      * @return void
      */
-    public function install(ObjectManagerInterface $objectManager, LoggerInterface $logger, $adminUserName)
-    {
-        /** @var \Magento\Tools\SampleData\Logger $sampleDataLogger */
-        $sampleDataLogger = $objectManager->get('Magento\Tools\SampleData\Logger');
+    public function install(
+        ObjectManagerInterface $objectManager,
+        LoggerInterface $logger,
+        $userName,
+        array $modules = []
+    ) {
+        /** @var \Magento\SampleData\Model\Logger $sampleDataLogger */
+        $sampleDataLogger = $objectManager->get('Magento\SampleData\Model\Logger');
         $sampleDataLogger->setSubject($logger);
 
         $areaCode = 'adminhtml';
@@ -68,11 +117,8 @@ class SampleData
         $configLoader = $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
         $objectManager->configure($configLoader->load($areaCode));
 
-        /** @var \Magento\User\Model\UserFactory $userFactory */
-        $userFactory = $objectManager->get('Magento\User\Model\UserFactory');
-        $user = $userFactory->create()->loadByUsername($adminUserName);
-
-        $installer = $objectManager->get('Magento\Tools\SampleData\Installer');
-        $installer->run($user);
+        /** @var \Magento\SampleData\Model\Installer $installer */
+        $installer = $objectManager->get('Magento\SampleData\Model\Installer');
+        $installer->run($userName, $modules);
     }
 }

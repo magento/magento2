@@ -9,6 +9,8 @@
  */
 namespace Magento\TestFramework\Performance\Scenario\Handler;
 
+use Magento\Framework\Phrase;
+
 class Jmeter implements \Magento\TestFramework\Performance\Scenario\HandlerInterface
 {
     /**
@@ -50,7 +52,7 @@ class Jmeter implements \Magento\TestFramework\Performance\Scenario\HandlerInter
      *
      * @param \Magento\TestFramework\Performance\Scenario $scenario
      * @param string|null $reportFile Report file to write results to, NULL disables report creation
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\TestFramework\Performance\Scenario\FailureException
      */
     public function run(\Magento\TestFramework\Performance\Scenario $scenario, $reportFile = null)
@@ -63,15 +65,15 @@ class Jmeter implements \Magento\TestFramework\Performance\Scenario\HandlerInter
 
         if ($reportFile) {
             if (!file_exists($reportFile)) {
-                throw new \Magento\Framework\Exception(
-                    "Report file '{$reportFile}' for '{$scenario->getTitle()}' has not been created."
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new Phrase("Report file '%1' for '%2' has not been created.", [$reportFile, $scenario->getTitle()])
                 );
             }
             $reportErrors = $this->_getReportErrors($reportFile);
             if ($reportErrors) {
                 throw new \Magento\TestFramework\Performance\Scenario\FailureException(
                     $scenario,
-                    implode(PHP_EOL, $reportErrors)
+                    new Phrase(implode(PHP_EOL, $reportErrors))
                 );
             }
         }

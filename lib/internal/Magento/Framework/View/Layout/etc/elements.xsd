@@ -108,15 +108,15 @@
 
     <xs:element type="containerReferenceType" name="referenceContainer"/>
 
-    <xs:element type="uiComponentType" name="ui_component">
+    <xs:element type="uiComponentType" name="uiComponent">
         <xs:annotation>
             <xs:documentation>
                 Argument name must be unique in scope of all Blocks, Containers and other UI Components.
             </xs:documentation>
         </xs:annotation>
         <xs:key name="uiElementArgumentName">
-            <xs:selector xpath="./arguments/argument"></xs:selector>
-            <xs:field xpath="@name"></xs:field>
+            <xs:selector xpath="./argument"/>
+            <xs:field xpath="@name"/>
         </xs:key>
     </xs:element>
 
@@ -185,7 +185,7 @@
             <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceContainer" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="ui_component" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="uiComponent" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute type="elementNameType" name="name"/>
         <xs:attribute type="xs:string" name="label"/>
@@ -216,7 +216,7 @@
             <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="ui_component" minOccurs="0" />
+            <xs:element ref="uiComponent" minOccurs="0" />
         </xs:sequence>
         <xs:attribute type="elementNameType" name="name" use="optional"/>
         <xs:attribute type="blockClassType" name="class" use="optional"/>
@@ -238,8 +238,8 @@
                 Part of view that can generate appropriate content.
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
+        <xs:sequence>
+            <xs:element name="argument" type="argumentType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute type="componentNameType" name="component" use="optional"/>
         <xs:attribute type="elementNameType" name="name" use="optional"/>
@@ -311,7 +311,7 @@
             <xs:element ref="container" minOccurs="0"/>
             <xs:element ref="referenceBlock" minOccurs="0" />
             <xs:element ref="referenceContainer" minOccurs="0"/>
-            <xs:element ref="ui_component" minOccurs="0" />
+            <xs:element ref="uiComponent" minOccurs="0" />
         </xs:choice>
         <xs:attribute type="elementNameType" name="name" use="required"/>
     </xs:complexType>
@@ -322,7 +322,7 @@
             <xs:element ref="block" minOccurs="0" />
             <xs:element ref="container" minOccurs="0" />
             <xs:element ref="referenceBlock" minOccurs="0" />
-            <xs:element ref="ui_component" minOccurs="0" />
+            <xs:element ref="uiComponent" minOccurs="0" />
         </xs:choice>
         <xs:attribute type="elementNameType" name="name" use="required"/>
         <xs:attribute type="htmlTagType" name="htmlTag"/>

@@ -56,6 +56,27 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
+     * Retrieve customer group id
+     *
+     * @return int
+     */
+    public function getCustomerGroupId()
+    {
+        return $this->getData(self::CUSTOMER_GROUP_ID);
+    }
+
+    /**
+     * Set customer group id
+     *
+     * @param int $customerGroupId
+     * @return $this
+     */
+    public function setCustomerGroupId($customerGroupId)
+    {
+        return $this->setData(self::CUSTOMER_GROUP_ID, $customerGroupId);
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface|null

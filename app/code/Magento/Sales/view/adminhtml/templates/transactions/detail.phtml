@@ -8,12 +8,12 @@
 
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $block->getButtonsHtml() ?></div>
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Transaction Data'); ?></span>
     </div>
-    <div id="log_details_fieldset" class="log-details">
-        <table cellspacing="0" class="log-info data-table">
+    <div id="log_details_fieldset" class="admin__page-section-content log-details">
+        <table class="log-info data-table admin__table-secondary">
             <tbody>
             <tr>
                 <th><?php echo __('Transaction ID'); ?></th>
@@ -54,22 +54,22 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title""><?php echo __('Child Transactions'); ?></span>
     </div>
-    <div class="log-details-grid">
+    <div class="admin__page-section-content log-details-grid">
         <?php echo $block->getChildHtml('child_grid') ?>
     </div>
-</div>
+</section>
 
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Transaction Details'); ?></span>
     </div>
-    <div class="log-details-grid">
+    <div class="admin__page-section-content log-details-grid">
         <?php echo $block->getChildHtml('detail_grid') ?>
     </div>
-</div>
+</section>

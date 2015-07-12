@@ -9,10 +9,6 @@ namespace Magento\Tax\Api\Data;
 
 interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    const KEY_APPLIED_TAXES = 'applied_taxes';
-
-    const KEY_ITEMS = 'items';
-
     /**
      * Get applied taxes at order level
      *

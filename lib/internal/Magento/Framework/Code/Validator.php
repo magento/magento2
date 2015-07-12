@@ -28,7 +28,7 @@ class Validator implements ValidatorInterface
      *
      * @param string $className
      * @return bool
-     * @throws \Magento\Framework\Code\ValidationException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function validate($className)
     {

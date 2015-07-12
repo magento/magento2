@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\AbstractController;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Controller\Result\RedirectFactory;
 
 class OrderLoader implements OrderLoaderInterface
 {
@@ -39,32 +38,24 @@ class OrderLoader implements OrderLoaderInterface
     protected $resultForwardFactory;
 
     /**
-     * @var Redirect
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param Registry $registry
      * @param \Magento\Framework\UrlInterface $url
      * @param ForwardFactory $resultForwardFactory
-     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
         OrderViewAuthorizationInterface $orderAuthorization,
         Registry $registry,
         \Magento\Framework\UrlInterface $url,
-        ForwardFactory $resultForwardFactory,
-        RedirectFactory $resultRedirectFactory
+        ForwardFactory $resultForwardFactory
     ) {
         $this->orderFactory = $orderFactory;
         $this->orderAuthorization = $orderAuthorization;
         $this->registry = $registry;
         $this->url = $url;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

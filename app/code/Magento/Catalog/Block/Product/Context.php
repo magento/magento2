@@ -76,7 +76,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\TranslateInterface $translator
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Session\SessionManagerInterface $session
@@ -95,6 +94,9 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param \Magento\Framework\View\Element\Template\File\Resolver $resolver
+     * @param \Magento\Framework\View\Element\Template\File\Validator $validator
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxHelper
@@ -106,7 +108,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param ReviewRendererInterface $reviewRenderer
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\View\Page\Config $pageConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -115,7 +116,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\TranslateInterface $translator,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Session\SessionManagerInterface $session,
@@ -135,6 +135,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\App\State $appState,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Page\Config $pageConfig,
+        \Magento\Framework\View\Element\Template\File\Resolver $resolver,
+        \Magento\Framework\View\Element\Template\File\Validator $validator,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Registry $registry,
         \Magento\Tax\Helper\Data $taxHelper,
@@ -163,7 +165,6 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $layout,
             $eventManager,
             $urlBuilder,
-            $translator,
             $cache,
             $design,
             $session,
@@ -182,7 +183,9 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $enginePool,
             $appState,
             $storeManager,
-            $pageConfig
+            $pageConfig,
+            $resolver,
+            $validator
         );
     }
 

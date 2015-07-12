@@ -23,7 +23,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Usps\Helper\Data::displayGirthValue
+     * @covers \Magento\Usps\Helper\Data::displayGirthValue
      * @dataProvider shippingMethodDataProvider
      */
     public function testDisplayGirthValue($shippingMethod)
@@ -32,7 +32,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Usps\Helper\Data::displayGirthValue
+     * @covers \Magento\Usps\Helper\Data::displayGirthValue
      */
     public function testDisplayGirthValueFalse()
     {

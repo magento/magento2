@@ -29,7 +29,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Make sure that isMessagesAvailable is not called
+     * Make sure that isMessagesAllowed is not called
      */
     public function testGetInlineForCheckout()
     {

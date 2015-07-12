@@ -6,6 +6,10 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 define([
     "jquery",
     "accordion",
@@ -179,7 +183,7 @@ define([
             if (json.isGuestCheckoutAllowed) {
                 
                 if( !guestChecked && !registerChecked ){
-                    alert( $.mage.__('Please choose to register or to checkout as a guest.') );
+                    alert( $.mage.__('Please create an account or check out as a guest.') );
                     
                     return false;
                 }

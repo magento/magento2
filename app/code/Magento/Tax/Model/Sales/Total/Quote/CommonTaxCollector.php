@@ -469,7 +469,7 @@ class CommonTaxCollector extends AbstractTotal
     /**
      * Process product items in the quote.
      * Set the following aggregated values in the quote object:
-     * subtotal, subtotalInclTax, tax, hidden_tax,
+     * subtotal, subtotalInclTax, tax, discount_tax_compensation,
      *
      * @param QuoteAddress $address
      * @param array $itemTaxDetails
@@ -484,7 +484,7 @@ class CommonTaxCollector extends AbstractTotal
         }
 
         $subtotal = $baseSubtotal = 0;
-        $hiddenTax = $baseHiddenTax = 0;
+        $discountTaxCompensation = $baseDiscountTaxCompensation = 0;
         $tax = $baseTax = 0;
         $subtotalInclTax = $baseSubtotalInclTax = 0;
 
@@ -503,8 +503,8 @@ class CommonTaxCollector extends AbstractTotal
             }
             $subtotal += $taxDetail->getRowTotal();
             $baseSubtotal += $baseTaxDetail->getRowTotal();
-            $hiddenTax += $taxDetail->getDiscountTaxCompensationAmount();
-            $baseHiddenTax += $baseTaxDetail->getDiscountTaxCompensationAmount();
+            $discountTaxCompensation += $taxDetail->getDiscountTaxCompensationAmount();
+            $baseDiscountTaxCompensation += $baseTaxDetail->getDiscountTaxCompensationAmount();
             $tax += $taxDetail->getRowTax();
             $baseTax += $baseTaxDetail->getRowTax();
             $subtotalInclTax += $taxDetail->getRowTotalInclTax();
@@ -516,8 +516,8 @@ class CommonTaxCollector extends AbstractTotal
         $address->setBaseTotalAmount('subtotal', $baseSubtotal);
         $address->setTotalAmount('tax', $tax);
         $address->setBaseTotalAmount('tax', $baseTax);
-        $address->setTotalAmount('hidden_tax', $hiddenTax);
-        $address->setBaseTotalAmount('hidden_tax', $baseHiddenTax);
+        $address->setTotalAmount('discount_tax_compensation', $discountTaxCompensation);
+        $address->setBaseTotalAmount('discount_tax_compensation', $baseDiscountTaxCompensation);
 
         $address->setSubtotalInclTax($subtotalInclTax);
         $address->setBaseSubtotalInclTax($baseSubtotalInclTax);
@@ -619,7 +619,7 @@ class CommonTaxCollector extends AbstractTotal
         $quoteItem->setRowTotalInclTax($itemTaxDetails->getRowTotalInclTax());
         $quoteItem->setTaxAmount($itemTaxDetails->getRowTax());
         $quoteItem->setTaxPercent($itemTaxDetails->getTaxPercent());
-        $quoteItem->setHiddenTaxAmount($itemTaxDetails->getDiscountTaxCompensationAmount());
+        $quoteItem->setDiscountTaxCompensationAmount($itemTaxDetails->getDiscountTaxCompensationAmount());
 
         $quoteItem->setBasePrice($baseItemTaxDetails->getPrice());
         $quoteItem->setBasePriceInclTax($baseItemTaxDetails->getPriceInclTax());
@@ -627,7 +627,7 @@ class CommonTaxCollector extends AbstractTotal
         $quoteItem->setBaseRowTotalInclTax($baseItemTaxDetails->getRowTotalInclTax());
         $quoteItem->setBaseTaxAmount($baseItemTaxDetails->getRowTax());
         $quoteItem->setTaxPercent($baseItemTaxDetails->getTaxPercent());
-        $quoteItem->setBaseHiddenTaxAmount($baseItemTaxDetails->getDiscountTaxCompensationAmount());
+        $quoteItem->setBaseDiscountTaxCompensationAmount($baseItemTaxDetails->getDiscountTaxCompensationAmount());
 
         //Set discount calculation price, this may be needed by discount collector
         if ($this->_config->discountTax($store)) {
@@ -653,8 +653,8 @@ class CommonTaxCollector extends AbstractTotal
     {
         $address->setTotalAmount('shipping', $shippingTaxDetails->getRowTotal());
         $address->setBaseTotalAmount('shipping', $baseShippingTaxDetails->getRowTotal());
-        $address->setTotalAmount('shipping_hidden_tax', $shippingTaxDetails->getDiscountTaxCompensationAmount());
-        $address->setBaseTotalAmount('shipping_hidden_tax', $baseShippingTaxDetails->getDiscountTaxCompensationAmount());
+        $address->setTotalAmount('shipping_discount_tax_compensation', $shippingTaxDetails->getDiscountTaxCompensationAmount());
+        $address->setBaseTotalAmount('shipping_discount_tax_compensation', $baseShippingTaxDetails->getDiscountTaxCompensationAmount());
 
         $address->setShippingInclTax($shippingTaxDetails->getRowTotalInclTax());
         $address->setBaseShippingInclTax($baseShippingTaxDetails->getRowTotalInclTax());

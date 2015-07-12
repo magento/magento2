@@ -5,6 +5,12 @@
  */
 namespace Magento\Framework\Url;
 
+/**
+ * This ScopeInterface adds URL methods to the scope interface to help
+ * determine scope based on URLs.
+ *
+ * @api
+ */
 interface ScopeInterface extends \Magento\Framework\App\ScopeInterface
 {
     /**

@@ -15,17 +15,20 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      *
      * @param int|null $id
      * @return void
-     * @throws \Magento\Catalog\Exception
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute($id = null)
     {
         if (!isset($id) || empty($id)) {
-            throw new \Magento\Catalog\Exception(__('Could not rebuild index for undefined product'));
+            throw new \Magento\Framework\Exception\InputException(
+                __('We can\'t rebuild the index for an undefined product.')
+            );
         }
         try {
             $this->reindex($id);
         } catch (\Exception $e) {
-            throw new \Magento\Catalog\Exception($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 }

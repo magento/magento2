@@ -7,6 +7,9 @@
 
 namespace Magento\Catalog\Api;
 
+/**
+ * @api
+ */
 interface ProductRepositoryInterface
 {
     /**
@@ -26,11 +29,12 @@ interface ProductRepositoryInterface
      *
      * @param string $sku
      * @param bool $editMode
-     * @param null|int $storeId
+     * @param int|null $storeId
+     * @param bool $forceReload
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($sku, $editMode = false, $storeId = null);
+    public function get($sku, $editMode = false, $storeId = null, $forceReload = false);
 
     /**
      * Get info about product by product id
@@ -38,10 +42,11 @@ interface ProductRepositoryInterface
      * @param int $productId
      * @param bool $editMode
      * @param null|int $storeId
+     * @param bool $forceReload
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getById($productId, $editMode = false, $storeId = null);
+    public function getById($productId, $editMode = false, $storeId = null, $forceReload = false);
 
     /**
      * Delete product
@@ -67,4 +72,10 @@ interface ProductRepositoryInterface
      * @return \Magento\Catalog\Api\Data\ProductSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+
+    /**
+     * @param \Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
+     */
+    public function search(\Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria);
 }

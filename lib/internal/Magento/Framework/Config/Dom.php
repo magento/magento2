@@ -13,6 +13,8 @@ namespace Magento\Framework\Config;
 
 /**
  * Class Dom
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Dom
 {
@@ -223,7 +225,7 @@ class Dom
      * Getter for node by path
      *
      * @param string $nodePath
-     * @throws \Magento\Framework\Exception An exception is possible if original document contains multiple nodes for identifier
+     * @throws \Magento\Framework\Exception\LocalizedException An exception is possible if original document contains multiple nodes for identifier
      * @return \DOMElement|null
      */
     protected function _getMatchedNode($nodePath)
@@ -235,7 +237,9 @@ class Dom
         $matchedNodes = $xPath->query($nodePath);
         $node = null;
         if ($matchedNodes->length > 1) {
-            throw new \Magento\Framework\Exception("More than one node matching the query: {$nodePath}");
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase("More than one node matching the query: %1", [$nodePath])
+            );
         } elseif ($matchedNodes->length == 1) {
             $node = $matchedNodes->item(0);
         }

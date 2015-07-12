@@ -65,7 +65,7 @@ define([
             }
             var syncOptionTitle = function (event) {
                 var currentValue = $(event.target).val(),
-                    optionBoxTitle = $('.title > span', $(event.target).closest('.fieldset-wrapper')),
+                    optionBoxTitle = $('.admin__collapsible-title > span', $(event.target).closest('.fieldset-wrapper')),
                     newOptionTitle = $.mage.__('New Option');
 
                 optionBoxTitle.text(currentValue === '' ? newOptionTitle : currentValue);
@@ -137,6 +137,8 @@ define([
 
                             var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 135;
                             $(this).closest('.ui-dialog').css('margin-top', topMargin);
+
+                            $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
                         },
                         close: function () {
                             $(this).closest('.ui-dialog').removeClass('ui-dialog-active');

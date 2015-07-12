@@ -5,6 +5,8 @@
  */
 namespace Magento\Payment\Block;
 
+use Magento\Payment\Model\MethodInterface;
+
 /**
  * Payment method form base block
  */
@@ -13,19 +15,31 @@ class Form extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve payment method model
      *
-     * @return \Magento\Payment\Model\MethodInterface
+     * @return MethodInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getMethod()
     {
         $method = $this->getData('method');
 
-        if (!$method instanceof \Magento\Payment\Model\MethodInterface) {
+        if (!$method instanceof MethodInterface) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot retrieve the payment method model object.')
             );
         }
         return $method;
+    }
+
+    /**
+     * Sets payment method instance to form
+     *
+     * @param MethodInterface $method
+     * @return $this
+     */
+    public function setMethod(MethodInterface $method)
+    {
+        $this->setData('method', $method);
+        return $this;
     }
 
     /**

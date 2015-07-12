@@ -109,6 +109,11 @@ class Form extends FormInterface
     protected $taxClassMultiSelectList = ".//*[contains(@class, 'tax_%s_class')]//*[@class='block mselect-list']";
 
     /**
+     * Count of try for fill new tax class input.
+     */
+    const MAX_TRY_COUNT = 3;
+
+    /**
      * Fill the root form.
      *
      * @param FixtureInterface $fixture
@@ -212,19 +217,38 @@ class Form extends FormInterface
         foreach ($taxClasses as $taxClass) {
             $option = $element->find(sprintf($this->optionMaskElement, $taxClass), Locator::SELECTOR_XPATH);
             if (!$option->isVisible()) {
-                $this->clickAddNewButton($element);
-                $inputSelector = $this->addNewInput;
-                $element->waitUntil(
-                    function () use ($element, $inputSelector) {
-                        $input = $element->find($inputSelector);
-                        return $input->isVisible() ? true : null;
-                    }
-                );
-                $element->find($this->addNewInput)->keys([$taxClass]);
-                $element->find($this->saveButton)->click();
-                $this->waitUntilOptionIsVisible($element, $taxClass);
+                $this->setNewTaxClassName($element, $taxClass);
             }
         }
+    }
+
+    /**
+     * Set new tax class name.
+     *
+     * @param SimpleElement $element
+     * @param string $taxClass
+     * @throws \Exception
+     * @return void
+     */
+    protected function setNewTaxClassName(SimpleElement $element, $taxClass)
+    {
+        $count = 0;
+        do {
+            try {
+                $this->clickAddNewButton($element);
+                $input = $element->find($this->addNewInput);
+                $input->click();
+                $input->setValue($taxClass);
+                $element->find($this->saveButton)->click();
+                $this->waitUntilOptionIsVisible($element, $taxClass);
+                return;
+            } catch (\Exception $e) {
+                // In parallel run on windows change the focus is lost on element
+                $count++;
+            }
+        } while ($count < self::MAX_TRY_COUNT);
+
+        throw new \Exception("Input for new tax class name isn't display.\n" . $e);
     }
 
     /**
@@ -262,11 +286,25 @@ class Form extends FormInterface
     }
 
     /**
-     * Getting all options in Tax Rate multi select list.
+     * Click 'Add New' button.
      *
-     * @return array
+     * @param SimpleElement $element
+     * @return void
      */
-    public function getAllTaxRates()
+    protected function clickAddNewButton(SimpleElement $element)
+    {
+        $element->waitUntil(
+            function () use ($element) {
+                return $element->find($this->addNewButton)->isVisible() ? true : null;
+            }
+        );
+        $element->find($this->addNewButton)->click();
+    }
+
+    /**
+     * Wait until tax rate element appears.
+     */
+    protected function waitForTaxRates()
     {
         $browser = $this->browser;
         $taxRateMultiSelectList = $this->taxRateMultiSelectList;
@@ -276,6 +314,16 @@ class Form extends FormInterface
                 return $element->isVisible() ? true : null;
             }
         );
+    }
+
+    /**
+     * Getting all options in Tax Rate multi select list.
+     *
+     * @return array
+     */
+    public function getAllTaxRates()
+    {
+        $this->waitForTaxRates();
         /** @var \Magento\Mtf\Client\Element\MultiselectlistElement $taxRates */
         $taxRates = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
 
@@ -283,19 +331,15 @@ class Form extends FormInterface
     }
 
     /**
-     * Click 'Add New' button.
+     * Check whether tax rate is visible in the list.
      *
-     * @param SimpleElement $element
-     * @return void
+     * @param string $value
+     * @return bool
      */
-    protected function clickAddNewButton(SimpleElement $element)
+    public function isTaxRateAvailable($value)
     {
-        $addNewButton = $this->addNewButton;
-        $element->waitUntil(
-            function () use ($element, $addNewButton) {
-                return $element->find($addNewButton)->isVisible() ? true : null;
-            }
-        );
-        $element->find($this->addNewButton)->click();
+        /** @var \Magento\Mtf\Client\Element\MultiselectlistElement $taxRate */
+        $taxRate = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
+        return $taxRate->isValueVisible($value);
     }
 }

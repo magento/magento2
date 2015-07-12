@@ -22,7 +22,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     private $filters = [];
 
     /**
-     * @var \Magento\Framework\Search\Request\Builder
+     * @var \Magento\CatalogSearch\Model\Advanced\Request\Builder
      */
     private $requestBuilder;
 
@@ -51,7 +51,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\Search\Request\Builder $requestBuilder
+     * @param \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Zend_Db_Adapter_Abstract $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -76,7 +76,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Framework\Search\Request\Builder $requestBuilder,
+        \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
         $connection = null
     ) {
@@ -123,7 +123,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _renderFiltersBefore()
     {
@@ -132,39 +131,45 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $this->requestBuilder->setRequestName('advanced_search_container');
             foreach ($this->filters as $attributes) {
                 foreach ($attributes as $attributeCode => $attributeValue) {
-                    if (is_numeric($attributeCode)) {
-                        $attributeCode = $this->_eavConfig->getAttribute(Product::ENTITY, $attributeCode)
-                            ->getAttributeCode();
-                    }
-                    if (isset($attributeValue['from']) || isset($attributeValue['to'])) {
-                        if (isset($attributeValue['from']) && '' !== $attributeValue['from']) {
-                            $this->requestBuilder->bind("{$attributeCode}.from", $attributeValue['from']);
-                        }
-                        if (isset($attributeValue['to']) && '' !== $attributeValue['to']) {
-                            $this->requestBuilder->bind("{$attributeCode}.to", $attributeValue['to']);
-                        }
-                    } elseif (!is_array($attributeValue)) {
-                        $this->requestBuilder->bind($attributeCode, $attributeValue);
-                    } elseif (isset($attributeValue['like'])) {
-                        $this->requestBuilder->bind($attributeCode, trim($attributeValue['like'], '%'));
-                    } elseif (isset($attributeValue['in'])) {
-                        $this->requestBuilder->bind($attributeCode, $attributeValue['in']);
-                    } elseif (isset($attributeValue['in_set'])) {
-                        $this->requestBuilder->bind($attributeCode, $attributeValue['in_set']);
-                    }
+                    $attributeCode = $this->getAttributeCode($attributeCode);
+                    $this->requestBuilder->bindRequestValue($attributeCode, $attributeValue);
                 }
             }
             $queryRequest = $this->requestBuilder->create();
             $queryResponse = $this->searchEngine->search($queryRequest);
 
-            $ids = [0];
-            /** @var \Magento\Framework\Search\Document $document */
-            foreach ($queryResponse as $document) {
-                $ids[] = $document->getId();
-            }
+            $ids = $this->getResponseIds($queryResponse);
 
             $this->addIdFilter($ids);
         }
         return parent::_renderFiltersBefore();
+    }
+
+    /**
+     * @param string $attributeCode
+     * @return string
+     */
+    private function getAttributeCode($attributeCode)
+    {
+        if (is_numeric($attributeCode)) {
+            $attributeCode = $this->_eavConfig->getAttribute(Product::ENTITY, $attributeCode)
+                ->getAttributeCode();
+        }
+
+        return $attributeCode;
+    }
+
+    /**
+     * @param \Magento\Framework\Search\Document[] $queryResponse
+     * @return int[]
+     */
+    private function getResponseIds($queryResponse)
+    {
+        $ids = [0];
+        foreach ($queryResponse as $document) {
+            $ids[] = $document->getId();
+        }
+
+        return $ids;
     }
 }

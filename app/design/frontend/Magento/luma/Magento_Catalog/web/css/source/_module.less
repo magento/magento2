@@ -212,7 +212,7 @@
         }
     }
     .product.attibute.sku {
-        word-break: break-all;
+        word-wrap: break-word;
     }
     .product {
         &-add-form {
@@ -249,12 +249,40 @@
             margin-top: @form-field__vertical-indent;
         }
     }
-    .product-options-wrapper {
-        .field {
-            .note {
-                display: block;
-                .css(margin-top, @indent__xs);
+}
+
+.product-options-wrapper {
+    .fieldset-product-options-inner {
+        .legend {
+            border: none;
+            .css(font-weight, @font-weight__semibold);
+            display: inline-block;
+            .font-size(14px);
+            float: none;
+            padding: 0;
+            margin: 0 0 8px;
+        }
+        &.required {
+            .legend {
+                &:after {
+                    content: '*';
+                    .typography(
+                    @_font-size: @form-field-label-asterisk__font-size,
+                    @_color: @form-field-label-asterisk__color,
+                    @_font-family: @form-field-label-asterisk__font-family,
+                    @_font-weight: @form-field-label-asterisk__font-weight,
+                    @_line-height: @form-field-label-asterisk__line-height,
+                    @_font-style: @form-field-label-asterisk__font-style
+                    );
+                    .css(margin, @form-field-label-asterisk__margin);
+                }
             }
+        }
+    }
+    .field {
+        .note {
+            display: block;
+            .css(margin-top, @indent__xs);
         }
     }
 }
@@ -496,13 +524,6 @@
         .additional-attributes-wrapper {
             &:extend(.abs-no-border-top all);
         }
-        .additional-attributes {
-            tbody {
-                th {
-                    &:extend(.abs-no-display-s all);
-                }
-            }
-        }
     }
 }
 
@@ -693,7 +714,7 @@ body.catalog-product-compare-index {
             .attribute.label {
                 display: block;
                 width: 100%;
-                word-break: break-all;
+                word-wrap: break-word;
             }
         }
         &.attribute {

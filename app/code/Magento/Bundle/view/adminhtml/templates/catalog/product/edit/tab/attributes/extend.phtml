@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend */
+$elementHtml = $block->getParentElementHtml();
+
+$attributeCode = $block->getAttribute()
+    ->getAttributeCode();
+
+$switchAttributeCode = "{$attributeCode}_type";
+$switchAttributeValue = $block->getProduct()
+    ->getData($switchAttributeCode);
+
+$isElementReadonly = $block->getElement()
+    ->getReadonly();
+?>
+
+<?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)) { ?>
+    <div class="<?= $attributeCode ?> "><?= $elementHtml ?></div>
+<?php } ?>
+
+<?=$block->getExtendedElement($switchAttributeCode)->toHtml(); ?>
+
+<?php if (!$isElementReadonly && $block->getDisableChild()) { ?>
+    <script>
+        require(['prototype'], function () {
+            function <?=$switchAttributeCode?>_change() {
+                var $attribute = $('<?=$attributeCode?>');
+                if ($('<?=$switchAttributeCode?>').value == '<?=$block::DYNAMIC?>') {
+                    if ($attribute) {
+                        $attribute.disabled = true;
+                        $attribute.value = '';
+                        $attribute.removeClassName('required-entry');
+                    }
+                    if ($('dynamic-price-warning')) {
+                        $('dynamic-price-warning').show();
+                    }
+                } else {
+                    if ($attribute) {
+                        <?php if ($attributeCode === 'price' && !$block->getCanEditPrice() && $block->getCanReadPrice()
+                                && $block->getProduct()->isObjectNew()) { ?>
+                            <?php $defaultProductPrice = $block->getDefaultProductPrice() ?: "''"; ?>
+                            $attribute.value = <?=$defaultProductPrice?>;
+                        <?php } else { ?>
+                            $attribute.disabled = false;
+                            $attribute.addClassName('required-entry');
+                        <?php } ?>
+                    }
+                    if ($('dynamic-price-warning')) {
+                        $('dynamic-price-warning').hide();
+                    }
+                }
+            }
+
+            <?php if (!($attributeCode === 'price' && !$block->getCanEditPrice()
+                    && !$block->getProduct()->isObjectNew())) { ?>
+                $('<?=$switchAttributeCode?>').observe('change', <?=$switchAttributeCode?>_change);
+            <?php } ?>
+            <?=$switchAttributeCode?>_change();
+        });
+    </script>
+<?php } ?>

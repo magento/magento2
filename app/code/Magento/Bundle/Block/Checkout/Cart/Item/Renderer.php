@@ -16,11 +16,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
     /**
-     * @var Configuration
-     */
-    protected $_configurationHelper = null;
-
-    /**
      * Bundle catalog product configuration
      *
      * @var Configuration
@@ -35,8 +30,8 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
-     * @param Configuration $bundleProductConfiguration
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param Configuration $bundleProductConfiguration
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -68,54 +63,6 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
     }
 
     /**
-     * @return void
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->_configurationHelper = $this->_bundleProductConfiguration;
-    }
-
-    /**
-     * Get bundled selections (slections-products collection)
-     *
-     * Returns array of options objects.
-     * Each option object will contain array of selections objects
-     *
-     * @param bool $useCache
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function _getBundleOptions($useCache = true)
-    {
-        return $this->_configurationHelper->getBundleOptions($this->getItem());
-    }
-
-    /**
-     * Obtain final price of selection in a bundle product
-     *
-     * @param \Magento\Catalog\Model\Product $selectionProduct
-     * @return float
-     */
-    protected function _getSelectionFinalPrice($selectionProduct)
-    {
-        $helper = $this->_bundleProductConfiguration;
-        $result = $helper->getSelectionFinalPrice($this->getItem(), $selectionProduct);
-        return $result;
-    }
-
-    /**
-     * Get selection quantity
-     *
-     * @param int $selectionId
-     * @return float
-     */
-    protected function _getSelectionQty($selectionId)
-    {
-        return $this->_configurationHelper->getSelectionQty($this->getProduct(), $selectionId);
-    }
-
-    /**
      * Overloaded method for getting list of bundle options
      * Caches result in quote item, because it can be used in cart 'recent view' and on same page in cart checkout
      *
@@ -123,7 +70,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      */
     public function getOptionList()
     {
-        return $this->_configurationHelper->getOptions($this->getItem());
+        return $this->_bundleProductConfiguration->getOptions($this->getItem());
     }
 
     /**

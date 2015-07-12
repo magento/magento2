@@ -6,13 +6,18 @@
 
 /**
  * Newsletter template preview block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
 class Preview extends \Magento\Backend\Block\Widget
 {
+    /**
+     * Name for profiler
+     *
+     * @var string
+     */
+    protected $profilerName = "newsletter_template_proccessing";
+
     /**
      * @var \Magento\Newsletter\Model\TemplateFactory
      */
@@ -51,26 +56,14 @@ class Preview extends \Magento\Backend\Block\Widget
         $template = $this->_templateFactory->create();
 
         if ($id = (int)$this->getRequest()->getParam('id')) {
-            $template->load($id);
+            $this->loadTemplate($template, $id);
         } else {
             $template->setTemplateType($this->getRequest()->getParam('type'));
             $template->setTemplateText($this->getRequest()->getParam('text'));
             $template->setTemplateStyles($this->getRequest()->getParam('styles'));
         }
 
-        $storeId = (int)$this->getRequest()->getParam('store_id');
-        if (!$storeId) {
-            $defaultStore = $this->_storeManager->getDefaultStoreView();
-            if (!$defaultStore) {
-                $allStores = $this->_storeManager->getStores();
-                if (isset($allStores[0])) {
-                    $defaultStore = $allStores[0];
-                }
-            }
-            $storeId = $defaultStore ? $defaultStore->getId() : null;
-        }
-
-        \Magento\Framework\Profiler::start("newsletter_template_proccessing");
+        \Magento\Framework\Profiler::start($this->profilerName);
         $vars = [];
 
         $vars['subscriber'] = $this->_subscriberFactory->create();
@@ -78,11 +71,11 @@ class Preview extends \Magento\Backend\Block\Widget
             $vars['subscriber']->load($this->getRequest()->getParam('subscriber'));
         }
 
-        $template->emulateDesign($storeId);
+        $template->emulateDesign($this->getStoreId());
         $templateProcessed = $this->_appState->emulateAreaCode(
             \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
             [$template, 'getProcessedTemplate'],
-            [$vars, true]
+            [$vars]
         );
         $template->revertDesign();
 
@@ -90,8 +83,42 @@ class Preview extends \Magento\Backend\Block\Widget
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
         }
 
-        \Magento\Framework\Profiler::stop("newsletter_template_proccessing");
+        \Magento\Framework\Profiler::stop($this->profilerName);
 
         return $templateProcessed;
+    }
+
+    /**
+     * Get Store Id from request or default
+     *
+     * @return int|null
+     */
+    protected function getStoreId()
+    {
+        $storeId = (int)$this->getRequest()->getParam('store');
+        if ($storeId) {
+            return $storeId;
+        }
+
+        $defaultStore = $this->_storeManager->getDefaultStoreView();
+        if (!$defaultStore) {
+            $allStores = $this->_storeManager->getStores();
+            if (isset($allStores[0])) {
+                $defaultStore = $allStores[0];
+            }
+        }
+
+        return $defaultStore ? $defaultStore->getId() : null;
+    }
+
+    /**
+     * @param \Magento\Newsletter\Model\Template $template
+     * @param string $id
+     * @return $this
+     */
+    protected function loadTemplate(\Magento\Newsletter\Model\Template $template, $id)
+    {
+        $template->load($id);
+        return $this;
     }
 }

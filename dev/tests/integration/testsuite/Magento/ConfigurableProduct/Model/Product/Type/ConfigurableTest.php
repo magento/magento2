@@ -79,7 +79,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testSetUsedProductAttributeIds()
     {
         $testConfigurable = $this->_getAttributeByCode('test_configurable');
-        $this->assertEmpty($this->_product->getData('_cache_instance_configurable_attributes'));
         $this->_model->setUsedProductAttributeIds([$testConfigurable->getId()], $this->_product);
         $attributes = $this->_product->getData('_cache_instance_configurable_attributes');
         $this->assertArrayHasKey(0, $attributes);
@@ -113,14 +112,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 $attribute
             );
             $this->assertEquals($testConfigurable->getId(), $attribute->getAttributeId());
-            $prices = $attribute->getPrices();
-            $this->assertCount(2, $prices);
+            $options = $attribute->getOptions();
+            $this->assertCount(2, $options);
             // fixture
-            $this->assertArrayHasKey('pricing_value', $prices[0]);
-            $this->assertEquals('Option 1', $prices[0]['label']);
-            $this->assertEquals(5, $prices[0]['pricing_value']);
-            $this->assertEquals('Option 2', $prices[1]['label']);
-            $this->assertEquals(5, $prices[1]['pricing_value']);
+            $this->assertEquals('Option 1', $options[0]['label']);
+            $this->assertEquals('Option 2', $options[1]['label']);
             break;
         }
     }
@@ -142,8 +138,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('label', $attributeOption);
             $this->assertArrayHasKey('default_label', $attributeOption);
             $this->assertArrayHasKey('store_label', $attributeOption);
-            $this->assertArrayHasKey('is_percent', $attributeOption);
-            $this->assertArrayHasKey('pricing_value', $attributeOption);
             $this->assertArrayHasKey('use_default_value', $attributeOption);
         }
         $this->assertArrayHasKey('attribute_id', $attribute);
@@ -292,7 +286,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetSpecifyOptionMessage()
     {
         $this->assertEquals(
-            'Please specify the product\'s option(s).',
+            'You need to choose options for your item.',
             (string)$this->_model->getSpecifyOptionMessage()
         );
     }

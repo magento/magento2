@@ -37,7 +37,7 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    protected $title = './label/span[1]';
+    protected $title = './/span[1]';
 
     /**
      * Selector for required option
@@ -107,7 +107,7 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    protected $optionByName = '//*[label[contains(.,"%s")]]';
+    protected $optionByName = '//*[label[contains(.,"%s")] or legend[contains(.,"%s")]]';
 
     /**
      * Get product options
@@ -463,7 +463,7 @@ class CustomOptions extends Form
     {
         foreach ($options as $option) {
             $optionBlock = $this->_rootElement->find(
-                sprintf($this->optionByName, $option['title']),
+                sprintf($this->optionByName, $option['title'], $option['title']),
                 Locator::SELECTOR_XPATH
             );
             $type = $this->getOptionType($option['type']);

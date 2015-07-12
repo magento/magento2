@@ -165,7 +165,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * Get catalog entity associated stores
      *
      * @return array
-     * @throws \Magento\UrlRewrite\Model\EntityNotAssociatedWithWebsiteException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getEntityStores()
     {
@@ -183,7 +183,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
                 $entityStores = array_intersect($entityStores, $categoryStores);
             }
             if (!$entityStores) {
-                throw new \Magento\UrlRewrite\Model\EntityNotAssociatedWithWebsiteException(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'We can\'t set up a URL rewrite because the product you chose is not associated with a website.'
                     )
@@ -193,10 +193,10 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
         } elseif ($category->getId()) {
             $entityStores = (array)$category->getStoreIds();
             $message = __(
-                'We can\'t set up a URL rewrite because the category you chose is not associated with a website.'
+                'Please assign a website to the selected category.'
             );
             if (!$entityStores) {
-                throw new \Magento\UrlRewrite\Model\EntityNotAssociatedWithWebsiteException($message);
+                throw new \Magento\Framework\Exception\LocalizedException($message);
             }
             $this->_requireStoresFilter = true;
         }

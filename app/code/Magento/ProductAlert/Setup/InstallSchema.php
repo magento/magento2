@@ -63,7 +63,7 @@ class InstallSchema implements InstallSchemaInterface
             'add_date',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Product alert add date'
         )->addColumn(
             'last_send_date',
@@ -97,21 +97,18 @@ class InstallSchema implements InstallSchemaInterface
             'customer_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('product_alert_price', 'product_id', 'catalog_product_entity', 'entity_id'),
             'product_id',
             $installer->getTable('catalog_product_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('product_alert_price', 'website_id', 'store_website', 'website_id'),
             'website_id',
             $installer->getTable('store_website'),
             'website_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Product Alert Price'
@@ -151,7 +148,7 @@ class InstallSchema implements InstallSchemaInterface
             'add_date',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Product alert add date'
         )->addColumn(
             'send_date',
@@ -185,21 +182,18 @@ class InstallSchema implements InstallSchemaInterface
             'website_id',
             $installer->getTable('store_website'),
             'website_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('product_alert_stock', 'customer_id', 'customer_entity', 'entity_id'),
             'customer_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('product_alert_stock', 'product_id', 'catalog_product_entity', 'entity_id'),
             'product_id',
             $installer->getTable('catalog_product_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Product Alert Stock'

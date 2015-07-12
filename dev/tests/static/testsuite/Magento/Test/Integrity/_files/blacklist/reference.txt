@@ -69,3 +69,5 @@ Model3
 \Magento\Mtf\Util\Generate\Repository\Resource
 \Magento\Mtf\Client\Element
 \Magento\Mtf\TestSuite\AppState
+\Magento\Framework\A
+\Magento\Framework\B

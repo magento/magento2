@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="bundleProduct" module="Magento_Bundle" type="eav" entity_type="catalog_product" product_type="bundle" collection="Magento\Catalog\Model\Resource\Product\Collection" identifier="sku" repository_class="Magento\Bundle\Test\Repository\BundleProduct" handler_interface="Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface" class="Magento\Bundle\Test\Fixture\BundleProduct">
     <dataset name="default">
         <field name="name" xsi:type="string">BundleProduct %isolation%</field>

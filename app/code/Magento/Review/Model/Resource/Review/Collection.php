@@ -17,35 +17,35 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @var string
      */
-    protected $_reviewTable;
+    protected $_reviewTable = null;
 
     /**
      * Review detail table
      *
      * @var string
      */
-    protected $_reviewDetailTable;
+    protected $_reviewDetailTable = null;
 
     /**
      * Review status table
      *
      * @var string
      */
-    protected $_reviewStatusTable;
+    protected $_reviewStatusTable = null;
 
     /**
      * Review entity table
      *
      * @var string
      */
-    protected $_reviewEntityTable;
+    protected $_reviewEntityTable = null;
 
     /**
      * Review store table
      *
      * @var string
      */
-    protected $_reviewStoreTable;
+    protected $_reviewStoreTable = null;
 
     /**
      * Add store data flag
@@ -111,11 +111,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _construct()
     {
         $this->_init('Magento\Review\Model\Review', 'Magento\Review\Model\Resource\Review');
-        $this->_reviewTable = $this->getTable('review');
-        $this->_reviewDetailTable = $this->getTable('review_detail');
-        $this->_reviewStatusTable = $this->getTable('review_status');
-        $this->_reviewEntityTable = $this->getTable('review_entity');
-        $this->_reviewStoreTable = $this->getTable('review_store');
     }
 
     /**
@@ -127,7 +122,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         parent::_initSelect();
         $this->getSelect()->join(
-            ['detail' => $this->_reviewDetailTable],
+            ['detail' => $this->getReviewDetailTable()],
             'main_table.review_id = detail.review_id',
             ['detail_id', 'title', 'detail', 'nickname', 'customer_id']
         );
@@ -156,7 +151,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $inCond = $this->getConnection()->prepareSqlCondition('store.store_id', ['in' => $storeId]);
         $this->getSelect()->join(
-            ['store' => $this->_reviewStoreTable],
+            ['store' => $this->getReviewStoreTable()],
             'main_table.review_id=store.review_id',
             []
         );
@@ -184,18 +179,19 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addEntityFilter($entity, $pkValue)
     {
+        $reviewEntityTable = $this->getReviewEntityTable();
         if (is_numeric($entity)) {
             $this->addFilter('entity', $this->getConnection()->quoteInto('main_table.entity_id=?', $entity), 'string');
         } elseif (is_string($entity)) {
             $this->_select->join(
-                $this->_reviewEntityTable,
-                'main_table.entity_id=' . $this->_reviewEntityTable . '.entity_id',
+                $reviewEntityTable,
+                'main_table.entity_id=' . $reviewEntityTable . '.entity_id',
                 ['entity_code']
             );
 
             $this->addFilter(
                 'entity',
-                $this->getConnection()->quoteInto($this->_reviewEntityTable . '.entity_code=?', $entity),
+                $this->getConnection()->quoteInto($reviewEntityTable . '.entity_code=?', $entity),
                 'string'
             );
         }
@@ -268,7 +264,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function addReviewsTotalCount()
     {
         $this->_select->joinLeft(
-            ['r' => $this->_reviewTable],
+            ['r' => $this->getReviewTable()],
             'main_table.entity_pk_value = r.entity_pk_value',
             ['total_reviews' => new \Zend_Db_Expr('COUNT(r.review_id)')]
         )->group(
@@ -311,7 +307,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $storesToReviews = [];
         if (count($reviewsIds) > 0) {
             $inCond = $adapter->prepareSqlCondition('review_id', ['in' => $reviewsIds]);
-            $select = $adapter->select()->from($this->_reviewStoreTable)->where($inCond);
+            $select = $adapter->select()->from($this->getReviewStoreTable())->where($inCond);
             $result = $adapter->fetchAll($select);
             foreach ($result as $row) {
                 if (!isset($storesToReviews[$row['review_id']])) {
@@ -328,5 +324,70 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 $item->setStores([]);
             }
         }
+    }
+
+    /**
+     * Get review table
+     *
+     * @return string
+     */
+    protected function getReviewTable()
+    {
+        if ($this->_reviewTable === null) {
+            $this->_reviewTable = $this->getTable('review');
+        }
+        return $this->_reviewTable;
+    }
+
+    /**
+     * Get review detail table
+     *
+     * @return string
+     */
+    protected function getReviewDetailTable()
+    {
+        if ($this->_reviewDetailTable === null) {
+            $this->_reviewDetailTable = $this->getTable('review_detail');
+        }
+        return $this->_reviewDetailTable;
+    }
+
+    /**
+     * Get review status table
+     *
+     * @return string
+     */
+    protected function getReviewStatusTable()
+    {
+        if ($this->_reviewStatusTable === null) {
+            $this->_reviewStatusTable = $this->getTable('review_status');
+        }
+        return $this->_reviewStatusTable;
+    }
+
+    /**
+     * Get review entity table
+     *
+     * @return string
+     */
+    protected function getReviewEntityTable()
+    {
+        if ($this->_reviewEntityTable === null) {
+            $this->_reviewEntityTable = $this->getTable('review_entity');
+        }
+        return $this->_reviewEntityTable;
+    }
+
+    /**
+     * Get review store table
+     *
+     * @return string
+     */
+    protected function getReviewStoreTable()
+    {
+        if ($this->_reviewStoreTable === null) {
+            $this->_reviewStoreTable = $this->getTable('review_store');
+        }
+        return $this->_reviewStoreTable;
     }
 }

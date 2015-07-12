@@ -6,15 +6,18 @@
 
 namespace Magento\Framework\Model\Resource\Db;
 
+use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Resource\AbstractResource;
 
 /**
  * Abstract resource model class
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractResource
+abstract class AbstractDb extends AbstractResource
 {
     /**
      * Cached resources singleton
@@ -233,6 +236,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @throws LocalizedException
      * @return string
+     * @api
      */
     public function getIdFieldName()
     {
@@ -248,6 +252,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @throws LocalizedException
      * @return string
+     * @api
      */
     public function getMainTable()
     {
@@ -262,6 +267,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param string $tableName
      * @return string
+     * @api
      */
     public function getTable($tableName)
     {
@@ -391,19 +397,24 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Exception
+     * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->isDeleted()) {
             return $this->delete($object);
         }
-        if (!$object->hasDataChanges()) {
-            return $this;
-        }
 
         $this->beginTransaction();
 
         try {
+            if (!$this->isModified($object)) {
+                $this->processNotModifiedSave($object);
+                $this->commit();
+                $object->setHasDataChanges(false);
+                return $this;
+            }
             $object->validateBeforeSave();
             $object->beforeSave();
             if ($object->isSaveAllowed()) {
@@ -411,53 +422,13 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                 $this->_beforeSave($object);
                 $this->_checkUnique($object);
                 $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                if ($object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
-                    $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
-                    /**
-                     * Not auto increment primary key support
-                     */
-                    if ($this->_isPkAutoIncrement) {
-                        $data = $this->_prepareDataForSave($object);
-                        unset($data[$this->getIdFieldName()]);
-                        $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
-                    } else {
-                        $select = $this->_getWriteAdapter()->select()->from(
-                            $this->getMainTable(),
-                            [$this->getIdFieldName()]
-                        )->where(
-                            $condition
-                        );
-                        if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
-                            $data = $this->_prepareDataForSave($object);
-                            unset($data[$this->getIdFieldName()]);
-                            if (!empty($data)) {
-                                $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
-                            }
-                        } else {
-                            $this->_getWriteAdapter()->insert(
-                                $this->getMainTable(),
-                                $this->_prepareDataForSave($object)
-                            );
-                        }
-                    }
+                if ($this->isObjectNotNew($object)) {
+                    $this->updateObject($object);
                 } else {
-                    $bind = $this->_prepareDataForSave($object);
-                    if ($this->_isPkAutoIncrement) {
-                        unset($bind[$this->getIdFieldName()]);
-                    }
-                    $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
-
-                    $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
-
-                    if ($this->_useIsObjectNew) {
-                        $object->isObjectNew(false);
-                    }
+                    $this->saveNewObject($object);
                 }
-
                 $this->unserializeFields($object);
-                $this->_afterSave($object);
-
-                $object->afterSave();
+                $this->processAfterSaves($object);
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
@@ -621,6 +592,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * @return $this
      * @throws AlreadyExistsException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -636,13 +608,13 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
 
             foreach ($fields as $unique) {
                 $select->reset(\Zend_Db_Select::WHERE);
-
-                if (is_array($unique['field'])) {
-                    foreach ($unique['field'] as $field) {
-                        $select->where($field . '=?', trim($data->getData($field)));
+                foreach ((array)$unique['field'] as $field) {
+                    $value = $data->getData($field);
+                    if ($value === null) {
+                        $select->where($field . ' IS NULL');
+                    } else {
+                        $select->where($field . '=?', trim($value));
                     }
-                } else {
-                    $select->where($unique['field'] . '=?', trim($data->getData($unique['field'])));
                 }
 
                 if ($object->getId() || $object->getId() === '0') {
@@ -769,5 +741,135 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             return $checksum[$table];
         }
         return $checksum;
+    }
+
+    /**
+     * Get the array of data fields that was changed or added
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return array
+     */
+    protected function prepareDataForUpdate($object)
+    {
+        $data = $object->getData();
+        foreach ($object->getStoredData() as $key => $value) {
+            if (array_key_exists($key, $data) && $data[$key] === $value) {
+                unset($data[$key]);
+            }
+        }
+        $dataObject = clone $object;
+        $dataObject->setData($data);
+        $data = $this->_prepareDataForTable($dataObject, $this->getMainTable());
+        unset($data[$this->getIdFieldName()]);
+        unset($dataObject);
+
+        return $data;
+    }
+
+    /**
+     * Check if object is new
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return bool
+     */
+    protected function isObjectNotNew(\Magento\Framework\Model\AbstractModel $object)
+    {
+        return $object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew());
+    }
+
+    /**
+     * Save New Object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @throws LocalizedException
+     * @return void
+     */
+    protected function saveNewObject(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $bind = $this->_prepareDataForSave($object);
+        if ($this->_isPkAutoIncrement) {
+            unset($bind[$this->getIdFieldName()]);
+        }
+        $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
+
+        $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
+
+        if ($this->_useIsObjectNew) {
+            $object->isObjectNew(false);
+        }
+    }
+
+    /**
+     * Update existing object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @throws LocalizedException
+     * @return void
+     */
+    protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        /**
+         * Not auto increment primary key support
+         */
+        if ($this->_isPkAutoIncrement) {
+            $data = $this->prepareDataForUpdate($object);
+            if (!empty($data)) {
+                $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+            }
+        } else {
+            $select = $this->_getWriteAdapter()->select()->from(
+                $this->getMainTable(),
+                [$this->getIdFieldName()]
+            )->where(
+                $condition
+            );
+            if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
+                $data = $this->prepareDataForUpdate($object);
+                if (!empty($data)) {
+                    $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                }
+            } else {
+                $this->_getWriteAdapter()->insert(
+                    $this->getMainTable(),
+                    $this->_prepareDataForSave($object)
+                );
+            }
+        }
+    }
+
+    /**
+     * Sequences of after save call
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return void
+     */
+    protected function processAfterSaves(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->_afterSave($object);
+        $object->afterSave();
+    }
+
+    /**
+     * Check if object was modified
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return bool
+     */
+    protected function isModified(\Magento\Framework\Model\AbstractModel $object)
+    {
+        return $object->hasDataChanges();
+    }
+
+    /**
+     * Process object which was modified
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function processNotModifiedSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        return $this;
     }
 }

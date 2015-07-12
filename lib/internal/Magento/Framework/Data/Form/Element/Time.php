@@ -52,7 +52,7 @@ class Time extends AbstractElement
      */
     public function getElementHtml()
     {
-        $this->addClass('select');
+        $this->addClass('select admin__control-select');
 
         $value_hrs = 0;
         $value_min = 0;

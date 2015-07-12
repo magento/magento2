@@ -21,7 +21,6 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -35,7 +34,6 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
@@ -48,7 +46,6 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
             $fileFactory,
             $translateInline,
             $resultPageFactory,
-            $resultRedirectFactory,
             $resultJsonFactory,
             $resultLayoutFactory,
             $resultRawFactory

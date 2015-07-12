@@ -21,6 +21,8 @@ class Server
 
     const REQUEST_PARAM_WSDL = 'wsdl';
 
+    const REQUEST_PARAM_LIST_WSDL = 'wsdl_list';
+
     /**
      * @var \Magento\Framework\App\AreaLIst
      */
@@ -30,11 +32,6 @@ class Server
      * @var \Magento\Framework\Config\ScopeInterface
      */
     protected $_configScope;
-
-    /**
-     * @var \Magento\Framework\DomDocument\Factory
-     */
-    protected $_domDocumentFactory;
 
     /**
      * @var \Magento\Webapi\Controller\Soap\Request
@@ -67,7 +64,6 @@ class Server
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Webapi\Controller\Soap\Request $request
-     * @param \Magento\Framework\DomDocument\Factory $domDocumentFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
@@ -78,7 +74,6 @@ class Server
         \Magento\Framework\App\AreaList $areaList,
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Webapi\Controller\Soap\Request $request,
-        \Magento\Framework\DomDocument\Factory $domDocumentFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
@@ -86,7 +81,7 @@ class Server
     ) {
         if (!extension_loaded('soap')) {
             throw new \Magento\Framework\Webapi\Exception(
-                'SOAP extension is not loaded.',
+                __('SOAP extension is not loaded.'),
                 0,
                 \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
             );
@@ -94,7 +89,6 @@ class Server
         $this->_areaList = $areaList;
         $this->_configScope = $configScope;
         $this->_request = $request;
-        $this->_domDocumentFactory = $domDocumentFactory;
         $this->_storeManager = $storeManager;
         $this->_soapServerFactory = $soapServerFactory;
         $this->_typeProcessor = $typeProcessor;

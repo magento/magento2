@@ -21,7 +21,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Exception
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Bad value was supplied.
      */
     public function testEmptyIds()

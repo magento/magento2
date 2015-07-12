@@ -48,7 +48,7 @@ class CustomerForm extends Form
     }
 
     /**
-     * Fill the customer data
+     * Fill the customer data.
      *
      * @param FixtureInterface $customer
      * @param SimpleElement|null $element
@@ -58,8 +58,9 @@ class CustomerForm extends Form
     {
         /** @var Customer $customer */
         if ($customer->hasData()) {
-            return parent::fill($customer, $element);
+            parent::fill($customer, $element);
         }
+        return $this;
     }
 
     /**

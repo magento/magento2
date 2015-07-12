@@ -6,6 +6,8 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
@@ -18,9 +20,9 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
         $itemId = $this->getRequest()->getParam('item_id');
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultRedirectFactory->create();
+        $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Store')->load($itemId))) {
-            $this->messageManager->addError(__('Unable to proceed. Please, try again'));
+            $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
@@ -37,7 +39,7 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 
             $this->_eventManager->dispatch('store_delete', ['store' => $model]);
 
-            $this->messageManager->addSuccess(__('The store view has been deleted.'));
+            $this->messageManager->addSuccess(__('You deleted the store view.'));
             return $redirectResult->setPath('adminhtml/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

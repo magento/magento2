@@ -8,6 +8,8 @@ namespace Magento\Framework\Pricing;
 
 /**
  * Interface PriceCurrencyInterface
+ *
+ * @api
  */
 interface PriceCurrencyInterface
 {
@@ -89,4 +91,11 @@ interface PriceCurrencyInterface
      * @return \Magento\Framework\Model\AbstractModel
      */
     public function getCurrency($scope = null, $currency = null);
+
+    /**
+     * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
+     * @param \Magento\Framework\Model\AbstractModel|string|null $currency
+     * @return string
+     */
+    public function getCurrencySymbol($scope = null, $currency = null);
 }

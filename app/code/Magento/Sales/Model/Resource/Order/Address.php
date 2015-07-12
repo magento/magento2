@@ -5,8 +5,9 @@
  */
 namespace Magento\Sales\Model\Resource\Order;
 
-use Magento\Sales\Model\Resource\Entity as SalesResource;
+use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Spi\OrderAddressResourceInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 
 /**
  * Flat sales order address resource
@@ -33,24 +34,33 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\Sales\Model\Increment $salesIncrement
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
+     * @param Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridPool $gridPool
-     * @param string|null $resourcePrefix
-     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\Sales\Model\Increment $salesIncrement,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        $resourcePrefix = null
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        parent::__construct(
+            $context,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
+            $resourcePrefix
+        );
     }
 
     /**
@@ -107,7 +117,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         $warnings = $this->_validator->validate($object);
         if (!empty($warnings)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Cannot save address:\n%1", implode("\n", $warnings))
+                __("We can't save the address:\n%1", implode("\n", $warnings))
             );
         }
         return $this;
@@ -122,8 +132,8 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $resource = parent::_afterSave($object);
-        if ($object->hasDataChanges() && $object->getOrderId()) {
-            $this->gridPool->refreshByOrderId($object->getOrderId());
+        if ($object->getParentId()) {
+            $this->gridPool->refreshByOrderId($object->getParentId());
         }
         return $resource;
     }

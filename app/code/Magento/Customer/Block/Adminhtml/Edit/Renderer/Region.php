@@ -48,10 +48,10 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
 
         $regionId = $element->getForm()->getElement('region_id')->getValue();
 
-        $html = '<div class="field field-state required">';
-        $element->setClass('input-text');
+        $html = '<div class="field field-state required admin__field _required">';
+        $element->setClass('input-text admin__control-text');
         $element->setRequired(true);
-        $html .= $element->getLabelHtml() . '<div class="control">';
+        $html .= $element->getLabelHtml() . '<div class="control admin__field-control">';
         $html .= $element->getElementHtml();
 
         $selectName = str_replace('region', 'region_id', $element->getName());
@@ -60,7 +60,7 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
             $selectId .
             '" name="' .
             $selectName .
-            '" class="select required-entry" style="display:none">';
+            '" class="select required-entry admin__control-select" style="display:none">';
         $html .= '<option value="">' . __('Please select') . '</option>';
         $html .= '</select>';
 

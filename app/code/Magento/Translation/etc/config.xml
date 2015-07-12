@@ -16,7 +16,7 @@
                 </invalid_caches>
             </translate_inline>
             <js>
-                <translate_strategy>none</translate_strategy>
+                <translate_strategy>dictionary</translate_strategy>
             </js>
         </dev>
     </default>

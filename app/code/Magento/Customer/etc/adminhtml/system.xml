@@ -82,8 +82,8 @@
                     <backend_model>Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault</backend_model>
                 </field>
                 <field id="vat_frontend_visibility" translate="label" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Show VAT Number on Frontend</label>
-                    <comment>To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.</comment>
+                    <label>Show VAT Number on Storefront</label>
+                    <comment>To show VAT number on Storefront, set "Show VAT Number on Storefront" option to Yes.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="email_domain" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">

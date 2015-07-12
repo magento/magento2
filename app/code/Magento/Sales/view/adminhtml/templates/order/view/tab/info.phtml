@@ -17,60 +17,58 @@
 <?php echo $block->getChildHtml('order_info') ?>
 <input type="hidden" name="order_id" value="<?php echo $_order->getId() ?>"/>
 
-<?php if (!$_order->getIsVirtual()): ?>
-<div class="clearfix">
-<?php endif; ?>
-
-    <div class="order-payment-method<?php if ($_order->getIsVirtual()): ?> order-payment-method-virtual<?php endif; ?>">
-        <?php /* Payment Method */ ?>
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title">
+<section class="admin__page-section order-view-billing-shipping">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Payment &amp; Shipping Method') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-payment-method<?php if ($_order->getIsVirtual()): ?> order-payment-method-virtual<?php endif; ?>">
+            <?php /* Payment Method */ ?>
+            <div class="admin__page-section-item-title">
                 <span class="title"><?php echo __('Payment Information') ?></span>
             </div>
-            <div><?php echo $block->getPaymentHtml() ?></div>
-            <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
-            <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
+            <div class="admin__page-section-item-content">
+                <div class="order-payment-method-title"><?php echo $block->getPaymentHtml() ?></div>
+                <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+                <div class="order-payment-additional">
+                    <?php echo $block->getChildHtml('order_payment_additional'); ?>
+                    <?php echo $block->getChildHtml('payment_additional_info'); ?>
+                </div>
+            </div>
         </div>
+        <?php echo $block->getChildHtml('order_shipping_view') ?>
     </div>
-
-<?php if ($_order->getIsVirtual()): ?>
-</div><?php /* opening div is in app\code\Magento\Sales\view\adminhtml\order\view\info.phtml */ ?>
-<?php endif; ?>
-
-<?php echo $block->getChildHtml('order_shipping_view') ?>
-
-<?php if (!$_order->getIsVirtual()): ?>
-</div>
-<?php endif; ?>
+</section>
 
 <?php echo $block->getGiftOptionsHtml() ?>
 
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Items Ordered') ?></span>
     </div>
     <?php echo $block->getItemsHtml() ?>
-</div>
+</section>
 
-<div class="clearfix">
-    <div class="order-comments-history">
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title">
-                <span class="title"><?php echo __('Comments History') ?></span>
-            </div>
-            <fieldset><?php echo $block->getChildHtml('order_history') ?></fieldset>
-        </div>
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Order Total') ?></span>
     </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-comments-history">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php echo __('Notes for this Order') ?></span>
+            </div>
+            <?php echo $block->getChildHtml('order_history') ?>
+        </div>
 
-    <div class="order-totals">
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title">
+        <div class="admin__page-section-item order-totals">
+            <div class="admin__page-section-item-title">
                 <span class="title"><?php echo __('Order Totals') ?></span>
             </div>
             <?php echo $block->getChildHtml('order_totals') ?>
         </div>
     </div>
-</div>
+</section>
 
 <?php echo $block->getChildHtml('popup_window');?>
 

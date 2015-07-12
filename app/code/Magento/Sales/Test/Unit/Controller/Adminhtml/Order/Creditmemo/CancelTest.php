@@ -113,36 +113,6 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         $this->helperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())
-            ->method('getHelper')
-            ->will($this->returnValue($this->helperMock));
-        $this->actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())
-            ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
-        $this->contextMock->expects($this->any())
-            ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlagMock));
-        $this->contextMock->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
-        $this->contextMock->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
-        $this->contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
-        $this->contextMock->expects($this->any())
-            ->method('getTitle')
-            ->will($this->returnValue($titleMock));
-        $this->contextMock->expects($this->any())
-            ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
         $this->loaderMock = $this->getMockBuilder('Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader')
             ->disableOriginalConstructor()
             ->getMock();
@@ -160,6 +130,39 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         $this->resultForwardMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->any())
+            ->method('getHelper')
+            ->will($this->returnValue($this->helperMock));
+        $this->actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->any())
+            ->method('getSession')
+            ->willReturn($this->sessionMock);
+        $this->contextMock->expects($this->any())
+            ->method('getActionFlag')
+            ->willReturn($this->actionFlagMock);
+        $this->contextMock->expects($this->any())
+            ->method('getRequest')
+            ->willReturn($this->requestMock);
+        $this->contextMock->expects($this->any())
+            ->method('getResponse')
+            ->willReturn($this->responseMock);
+        $this->contextMock->expects($this->any())
+            ->method('getObjectManager')
+            ->willReturn($this->objectManagerMock);
+        $this->contextMock->expects($this->any())
+            ->method('getTitle')
+            ->willReturn($titleMock);
+        $this->contextMock->expects($this->any())
+            ->method('getMessageManager')
+            ->willReturn($this->messageManagerMock);
+        $this->contextMock->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactoryMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $objectManager->getObject(
@@ -167,7 +170,6 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->contextMock,
                 'creditmemoLoader' => $this->loaderMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
                 'resultForwardFactory' => $this->resultForwardFactoryMock
             ]
         );

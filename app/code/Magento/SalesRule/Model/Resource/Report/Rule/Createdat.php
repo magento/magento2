@@ -49,12 +49,10 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $table = $this->getMainTable();
         $sourceTable = $this->getTable('sales_order');
         $adapter = $this->_getWriteAdapter();
+        $salesAdapter = $this->_resources->getConnection('sales_read');
         $adapter->beginTransaction();
 
         try {
@@ -64,11 +62,11 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 $subSelect = null;
             }
 
-            $this->_clearTableByDateRange($table, $from, $to, $subSelect);
+            $this->_clearTableByDateRange($table, $from, $to, $subSelect, false, $salesAdapter);
 
-            // convert dates from UTC to current admin timezone
+            // convert dates to current admin timezone
             $periodExpr = $adapter->getDatePartSql(
-                $this->getStoreTZOffsetQuery($sourceTable, $aggregationField, $from, $to)
+                $this->getStoreTZOffsetQuery($sourceTable, $aggregationField, $from, $to, null, $salesAdapter)
             );
 
             $columns = [
@@ -140,14 +138,18 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $select->from(['source_table' => $sourceTable], $columns)->where('coupon_code IS NOT NULL');
 
             if ($subSelect !== null) {
-                $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
+                $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period', $salesAdapter));
             }
 
             $select->group([$periodExpr, 'store_id', 'status', 'coupon_code']);
 
             $select->having('COUNT(entity_id) > 0');
 
-            $adapter->query($select->insertFromSelect($table, array_keys($columns)));
+            $aggregatedData = $salesAdapter->fetchAll($select);
+
+            if ($aggregatedData) {
+                $adapter->insertOnDuplicate($table, $aggregatedData, array_keys($columns));
+            }
 
             $select->reset();
 
@@ -169,7 +171,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $select->from($table, $columns)->where('store_id <> 0');
 
             if ($subSelect !== null) {
-                $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
+                $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period', $salesAdapter));
             }
 
             $select->group(['period', 'order_status', 'coupon_code']);

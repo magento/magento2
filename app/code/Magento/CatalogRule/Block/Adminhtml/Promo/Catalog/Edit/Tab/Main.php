@@ -68,6 +68,7 @@ class Main extends Generic implements TabInterface
      * Prepare content for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -78,6 +79,7 @@ class Main extends Generic implements TabInterface
      * Prepare title for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -88,6 +90,7 @@ class Main extends Generic implements TabInterface
      * Returns status flag about this tab can be showed or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -98,6 +101,7 @@ class Main extends Generic implements TabInterface
      * Returns status flag about this tab hidden or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -194,9 +198,8 @@ class Main extends Generic implements TabInterface
             'date',
             [
                 'name' => 'from_date',
-                'label' => __('From Date'),
-                'title' => __('From Date'),
-                'image' => $this->getViewFileUrl('images/grid-cal.png'),
+                'label' => __('From'),
+                'title' => __('From'),
                 'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             ]
@@ -206,9 +209,8 @@ class Main extends Generic implements TabInterface
             'date',
             [
                 'name' => 'to_date',
-                'label' => __('To Date'),
-                'title' => __('To Date'),
-                'image' => $this->getViewFileUrl('images/grid-cal.png'),
+                'label' => __('To'),
+                'title' => __('To'),
                 'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             ]

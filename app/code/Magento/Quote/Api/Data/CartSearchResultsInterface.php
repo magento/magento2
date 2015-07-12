@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface CartSearchResultsInterface
+ * @api
+ */
 interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**#@+
@@ -31,7 +35,7 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      * @param \Magento\Quote\Api\Data\CartInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 
     /**
      * Get search criteria.
@@ -46,7 +50,7 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null);
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Get total count.

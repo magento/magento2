@@ -84,7 +84,7 @@ class StockManagement implements StockManagementInterface
             $orderedQty = $items[$productId];
             $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
             $canSubtractQty = $stockItem->getItemId() && $this->canSubtractQty($stockItem);
-            if (!$canSubtractQty || !$this->stockConfiguration->isQty($this->getProductType($productId))) {
+            if (!$canSubtractQty || !$this->stockConfiguration->isQty($lockedItemRecord['type_id'])) {
                 continue;
             }
             if (!$stockItem->hasAdminArea()

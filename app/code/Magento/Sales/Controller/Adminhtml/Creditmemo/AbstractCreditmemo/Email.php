@@ -13,23 +13,6 @@ namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 class Email extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
-        parent::__construct($context);
-    }
-
-    /**
      * @return bool
      */
     protected function _isAllowed()
@@ -55,7 +38,7 @@ class Email extends \Magento\Backend\App\Action
         $this->_objectManager->create('Magento\Sales\Model\Order\CreditmemoNotifier')
             ->notify($creditmemo);
 
-        $this->messageManager->addSuccess(__('We sent the message.'));
+        $this->messageManager->addSuccess(__('You sent the message.'));
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('sales/order_creditmemo/view', ['creditmemo_id' => $creditmemoId]);
         return $resultRedirect;

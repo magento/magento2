@@ -10,5 +10,15 @@ namespace Magento\Ui\Component\Form\Element\DataType;
  */
 class Number extends AbstractDataType
 {
-    //
+    const NAME = 'number';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
 }

@@ -113,7 +113,7 @@ class Http implements \Magento\Framework\AppInterface
         /** @var \Magento\Framework\App\FrontControllerInterface $frontController */
         $frontController = $this->_objectManager->get('Magento\Framework\App\FrontControllerInterface');
         $result = $frontController->dispatch($this->_request);
-        // TODO: Temporary solution till all controllers are returned not ResultInterface (MAGETWO-28359)
+        // TODO: Temporary solution until all controllers return ResultInterface (MAGETWO-28359)
         if ($result instanceof ResultInterface) {
             $this->registry->register('use_page_cache_plugin', true, true);
             $result->renderResult($this->_response);
@@ -224,7 +224,7 @@ class Http implements \Magento\Framework\AppInterface
      */
     private function handleSessionException(\Exception $exception)
     {
-        if ($exception instanceof \Magento\Framework\Session\Exception) {
+        if ($exception instanceof \Magento\Framework\Exception\SessionException) {
             $this->_response->setRedirect($this->_request->getDistroBaseUrl());
             $this->_response->sendHeaders();
             return true;
@@ -240,7 +240,7 @@ class Http implements \Magento\Framework\AppInterface
      */
     private function handleInitException(\Exception $exception)
     {
-        if ($exception instanceof \Magento\Framework\App\InitException) {
+        if ($exception instanceof \Magento\Framework\Exception\State\InitException) {
             require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');
             return true;
         }

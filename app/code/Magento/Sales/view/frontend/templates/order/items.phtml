@@ -31,7 +31,7 @@
 } ?>
             <tbody>
                 <?php echo $block->getItemHtml($_item) ?>
-                <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
+                <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $_item) && $_item->getGiftMessageId()): ?>
                     <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_item); ?>
                     <tr>
                         <td class="col options" colspan="5">

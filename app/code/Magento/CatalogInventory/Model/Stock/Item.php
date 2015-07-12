@@ -100,7 +100,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * @param StockRegistryInterface $stockRegistry
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -115,7 +115,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
         StockRegistryInterface $stockRegistry,
         StockItemRepositoryInterface $stockItemRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -239,11 +239,11 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * @return int Timestamp
+     * @return string Timestamp
      */
     public function getLowStockDate()
     {
-        return (int) $this->_getData(static::LOW_STOCK_DATE);
+        return $this->_getData(static::LOW_STOCK_DATE);
     }
 
     /**

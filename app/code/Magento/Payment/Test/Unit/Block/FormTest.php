@@ -90,13 +90,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with($field)
             ->will($this->returnValue($value));
-        $method = $this->getMock(
-            'Magento\Payment\Model\MethodInterface',
-            ['getInfoInstance', 'getFormBlockType', 'getTitle', 'getCode'],
-            [],
-            '',
-            false
-        );
+        $method = $this->getMockBuilder(
+            'Magento\Payment\Model\MethodInterface'
+        )->getMockForAbstractClass();
         $method->expects($this->any())
             ->method('getInfoInstance')
             ->will($this->returnValue($methodInstance));
@@ -118,5 +114,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 ['aa', '!@#$%^&amp;*()_#$%@^%&amp;$%^*%&amp;^*', 'cc']
             ]
         ];
+    }
+
+    public function testSetMethod()
+    {
+        $methodInterfaceMock = $this->getMockBuilder('\Magento\Payment\Model\MethodInterface')
+            ->getMockForAbstractClass();
+
+        $this->assertSame($this->_object, $this->_object->setMethod($methodInterfaceMock));
     }
 }

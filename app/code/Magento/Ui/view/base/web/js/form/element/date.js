@@ -4,13 +4,21 @@
  */
 define([
     'moment',
+    'mageUtils',
     './abstract'
-], function (moment, Abstract) {
+], function (moment, utils, Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
-            dateFormat: 'MM/DD/YYYY'
+            dateFormat: 'MM/dd/YYYY',
+            options: {}
+        },
+
+        initProperties: function () {
+            this.dateFormat = utils.normalizeDate(this.dateFormat);
+
+            return this._super();
         },
 
         /**
@@ -18,7 +26,7 @@ define([
          *
          * @returns {String}
          */
-        getInititalValue: function () {
+        getInitialValue: function () {
             var value = this._super();
 
             if (value) {

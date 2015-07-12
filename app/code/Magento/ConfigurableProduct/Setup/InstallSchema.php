@@ -77,8 +77,7 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-                \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
+                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Super Attribute Table');
 
@@ -147,7 +146,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_super_attribute_id',
                 $installer->getTable('catalog_product_super_attribute'),
                 'product_super_attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -155,100 +153,9 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Super Attribute Label Table');
-        $installer->getConnection()->createTable($table);
-
-        /**
-         * Create table 'catalog_product_super_attribute_pricing'
-         */
-        $table = $installer->getConnection()
-            ->newTable($installer->getTable('catalog_product_super_attribute_pricing'))
-            ->addColumn(
-                'value_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-                'Value ID'
-            )
-            ->addColumn(
-                'product_super_attribute_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Product Super Attribute ID'
-            )
-            ->addColumn(
-                'value_index',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                255,
-                ['nullable' => true, 'default' => null],
-                'Value Index'
-            )
-            ->addColumn(
-                'is_percent',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'default' => '0'],
-                'Is Percent'
-            )
-            ->addColumn(
-                'pricing_value',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Pricing Value'
-            )
-            ->addColumn(
-                'website_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Website ID'
-            )
-            ->addIndex(
-                $installer->getIdxName('catalog_product_super_attribute_pricing', ['website_id']),
-                ['website_id']
-            )
-            ->addIndex(
-                $installer->getIdxName(
-                    'catalog_product_super_attribute_pricing',
-                    ['product_super_attribute_id', 'value_index', 'website_id'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                ),
-                ['product_super_attribute_id', 'value_index', 'website_id'],
-                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
-            )
-            ->addForeignKey(
-                $installer->getFkName(
-                    'catalog_product_super_attribute_pricing',
-                    'website_id',
-                    'store_website',
-                    'website_id'
-                ),
-                'website_id',
-                $installer->getTable('store_website'),
-                'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-            )
-            ->addForeignKey(
-                $installer->getFkName(
-                    'catalog_product_super_attribute_pricing',
-                    'product_super_attribute_id',
-                    'catalog_product_super_attribute',
-                    'product_super_attribute_id'
-                ),
-                'product_super_attribute_id',
-                $installer->getTable('catalog_product_super_attribute'),
-                'product_super_attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-            )
-            ->setComment('Catalog Product Super Attribute Pricing Table');
-
         $installer->getConnection()->createTable($table);
 
         /**
@@ -300,7 +207,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -308,7 +214,6 @@ class InstallSchema implements InstallSchemaInterface
                 'parent_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Super Link Table');

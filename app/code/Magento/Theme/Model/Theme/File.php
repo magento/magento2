@@ -54,7 +54,7 @@ class File extends AbstractModel implements FileInterface
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
      * @param \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -63,7 +63,7 @@ class File extends AbstractModel implements FileInterface
         \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
         \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_themeFactory = $themeFactory;
@@ -122,13 +122,13 @@ class File extends AbstractModel implements FileInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getTheme()
     {
         $theme = $this->_themeFactory->create($this->getData('theme_id'));
         if (!$theme) {
-            throw new \Magento\Framework\Exception('Theme id should be set');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Theme id should be set'));
         }
         return $theme;
     }

@@ -95,7 +95,7 @@ interface ReadInterface
      * @param string|null $flag
      * @param resource|null $context
      * @return string
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function readFile($path, $flag = null, $context = null);
 }

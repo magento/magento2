@@ -5,6 +5,7 @@
 
 @legend-border-bottom: 1px solid @color-gray-light6;
 @form-field__vertical-indent__desktop: 29px;
+@form-calendar-icon__color: @primary__color;
 
 //
 //    Common
@@ -106,6 +107,26 @@ div.mage-error[generated] {
 input:focus ~ .tooltip .tooltip-content,
 select:focus ~ .tooltip .tooltip-content {
     display: block;
+}
+
+.hasDatepicker {
+    + .ui-datepicker-trigger {
+        .button-reset();
+        .icon-font(
+        @_icon-font-content: @icon-calendar,
+        @_icon-font-color: @primary__color__lighter,
+        @_icon-font-size: @icon-calendar__font-size,
+        @_icon-font-line-height: @icon-calendar__font-size,
+        @_icon-font-display: block,
+        @_icon-font-text-hide: true
+        );
+        display: inline-block;
+        vertical-align: middle;
+        &:focus {
+            box-shadow: none;
+            outline: 0;
+        }
+    }
 }
 
 //

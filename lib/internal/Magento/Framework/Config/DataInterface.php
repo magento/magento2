@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Config;
 
+/**
+ * Config data interface.
+ *
+ * @api
+ */
 interface DataInterface
 {
     /**

@@ -6,8 +6,9 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action;
 
-use Magento\Backend\Test\Block\Widget\Form;
-use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Product attribute massaction edit page.
@@ -15,30 +16,23 @@ use Magento\Mtf\Client\Locator;
 class Attribute extends Form
 {
     /**
-     * CSS selector for 'save' button.
+     * Fill the root form.
      *
-     * @var string
+     * @param FixtureInterface $fixture
+     * @param SimpleElement|null $element
+     * @return $this
      */
-    protected $saveButton = '[data-ui-id="page-actions-toolbar-save-button"]';
-
-    /**
-     * XPath selector for checkbox that enables price editing.
-     *
-     * @var string
-     */
-    protected $priceFieldEnablerSelector = '//*[@id="attribute-price-container"]/div[1]/div/label//*[@type="checkbox"]';
-
-    /**
-     * Enable price field editing.
-     *
-     * @return void
-     */
-    public function enablePriceEdit()
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
-        $this->_rootElement->find(
-            $this->priceFieldEnablerSelector,
-            Locator::SELECTOR_XPATH,
-            'checkbox'
-        )->setValue('Yes');
+        $data = $fixture->getData();
+        $fields = [];
+        foreach ($data as $name => $dataValue) {
+            $fields['toggle_' . $name] = 'Yes';
+            $fields[$name] = $dataValue;
+        }
+        $mapping = $this->dataMapping($fields);
+        $this->_fill($mapping, $element);
+
+        return $this;
     }
 }

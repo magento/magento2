@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 class InfoTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Payment\Model\Info */
+    /** @var \Magento\Payment\Model\InfoInterface */
     protected $info;
 
     /** @var ObjectManagerHelper */
@@ -45,9 +45,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->methodInstanceMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['setInfoInstance', 'getCode', 'getFormBlockType', 'getTitle'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->info = $this->objectManagerHelper->getObject(

@@ -50,7 +50,7 @@ class Memory
             // try to use the Windows command line
             // some ports of Unix commands on Windows, such as MinGW, have limited capabilities and cannot be used
             $result = $this->_getWinProcessMemoryUsage($pid);
-        } catch (\Magento\Framework\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // fall back to the Unix command line
             $result = $this->_getUnixProcessMemoryUsage($pid);
         }

@@ -65,7 +65,6 @@ class Book extends \Magento\Framework\View\Element\Template
         $this->_addressConfig = $addressConfig;
         $this->addressMapper = $addressMapper;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
     }
 
     /**

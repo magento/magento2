@@ -13,7 +13,10 @@
     <td class="col-ordered-qty"><?php echo $block->getColumnHtml($_item, 'qty') ?></td>
     <td class="col-qty <?php if ($block->isShipmentRegular()): ?>last<?php endif; ?>">
         <?php if ($block->canShipPartiallyItem()): ?>
-            <input type="text" class="input-text qty-item" name="shipment[items][<?php echo $_item->getOrderItemId() ?>]" value="<?php echo $_item->getQty()*1 ?>" />
+            <input type="text"
+                   class="input-text admin__control-text qty-item"
+                   name="shipment[items][<?php echo $_item->getOrderItemId() ?>]"
+                   value="<?php echo $_item->getQty()*1 ?>" />
         <?php else: ?>
             <?php echo $_item->getQty()*1 ?>
         <?php endif; ?>

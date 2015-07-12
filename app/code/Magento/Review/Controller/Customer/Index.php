@@ -1,32 +1,31 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Customer;
 
-class Index extends \Magento\Review\Controller\Customer
+use Magento\Review\Controller\Customer as CustomerController;
+use Magento\Framework\Controller\ResultFactory;
+
+class Index extends CustomerController
 {
     /**
      * Render my product reviews
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
-
-        if ($navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation')) {
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        if ($navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation')) {
             $navigationBlock->setActive('review/customer');
         }
-        if ($block = $this->_view->getLayout()->getBlock('review_customer_list')) {
+        if ($block = $resultPage->getLayout()->getBlock('review_customer_list')) {
             $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
-
-        $this->_view->getPage()->getConfig()->getTitle()->set(__('My Product Reviews'));
-
-        $this->_view->renderLayout();
+        $resultPage->getConfig()->getTitle()->set(__('My Product Reviews'));
+        return $resultPage;
     }
 }

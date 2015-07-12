@@ -9,25 +9,6 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
-        parent::__construct($context, $coreRegistry);
-    }
-
-    /**
      * Save action
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -55,7 +36,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 // save the data
                 $model->save();
                 // display success message
-                $this->messageManager->addSuccess(__('The block has been saved.'));
+                $this->messageManager->addSuccess(__('You saved the block.'));
                 // clear previously saved data from session
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
 

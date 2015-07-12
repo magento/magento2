@@ -1,12 +1,15 @@
 <?php
 /**
- * Routes configuration interface
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Route;
 
+/**
+ * Routes configuration interface
+ *
+ * @api
+ */
 interface ConfigInterface
 {
     /**
@@ -32,7 +35,7 @@ interface ConfigInterface
      *
      * @param string $frontName
      * @param string $scope
-     * @return array
+     * @return string[]
      */
     public function getModulesByFrontName($frontName, $scope = null);
 }

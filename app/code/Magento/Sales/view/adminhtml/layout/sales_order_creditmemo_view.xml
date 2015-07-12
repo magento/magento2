@@ -8,6 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="sales_creditmemo_item_price"/>
     <body>
+        <referenceContainer name="admin.scope.col.wrap" htmlClass="admin__old" /> <!-- ToDo UI: remove this wrapper with old styles removal. The class name "admin__old" is for tests only, we shouldn't use it in any way -->
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View" name="sales_creditmemo_view">
                 <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Form" name="form" template="order/creditmemo/view/form.phtml">

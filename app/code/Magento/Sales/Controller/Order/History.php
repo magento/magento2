@@ -38,7 +38,6 @@ class History extends \Magento\Framework\App\Action\Action implements OrderInter
     {
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->initMessages();
         $resultPage->getConfig()->getTitle()->set(__('My Orders'));
 
         $block = $resultPage->getLayout()->getBlock('customer.account.link.back');

@@ -6,31 +6,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-use Magento\Framework\Registry;
-use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\RedirectFactory;
-
 class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
-    /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @param Context $context
-     * @param Registry $coreRegistry
-     * @param RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        Context $context,
-        Registry $coreRegistry,
-        RedirectFactory $resultRedirectFactory
-    ) {
-        parent::__construct($context, $coreRegistry);
-        $this->resultRedirectFactory = $resultRedirectFactory;
-    }
-
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
@@ -47,7 +24,7 @@ class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
             } catch (\Exception $e) {
                 $this->messageManager->addException(
                     $e,
-                    __('Something went wrong while we were unassigning the order.')
+                    __('Something went wrong while unassigning the order.')
                 );
             }
         } else {

@@ -112,7 +112,7 @@ class Builder
      * @param AbstractCondition $condition
      * @param string $value
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '')
     {
@@ -121,7 +121,7 @@ class Builder
             $conditionOperator = $condition->getOperatorForValidate();
 
             if (!isset($this->_conditionOperatorMap[$conditionOperator])) {
-                throw new \Magento\Framework\Exception('Unknown condition operator');
+                throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
             }
 
             $sql = str_replace(

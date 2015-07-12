@@ -45,7 +45,7 @@ class SenderResolver implements \Magento\Framework\Mail\Template\SenderResolverI
         }
 
         if (!isset($result['name']) || !isset($result['email'])) {
-            throw new \Magento\Framework\Mail\Exception(__('Invalid sender data'));
+            throw new \Magento\Framework\Exception\MailException(__('Invalid sender data'));
         }
 
         return $result;

@@ -4,11 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/**  @var $block \Magento\Checkout\Block\Cart\EmptyCart */
+/**  @var $block \Magento\Checkout\Block\Cart */
 ?>
 <div class="cart-empty">
     <?php echo $block->getChildHtml('checkout_cart_empty_widget'); ?>
     <p><?php echo __('You have no items in your shopping cart.') ?></p>
-    <p><?php echo __('Click <a href="%1">here</a> to continue shopping.', $block->getContinueShoppingUrl()) ?></p>
+    <p><?php echo __('Click <a href="%1">here</a> to continue shopping.',
+            $block->escapeUrl($block->getContinueShoppingUrl())) ?></p>
     <?php echo $block->getChildHtml('shopping.cart.table.after'); ?>
 </div>

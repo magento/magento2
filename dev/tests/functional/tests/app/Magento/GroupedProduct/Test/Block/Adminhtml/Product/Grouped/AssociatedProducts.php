@@ -29,7 +29,7 @@ class AssociatedProducts extends Tab
      *
      * @var string
      */
-    protected $productSearchGrid = "./ancestor::body//div[div[contains(@data-role,'add-product-dialog')]]";
+    protected $productSearchGrid = './/*[@data-role="modal"][.//*[@data-role="add-product-dialog"]]';
 
     /**
      * Associated products list block
@@ -43,7 +43,7 @@ class AssociatedProducts extends Tab
      *
      * @var string
      */
-    protected $deleteButton = '.delete';
+    protected $deleteButton = '[data-role="delete"]';
 
     /**
      * Get search grid
@@ -54,7 +54,7 @@ class AssociatedProducts extends Tab
     {
         return $this->blockFactory->create(
             'Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\AssociatedProducts\Search\Grid',
-            ['element' => $this->_rootElement->find($this->productSearchGrid, Locator::SELECTOR_XPATH)]
+            ['element' => $this->browser->find($this->productSearchGrid, Locator::SELECTOR_XPATH)]
         );
     }
 
@@ -104,6 +104,8 @@ class AssociatedProducts extends Tab
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDataFormTab($fields = null, SimpleElement $element = null)
     {

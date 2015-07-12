@@ -85,7 +85,7 @@ class SetupTest extends \PHPUnit_Framework_TestCase
     {
         $q = 'SELECT something';
         $this->connection->expects($this->once())
-            ->method('multiQuery')
+            ->method('query')
             ->with($q);
         $this->object->run($q);
     }

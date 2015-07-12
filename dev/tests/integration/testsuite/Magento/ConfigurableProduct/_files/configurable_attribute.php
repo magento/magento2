@@ -4,6 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+$attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
+if ($attribute instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+    && $attribute->getId()
+) {
+    $attribute->delete();
+}
+$eavConfig->clear();
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

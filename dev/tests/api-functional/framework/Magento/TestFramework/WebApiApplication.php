@@ -33,7 +33,7 @@ class WebApiApplication extends Application
 
         /* Install application */
         if ($installOptions) {
-            $installCmd = 'php -f ' . BP . '/setup/index.php install';
+            $installCmd = 'php -f ' . BP . '/bin/magento setup:install';
             $installArgs = [];
             foreach ($installOptions as $optionName => $optionValue) {
                 if (is_bool($optionValue)) {

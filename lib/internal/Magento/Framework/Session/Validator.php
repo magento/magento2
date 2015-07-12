@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Phrase;
+
 /**
  * Session Validator
  */
@@ -71,7 +74,7 @@ class Validator implements ValidatorInterface
      *
      * @param SessionManagerInterface $session
      * @return void
-     * @throws Exception
+     * @throws SessionException
      */
     public function validate(SessionManagerInterface $session)
     {
@@ -80,7 +83,7 @@ class Validator implements ValidatorInterface
         } else {
             try {
                 $this->_validate();
-            } catch (Exception $e) {
+            } catch (SessionException $e) {
                 $session->destroy(['clear_storage' => false]);
                 // throw core session exception
                 throw $e;
@@ -92,7 +95,7 @@ class Validator implements ValidatorInterface
      * Validate data
      *
      * @return bool
-     * @throws Exception
+     * @throws SessionException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _validate()
@@ -105,14 +108,24 @@ class Validator implements ValidatorInterface
             $this->_scopeType
         ) && $sessionData[self::VALIDATOR_REMOTE_ADDR_KEY] != $validatorData[self::VALIDATOR_REMOTE_ADDR_KEY]
         ) {
-            throw new Exception('Invalid session ' . self::VALIDATOR_REMOTE_ADDR_KEY . ' value.');
+            throw new SessionException(
+                new Phrase(
+                    'Invalid session %1 value.',
+                    [self::VALIDATOR_REMOTE_ADDR_KEY]
+                )
+            );
         }
         if ($this->_scopeConfig->getValue(
             self::XML_PATH_USE_HTTP_VIA,
             $this->_scopeType
         ) && $sessionData[self::VALIDATOR_HTTP_VIA_KEY] != $validatorData[self::VALIDATOR_HTTP_VIA_KEY]
         ) {
-            throw new Exception('Invalid session ' . self::VALIDATOR_HTTP_VIA_KEY . ' value.');
+            throw new SessionException(
+                new Phrase(
+                    'Invalid session %1 value.',
+                    [self::VALIDATOR_HTTP_VIA_KEY]
+                )
+            );
         }
 
         $httpXForwardedKey = $sessionData[self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY];
@@ -122,7 +135,12 @@ class Validator implements ValidatorInterface
             $this->_scopeType
         ) && $httpXForwardedKey != $validatorXForwarded
         ) {
-            throw new Exception('Invalid session ' . self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY . ' value.');
+            throw new SessionException(
+                new Phrase(
+                    'Invalid session %1 value.',
+                    [self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY]
+                )
+            );
         }
         if ($this->_scopeConfig->getValue(
             self::XML_PATH_USE_USER_AGENT,
@@ -134,7 +152,12 @@ class Validator implements ValidatorInterface
                     return true;
                 }
             }
-            throw new Exception('Invalid session ' . self::VALIDATOR_HTTP_USER_AGENT_KEY . ' value.');
+            throw new SessionException(
+                new Phrase(
+                    'Invalid session %1 value.',
+                    [self::VALIDATOR_HTTP_USER_AGENT_KEY]
+                )
+            );
         }
 
         return true;

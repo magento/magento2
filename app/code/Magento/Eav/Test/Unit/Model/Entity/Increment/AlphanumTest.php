@@ -54,7 +54,7 @@ class AlphanumTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Eav\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid character encountered in increment ID: ---wrong-id---
      */
     public function testGetNextIdThrowsExceptionIfIdContainsNotAllowedCharacters()

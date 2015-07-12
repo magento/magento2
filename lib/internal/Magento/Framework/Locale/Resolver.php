@@ -10,6 +10,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Resolver implements ResolverInterface
 {
     /**
+     * Default locale
+     */
+    const DEFAULT_LOCALE = 'en_US';
+    /**
      * Default locale code
      *
      * @var string
@@ -85,7 +89,7 @@ class Resolver implements ResolverInterface
         if (!$this->defaultLocale) {
             $locale = $this->scopeConfig->getValue($this->getDefaultLocalePath(), $this->scopeType);
             if (!$locale) {
-                $locale = ResolverInterface::DEFAULT_LOCALE;
+                $locale = self::DEFAULT_LOCALE;
             }
             $this->defaultLocale = $locale;
         }

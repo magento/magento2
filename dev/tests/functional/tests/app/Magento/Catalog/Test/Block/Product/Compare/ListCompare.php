@@ -199,9 +199,9 @@ class ListCompare extends Block
     public function removeAllProducts()
     {
         $this->waitForElementVisible(sprintf($this->removeButton, 1), Locator::SELECTOR_XPATH);
-        /** @var \Magento\Core\Test\Block\Messages $messageBlock */
+        /** @var \Magento\Backend\Test\Block\Messages $messageBlock */
         $messageBlock = $this->blockFactory->create(
-            'Magento\Core\Test\Block\Messages',
+            'Magento\Backend\Test\Block\Messages',
             ['element' => $this->browser->find($this->messageBlock)]
         );
 
@@ -236,17 +236,19 @@ class ListCompare extends Block
 
     /**
      * Get empty message on compare product block.
-     * Returns message absence of compared products or false, if the message isn't visible.
      *
-     * @return string|bool
+     * @return string
      */
     public function getEmptyMessage()
     {
-        $this->waitForElementVisible($this->isEmpty);
+        $rootElement = $this->_rootElement;
+        $selector = $this->isEmpty;
+        $this->_rootElement->waitUntil(
+            function () use ($rootElement, $selector) {
+                return $rootElement->find($selector)->isVisible() ? true : null;
+            }
+        );
         $isEmpty = $this->_rootElement->find($this->isEmpty);
-        if ($isEmpty->isVisible()) {
-            return $isEmpty->getText();
-        }
-        return false;
+        return $isEmpty->getText();
     }
 }

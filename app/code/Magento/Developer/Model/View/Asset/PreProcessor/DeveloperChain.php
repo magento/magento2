@@ -15,6 +15,7 @@ class DeveloperChain extends Chain
      * @param string $origContent
      * @param string $origContentType
      * @param null $origAssetPath
+     * @codeCoverageIgnore
      */
     public function __construct(
         LocalInterface $asset,

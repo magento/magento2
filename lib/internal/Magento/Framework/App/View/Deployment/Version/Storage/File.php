@@ -42,7 +42,7 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
     {
         try {
             return $this->directory->readFile($this->fileName);
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \UnexpectedValueException(
                 'Unable to retrieve deployment version of static files from the file system.',
                 0,

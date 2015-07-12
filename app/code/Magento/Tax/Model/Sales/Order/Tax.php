@@ -18,13 +18,21 @@ namespace Magento\Tax\Model\Sales\Order;
  * @method \Magento\Tax\Model\Sales\Order\Tax setProcess(int $value)
  * @method float getBaseRealAmount()
  * @method \Magento\Tax\Model\Sales\Order\Tax setBaseRealAmount(float $value)
- * @method int getHidden()
- * @method \Magento\Tax\Model\Sales\Order\Tax setHidden(int $value)
  * @codeCoverageIgnore
  */
 class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_CODE        = 'code';
+    const KEY_TITLE       = 'title';
+    const KEY_PERCENT     = 'percent';
+    const KEY_AMOUNT      = 'amount';
+    const KEY_BASE_AMOUNT = 'base_amount';
+    /**#@-*/
+
     /**
      * @return void
      */

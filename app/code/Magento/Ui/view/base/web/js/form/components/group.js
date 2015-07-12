@@ -4,103 +4,74 @@
  */
 define([
     'underscore',
-    '../component',
-    'mage/utils'
-], function(_, Component, utils) {
+    'uiComponent'
+], function (_, Component) {
     'use strict';
-    
-    function extractData(container, field){
-        var data,
-            value;
-
-        container.some(function(item){
-            value = item[field];
-
-            if(_.isFunction(value)){
-                value = value();
-            }
-
-            return !item.hidden() && (data = value);
-        });
-
-        return data || '';
-    }
 
     return Component.extend({
         defaults: {
-            hidden:         false,
-            label:          '',
-            required:       false,
-            template:       'ui/group/group',
-            fieldTemplate:  'ui/group/field',
-            breakLine:      true
+            visible: true,
+            label: '',
+            required: false,
+            template: 'ui/group/group',
+            fieldTemplate: 'ui/form/field',
+            breakLine: true,
+            validateWholeGroup: false,
+            additionalClasses: {}
         },
 
         /**
          * Extends this with defaults and config.
          * Then calls initObservable, iniListenes and extractData methods.
-         * 
-         * @param  {Object} config
          */
-        initialize: function() {            
-            _.bindAll(this, 'toggle');
+        initialize: function () {
+            this._super()
+                ._setClasses();
 
-            return this._super();
+            return this;
         },
 
         /**
          * Calls initObservable of parent class.
          * Defines observable properties of instance.
-         * 
+         *
          * @return {Object} - reference to instance
          */
-        initObservable: function(){
+        initObservable: function () {
             this._super()
-                .observe('hidden label required');
+                .observe('visible')
+                .observe({
+                    required: !!+this.required
+                });
 
             return this;
         },
 
         /**
-         * Assignes onUpdate callback to update event of incoming element.
-         * Calls extractData method.
-         * @param  {Object} element
-         * @return {Object} - reference to instance
+         * Extends 'additionalClasses' object.
+         *
+         * @returns {Group} Chainable.
          */
-        initElement: function(elem){
-            this._super();
+        _setClasses: function () {
+            var addtional = this.additionalClasses,
+                classes;
 
-            elem.on({
-                'toggle': this.toggle
+            if (_.isString(addtional)) {
+                addtional = this.additionalClasses.split(' ');
+                classes = this.additionalClasses = {};
+
+                addtional.forEach(function (name) {
+                    classes[name] = true;
+                }, this);
+            }
+
+            _.extend(this.additionalClasses, {
+                required:   this.required,
+                _error:     this.error,
+                _disabled:  this.disabled
             });
 
-            this.extractData();
-
             return this;
-        },
-
-        /**
-         * Extracts label and required properties from child elements
-         * 
-         * @return {Object} - reference to instance
-         */
-        extractData: function(){
-            var elems = this.elems();
-
-            this.label(extractData(elems, 'label'));
-            this.required(extractData(elems, 'required'));
-
-            return this;
-        },
-
-        /**
-         * Sets incoming value to hidden observable, calls extractData method
-         * 
-         * @param  {Boolean} value
-         */
-        toggle: function(value){
-            this.extractData()
-                .hidden(value);
         },
 
         /**

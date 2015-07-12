@@ -30,7 +30,6 @@ class Add extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
@@ -40,7 +39,6 @@ class Add extends \Magento\Checkout\Controller\Cart
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         ProductRepositoryInterface $productRepository
     ) {
         parent::__construct(
@@ -49,8 +47,7 @@ class Add extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart,
-            $resultRedirectFactory
+            $cart
         );
         $this->productRepository = $productRepository;
     }
@@ -150,7 +147,7 @@ class Add extends \Magento\Checkout\Controller\Cart
             return $this->goBack($url);
 
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
+            $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             return $this->goBack();
         }
@@ -174,15 +171,6 @@ class Add extends \Magento\Checkout\Controller\Cart
         if ($backUrl || $backUrl = $this->getBackUrl()) {
             $result['backUrl'] = $backUrl;
         } else {
-            $this->_view->loadLayout(['default'], true, true, false);
-            $layout = $this->_view->getLayout();
-
-            $result['messages'] = $layout->getBlock('global_messages')->toHtml();
-
-            if ($this->_checkoutSession->getCartWasUpdated()) {
-                $result['minicart'] = $layout->getBlock('minicart')->toHtml();
-            }
-
             if ($product && !$product->getIsSalable()) {
                 $result['product'] = [
                     'statusText' => __('Out of stock')

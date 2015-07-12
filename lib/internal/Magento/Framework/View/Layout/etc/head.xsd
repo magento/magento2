@@ -18,6 +18,7 @@
         <xs:attribute name="sizes" type="xs:string"/>
         <xs:attribute name="target" type="xs:string"/>
         <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="src_type" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="metaType">
@@ -35,6 +36,7 @@
         <xs:attribute name="async" type="xs:string"/>
         <xs:attribute name="charset" type="xs:string"/>
         <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="src_type" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="headAttributeType">

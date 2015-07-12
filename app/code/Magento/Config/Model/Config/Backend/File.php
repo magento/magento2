@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
@@ -50,7 +51,7 @@ class File extends \Magento\Framework\App\Config\Value
      * @param \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData
      * @param Filesystem $filesystem
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -61,7 +62,7 @@ class File extends \Magento\Framework\App\Config\Value
         \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
         Filesystem $filesystem,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_uploaderFactory = $uploaderFactory;
@@ -196,7 +197,7 @@ class File extends \Magento\Framework\App\Config\Value
     protected function _prependScopeInfo($path)
     {
         $scopeInfo = $this->getScope();
-        if (\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
+        if (ScopeConfigInterface::SCOPE_TYPE_DEFAULT != $this->getScope()) {
             $scopeInfo .= '/' . $this->getScopeId();
         }
         return $scopeInfo . '/' . $path;
@@ -213,7 +214,7 @@ class File extends \Magento\Framework\App\Config\Value
     protected function _appendScopeInfo($path)
     {
         $path .= '/' . $this->getScope();
-        if (\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
+        if (ScopeConfigInterface::SCOPE_TYPE_DEFAULT != $this->getScope()) {
             $path .= '/' . $this->getScopeId();
         }
         return $path;

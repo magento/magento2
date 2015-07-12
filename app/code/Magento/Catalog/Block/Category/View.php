@@ -9,7 +9,7 @@ namespace Magento\Catalog\Block\Category;
  * Class View
  * @package Magento\Catalog\Block\Category
  */
-class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
+class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
 {
     /**
      * Core registry

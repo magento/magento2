@@ -12,7 +12,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
  * Customer entity resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
+class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
      * @var \Magento\Framework\Validator\Factory
@@ -33,6 +33,8 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -40,12 +42,14 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $data = []
     ) {
-        parent::__construct($context, $data);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
         $this->_scopeConfig = $scopeConfig;
         $this->_validatorFactory = $validatorFactory;
         $this->dateTime = $dateTime;
@@ -82,7 +86,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         parent::_beforeSave($customer);
 
         if (!$customer->getEmail()) {
-            throw new ValidatorException(__('Customer email is required'));
+            throw new ValidatorException(__('Please enter a customer email.'));
         }
 
         $adapter = $this->_getWriteAdapter();
@@ -106,7 +110,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         $result = $adapter->fetchOne($select, $bind);
         if ($result) {
             throw new AlreadyExistsException(
-                __('Customer with the same email already exists in associated website.')
+                __('A customer with the same email already exists in an associated website.')
             );
         }
 
@@ -149,63 +153,12 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Save customer addresses and set default addresses in attributes backend
      *
-     * @param \Magento\Customer\Model\Customer $customer
+     * @param \Magento\Framework\Object $customer
      * @return $this
      */
     protected function _afterSave(\Magento\Framework\Object $customer)
     {
-        $this->_saveAddresses($customer);
         return parent::_afterSave($customer);
-    }
-
-    /**
-     * Save/delete customer address
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _saveAddresses(\Magento\Customer\Model\Customer $customer)
-    {
-        $defaultBillingId = $customer->getData('default_billing');
-        $defaultShippingId = $customer->getData('default_shipping');
-        /** @var \Magento\Customer\Model\Address $address */
-        foreach ($customer->getAddresses() as $address) {
-            if ($address->getData('_deleted')) {
-                if ($address->getId() == $defaultBillingId) {
-                    $customer->setData('default_billing', null);
-                }
-                if ($address->getId() == $defaultShippingId) {
-                    $customer->setData('default_shipping', null);
-                }
-                $removedAddressId = $address->getId();
-                $address->delete();
-                // Remove deleted address from customer address collection
-                $customer->getAddressesCollection()->removeItemByKey($removedAddressId);
-            } else {
-                $address->setParentId(
-                    $customer->getId()
-                )->setStoreId(
-                    $customer->getStoreId()
-                )->setIsCustomerSaveTransaction(
-                    true
-                )->save();
-                if (($address->getIsPrimaryBilling() ||
-                    $address->getIsDefaultBilling()) && $address->getId() != $defaultBillingId
-                ) {
-                    $customer->setData('default_billing', $address->getId());
-                }
-                if (($address->getIsPrimaryShipping() ||
-                    $address->getIsDefaultShipping()) && $address->getId() != $defaultShippingId
-                ) {
-                    $customer->setData('default_shipping', $address->getId());
-                }
-            }
-        }
-        $this->saveAttribute($customer, 'default_billing');
-        $this->saveAttribute($customer, 'default_shipping');
-
-        return $this;
     }
 
     /**
@@ -247,7 +200,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         if ($customer->getSharingConfig()->isWebsiteScope()) {
             if (!$customer->hasData('website_id')) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Customer website ID must be specified when using the website scope')
+                    __('A customer website ID must be specified when using the website scope.')
                 );
             }
             $bind['website_id'] = (int)$customer->getWebsiteId();
@@ -274,7 +227,6 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     public function changePassword(\Magento\Customer\Model\Customer $customer, $newPassword)
     {
         $customer->setPassword($newPassword);
-        $this->saveAttribute($customer, 'password_hash');
         return $this;
     }
 
@@ -383,8 +335,6 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
             $customer->setRpTokenCreatedAt(
                 (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
             );
-            $this->saveAttribute($customer, 'rp_token');
-            $this->saveAttribute($customer, 'rp_token_created_at');
         }
         return $this;
     }

@@ -70,8 +70,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'non-existing base dir' => [
                 require __DIR__ . '/_files/config_data.php',
                 'non_existing_dir',
-                'Magento\Framework\Exception',
-                "Base directory 'non_existing_dir' does not exist",
+                'Magento\Framework\Exception\LocalizedException',
+                new \Magento\Framework\Phrase("Base directory 'non_existing_dir' does not exist"),
             ],
             'invalid scenarios format' => [
                 require __DIR__ . '/_files/config_data_invalid_scenarios_format.php',
@@ -144,9 +144,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $expectedOptions = [
             'option1' => 'value 1',
             'option2' => 'value 2',
-            'backend_frontname' => 'backend',
-            'admin_username' => 'admin',
-            'admin_password' => 'password1',
+            'backend-frontname' => 'backend',
+            'admin-user' => 'admin',
+            'admin-password' => 'password1',
         ];
         $this->assertEquals($expectedOptions, $this->_object->getInstallOptions());
     }
@@ -174,7 +174,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Performance\Scenario::ARG_HOST => '127.0.0.1',
             \Magento\TestFramework\Performance\Scenario::ARG_PATH => '/',
             \Magento\TestFramework\Performance\Scenario::ARG_BACKEND_FRONTNAME => 'backend',
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME => 'admin',
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USER => 'admin',
             \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD => 'password1',
             \Magento\TestFramework\Performance\Scenario::ARG_BASEDIR => $this->_getFixtureAppBaseDir(),
             'arg1' => 'value 1',

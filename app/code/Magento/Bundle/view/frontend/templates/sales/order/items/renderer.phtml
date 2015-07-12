@@ -17,7 +17,7 @@
 
 <?php foreach ($items as $_item): ?>
 
-    <?php if ($block->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
+    <?php if ($block->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
         <?php $_showlastRow = true ?>
     <?php else: ?>
         <?php $_showlastRow = false ?>
@@ -48,7 +48,7 @@
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
+    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Quantity')); ?>">
         <?php if (
         ($_item->getParentItem() && $block->isChildCalculated()) ||
         (!$_item->getParentItem() && !$block->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately())):?>

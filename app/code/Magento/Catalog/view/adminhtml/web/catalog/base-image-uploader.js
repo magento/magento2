@@ -19,7 +19,7 @@ define([
          */
         _create: function () {
             var $container = this.element,
-                imageTmpl = mageTemplate(this.element.find('.image-template').html()),
+                imageTmpl = mageTemplate(this.element.find('[data-template=image]').html()),
                 $dropPlaceholder = this.element.find('.image-placeholder'),
                 $galleryContainer = $('#media_gallery_content'),
                 mainClass = 'base-image',
@@ -124,7 +124,7 @@ define([
                     if (!data.result.error) {
                         $galleryContainer.trigger('addItem', data.result);
                     } else {
-                        alert($.mage.__('File extension not known or unsupported type.'));
+                        alert($.mage.__('We don\'t recognize or support this file extension type.'));
                     }
                 },
                 add: function (event, data) {

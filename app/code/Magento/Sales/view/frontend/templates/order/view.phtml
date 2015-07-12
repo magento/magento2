@@ -20,7 +20,7 @@
 
     <?php echo $block->getChildHtml('order_items') ?>
 
-    <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order', $_order) && $_order->getGiftMessageId()): ?>
+    <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order) && $_order->getGiftMessageId()): ?>
     <div class="block block-order-details-gift-message">
         <div class="block-title"><strong><?php echo __('Gift Message for This Order') ?></strong></div>
         <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_order); ?>

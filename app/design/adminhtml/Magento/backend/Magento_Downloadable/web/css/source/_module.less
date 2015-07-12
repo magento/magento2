@@ -1,0 +1,68 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+// @todo ui - rebuilt with common classes for table control and file upload ui component
+
+//
+//  File uploads dynamic control
+//  ---------------------------------------------
+
+.downloadable-form {
+    .col-price,
+    .col-limit,
+    .col-share,
+    .col-sort {
+        width: 1%;
+    }
+    .col-action {
+        width: 1px;
+    }
+    td {
+        &.col-limit {
+            white-space: nowrap;
+        }
+    }
+    .admin__control-table {
+        .admin__control-text {
+            margin-bottom: .5rem;
+            min-width: 6rem;
+        }
+    }
+    .files,
+    .files-wide {
+        .row {
+            margin: .7rem 0;
+            > .admin__control-text {
+                margin-top: .7rem;
+            }
+        }
+        .uploader {
+            margin: .5rem 0;
+        }
+        .fileinput-button {
+            color: @link__color;
+            cursor: pointer;
+            display: inline-block;
+            float: none;
+            margin: .5rem 0;
+            text-decoration: none;
+            &:hover {
+                color: @link__hover__color;
+                text-decoration: underline;
+            }
+        }
+
+    }
+}
+
+@-moz-document url-prefix() { // Firefox fieldset overflow bug fix
+    .downloadable-form {
+        display: table-column;
+    }
+}

@@ -45,7 +45,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $mockedCollection = $this->getMockedCollection();
 
-        $mockBuilder = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\Grid\CollectionFactory');
+        $mockBuilder = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\CollectionFactory');
         $mock = $mockBuilder->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
