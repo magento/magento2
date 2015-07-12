@@ -19,6 +19,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallData implements InstallDataInterface
 {
