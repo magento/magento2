@@ -55,9 +55,9 @@ class CustomerQuote
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $observer->getEvent()->getCustomerDataObject();
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $origCustomer */
-        $origCustomer = $observer->getEvent()->getOrigCustomerDataObject();
-        if ($customer->getGroupId() !== $origCustomer->getGroupId()) {
+        try {
+            $quote = $this->quoteRepository->getForCustomer($customer->getId());
+            if ($customer->getGroupId() !== $quote->getCustomerGroupId()) {
             /**
              * It is needed to process customer's quotes for all websites
              * if customer accounts are shared between all of them
@@ -68,15 +68,13 @@ class CustomerQuote
                 : $this->storeManager->getWebsites();
 
             foreach ($websites as $website) {
-                try {
-                    $quote = $this->quoteRepository->getForCustomer($customer->getId());
                     $quote->setWebsite($website);
                     $quote->setCustomerGroupId($customer->getGroupId());
                     $quote->collectTotals();
                     $this->quoteRepository->save($quote);
-                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 }
             }
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
     }
 }
