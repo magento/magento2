@@ -54,6 +54,10 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface
      */
     protected $orderSearchResultMock;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManagerMock;
 
     protected function setUp()
     {
@@ -107,12 +111,18 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
+        $this->eventManagerMock = $this->getMockBuilder(
+            'Magento\Framework\Event\ManagerInterface'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderService = new \Magento\Sales\Model\Service\OrderService(
             $this->orderRepositoryMock,
             $this->orderStatusHistoryRepositoryMock,
             $this->searchCriteriaBuilderMock,
             $this->filterBuilderMock,
-            $this->orderNotifierMock
+            $this->orderNotifierMock,
+            $this->eventManagerMock
         );
     }
 
@@ -142,11 +152,15 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
             ->with(123)
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
+            ->method('setConditionType')
+            ->with('eq')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($this->filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addFilter')
-            ->with(['eq' => $this->filterMock])
+            ->method('addFilters')
+            ->with([$this->filterMock])
             ->willReturn($this->filterBuilderMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')

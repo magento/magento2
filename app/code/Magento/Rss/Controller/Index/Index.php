@@ -6,7 +6,7 @@
  */
 namespace Magento\Rss\Controller\Index;
 
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NotFoundException;
 
 class Index extends \Magento\Rss\Controller\Index
 {
@@ -22,7 +22,7 @@ class Index extends \Magento\Rss\Controller\Index
             $this->_view->loadLayout();
             $this->_view->renderLayout();
         } else {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found.'));
         }
     }
 }

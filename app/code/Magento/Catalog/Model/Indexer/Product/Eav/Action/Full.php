@@ -15,14 +15,15 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      *
      * @param array|int|null $ids
      * @return void
-     * @throws \Magento\Catalog\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($ids = null)
     {
         try {
             $this->reindex();
         } catch (\Exception $e) {
-            throw new \Magento\Catalog\Exception($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 }

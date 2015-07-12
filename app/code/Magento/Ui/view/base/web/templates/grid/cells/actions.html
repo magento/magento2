@@ -1,0 +1,52 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<td data-bind="visible: visible" class="data-grid-actions-cell">
+    <!-- ko if: isSingle($parentContext.$index()) -->
+        <!-- ko foreach: getVisibleActions($parentContext.$index()) -->
+    <a
+        class="action-menu-item"
+        data-bind="
+            attr: {
+                href: $data.href
+            },
+            click: $parent.applyAction.bind($parent, index, rowIndex),
+            text: $data.label"></a>
+        <!-- /ko -->
+    <!-- /ko -->
+
+    <!-- ko if: isMultiple($parentContext.$index()) -->
+    <div
+        class="action-select-wrap"
+        data-bind="
+            css : {
+                '_active' : opened() === $parentContext.$index()
+            },
+            outerClick: closeList.bind($data, $parentContext.$index())">
+        <button class="action-select" data-bind="click: toggleList.bind($data, $parentContext.$index())">
+            <span data-bind="text: $t('Select')"></span>
+        </button>
+        <ul
+            class="action-menu"
+            data-bind="
+                css: {'_active': opened() === $parentContext.$index()}">
+            <!-- ko foreach: getVisibleActions($parentContext.$index()) -->
+            <li>
+                <a
+                    class="action-menu-item"
+                    data-bind="
+                        attr: {
+                            href: $data.href
+                        },
+                        click: $parent.applyAction.bind($parent, index, rowIndex),
+                        text: $data.label"></a>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+    <!-- /ko -->
+</td>

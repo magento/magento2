@@ -47,6 +47,7 @@ class Config
      * Return integrations loaded from cache if enabled or from files merged previously
      *
      * @return array
+     * @api
      */
     public function getIntegrations()
     {

@@ -34,6 +34,7 @@ class ChangeCustomerPasswordTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
+    const STABLE = 'no';
     /* end tags */
 
     /**

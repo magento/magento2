@@ -29,19 +29,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
-        parent::__construct($context, $resultRedirectFactory);
+        parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
@@ -144,11 +142,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             $category->setData('use_post_data_config', $this->getRequest()->getPost('use_config'));
 
             try {
+                $categoryResource = $category->getResource();
+                if ($category->hasCustomDesignTo()) {
+                    $categoryResource->getAttribute('custom_design_from')->setMaxValue($category->getCustomDesignTo());
+                }
                 $validate = $category->validate();
                 if ($validate !== true) {
                     foreach ($validate as $code => $error) {
                         if ($error === true) {
-                            $attribute = $category->getResource()->getAttribute($code)->getFrontend()->getLabel();
+                            $attribute = $categoryResource->getAttribute($code)->getFrontend()->getLabel();
                             throw new \Magento\Framework\Exception\LocalizedException(
                                 __('Attribute "%1" is required.', $attribute)
                             );
@@ -160,7 +162,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
                 $category->unsetData('use_post_data_config');
                 if (isset($data['general']['entity_id'])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save the category'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Something went wrong while saving the category.')
+                    );
                 }
 
                 $category->save();

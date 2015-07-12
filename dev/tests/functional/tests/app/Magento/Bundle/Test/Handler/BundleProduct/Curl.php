@@ -9,7 +9,8 @@ namespace Magento\Bundle\Test\Handler\BundleProduct;
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Config;
+use Magento\Mtf\Config\DataInterface;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
  * Create new bundle product via curl.
@@ -25,11 +26,12 @@ class Curl extends ProductCurl implements BundleProductInterface
 
     /**
      * @constructor
-     * @param Config $configuration
+     * @param DataInterface $configuration
+     * @param EventManagerInterface $eventManager
      */
-    public function __construct(Config $configuration)
+    public function __construct(DataInterface $configuration, EventManagerInterface $eventManager)
     {
-        parent::__construct($configuration);
+        parent::__construct($configuration, $eventManager);
 
         $this->mappingData += [
             'selection_can_change_qty' => [

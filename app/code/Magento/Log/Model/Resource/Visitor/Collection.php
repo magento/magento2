@@ -81,8 +81,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @var array
      */
     protected $_fieldMap = [
-        'customer_firstname' => 'customer_firstname_table.value',
-        'customer_lastname' => 'customer_lastname_table.value',
+        'customer_firstname' => 'customer_email_table.firstname',
+        'customer_lastname' => 'customer_email_table.lastname',
         'customer_email' => 'customer_email_table.email',
         'customer_id' => 'customer_table.customer_id',
         'url' => 'url_info_table.url',
@@ -111,6 +111,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Filter for customers only
      *
      * @return $this
+     * @api
      */
     public function showCustomersOnly()
     {
@@ -174,6 +175,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @api
      */
     public function getIsOnlineFilterUsed()
     {
@@ -185,6 +187,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int[]|int $storeIds
      * @return void
+     * @api
      */
     public function addVisitorStoreFilter($storeIds)
     {

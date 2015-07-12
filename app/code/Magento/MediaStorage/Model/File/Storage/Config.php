@@ -8,7 +8,7 @@ namespace Magento\MediaStorage\Model\File\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 
 class Config
 {
@@ -31,7 +31,7 @@ class Config
      *
      * @var DirectoryWrite
      */
-    protected $pubDirectory;
+    protected $rootDirectory;
 
     /**
      * @param \Magento\MediaStorage\Model\File\Storage $storage
@@ -44,7 +44,7 @@ class Config
         $cacheFile
     ) {
         $this->config = $storage->getScriptConfig();
-        $this->pubDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $this->rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->cacheFilePath = $cacheFile;
     }
 
@@ -76,13 +76,13 @@ class Config
     public function save()
     {
         /** @var Write $file */
-        $file = $this->pubDirectory->openFile($this->pubDirectory->getRelativePath($this->cacheFilePath), 'w');
+        $file = $this->rootDirectory->openFile($this->rootDirectory->getRelativePath($this->cacheFilePath), 'w');
         try {
             $file->lock();
             $file->write(json_encode($this->config));
             $file->unlock();
             $file->close();
-        } catch (FilesystemException $e) {
+        } catch (FileSystemException $e) {
             $file->close();
         }
     }

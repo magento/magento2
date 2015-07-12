@@ -6,33 +6,17 @@
 namespace Magento\Search\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\ResultFactory;
 
-class Term extends \Magento\Backend\App\Action
+class Term extends Action
 {
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @param Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
-    ) {
-        parent::__construct($context);
-        $this->resultPageFactory = $resultPageFactory;
-    }
-
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
     protected function createPage()
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
-        $resultPage = $this->resultPageFactory->create();
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->setActiveMenu('Magento_Search::search_term')
             ->addBreadcrumb(__('Search'), __('Search'));
         return $resultPage;

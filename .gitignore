@@ -10,6 +10,7 @@ atlassian*
 /.gitattributes
 /app/config_sandbox
 /app/etc/config.php
+/app/etc/env.php
 /app/code/Magento/TestModule*
 /lib/internal/flex/uploader/.actionScriptProperties
 /lib/internal/flex/uploader/.flexProperties
@@ -30,6 +31,8 @@ atlassian*
 !/pub/media/customer/.htaccess
 /pub/media/downloadable/*
 !/pub/media/downloadable/.htaccess
+/pub/media/import/*
+!/pub/media/import/.htaccess
 /pub/media/theme/*
 /pub/media/theme_customization/*
 !/pub/media/theme_customization/.htaccess
@@ -37,6 +40,7 @@ atlassian*
 !/pub/media/wysiwyg/.htaccess
 /pub/media/tmp/*
 !/pub/media/tmp/.htaccess
+/pub/media/captcha/*
 /pub/static/*
 !/pub/static/.htaccess
 

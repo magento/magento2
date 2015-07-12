@@ -10,13 +10,11 @@ namespace Magento\Framework\DB;
 \Zend_Loader::loadClass('\Magento\Framework\DB\Tree\NodeSet');
 use Magento\Framework\DB\Tree\Node;
 use Magento\Framework\DB\Tree\NodeSet;
-use Magento\Framework\DB\Tree\TreeException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Magento Library
- */
-require_once 'Tree/TreeException.php';
-/**
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Tree
@@ -79,7 +77,7 @@ class Tree
 
     /**
      * @param array $config
-     * @throws TreeException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -97,7 +95,9 @@ class Tree
 
             // make sure it's a \Zend_Db_Adapter
             if (!$connection instanceof \Zend_Db_Adapter_Abstract) {
-                throw new TreeException('db object does not implement \Zend_Db_Adapter_Abstract');
+                throw new LocalizedException(
+                    new \Magento\Framework\Phrase('db object does not implement \Zend_Db_Adapter_Abstract')
+                );
             }
 
             // save the connection
@@ -107,7 +107,7 @@ class Tree
                 $conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
             }
         } else {
-            throw new TreeException('db object is not set in config');
+            throw new LocalizedException(new \Magento\Framework\Phrase('db object is not set in config'));
         }
 
         if (!empty($config['table'])) {

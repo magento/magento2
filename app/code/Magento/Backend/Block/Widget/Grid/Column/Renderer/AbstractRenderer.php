@@ -52,10 +52,9 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     {
         if ($this->getColumn()->getEditable()) {
             $value = $this->_getValue($row);
-            return $value . ($this->getColumn()->getEditOnly() ? '' : ($value !=
-                '' ? '' : '&nbsp;')) . $this->_getInputValueElement(
-                    $row
-                );
+            return '<div class="admin__grid-control">' .
+            '<span class="admin__grid-control-value">' . $value . '</span>' .
+            $this->_getInputValueElement($row) . '</div>' ;
         }
         return $this->_getValue($row);
     }
@@ -123,26 +122,23 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
             $dir = strtolower($this->getColumn()->getDir());
             $nDir = $dir == 'asc' ? 'desc' : 'asc';
             if ($this->getColumn()->getDir()) {
-                $className = 'sort-arrow-' . $dir;
+                $className = '_' . $dir . 'end';
             }
-            $out = '<a href="#" name="' .
+            $out = '<th data-sort="' .
                 $this->getColumn()->getId() .
-                '" title="' .
+                '" data-direction="' .
                 $nDir .
-                '" class="' .
-                $className .
-                '">' .
-                '<label class="sort-title" for=' .
-                $this->getColumn()->getHtmlId() .
-                '>' .
+                '" class="data-grid-th _sortable ' .
+                $className . ' ' .
+                $this->getColumn()->getHeaderCssClass() .
+                '"><span>' .
                 $this->getColumn()->getHeader() .
-                '</label></a>';
+                '</span></th>';
         } else {
-            $out = '<label for=' .
-                $this->getColumn()->getHtmlId() .
-                '>' .
+            $out = '<th class="data-grid-th ' .
+                $this->getColumn()->getHeaderCssClass() . '"><span>' .
                 $this->getColumn()->getHeader() .
-                '</label>';
+                '</span></th>';
         }
         return $out;
     }

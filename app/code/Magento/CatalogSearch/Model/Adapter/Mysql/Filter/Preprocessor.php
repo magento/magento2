@@ -11,6 +11,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
+use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface;
 
 class Preprocessor implements PreprocessorInterface
@@ -63,26 +64,25 @@ class Preprocessor implements PreprocessorInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function process(FilterInterface $filter, $isNegation, $query)
+    public function process(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
     {
-        return $resultQuery = $this->processQueryWithField($filter, $isNegation, $query);
+        return $this->processQueryWithField($filter, $isNegation, $query, $queryContainer);
     }
 
     /**
      * @param FilterInterface $filter
      * @param bool $isNegation
      * @param string $query
+     * @param QueryContainer $queryContainer
      * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
+    private function processQueryWithField(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
     {
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
         $attribute = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $filter->getField());
-        $select = $this->getSelect();
+        $select = $this->getConnection()->select();
         $table = $attribute->getBackendTable();
         if ($filter->getField() == 'price') {
             $query = str_replace('price', 'min_price', $query);
@@ -96,17 +96,23 @@ class Preprocessor implements PreprocessorInterface
                     ->where($query);
             } else {
                 if ($filter->getType() == FilterInterface::TYPE_TERM) {
-                    $field = $filter->getField();
-                    $mapper = function ($value) use ($field, $isNegation) {
-                        return ($isNegation ? '-' : '') . $this->attributePrefix . $field . '_' . $value;
-                    };
                     if (is_array($filter->getValue())) {
-                        $value = implode(' ', array_map($mapper, $filter->getValue()));
+                        $value = sprintf(
+                            '%s IN (%s)',
+                            ($isNegation ? 'NOT' : ''),
+                            implode(',', $filter->getValue())
+                        );
                     } else {
-                        $value = $mapper($filter->getValue());
+                        $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
                     }
-
-                    return 'MATCH (data_index) AGAINST (' . $this->getConnection()->quote($value) . ' IN BOOLEAN MODE)';
+                    $filterQuery = sprintf(
+                        'cpie.store_id = %d AND cpie.attribute_id = %d AND cpie.value %s',
+                        $this->scopeResolver->getScope()->getId(),
+                        $attribute->getId(),
+                        $value
+                    );
+                    $queryContainer->addFilter($filterQuery);
+                    return '';
                 }
                 $ifNullCondition = $this->getConnection()->getIfNullSql('current_store.value', 'main_table.value');
 
@@ -127,7 +133,7 @@ class Preprocessor implements PreprocessorInterface
             }
         }
 
-        return 'search_index.product_id IN (
+        return 'search_index.entity_id IN (
             select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
             )';
     }
@@ -138,13 +144,5 @@ class Preprocessor implements PreprocessorInterface
     private function getConnection()
     {
         return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
-    }
-
-    /**
-     * @return \Magento\Framework\DB\Select
-     */
-    private function getSelect()
-    {
-        return $this->getConnection()->select();
     }
 }

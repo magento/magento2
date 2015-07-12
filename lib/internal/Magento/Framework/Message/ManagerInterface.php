@@ -6,15 +6,12 @@
 namespace Magento\Framework\Message;
 
 /**
- * Message manager interface
+ * Adds different types of messages to the session, and allows access to existing messages.
+ *
+ * @api
  */
 interface ManagerInterface
 {
-    /**
-     * Default message group
-     */
-    const DEFAULT_GROUP = 'default';
-
     /**
      * Retrieve messages
      *
@@ -32,7 +29,7 @@ interface ManagerInterface
     public function getDefaultGroup();
 
     /**
-     * Adding new message to message collection
+     * Adds new message to message collection
      *
      * @param MessageInterface $message
      * @param string|null $group
@@ -41,7 +38,7 @@ interface ManagerInterface
     public function addMessage(MessageInterface $message, $group = null);
 
     /**
-     * Adding messages array to message collection
+     * Adds messages array to message collection
      *
      * @param array $messages
      * @param string|null $group
@@ -50,7 +47,7 @@ interface ManagerInterface
     public function addMessages(array $messages, $group = null);
 
     /**
-     * Adding new error message
+     * Adds new error message
      *
      * @param string $message
      * @param string|null $group
@@ -59,7 +56,7 @@ interface ManagerInterface
     public function addError($message, $group = null);
 
     /**
-     * Adding new warning message
+     * Adds new warning message
      *
      * @param string $message
      * @param string|null $group
@@ -68,7 +65,7 @@ interface ManagerInterface
     public function addWarning($message, $group = null);
 
     /**
-     * Adding new notice message
+     * Adds new notice message
      *
      * @param string $message
      * @param string|null $group
@@ -77,7 +74,7 @@ interface ManagerInterface
     public function addNotice($message, $group = null);
 
     /**
-     * Adding new success message
+     * Adds new success message
      *
      * @param string $message
      * @param string|null $group
@@ -86,7 +83,7 @@ interface ManagerInterface
     public function addSuccess($message, $group = null);
 
     /**
-     * Adds messages array to message collection, but doesn't add duplicates to it
+     * Adds messages array to message collection, without adding duplicate messages
      *
      * @param array|MessageInterface $messages
      * @param string|null $group
@@ -95,7 +92,7 @@ interface ManagerInterface
     public function addUniqueMessages($messages, $group = null);
 
     /**
-     * Not Magento exception handling
+     * Adds a message describing an exception. Does not contain Exception handling logic.
      *
      * @param \Exception $exception
      * @param string $alternativeText

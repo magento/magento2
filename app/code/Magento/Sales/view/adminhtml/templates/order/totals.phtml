@@ -10,58 +10,61 @@
 <?php /*$_source = $block->getSource(); ?>
 <?php $block->setPriceDataObject($_source) ?>
 <?php if ($_source): ?>
-<table cellspacing="0" width="100%">
+<table width="100%">
     <?php echo $block->getChildHtml('main'); ?>
     <?php echo $block->getChildHtml('footer'); ?>
 </table>
 <?php endif;*/ ?>
-<table cellspacing="0" class="data-table order-subtotal">
+<table class="data-table admin__table-secondary order-subtotal-table">
     <?php $_totals = $block->getTotals('footer')?>
+
     <?php if ($_totals):?>
-    <tfoot>
-    <?php foreach ($block->getTotals('footer') as $_code => $_total): ?>
-        <?php if ($_total->getBlockName()): ?>
-            <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
-        <?php else:?>
-        <tr class="col-<?php echo $_code?>">
-            <td <?php echo $block->getLabelProperties()?> class="label">
-                <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
-            </td>
-            <td <?php echo $block->getValueProperties()?>>
-                <strong><?php echo $block->formatValue($_total) ?></strong>
-            </td>
-        </tr>
-        <?php endif?>
-    <?php endforeach?>
-    </tfoot>
+        <tfoot>
+            <?php foreach ($block->getTotals('footer') as $_code => $_total): ?>
+                <?php if ($_total->getBlockName()): ?>
+                    <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
+                <?php else:?>
+                <tr class="col-<?php echo $_code?>">
+                    <td <?php echo $block->getLabelProperties()?> class="label">
+                        <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
+                    </td>
+                    <td <?php echo $block->getValueProperties()?>>
+                        <strong><?php echo $block->formatValue($_total) ?></strong>
+                    </td>
+                </tr>
+                <?php endif?>
+            <?php endforeach?>
+        </tfoot>
     <?php endif?>
 
     <?php $_totals = $block->getTotals('')?>
     <?php if ($_totals):?>
-    <tbody>
-    <?php foreach ($_totals as $_code => $_total): ?>
-        <?php if ($_total->getBlockName()): ?>
-            <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
-        <?php else:?>
-        <tr class="col-<?php echo $_code?>">
-            <td <?php echo $block->getLabelProperties()?> class="label">
-                <?php if ($_total->getStrong()):?>
-                <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
+        <tbody>
+            <?php foreach ($_totals as $_code => $_total): ?>
+                <?php if ($_total->getBlockName()): ?>
+                    <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
                 <?php else:?>
-                <?php echo $block->escapeHtml($_total->getLabel()); ?>
+                    <tr class="col-<?php echo $_code?>">
+                        <td <?php echo $block->getLabelProperties()?> class="label">
+                            <?php if ($_total->getStrong()):?>
+                            <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
+                            <?php else:?>
+                            <?php echo $block->escapeHtml($_total->getLabel()); ?>
+                            <?php endif?>
+                        </td>
+
+                        <?php if ($_total->getStrong()):?>
+                            <td <?php echo $block->getValueProperties()?>>
+                                <strong><?php echo $block->formatValue($_total) ?></strong>
+                            </td>
+                        <?php else:?>
+                            <td <?php echo $block->getValueProperties()?>>
+                                <span><?php echo $block->formatValue($_total) ?></span>
+                            </td>
+                        <?php endif?>
+                    </tr>
                 <?php endif?>
-            </td>
-            <?php if ($_total->getStrong()):?>
-            <td <?php echo $block->getValueProperties()?>>
-                <strong><?php echo $block->formatValue($_total) ?></strong>
-            <?php else:?>
-            <td <?php echo $block->getValueProperties()?>>
-                <?php echo $block->formatValue($_total) ?>
-            <?php endif?>
-            </td>
-        </tr>
-        <?php endif?>
-    <?php endforeach?>
-    </tbody>
+            <?php endforeach?>
+        </tbody>
     <?php endif?>
 </table>

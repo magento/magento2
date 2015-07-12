@@ -6,19 +6,19 @@
 
 namespace Magento\Tax\Model;
 
-use Magento\Tax\Api\Data\TaxDetailsInterface;
+use Magento\Tax\Api\TaxCalculationInterface;
+use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 use Magento\Tax\Api\Data\TaxDetailsInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
-use Magento\Tax\Api\Data\AppliedTaxRateInterface;
-use Magento\Tax\Api\Data\AppliedTaxInterface;
-use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Model\Calculation\AbstractCalculator;
 use Magento\Tax\Model\Calculation\CalculatorFactory;
 use Magento\Tax\Model\Config;
-use Magento\Tax\Model\Calculation\AbstractCalculator;
+use Magento\Tax\Model\TaxDetails\AppliedTax;
+use Magento\Tax\Model\TaxDetails\AppliedTaxRate;
+use Magento\Tax\Model\TaxDetails\TaxDetails;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Tax\Api\TaxCalculationInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -142,11 +142,11 @@ class TaxCalculation implements TaxCalculationInterface
 
         // initial TaxDetails data
         $taxDetailsData = [
-            TaxDetailsInterface::KEY_SUBTOTAL => 0.0,
-            TaxDetailsInterface::KEY_TAX_AMOUNT => 0.0,
-            TaxDetailsInterface::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT => 0.0,
-            TaxDetailsInterface::KEY_APPLIED_TAXES => [],
-            TaxDetailsInterface::KEY_ITEMS => [],
+            TaxDetails::KEY_SUBTOTAL => 0.0,
+            TaxDetails::KEY_TAX_AMOUNT => 0.0,
+            TaxDetails::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT => 0.0,
+            TaxDetails::KEY_APPLIED_TAXES => [],
+            TaxDetails::KEY_ITEMS => [],
         ];
         $items = $quoteDetails->getItems();
         if (empty($items)) {
@@ -327,21 +327,21 @@ class TaxCalculation implements TaxCalculationInterface
      */
     protected function aggregateItemData($taxDetailsData, TaxDetailsItemInterface $item)
     {
-        $taxDetailsData[TaxDetailsInterface::KEY_SUBTOTAL]
-            = $taxDetailsData[TaxDetailsInterface::KEY_SUBTOTAL] + $item->getRowTotal();
+        $taxDetailsData[TaxDetails::KEY_SUBTOTAL]
+            = $taxDetailsData[TaxDetails::KEY_SUBTOTAL] + $item->getRowTotal();
 
-        $taxDetailsData[TaxDetailsInterface::KEY_TAX_AMOUNT]
-            = $taxDetailsData[TaxDetailsInterface::KEY_TAX_AMOUNT] + $item->getRowTax();
+        $taxDetailsData[TaxDetails::KEY_TAX_AMOUNT]
+            = $taxDetailsData[TaxDetails::KEY_TAX_AMOUNT] + $item->getRowTax();
 
-        $taxDetailsData[TaxDetailsInterface::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT] =
-            $taxDetailsData[TaxDetailsInterface::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT]
+        $taxDetailsData[TaxDetails::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT] =
+            $taxDetailsData[TaxDetails::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT]
             + $item->getDiscountTaxCompensationAmount();
 
         $itemAppliedTaxes = $item->getAppliedTaxes();
         if ($itemAppliedTaxes === null) {
             return $taxDetailsData;
         }
-        $appliedTaxes = $taxDetailsData[TaxDetailsInterface::KEY_APPLIED_TAXES];
+        $appliedTaxes = $taxDetailsData[TaxDetails::KEY_APPLIED_TAXES];
         foreach ($itemAppliedTaxes as $taxId => $itemAppliedTax) {
             if (!isset($appliedTaxes[$taxId])) {
                 //convert rate data object to array
@@ -349,23 +349,23 @@ class TaxCalculation implements TaxCalculationInterface
                 $rateDataObjects = $itemAppliedTax->getRates();
                 foreach ($rateDataObjects as $rateDataObject) {
                     $rates[$rateDataObject->getCode()] = [
-                        AppliedTaxRateInterface::KEY_CODE => $rateDataObject->getCode(),
-                        AppliedTaxRateInterface::KEY_TITLE => $rateDataObject->getTitle(),
-                        AppliedTaxRateInterface::KEY_PERCENT => $rateDataObject->getPercent(),
+                        AppliedTaxRate::KEY_CODE => $rateDataObject->getCode(),
+                        AppliedTaxRate::KEY_TITLE => $rateDataObject->getTitle(),
+                        AppliedTaxRate::KEY_PERCENT => $rateDataObject->getPercent(),
                     ];
                 }
                 $appliedTaxes[$taxId] = [
-                    AppliedTaxInterface::KEY_AMOUNT => $itemAppliedTax->getAmount(),
-                    AppliedTaxInterface::KEY_PERCENT => $itemAppliedTax->getPercent(),
-                    AppliedTaxInterface::KEY_RATES => $rates,
-                    AppliedTaxInterface::KEY_TAX_RATE_KEY => $itemAppliedTax->getTaxRateKey(),
+                    AppliedTax::KEY_AMOUNT => $itemAppliedTax->getAmount(),
+                    AppliedTax::KEY_PERCENT => $itemAppliedTax->getPercent(),
+                    AppliedTax::KEY_RATES => $rates,
+                    AppliedTax::KEY_TAX_RATE_KEY => $itemAppliedTax->getTaxRateKey(),
                 ];
             } else {
-                $appliedTaxes[$taxId][AppliedTaxInterface::KEY_AMOUNT] += $itemAppliedTax->getAmount();
+                $appliedTaxes[$taxId][AppliedTax::KEY_AMOUNT] += $itemAppliedTax->getAmount();
             }
         }
 
-        $taxDetailsData[TaxDetailsInterface::KEY_APPLIED_TAXES] = $appliedTaxes;
+        $taxDetailsData[TaxDetails::KEY_APPLIED_TAXES] = $appliedTaxes;
         return $taxDetailsData;
     }
 

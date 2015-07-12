@@ -13,11 +13,6 @@ use Magento\Framework\View\Result\PageFactory;
 class Gallery extends \Magento\Catalog\Controller\Product
 {
     /**
-     * @var Result\Redirect
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var Result\ForwardFactory
      */
     protected $resultForwardFactory;
@@ -31,17 +26,14 @@ class Gallery extends \Magento\Catalog\Controller\Product
      * Constructor
      *
      * @param Context $context
-     * @param Result\RedirectFactory $resultRedirectFactory
      * @param Result\ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
-        Result\RedirectFactory $resultRedirectFactory,
         Result\ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory
     ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);

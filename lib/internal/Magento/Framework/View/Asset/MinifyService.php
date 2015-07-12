@@ -100,22 +100,28 @@ class MinifyService
      *
      * @param string $contentType
      * @return \Magento\Framework\Code\Minifier\AdapterInterface
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getAdapter($contentType)
     {
         if (!isset($this->adapters[$contentType])) {
             $adapterClass = $this->config->getAssetMinificationAdapter($contentType);
             if (!$adapterClass) {
-                throw new \Magento\Framework\Exception(
-                    "Minification adapter is not specified for '$contentType' content type"
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        "Minification adapter is not specified for '%1' content type",
+                        [$contentType]
+                    )
                 );
             }
             $adapter = $this->objectManager->get($adapterClass);
             if (!($adapter instanceof \Magento\Framework\Code\Minifier\AdapterInterface)) {
                 $type = get_class($adapter);
-                throw new \Magento\Framework\Exception(
-                    "Invalid adapter: '{$type}'. Expected: \\Magento\\Framework\\Code\\Minifier\\AdapterInterface"
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        "Invalid adapter: '%1'. Expected: \\Magento\\Framework\\Code\\Minifier\\AdapterInterface",
+                        [$type]
+                    )
                 );
             }
             $this->adapters[$contentType] = $adapter;
@@ -130,7 +136,7 @@ class MinifyService
      * @param string $strategy
      * @param bool $isDirectRequest
      * @return AssetInterface
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getAssetDecorated(AssetInterface $asset, $strategy, $isDirectRequest)
     {

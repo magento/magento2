@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Model\Config\Backend\Address;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Line count config model for customer address street attribute
  *
@@ -27,7 +29,7 @@ class Street extends \Magento\Framework\App\Config\Value
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -37,7 +39,7 @@ class Street extends \Magento\Framework\App\Config\Value
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_eavConfig = $eavConfig;
@@ -64,7 +66,7 @@ class Street extends \Magento\Framework\App\Config\Value
                 }
                 break;
 
-            case \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT:
+            case ScopeConfigInterface::SCOPE_TYPE_DEFAULT:
                 $attribute->setData('multiline_count', $value);
                 break;
         }

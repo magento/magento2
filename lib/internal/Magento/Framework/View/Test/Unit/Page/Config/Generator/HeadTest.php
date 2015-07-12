@@ -70,12 +70,16 @@ class HeadTest extends \PHPUnit_Framework_TestCase
         $structureMock->expects($this->once())->method('processRemoveElementAttributes');
 
         $assets = [
-            'remoteName' => ['src' => 'file-url', 'src_type' => 'url', 'media' => "all"],
-            'name' => ['src' => 'file-path', 'ie_condition' => 'lt IE 7', 'media' => "print"],
+            'remoteCss' => ['src' => 'file-url', 'src_type' => 'url', 'media' => "all", 'content_type' => 'css'],
+            'remoteLink' => ['src' => 'file-url', 'src_type' => 'url', 'media' => "all"],
+            'name' => ['src' => 'file-path', 'ie_condition' => 'lt IE 7', 'media' => "print", 'content_type' => 'css'],
         ];
-        $this->pageConfigMock->expects($this->once())
+        $this->pageConfigMock->expects($this->at(0))
             ->method('addRemotePageAsset')
-            ->with('remoteName', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
+            ->with('remoteCss', 'css', ['attributes' => ['media' => 'all']]);
+        $this->pageConfigMock->expects($this->at(1))
+            ->method('addRemotePageAsset')
+            ->with('remoteLink', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
         $this->pageConfigMock->expects($this->once())
             ->method('addPageAsset')
             ->with('name', ['attributes' => ['media' => 'print'], 'ie_condition' => 'lt IE 7']);

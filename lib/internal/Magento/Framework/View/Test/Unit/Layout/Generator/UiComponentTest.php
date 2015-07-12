@@ -40,6 +40,16 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
     protected $argumentInterpreterMock;
 
     /**
+     * @var \Magento\Framework\View\Element\UiComponent\ContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contextFactoryMock;
+
+    /**
+     * @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $blockFactoryMock;
+
+    /**
      * @var \Magento\Framework\View\Layout\Generator\UiComponent
      */
     protected $uiComponent;
@@ -49,17 +59,31 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->argumentInterpreterMock = $this->getMockBuilder('Magento\Framework\Data\Argument\InterpreterInterface')
             ->disableOriginalConstructor()->getMockForAbstractClass();
-
         $this->uiComponentFactoryMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentFactory')
             ->disableOriginalConstructor()->getMock();
         $this->scheduledStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure')
             ->disableOriginalConstructor()->getMock();
+        $this->contextFactoryMock = $this->getMock(
+            'Magento\Framework\View\Element\UiComponent\ContextFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->blockFactoryMock = $this->getMock(
+            'Magento\Framework\View\Element\BlockFactory',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->uiComponent = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\Layout\Generator\UiComponent',
             [
                 'uiComponentFactory' => $this->uiComponentFactoryMock,
-                'argumentInterpreter' => $this->argumentInterpreterMock
+                'blockFactory' => $this->blockFactoryMock,
+                'contextFactory' => $this->contextFactoryMock
             ]
         );
     }
@@ -100,16 +124,50 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             ->with($layoutMock)
             ->willReturnSelf();
 
-        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
-            ->disableOriginalConstructor()->getMock();
+        $componentMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponentInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            []
+        );
+
+        $contextMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\ContextInterface',
+            [],
+            '',
+            false
+        );
+        $blockMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\BlockInterface',
+            [],
+            '',
+            false
+        );
+
+        $this->contextFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'namespace' => 'uiComponent',
+                    'pageLayout' => $layoutMock
+                ]
+            )->willReturn($contextMock);
 
         $this->uiComponentFactoryMock->expects($this->any())
-            ->method('createUiComponent')
+            ->method('create')
             ->with(
-                'component_name',
-                UiComponent::TYPE,
-                ['attribute_1' => 'value_1', 'attribute_2' => 'value_2']
-            )->willReturn($blockMock);
+                'uiComponent',
+                null,
+                ['context' => $contextMock]
+            )->willReturn($componentMock);
+
+        $this->blockFactoryMock->expects($this->once())
+            ->method('createBlock')
+            ->with(UiComponent::CONTAINER, ['component' => $componentMock])
+            ->willReturn($blockMock);
 
         $this->argumentInterpreterMock->expects($this->any())
             ->method('evaluate')

@@ -24,6 +24,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      * Set resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -35,6 +36,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      *
      * @param string $attributeCode
      * @return $this
+     * @api
      */
     public function addAttributeInConditionFilter($attributeCode)
     {

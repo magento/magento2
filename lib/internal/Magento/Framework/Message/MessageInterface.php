@@ -6,7 +6,9 @@
 namespace Magento\Framework\Message;
 
 /**
- * Interface for message
+ * Represent a message with a type, content text, and an isSticky attribute to prevent message from being cleared.
+ *
+ * @api
  */
 interface MessageInterface
 {

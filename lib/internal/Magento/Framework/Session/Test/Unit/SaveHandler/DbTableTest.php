@@ -100,7 +100,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Session\SaveHandlerException
+     * @expectedException \Magento\Framework\Exception\SessionException
      * @expectedExceptionMessage Write DB connection is not available
      */
     public function testCheckConnectionNoConnection()
@@ -124,7 +124,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Session\SaveHandlerException
+     * @expectedException \Magento\Framework\Exception\SessionException
      * @expectedExceptionMessage DB storage table does not exist
      */
     public function testCheckConnectionNoTable()

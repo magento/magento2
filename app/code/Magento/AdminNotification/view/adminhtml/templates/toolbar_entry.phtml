@@ -14,12 +14,12 @@
 ?>
 <div
     data-mage-init='{"toolbarEntry": {}}'
-    class="notifications-wrapper"
+    class="notifications-wrapper admin__action-dropdown-wrap"
     data-notification-count="<?php echo $notificationCount; ?>">
     <?php if ($notificationCount > 0) : ?>
         <a
             href="<?php echo $block->getUrl('adminhtml/notification/index'); ?>"
-            class="notifications-action"
+            class="notifications-action admin__action-dropdown"
             data-mage-init='{"dropdown":{}}'
             title="<?php echo __('Notifications'); ?>"
             data-toggle="dropdown">
@@ -28,7 +28,7 @@
             </span>
         </a>
         <ul
-            class="notifications-list"
+            class="admin__action-dropdown-menu"
             data-mark-as-read-url="<?php echo $block->getUrl('adminhtml/notification/ajaxMarkAsRead'); ?>">
             <?php foreach ($block->getLatestUnreadNotifications() as $notification) : ?>
             <?php /** @var $notification \Magento\AdminNotification\Model\Inbox*/ ?>
@@ -76,7 +76,7 @@
         </ul>
     <?php else : ?>
         <a
-            class="notifications-action"
+            class="notifications-action admin__action-dropdown"
             href="<?php echo $block->getUrl('adminhtml/notification/index'); ?>"
             title="<?php echo __('Notifications'); ?>">
         </a>

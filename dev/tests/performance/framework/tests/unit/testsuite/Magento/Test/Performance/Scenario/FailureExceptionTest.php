@@ -22,7 +22,7 @@ class FailureExceptionTest extends \PHPUnit_Framework_TestCase
         $this->_scenario = new \Magento\TestFramework\Performance\Scenario('Title', '', [], [], []);
         $this->_object = new \Magento\TestFramework\Performance\Scenario\FailureException(
             $this->_scenario,
-            'scenario has failed'
+            new \Magento\Framework\Phrase('scenario has failed')
         );
     }
 

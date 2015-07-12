@@ -8,6 +8,7 @@ namespace Magento\Install\Test\Constraint;
 
 use Magento\Install\Test\Page\Install;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\TestFramework\Inspection\Exception;
 
 /**
  * Check that agreement text present on Terms & Agreement page during install.
@@ -15,9 +16,14 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertAgreementTextPresent extends AbstractConstraint
 {
     /**
-     * Part of license agreement text.
+     * Part of Default license agreement text.
      */
-    const LICENSE_AGREEMENT_TEXT = 'Open Software License ("OSL") v. 3.0';
+    const DEFAULT_LICENSE_AGREEMENT_TEXT = 'Open Software License ("OSL") v. 3.0';
+
+    /**
+     * Part of Default license agreement text.
+     */
+    const LICENSE_AGREEMENT_TEXT = 'END USER LICENSE AGREEMENT';
 
     /**
      * Assert that part of license agreement text is present on Terms & Agreement page.
@@ -27,11 +33,19 @@ class AssertAgreementTextPresent extends AbstractConstraint
      */
     public function processAssert(Install $installPage)
     {
-        \PHPUnit_Framework_Assert::assertContains(
-            self::LICENSE_AGREEMENT_TEXT,
-            $installPage->getLicenseBlock()->getLicense(),
-            'License agreement text is absent.'
-        );
+        try {
+            \PHPUnit_Framework_Assert::assertContains(
+                self::LICENSE_AGREEMENT_TEXT,
+                $installPage->getLicenseBlock()->getLicense(),
+                'License agreement text is absent.'
+            );
+        } catch (\Exception $e) {
+            \PHPUnit_Framework_Assert::assertContains(
+                self::DEFAULT_LICENSE_AGREEMENT_TEXT,
+                $installPage->getLicenseBlock()->getLicense(),
+                'License agreement text is absent.'
+            );
+        }
     }
 
     /**

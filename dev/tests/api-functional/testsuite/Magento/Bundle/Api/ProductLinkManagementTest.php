@@ -33,12 +33,13 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $this->assertArrayHasKey(0, $result);
         $this->assertArrayHasKey('option_id', $result[0]);
         $this->assertArrayHasKey('is_default', $result[0]);
-        $this->assertArrayHasKey('is_defined', $result[0]);
+        $this->assertArrayHasKey('can_change_quantity', $result[0]);
         $this->assertArrayHasKey('price', $result[0]);
         $this->assertArrayHasKey('price_type', $result[0]);
+        $this->assertNotNull($result[0]['id']);
 
-        unset($result[0]['option_id'], $result[0]['is_default'], $result[0]['is_defined']);
-        unset($result[0]['price'], $result[0]['price_type']);
+        unset($result[0]['option_id'], $result[0]['is_default'], $result[0]['can_change_quantity']);
+        unset($result[0]['price'], $result[0]['price_type'], $result[0]['id']);
 
         ksort($result[0]);
         ksort($expected[0]);
@@ -81,6 +82,55 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
 
         $childId = $this->addChild($productSku, $optionId, $linkedProduct);
         $this->assertGreaterThan(0, $childId);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     */
+    public function testSaveChild()
+    {
+        $productSku = 'bundle-product';
+        $children = $this->getChildren($productSku);
+
+        $linkedProduct = $children[0];
+
+        //Modify a few fields
+        $linkedProduct['is_default'] = true;
+        $linkedProduct['qty'] = 2;
+
+        $this->assertTrue($this->saveChild($productSku, $linkedProduct));
+        $children = $this->getChildren($productSku);
+        $this->assertEquals($linkedProduct, $children[0]);
+    }
+
+    /**
+     * @param string $productSku
+     * @param array $linkedProduct
+     * @return string
+     */
+    private function saveChild($productSku, $linkedProduct)
+    {
+        $resourcePath = self::RESOURCE_PATH . '/:sku/links/:id';
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => str_replace(
+                    [':sku', ':id'],
+                    [$productSku, $linkedProduct['id']],
+                    $resourcePath
+                ),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'SaveChild',
+            ],
+        ];
+        return $this->_webApiCall(
+            $serviceInfo,
+            ['sku' => $productSku, 'linkedProduct' => $linkedProduct]
+        );
     }
 
     /**
@@ -158,6 +208,6 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
                 'operation' => self::SERVICE_NAME . 'getChildren',
             ],
         ];
-        return $this->_webApiCall($serviceInfo, ['productId' => $productSku]);
+        return $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
     }
 }

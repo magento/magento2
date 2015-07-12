@@ -9,6 +9,6 @@
     <page name="CmsBlockNew" area="Adminhtml" mca="cms/block/new" module="Magento_Cms">
         <block name="formPageActions" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector" />
         <block name="cmsForm" class="Magento\Cms\Test\Block\Adminhtml\Block\Edit\CmsForm" locator="[id='page:main-container']" strategy="css selector" />
-        <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector" />
+        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages" strategy="css selector" />
     </page>
 </config>

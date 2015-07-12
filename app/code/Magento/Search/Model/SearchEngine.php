@@ -17,14 +17,21 @@ class SearchEngine implements SearchEngineInterface
     /**
      * @var AdapterInterface
      */
-    protected $adapter;
+    private $adapter = null;
+
+    /**
+     * Adapter factory
+     *
+     * @var AdapterFactory
+     */
+    private $adapterFactory;
 
     /**
      * @param AdapterFactory $adapterFactory
      */
     public function __construct(AdapterFactory $adapterFactory)
     {
-        $this->adapter = $adapterFactory->create();
+        $this->adapterFactory = $adapterFactory;
     }
 
     /**
@@ -32,6 +39,19 @@ class SearchEngine implements SearchEngineInterface
      */
     public function search(RequestInterface $request)
     {
-        return $this->adapter->query($request);
+        return $this->getAdapter()->query($request);
+    }
+
+    /**
+     * Get adapter
+     *
+     * @return AdapterInterface
+     */
+    protected function getAdapter()
+    {
+        if ($this->adapter === null) {
+            $this->adapter = $this->adapterFactory->create();
+        }
+        return $this->adapter;
     }
 }

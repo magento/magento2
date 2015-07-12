@@ -6,12 +6,12 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Block;
 
-use Magento\Backend\Test\Block\Widget\Grid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Adminhtml Cms Block management grid.
+ * Backend Data Grid for managing "CMS Block" entities.
  */
-class CmsGrid extends Grid
+class CmsGrid extends DataGrid
 {
     /**
      * Filters array mapping.
@@ -19,48 +19,37 @@ class CmsGrid extends Grid
      * @var array
      */
     protected $filters = [
+        'block_id_from' => [
+            'selector' => '[name="filters[block_id][from]"]',
+        ],
+        'block_id_to' => [
+            'selector' => '[name="filters[block_id][to]"]',
+        ],
         'title' => [
-            'selector' => '#title',
+            'selector' => '[name="filters[title]"]',
         ],
         'identifier' => [
-            'selector' => '#identifier',
+            'selector' => '[name="filters[identifier]"]',
+        ],
+        'store_id' => [
+            'selector' => '[name="filters[store_id]"]',
+            'input' => 'selectstore'
         ],
         'is_active' => [
-            'selector' => '#is_active',
+            'selector' => '[name="filters[is_active]"]',
             'input' => 'select',
         ],
         'creation_time_from' => [
-            'selector' => '(//span[.="Created"]/following::input[contains(@placeholder,"From")])[1]',
-            'strategy' => 'xpath',
+            'selector' => '[name="filters[creation_time][from]"]',
+        ],
+        'creation_time_to' => [
+            'selector' => '[name="filters[creation_time][to]"]',
         ],
         'update_time_from' => [
-            'selector' => '(//span[.="Created"]/following::input[contains(@placeholder,"From")])[2]',
-            'strategy' => 'xpath',
+            'selector' => '[name="filters[update_time][from]"]',
         ],
-        'store_id' => [
-            'selector' => 'label[for="store_id"] + div > select',
-            'input' => 'selectstore'
+        'update_time_to' => [
+            'selector' => '[name="filters[update_time][to]"]',
         ],
     ];
-
-    /**
-     * Locator value for 'Search' button.
-     *
-     * @var string
-     */
-    protected $searchButton = '.action-apply';
-
-    /**
-     * Locator value for 'Reset' button.
-     *
-     * @var string
-     */
-    protected $resetButton = '.action-reset';
-
-    /**
-     * Locator value for link in action column.
-     *
-     * @var string
-     */
-    protected $editLink = 'td[data-part="body.row.cell"]';
 }

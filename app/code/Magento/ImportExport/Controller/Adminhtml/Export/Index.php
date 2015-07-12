@@ -1,26 +1,28 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
-class Index extends \Magento\ImportExport\Controller\Adminhtml\Export
+use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
+use Magento\Framework\Controller\ResultFactory;
+
+class Index extends ExportController
 {
     /**
      * Index action.
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_ImportExport::system_convert_export');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Import/Export'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Export'));
-        $this->_addBreadcrumb(__('Export'), __('Export'));
-
-        $this->_view->renderLayout();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_ImportExport::system_convert_export');
+        $resultPage->getConfig()->getTitle()->prepend(__('Import/Export'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Export'));
+        $resultPage->addBreadcrumb(__('Export'), __('Export'));
+        return $resultPage;
     }
 }

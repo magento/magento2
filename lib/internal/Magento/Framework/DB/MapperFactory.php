@@ -33,13 +33,18 @@ class MapperFactory
      * @param string $className
      * @param array $arguments
      * @return MapperInterface
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create($className, array $arguments = [])
     {
         $mapper = $this->objectManager->create($className, $arguments);
         if (!$mapper instanceof MapperInterface) {
-            throw new \Magento\Framework\Exception($className . ' doesn\'t implement \Magento\Framework\DB\MapperInterface');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase(
+                    '%1 doesn\'t implement \Magento\Framework\DB\MapperInterface',
+                    [$className]
+                )
+            );
         }
         return $mapper;
     }

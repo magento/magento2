@@ -62,7 +62,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadExceptionWrapping()
     {
-        $filesystemException = new \Magento\Framework\Filesystem\FilesystemException('File does not exist');
+        $filesystemException = new \Magento\Framework\Exception\FileSystemException(
+            new \Magento\Framework\Phrase('File does not exist')
+        );
         $this->directory
             ->expects($this->once())
             ->method('readFile')

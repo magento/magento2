@@ -5,11 +5,11 @@
  */
 namespace Magento\CatalogRule\Model\Indexer;
 
-use Magento\CatalogRule\CatalogRuleException;
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 use Magento\Indexer\Model\ActionInterface as IndexerActionInterface;
+use Magento\Framework\Object\IdentityInterface as IdentityInterface;
 
-abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface
+abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
     /**
      * @var IndexBuilder
@@ -61,6 +61,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Get affected cache tags
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getIdentities()
     {
@@ -74,13 +75,15 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Execute partial indexation by ID list
      *
      * @param int[] $ids
-     * @throws CatalogRuleException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function executeList(array $ids)
     {
         if (!$ids) {
-            throw new CatalogRuleException(__('Could not rebuild index for empty products array'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Could not rebuild index for empty products array')
+            );
         }
         $this->doExecuteList($ids);
     }
@@ -97,13 +100,15 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Execute partial indexation by ID
      *
      * @param int $id
-     * @throws CatalogRuleException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function executeRow($id)
     {
         if (!$id) {
-            throw new CatalogRuleException(__('Could not rebuild index for undefined product'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We can\'t rebuild the index for an undefined product.')
+            );
         }
         $this->doExecuteRow($id);
     }
@@ -112,7 +117,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Execute partial indexation by ID. Template method
      *
      * @param int $id
-     * @throws \Magento\CatalogRule\CatalogRuleException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     abstract protected function doExecuteRow($id);

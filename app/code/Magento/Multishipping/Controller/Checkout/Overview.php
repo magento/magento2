@@ -36,7 +36,6 @@ class Overview extends \Magento\Multishipping\Controller\Checkout
             $this->_getState()->setCompleteStep(State::STEP_BILLING);
 
             $this->_view->loadLayout();
-            $this->_view->getLayout()->initMessages();
             $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

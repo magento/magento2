@@ -264,7 +264,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $assetUrl = 'url';
         $assetNoRoutUrl = 'no_route_url';
 
-        $exception = new \Magento\Framework\Exception('my message');
+        $exception = new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('my message'));
 
         $assetMockOne = $this->getMock('Magento\Framework\View\Asset\AssetInterface');
         $assetMockOne->expects($this->exactly(2))

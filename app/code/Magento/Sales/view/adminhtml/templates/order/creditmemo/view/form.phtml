@@ -9,51 +9,56 @@
 ?>
 <?php  $_order = $block->getCreditmemo()->getOrder() ?>
 <?php echo $block->getChildHtml('order_info') ?>
-<div class="clearfix">
-<?php if (!$_order->getIsVirtual()): ?>
-<div class="order-payment-method">
-<?php else: ?>
-<div class="order-payment-method order-payment-method-virtual">
-<?php endif; ?>
-    <?php /* Billing Address */?>
-    <div class="fieldset-wrapper">
-        <div class="fieldset-wrapper-title">
-            <span class="title"><?php echo __('Payment Information') ?></span>
-        </div>
-        <div><?php echo $block->getChildHtml('order_payment') ?></div>
-        <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
-        <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Payment &amp; Shipping Method') ?></span>
     </div>
-</div>
-<?php if (!$_order->getIsVirtual()): ?>
-<div class="order-shipping-address">
-    <?php /* Shipping Address */ ?>
-    <div class="fieldset-wrapper">
-        <div class="fieldset-wrapper-title">
-            <span class="title"><?php echo __('Shipping Information') ?></span>
-        </div>
-        <div class="shipping-description-wrapper">
-            <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
-            <div class="shipping-description-content">
-                <?php echo __('Total Shipping Charges'); ?>:
+    <div class="admin__page-section-content">
 
-                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
-                    <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
-                <?php else: ?>
-                    <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
-                <?php endif; ?>
-                <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
-
-                <?php echo $_excl; ?>
-                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                    (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                <?php endif; ?>
+        <?php if (!$_order->getIsVirtual()): ?>
+        <div class="admin__page-section-item order-payment-method">
+        <?php else: ?>
+        <div class="admin__page-section-item order-payment-method order-payment-method-virtual">
+        <?php endif; ?>
+            <?php /* Billing Address */?>
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php echo __('Payment Information') ?></span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <div class="order-payment-method-title"><?php echo $block->getChildHtml('order_payment') ?></div>
+                <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+                <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
             </div>
         </div>
+
+        <?php if (!$_order->getIsVirtual()): ?>
+        <div class="admin__page-section-item order-shipping-address">
+            <?php /* Shipping Address */ ?>
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php echo __('Shipping Information') ?></span>
+            </div>
+            <div class="shipping-description-wrapper admin__page-section-item-content">
+                <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
+                <div class="shipping-description-content">
+                    <?php echo __('Total Shipping Charges'); ?>:
+
+                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
+                        <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
+                    <?php else: ?>
+                        <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                    <?php endif; ?>
+                    <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
+
+                    <?php echo $_excl; ?>
+                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                        (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
-</div>
-<?php endif; ?>
-</div>
+</section>
 <?php $_items = $block->getCreditmemo()->getAllItems() ?>
 
 <?php if (count($_items)): ?>
@@ -61,24 +66,30 @@
     <?php echo $block->getChildHtml('creditmemo_items') ?>
 </div>
 <?php else: ?>
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Items Refunded') ?></span>
     </div>
-    <div class="no-items"><?php echo __('No Items') ?></div>
-</div>
+    <div class="no-items admin__page-section-content"><?php echo __('No Items') ?></div>
+</section>
 <?php endif; ?>
-<div class="clearfix">
-    <div class="order-comments-history">
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Credit Memo History') ?></span></div>
-            <fieldset><?php echo $block->getChildHtml('order_comments') ?></fieldset>
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Memo Total') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-comments-history">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php echo __('Credit Memo History') ?></span>
+            </div>
+            <div class="admin__page-section-item-content"><?php echo $block->getChildHtml('order_comments') ?></div>
+        </div>
+        <div class="admin__page-section-item order-totals" id="history_form">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php echo __('Credit Memo Totals') ?></span>
+            </div>
+            <div class="admin__page-section-content"><?php echo $block->getChildHtml('creditmemo_totals') ?></div>
         </div>
     </div>
-    <div class="order-totals">
-        <div class="fieldset-wrapper" id="history_form">
-            <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Credit Memo Totals') ?></span></div>
-            <div><?php echo $block->getChildHtml('creditmemo_totals') ?></div>
-        </div>
-    </div>
-</div>
+</section>

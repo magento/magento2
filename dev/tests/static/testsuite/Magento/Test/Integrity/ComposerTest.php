@@ -8,7 +8,7 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\Composer\MagentoComponent;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Shell;
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * A test that enforces validity of composer.json files and any other conventions in Magento components
@@ -365,7 +365,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     {
         try {
             self::$shell->execute(self::$composerPath . ' --version');
-        } catch (Exception $e) {
+        } catch (LocalizedException $e) {
             return false;
         }
         return true;

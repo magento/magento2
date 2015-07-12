@@ -5,14 +5,14 @@
  */
 
 // @codingStandardsIgnoreFile
-
 ?>
 <?php if ($block->isPossibleOnepageCheckout()):?>
     <button type="button"
+            data-role="proceed-to-checkout"
             title="<?php echo __('Proceed to Checkout') ?>"
+            data-mage-init='{"Magento_Checkout/js/proceed-to-checkout":{}}'
             class="action primary checkout<?php echo($block->isDisabled()) ? ' disabled' : ''; ?>"
-            <?php if ($block->isDisabled()):?>disabled="disabled"<?php endif; ?>
-            onclick="window.location='<?php echo $block->getCheckoutUrl() ?>';">
-                <span><?php echo __('Proceed to Checkout') ?></span>
+            <?php if ($block->isDisabled()):?>disabled="disabled"<?php endif; ?>>
+        <span><?php echo __('Proceed to Checkout') ?></span>
     </button>
 <?php endif?>

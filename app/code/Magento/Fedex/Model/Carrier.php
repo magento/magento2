@@ -236,10 +236,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Collect and get rates
      *
-     * @param RateRequest $request
+     * @param \Magento\Framework\Object $request
      * @return Result|bool|null
      */
-    public function collectRates(RateRequest $request)
+    public function collectRates(\Magento\Framework\Object $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;
@@ -506,7 +506,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $costArr = [];
         $priceArr = [];
-        $errorTitle = 'Unable to retrieve tracking';
+        $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
 
         if (is_object($response)) {
             if ($response->HighestSeverity == 'FAILURE' || $response->HighestSeverity == 'ERROR') {
@@ -736,7 +736,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $errorTitle = 'Response is in the wrong format.';
             }
         } else {
-            $errorTitle = 'Unable to retrieve tracking';
+            $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
         }
 
         $result = $this->_rateFactory->create();
@@ -1139,7 +1139,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $error->setCarrier('fedex');
             $error->setCarrierTitle($this->getConfigData('title'));
             $error->setTracking($trackingValue);
-            $error->setErrorMessage($errorTitle ? $errorTitle : __('Unable to retrieve tracking'));
+            $error->setErrorMessage(
+                $errorTitle ? $errorTitle : __('For some reason we can\'t retrieve tracking info right now.')
+            );
             $this->_result->append($error);
         }
     }

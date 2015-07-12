@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    '../component'
-], function(Component) {
+    'uiComponent'
+], function (Component) {
     'use strict';
 
     return Component.extend({
@@ -18,7 +18,7 @@ define([
          * Extends instance with defaults. Invokes parent initialize method.
          * Calls initListeners and pushParams methods.
          */
-        initialize: function() {
+        initialize: function () {
             this._super()
                 .setUnique();
         },
@@ -28,25 +28,25 @@ define([
          * Defines observable properties of instance.
          * @return {Object} - reference to instance
          */
-        initObservable: function() {
+        initObservable: function () {
             this._super()
                 .observe('active wasActivated');
 
             return this;
         },
-        
-        onUniqueUpdate: function(name){
+
+        onUniqueUpdate: function (name) {
             var active = name === this.name;
 
             this._super();
 
             this.trigger('active', active);
         },
-        
+
         /**
          * Sets active property to true, then invokes pushParams method.
          */
-        activate: function(){
+        activate: function () {
             this.active(true);
             this.wasActivated(true);
 

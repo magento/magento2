@@ -91,9 +91,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $this->_queueLinkTable = $this->getTable('newsletter_queue_link');
         $this->_storeTable = $this->getTable('store');
 
-        // defining mapping for fields represented in several tables
-        $this->_map['fields']['customer_lastname'] = 'customer_lastname_table.value';
-        $this->_map['fields']['customer_firstname'] = 'customer_firstname_table.value';
         $this->_map['fields']['type'] = $this->getResource()->getReadConnection()->getCheckSql(
             'main_table.customer_id = 0',
             1,
@@ -145,37 +142,16 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function showCustomerInfo()
     {
-        $adapter = $this->getConnection();
-
-        $lastNameData = $this->_customerHelperData->getAttributeMetadata(
-            \Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-            'lastname'
+        $this->getSelect()->joinLeft(
+            [
+                'customer' => $this->getTable('customer_entity')
+            ],
+            'main_table.customer_id = customer.entity_id',
+            [
+                'customer_lastname' => 'lastname',
+                'customer_firstname' => 'firstname'
+            ]
         );
-        $firstNameData = $this->_customerHelperData->getAttributeMetadata(
-            \Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-            'firstname'
-        );
-
-        $this->getSelect()
-            ->joinLeft(
-                ['customer_lastname_table' => $lastNameData['attribute_table']],
-                $adapter->quoteInto(
-                    'customer_lastname_table.entity_id=main_table.customer_id
-                                     AND customer_lastname_table.attribute_id = ?',
-                    (int)$lastNameData['attribute_id']
-                ),
-                ['customer_lastname' => 'value']
-            )
-            ->joinLeft(
-                ['customer_firstname_table' => $firstNameData['attribute_table']],
-                $adapter->quoteInto(
-                    'customer_firstname_table.entity_id=main_table.customer_id
-                                     AND customer_firstname_table.attribute_id = ?',
-                    (int)$firstNameData['attribute_id']
-                ),
-                ['customer_firstname' => 'value']
-            );
-
         return $this;
     }
 

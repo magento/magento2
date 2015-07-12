@@ -14,8 +14,8 @@ class DbStatusValidatorTest extends \Magento\TestFramework\TestCase\AbstractCont
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Module\Exception
-     * @expectedExceptionMessage Please update your database
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Please upgrade your database
      */
     public function testValidationOutdatedDb()
     {

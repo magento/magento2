@@ -37,7 +37,7 @@ class Element extends \Magento\Framework\Simplexml\Element
 
     const TYPE_MOVE = 'move';
 
-    const TYPE_UI_COMPONENT = 'ui_component';
+    const TYPE_UI_COMPONENT = 'uiComponent';
 
     const TYPE_HEAD = 'head';
 

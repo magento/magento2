@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class ScopePool
 {
     const CACHE_TAG = 'config_scopes';
@@ -78,7 +80,7 @@ class ScopePool
                 $data = unserialize($data);
             } else {
                 $reader = $this->_readerPool->getReader($scopeType);
-                if ($scopeType === \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT) {
+                if ($scopeType === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
                     $data = $reader->read();
                 } else {
                     $data = $reader->read($scopeCode);
@@ -111,7 +113,7 @@ class ScopePool
     protected function _getScopeCode($scopeType, $scopeCode)
     {
         if (($scopeCode === null || is_numeric($scopeCode))
-            && $scopeType !== \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+            && $scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         ) {
             $scopeResolver = $this->_scopeResolverPool->get($scopeType);
             $scopeCode = $scopeResolver->getScope($scopeCode);

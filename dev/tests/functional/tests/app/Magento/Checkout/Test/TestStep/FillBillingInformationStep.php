@@ -8,71 +8,75 @@ namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Customer\Test\Fixture\Address;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Checkout\Test\Constraint\AssertBillingAddressSameAsShippingCheckbox;
 
 /**
- * Class FillBillingInformationStep
- * Fill billing information
+ * Fill billing information.
  */
 class FillBillingInformationStep implements TestStepInterface
 {
     /**
-     * Onepage checkout page
+     * Onepage checkout page.
      *
      * @var CheckoutOnepage
      */
     protected $checkoutOnepage;
 
     /**
-     * Address fixture
+     * Address fixture.
      *
      * @var Address
      */
     protected $billingAddress;
 
     /**
-     * Customer fixture
+     * "Same as Shipping" checkbox value assertion.
      *
-     * @var Customer
+     * @var AssertBillingAddressSameAsShippingCheckbox
      */
-    protected $customer;
+    protected $assertBillingAddressCheckbox;
 
     /**
-     * Checkout method
+     * "Same as Shipping" checkbox expected value.
      *
      * @var string
      */
-    protected $checkoutMethod;
+    protected $billingCheckboxState;
 
     /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
+     * @param AssertBillingAddressSameAsShippingCheckbox $assertBillingAddressCheckbox
      * @param Address $billingAddress
-     * @param Customer $customer
-     * @param string $checkoutMethod
+     * @param string $billingCheckboxState
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
-        Address $billingAddress,
-        Customer $customer,
-        $checkoutMethod
+        AssertBillingAddressSameAsShippingCheckbox $assertBillingAddressCheckbox,
+        Address $billingAddress = null,
+        $billingCheckboxState = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->billingAddress = $billingAddress;
-        $this->customer = $customer;
-        $this->checkoutMethod = $checkoutMethod;
+        $this->assertBillingAddressCheckbox = $assertBillingAddressCheckbox;
+        $this->billingCheckboxState = $billingCheckboxState;
     }
 
     /**
-     * Fill billing address
+     * Fill billing address.
      *
      * @return void
      */
     public function run()
     {
-        $customer = $this->checkoutMethod === 'register' ? $this->customer : null;
-        $this->checkoutOnepage->getBillingBlock()->fillBilling($this->billingAddress, $customer);
-        $this->checkoutOnepage->getBillingBlock()->clickContinue();
+        if ($this->billingCheckboxState) {
+            $this->assertBillingAddressCheckbox->processAssert($this->checkoutOnepage, $this->billingCheckboxState);
+        }
+
+        if ($this->billingAddress) {
+            $selectedPaymentMethod = $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock();
+            $selectedPaymentMethod->getBillingBlock()->fillBilling($this->billingAddress);
+        }
     }
 }

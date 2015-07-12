@@ -61,6 +61,7 @@ abstract class AbstractResource
      * Start resource transaction
      *
      * @return $this
+     * @api
      */
     public function beginTransaction()
     {
@@ -73,6 +74,7 @@ abstract class AbstractResource
      *
      * @param array $callback
      * @return $this
+     * @api
      */
     public function addCommitCallback($callback)
     {
@@ -85,6 +87,7 @@ abstract class AbstractResource
      * Commit resource transaction
      *
      * @return $this
+     * @api
      */
     public function commit()
     {
@@ -97,8 +100,13 @@ abstract class AbstractResource
             if (isset(self::$_commitCallbacks[$adapterKey])) {
                 $callbacks = self::$_commitCallbacks[$adapterKey];
                 self::$_commitCallbacks[$adapterKey] = [];
-                foreach ($callbacks as $callback) {
-                    call_user_func($callback);
+                try {
+                    foreach ($callbacks as $callback) {
+                        call_user_func($callback);
+                    }
+                } catch (\Exception $e) {
+                    echo $e;
+                    throw $e;
                 }
             }
         }
@@ -109,10 +117,13 @@ abstract class AbstractResource
      * Roll back resource transaction
      *
      * @return $this
+     * @api
      */
     public function rollBack()
     {
         $this->_getWriteAdapter()->rollBack();
+        $adapterKey = spl_object_hash($this->_getWriteAdapter());
+        self::$_commitCallbacks[$adapterKey] = [];
         return $this;
     }
 

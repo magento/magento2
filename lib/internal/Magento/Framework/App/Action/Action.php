@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Action;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Default implementation of application action controller
@@ -65,7 +66,7 @@ class Action extends AbstractAction
      */
     public function __construct(Context $context)
     {
-        parent::__construct($context->getRequest(), $context->getResponse());
+        parent::__construct($context);
         $this->_objectManager = $context->getObjectManager();
         $this->_eventManager = $context->getEventManager();
         $this->_url = $context->getUrl();

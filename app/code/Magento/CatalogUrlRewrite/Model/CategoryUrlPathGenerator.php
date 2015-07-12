@@ -56,7 +56,7 @@ class CategoryUrlPathGenerator
     /**
      * Build category URL path
      *
-     * @param \Magento\Catalog\Api\Data\CategoryInterface|\Magento\Framework\Object $category
+     * @param \Magento\Catalog\Api\Data\CategoryInterface|\Magento\Framework\Model\AbstractModel $category
      * @return string
      */
     public function getUrlPath($category)

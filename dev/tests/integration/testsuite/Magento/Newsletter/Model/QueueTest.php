@@ -68,13 +68,9 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $transport = $this->getMock('\Magento\Framework\Mail\TransportInterface');
-        $transport->expects(
-            $this->any()
-        )->method(
-            'sendMessage'
-        )->will(
-            $this->throwException(new \Magento\Framework\Mail\Exception($errorMsg, 99))
-        );
+        $transport->expects($this->any())
+            ->method('sendMessage')
+            ->willThrowException(new \Magento\Framework\Exception\MailException(__($errorMsg)));
 
         $builder = $this->getMock(
             '\Magento\Newsletter\Model\Queue\TransportBuilder',
@@ -100,7 +96,6 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
         $problem->load($queue->getId(), 'queue_id');
         $this->assertNotEmpty($problem->getId());
-        $this->assertEquals(99, $problem->getProblemErrorCode());
         $this->assertEquals($errorMsg, $problem->getProblemErrorText());
     }
 }

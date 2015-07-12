@@ -65,6 +65,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     const KEY_POSITION = 'position';
     const KEY_LEVEL = 'level';
     const KEY_UPDATED_AT = 'updated_at';
+    const KEY_CREATED_AT = 'created_at';
     const KEY_PATH = 'path';
     const KEY_AVAILABLE_SORT_BY = 'available_sort_by';
     const KEY_INCLUDE_IN_MENU = 'include_in_menu';
@@ -126,6 +127,25 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         'page_layout',
         'custom_layout_update',
         'custom_apply_to_products',
+    ];
+
+    /**
+     * Attributes are that part of interface
+     *
+     * @var array
+     */
+    protected $interfaceAttributes = [
+        'id',
+        self::KEY_PARENT_ID,
+        self::KEY_NAME,
+        self::KEY_IS_ACTIVE,
+        self::KEY_POSITION,
+        self::KEY_LEVEL,
+        self::KEY_UPDATED_AT,
+        self::KEY_CREATED_AT,
+        self::KEY_AVAILABLE_SORT_BY,
+        self::KEY_INCLUDE_IN_MENU,
+        self::KEY_CHILDREN_DATA,
     ];
 
     /**
@@ -214,7 +234,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -238,7 +258,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -289,6 +309,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         if ($this->customAttributesCodes === null) {
             $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+            $this->customAttributesCodes = array_diff($this->customAttributesCodes, $this->interfaceAttributes);
         }
         return $this->customAttributesCodes;
     }
@@ -353,8 +374,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         } catch (NoSuchEntityException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'Sorry, but we can\'t move the category because we can\'t find the new parent category you'
-                    . ' selected.'
+                    'Sorry, but we can\'t find the new parent category you selected.'
                 ),
                 $e
             );
@@ -362,13 +382,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
         if (!$this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, but we can\'t move the category because we can\'t find the new category you selected.')
+                __('Sorry, but we can\'t find the new category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'We can\'t perform this category move operation because the parent category matches the child'
-                    . 'category.'
+                    'We can\'t move the category because the parent category name matches the child category name.'
                 )
             );
         }
@@ -430,7 +449,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get category products collection
      *
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     public function getProductCollection()
     {
@@ -1294,6 +1313,15 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(self::KEY_UPDATED_AT, $updatedAt);
+    }
+
+    /**
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(self::KEY_CREATED_AT, $createdAt);
     }
 
     /**

@@ -7,6 +7,7 @@
  */
 namespace Magento\Framework\App\Request;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
@@ -345,6 +346,25 @@ class Http extends Request implements RequestInterface
     }
 
     /**
+     * Return url with no script name
+     *
+     * @param  string $url
+     * @return string
+     */
+    public static function getUrlNoScript($url)
+    {
+        if (!isset($_SERVER['SCRIPT_NAME'])) {
+            return $url;
+        }
+
+        if (($pos = strripos($url, basename($_SERVER['SCRIPT_NAME']))) !== false) {
+            $url = substr($url, 0, $pos);
+        }
+
+        return $url;
+    }
+
+    /**
      * Retrieve full action name
      *
      * @param string $delimiter
@@ -384,7 +404,7 @@ class Http extends Request implements RequestInterface
         $offLoaderHeader = trim(
             (string)$config->getValue(
                 self::XML_PATH_OFFLOADER_HEADER,
-                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             )
         );
 

@@ -5,59 +5,44 @@
  */
 
 // @codingStandardsIgnoreFile
-
-/* @var $block \Magento\Catalog\Block\Product\Compare\Sidebar */
+/* @var $block \Magento\Framework\View\Element\Template */
 ?>
-<?php
-$_helper = $this->helper('Magento\Catalog\Helper\Product\Compare');
-$_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
-$count = $_helper->getItemCount();
-?>
-<div class="block block-compare">
+<div class="block block-compare" data-bind="scope: 'compareProducts'" data-role="compare-products-sidebar">
     <div class="block-title">
         <strong id="block-compare-heading" role="heading" aria-level="2"><?php echo __('Compare Products') ?></strong>
-        <?php if ($count > 0): ?>
-        <span class="counter qty"><?php echo($count == 1) ? __('1 item') : __('%1 items', $count) ?></span>
-        <?php endif; ?>
+        <span class="counter qty no-display" data-bind="text: compareProducts().countCaption, css: {'no-display': !compareProducts().count}"></span>
     </div>
-    <div class="block-content" aria-labelledby="block-compare-heading">
-        <?php if ($_helper->getItemCount() > 0): ?>
-            <ol id="compare-items" class="product-items product-items-names"
-                data-mage-init='{"compareItems":{
-                    "removeConfirmMessage":"<?php echo __("Are you sure you would like to remove this item from the compare products?") ?>",
-                    "removeSelector":"#compare-items a.action.delete",
-                    "clearAllConfirmMessage":"<?php echo __("Are you sure you would like to remove all products from your comparison?") ?>",
-                    "clearAllSelector":"#compare-clear-all"
-                }}'>
-            <?php foreach ($_items as $_index => $_item): ?>
-            <li class="product-item">
-                <input type="hidden" class="compare-item-id" value="<?php echo $_item->getId() ?>"/>
-                <strong class="product-item-name">
-                    <a href="<?php echo $block->getProductUrl($_item) ?>" class="product-item-link">
-                        <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_item, $_item->getName(), 'name') ?>
+    <!-- ko if: compareProducts().count -->
+    <div class="block-content no-display" aria-labelledby="block-compare-heading" data-bind="css: {'no-display': !compareProducts().count}">
+        <ol id="compare-items" class="product-items product-items-names" data-bind="foreach: compareProducts().items">
+                <li class="product-item">
+                    <input type="hidden" class="compare-item-id" data-bind="value: id"/>
+                    <strong class="product-item-name">
+                        <a data-bind="attr: {href: product_url}, html: name" class="product-item-link"></a>
+                    </strong>
+                    <a href="#" data-bind="attr: {'data-post': remove_url}" title="<?php echo __('Remove This Item') ?>" class="action delete">
+                        <span><?php echo __('Remove This Item') ?></span>
                     </a>
-                </strong>
-                <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
-
-                <a href="#" data-post='<?php echo $compareHelper->getPostDataRemove($_item); ?>'
-                   title="<?php echo __('Remove This Item') ?>"
-                   class="action delete">
-                    <span><?php echo __('Remove This Item') ?></span></a>
-            </li>
-        <?php endforeach; ?>
-    </ol>
-    <div class="actions-toolbar">
-        <div class="primary">
-            <a href="<?php echo $_helper->getListUrl() ?>" class="action compare primary"><span><?php echo __('Compare') ?></span></a>
-        </div>
-        <div class="secondary">
-            <a id="compare-clear-all" href="#" data-post='<?php echo $_helper->getPostDataClearList() ?>' class="action clear">
-                <span><?php echo __('Clear All') ?></span>
-            </a>
+                </li>
+        </ol>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <a data-bind="attr: {'href': compareProducts().listUrl}" class="action compare primary"><span><?php echo __('Compare') ?></span></a>
+            </div>
+            <div class="secondary">
+                <a id="compare-clear-all" href="#" class="action clear" data-post="<?=$block->escapeHtml(
+                    $this->helper('Magento\Catalog\Helper\Product\Compare')->getPostDataClearList()
+                ) ?>">
+                    <span><?php echo __('Clear All') ?></span>
+                </a>
+            </div>
         </div>
     </div>
-    <?php else: ?>
-        <div class="empty"><?php echo __('You have no items to compare.') ?></div>
-    <?php endif; ?>
-    </div>
+    <!-- /ko -->
+    <!-- ko ifnot: compareProducts().count -->
+    <div class="empty"><?php echo __('You have no items to compare.') ?></div>
+    <!-- /ko -->
 </div>
+<script type="text/x-magento-init">
+{"[data-role=compare-products-sidebar]": {"Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>}}
+</script>

@@ -30,13 +30,21 @@ $shippingAddress->setId(null)->setPostcode('2')->setAddressType('shipping');
 $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
 $order->loadByIncrementId('100000001');
 $clonedOrder = clone $order;
-$order->setIncrementId('100000002');
-$order->save();
 
 /** @var $payment \Magento\Sales\Model\Order\Payment */
 $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Payment');
 $payment->setMethod('checkmo');
+$clonedOrder->setIncrementId('100000002')
+    ->setId(null)
+    ->setBillingAddress($billingAddress)
+    ->setShippingAddress($shippingAddress)
+    ->setPayment($payment);
+$clonedOrder->save();
 
-$order = $clonedOrder;
-$order->setId(null)->setBillingAddress($billingAddress)->setShippingAddress($shippingAddress)->setPayment($payment);
-$order->save();
+$secondClonedOrder = clone $order;
+$secondClonedOrder->setIncrementId('100000003')
+    ->setId(null)
+    ->setBillingAddress($billingAddress->setId(null))
+    ->setShippingAddress($shippingAddress->setId(null))
+    ->setPayment($payment->setId(null));
+$secondClonedOrder->save();

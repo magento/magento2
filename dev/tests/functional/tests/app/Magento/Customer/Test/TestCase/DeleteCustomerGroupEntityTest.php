@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupNew;
 use Magento\Mtf\TestCase\Injectable;
@@ -67,10 +67,10 @@ class DeleteCustomerGroupEntityTest extends Injectable
     /**
      * Delete Customer Group
      *
-     * @param CustomerGroupInjectable $customerGroup
+     * @param CustomerGroup $customerGroup
      * @return void
      */
-    public function test(CustomerGroupInjectable $customerGroup)
+    public function test(CustomerGroup $customerGroup)
     {
         // Precondition
         $customerGroup->persist();

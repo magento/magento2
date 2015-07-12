@@ -1,0 +1,434 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  UI -> Data Grid
+//  _____________________________________________
+
+//
+//  Components
+//  ---------------------------------------------
+
+@import 'data-grid/_data-grid-header.less';
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@data-grid__font-size: 1.3rem;
+
+@data-grid-tr__active__background-color: @action__hover__background-color;
+@data-grid-tr__hover__background-color: lighten(@action__hover__background-color, 1%);
+
+@data-grid-cell__border-width: .1rem;
+@data-grid-cell__padding-horizontal: 1rem;
+@data-grid-cell__padding-vertical: 1rem;
+
+@data-grid-td__border-color: @color-gray84;
+@data-grid-td__border-inner-style: dashed;
+@data-grid-td__border-outer-style: solid;
+@data-grid-td__even__background-color: @color-white-smoke;
+@data-grid-td__odd__background-color: @page__background-color;
+
+@data-grid-th__border-color: @color-darkie-gray;
+@data-grid-th__border-style: solid;
+@data-grid-th__background-color: @color-brownie;
+@data-grid-th__color: @color-white;
+@data-grid-th__padding-horizontal: @data-grid-cell__padding-horizontal;
+@data-grid-th__padding-vertical: @data-grid-cell__padding-vertical;
+@data-grid-th__hover__background-color: lighten(@data-grid-th__background-color, 5%);
+
+@data-grid-th-marker__width: .7rem;
+@data-grid-th-marker__required__color: lighten(@color-light-phoenix, 10%);
+
+@data-grid-checkbox-cell-inner__padding-top: 1.1rem;
+@data-grid-checkbox-cell-inner__padding-horizontal: 1.8rem;
+
+@data-grid-row-parent-marker__size: 1rem;
+
+//
+
+.admin__data-grid-outer-wrap {
+    position: relative; // Used to keep spinner inside
+}
+
+.admin__data-grid-wrap {
+    margin-bottom: 2rem;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-top: 0;
+}
+
+.admin__data-grid-loading-mask {
+    background: rgba(255, 255, 255, .5);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    position: absolute;
+    z-index: @data-grid-overlay__z-index;
+
+    .grid-loader {
+        background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
+        bottom: 0;
+        height: 149px;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 218px;
+    }
+}
+
+.data-grid {
+    border-bottom: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    box-sizing: border-box; // ToDo UI: Rewrite old styles. Should be deleted afterwards
+    font-size: @data-grid__font-size;
+    max-width: 100%;
+    margin-bottom: 0;
+    width: 100%;
+    thead {
+        background-color: transparent;
+        color: @text__color; // ToDo UI: Rewrite old styles. Should be deleted afterwards
+    }
+    tfoot {
+        th {
+            padding: @data-grid-cell__padding-vertical @data-grid-cell__padding-horizontal;
+        }
+    }
+    tr {
+        &:nth-child(even) {
+            td {
+                background-color: @data-grid-td__even__background-color;
+                &._dragging {
+                    background-color: fade(@data-grid-td__even__background-color, @data-grid-td__dragging__opacity); 
+                }
+            }
+        }
+        &.data-grid-tr-no-data {
+            &:hover {
+                td {
+                    cursor: default;
+                    background-color: @data-grid-td__odd__background-color;
+                }
+            }
+        }
+    }
+    tbody {
+        tr {
+            &:active {
+                td {
+                    background-color: @data-grid-tr__active__background-color;
+                }
+            }
+            &:hover {
+                td {
+                    background-color: @data-grid-tr__hover__background-color;
+                }
+            }
+            &._clickable,
+            ._clickable {
+                cursor: pointer;
+            }
+        }
+    }
+    th,
+    td {
+        font-size: @data-grid__font-size; // ToDo UI: Rewrite old styles. Should be deleted afterwards
+        line-height: @line-height__base;
+        transition: @smooth__background-color;
+        vertical-align: top;
+    }
+    td {
+        background-color: @data-grid-td__odd__background-color;
+        border-left: @data-grid-cell__border-width @data-grid-td__border-inner-style @data-grid-td__border-color;
+        border-right: @data-grid-cell__border-width @data-grid-td__border-inner-style @data-grid-td__border-color;
+        color: @table__color;
+        padding: @data-grid-cell__padding-vertical @data-grid-cell__padding-horizontal;
+        &:first-child {
+            border-left-style: @data-grid-td__border-outer-style;
+        }
+        &:last-child {
+            border-right-style: @data-grid-td__border-outer-style;
+        }
+        &._dragging {
+            color: fade(@table__color, @data-grid-td__dragging__opacity);
+            background-color: fade(@data-grid-td__odd__background-color, @data-grid-td__dragging__opacity);
+            a {
+                color: fade(@link__color, @data-grid-td__dragging__opacity);
+                &:hover {
+                    color: fade(@link__hover__color, @data-grid-td__dragging__opacity);
+                }
+            }
+        }
+        
+        //  Action select data grid styles (can be action-select-secondary in future)
+        .action-select-wrap {
+            position: static;
+        }
+        .action-select {
+            .link-pattern();
+            background-color: transparent;
+            border: none;
+            font-size: @data-grid__font-size;
+            padding: 0 3rem 0 0;
+            &:hover {
+                &:after {
+                    border-color: @link__hover__color transparent transparent transparent;
+                }
+            }
+            &:after {
+                border-color: @link__color transparent transparent transparent;
+                margin: .6rem 0 0 .7rem;
+                right: auto;
+                top: auto;
+            }
+            &:before {
+                display: none;
+            }
+        }
+        .action-menu {
+            left: auto;
+            min-width: 10rem;
+            right: 0;
+            top: auto;
+            z-index: 1;
+        }
+    }
+    th {
+        background-color: @data-grid-th__background-color;
+        border: @data-grid-cell__border-width @data-grid-th__border-style @data-grid-th__border-color;
+        border-left-color: transparent;
+        color: @data-grid-th__color;
+        font-weight: @font-weight__semibold;
+        padding: 0;
+        text-align: left;
+        &:first-child {
+            border-left-color: @data-grid-th__border-color;
+        }
+        &._dragover-left {
+            box-shadow: inset 3px 0 0px 0px @color-white;
+        }
+        &._dragover-right {
+            box-shadow: inset -3px 0 0px 0px @color-white;
+        }
+    }
+    .data-grid-th {
+        color: @data-grid-th__color;
+        padding: @data-grid-th__padding-vertical @data-grid-th__padding-horizontal;
+        vertical-align: middle;
+        &._draggable {
+            cursor: -webkit-grab;
+               cursor: -moz-grab;
+                    cursor: grab;
+        }
+        &._sortable {
+            background-clip: padding-box; // Fix for border overlay in Firefox
+            cursor: pointer;
+            padding-right: @data-grid-th__padding-horizontal * 2 + @data-grid-th-marker__width;
+            position: relative;
+            transition: @smooth__background-color;
+            z-index: 1;
+            &:focus,
+            &:hover {
+                background-color: @data-grid-th__hover__background-color;
+            }
+            &:active {
+                padding-bottom: @data-grid-th__padding-vertical - .1rem;
+                padding-top: @data-grid-th__padding-vertical + .1rem;
+            }
+        }
+        //  Required column
+        &.required {
+            > span {
+                &:after {
+                    content: '*';
+                    margin-left: .3rem;
+                    color: @data-grid-th-marker__required__color;
+                }
+            }
+        }
+    }
+    .data-grid-checkbox-cell {
+        padding: 0;
+        width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
+        &:hover {
+            cursor: default;
+        }
+    }
+    .data-grid-thumbnail-cell {
+        width: 7rem;
+        text-align: center;
+        img {
+            border: 1px solid @data-grid-td__border-color;
+            max-width: 5rem;
+        }
+    }
+    .data-grid-multiselect-cell {
+        padding: @data-grid-th__padding-horizontal @data-grid-th__padding-vertical @data-grid-th__padding-horizontal - .1rem;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .data-grid-actions-cell {
+        padding-left: @data-grid-cell__padding-horizontal * 2;
+        padding-right: @data-grid-cell__padding-horizontal * 2;
+        width: 1%;
+    }
+    //  Nested rows
+    .data-grid-row-parent {
+        &._active {
+            > td {
+                background-color: @color-lazy-sunny;
+                border-bottom: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
+                border-left-color: transparent;
+                border-right-color: transparent;
+                border-top: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
+                &:first-child {
+                    border-left-color: @data-grid-td__border-color;
+                }
+                &:last-child {
+                    border-right-color: @data-grid-td__border-color;
+                }
+            }
+        }
+    }
+    .data-grid-row-child {
+        display: none;
+        &._active {
+            display: table-row;
+            + tr {
+                &:not(.data-grid-row-child) {
+                    td {
+                        border-top: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
+                    }
+                }
+            }
+        }
+    }
+    .data-grid-row-child,
+    .data-grid-row-parent ~ .data-grid-row-child {
+        td {
+            background-color: @color-lazy-sun-white;
+            border-color: transparent;
+            &:first-child {
+                border-left-color: @data-grid-td__border-color;
+            }
+            &:last-child {
+                border-right-color: @data-grid-td__border-color;
+            }
+        }
+    }
+    //  Draggable columns
+    &._hidden {
+        display: none;
+    }
+    &.data-grid-draggable {
+        background-color: @color-black;
+    }
+    &._dragging-copy {
+        background-color: @color-white;
+        box-shadow: @component__box-shadow__base;
+        left: 0;
+        opacity: .95;
+        position: fixed;
+        top: 0;
+        z-index: @data-grid-overlay__z-index;
+        .data-grid-th {
+            border: @data-grid-dragging-copy__border;
+            border-bottom: none;
+        }
+        .data-grid-th,
+        .data-grid-th._sortable {
+            cursor: -webkit-grabbing;
+               cursor: -moz-grabbing;
+                    cursor: grabbing;
+        }
+        tbody {
+            tr {
+                &:last-child {
+                    td {
+                        border-bottom: @data-grid-dragging-copy__border;
+                    }
+                }
+            }
+            td {
+                border-left: @data-grid-dragging-copy__border;
+                border-right: @data-grid-dragging-copy__border;
+            }
+        }
+    }
+}
+
+//  Ascend & Descend sort marker
+.data-grid-th {
+    &._sortable {
+        &._ascend,
+        &._descend {
+            &:before {
+                position: absolute;
+                right: @data-grid-th__padding-horizontal;
+                top: 50%;
+                margin-top: -.75em;
+            }
+        }
+        &._ascend {
+            &:before {
+                content: '\2193';
+            }
+        }
+        &._descend {
+            &:before {
+                content: '\2191';
+            }
+        }
+    }
+}
+
+//  Checkbox actions column
+.data-grid-checkbox-cell-inner {
+    display: block;
+    padding: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+    text-align: right;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+//  Nested rows
+.data-grid-row-parent {
+    &._active {
+        > td {
+            .data-grid-checkbox-cell-inner {
+                &:before {
+                    content: @icon-caret-up__content;
+                }
+            }
+        }
+    }
+    > td {
+        .data-grid-checkbox-cell-inner {
+            padding-left: (@data-grid-checkbox-cell-inner__padding-horizontal * .75) * 2 + @data-grid-row-parent-marker__size;
+            position: relative;
+            &:before {
+                &:extend(.abs-icon all);
+                content: @icon-caret-down__content;
+                font-size: @data-grid-row-parent-marker__size;
+                font-weight: @font-weight__bold;
+                left: @data-grid-checkbox-cell-inner__padding-horizontal * .75;
+                position: absolute;
+                top: @data-grid-checkbox-cell-inner__padding-top + (@data-grid-row-parent-marker__size / 2);
+            }
+        }
+    }
+}
+.data-grid-th {
+    &._col-xs {
+        width: 1%;
+    }
+}

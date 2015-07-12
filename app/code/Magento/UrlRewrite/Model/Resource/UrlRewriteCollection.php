@@ -54,6 +54,7 @@ class UrlRewriteCollection extends \Magento\Framework\Model\Resource\Db\Collecti
      * @param mixed $store
      * @param bool $withAdmin
      * @return $this
+     * @api
      */
     public function addStoreFilter($store, $withAdmin = true)
     {

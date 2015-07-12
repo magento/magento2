@@ -19,25 +19,25 @@ abstract class Sidebar extends Block
      *
      * @var string
      */
-    protected $addToOrder = '//tr[td[.="%s"]]//input[contains(@name,"add")]';
+    protected $addToOrder = './/tr[td[.="%s"]]//input[contains(@name,"add")]';
 
     /**
      * 'Add to order' checkbox.
      *
      * @var string
      */
-    protected $addToOrderProductName = '//tr/td[.="%s"]';
+    protected $addToOrderProductName = './/tr/td[.="%s"]';
 
     /**
-     * Add product to order by name.
+     * Add productz to order.
      *
-     * @param string|array $names
+     * @param array $products
      * @return void
      */
-    public function addToOrderByName($names)
+    public function addProductsToOrder(array $products)
     {
-        $names = is_array($names) ? $names : [$names];
-        foreach ($names as $name) {
+        foreach ($products as $product) {
+            $name = $product->getName();
             $this->_rootElement->find(sprintf($this->addToOrderProductName, $name), Locator::SELECTOR_XPATH)->click();
             $this->_rootElement->click();
             $this->_rootElement->find(sprintf($this->addToOrder, $name), Locator::SELECTOR_XPATH, 'checkbox')

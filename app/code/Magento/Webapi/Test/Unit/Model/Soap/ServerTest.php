@@ -18,9 +18,6 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Soap\Request */
     protected $_requestMock;
 
-    /** @var \Magento\Framework\DomDocument\Factory */
-    protected $_domDocumentFactory;
-
     /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $_storeManagerMock;
 
@@ -67,10 +64,6 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             'Magento\Webapi\Controller\Soap\Request'
         )->disableOriginalConstructor()->getMock();
 
-        $this->_domDocumentFactory = $this->getMockBuilder(
-            'Magento\Framework\DomDocument\Factory'
-        )->disableOriginalConstructor()->getMock();
-
         $this->_soapServerFactory = $this->getMockBuilder(
             'Magento\Webapi\Model\Soap\ServerFactory'
         )->disableOriginalConstructor()->getMock();
@@ -90,7 +83,6 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             $areaListMock,
             $configScopeMock,
             $this->_requestMock,
-            $this->_domDocumentFactory,
             $this->_storeManagerMock,
             $this->_soapServerFactory,
             $this->_typeProcessor,

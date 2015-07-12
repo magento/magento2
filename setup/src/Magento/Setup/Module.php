@@ -6,7 +6,6 @@
 
 namespace Magento\Setup;
 
-use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Setup\Mvc\View\Http\InjectTemplateListener;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
@@ -66,7 +65,6 @@ class Module implements
             include __DIR__ . '/../../../config/states.config.php',
             include __DIR__ . '/../../../config/languages.config.php'
         );
-        $result = InitParamListener::attachToConsoleRoutes($result);
         return $result;
     }
 }

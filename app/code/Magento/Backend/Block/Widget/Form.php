@@ -111,6 +111,13 @@ class Form extends \Magento\Backend\Block\Widget
         $this->_form = $form;
         $this->_form->setParent($this);
         $this->_form->setBaseUrl($this->_urlBuilder->getBaseUrl());
+
+        $customAttributes = $this->getData('custom_attributes');
+        if (is_array($customAttributes)) {
+            foreach ($customAttributes as $key => $value) {
+                $this->_form->addCustomAttribute($key, $value);
+            }
+        }
         return $this;
     }
 
@@ -226,7 +233,6 @@ class Form extends \Magento\Backend\Block\Widget
                 $element->setCanBeEmpty(true);
                 break;
             case 'date':
-                $element->setImage($this->getViewFileUrl('images/grid-cal.png'));
                 $element->setDateFormat($this->_localeDate->getDateFormatWithLongYear());
                 break;
             case 'multiline':

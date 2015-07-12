@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
 use Magento\Mtf\Block\Form;
@@ -19,7 +20,7 @@ class LinkRow extends Form
      *
      * @var string
      */
-    protected $deleteButton = '.delete-link-item';
+    protected $deleteButton = '.action-delete';
 
     /**
      * Fill item link

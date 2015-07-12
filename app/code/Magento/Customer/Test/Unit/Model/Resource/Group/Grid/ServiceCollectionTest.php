@@ -88,7 +88,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
             ->setCurrentPage(1)
             ->setPageSize(false)
             ->addSortOrder($sortOrder)
-            ->addFilter(
+            ->addFilters(
                 [$this->filterBuilder->setField('name')->setConditionType('eq')->setValue('Magento')->create()]
             )->create();
 
@@ -119,7 +119,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
             ->setCurrentPage(1)
             ->setPageSize(0)
             ->addSortOrder($sortOrder)
-            ->addFilter([$filter])
+            ->addFilters([$filter])
             ->create();
 
         // Verifies that the search criteria Data Object created by the serviceCollection matches expected
@@ -150,7 +150,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
             ->setCurrentPage(1)
             ->setPageSize(0)
             ->addSortOrder($sortOrder)
-            ->addFilter(
+            ->addFilters(
                 [
                     $this->filterBuilder->setField($fieldA)->setConditionType('eq')->setValue($value)->create(),
                     $this->filterBuilder->setField($fieldB)->setConditionType('eq')->setValue($value)->create(),
@@ -186,13 +186,13 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
             ->setCurrentPage(1)
             ->setPageSize(0)
             ->addSortOrder($sortOrder)
-            ->addFilter(
+            ->addFilters(
                 [
                     $this->filterBuilder->setField($fieldA)->setConditionType('gt')
                         ->setValue($value)->create(),
                 ]
             )
-            ->addFilter(
+            ->addFilters(
                 [
                     $this->filterBuilder->setField($fieldB)->setConditionType('gt')
                         ->setValue($value)->create(),
@@ -217,7 +217,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
      * @param string[] $fields
      * @param array $conditions
      *
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage When passing in a field array there must be a matching condition array
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */

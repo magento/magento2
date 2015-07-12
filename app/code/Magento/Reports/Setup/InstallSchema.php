@@ -73,7 +73,7 @@ class InstallSchema implements InstallSchemaInterface
                 'added_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Added At'
             )
             ->addIndex(
@@ -111,7 +111,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_id',
                 $installer->getTable('customer_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -124,7 +123,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -132,8 +130,7 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
             )
             ->setComment('Reports Compared Product Index Table');
         $installer->getConnection()->createTable($table);
@@ -184,7 +181,7 @@ class InstallSchema implements InstallSchemaInterface
                 'added_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Added At'
             )
             ->addIndex(
@@ -222,7 +219,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_id',
                 $installer->getTable('customer_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -235,7 +231,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -243,8 +238,7 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
             )
             ->setComment('Reports Viewed Product Index Table');
         $installer->getConnection()->createTable($table);
@@ -294,7 +288,7 @@ class InstallSchema implements InstallSchemaInterface
                 'logged_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Logged At'
             )
             ->addColumn(
@@ -357,7 +351,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -365,7 +358,6 @@ class InstallSchema implements InstallSchemaInterface
                 'event_type_id',
                 $installer->getTable('report_event_types'),
                 'event_type_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Reports Event Table');
@@ -419,7 +411,7 @@ class InstallSchema implements InstallSchemaInterface
                     'added_at',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                     null,
-                    ['nullable' => false],
+                    ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                     'Added At'
                 )
                 ->addIndex(
@@ -452,7 +444,6 @@ class InstallSchema implements InstallSchemaInterface
                     'customer_id',
                     $installer->getTable('customer_entity'),
                     'entity_id',
-                    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
                 )
                 ->addForeignKey(
@@ -465,7 +456,6 @@ class InstallSchema implements InstallSchemaInterface
                     'product_id',
                     $installer->getTable('catalog_product_entity'),
                     'entity_id',
-                    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
                 )
                 ->addForeignKey(
@@ -473,8 +463,7 @@ class InstallSchema implements InstallSchemaInterface
                     'store_id',
                     $installer->getTable('store'),
                     'store_id',
-                    \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                    \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
                 )
                 ->setComment('Reports Compared Product Index Table');
             $installer->getConnection()->createTable($table);
@@ -528,7 +517,7 @@ class InstallSchema implements InstallSchemaInterface
                     'added_at',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                     null,
-                    ['nullable' => false],
+                    ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                     'Added At'
                 )
                 ->addIndex(
@@ -556,7 +545,6 @@ class InstallSchema implements InstallSchemaInterface
                     'customer_id',
                     $installer->getTable('customer_entity'),
                     'entity_id',
-                    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
                 )
                 ->addForeignKey(
@@ -569,7 +557,6 @@ class InstallSchema implements InstallSchemaInterface
                     'product_id',
                     $installer->getTable('catalog_product_entity'),
                     'entity_id',
-                    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
                 )
                 ->addForeignKey(
@@ -577,8 +564,7 @@ class InstallSchema implements InstallSchemaInterface
                     'store_id',
                     $installer->getTable('store'),
                     'store_id',
-                    \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                    \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
                 )
                 ->setComment('Reports Viewed Product Index Table');
             $installer->getConnection()->createTable($table);
@@ -667,7 +653,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -680,7 +665,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Most Viewed Products Aggregated Daily');
@@ -769,7 +753,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -782,7 +765,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Most Viewed Products Aggregated Monthly');
@@ -871,7 +853,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -884,7 +865,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Most Viewed Products Aggregated Yearly');

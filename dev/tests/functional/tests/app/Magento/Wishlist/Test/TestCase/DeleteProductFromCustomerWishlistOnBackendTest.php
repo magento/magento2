@@ -76,7 +76,7 @@ class DeleteProductFromCustomerWishlistOnBackendTest extends AbstractWishlistTes
         $customerForm = $customerIndexEdit->getCustomerForm();
         $customerForm->openTab('wishlist');
         $filter = ['product_name' => $product->getName()];
-        $customerForm->getTabElement('wishlist')->getSearchGridBlock()->searchAndAction($filter, 'Delete');
+        $customerForm->getTab('wishlist')->getSearchGridBlock()->searchAndAction($filter, 'Delete');
 
         return ['products' => [$product]];
     }

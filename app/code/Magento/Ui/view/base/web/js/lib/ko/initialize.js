@@ -6,19 +6,19 @@
 define([
     'ko',
     './template/engine',
-    './bind/date',
     './bind/scope',
     './bind/datepicker',
     './bind/stop_propagation',
     './bind/outer_click',
-    './bind/class',
     './bind/keyboard',
     './bind/optgroup',
+    './bind/fadeVisible',
+    './bind/mage-init',
+    './bind/after-render',
     './extender/observable_array'
-], function(ko, templateEngine) {
+], function (ko, templateEngine) {
     'use strict';
 
     ko.setTemplateEngine(templateEngine);
     ko.applyBindings();
-
 });

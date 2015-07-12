@@ -6,8 +6,9 @@
 namespace Magento\Framework\Json;
 
 /**
- * Json encoder
+ * JSON encoder
  *
+ * @api
  */
 interface EncoderInterface
 {

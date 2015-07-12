@@ -67,7 +67,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Columns number: "1" have empty headers
      */
@@ -78,9 +78,33 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method validateData() for delete behaviour
+     *
+     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
+     */
+    public function testValidateDataEmptyColumnNameForDeleteBehaviour()
+    {
+        $this->_createSourceAdapterMock(['']);
+        $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
+        $this->_model->validateData();
+    }
+
+    /**
+     * Test for method validateData() for delete behaviour
+     *
+     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     */
+    public function testValidateDataColumnNameWithWhitespacesForDeleteBehaviour()
+    {
+        $this->_createSourceAdapterMock(['  ']);
+        $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
+        $this->_model->validateData();
+    }
+
+    /**
      * Test for method validateData()
      *
-     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Columns number: "1" have empty headers
      */
@@ -93,7 +117,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Column names: "_test1" are invalid
      */
@@ -104,10 +128,20 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method isNeedToLogInHistory()
+     *
+     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isNeedToLogInHistory
+     */
+    public function testIsNeedToLogInHistory()
+    {
+        $this->assertEquals(false, $this->_model->isNeedToLogInHistory());
+    }
+
+    /**
      * Test for method isAttributeValid()
      *
      * @dataProvider isAttributeValidDataProvider
-     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isAttributeValid
+     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isAttributeValid
      *
      * @param string $attrCode
      * @param array $attrParams
@@ -145,5 +179,29 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ['created_at', ['type' => 'datetime'], ['created_at' => '11.02.4 11:12:59'], 1, false],
             ['dob', ['type' => 'datetime'], ['dob' => '02/29/2012 11:12:67'], 1, false]
         ];
+    }
+
+    /**
+     * Test getCreatedItemsCount()
+     */
+    public function testGetCreatedItemsCount()
+    {
+        $this->assertNotEmpty('integer', $this->_model->getCreatedItemsCount());
+    }
+
+    /**
+     * Test getUpdatedItemsCount()
+     */
+    public function testGetUpdatedItemsCount()
+    {
+        $this->assertInternalType('integer', $this->_model->getUpdatedItemsCount());
+    }
+
+    /**
+     * Test getDeletedItemsCount()
+     */
+    public function testGetDeletedItemsCount()
+    {
+        $this->assertNotEmpty('integer', $this->_model->getDeletedItemsCount());
     }
 }

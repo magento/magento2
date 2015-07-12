@@ -98,7 +98,6 @@ class GenericMetadata extends \Magento\Backend\Block\Widget\Form\Generic
                 $element->setCanBeEmpty(true);
                 break;
             case 'date':
-                $element->setImage($this->getViewFileUrl('images/grid-cal.png'));
                 $element->setDateFormat($this->_localeDate->getDateFormatWithLongYear());
                 break;
             case 'multiline':

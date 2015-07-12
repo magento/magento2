@@ -121,6 +121,15 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList($configValue, $customerGroupId, $groupData, $expected)
     {
+        $group = $this->getMock('\Magento\Customer\Model\Data\Group',
+            [],
+            [],
+            '',
+            false
+        );
+        $group->expects($this->any())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
+        $this->groupManagementMock->expects($this->any())->method('getAllCustomersGroup')
+            ->will($this->returnValue($group));
         $this->repositoryMock->expects($this->once())->method('get')->with('product_sku')
             ->will($this->returnValue($this->productMock));
         $this->productMock

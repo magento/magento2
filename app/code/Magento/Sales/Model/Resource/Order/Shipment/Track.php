@@ -5,7 +5,8 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Shipment;
 
-use Magento\Sales\Model\Resource\Entity as SalesResource;
+use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
 
 /**
@@ -32,21 +33,30 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\Sales\Model\Increment $salesIncrement
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
+     * @param Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Shipment\Track\Validator $validator
-     * @param string|null $resourcePrefix
-     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\Sales\Model\Increment $salesIncrement,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         \Magento\Sales\Model\Order\Shipment\Track\Validator $validator,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        parent::__construct(
+            $context,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
+            $resourcePrefix
+        );
     }
 
     /**

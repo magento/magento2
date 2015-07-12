@@ -284,6 +284,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Exception
      */
     public function loadData($printQuery = false, $logQuery = false)
@@ -668,6 +669,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param string $value
      * @param string $type
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addFilter($field, $value, $type = 'and')
     {
@@ -696,7 +698,10 @@ class Filesystem extends \Magento\Framework\Data\Collection
      */
     public function filterCallbackLike($field, $filterValue, $row)
     {
-        $filterValueRegex = str_replace('%', '(.*?)', preg_quote($filterValue, '/'));
+        $filterValue = trim(stripslashes($filterValue), '\'');
+        $filterValue = trim($filterValue, '%');
+        $filterValueRegex = '(.*?)' . preg_quote($filterValue, '/') . '(.*?)';
+
         return (bool)preg_match("/^{$filterValueRegex}\$/i", $row[$field]);
     }
 

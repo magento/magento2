@@ -65,6 +65,12 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Logo</backend_model>
                     <base_url type="media" scope_info="1">logo</base_url>
                 </field>
+                <field id="logo_width" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo Image Width</label>
+                </field>
+                <field id="logo_height" translate="label" type="text" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo Image Height</label>
+                </field>
                 <field id="logo_alt" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Image Alt</label>
                 </field>

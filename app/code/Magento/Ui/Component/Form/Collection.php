@@ -5,13 +5,23 @@
  */
 namespace Magento\Ui\Component\Form;
 
+use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Ui\Component\AbstractView;
 
 /**
  * Class Collection
  */
-class Collection extends AbstractView implements UiComponentInterface
+class Collection extends AbstractComponent implements UiComponentInterface
 {
-    //
+    const NAME = 'collection';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
 }

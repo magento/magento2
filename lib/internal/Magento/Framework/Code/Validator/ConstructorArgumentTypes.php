@@ -37,7 +37,7 @@ class ConstructorArgumentTypes implements ValidatorInterface
      *
      * @param string $className
      * @return bool
-     * @throws \Magento\Framework\Code\ValidationException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function validate($className)
     {
@@ -49,8 +49,11 @@ class ConstructorArgumentTypes implements ValidatorInterface
         }, $expectedArguments);
         $result = array_diff($expectedArguments, $actualArguments);
         if (!empty($result)) {
-            throw new \Magento\Framework\Code\ValidationException(
-                'Invalid constructor argument(s) in ' . $className
+            throw new \Magento\Framework\Exception\ValidatorException(
+                new \Magento\Framework\Phrase(
+                    'Invalid constructor argument(s) in %1',
+                    [$className]
+                )
             );
         }
         return true;

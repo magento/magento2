@@ -6,34 +6,27 @@
 
 namespace Magento\Weee\Test\Block\Product;
 
+use Magento\Weee\Test\Block\Product\ProductList\ProductItem;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Product list
+ * Product list block.
  */
 class ListProduct extends \Magento\Catalog\Test\Block\Product\ListProduct
 {
     /**
-     * This member holds the class name for the fpt block found inside the product details.
+     * Return product item block.
      *
-     * @var string
+     * @param FixtureInterface $product
+     * @return ProductItem
      */
-    protected $fptBlockClass = '.price-box .weee [data-label="%s"]';
-
-    /**
-     * This method returns the fpt box block for the named product.
-     *
-     * @param string $productName
-     * @param string $fptLabel
-     * @return \Magento\Weee\Test\Block\Product\Fpt
-     */
-    public function getProductFptBlock($productName, $fptLabel)
+    public function getProductItem(FixtureInterface $product)
     {
-        $element = $this->getProductDetailsElement($productName)
-            ->find(sprintf($this->fptBlockClass, $fptLabel), Locator::SELECTOR_CSS);
+        $locator = sprintf($this->productItem, $product->getName());
         return $this->blockFactory->create(
-            'Magento\Weee\Test\Block\Product\Fpt',
-            ['element' => $element]
+            'Magento\Weee\Test\Block\Product\ProductList\ProductItem',
+            ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
         );
     }
 }

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="rating" module="Magento_Review" type="flat" entity_type="rating" collection="Magento\Review\Model\Resource\Rating\Collection" identifier="rating_code" repository_class="Magento\Review\Test\Repository\Rating" handler_interface="Magento\Review\Test\Handler\Rating\RatingInterface" class="Magento\Review\Test\Fixture\Rating">
     <dataset name="default">
         <field name="rating_code" xsi:type="string">Rating %isolation%</field>

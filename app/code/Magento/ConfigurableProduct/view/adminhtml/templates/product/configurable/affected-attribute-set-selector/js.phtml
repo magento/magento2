@@ -16,8 +16,7 @@
 
     require([
         "jquery",
-        "jquery/ui",
-        "Magento_ConfigurableProduct/catalog/product-variation"
+        "jquery/ui"
     ], function($){
         $form = $('#affected-attribute-set-form');
 
@@ -34,7 +33,7 @@
 
         $form
             .dialog({
-                title: '<?php echo __('Choose Affected Attribute Set'); ?>',
+                title: '<?php echo __('Choose Affected Product Template'); ?>',
                 autoOpen: false,
                 id: '<?php echo $block->getJsId() ?>',
                 width: '75%',
@@ -122,6 +121,27 @@
     ], function ($) {
 
         /**
+         * Retrieve list of attributes
+         *
+         * @return {Array}
+         */
+        var getAttributes = function ($node) {
+            return $.map(
+                $node.find('[data-role=configurable-attributes-container] [data-role=attribute-info]') || [],
+                function (attribute) {
+                    var $attribute = $(attribute);
+
+                    return {
+                        id: $attribute.find('[name$="[attribute_id]"]').val(),
+                        code: $attribute.find('[name$="[code]"]').val(),
+                        label: $attribute.find('[name$="[label]"]').val(),
+                        position: $attribute.find('[name$="[position]"]').val()
+                    };
+                }
+            );
+        };
+
+        /**
          * This fix was made in order to properly handle 'stopImmediatePropagation'.
          */
         $('#save-split-button .item').on('click', function(event) {
@@ -131,7 +151,7 @@
 
             var extendingAttributes = [];
 
-            $.each($('#configurable-attributes-container').variationsAttributes('getAttributes'), function () {
+            $.each(getAttributes($('[data-role=product-variations-matrix]')), function () {
                 if (!$('#attribute-' + this.code + '-container').length) {
                     extendingAttributes.push(this.id);
                 }
@@ -140,7 +160,7 @@
                 $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
                 return; // all selected configurable attributes belong to current attribute set
             }
-            if (!$('[data-role=product-variations-matrix] [data-column=entity_id]:checked')
+            if (!$('[data-role=product-variations-matrix] [data-column=entity_id]')
                 .closest('tr').has('input[name$="[name]"]').length
             ) {
                 return; // no new simple products to save from matrix: uniting attribute set is not needed
@@ -148,8 +168,7 @@
 
             event.stopImmediatePropagation();
 
-            $form.data('target', event.target)
-                .dialog('open');
+            $form.data('target', event.target).dialog('open');
         });
 
     });

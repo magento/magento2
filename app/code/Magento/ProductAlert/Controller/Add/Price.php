@@ -1,39 +1,47 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Controller\Add;
 
+use Magento\ProductAlert\Controller\Add as AddController;
 use Magento\Framework\App\Action\Context;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class Price extends \Magento\ProductAlert\Controller\Add
+class Price extends AddController
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
-    /** @var  \Magento\Catalog\Api\ProductRepositoryInterface */
+    /**
+     * @var  \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
     /**
-     * @param Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
         Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        CustomerSession $customerSession,
+        StoreManagerInterface $storeManager,
+        ProductRepositoryInterface $productRepository
     ) {
-        parent::__construct($context, $customerSession);
-        $this->_storeManager = $storeManager;
+        $this->storeManager = $storeManager;
         $this->productRepository = $productRepository;
+        parent::__construct($context, $customerSession);
     }
 
     /**
@@ -42,61 +50,57 @@ class Price extends \Magento\ProductAlert\Controller\Add
      * @param string $url
      * @return bool
      */
-    protected function _isInternal($url)
+    protected function isInternal($url)
     {
         if (strpos($url, 'http') === false) {
             return false;
         }
-        $currentStore = $this->_storeManager->getStore();
-        return strpos(
-            $url,
-            $currentStore->getBaseUrl()
-        ) === 0 || strpos(
-            $url,
-            $currentStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true)
-        ) === 0;
+        $currentStore = $this->storeManager->getStore();
+        return strpos($url, $currentStore->getBaseUrl()) === 0
+            || strpos($url, $currentStore->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)) === 0;
     }
 
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
-        $backUrl = $this->getRequest()->getParam(\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED);
+        $backUrl = $this->getRequest()->getParam(Action::PARAM_NAME_URL_ENCODED);
         $productId = (int)$this->getRequest()->getParam('product_id');
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$backUrl || !$productId) {
-            $this->_redirect('/');
-            return;
+            $resultRedirect->setPath('/');
+            return $resultRedirect;
         }
 
         try {
+            /* @var $product \Magento\Catalog\Model\Product */
             $product = $this->productRepository->getById($productId);
-
-            $model = $this->_objectManager->create(
-                'Magento\ProductAlert\Model\Price'
-            )->setCustomerId(
-                $this->_customerSession->getCustomerId()
-            )->setProductId(
-                $product->getId()
-            )->setPrice(
-                $product->getFinalPrice()
-            )->setWebsiteId(
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
-            );
+            /** @var \Magento\ProductAlert\Model\Price $model */
+            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Price')
+                ->setCustomerId($this->customerSession->getCustomerId())
+                ->setProductId($product->getId())
+                ->setPrice($product->getFinalPrice())
+                ->setWebsiteId(
+                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                        ->getStore()
+                        ->getWebsiteId()
+                );
             $model->save();
             $this->messageManager->addSuccess(__('You saved the alert subscription.'));
         } catch (NoSuchEntityException $noEntityException) {
-            /* @var $product \Magento\Catalog\Model\Product */
             $this->messageManager->addError(__('There are not enough parameters.'));
-            if ($this->_isInternal($backUrl)) {
-                $this->getResponse()->setRedirect($backUrl);
+            if ($this->isInternal($backUrl)) {
+                $resultRedirect->setUrl($backUrl);
             } else {
-                $this->_redirect('/');
+                $resultRedirect->setPath('/');
             }
-            return;
+            return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
+            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
+        return $resultRedirect;
     }
 }

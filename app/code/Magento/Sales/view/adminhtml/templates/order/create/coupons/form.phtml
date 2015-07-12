@@ -13,23 +13,26 @@
  *
  */
 ?>
-<div class="box-left">
-    <h4><?php echo __('Apply Coupon Code') ?></h4>
-    <fieldset>
-        <div class="content">
-            <input type="text" class="input-text" id="coupons:code" value="" name="coupon_code" />
-            <?php echo $block->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
-            <?php if ($block->getCouponCode()): ?>
-            <p><strong><?php echo $block->escapeHtml($block->getCouponCode()) ?></strong> [<a href="#" onclick="order.applyCoupon(''); return false;" title="<?php echo __('Remove Coupon Code') ?>"><?php echo __('Remove') ?></a>]</p>
-            <?php endif; ?>
-            <script>
+
+<div class="admin__field field-apply-coupon-code">
+    <label class="admin__field-label"><span><?php echo __('Apply Coupon Code') ?></span></label>
+    <div class="admin__field-control">
+        <input type="text" class="admin__control-text" id="coupons:code" value="" name="coupon_code" />
+        <?php echo $block->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
+        <?php if ($block->getCouponCode()): ?>
+        <p class="added-coupon-code">
+            <span><?php echo $block->escapeHtml($block->getCouponCode()) ?></span>
+            <a href="#" onclick="order.applyCoupon(''); return false;" title="<?php echo __('Remove Coupon Code') ?>"
+               class="action-remove"><span><?php echo __('Remove') ?></span></a>
+        </p>
+        <?php endif; ?>
+        <script>
             require(["Magento_Sales/order/create/form"], function(){
 
                 order.overlay('shipping-method-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
                 order.overlay('address-shipping-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
 
             });
-</script>
-        </div>
-    </fieldset>
+        </script>
+    </div>
 </div>

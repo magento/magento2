@@ -8,13 +8,16 @@ namespace Magento\Sales\Model\Resource\Order;
 use Magento\Framework\App\Resource;
 use Psr\Log\LoggerInterface as LogWriter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\SalesSequence\Model\Manager;
+use \Magento\Sales\Model\Resource\EntityAbstract;
+use \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 
 /**
  * Order status resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb
 {
     /**
      * Status labels table
@@ -29,27 +32,6 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @var string
      */
     protected $stateTable;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * Class constructor
-     *
-     * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param LogWriter $logger
-     * @param string|null $resourcePrefix
-     */
-    public function __construct(
-        \Magento\Framework\Model\Resource\Db\Context $context,
-        LogWriter $logger,
-        $resourcePrefix = null
-    ) {
-        $this->logger = $logger;
-        parent::__construct($context, $resourcePrefix);
-    }
 
     /**
      * Internal constructor

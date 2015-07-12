@@ -9,69 +9,106 @@
 ?>
 <?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
 <div class="create-order-sidebar-block" id="sidebar_data_<?php echo $block->getDataId() ?>">
-    <div class="head">
-        <a href="#" class="action-refresh" title="<?php echo __('Refresh') ?>" onclick="order.loadArea('sidebar_<?php echo $block->getDataId() ?>', 'sidebar_data_<?php echo $block->getDataId() ?>');return false;">Refresh</a>
-        <h5><?php echo $block->getHeaderText() ?> <span class="normal">(<?php echo $block->getItemCount() ?>)</span></h5>
+    <div class="head sidebar-title-block">
+        <a href="#" class="action-refresh"
+           title="<?php echo $block->escapeHtml(__('Refresh')); ?>"
+           onclick="order.loadArea('sidebar_<?php echo $block->getDataId() ?>', 'sidebar_data_<?php echo $block->getDataId() ?>');return false;">
+            <span><?php echo __('Refresh'); ?></span>
+        </a>
+        <h5 class="create-order-sidebar-label">
+            <?php echo $block->getHeaderText() ?>
+            <span class="normal">(<?php echo $block->getItemCount() ?>)</span>
+        </h5>
     </div>
     <div class="content">
         <div class="auto-scroll">
         <?php if ($block->getItemCount()): ?>
-        <table class="data-table" cellspacing="0">
-            <col />
-            <?php if ($block->canDisplayItemQty()): ?>
-            <col width="20" />
-            <?php endif; ?>
-            <?php if ($block->canDisplayPrice()): ?>
-            <col width="60" />
-            <?php endif; ?>
-            <?php if ($block->canRemoveItems()): ?>
-            <col width="16" />
-            <?php endif; ?>
-            <col width="16" />
+        <table class="admin__table-primary">
             <thead>
                 <tr>
-                    <th><?php echo __('Item') ?></th>
+                    <th class="col-item"><?php echo __('Item') ?></th>
+
                     <?php if ($block->canDisplayItemQty()): ?>
-                    <th class="a-center"><?php echo __('Qty') ?></th>
+                        <th class="col-qty"><?php echo __('Qty') ?></th>
                     <?php endif; ?>
+
                     <?php if ($block->canDisplayPrice()): ?>
-                    <th><?php echo __('Price') ?></th>
+                        <th class="col-price"><?php echo __('Price') ?></th>
                     <?php endif; ?>
+
                     <?php if ($block->canRemoveItems()): ?>
-                    <th class="a-center">
-                        <span class="icon icon-remove"><?php echo __('Remove') ?></span>
-                    </th>
+                        <th class="col-remove">
+                            <span title="<?php echo $block->escapeHtml(__('Remove')); ?>"
+                                  class="icon icon-remove">
+                                <span><?php echo __('Remove') ?></span>
+                            </span>
+                        </th>
                     <?php endif; ?>
-                    <th class="a-center">
-                        <span class="icon icon-add"><?php echo __('Add To Order') ?></span>
+
+                    <th class="col-add">
+                        <span title="<?php echo $block->escapeHtml(__('Add To Order')); ?>"
+                              class="icon icon-add">
+                            <span><?php echo __('Add To Order') ?></span>
+                        </span>
                     </th>
                 </tr>
             </thead>
+
             <tbody>
                 <?php foreach ($block->getItems() as $_item): ?>
-                <tr>
-                    <td><?php echo $block->escapeHtml($_item->getName()) ?></td>
-                    <?php if ($block->canDisplayItemQty()): ?>
-                    <td class="a-center">
-                        <?php echo $block->getItemQty($_item); ?>
-                    </td>
-                    <?php endif; ?>
-                    <?php if ($block->canDisplayPrice()): ?>
-                    <td><?php echo $block->convertPrice($_item->getPrice()) ?></td>
-                    <?php endif; ?>
-                    <?php if ($block->canRemoveItems()): ?>
-                    <td class="a-center"><input type="checkbox" name="sidebar[remove][<?php echo $block->getItemId($_item) ?>]" value="<?php echo $block->getDataId() ?>" title="<?php echo __('Remove') ?>"/></td>
-                    <?php endif; ?>
-                    <td class="a-center">
-                        <?php if ($block->isConfigurationRequired($_item->getTypeId()) && $block->getDataId() == 'wishlist'): ?>
-                            <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo $block->getProductId($_item) ?>, <?php echo $block->getItemId($_item) ?>); return false;"><img src="<?php echo $block->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo __('Configure and Add to Order') ?>" title="<?php echo __('Configure and Add to Order') ?>" width="16" height="16"/></a>
-                        <?php elseif ($block->isConfigurationRequired($_item->getTypeId())): ?>
-                            <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo $block->getProductId($_item) ?>); return false;"><img src="<?php echo $block->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo __('Configure and Add to Order') ?>" title="<?php echo __('Configure and Add to Order') ?>" width="16" height="16"/></a>
-                        <?php else: ?>
-                            <input type="checkbox" name="sidebar[<?php echo $block->getSidebarStorageAction() ?>][<?php echo $block->getIdentifierId($_item) ?>]" value="<?php echo $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>" title="<?php echo __('Add To Order') ?>"/>
+                    <tr>
+                        <td class="col-item"><?php echo $block->escapeHtml($_item->getName()) ?></td>
+
+                        <?php if ($block->canDisplayItemQty()): ?>
+                            <td class="col-qty">
+                                <?php echo $block->getItemQty($_item); ?>
+                            </td>
                         <?php endif; ?>
-                    </td>
-                </tr>
+
+                        <?php if ($block->canDisplayPrice()): ?>
+                            <td class="col-price"><?php echo $block->convertPrice($_item->getPrice()) ?></td>
+                        <?php endif; ?>
+
+                        <?php if ($block->canRemoveItems()): ?>
+                            <td class="col-remove">
+                                <div class="admin__field-option">
+                                    <input type="checkbox"
+                                           class="admin__control-checkbox"
+                                           name="sidebar[remove][<?php echo $block->getItemId($_item) ?>]"
+                                           value="<?php echo $block->getDataId() ?>"
+                                           title="<?php echo $block->escapeHtml(__('Remove')); ?>" />
+                                    <label class="admin__field-label"></label>
+                                </div>
+                            </td>
+                        <?php endif; ?>
+
+                        <td class="col-add">
+                            <div class="admin__field-option">
+                                <?php if ($block->isConfigurationRequired($_item->getTypeId()) && $block->getDataId() == 'wishlist'): ?>
+                                    <a href="#"
+                                       class="icon icon-configure"
+                                       title="<?php echo $block->escapeHtml(__('Configure and Add to Order')); ?>"
+                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo $block->getProductId($_item) ?>, <?php echo $block->getItemId($_item) ?>); return false;">
+                                        <span><?php echo __('Configure and Add to Order') ?></span>
+                                    </a>
+                                <?php elseif ($block->isConfigurationRequired($_item->getTypeId())): ?>
+                                    <a href="#"
+                                       class="icon icon-configure"
+                                       title="<?php echo $block->escapeHtml(__('Configure and Add to Order')); ?>"
+                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo $block->getProductId($_item) ?>); return false;">
+                                        <span><?php echo __('Configure and Add to Order') ?></span>
+                                    </a>
+                                <?php else: ?>
+                                    <input type="checkbox"
+                                           class="admin__control-checkbox"
+                                           name="sidebar[<?php echo $block->getSidebarStorageAction() ?>][<?php echo $block->getIdentifierId($_item) ?>]"
+                                           value="<?php echo $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
+                                           title="<?php echo $block->escapeHtml(__('Add To Order')); ?>"/>
+                                    <label class="admin__field-label"></label>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                    </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
@@ -80,7 +117,7 @@
         <?php endif ?>
         </div>
         <?php if ($block->getItemCount() && $block->canRemoveItems()): ?>
-        <?php echo $block->getChildHtml('empty_customer_cart_button'); ?>
+            <?php echo $block->getChildHtml('empty_customer_cart_button'); ?>
         <?php endif; ?>
     </div>
 </div>

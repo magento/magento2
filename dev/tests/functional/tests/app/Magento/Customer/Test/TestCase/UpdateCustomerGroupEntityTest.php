@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupNew;
 use Magento\Mtf\TestCase\Injectable;
@@ -33,6 +33,7 @@ class UpdateCustomerGroupEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
+    const STABLE = 'no';
     /* end tags */
 
     /**
@@ -67,13 +68,13 @@ class UpdateCustomerGroupEntityTest extends Injectable
     /**
      * Update Customer Group
      *
-     * @param CustomerGroupInjectable $customerGroupOriginal
-     * @param CustomerGroupInjectable $customerGroup
+     * @param CustomerGroup $customerGroupOriginal
+     * @param CustomerGroup $customerGroup
      * @return void
      */
     public function test(
-        CustomerGroupInjectable $customerGroupOriginal,
-        CustomerGroupInjectable $customerGroup
+        CustomerGroup $customerGroupOriginal,
+        CustomerGroup $customerGroup
     ) {
         // Precondition
         $customerGroupOriginal->persist();

@@ -71,12 +71,14 @@ class FillCustomerAddressesStep implements TestStepInterface
      */
     public function run()
     {
+        $addresses = $this->customer->getDataFieldConfig('address')['source']->getAddresses();
         $bindings = [];
+
         foreach ($this->products as $key => $product) {
             $productName = $product->getName();
             $addressRender = $this->objectManeger->create(
                 '\Magento\Customer\Test\Block\Address\Renderer',
-                ['address' => $this->customer->getAddress()[$key], 'type' => 'oneline']
+                ['address' => $addresses[$key], 'type' => 'oneline']
             );
             $bindings[$productName] = $addressRender->render();
         }

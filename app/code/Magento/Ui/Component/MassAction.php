@@ -5,42 +5,59 @@
  */
 namespace Magento\Ui\Component;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+
 /**
  * Class MassAction
  */
-class MassAction extends AbstractView
+class MassAction extends AbstractComponent
 {
-    /**
-     * Prepare component data
-     *
-     * @return $this|void
-     */
-    public function prepare()
-    {
-        $configData = $this->getDefaultConfiguration();
-        if ($this->hasData('config')) {
-            $configData = array_merge($configData, $this->getData('config'));
-        }
-        array_walk_recursive(
-            $configData,
-            function (&$item, $key, $object) {
-                if ($key === 'url') {
-                    $item = $object->getUrl($item);
-                }
-            },
-            $this
-        );
+    const NAME = 'massaction';
 
-        $this->prepareConfiguration($configData);
+    /**
+     * Default component data
+     *
+     * @var array
+     */
+    protected $_data = [
+        'config' => [
+            'actions' => []
+        ]
+    ];
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
     }
 
     /**
-     * Get default parameters
+     * Register component
      *
-     * @return array
+     * @return void
      */
-    protected function getDefaultConfiguration()
+    public function prepare()
     {
-        return ['actions' => []];
+        $config = $this->getData('config');
+        if (isset($config['actions'])) {
+            $config['actions'] = array_values($config['actions']);
+            array_walk_recursive(
+                $config['actions'],
+                function (&$item, $key, $context) {
+                    /** @var ContextInterface $context */
+                    if ($key === 'url') {
+                        $item = $context->getUrl($item);
+                    }
+                },
+                $this->getContext()
+            );
+            $this->setData('config', $config);
+        }
+
+        parent::prepare();
     }
 }

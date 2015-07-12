@@ -93,7 +93,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     'node_data' => null,
                     'keys' => null,
                 ],
-                '\Magento\Framework\DB\Tree\Node\NodeException',
+                '\Magento\Framework\Exception\LocalizedException',
                 'Empty array of node information',
             ],
             [
@@ -101,7 +101,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     'node_data' => null,
                     'keys' => true,
                 ],
-                '\Magento\Framework\DB\Tree\Node\NodeException',
+                '\Magento\Framework\Exception\LocalizedException',
                 'Empty array of node information'
             ],
             [
@@ -109,7 +109,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     'node_data' => true,
                     'keys' => null,
                 ],
-                '\Magento\Framework\DB\Tree\Node\NodeException',
+                '\Magento\Framework\Exception\LocalizedException',
                 'Empty keys array'
             ]
         ];

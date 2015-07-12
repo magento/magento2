@@ -15,11 +15,11 @@
 <?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
 
 <?php if ($_specificInfo = $block->getSpecificInformation()):?>
-<table class="data-table" cellspacing="0">
+<table class="data-table admin__table-secondary">
 <?php foreach ($_specificInfo as $_label => $_value):?>
     <tr>
         <th><?php echo $block->escapeHtml($_label)?>:</th>
-        <td><?php echo nl2br(implode($block->getValueAsArray($_value, true), "\n"))?></td>
+        <td><?php echo nl2br(implode("\n", $block->getValueAsArray($_value, true)))?></td>
     </tr>
 <?php endforeach; ?>
 </table>

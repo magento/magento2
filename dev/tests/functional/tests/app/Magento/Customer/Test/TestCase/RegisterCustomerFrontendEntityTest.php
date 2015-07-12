@@ -29,6 +29,7 @@ class RegisterCustomerFrontendEntityTest extends Injectable
     const MVP = 'yes';
     const DOMAIN = 'CS';
     const TEST_TYPE = 'acceptance_test';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
@@ -59,6 +60,7 @@ class RegisterCustomerFrontendEntityTest extends Injectable
         $this->customerAccountLogout = $customerAccountLogout;
         $this->customerAccountCreate = $customerAccountCreate;
         $this->cmsIndex = $cmsIndex;
+        $this->customerAccountLogout->open();
     }
 
     /**
@@ -70,7 +72,7 @@ class RegisterCustomerFrontendEntityTest extends Injectable
     {
         //Steps
         $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->openLink('Register');
+        $this->cmsIndex->getLinksBlock()->openLink('Create an Account');
         $this->customerAccountCreate->getRegisterForm()->registerCustomer($customer);
     }
 

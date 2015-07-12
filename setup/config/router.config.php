@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Setup\Controller\ConsoleController;
 
 return [
     'router' => [
@@ -36,5 +35,4 @@ return [
             ],
         ],
     ],
-    'console' => ['router' => ['routes' => ConsoleController::getRouterConfig()]],
 ];

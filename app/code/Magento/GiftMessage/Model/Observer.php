@@ -74,7 +74,7 @@ class Observer extends \Magento\Framework\Object
             return $this;
         }
 
-        if (!$this->_giftMessageMessage->isMessagesAvailable('order', $order, $order->getStore())) {
+        if (!$this->_giftMessageMessage->isMessagesAllowed('order', $order, $order->getStore())) {
             return $this;
         }
         $giftMessageId = $order->getGiftMessageId();
@@ -102,7 +102,7 @@ class Observer extends \Magento\Framework\Object
             return $this;
         }
 
-        $isAvailable = $this->_giftMessageMessage->isMessagesAvailable(
+        $isAvailable = $this->_giftMessageMessage->isMessagesAllowed(
             'order_item',
             $orderItem,
             $orderItem->getStoreId()

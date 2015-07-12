@@ -9,6 +9,6 @@
   <page name="TaxRateNew" area="Adminhtml" mca="tax/rate/add" module="Magento_Tax">
     <block name="formPageActions" class="Magento\Tax\Test\Block\Adminhtml\Rate\Edit\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="taxRateForm" class="Magento\Tax\Test\Block\Adminhtml\Rate\Edit\Form" locator="#rate-form" strategy="css selector"/>
-    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>
+    <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages" strategy="css selector"/>
   </page>
 </config>

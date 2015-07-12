@@ -14,8 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
 
 /**
- * Class AssertOrderInOrdersGridOnFrontend
- * Assert that order is present in Orders grid on frontend
+ * Assert that order is present in Orders grid on frontend.
  */
 class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
 {
@@ -24,7 +23,7 @@ class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
     /* end tags */
 
     /**
-     * Assert that order is present in Orders grid on frontend
+     * Assert that order is present in Orders grid on frontend.
      *
      * @param OrderInjectable $order
      * @param Customer $customer
@@ -50,11 +49,11 @@ class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
             'id' => $order->hasData('id') ? $order->getId() : $orderId,
             'status' => $statusToCheck === null ? $status : $statusToCheck,
         ];
-        $customerLogin = $objectManager->create(
+
+        $objectManager->create(
             'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
             ['customer' => $customer]
-        );
-        $customerLogin->run();
+        )->run();
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Orders');
         $errorMessage = implode(', ', $filter);
         \PHPUnit_Framework_Assert::assertTrue(
@@ -64,7 +63,7 @@ class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

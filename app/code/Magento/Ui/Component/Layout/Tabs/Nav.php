@@ -5,12 +5,12 @@
  */
 namespace Magento\Ui\Component\Layout\Tabs;
 
-use Magento\Ui\Component\AbstractView;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Class Nav
  */
-class Nav extends AbstractView
+class Nav extends Template
 {
-    const NAME = 'nav';
+    //
 }

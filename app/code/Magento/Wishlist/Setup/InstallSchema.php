@@ -76,7 +76,6 @@ class InstallSchema implements InstallSchemaInterface
             'customer_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Wishlist main Table'
@@ -138,7 +137,6 @@ class InstallSchema implements InstallSchemaInterface
             'wishlist_id',
             $installer->getTable('wishlist'),
             'wishlist_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addIndex(
             $installer->getIdxName('wishlist_item', 'product_id'),
@@ -148,7 +146,6 @@ class InstallSchema implements InstallSchemaInterface
             'product_id',
             $installer->getTable('catalog_product_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addIndex(
             $installer->getIdxName('wishlist_item', 'store_id'),
@@ -158,8 +155,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Wishlist items'
         );
@@ -205,7 +201,6 @@ class InstallSchema implements InstallSchemaInterface
             'wishlist_item_id',
             $installer->getTable('wishlist_item'),
             'wishlist_item_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Wishlist Item Option Table'

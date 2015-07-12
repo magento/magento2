@@ -24,6 +24,7 @@ interface GroupManagementInterface
     /**
      * Get default customer group.
      *
+     * @api
      * @param int $storeId
      * @return \Magento\Customer\Api\Data\GroupInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -34,6 +35,7 @@ interface GroupManagementInterface
     /**
      * Get customer group representing customers not logged in.
      *
+     * @api
      * @return \Magento\Customer\Api\Data\GroupInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -43,6 +45,7 @@ interface GroupManagementInterface
     /**
      * Get all customer groups except group representing customers not logged in.
      *
+     * @api
      * @return \Magento\Customer\Api\Data\GroupInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -51,6 +54,7 @@ interface GroupManagementInterface
     /**
      * Get customer group representing all customers.
      *
+     * @api
      * @return \Magento\Customer\Api\Data\GroupInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */

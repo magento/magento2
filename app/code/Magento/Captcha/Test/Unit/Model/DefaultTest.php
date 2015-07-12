@@ -8,6 +8,11 @@ namespace Magento\Captcha\Test\Unit\Model;
 class DefaultTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Expiration frame
+     */
+    const EXPIRE_FRAME = 86400;
+
+    /**
      * Captcha default config data
      * @var array
      */
@@ -67,7 +72,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_session;
+    protected $session;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -136,7 +141,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::getBlockName
+     * @covers \Magento\Captcha\Model\DefaultModel::getBlockName
      */
     public function testGetBlockName()
     {
@@ -144,7 +149,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::isRequired
+     * @covers \Magento\Captcha\Model\DefaultModel::isRequired
      */
     public function testIsRequired()
     {
@@ -152,7 +157,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::isCaseSensitive
+     * @covers \Magento\Captcha\Model\DefaultModel::isCaseSensitive
      */
     public function testIsCaseSensitive()
     {
@@ -163,7 +168,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::getFont
+     * @covers \Magento\Captcha\Model\DefaultModel::getFont
      */
     public function testGetFont()
     {
@@ -171,8 +176,8 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::getTimeout
-     * covers \Magento\Captcha\Model\DefaultModel::getExpiration
+     * @covers \Magento\Captcha\Model\DefaultModel::getTimeout
+     * @covers \Magento\Captcha\Model\DefaultModel::getExpiration
      */
     public function testGetTimeout()
     {
@@ -180,20 +185,20 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::isCorrect
+     * @covers \Magento\Captcha\Model\DefaultModel::isCorrect
      */
     public function testIsCorrect()
     {
         self::$_defaultConfig['case_sensitive'] = '1';
         $this->assertFalse($this->_object->isCorrect('abcdef5'));
-        $sessionData = ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + 600]];
+        $sessionData = ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + self::EXPIRE_FRAME]];
         $this->_object->getSession()->setData($sessionData);
         self::$_defaultConfig['case_sensitive'] = '0';
         $this->assertTrue($this->_object->isCorrect('abcdef5'));
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::getImgSrc
+     * @covers \Magento\Captcha\Model\DefaultModel::getImgSrc
      */
     public function testGetImgSrc()
     {
@@ -204,7 +209,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::logAttempt
+     * @covers \Magento\Captcha\Model\DefaultModel::logAttempt
      */
     public function testLogAttempt()
     {
@@ -221,7 +226,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::getWord
+     * @covers \Magento\Captcha\Model\DefaultModel::getWord
      */
     public function testGetWord()
     {
@@ -251,7 +256,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         );
         $session->expects($this->any())->method('isLoggedIn')->will($this->returnValue(false));
 
-        $session->setData(['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + 600]]);
+        $session->setData(['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + self::EXPIRE_FRAME]]);
         return $session;
     }
 

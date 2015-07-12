@@ -13,28 +13,28 @@
 ?>
 <?php if ($block->includeTax() && $block->getTotalExclTax() >= 0):?>
 <tr class="row-totals">
-    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <strong><?php echo __('Grand Total Excl. Tax')?></strong>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <strong><?php echo $block->formatPrice($block->getTotalExclTax()) ?></strong>
     </td>
 </tr>
 <?php echo $block->renderTotals('taxes', $block->getColspan()); ?>
 <tr class="row-totals">
-    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <strong><?php echo __('Grand Total Incl. Tax')?></strong>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <strong><?php echo $block->formatPrice($block->getTotal()->getValue()) ?></strong>
     </td>
 </tr>
 <?php else:?>
 <tr class="row-totals">
-    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <strong><?php echo $block->getTotal()->getTitle() ?></strong>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <strong><?php echo $block->formatPrice($block->getTotal()->getValue()) ?></strong>
     </td>
 </tr>

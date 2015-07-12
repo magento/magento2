@@ -5,10 +5,9 @@
  */
 namespace Magento\MediaStorage\Model\File\Storage;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Synchronization
@@ -27,29 +26,28 @@ class Synchronization
      *
      * @var DirectoryWrite
      */
-    protected $pubDirectory;
+    protected $mediaDirectory;
 
     /**
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageFactory
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param DirectoryWrite $directory
      */
     public function __construct(
         \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageFactory,
-        \Magento\Framework\Filesystem $filesystem
+        DirectoryWrite $directory
     ) {
         $this->storageFactory = $storageFactory;
-        $this->pubDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $this->mediaDirectory = $directory;
     }
 
     /**
      * Synchronize file
      *
      * @param string $relativeFileName
-     * @param string $filePath
      * @return void
      * @throws \LogicException
      */
-    public function synchronize($relativeFileName, $filePath)
+    public function synchronize($relativeFileName)
     {
         /** @var $storage \Magento\MediaStorage\Model\File\Storage\Database */
         $storage = $this->storageFactory->create();
@@ -59,13 +57,13 @@ class Synchronization
         }
         if ($storage->getId()) {
             /** @var Write $file */
-            $file = $this->pubDirectory->openFile($this->pubDirectory->getRelativePath($filePath), 'w');
+            $file = $this->mediaDirectory->openFile($relativeFileName, 'w');
             try {
                 $file->lock();
                 $file->write($storage->getContent());
                 $file->unlock();
                 $file->close();
-            } catch (FilesystemException $e) {
+            } catch (FileSystemException $e) {
                 $file->close();
             }
         }

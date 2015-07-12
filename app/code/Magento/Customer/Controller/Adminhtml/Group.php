@@ -31,11 +31,6 @@ class Group extends \Magento\Backend\App\Action
     protected $groupDataFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
@@ -52,7 +47,6 @@ class Group extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param GroupRepositoryInterface $groupRepository
      * @param GroupInterfaceFactory $groupDataFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
@@ -61,7 +55,6 @@ class Group extends \Magento\Backend\App\Action
         \Magento\Framework\Registry $coreRegistry,
         GroupRepositoryInterface $groupRepository,
         GroupInterfaceFactory $groupDataFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
@@ -69,7 +62,6 @@ class Group extends \Magento\Backend\App\Action
         $this->groupRepository = $groupRepository;
         $this->groupDataFactory = $groupDataFactory;
         parent::__construct($context);
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultPageFactory = $resultPageFactory;
     }

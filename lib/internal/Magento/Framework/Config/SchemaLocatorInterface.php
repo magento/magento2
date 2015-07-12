@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Config;
 
+/**
+ * Config schema locator interface.
+ *
+ * @api
+ */
 interface SchemaLocatorInterface
 {
     /**

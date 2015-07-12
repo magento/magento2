@@ -63,10 +63,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     */
     public function testBeforeDispatch()
     {
-        $this->setExpectedException('Magento\Framework\App\Action\NotFoundException');
-
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
         $indexController = $this->getMock('Magento\Wishlist\Controller\Index\Index', [], [], '', false);
 

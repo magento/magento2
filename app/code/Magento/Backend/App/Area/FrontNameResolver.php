@@ -7,6 +7,7 @@
  */
 namespace Magento\Backend\App\Area;
 
+use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\App\DeploymentConfig;
 
 class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolverInterface
@@ -14,8 +15,6 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     const XML_PATH_USE_CUSTOM_ADMIN_PATH = 'admin/url/use_custom_path';
 
     const XML_PATH_CUSTOM_ADMIN_PATH = 'admin/url/custom_path';
-
-    const PARAM_BACKEND_FRONT_NAME = 'backend/frontName';
 
     /**
      * Backend area code
@@ -46,7 +45,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     public function __construct(\Magento\Backend\App\Config $config, DeploymentConfig $deploymentConfig)
     {
         $this->config = $config;
-        $this->defaultFrontName = $deploymentConfig->get(self::PARAM_BACKEND_FRONT_NAME);
+        $this->defaultFrontName = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME);
     }
 
     /**

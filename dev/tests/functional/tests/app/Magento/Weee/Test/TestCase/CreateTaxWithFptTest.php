@@ -14,8 +14,6 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create customer
  * 2. Log in as default admin user.
@@ -119,7 +117,7 @@ class CreateTaxWithFptTest extends Injectable
         );
         $product->persist();
         $this->objectManager->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => $configData]
         )->run();
         $this->loginCustomer($customer);
@@ -135,7 +133,7 @@ class CreateTaxWithFptTest extends Injectable
     {
         $this->objectManager->create('\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep')->run();
         $this->objectManager->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => 'default_tax_configuration,shipping_tax_class_taxable_goods_rollback']
         )->run();
     }

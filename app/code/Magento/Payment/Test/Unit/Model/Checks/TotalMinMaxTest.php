@@ -28,7 +28,7 @@ class TotalMinMaxTest extends \PHPUnit_Framework_TestCase
     public function testIsApplicable($baseGrandTotal, $expectation)
     {
         $paymentMethod = $this->getMockBuilder(
-            'Magento\Payment\Model\Checks\PaymentMethodChecksInterface'
+            '\Magento\Payment\Model\MethodInterface'
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->at(0))->method('getConfigData')->with(
             TotalMinMax::MIN_ORDER_TOTAL

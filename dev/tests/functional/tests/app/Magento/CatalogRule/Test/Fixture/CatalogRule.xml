@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="catalogRule" module="Magento_CatalogRule" type="eav" entity_type="catalog_rule" collection="Magento\CatalogRule\Model\Resource\Rule\Product\Price\Collection" repository_class="Magento\CatalogRule\Test\Repository\CatalogRule" handler_interface="Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface" class="Magento\CatalogRule\Test\Fixture\CatalogRule">
     <dataset name="default">
         <field name="name" xsi:type="string">CatalogPriceRule %isolation%</field>
@@ -17,7 +17,7 @@
         <field name="customer_group_ids" xsi:type="array">
             <item name="0" xsi:type="string">NOT LOGGED IN</item>
         </field>
-        <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+        <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
         <field name="discount_amount" xsi:type="string">50</field>
     </dataset>
     <field name="name" is_required="1" group="rule_information">
@@ -46,7 +46,7 @@
       <default_value xsi:type="null"/>
     </field>
     <field name="simple_action" is_required="0" group="actions">
-      <default_value xsi:type="string">By Percentage of the Original Price</default_value>
+      <default_value xsi:type="string">Apply as percentage of original</default_value>
     </field>
     <field name="discount_amount" is_required="1" group="actions">
       <default_value xsi:type="number">50</default_value>

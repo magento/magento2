@@ -135,15 +135,15 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     protected function _renderItemOptions(Product $product, array $options)
     {
-        $html = '<div class="bundle-product-options">' . '<strong>' . $this->escapeHtml(
+        $html = '<div class="product-title">' . $this->escapeHtml(
             $product->getName()
-        ) . '</strong>' . '<dl>';
+        ) . '</div>' . '<dl class="item-options">';
         foreach ($options as $option) {
             $formattedOption = $this->getFormattedOptionValue($option);
             $html .= '<dt>' . $this->escapeHtml($option['label']) . '</dt>';
             $html .= '<dd>' . $formattedOption['value'] . '</dd>';
         }
-        $html .= '</dl></div>';
+        $html .= '</dl>';
 
         return $html;
     }

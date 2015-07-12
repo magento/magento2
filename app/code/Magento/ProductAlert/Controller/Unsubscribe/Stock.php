@@ -1,16 +1,22 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
+use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
+use Magento\Framework\App\Action\Context;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class Stock extends \Magento\ProductAlert\Controller\Unsubscribe
+class Stock extends UnsubscribeController
 {
-    /** @var  \Magento\Catalog\Api\ProductRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
     /**
@@ -19,24 +25,25 @@ class Stock extends \Magento\ProductAlert\Controller\Unsubscribe
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        Context $context,
+        CustomerSession $customerSession,
+        ProductRepositoryInterface $productRepository
     ) {
-        parent::__construct($context, $customerSession);
         $this->productRepository = $productRepository;
+        parent::__construct($context, $customerSession);
     }
 
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
         $productId = (int)$this->getRequest()->getParam('product');
-
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$productId) {
-            $this->_redirect('');
-            return;
+            $resultRedirect->setPath('/');
+            return $resultRedirect;
         }
 
         try {
@@ -45,26 +52,27 @@ class Stock extends \Magento\ProductAlert\Controller\Unsubscribe
                 throw new NoSuchEntityException();
             }
 
-            $model = $this->_objectManager->create(
-                'Magento\ProductAlert\Model\Stock'
-            )->setCustomerId(
-                $this->_customerSession->getCustomerId()
-            )->setProductId(
-                $product->getId()
-            )->setWebsiteId(
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
-            )->loadByParam();
+            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Stock')
+                ->setCustomerId($this->customerSession->getCustomerId())
+                ->setProductId($product->getId())
+                ->setWebsiteId(
+                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                        ->getStore()
+                        ->getWebsiteId()
+                )
+                ->loadByParam();
             if ($model->getId()) {
                 $model->delete();
             }
             $this->messageManager->addSuccess(__('You will no longer receive stock alerts for this product.'));
         } catch (NoSuchEntityException $noEntityException) {
             $this->messageManager->addError(__('The product was not found.'));
-            $this->_redirect('customer/account/');
-            return;
+            $resultRedirect->setPath('customer/account/');
+            return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
+            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
         }
-        $this->getResponse()->setRedirect($product->getProductUrl());
+        $resultRedirect->setUrl($product->getProductUrl());
+        return $resultRedirect;
     }
 }

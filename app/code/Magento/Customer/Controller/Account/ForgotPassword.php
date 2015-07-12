@@ -21,7 +21,6 @@ class ForgotPassword extends \Magento\Customer\Controller\Account
 
         $this->_getSession()->unsForgottenEmail();
 
-        $resultPage->getLayout()->initMessages();
         return $resultPage;
     }
 }

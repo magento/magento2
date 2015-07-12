@@ -77,7 +77,7 @@ interface MapperInterface
      *
      * @param string|array $field
      * @param string|int|array $condition
-     * @throws \Magento\Framework\Exception if some error in the input could be detected.
+     * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      * @return void
      */
     public function addFieldToFilter($field, $condition = null);

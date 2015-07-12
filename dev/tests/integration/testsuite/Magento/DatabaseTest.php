@@ -21,7 +21,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
         $db = Bootstrap::getInstance()->getBootstrap()->getApplication()->getDbInstance();
         $command = $checkerPath . ' -d ' . $db->getSchema()
-            . ' h=' . $db->getHost()['db_host'] . ',u=' . $db->getUser() . ',p=' . $db->getPassword();
+            . ' h=' . $db->getHost()['db-host'] . ',u=' . $db->getUser() . ',p=' . $db->getPassword();
 
         exec($command, $output, $exitCode);
         $this->assertEquals(0, $exitCode);

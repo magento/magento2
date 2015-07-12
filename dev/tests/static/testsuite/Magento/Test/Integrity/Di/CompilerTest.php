@@ -68,10 +68,18 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $basePath = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
         $basePath = str_replace('\\', '/', $basePath);
 
+
         $this->_tmpDir = realpath(__DIR__) . '/tmp';
         $this->_generationDir = $this->_tmpDir . '/generation';
+        if (!file_exists($this->_generationDir)) {
+            mkdir($this->_generationDir, 0777, true);
+        }
         $this->_compilationDir = $this->_tmpDir . '/di';
-        $this->_command = 'php ' . $basePath . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
+        if (!file_exists($this->_compilationDir)) {
+            mkdir($this->_compilationDir, 0777, true);
+        }
+
+        $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile-multi-tenant --generation=%s --di=%s';
 
         $booleanUtils = new \Magento\Framework\Stdlib\BooleanUtils();
         $constInterpreter = new \Magento\Framework\Data\Argument\Interpreter\Constant();
@@ -282,7 +290,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->_validator->validate($className);
-        } catch (\Magento\Framework\Code\ValidationException $exceptions) {
+        } catch (\Magento\Framework\Exception\ValidatorException $exceptions) {
             $this->fail($exceptions->getMessage());
         } catch (\ReflectionException $exceptions) {
             $this->fail($exceptions->getMessage());
@@ -366,7 +374,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             if (\Magento\Framework\App\Utility\Files::init()->isModuleExists($module)) {
                 $this->pluginValidator->validate($plugin, $type);
             }
-        } catch (\Magento\Framework\Interception\Code\ValidatorException $exception) {
+        } catch (\Magento\Framework\Exception\ValidatorException $exception) {
             $this->fail($exception->getMessage());
         }
     }
@@ -411,7 +419,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->_shell->execute($this->_command, [$this->_generationDir, $this->_compilationDir]);
-        } catch (\Magento\Framework\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             $this->fail($exception->getPrevious()->getMessage());
         }
     }

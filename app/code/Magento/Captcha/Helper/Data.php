@@ -81,7 +81,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Captcha
      *
      * @param string $formId
-     * @return \Magento\Captcha\Model\ModelInterface
+     * @return \Magento\Captcha\Model\CaptchaInterface
      */
     public function getCaptcha($formId)
     {

@@ -23,8 +23,8 @@ class AssertSuccessInstall extends AbstractConstraint
      */
     protected $adminFieldsList = [
         ['pageData' => 'username', 'fixture' => 'username'],
-        ['pageData' => 'e-mail', 'fixture' => 'email'],
-        ['pageData' => 'your_store_address', 'fixture' => 'web'],
+        ['pageData' => 'email', 'fixture' => 'email'],
+        ['pageData' => 'your_store_address', 'fixture' => 'baseUrl'],
         ['pageData' => 'magento_admin_address', 'fixture' => 'admin']
     ];
 
@@ -52,7 +52,13 @@ class AssertSuccessInstall extends AbstractConstraint
         $dbData = $installPage->getInstallBlock()->getDbInfo();
 
         $allData = array_merge($user->getData(), $installConfig->getData());
-        $allData['admin'] = $allData['web'] . $allData['admin'] . '/';
+
+        foreach ($installConfig->getData() as $key => $value) {
+            $allData[$key] = isset($value['value']) ? $value['value'] : $value;
+        }
+
+        $allData['baseUrl'] = (isset($allData['https']) ? $allData['https'] : $allData['baseUrl']);
+        $allData['admin'] = $allData['baseUrl'] . $allData['admin'] . '/';
 
         foreach ($this->adminFieldsList as $field) {
             \PHPUnit_Framework_Assert::assertEquals(

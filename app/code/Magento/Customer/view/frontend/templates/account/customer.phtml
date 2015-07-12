@@ -14,14 +14,28 @@
               tabindex="0"
               data-mage-init='{"dropdown":{}}'
               data-toggle="dropdown"
-              data-trigger-keypress-button="true">
-            <span><?php echo $block->getCustomerName(); ?></span>
+              data-trigger-keypress-button="true"
+              data-bind="scope: 'customer'">
+            <span data-bind="text: customer().fullname"></span>
             <button type="button"
                     class="action switch"
                     tabindex="-1">
                 <span><?php echo __('Change')?></span>
             </button>
         </span>
+        <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "customer": {
+                            "component": "Magento_Customer/js/view/customer"
+                        }
+                    }
+                }
+            }
+        }
+        </script>
         <?php if($block->getChildHtml()):?>
         <div class="customer-menu" data-target="dropdown">
             <?php echo $block->getChildHtml();?>

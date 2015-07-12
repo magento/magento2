@@ -4,7 +4,7 @@
  */
 define([
     'underscore',
-    'mage/utils'
+    'mageUtils'
 ], function (_, utils) {
     'use strict';
 

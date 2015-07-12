@@ -10,6 +10,7 @@ namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Block\Widget\Dob;
+use Magento\Framework\Locale\Resolver;
 
 class DobTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,7 +70,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $localeResolver = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
         $localeResolver->expects($this->any())
             ->method('getLocale')
-            ->willReturn(\Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE);
+            ->willReturn(Resolver::DEFAULT_LOCALE);
         $timezone = $objectManager->getObject(
             'Magento\Framework\Stdlib\DateTime\Timezone',
             ['localeResolver' => $localeResolver]

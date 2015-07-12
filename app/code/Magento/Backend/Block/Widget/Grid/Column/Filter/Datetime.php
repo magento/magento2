@@ -104,7 +104,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
         $html =
             '<div class="range" id="' . $htmlId . '_range"><div class="range-line date">' . '<input type="text" name="'
             . $this->_getHtmlName() . '[from]" id="' . $htmlId . '_from"' . ' value="' . $this->getEscapedValue('from')
-            . '" class="input-text no-changes" placeholder="' . __(
+            . '" class="input-text admin__control-text no-changes" placeholder="' . __(
                 'From'
             ) . '" ' . $this->getUiId(
                 'filter',
@@ -114,7 +114,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
         $html .= '<div class="range-line date">' . '<input type="text" name="' . $this->_getHtmlName() . '[to]" id="'
             . $htmlId . '_to"' . ' value="' . $this->getEscapedValue(
                 'to'
-            ) . '" class="input-text no-changes" placeholder="' . __(
+            ) . '" class="input-text admin__control-text no-changes" placeholder="' . __(
                 'To'
             ) . '" ' . $this->getUiId(
                 'filter',
@@ -129,7 +129,6 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                         dateFormat: "' . $format . '",
                         timeFormat: "' . $timeFormat . '",
                         showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
-                        buttonImage: "' . $this->getViewFileUrl('images/grid-cal.png') . '",
                         buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
                         from: {
                             id: "' . $htmlId . '_from"

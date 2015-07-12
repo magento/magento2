@@ -26,6 +26,7 @@ class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 [
                     'label' => __('Update Changes'),
                     'onclick' => 'order.sidebarApplyChanges()',
+                    'class' => 'action-secondary',
                     'before_html' => '<div class="actions">',
                     'after_html' => '</div>',
                 ]

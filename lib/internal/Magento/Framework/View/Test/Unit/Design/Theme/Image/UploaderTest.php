@@ -102,7 +102,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'checkAllowedExtension' => true,
                 'save' => true,
                 'result' => false,
-                'exception' => 'Magento\Framework\Exception'
+                'exception' => 'Magento\Framework\Exception\LocalizedException'
             ],
             [
                 'isUploaded' => true,
@@ -110,7 +110,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'checkAllowedExtension' => false,
                 'save' => true,
                 'result' => false,
-                'exception' => 'Magento\Framework\Exception'
+                'exception' => 'Magento\Framework\Exception\LocalizedException'
             ],
             [
                 'isUploaded' => true,
@@ -118,14 +118,14 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'checkAllowedExtension' => true,
                 'save' => false,
                 'result' => false,
-                'exception' => 'Magento\Framework\Exception'
+                'exception' => 'Magento\Framework\Exception\LocalizedException'
             ]
         ];
     }
 
     /**
      * @dataProvider uploadDataProvider
-     * covers \Magento\Framework\View\Design\Theme\Image\Uploader::uploadPreviewImage
+     * @covers \Magento\Framework\View\Design\Theme\Image\Uploader::uploadPreviewImage
      */
     public function testUploadPreviewImage($isUploaded, $isValid, $checkExtension, $save, $result, $exception)
     {

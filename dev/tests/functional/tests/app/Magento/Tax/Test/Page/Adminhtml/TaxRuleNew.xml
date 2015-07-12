@@ -9,6 +9,6 @@
   <page name="TaxRuleNew" area="Adminhtml" mca="tax/rule/new" module="Magento_Tax">
     <block name="formPageActions" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="taxRuleForm" class="Magento\Tax\Test\Block\Adminhtml\Rule\Edit\Form" locator="#edit_form" strategy="css selector"/>
-    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>
+    <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages" strategy="css selector"/>
   </page>
 </config>

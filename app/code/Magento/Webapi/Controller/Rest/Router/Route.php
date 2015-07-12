@@ -69,7 +69,7 @@ class Route implements RouterInterface
                 $this->variables[$key] = substr($value, 1);
                 $value = null;
             }
-            $result[$key] = strtolower($value);
+            $result[$key] = $value;
         }
         return $result;
     }
@@ -92,19 +92,12 @@ class Route implements RouterInterface
     /**
      * Retrieve unified requested path
      *
-     * Lowercase all path chunks, except variables names.
-     * E.g. the path '/V1/Categories/:categoryId' will be converted to '/v1/categories/:categoryId'.
-     *
      * @param string $path
      * @return array
      */
     protected function getPathParts($path)
     {
-        $result = explode('/', trim($path, '/'));
-        array_walk($result, function (&$item) {
-            $item = substr($item, 0, 1) === ":" ? $item : strtolower($item);
-        });
-        return $result;
+        return explode('/', trim($path, '/'));
     }
 
     /**

@@ -59,7 +59,7 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributesHtml()
     {
         $expected = 'type="button" class="action- scalable classValue disabled" '
-            . 'onclick="setLocation(\'url2\');" disabled="disabled" data-attributeKey="attributeValue" ';
+            . 'onclick="location.href = \'url2\';" disabled="disabled" data-attributeKey="attributeValue" ';
         $this->button->setDisabled(true);
         $this->button->setData('url', 'url2');
         $this->button->setData('class', 'classValue');
@@ -98,12 +98,12 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [null, null, '', null],
-            [null, null, 'get_url', 'setLocation(\'get_url\');'],
+            [null, null, 'get_url', 'location.href = \'get_url\';'],
             ['on_click', null, null, 'on_click'],
             ['on_click', 'url', 'get_url', 'on_click'],
             ['on_click', null, '', 'on_click'],
-            [null, 'url', 'get_url', 'setLocation(\'url\');'],
-            [null, 'url', '', 'setLocation(\'url\');'],
+            [null, 'url', 'get_url', 'location.href = \'url\';'],
+            [null, 'url', '', 'location.href = \'url\';'],
         ];
     }
 }

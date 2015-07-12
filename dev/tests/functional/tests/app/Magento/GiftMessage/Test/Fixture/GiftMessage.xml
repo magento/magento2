@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="giftMessage" module="Magento_GiftMessage" type="flat" entity_type="gift_message" collection="Magento\GiftMessage\Model\Resource\Message\Collection" identifier="gift_message_id" repository_class="Magento\GiftMessage\Test\Repository\GiftMessage" class="Magento\GiftMessage\Test\Fixture\GiftMessage">
     <dataset name="default">
         <field name="allow_gift_options" xsi:type="string">Yes</field>

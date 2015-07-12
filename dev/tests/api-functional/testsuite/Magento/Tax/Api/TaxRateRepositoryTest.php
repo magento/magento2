@@ -10,7 +10,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
-use Magento\Tax\Api\Data\TaxRateInterface as TaxRate;
+use Magento\Tax\Model\Calculation\Rate;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -433,11 +433,11 @@ class TaxRateRepositoryTest extends WebapiAbstract
         $rates = $this->setupTaxRatesForSearch();
 
         // Find rates whose code is 'codeUs12'
-        $filter = $this->filterBuilder->setField(TaxRate::KEY_CODE)
+        $filter = $this->filterBuilder->setField(Rate::KEY_CODE)
             ->setValue('codeUs12')
             ->create();
 
-        $this->searchCriteriaBuilder->addFilter([$filter]);
+        $this->searchCriteriaBuilder->addFilters([$filter]);
 
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -480,15 +480,15 @@ class TaxRateRepositoryTest extends WebapiAbstract
         $rates = $this->setupTaxRatesForSearch();
 
         // Find rates which country id 'CZ'
-        $filter = $this->filterBuilder->setField(TaxRate::KEY_COUNTRY_ID)
+        $filter = $this->filterBuilder->setField(Rate::KEY_COUNTRY_ID)
             ->setValue('CZ')
             ->create();
         $sortOrder = $this->sortOrderBuilder
-            ->setField(TaxRate::KEY_POSTCODE)
+            ->setField(Rate::KEY_POSTCODE)
             ->setDirection(SearchCriteria::SORT_DESC)
             ->create();
         // Order them by descending postcode (not the default order)
-        $this->searchCriteriaBuilder->addFilter([$filter])
+        $this->searchCriteriaBuilder->addFilters([$filter])
             ->addSortOrder($sortOrder);
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];

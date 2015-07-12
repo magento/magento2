@@ -7,26 +7,33 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<legend class="legend"><span><?php echo __('Order Totals') ?></span></legend>
-<table class="data-table" cellspacing="0">
+<legend class="admin__legend"><span><?php echo __('Order Totals') ?></span></legend>
+<br>
+
+<table class="admin__table-secondary data-table">
     <tbody>
         <?php echo $block->renderTotals(); ?>
         <?php echo $block->renderTotals('footer'); ?>
     </tbody>
 </table>
-<div class="divider"></div>
-<div class="order-totals-bottom">
-    <div class="field choice field-append-comments">
-        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]" value="1"<?php if ($block->getNoteNotify()): ?> checked="checked"<?php endif; ?>/>
-        <label for="notify_customer" class="normal"><?php echo __('Append Comments') ?></label>
+
+<div class="order-totals-actions">
+    <div class="admin__field admin__field-option field-append-comments">
+        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]"
+               value="1"<?php if ($block->getNoteNotify()): ?> checked="checked"<?php endif; ?>
+               class="admin__control-checkbox"/>
+        <label for="notify_customer" class="admin__field-label"><?php echo __('Append Comments') ?></label>
     </div>
     <?php if ($block->canSendNewOrderConfirmationEmail()): ?>
-    <div class="field choice field-email-order-confirmation">
-        <input type="checkbox" id="send_confirmation" name="order[send_confirmation]" value="1" checked="checked"/>
-        <label for="send_confirmation" class="normal"><?php echo __('Email Order Confirmation') ?></label>
+    <div class="admin__field admin__field-option field-email-order-confirmation">
+        <input type="checkbox" id="send_confirmation" name="order[send_confirmation]" value="1" checked="checked"
+               class="admin__control-checkbox"/>
+        <label for="send_confirmation" class="admin__field-label"><?php echo __('Email Order Confirmation') ?></label>
     </div>
     <?php endif; ?>
-    <div class="actions"><?php echo $block->getButtonHtml(__('Submit Order'), 'order.submit()', 'save primary'); ?></div>
+    <div class="actions">
+        <?php echo $block->getButtonHtml(__('Submit Order'), 'order.submit()', 'save primary'); ?>
+    </div>
 </div>
 
 <script>

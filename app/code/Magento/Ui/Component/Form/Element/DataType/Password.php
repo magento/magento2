@@ -10,5 +10,15 @@ namespace Magento\Ui\Component\Form\Element\DataType;
  */
 class Password extends AbstractDataType
 {
-    //
+    const NAME = 'password';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
 }

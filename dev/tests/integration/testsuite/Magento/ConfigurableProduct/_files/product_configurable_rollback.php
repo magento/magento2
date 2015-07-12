@@ -27,7 +27,7 @@ if ($product->getId()) {
     $product->delete();
 }
 
+require __DIR__ . '/configurable_attribute_rollback.php';
+
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-
-require __DIR__ . '/configurable_attribute_rollback.php';

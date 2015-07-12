@@ -7,61 +7,55 @@
 namespace Magento\Mtf\App\State;
 
 use Magento\Mtf\ObjectManager;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Core\Test\Fixture\ConfigData;
 
 /**
- * Class State1
- * Example Application State class
+ * Example Application State class.
  */
 class State1 extends AbstractState
 {
-    // TODO: Move data set to ConfigData fixture after implement merging fixture xml
     /**
-     * Data set for configuration state
+     * Object Manager.
      *
-     * @var array
+     * @var ObjectManager
      */
-    protected $configDataSet = [
-        'section' => [
-            [
-                'path' => 'cms/wysiwyg/enabled',
-                'scope' => 'default',
-                'scope_id' => 1,
-                'value' => 'disabled',
-            ],
-        ]
-    ];
+    protected $objectManager;
 
     /**
-     * Configuration fixture
+     * Data for configuration state.
      *
-     * @var ConfigData
+     * @var string
      */
-    protected $config;
+    protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled';
 
     /**
      * @construct
-     * @param FixtureFactory $fixtureFactory
+     * @param ObjectManager $objectManager
      */
-    public function __construct(FixtureFactory $fixtureFactory)
+    public function __construct(ObjectManager $objectManager)
     {
-        $this->config = $fixtureFactory->createByCode('configData', ['data' => $this->configDataSet]);
+        $this->objectManager = $objectManager;
     }
 
     /**
-     * @inheritdoc
+     * Apply set up configuration profile.
+     *
+     * @return void
      */
     public function apply()
     {
         parent::apply();
         if (file_exists(dirname(dirname(dirname(MTF_BP))) . '/app/etc/config.php')) {
-            $this->config->persist();
+            $this->objectManager->create(
+                '\Magento\Config\Test\TestStep\SetupConfigurationStep',
+                ['configData' => $this->config]
+            )->run();
         }
     }
 
     /**
-     * @inheritdoc
+     * Get name of the Application State Profile.
+     *
+     * @return string
      */
     public function getName()
     {

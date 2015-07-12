@@ -9,25 +9,6 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 class Delete extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
-        parent::__construct($context, $coreRegistry);
-    }
-
-    /**
      * Delete action
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -45,7 +26,7 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block
                 $model->load($id);
                 $model->delete();
                 // display success message
-                $this->messageManager->addSuccess(__('The block has been deleted.'));
+                $this->messageManager->addSuccess(__('You deleted the block.'));
                 // go to grid
                 return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {

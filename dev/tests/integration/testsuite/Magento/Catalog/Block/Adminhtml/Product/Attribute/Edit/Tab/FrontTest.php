@@ -37,7 +37,7 @@ class FrontTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $model */
         $model = $this->objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
-        $model->load($attributeCode, 'attribute_code');
+        $model->loadByCode(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
 
         /** @var \Magento\Framework\Registry $coreRegistry */
         $coreRegistry = $this->objectManager->get('\Magento\Framework\Registry');

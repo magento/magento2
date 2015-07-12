@@ -7,14 +7,14 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\AttributeTypeResolverInterface;
-use Magento\Framework\Api\Config\Reader;
+use Magento\Framework\Api\ExtensionAttribute\Config;
 
 class AttributeTypeResolver implements AttributeTypeResolverInterface
 {
     /**
-     * @var Reader
+     * @var Config
      */
-    protected $configReader;
+    protected $config;
 
     /**
      * @var TypeProcessor
@@ -23,11 +23,11 @@ class AttributeTypeResolver implements AttributeTypeResolverInterface
 
     /**
      * @param TypeProcessor $typeProcessor
-     * @param Reader $configReader
+     * @param Config $config
      */
-    public function __construct(TypeProcessor $typeProcessor, Reader $configReader)
+    public function __construct(TypeProcessor $typeProcessor, Config $config)
     {
-        $this->configReader = $configReader;
+        $this->config = $config;
         $this->typeProcessor = $typeProcessor;
     }
 
@@ -39,12 +39,12 @@ class AttributeTypeResolver implements AttributeTypeResolverInterface
         if (!is_object($value)) {
             throw new \InvalidArgumentException('Provided value is not object type');
         }
-        $data = $this->configReader->read();
+        $data = $this->config->get();
         $context = trim($context, '\\');
         $config = isset($data[$context]) ? $data[$context] : [];
         $output = get_class($value);
         if (isset($config[$attributeCode])) {
-            $type = $config[$attributeCode];
+            $type = $config[$attributeCode]['type'];
             $output = $this->typeProcessor->getArrayItemType($type);
             if (!(class_exists($output) || interface_exists($output))) {
                 throw new \LogicException(

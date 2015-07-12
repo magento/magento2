@@ -11,7 +11,11 @@ use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 
 /**
- * @method \Magento\Sales\Model\Order\Invoice setCreatedAt(string $value)
+ * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
+ * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
+ * @method string getCustomerNote()
+ * @method \Magento\Sales\Model\Order\Invoice setCustomerNoteNotify(bool $value)
+ * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -118,8 +122,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Invoice\Config $invoiceConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
@@ -127,7 +129,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * @param Invoice\CommentFactory $invoiceCommentFactory
      * @param \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $commentCollectionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -136,8 +138,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\Order\Invoice\Config $invoiceConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
@@ -145,7 +145,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         \Magento\Sales\Model\Order\Invoice\CommentFactory $invoiceCommentFactory,
         \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $commentCollectionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_invoiceConfig = $invoiceConfig;
@@ -159,8 +159,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $localeDate,
-            $dateTime,
             $resource,
             $resourceCollection,
             $data
@@ -301,7 +299,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     {
         if ($this->getState() == self::STATE_PAID) {
             if ($this->getCanVoidFlag() === null) {
-                return (bool)$this->getOrder()->getPayment()->canVoid($this);
+                return (bool)$this->getOrder()->getPayment()->canVoid();
             }
         }
         return (bool)$this->getCanVoidFlag();
@@ -420,8 +418,12 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $order->setTaxInvoiced($order->getTaxInvoiced() - $this->getTaxAmount());
         $order->setBaseTaxInvoiced($order->getBaseTaxInvoiced() - $this->getBaseTaxAmount());
 
-        $order->setHiddenTaxInvoiced($order->getHiddenTaxInvoiced() - $this->getHiddenTaxAmount());
-        $order->setBaseHiddenTaxInvoiced($order->getBaseHiddenTaxInvoiced() - $this->getBaseHiddenTaxAmount());
+        $order->setDiscountTaxCompensationInvoiced(
+            $order->getDiscountTaxCompensationInvoiced() - $this->getDiscountTaxCompensationAmount()
+        );
+        $order->setBaseDiscountTaxCompensationInvoiced(
+            $order->getBaseDiscountTaxCompensationInvoiced() - $this->getBaseDiscountTaxCompensationAmount()
+        );
 
         $order->setShippingTaxInvoiced($order->getShippingTaxInvoiced() - $this->getShippingTaxAmount());
         $order->setBaseShippingTaxInvoiced($order->getBaseShippingTaxInvoiced() - $this->getBaseShippingTaxAmount());
@@ -434,11 +436,12 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $order->setBaseTotalInvoicedCost($order->getBaseTotalInvoicedCost() - $this->getBaseCost());
 
         if ($this->getState() == self::STATE_PAID) {
-            $this->getOrder()->setTotalPaid($this->getOrder()->getTotalPaid() - $this->getGrandTotal());
-            $this->getOrder()->setBaseTotalPaid($this->getOrder()->getBaseTotalPaid() - $this->getBaseGrandTotal());
+            $order->setTotalPaid($order->getTotalPaid() - $this->getGrandTotal());
+            $order->setBaseTotalPaid($order->getBaseTotalPaid() - $this->getBaseGrandTotal());
         }
         $this->setState(self::STATE_CANCELED);
-        $this->getOrder()->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true);
+        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
+            ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING));
         $this->_eventManager->dispatch('sales_order_invoice_cancel', [$this->_eventObject => $this]);
         return $this;
     }
@@ -624,8 +627,12 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $order->setTaxInvoiced($order->getTaxInvoiced() + $this->getTaxAmount());
         $order->setBaseTaxInvoiced($order->getBaseTaxInvoiced() + $this->getBaseTaxAmount());
 
-        $order->setHiddenTaxInvoiced($order->getHiddenTaxInvoiced() + $this->getHiddenTaxAmount());
-        $order->setBaseHiddenTaxInvoiced($order->getBaseHiddenTaxInvoiced() + $this->getBaseHiddenTaxAmount());
+        $order->setDiscountTaxCompensationInvoiced(
+            $order->getDiscountTaxCompensationInvoiced() + $this->getDiscountTaxCompensationAmount()
+        );
+        $order->setBaseDiscountTaxCompensationInvoiced(
+            $order->getBaseDiscountTaxCompensationInvoiced() + $this->getBaseDiscountTaxCompensationAmount()
+        );
 
         $order->setShippingTaxInvoiced($order->getShippingTaxInvoiced() + $this->getShippingTaxAmount());
         $order->setBaseShippingTaxInvoiced($order->getBaseShippingTaxInvoiced() + $this->getBaseShippingTaxAmount());
@@ -756,6 +763,41 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
+     * Returns invoice items
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceItemInterface[]
+     */
+    public function getItems()
+    {
+        if ($this->getData(InvoiceInterface::ITEMS) === null && $this->getId()) {
+            $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
+            foreach ($collection as $item) {
+                $item->setInvoice($this);
+            }
+            $this->setData(InvoiceInterface::ITEMS, $collection->getItems());
+        }
+        return $this->getData(InvoiceInterface::ITEMS);
+    }
+
+    /**
+     * Return invoice comments
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[]
+     */
+    public function getComments()
+    {
+        if ($this->getData(InvoiceInterface::COMMENTS) === null && $this->getId()) {
+            $collection = $this->_commentCollectionFactory->create()->setInvoiceFilter($this->getId());
+            foreach ($collection as $comment) {
+                $comment->setInvoice($this);
+            }
+            $this->setData(InvoiceInterface::COMMENTS, $collection->getItems());
+        }
+        return $this->getData(InvoiceInterface::COMMENTS);
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
      * Returns increment id
      *
      * @return string
@@ -783,23 +825,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function getDiscountDescription()
     {
         return $this->getData(InvoiceInterface::DISCOUNT_DESCRIPTION);
-    }
-
-    /**
-     * Returns invoice items
-     *
-     * @return \Magento\Sales\Api\Data\InvoiceItemInterface[]
-     */
-    public function getItems()
-    {
-        if ($this->getData(InvoiceInterface::ITEMS) === null && $this->getId()) {
-            $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
-            foreach ($collection as $item) {
-                $item->setInvoice($this);
-            }
-            $this->setData(InvoiceInterface::ITEMS, $collection->getItems());
-        }
-        return $this->getData(InvoiceInterface::ITEMS);
     }
 
     /**
@@ -841,13 +866,13 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * Returns base_hidden_tax_amount
+     * Returns base_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount()
+    public function getBaseDiscountTaxCompensationAmount()
     {
-        return $this->getData(InvoiceInterface::BASE_HIDDEN_TAX_AMOUNT);
+        return $this->getData(InvoiceInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -861,13 +886,13 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * Returns base_shipping_hidden_tax_amnt
+     * Returns base_shipping_discount_tax_compensation_amnt
      *
      * @return float
      */
-    public function getBaseShippingHiddenTaxAmnt()
+    public function getBaseShippingDiscountTaxCompensationAmnt()
     {
-        return $this->getData(InvoiceInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT);
+        return $this->getData(InvoiceInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT);
     }
 
     /**
@@ -971,6 +996,14 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(InvoiceInterface::CREATED_AT, $createdAt);
+    }
+
+    /**
      * Returns discount_amount
      *
      * @return float
@@ -1011,13 +1044,13 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * Returns hidden_tax_amount
+     * Returns discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getHiddenTaxAmount()
+    public function getDiscountTaxCompensationAmount()
     {
-        return $this->getData(InvoiceInterface::HIDDEN_TAX_AMOUNT);
+        return $this->getData(InvoiceInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -1071,13 +1104,13 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * Returns shipping_hidden_tax_amount
+     * Returns shipping_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getShippingHiddenTaxAmount()
+    public function getShippingDiscountTaxCompensationAmount()
     {
-        return $this->getData(InvoiceInterface::SHIPPING_HIDDEN_TAX_AMOUNT);
+        return $this->getData(InvoiceInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -1221,24 +1254,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         return $this->getData(InvoiceInterface::UPDATED_AT);
     }
 
-    /**
-     * Return invoice comments
-     *
-     * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[]
-     */
-    public function getComments()
-    {
-        if ($this->getData(InvoiceInterface::COMMENTS) === null && $this->getId()) {
-            $collection = $this->_commentCollectionFactory->create()->setInvoiceFilter($this->getId());
-            foreach ($collection as $comment) {
-                $comment->setInvoice($this);
-            }
-            $this->setData(InvoiceInterface::COMMENTS, $collection->getItems());
-        }
-        return $this->getData(InvoiceInterface::COMMENTS);
-    }
-
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
@@ -1514,33 +1529,33 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxAmount($amount)
+    public function setDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(InvoiceInterface::HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(InvoiceInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxAmount($amount)
+    public function setBaseDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(InvoiceInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(InvoiceInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setShippingHiddenTaxAmount($amount)
+    public function setShippingDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(InvoiceInterface::SHIPPING_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(InvoiceInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseShippingHiddenTaxAmnt($amnt)
+    public function setBaseShippingDiscountTaxCompensationAmnt($amnt)
     {
-        return $this->setData(InvoiceInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT, $amnt);
+        return $this->setData(InvoiceInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT, $amnt);
     }
 
     /**

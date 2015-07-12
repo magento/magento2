@@ -38,7 +38,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         array $data = []
     ) {
-        $this->_isScopePrivate = true;
         $this->_wishlistHelper = $wishlistHelper;
         parent::__construct($context, $data);
     }
@@ -68,48 +67,5 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     public function getLabel()
     {
         return __('My Wish List');
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->getLabel();
-    }
-
-    /**
-     * @return string
-     */
-    public function getCounter()
-    {
-        return $this->_createCounter($this->_getItemCount());
-    }
-
-    /**
-     * Count items in wishlist
-     *
-     * @return int
-     */
-    protected function _getItemCount()
-    {
-        return $this->_wishlistHelper->getItemCount();
-    }
-
-    /**
-     * Create button label based on wishlist item quantity
-     *
-     * @param int $count
-     * @return \Magento\Framework\Phrase|void
-     */
-    protected function _createCounter($count)
-    {
-        if ($count > 1) {
-            return __('%1 items', $count);
-        } elseif ($count == 1) {
-            return __('1 item');
-        } else {
-            return;
-        }
     }
 }

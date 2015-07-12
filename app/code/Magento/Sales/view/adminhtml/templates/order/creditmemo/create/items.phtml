@@ -9,14 +9,14 @@
 ?>
 <?php $_items = $block->getCreditmemo()->getAllItems() ?>
 
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Items to Refund') ?></span>
     </div>
 
     <?php if (count($_items)) : ?>
-    <div class="grid">
-        <table cellspacing="0" class="data order-tables">
+    <div class="admin__table-wrapper">
+        <table class="data-table admin__table-primary order-creditmemo-tables">
             <thead>
                 <tr class="headings">
                     <th class="col-product"><span><?php echo __('Product') ?></span></th>
@@ -45,10 +45,10 @@
             <?php endif; ?>
             <?php $i = 0; foreach ($_items as $_item): ?>
                 <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} else {
-    $i++;
-} ?>
+                continue;
+            } else {
+                $i++;
+            } ?>
                 <tbody class="<?php echo $i%2 ? 'even' : 'odd' ?>">
                     <?php echo $block->getItemHtml($_item) ?>
                     <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
@@ -61,40 +61,67 @@
         <?php echo __('No Items To Refund') ?>
     </div>
     <?php endif; ?>
-</div>
+</section>
 
 <?php $orderTotalBar = $block->getChildHtml('order_totalbar'); ?>
 
 <?php if (!empty($orderTotalBar)): ?>
-<div class="fieldset-wrapper">
+<section class="fieldset-wrapper">
     <?php echo $orderTotalBar; ?>
-</div>
+</section>
 <?php endif; ?>
 
-<div class="clearfix">
+<section class="admin__page-section">
     <input type="hidden" name="creditmemo[do_offline]" id="creditmemo_do_offline" value="0" />
-    <div class="order-comments-history">
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Credit Memo Comments') ?></span></div>
-            <fieldset id="history_form">
-                <label class="normal" for="creditmemo_comment_text"><?php echo __('Credit Memo Comments') ?></label><br/>
-                <textarea id="creditmemo_comment_text" name="creditmemo[comment_text]" rows="3" cols="5"><?php echo $block->getCreditmemo()->getCommentText(); ?></textarea>
-            </fieldset>
-        </div>
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Order Total') ?></span>
     </div>
-    <div class="order-totals creditmemo-totals">
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Refund Totals') ?></span></div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-comments-history">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php echo __('Credit Memo Comments') ?></span>
+            </div>
+            <div id="history_form" class="admin__fieldset-wrapper-content">
+                <div class="admin__field">
+                    <label class="normal admin__field-label"
+                           for="creditmemo_comment_text">
+                        <span><?php echo __('Comment Text') ?></span></label>
+                    <div class="admin__field-control">
+                        <textarea id="creditmemo_comment_text"
+                                  class="admin__control-textarea"
+                                  name="creditmemo[comment_text]"
+                                  rows="3"
+                                  cols="5"><?php echo $block->getCreditmemo()->getCommentText(); ?></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin__page-section-item order-totals creditmemo-totals">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php echo __('Refund Totals') ?></span>
+            </div>
             <?php echo $block->getChildHtml('creditmemo_totals') ?>
-            <div class="order-totals-bottom">
-                <div  class="field choice field-append-comments">
-                    <input id="notify_customer" name="creditmemo[comment_customer_notify]" value="1" type="checkbox" />
-                    <label for="notify_customer"><span><?php echo __('Append Comments') ?></span></label>
+            <div class="order-totals-actions">
+                <div class="field choice admin__field admin__field-option field-append-comments">
+                    <input id="notify_customer"
+                           class="admin__control-checkbox"
+                           name="creditmemo[comment_customer_notify]"
+                           value="1"
+                           type="checkbox" />
+                    <label for="notify_customer" class="admin__field-label">
+                        <span><?php echo __('Append Comments') ?></span>
+                    </label>
                 </div>
                 <?php if ($block->canSendCreditmemoEmail()):?>
-                <div class="field choice field-email-copy">
-                    <input id="send_email" name="creditmemo[send_email]" value="1" type="checkbox" />
-                    <label for="send_email"><span><?php echo __('Email Copy of Credit Memo') ?></span></label>
+                <div class="field choice admin__field admin__field-option field-email-copy">
+                    <input id="send_email"
+                           class="admin__control-checkbox"
+                           name="creditmemo[send_email]"
+                           value="1"
+                           type="checkbox" />
+                    <label for="send_email" class="admin__field-label">
+                        <span><?php echo __('Email Copy of Credit Memo') ?></span>
+                    </label>
                 </div>
                 <?php endif; ?>
                 <?php echo $block->getChildHtml('submit_before') ?>
@@ -106,7 +133,7 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <script>
 require(['jquery', 'prototype'], function(jQuery){

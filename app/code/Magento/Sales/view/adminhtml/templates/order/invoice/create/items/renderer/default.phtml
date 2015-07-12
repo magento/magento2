@@ -17,7 +17,9 @@
     <td class="col-qty"><?php echo $block->getColumnHtml($_item, 'qty') ?></td>
     <td class="col-qty-invoice">
     <?php if ($block->canEditQty()) : ?>
-        <input type="text" class="input-text qty-input" name="invoice[items][<?php echo $_item->getOrderItemId() ?>]" value="<?php echo $_item->getQty()*1 ?>"/>
+        <input type="text" class="input-text admin__control-text qty-input"
+               name="invoice[items][<?php echo $_item->getOrderItemId() ?>]"
+               value="<?php echo $_item->getQty()*1 ?>"/>
     <?php else : ?>
         <?php echo $_item->getQty()*1 ?>
     <?php endif; ?>

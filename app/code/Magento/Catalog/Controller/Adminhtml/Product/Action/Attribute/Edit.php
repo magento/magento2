@@ -14,25 +14,17 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         parent::__construct($context, $attributeHelper);
         $this->resultPageFactory = $resultPageFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
@@ -43,6 +35,8 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         if (!$this->_validateProducts()) {
             return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['_current' => true]);
         }
-        return $this->resultPageFactory->create();
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->prepend(__('Update Attributes'));
+        return $resultPage;
     }
 }

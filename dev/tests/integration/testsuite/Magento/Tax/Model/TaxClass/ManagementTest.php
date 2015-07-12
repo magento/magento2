@@ -8,6 +8,7 @@ namespace Magento\Tax\Model\TaxClass;
 use Magento\Tax\Api\Data\TaxClassInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Model\TaxClass\Key;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class ManagementTest extends \PHPUnit_Framework_TestCase
@@ -63,8 +64,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper->populateWithArray(
             $taxClassKeyTypeId,
             [
-                TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
-                TaxClassKeyInterface::KEY_VALUE => $taxClassId,
+                Key::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
+                Key::KEY_VALUE => $taxClassId,
             ],
             '\Magento\Tax\Api\Data\TaxClassKeyInterface'
         );
@@ -76,8 +77,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper->populateWithArray(
             $taxClassKeyTypeName,
             [
-                TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
-                TaxClassKeyInterface::KEY_VALUE => $taxClassName,
+                Key::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
+                Key::KEY_VALUE => $taxClassName,
             ],
             '\Magento\Tax\Api\Data\TaxClassKeyInterface'
         );

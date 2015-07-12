@@ -11,7 +11,6 @@ use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
 use Magento\Review\Test\Fixture\Review;
@@ -82,13 +81,6 @@ class CustomerReviewReportEntityTest extends Injectable
     protected $catalogCategoryView;
 
     /**
-     * Customer frontend login page
-     *
-     * @var CustomerAccountLogin
-     */
-    protected $customerAccountLogin;
-
-    /**
      * Prepare data
      *
      * @param FixtureFactory $fixtureFactory
@@ -109,7 +101,6 @@ class CustomerReviewReportEntityTest extends Injectable
      * @param CatalogProductView $pageCatalogProductView
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
-     * @param CustomerAccountLogin $customerAccountLogin
      * @param CustomerAccountLogout $customerAccountLogout
      * @return void
      */
@@ -118,14 +109,12 @@ class CustomerReviewReportEntityTest extends Injectable
         CatalogProductView $pageCatalogProductView,
         CmsIndex $cmsIndex,
         CatalogCategoryView $catalogCategoryView,
-        CustomerAccountLogin $customerAccountLogin,
         CustomerAccountLogout $customerAccountLogout
     ) {
         $this->productReportReview = $productReportReview;
         $this->pageCatalogProductView = $pageCatalogProductView;
         $this->cmsIndex = $cmsIndex;
         $this->catalogCategoryView = $catalogCategoryView;
-        $this->customerAccountLogin = $customerAccountLogin;
         $this->customerAccountLogout = $customerAccountLogout;
     }
 
@@ -152,8 +141,10 @@ class CustomerReviewReportEntityTest extends Injectable
         $product->persist();
         $this->cmsIndex->open();
         if ($customerLogin == 'Yes') {
-            $this->cmsIndex->getLinksBlock()->openLink("Log In");
-            $this->customerAccountLogin->getLoginBlock()->login($customer);
+            $this->objectManager->create(
+                'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+                ['customer' => $customer]
+            )->run();
         }
         // Steps
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');

@@ -11,10 +11,12 @@ namespace Magento\Quote\Model;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Quote model
@@ -26,8 +28,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  sales_quote_delete_before
  *  sales_quote_delete_after
  *
- * @method Quote setStoreId(int $value)
- * @method Quote setIsVirtual(int $value)
  * @method int getIsMultiShipping()
  * @method Quote setIsMultiShipping(int $value)
  * @method float getStoreToBaseRate()
@@ -268,7 +268,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $criteriaBuilder;
+    protected $searchCriteriaBuilder;
 
     /**
      * Filter builder
@@ -323,6 +323,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $dataObjectHelper;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    protected $extensionAttributesJoinProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -355,8 +360,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param Cart\CurrencyFactory $currencyFactory
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -393,8 +399,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->quoteValidator = $quoteValidator;
@@ -414,7 +421,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->_quotePaymentCollectionFactory = $quotePaymentCollectionFactory;
         $this->_objectCopyService = $objectCopyService;
         $this->addressRepository = $addressRepository;
-        $this->criteriaBuilder = $criteriaBuilder;
+        $this->searchCriteriaBuilder = $criteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->stockRegistry = $stockRegistry;
         $this->itemProcessor = $itemProcessor;
@@ -425,6 +432,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->dataObjectHelper = $dataObjectHelper;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->currencyFactory = $currencyFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         parent::__construct(
             $context,
             $registry,
@@ -559,6 +567,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * {@inheritdoc}
      */
+    public function setIsVirtual($isVirtual)
+    {
+        return $this->setData(self::KEY_IS_VIRTUAL, $isVirtual);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getItemsCount()
     {
         return $this->_getData(self::KEY_ITEMS_COUNT);
@@ -670,16 +686,23 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     //@codeCoverageIgnoreEnd
 
     /**
-     * Get quote store identifier
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getStoreId()
     {
         if (!$this->hasStoreId()) {
             return $this->_storeManager->getStore()->getId();
         }
-        return $this->_getData('store_id');
+        return (int)$this->_getData(self::KEY_STORE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($storeId)
+    {
+        $this->setData(self::KEY_STORE_ID, (int)$storeId);
+        return $this;
     }
 
     /**
@@ -772,34 +795,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->setCustomerId($this->_customer->getId());
         }
 
+        //mark quote if it has virtual products only
+        $this->setIsVirtual($this->getIsVirtual());
+
         parent::beforeSave();
-    }
-
-    /**
-     * Save related items
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        parent::afterSave();
-
-        if (null !== $this->_addresses) {
-            $this->getAddressesCollection()->save();
-        }
-
-        if (null !== $this->_items) {
-            $this->getItemsCollection()->save();
-        }
-
-        if (null !== $this->_payments) {
-            $this->getPaymentsCollection()->save();
-        }
-
-        if (null !== $this->_currentPayment) {
-            $this->getPayment()->save();
-        }
-        return $this;
     }
 
     /**
@@ -1312,6 +1311,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
         if (null === $this->_items) {
             $this->_items = $this->_quoteItemCollectionFactory->create();
+            $this->extensionAttributesJoinProcessor->process($this->_items);
             $this->_items->setQuote($this);
         }
         return $this->_items;
@@ -1326,6 +1326,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
+            /** @var \Magento\Quote\Model\Resource\Quote\Item $item */
             if (!$item->isDeleted()) {
                 $items[] = $item;
             }
@@ -1538,8 +1539,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         /**
          * Error message
          */
-        if (is_string($cartCandidates)) {
-            return $cartCandidates;
+        if (is_string($cartCandidates) || $cartCandidates instanceof \Magento\Framework\Phrase) {
+            return strval($cartCandidates);
         }
 
         /**
@@ -1847,10 +1848,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Payment $payment
+     * Adds a payment to quote
+     *
+     * @param PaymentInterface $payment
      * @return $this
      */
-    public function addPayment(\Magento\Quote\Model\Quote\Payment $payment)
+    public function addPayment(PaymentInterface $payment)
     {
         $payment->setQuote($this);
         if (!$payment->getId()) {
@@ -1860,10 +1863,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Payment $payment
-     * @return \Magento\Quote\Model\Quote\Payment
+     * Sets payment to current quote
+     *
+     * @param PaymentInterface $payment
+     * @return PaymentInterface
      */
-    public function setPayment(\Magento\Quote\Model\Quote\Payment $payment)
+    public function setPayment(PaymentInterface $payment)
     {
         if (!$this->getIsMultiPayment() && ($old = $this->getPayment())) {
             $payment->setId($old->getId());
@@ -2084,6 +2089,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Sets flag, whether this quote has some error associated with it.
      *
+     * @codeCoverageIgnore
+     *
      * @param bool $flag
      * @return $this
      */
@@ -2243,12 +2250,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         if (!$this->getReservedOrderId()) {
             $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
-        } else {
-            //checking if reserved order id was already used for some order
-            //if yes reserving new one if not using old one
-            if ($this->_getResource()->isOrderIncrementIdUsed($this->getReservedOrderId())) {
-                $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
-            }
         }
         return $this;
     }
@@ -2469,6 +2470,46 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function addressCollectionWasSet()
+    {
+        return null !== $this->_addresses;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function itemsCollectionWasSet()
+    {
+        return null !== $this->_items;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function paymentsCollectionWasSet()
+    {
+        return null !== $this->_payments;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function currentPaymentWasSet()
+    {
+        return null !== $this->_currentPayment;
+    }
+
+    /**
      * Return checkout method code
      *
      * @param boolean $originalMethod if true return defined method from beginning
@@ -2485,6 +2526,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Sets the payment method that is used to process the cart.
      *
+     * @codeCoverageIgnore
+     *
      * @param string $checkoutMethod
      * @return $this
      */
@@ -2496,6 +2539,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Prevent quote from saving
      *
+     * @codeCoverageIgnore
+     *
      * @return $this
      */
     public function preventSaving()
@@ -2506,6 +2551,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
     /**
      * Check if model can be saved
+     *
+     * @codeCoverageIgnore
      *
      * @return bool
      */

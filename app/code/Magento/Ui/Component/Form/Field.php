@@ -5,29 +5,99 @@
  */
 namespace Magento\Ui\Component\Form;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Ui\Component\AbstractComponent;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Ui\Component\AbstractView;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Class AbstractFormElement
+ * Class Field
  */
-class Field extends AbstractView implements UiComponentInterface
+class Field extends AbstractComponent
 {
+    const NAME = 'field';
+
     /**
-     * @return mixed
+     * Wrapped component
+     *
+     * @var UiComponentInterface
      */
-    public function renderHeader()
-    {
-        return $this->getRenderEngine()->render($this, $this->getHeaderTemplate());
+    protected $wrappedComponent;
+
+    /**
+     * UI component factory
+     *
+     * @var UiComponentFactory
+     */
+    protected $uiComponentFactory;
+
+    /**
+     * Constructor
+     *
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param UiComponentInterface[] $components
+     * @param array $data
+     */
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        array $components = [],
+        array $data = []
+    ) {
+        $this->uiComponentFactory = $uiComponentFactory;
+        parent::__construct($context, $components, $data);
     }
 
     /**
-     * Getting template for field header section
+     * Get component name
      *
-     * @return string|false
+     * @return string
      */
-    public function getHeaderTemplate()
+    public function getComponentName()
     {
-        return isset($this->configuration['header_template']) ? $this->configuration['header_template'] : false;
+        return 'form.' . $this->wrappedComponent->getComponentName();
+    }
+
+    /**
+     * Prepare component configuration
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function prepare()
+    {
+        $formElement = $this->getData('config/formElement');
+        if (null === $formElement) {
+            throw new LocalizedException(__(
+                'The configuration parameter "formElement" is a required for "' . $this->getName() . '" field.'
+            ));
+        }
+        // Create of wrapped component
+        $this->wrappedComponent = $this->uiComponentFactory->create(
+            $this->getName(),
+            $formElement,
+            array_merge(['context' => $this->getContext()], (array)$this->getData())
+        );
+        $this->wrappedComponent->setData(
+            'config',
+            array_replace_recursive(
+                (array) $this->wrappedComponent->getData('config'),
+                (array) $this->getData('config')
+            )
+        );
+        $this->wrappedComponent->prepare();
+        $this->components = $this->wrappedComponent->getChildComponents();
+        // Merge JS configuration with wrapped component configuration
+        $wrappedComponentConfig = $this->getJsConfig($this->wrappedComponent);
+
+        $jsConfig = array_replace_recursive($wrappedComponentConfig, $this->getJsConfig($this));
+        $jsConfig['extends'] = $this->wrappedComponent->getComponentName();
+        $this->setData('js_config', $jsConfig);
+
+        $this->setData('config', $this->wrappedComponent->getData('config'));
+
+        parent::prepare();
     }
 }

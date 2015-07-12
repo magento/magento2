@@ -10,7 +10,6 @@ use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -24,7 +23,7 @@ class AttributeForm extends FormTabs
      *
      * @var string
      */
-    protected $closedToggle = '//*[contains(@class,"collapsable-wrapper") and not(contains(@class,"opened"))]//strong';
+    protected $closedToggle = '.admin__collapsible-block-wrapper:not(.opened) [data-toggle="collapse"]';
 
     /**
      * Properties tab selector.
@@ -60,7 +59,7 @@ class AttributeForm extends FormTabs
                 if ($this->isTabVisible($tabName)) {
                     $this->openTab($tabName);
                     $this->expandAllToggles();
-                    $tabData = $this->getTabElement($tabName)->getDataFormTab();
+                    $tabData = $this->getTab($tabName)->getDataFormTab();
                     $data = array_merge($data, $tabData);
                 }
             }
@@ -71,7 +70,7 @@ class AttributeForm extends FormTabs
                 if ($this->isTabVisible($tabName)) {
                     $this->openTab($tabName);
                     $this->expandAllToggles();
-                    $tabData = $this->getTabElement($tabName)->getDataFormTab($fields, $this->_rootElement);
+                    $tabData = $this->getTab($tabName)->getDataFormTab($fields, $this->_rootElement);
                     $data = array_merge($data, $tabData);
                 }
             }
@@ -87,7 +86,7 @@ class AttributeForm extends FormTabs
      */
     protected function expandAllToggles()
     {
-        $closedToggles = $this->_rootElement->getElements($this->closedToggle, Locator::SELECTOR_XPATH);
+        $closedToggles = $this->_rootElement->getElements($this->closedToggle);
         foreach ($closedToggles as $toggle) {
             $toggle->click();
         }
@@ -103,20 +102,5 @@ class AttributeForm extends FormTabs
     {
         $this->browser->find($this->pageTitle)->click(); // Handle menu overlap problem
         return parent::openTab($tabName);
-    }
-
-    /**
-     * Check if tab is visible.
-     *
-     * @param string $tabName
-     * @return bool
-     */
-    protected function isTabVisible($tabName)
-    {
-        $selector = $this->tabs[$tabName]['selector'];
-        $strategy = isset($this->tabs[$tabName]['strategy'])
-            ? $this->tabs[$tabName]['strategy']
-            : Locator::SELECTOR_CSS;
-        return $this->_rootElement->find($selector, $strategy)->isVisible();
     }
 }

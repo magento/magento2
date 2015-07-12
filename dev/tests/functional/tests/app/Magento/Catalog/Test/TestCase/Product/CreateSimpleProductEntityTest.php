@@ -75,7 +75,7 @@ class CreateSimpleProductEntityTest extends Injectable
 
         // Preconditions
         $this->objectManager->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => $this->configData]
         )->run();
 
@@ -96,7 +96,7 @@ class CreateSimpleProductEntityTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => $this->configData, 'rollback' => true]
         )->run();
     }

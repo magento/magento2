@@ -29,14 +29,14 @@ class AssertBundleInCategory extends AssertProductInCategory
         /** @var BundleProduct $bundle */
         $priceData = $bundle->getDataFieldConfig('price')['source']->getPreset();
         //Price from/to verification
-        $priceBlock = $catalogCategoryView->getListProductBlock()->getProductPriceBlock($bundle->getName());
+        $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($bundle)->getPriceBlock();
 
         if ($bundle->hasData('special_price') || $bundle->hasData('group_price')) {
-            $priceLow = $priceBlock->getFinalPrice();
+            $priceLow = $priceBlock->getPrice();
         } else {
             $priceLow = ($bundle->getPriceView() == 'Price Range')
                 ? $priceBlock->getPriceFrom()
-                : $priceBlock->getRegularPrice();
+                : $priceBlock->getPrice();
         }
 
         \PHPUnit_Framework_Assert::assertEquals(

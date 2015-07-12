@@ -78,7 +78,7 @@ class Cc extends \Magento\Payment\Block\Info
     public function getCcExpDate()
     {
         $date = new \DateTime('now', new \DateTimeZone($this->_localeDate->getConfigTimezone()));
-        $date->setDate($this->getInfo()->getCcExpYear(), $this->getInfo()->getCcExpMonth(), $date->format('d'));
+        $date->setDate($this->getInfo()->getCcExpYear(), $this->getInfo()->getCcExpMonth() + 1, 0);
         return $date;
     }
 
@@ -101,6 +101,7 @@ class Cc extends \Magento\Payment\Block\Info
         if ($this->getInfo()->getCcLast4()) {
             $data[(string)__('Credit Card Number')] = sprintf('xxxx-%s', $this->getInfo()->getCcLast4());
         }
+
         if (!$this->getIsSecureMode()) {
             if ($ccSsIssue = $this->getInfo()->getCcSsIssue()) {
                 $data[(string)__('Switch/Solo/Maestro Issue Number')] = $ccSsIssue;

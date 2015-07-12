@@ -18,7 +18,7 @@ Packaging.prototype = {
         this.errorQtyOverLimit = params.errorQtyOverLimit;
         this.titleDisabledSaveBtn = params.titleDisabledSaveBtn;
         this.window = $('packaging_window');
-        this.messages = this.window.select('.messages')[0];
+        this.messages = this.window.select('.message-warning')[0];
         this.packagesContent = $('packages_content');
         this.template = $('package_template');
         this.paramsCreateLabelRequest = {};
@@ -748,7 +748,7 @@ Packaging.prototype = {
 
     _observeQty: function() {
         /** this = input[type="checkbox"] */
-        var tr  = this.parentNode.parentNode,
+        var tr  = jQuery(this).closest('tr')[0],
             qty = $(tr.cells[tr.cells.length - 1]).select('input[name="qty"]')[0];
 
         if (qty.disabled = !this.checked) {

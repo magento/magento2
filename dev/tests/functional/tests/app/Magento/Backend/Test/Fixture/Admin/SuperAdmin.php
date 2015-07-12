@@ -22,10 +22,10 @@ class SuperAdmin extends DataFixture
         $this->_data = [
             'fields' => [
                 'username' => [
-                    'value' => $this->_configuration->getParameter('application/backendLogin'),
+                    'value' => $this->_configuration->get('application/0/backendLogin/0/value'),
                 ],
                 'password' => [
-                    'value' => $this->_configuration->getParameter('application/backendPassword'),
+                    'value' => $this->_configuration->get('application/0/backendPassword/0/value'),
                 ],
             ],
         ];

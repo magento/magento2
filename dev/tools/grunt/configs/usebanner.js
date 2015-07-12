@@ -5,7 +5,26 @@
 
 'use strict';
 
-var banner = require('./banner');
+function printCopyright(lang) {
+    var copyrightText = {
+            firstLine: 'Copyright © 2015 Magento. All rights reserved.',
+            secondLine: 'See COPYING.txt for license details.'
+        },
+        nlWin = '\r\n';
+    switch (lang) {
+        case 'css':
+            return '/**' + nlWin + ' * ' + copyrightText.firstLine + nlWin + ' * ' + copyrightText.secondLine + nlWin + ' */' + nlWin;
+            break;
+        case 'less':
+            return '// /**' + nlWin + '//  * ' + copyrightText.firstLine + nlWin + '//  * ' + copyrightText.secondLine + nlWin + '//  */' + nlWin;
+            break;
+        case 'html':
+            return '<!--' + nlWin + '/**' + nlWin + ' * ' + copyrightText.firstLine + nlWin + ' * ' + copyrightText.secondLine + nlWin + ' */' + nlWin + '-->' + nlWin;
+            break;
+        default:
+            return;
+    }
+}
 
 module.exports = {
     options: {
@@ -14,15 +33,23 @@ module.exports = {
     },
     setup: {
         options: {
-            banner: banner.css()
+            banner: printCopyright('css')
         },
         files: {
             src: '<%= path.css.setup %>/*.css'
         }
     },
+    updater: {
+        options: {
+            banner: printCopyright('css')
+        },
+        files: {
+            src: '<%= path.css.updater %>/updater.css'
+        }
+    },
     documentationCss: {
         options: {
-            banner: banner.css()
+            banner: printCopyright('css')
         },
         files: {
             src: '<%= path.doc %>/**/*.css'
@@ -30,7 +57,7 @@ module.exports = {
     },
     documentationLess: {
         options: {
-            banner: banner.less()
+            banner: printCopyright('less')
         },
         files: {
             src: '<%= path.doc %>/**/*.less'
@@ -38,7 +65,7 @@ module.exports = {
     },
     documentationHtml: {
         options: {
-            banner: banner.html()
+            banner: printCopyright('html')
         },
         files: {
             src: '<%= path.doc %>/**/*.html'

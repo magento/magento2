@@ -9,7 +9,7 @@ use Magento\Payment\Model\Method\Substitution;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Payment\Block\Form;
-use Magento\Payment\Model\Info;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\LayoutFactory;
@@ -115,9 +115,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get and sort available payment methods for specified or current store
      *
-     * @param null|string|bool|int|Store $store
+     * @param null|string|bool|int $store
      * @param Quote|null $quote
-     * @return array
+     * @return AbstractMethod[]
      */
     public function getStoreMethods($store = null, $quote = null)
     {
@@ -141,28 +141,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 /* if the payment method cannot be used at this time */
                 continue;
             }
-            $sortOrder = (int)$methodInstance->getConfigData('sort_order', $store);
-            $methodInstance->setSortOrder($sortOrder);
             $res[] = $methodInstance;
         }
 
-        uasort($res, [$this, '_sortMethods']);
+        @uasort(
+            $res,
+            function (MethodInterface $a, MethodInterface $b) {
+                if ((int)$a->getConfigData('sort_order') < (int)$b->getConfigData('sort_order')) {
+                    return -1;
+                }
+
+                if ((int)$a->getConfigData('sort_order') > (int)$b->getConfigData('sort_order')) {
+                    return 1;
+                }
+
+                return 0;
+            }
+        );
 
         return $res;
-    }
-
-    /**
-     * Sort payments methods
-     *
-     * @param MethodInterface $a
-     * @param MethodInterface $b
-     * @return int
-     */
-    protected function _sortMethods($a, $b)
-    {
-        return (int)$a->getSortOrder() <
-            (int)$b->getSortOrder() ? -1 : ((int)$a->getSortOrder() >
-            (int)$b->getSortOrder() ? 1 : 0);
     }
 
     /**
@@ -182,11 +179,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve payment information block
      *
-     * @param Info $info
+     * @param InfoInterface $info
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return Template
      */
-    public function getInfoBlock(Info $info, LayoutInterface $layout = null)
+    public function getInfoBlock(InfoInterface $info, LayoutInterface $layout = null)
     {
         $layout = $layout ?: $this->_layout;
         $blockType = $info->getMethodInstance()->getInfoBlockType();
@@ -198,12 +195,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Render payment information block
      *
-     * @param Info $info
+     * @param InfoInterface $info
      * @param int $storeId
      * @return string
      * @throws \Exception
      */
-    public function getInfoBlockHtml(Info $info, $storeId)
+    public function getInfoBlockHtml(InfoInterface $info, $storeId)
     {
         $this->_appEmulation->startEnvironmentEmulation($storeId);
 

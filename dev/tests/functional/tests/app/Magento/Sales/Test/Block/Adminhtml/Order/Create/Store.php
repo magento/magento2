@@ -26,6 +26,13 @@ class Store extends Block
     protected $templateBlock = './ancestor::body';
 
     /**
+     * Locator value for specified Store control.
+     *
+     * @var string
+     */
+    protected $store = '//label[contains(., "%s")]/preceding-sibling::*';
+
+    /**
      * Get backend abstract block
      *
      * @return \Magento\Backend\Test\Block\Template
@@ -48,7 +55,7 @@ class Store extends Block
             return;
         }
         $storeName = $fixture == null ? 'Default Store View' : $fixture->getName();
-        $selector = '//label[text()="' . $storeName . '"]/preceding-sibling::*';
+        $selector = sprintf($this->store, $storeName);
         $this->_rootElement->find($selector, Locator::SELECTOR_XPATH, 'checkbox')->setValue('Yes');
         $this->getTemplateBlock()->waitLoader();
     }

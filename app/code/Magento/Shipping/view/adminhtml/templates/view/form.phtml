@@ -9,94 +9,110 @@
 ?>
 <?php  $_order = $block->getShipment()->getOrder() ?>
 <?php echo $block->getChildHtml('order_info') ?>
-<div class="clearfix">
-    <div class="order-payment-method">
+<section class="admin__page-section order-shipment-billing-shipping">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Payment &amp; Shipping Method') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+
         <?php /* Billing Address */ ?>
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title">
+        <div class="admin__page-section-item order-payment-method">
+            <div class="admin__page-section-item-title">
                 <span class="title"><?php echo __('Payment Information') ?></span>
             </div>
-            <div><?php echo $block->getChildHtml('order_payment') ?></div>
-            <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+            <div class="admin__page-section-item-content">
+                <div><?php echo $block->getChildHtml('order_payment') ?></div>
+                <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+            </div>
         </div>
-    </div>
-    <div class="order-shipping-address">
+
         <?php /* Shipping Address */ ?>
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title">
+        <div class="admin__page-section-item order-shipping-address">
+            <div class="admin__page-section-item-title">
                 <span class="title"><?php echo __('Shipping and Tracking Information') ?></span>
             </div>
-            <div class="shipping-description-wrapper">
-                <?php if ($block->getShipment()->getTracksCollection()->count()): ?>
+            <div class="admin__page-section-item-content">
+                <div class="shipping-description-wrapper">
+                    <?php if ($block->getShipment()->getTracksCollection()->count()): ?>
+                        <p>
+                            <a href="#" id="linkId" onclick="popWin('<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($block->getShipment()) ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php echo __('Track this shipment') ?>"><?php echo __('Track this shipment') ?></a>
+                        </p>
+                    <?php endif; ?>
+                    <div class="shipping-description-title">
+                        <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
+                    </div>
+
+                    <?php echo __('Total Shipping Charges'); ?>:
+
+                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
+                        <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
+                    <?php else: ?>
+                        <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                    <?php endif; ?>
+                    <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
+
+                    <?php echo $_excl; ?>
+                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                        (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                    <?php endif; ?>
+                </div>
+                <?php if ($block->canCreateShippingLabel()): ?>
                 <p>
-                    <a href="#" id="linkId" onclick="popWin('<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($block->getShipment()) ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php echo __('Track this shipment') ?>"><?php echo __('Track this shipment') ?></a>
+                    <?php echo $block->getCreateLabelButton()?>
+                    <?php if ($block->getShipment()->getShippingLabel()): ?>
+                        <?php echo $block->getPrintLabelButton() ?>
+                    <?php endif ?>
+                    <?php if ($block->getShipment()->getPackages()): ?>
+                        <?php echo $block->getShowPackagesButton() ?>
+                    <?php endif ?>
                 </p>
-                <?php endif; ?>
-                <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
-                <?php echo __('Total Shipping Charges'); ?>:
-
-                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
-                    <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
-                <?php else: ?>
-                    <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
-                <?php endif; ?>
-                <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
-
-                <?php echo $_excl; ?>
-                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                    (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                <?php endif; ?>
-            </div>
-            <?php if ($block->canCreateShippingLabel()): ?>
-            <p>
-                <?php echo $block->getCreateLabelButton()?>
-                <?php if ($block->getShipment()->getShippingLabel()): ?>
-                    <?php echo $block->getPrintLabelButton() ?>
                 <?php endif ?>
-                <?php if ($block->getShipment()->getPackages()): ?>
-                    <?php echo $block->getShowPackagesButton() ?>
-                <?php endif ?>
-            </p>
-            <?php endif ?>
-            <div><?php echo $block->getChildHtml('shipment_tracking') ?></div>
-        <?php echo $block->getChildHtml('shipment_packaging') ?>
-        <script>
-require([
-    'prototype'
-], function(){
+                <?php echo $block->getChildHtml('shipment_tracking') ?>
 
-    setTimeout(function(){
-        packaging.setConfirmPackagingCallback(function(){
-            packaging.sendCreateLabelRequest();
-        });
-        packaging.setLabelCreatedCallback(function(response){
-            setLocation("<?php echo $block->getUrl(
-                'adminhtml/order_shipment/view',
-                ['shipment_id' => $block->getShipment()->getId()]
-            ); ?>");
-        });
-    }, 500);
+                <?php echo $block->getChildHtml('shipment_packaging') ?>
+<script>
+    require([
+        'prototype'
+    ], function () {
 
-});
+        setTimeout(function () {
+            packaging.setConfirmPackagingCallback(function () {
+                packaging.sendCreateLabelRequest();
+            });
+            packaging.setLabelCreatedCallback(function (response) {
+                setLocation("<?php echo $block->getUrl(
+'adminhtml/order_shipment/view',
+['shipment_id' => $block->getShipment()->getId()]
+); ?>");
+            });
+        }, 500);
+
+    });
 </script>
+            </div>
         </div>
     </div>
-</div>
+</section>
 
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Items Shipped') ?></span>
     </div>
     <?php echo $block->getChildHtml('shipment_items') ?>
-</div>
+</section>
 
-<div class="clearfix">
-    <?php echo $block->getChildHtml('shipment_packed') ?>
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('Order Total') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <?php echo $block->getChildHtml('shipment_packed') ?>
 
-    <div class="order-comments-history">
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Shipment History') ?></span></div>
-            <fieldset><?php echo $block->getChildHtml('order_comments') ?></fieldset>
+        <div class="admin__page-section-item order-comments-history">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php echo __('Shipment History') ?></span>
+            </div>
+            <div class="admin__page-section-item-content"><?php echo $block->getChildHtml('order_comments') ?></div>
         </div>
     </div>
-</div>
+</section>

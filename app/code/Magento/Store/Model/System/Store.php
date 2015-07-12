@@ -5,10 +5,12 @@
  */
 namespace Magento\Store\Model\System;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Core System Store Model
  */
-class Store extends \Magento\Framework\Object
+class Store extends \Magento\Framework\Object implements OptionSourceInterface
 {
     /**
      * Website collection
@@ -457,5 +459,15 @@ class Store extends \Magento\Framework\Object
     {
         $this->_isAdminScopeAllowed = (bool)$value;
         return $this;
+    }
+
+    /**
+     * Return array of options as value-label pairs
+     *
+     * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
+     */
+    public function toOptionArray()
+    {
+        return $this->getStoreValuesForForm();
     }
 }

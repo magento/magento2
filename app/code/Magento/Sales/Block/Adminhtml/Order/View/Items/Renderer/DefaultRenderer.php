@@ -220,7 +220,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      */
     public function canDisplayGiftmessage()
     {
-        return $this->_messageHelper->getIsMessagesAvailable(
+        return $this->_messageHelper->isMessagesAllowed(
             'order_item',
             $this->getItem(),
             $this->getItem()->getOrder()->getStoreId()

@@ -10,7 +10,9 @@ namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Test class for \Magento\Quote\Model
@@ -131,6 +133,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $objectCopyServiceMock;
 
     /**
+     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesJoinProcessorMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -146,7 +153,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\Quote\Address',
             [
                 'isDeleted', 'getCollection', 'getId', 'getCustomerAddressId',
-                '__wakeup', 'getAddressType', 'getDeleteImmediately', 'validateMinimumAmount'
+                '__wakeup', 'getAddressType', 'getDeleteImmediately', 'validateMinimumAmount', 'setData'
             ],
             [],
             '',
@@ -259,6 +266,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+            'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 'Magento\Quote\Model\Quote',
@@ -279,7 +294,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'scopeConfig' => $this->scopeConfig,
                     'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
                     'customerRepository' => $this->customerRepositoryMock,
-                    'objectCopyService' => $this->objectCopyServiceMock
+                    'objectCopyService' => $this->objectCopyServiceMock,
+                    'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
                 ]
             );
     }
@@ -745,8 +761,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getAddressType')
             ->will($this->returnValue(\Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING));
         $this->quoteAddressMock->expects($this->any())
+            ->method('getAddressType')
+            ->will($this->returnValue(\Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING));
+        $this->quoteAddressMock->expects($this->any())
             ->method('isDeleted')
             ->will($this->returnValue(false));
+        $this->quoteAddressMock->expects($this->any())
+            ->method('setData')
+            ->will($this->returnSelf());
         $this->quoteAddressMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($id));
@@ -1039,5 +1061,139 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
 
         $this->quote->addItem($item);
+    }
+
+    /**
+     * @param array $productTypes
+     * @param int $expected
+     * @dataProvider dataProviderForTestBeforeSaveIsVirtualQuote
+     */
+    public function testBeforeSaveIsVirtualQuote(array $productTypes, $expected)
+    {
+        $storeId = 1;
+        $currencyMock = $this->getMockBuilder('Magento\Directory\Model\Currency')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currencyMock->expects($this->any())
+            ->method('getCode')
+            ->will($this->returnValue('test_code'));
+        $currencyMock->expects($this->any())
+            ->method('getRate')
+            ->will($this->returnValue('test_rate'));
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getBaseCurrency')
+            ->will($this->returnValue($currencyMock));
+        $storeMock->expects($this->once())
+            ->method('getCurrentCurrency')
+            ->will($this->returnValue($currencyMock));
+
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->with($storeId)
+            ->will($this->returnValue($storeMock));
+        $this->quote->setStoreId($storeId);
+
+        $collectionMock = $this->getMock(
+            'Magento\Quote\Model\Resource\Quote\Item\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+        $items = [];
+        foreach ($productTypes as $type) {
+            $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);;
+            $productMock->expects($this->any())->method('getIsVirtual')->willReturn($type);
+
+            $itemMock = $this->getMock(
+                'Magento\Quote\Model\Quote\Item',
+                ['isDeleted', 'getParentItemId', 'getProduct'],
+                [],
+                '',
+                false
+            );
+            $itemMock->expects($this->any())
+                ->method('isDeleted')
+                ->willReturn(false);
+            $itemMock->expects($this->any())
+                ->method('getParentItemId')
+                ->willReturn(false);
+            $itemMock->expects($this->any())
+                ->method('getProduct')
+                ->willReturn($productMock);
+            $items[] = $itemMock;
+        }
+        $iterator = new \ArrayIterator($items);
+        $collectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($collectionMock));
+
+        $this->quote->beforeSave();
+        $this->assertEquals($expected, $this->quote->getDataByKey(CartInterface::KEY_IS_VIRTUAL));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForTestBeforeSaveIsVirtualQuote()
+    {
+        return [
+            [[true], 1],
+            [[true, true], 1],
+            [[false], 0],
+            [[true, false], 0],
+            [[false, false], 0]
+        ];
+    }
+
+    public function testGetItemsCollection()
+    {
+        $itemCollectionMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['setQuote'])
+            ->getMock();
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($itemCollectionMock);
+
+        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->isInstanceOf('Magento\Quote\Model\Resource\Quote\Collection')
+            );
+        $itemCollectionMock->expects($this->once())->method('setQuote')->with($this->quote);
+
+        $this->quote->getItemsCollection();
+    }
+
+    public function testGetAllItems()
+    {
+        $itemOneMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Item')
+            ->setMethods(['isDeleted'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemOneMock->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(false);
+
+        $itemTwoMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Item')
+            ->setMethods(['isDeleted'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemTwoMock->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(true);
+
+        $items = [$itemOneMock, $itemTwoMock];
+        $itemResult = [$itemOneMock];
+        $this->quote->setData('items_collection', $items);
+
+        $this->assertEquals($itemResult, $this->quote->getAllItems());
     }
 }

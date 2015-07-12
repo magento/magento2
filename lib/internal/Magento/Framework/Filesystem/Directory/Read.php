@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Filesystem\Directory;
 
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 
 class Read implements ReadInterface
 {
@@ -146,7 +146,7 @@ class Read implements ReadInterface
      *
      * @param string $path [optional]
      * @return bool
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function isExist($path = null)
     {
@@ -158,7 +158,7 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @return array
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function stat($path)
     {
@@ -170,7 +170,7 @@ class Read implements ReadInterface
      *
      * @param string $path [optional]
      * @return bool
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function isReadable($path = null)
     {
@@ -199,7 +199,7 @@ class Read implements ReadInterface
      * @param string|null $flag
      * @param resource|null $context
      * @return string
-     * @throws FilesystemException
+     * @throws FileSystemException
      */
     public function readFile($path, $flag = null, $context = null)
     {

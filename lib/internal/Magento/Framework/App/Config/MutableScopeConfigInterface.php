@@ -8,6 +8,9 @@
 
 namespace Magento\Framework\App\Config;
 
+/**
+ * @api
+ */
 interface MutableScopeConfigInterface extends \Magento\Framework\App\Config\ScopeConfigInterface
 {
     /**
@@ -15,14 +18,14 @@ interface MutableScopeConfigInterface extends \Magento\Framework\App\Config\Scop
      *
      * @param string $path
      * @param mixed $value
-     * @param string $scope
+     * @param string $scopeType
      * @param null|string $scopeCode
      * @return void
      */
     public function setValue(
         $path,
         $value,
-        $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+        $scopeType = \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeCode = null
     );
 }

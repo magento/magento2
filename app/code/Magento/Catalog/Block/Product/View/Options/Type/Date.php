@@ -189,7 +189,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         )->setId(
             'options_' . $this->getOption()->getId() . '_' . $name
         )->setClass(
-            'product-custom-option datetime-picker' . $require
+            'product-custom-option admin__control-select datetime-picker' . $require
         )->setExtraParams()->setName(
             'options[' . $option->getId() . '][' . $name . ']'
         );

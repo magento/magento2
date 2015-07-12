@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
@@ -58,7 +58,7 @@ class Plugin
      * @param \Magento\Framework\App\ActionInterface $subject
      * @param RequestInterface $request
      * @return void
-     * @throws \Magento\Framework\App\Action\NotFoundException
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function beforeDispatch(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
     {
@@ -70,7 +70,7 @@ class Plugin
             $this->customerSession->setBeforeWishlistRequest($request->getParams());
         }
         if (!$this->config->isSetFlag('wishlist/general/active')) {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found.'));
         }
     }
 }

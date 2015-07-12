@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Component\Form\Element\DataType;
 
-use Magento\Framework\Object;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
@@ -19,11 +18,4 @@ interface DataTypeInterface extends UiComponentInterface
      * @return bool
      */
     public function validate();
-
-    /**
-     * Get data object value
-     *
-     * @return mixed
-     */
-    public function getDataObjectValue();
 }

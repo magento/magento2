@@ -44,7 +44,7 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
             array_unshift($options, ['value' => '', 'label' => '']);
         }
         $html = sprintf(
-            '<select name="%s" id="%s" class="no-changes" %s>%s</select>',
+            '<select name="%s" id="%s" class="admin__control-select no-changes" %s>%s</select>',
             $this->_getHtmlName(),
             $this->_getHtmlId(),
             $this->getUiId('filter', $this->_getHtmlName()),

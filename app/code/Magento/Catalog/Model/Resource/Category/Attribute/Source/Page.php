@@ -15,16 +15,16 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * Block collection factory
      *
-     * @var \Magento\Cms\Model\Resource\Block\Grid\CollectionFactory
+     * @var \Magento\Cms\Model\Resource\Block\CollectionFactory
      */
     protected $_blockCollectionFactory;
 
     /**
      * Construct
      *
-     * @param \Magento\Cms\Model\Resource\Block\Grid\CollectionFactory $blockCollectionFactory
+     * @param \Magento\Cms\Model\Resource\Block\CollectionFactory $blockCollectionFactory
      */
-    public function __construct(\Magento\Cms\Model\Resource\Block\Grid\CollectionFactory $blockCollectionFactory)
+    public function __construct(\Magento\Cms\Model\Resource\Block\CollectionFactory $blockCollectionFactory)
     {
         $this->_blockCollectionFactory = $blockCollectionFactory;
     }

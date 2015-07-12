@@ -12,6 +12,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Api\Data\TaxClassInterfaceFactory;
+use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\ClassModelRegistry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -171,9 +172,9 @@ class TaxClassRepositoryTest extends WebapiAbstract
         ];
         $requestData = ['taxClassId' => $taxClassId];
         $taxClassData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($taxClassData[Data\TaxClassInterface::KEY_NAME], $taxClassName);
+        $this->assertEquals($taxClassData[ClassModel::KEY_NAME], $taxClassName);
         $this->assertEquals(
-            $taxClassData[Data\TaxClassInterface::KEY_TYPE],
+            $taxClassData[ClassModel::KEY_TYPE],
             TaxClassManagementInterface::TYPE_CUSTOMER
         );
     }
@@ -220,11 +221,11 @@ class TaxClassRepositoryTest extends WebapiAbstract
     public function testSearchTaxClass()
     {
         $taxClassName = 'Retail Customer';
-        $taxClassNameField = Data\TaxClassInterface::KEY_NAME;
+        $taxClassNameField = ClassModel::KEY_NAME;
         $filter = $this->filterBuilder->setField($taxClassNameField)
             ->setValue($taxClassName)
             ->create();
-        $this->searchCriteriaBuilder->addFilter([$filter]);
+        $this->searchCriteriaBuilder->addFilters([$filter]);
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
@@ -249,31 +250,31 @@ class TaxClassRepositoryTest extends WebapiAbstract
     public function testSearchTaxClassMultipleFilterGroups()
     {
         $productTaxClass = [
-            Data\TaxClassInterface::KEY_NAME => 'Taxable Goods',
-            Data\TaxClassInterface::KEY_TYPE => 'PRODUCT',
+            ClassModel::KEY_NAME => 'Taxable Goods',
+            ClassModel::KEY_TYPE => 'PRODUCT',
         ];
-        $customerTaxClass = [Data\TaxClassInterface::KEY_NAME => 'Retail Customer',
-            Data\TaxClassInterface::KEY_TYPE => 'CUSTOMER', ];
+        $customerTaxClass = [ClassModel::KEY_NAME => 'Retail Customer',
+            ClassModel::KEY_TYPE => 'CUSTOMER', ];
 
-        $filter1 = $this->filterBuilder->setField(Data\TaxClassInterface::KEY_NAME)
-            ->setValue($productTaxClass[Data\TaxClassInterface::KEY_NAME])
+        $filter1 = $this->filterBuilder->setField(ClassModel::KEY_NAME)
+            ->setValue($productTaxClass[ClassModel::KEY_NAME])
             ->create();
-        $filter2 = $this->filterBuilder->setField(Data\TaxClassInterface::KEY_NAME)
-            ->setValue($customerTaxClass[Data\TaxClassInterface::KEY_NAME])
+        $filter2 = $this->filterBuilder->setField(ClassModel::KEY_NAME)
+            ->setValue($customerTaxClass[ClassModel::KEY_NAME])
             ->create();
-        $filter3 = $this->filterBuilder->setField(Data\TaxClassInterface::KEY_TYPE)
-            ->setValue($productTaxClass[Data\TaxClassInterface::KEY_TYPE])
+        $filter3 = $this->filterBuilder->setField(ClassModel::KEY_TYPE)
+            ->setValue($productTaxClass[ClassModel::KEY_TYPE])
             ->create();
-        $filter4 = $this->filterBuilder->setField(Data\TaxClassInterface::KEY_TYPE)
-            ->setValue($customerTaxClass[Data\TaxClassInterface::KEY_TYPE])
+        $filter4 = $this->filterBuilder->setField(ClassModel::KEY_TYPE)
+            ->setValue($customerTaxClass[ClassModel::KEY_TYPE])
             ->create();
 
         /**
          * (class_name == 'Retail Customer' || class_name == 'Taxable Goods)
          * && ( class_type == 'CUSTOMER' || class_type == 'PRODUCT')
          */
-        $this->searchCriteriaBuilder->addFilter([$filter1, $filter2]);
-        $this->searchCriteriaBuilder->addFilter([$filter3, $filter4]);
+        $this->searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $this->searchCriteriaBuilder->addFilters([$filter3, $filter4]);
         $searchCriteria = $this->searchCriteriaBuilder->setCurrentPage(1)->setPageSize(10)->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -291,17 +292,17 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(2, $searchResults['total_count']);
         $this->assertEquals(
-            $productTaxClass[Data\TaxClassInterface::KEY_NAME],
-            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]
+            $productTaxClass[ClassModel::KEY_NAME],
+            $searchResults['items'][0][ClassModel::KEY_NAME]
         );
         $this->assertEquals(
-            $customerTaxClass[Data\TaxClassInterface::KEY_NAME],
-            $searchResults['items'][1][Data\TaxClassInterface::KEY_NAME]
+            $customerTaxClass[ClassModel::KEY_NAME],
+            $searchResults['items'][1][ClassModel::KEY_NAME]
         );
 
         /** class_name == 'Retail Customer' && ( class_type == 'CUSTOMER' || class_type == 'PRODUCT') */
-        $this->searchCriteriaBuilder->addFilter([$filter2]);
-        $this->searchCriteriaBuilder->addFilter([$filter3, $filter4]);
+        $this->searchCriteriaBuilder->addFilters([$filter2]);
+        $this->searchCriteriaBuilder->addFilters([$filter3, $filter4]);
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -309,8 +310,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResults['total_count']);
         $this->assertEquals(
-            $customerTaxClass[Data\TaxClassInterface::KEY_NAME],
-            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]
+            $customerTaxClass[ClassModel::KEY_NAME],
+            $searchResults['items'][0][ClassModel::KEY_NAME]
         );
     }
 }

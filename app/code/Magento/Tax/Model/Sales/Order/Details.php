@@ -13,6 +13,13 @@ namespace Magento\Tax\Model\Sales\Order;
 class Details extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\OrderTaxDetailsInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_APPLIED_TAXES = 'applied_taxes';
+    const KEY_ITEMS         = 'items';
+    /**#@-*/
+
     /**
      * {@inheritdoc}
      */

@@ -8,7 +8,7 @@ namespace Magento\Indexer\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class IndexerTest extends \Magento\Backend\Utility\Controller
+class IndexerTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Assert that current page is index management page and that it has indexers mode selector

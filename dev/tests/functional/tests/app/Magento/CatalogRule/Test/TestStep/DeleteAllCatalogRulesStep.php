@@ -51,9 +51,11 @@ class DeleteAllCatalogRulesStep implements TestStepInterface
     public function run()
     {
         $this->catalogRuleIndex->open();
+        $this->catalogRuleIndex->getCatalogRuleGrid()->resetFilter();
         while ($this->catalogRuleIndex->getCatalogRuleGrid()->isFirstRowVisible()) {
             $this->catalogRuleIndex->getCatalogRuleGrid()->openFirstRow();
             $this->catalogRuleNew->getFormPageActions()->delete();
+            $this->catalogRuleIndex->getSystemMessageDialog()->closePopup();
         }
     }
 }

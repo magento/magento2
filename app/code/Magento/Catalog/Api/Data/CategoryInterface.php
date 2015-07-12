@@ -8,6 +8,9 @@
 
 namespace Magento\Catalog\Api\Data;
 
+/**
+ * @api
+ */
 interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**
@@ -105,6 +108,12 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * @return string|null
      */
     public function getCreatedAt();
+
+    /**
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
 
     /**
      * @return string|null

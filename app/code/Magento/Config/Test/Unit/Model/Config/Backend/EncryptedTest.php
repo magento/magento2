@@ -87,37 +87,24 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\Config\Model\Config\Backend\Encrypted::beforeSave
      * @dataProvider beforeSaveDataProvider
      *
-     * @param $value
-     * @param $valueToSave
+     * @param string $value
+     * @param string $expectedValue
+     * @param int $encryptMethodCall
      */
-    public function testBeforeSave($value, $valueToSave)
+    public function testBeforeSave($value, $expectedValue, $encryptMethodCall)
     {
         $this->_resourceMock->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
         $this->_resourceMock->expects($this->any())->method('commit')->will($this->returnSelf());
-
-        $this->_configMock->expects(
-            $this->any()
-        )->method(
-            'getValue'
-        )->with(
-            'some/path'
-        )->will(
-            $this->returnValue('oldValue')
-        );
-        $this->_encryptorMock->expects(
-            $this->once()
-        )->method(
-            'encrypt'
-        )->with(
-            $valueToSave
-        )->will(
-            $this->returnValue('encrypted')
-        );
+        $this->_encryptorMock->expects($this->exactly($encryptMethodCall))
+            ->method('encrypt')
+            ->with($value)
+            ->will($this->returnValue('encrypted'));
 
         $this->_model->setValue($value);
         $this->_model->setPath('some/path');
         $this->_model->beforeSave();
-        $this->assertEquals($this->_model->getValue(), 'encrypted');
+
+        $this->assertEquals($expectedValue, $this->_model->getValue());
     }
 
     /**
@@ -125,6 +112,6 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
      */
     public function beforeSaveDataProvider()
     {
-        return [['****', 'oldValue'], ['newValue', 'newValue']];
+        return [['someValue', 'encrypted', 1], ['****', '****', 0]];
     }
 }

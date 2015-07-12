@@ -46,7 +46,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Helper\Data::getCaptcha
+     * @covers \Magento\Captcha\Helper\Data::getCaptcha
      */
     public function testGetCaptcha()
     {
@@ -71,7 +71,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 new \Magento\Captcha\Model\DefaultModel(
                     $this->getMock('Magento\Framework\Session\SessionManager', [], [], '', false),
                     $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false),
-                    $this->getMock('Magento\Captcha\Model\Resource\LogFactory', [], [], '', false),
+                    $this->getMock('Magento\Captcha\Model\Resource\LogFactory', ['create'], [], '', false),
                     'user_create'
                 )
             )
@@ -81,7 +81,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Helper\Data::getConfig
+     * @covers \Magento\Captcha\Helper\Data::getConfig
      */
     public function testGetConfigNode()
     {
@@ -137,8 +137,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::getImgDir
-     * covers \Magento\Captcha\Helper\Data::getImgDir
+     * @covers \Magento\Captcha\Model\DefaultModel::getImgDir
+     * @covers \Magento\Captcha\Helper\Data::getImgDir
      */
     public function testGetImgDir()
     {
@@ -177,8 +177,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Captcha\Model\DefaultModel::getImgUrl
-     * covers \Magento\Captcha\Helper\Data::getImgUrl
+     * @covers \Magento\Captcha\Model\DefaultModel::getImgUrl
+     * @covers \Magento\Captcha\Helper\Data::getImgUrl
      */
     public function testGetImgUrl()
     {

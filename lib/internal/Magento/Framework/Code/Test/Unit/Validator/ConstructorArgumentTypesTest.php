@@ -60,7 +60,7 @@ class ConstructorArgumentTypesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Code\ValidationException
+     * @expectedException \Magento\Framework\Exception\ValidatorException
      * @expectedExceptionMessage Invalid constructor argument(s) in \stdClass
      */
     public function testValidateWithException()

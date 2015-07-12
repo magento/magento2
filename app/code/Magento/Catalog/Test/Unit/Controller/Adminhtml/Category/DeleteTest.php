@@ -98,6 +98,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())
             ->method('getAuth')
             ->will($this->returnValue($auth));
+        $context->expects($this->once())->method('getResultRedirectFactory')->willReturn($resultRedirectFactory);
         $auth->expects($this->any())
             ->method('getAuthStorage')
             ->will($this->returnValue($this->authStorage));
@@ -109,7 +110,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Controller\Adminhtml\Category\Delete',
             [
                 'context' => $context,
-                'resultRedirectFactory' => $resultRedirectFactory,
                 'categoryRepository' => $this->categoryRepository
             ]
         );

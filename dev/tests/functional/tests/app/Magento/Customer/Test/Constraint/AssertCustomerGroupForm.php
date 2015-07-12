@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupNew;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -34,15 +34,15 @@ class AssertCustomerGroupForm extends AbstractConstraint
      *
      * @param CustomerGroupIndex $customerGroupIndex
      * @param CustomerGroupNew $customerGroupNew
-     * @param CustomerGroupInjectable $customerGroup
-     * @param CustomerGroupInjectable $customerGroupOriginal
+     * @param CustomerGroup $customerGroup
+     * @param CustomerGroup $customerGroupOriginal
      * @return void
      */
     public function processAssert(
         CustomerGroupIndex $customerGroupIndex,
         CustomerGroupNew $customerGroupNew,
-        CustomerGroupInjectable $customerGroup,
-        CustomerGroupInjectable $customerGroupOriginal = null
+        CustomerGroup $customerGroup,
+        CustomerGroup $customerGroupOriginal = null
     ) {
         $data = ($customerGroupOriginal !== null)
             ? array_merge($customerGroupOriginal->getData(), $customerGroup->getData())

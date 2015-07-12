@@ -11,7 +11,6 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -82,7 +81,6 @@ class CreatePost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
@@ -106,7 +104,6 @@ class CreatePost extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
-        RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
@@ -144,7 +141,6 @@ class CreatePost extends \Magento\Customer\Controller\Account
         parent::__construct(
             $context,
             $customerSession,
-            $resultRedirectFactory,
             $resultPageFactory
         );
     }
@@ -253,7 +249,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
                 // @codingStandardsIgnoreStart
                 $this->messageManager->addSuccess(
                     __(
-                        'Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href="%1">click here</a>.',
+                        'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
                         $email
                     )
                 );
@@ -281,7 +277,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
                 $this->messageManager->addError($this->escaper->escapeHtml($error->getMessage()));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Cannot save the customer.'));
+            $this->messageManager->addException($e, __('We can\'t save the customer.'));
         }
 
         $this->_getSession()->setCustomerFormData($this->getRequest()->getPostValue());
@@ -316,14 +312,14 @@ class CreatePost extends \Magento\Customer\Controller\Account
             if ($this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING) {
                 // @codingStandardsIgnoreStart
                 $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter you shipping address for proper VAT calculation',
+                    'If you are a registered VAT customer, please <a href="%1">click here</a> to enter your shipping address for proper VAT calculation.',
                     $this->urlModel->getUrl('customer/address/edit')
                 );
                 // @codingStandardsIgnoreEnd
             } else {
                 // @codingStandardsIgnoreStart
                 $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter you billing address for proper VAT calculation',
+                    'If you are a registered VAT customer, please <a href="%1">click here</a> to enter your billing address for proper VAT calculation.',
                     $this->urlModel->getUrl('customer/address/edit')
                 );
                 // @codingStandardsIgnoreEnd

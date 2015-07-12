@@ -16,6 +16,16 @@ use Magento\Framework\Escaper;
 class Textarea extends AbstractElement
 {
     /**
+     * Default number of rows
+     */
+    const DEFAULT_ROWS = 2;
+
+    /**
+     * Default number of columns
+     */
+    const DEFAULT_COLS = 15;
+
+    /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
@@ -30,8 +40,12 @@ class Textarea extends AbstractElement
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('textarea');
         $this->setExtType('textarea');
-        $this->setRows(2);
-        $this->setCols(15);
+        if (!$this->getRows()) {
+            $this->setRows(self::DEFAULT_ROWS);
+        }
+        if (!$this->getCols()) {
+            $this->setCols(self::DEFAULT_COLS);
+        }
     }
 
     /**
@@ -53,7 +67,9 @@ class Textarea extends AbstractElement
             'disabled',
             'onkeyup',
             'tabindex',
-            'data-form-part'
+            'data-form-part',
+            'data-role',
+            'data-action'
         ];
     }
 
@@ -65,9 +81,8 @@ class Textarea extends AbstractElement
     public function getElementHtml()
     {
         $this->addClass('textarea');
-        $html = '<textarea id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" ' . $this->serialize(
-            $this->getHtmlAttributes()
-        ) . $this->_getUiId() . ' >';
+        $html = '<textarea id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" '
+            . $this->serialize($this->getHtmlAttributes()) . $this->_getUiId() . ' >';
         $html .= $this->getEscapedValue();
         $html .= "</textarea>";
         $html .= $this->getAfterElementHtml();

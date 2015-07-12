@@ -5,32 +5,18 @@
  */
 namespace Magento\Persistent\Controller;
 
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Persistent\Model\QuoteManager;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Persistent\Helper\Session as SessionHelper;
+
 /**
  * Persistent front controller
  */
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends Action
 {
-    /**
-     * Whether clear checkout session when logout
-     *
-     * @var bool
-     */
-    protected $_clearCheckoutSession = true;
-
-    /**
-     * Customer session
-     *
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $_customerSession;
-
-    /**
-     * Checkout session
-     *
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $_checkoutSession;
-
     /**
      * Persistent observer
      *
@@ -39,20 +25,49 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $quoteManager;
 
     /**
+     * Checkout session
+     *
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
+     * Customer session
+     *
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
+
+    /**
+     * @var \Magento\Persistent\Helper\Session
+     */
+    protected $sessionHelper;
+
+    /**
+     * Whether clear checkout session when logout
+     *
+     * @var bool
+     */
+    protected $clearCheckoutSession = true;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Persistent\Helper\Session $sessionHelper
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Persistent\Model\QuoteManager $quoteManager,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession
+        Context $context,
+        QuoteManager $quoteManager,
+        CheckoutSession $checkoutSession,
+        CustomerSession $customerSession,
+        SessionHelper $sessionHelper
     ) {
         $this->quoteManager = $quoteManager;
-        $this->_checkoutSession = $checkoutSession;
-        $this->_customerSession = $customerSession;
+        $this->checkoutSession = $checkoutSession;
+        $this->customerSession = $customerSession;
+        $this->sessionHelper = $sessionHelper;
         parent::__construct($context);
     }
 
@@ -64,17 +79,7 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function setClearCheckoutSession($clear = true)
     {
-        $this->_clearCheckoutSession = $clear;
+        $this->clearCheckoutSession = $clear;
         return $this;
-    }
-
-    /**
-     * Retrieve 'persistent session' helper instance
-     *
-     * @return \Magento\Persistent\Helper\Session
-     */
-    protected function _getHelper()
-    {
-        return $this->_objectManager->get('Magento\Persistent\Helper\Session');
     }
 }

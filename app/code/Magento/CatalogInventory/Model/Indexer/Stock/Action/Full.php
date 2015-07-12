@@ -19,16 +19,18 @@ class Full extends \Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction
      * Execute Full reindex
      *
      * @param null|array $ids
-     * @throws \Magento\CatalogInventory\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($ids = null)
     {
         try {
             $this->reindexAll();
         } catch (\Exception $e) {
-            throw new \Magento\CatalogInventory\Exception($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 }

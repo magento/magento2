@@ -19,7 +19,7 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Eav\Exception as EavException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\AttributeValueFactory;
 
@@ -82,7 +82,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute $resourceAttribute
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -96,7 +96,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute $resourceAttribute,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -255,17 +255,17 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Validate attribute set name
      *
      * @return bool
-     * @throws EavException
+     * @throws LocalizedException
      */
     public function validate()
     {
         $attributeSetName = $this->getAttributeSetName();
         if ($attributeSetName == '') {
-            throw new EavException(__('Attribute set name is empty.'));
+            throw new LocalizedException(__('Attribute set name is empty.'));
         }
 
         if (!$this->_getResource()->validate($this, $attributeSetName)) {
-            throw new EavException(__('An attribute set with the "%1" name already exists.', $attributeSetName));
+            throw new LocalizedException(__('An attribute set named "%1" already exists.', $attributeSetName));
         }
 
         return true;

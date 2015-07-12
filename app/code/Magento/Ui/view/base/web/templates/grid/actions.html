@@ -1,0 +1,29 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="col-xs-2">
+    <div
+        class="action-select-wrap"
+        data-bind="css: {'_active': opened},
+           click: toggleOpened,
+           outerClick: close">
+        <button
+            class="action-select"
+            data-bind="title: $t('Select Items')">
+            <span data-bind="text: $t('Actions')"></span>
+        </button>
+        <ul
+            class="action-menu"
+            data-bind="css: {'_active': opened},
+                       foreach: actions">
+            <li data-bind="click: $parent.applyAction.bind($parent, type)">
+            <span
+                class="action-menu-item"
+                data-bind="text: label"></span>
+            </li>
+        </ul>
+    </div>
+</div>

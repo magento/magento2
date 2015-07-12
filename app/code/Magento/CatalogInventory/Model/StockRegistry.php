@@ -15,6 +15,8 @@ use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 
 /**
  * Class StockRegistry
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockRegistry implements StockRegistryInterface
 {
@@ -170,7 +172,7 @@ class StockRegistry implements StockRegistryInterface
         $criteria = $this->criteriaFactory->create();
         $criteria->setLimit($currentPage, $pageSize);
         $criteria->setWebsiteFilter($websiteId);
-        $criteria->setQtyFilter('>=', $qty);
+        $criteria->setQtyFilter('<=', $qty);
         $criteria->addField('qty');
         return $this->stockItemRepository->getList($criteria);
     }
@@ -185,9 +187,7 @@ class StockRegistry implements StockRegistryInterface
         $origStockItem = $this->getStockItem($productId, $websiteId);
         $data = $stockItem->getData();
         if ($origStockItem->getItemId()) {
-            if (isset($data['item_id'])) {
-                unset($data['item_id']);
-            }
+            unset($data['item_id']);
         }
         $origStockItem->addData($data);
         $origStockItem->setProductId($productId);

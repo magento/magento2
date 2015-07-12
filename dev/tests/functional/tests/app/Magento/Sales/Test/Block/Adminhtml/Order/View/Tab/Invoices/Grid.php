@@ -24,7 +24,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
-    protected $invoiceId = 'td[data-column="increment_id"]';
+    protected $invoiceId = 'tbody td[data-column="increment_id"]';
 
     /**
      * Filters array mapping

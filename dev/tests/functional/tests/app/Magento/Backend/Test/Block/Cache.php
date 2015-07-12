@@ -8,38 +8,35 @@ namespace Magento\Backend\Test\Block;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Factory\Factory;
 
 /**
- * Class Actions
- * Cache actions block
- *
+ * Cache actions block.
  */
 class Cache extends Block
 {
     /**
-     * 'Flush Magento Cache' button
+     * 'Flush Magento Cache' button.
      *
      * @var string
      */
     protected $flushMagentoCacheButton = '[data-ui-id="adminhtml-cache-container-flush-magento-button"]';
 
     /**
-     * 'Flush Cache Storage' button
+     * 'Flush Cache Storage' button.
      *
      * @var string
      */
     protected $flushCacheStorageButton = '[data-ui-id="adminhtml-cache-container-flush-system-button"]';
 
     /**
-     * Selector for messages block
+     * Selector for messages block.
      *
      * @var string
      */
     protected $messagesSelector = '//ancestor::div//div[@id="messages"]';
 
     /**
-     * Messages texts
+     * Messages texts.
      *
      * @var array
      */
@@ -49,7 +46,7 @@ class Cache extends Block
     ];
 
     /**
-     * Flush magento cache
+     * Flush magento cache.
      */
     public function flushMagentoCache()
     {
@@ -57,7 +54,7 @@ class Cache extends Block
     }
 
     /**
-     * Flush cache storage
+     * Flush cache storage.
      */
     public function flushCacheStorage()
     {
@@ -66,7 +63,7 @@ class Cache extends Block
     }
 
     /**
-     * Is storage cache flushed successfully
+     * Is storage cache flushed successfully.
      *
      * @return bool
      */
@@ -76,7 +73,7 @@ class Cache extends Block
     }
 
     /**
-     * Is magento cache flushed successfully
+     * Is magento cache flushed successfully.
      *
      * @return bool
      */
@@ -86,14 +83,15 @@ class Cache extends Block
     }
 
     /**
-     * Get messages block
+     * Get messages block.
      *
-     * @return \Magento\Core\Test\Block\Messages
+     * @return \Magento\Backend\Test\Block\Messages
      */
     protected function getMessagesBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCoreMessages(
-            $this->_rootElement->find($this->messagesSelector, Locator::SELECTOR_XPATH)
+        return $this->blockFactory->create(
+            'Magento\Backend\Test\Block\Messages',
+            ['element' => $this->_rootElement->find($this->messagesSelector, Locator::SELECTOR_XPATH)]
         );
     }
 }

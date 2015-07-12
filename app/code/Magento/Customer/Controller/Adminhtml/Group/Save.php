@@ -23,7 +23,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      * @param \Magento\Framework\Registry $coreRegistry
      * @param GroupRepositoryInterface $groupRepository
      * @param GroupInterfaceFactory $groupDataFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
@@ -33,7 +32,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
         \Magento\Framework\Registry $coreRegistry,
         GroupRepositoryInterface $groupRepository,
         GroupInterfaceFactory $groupDataFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
@@ -44,7 +42,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
             $coreRegistry,
             $groupRepository,
             $groupDataFactory,
-            $resultRedirectFactory,
             $resultForwardFactory,
             $resultPageFactory
         );
@@ -94,7 +91,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
 
                 $this->groupRepository->save($customerGroup);
 
-                $this->messageManager->addSuccess(__('The customer group has been saved.'));
+                $this->messageManager->addSuccess(__('You saved the customer group.'));
                 $resultRedirect->setPath('customer/group');
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());

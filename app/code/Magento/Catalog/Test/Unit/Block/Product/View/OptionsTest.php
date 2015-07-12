@@ -59,7 +59,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
         $optValFactoryMock = $this->getMock(
             'Magento\Catalog\Model\Product\Option\ValueFactory',
-            [],
+            ['create'],
             [],
             '',
             false

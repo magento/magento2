@@ -33,6 +33,7 @@ class UpdateConfigurableProductEntityTest extends Scenario
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'MX';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

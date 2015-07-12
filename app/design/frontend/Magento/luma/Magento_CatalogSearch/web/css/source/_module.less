@@ -126,9 +126,6 @@
             }
             &:last-child {
                 position: relative;
-                input {
-                    width: 90%;
-                }
                 div.mage-error[generated] {
                     position: absolute;
                     top: 32px;
@@ -139,6 +136,9 @@
                 .control {
                     padding-right: 45px;
                 }
+            }
+            &.date {
+                &:extend(.abs-field-date all);
             }
         }
     }

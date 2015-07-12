@@ -14,15 +14,15 @@ $_class = $_element->getFieldsetHtmlClass();
 $_validateButton = $block->getValidateButton();
 ?>
 <?php if (!$_element->getNoDisplay()): ?>
-<div class="field field-vat-number">
+<div class="admin__field field-vat-number">
     <?php if ($_element->getType() == 'hidden'): ?>
     <div class="hidden"><?php echo $_element->getElementHtml(); ?></div>
     <?php else: ?>
     <?php echo $_element->getLabelHtml(); ?>
-    <div class="control <?php echo $_element->hasValueClass() ? $_element->getValueClass() : 'value'; ?><?php echo $_class ? " {$_class}-value" : ''; ?>">
+    <div class="admin__field-control <?php echo $_element->hasValueClass() ? $_element->getValueClass() : 'value'; ?><?php echo $_class ? " {$_class}-value" : ''; ?>">
         <?php echo $_element->getElementHtml(); ?>
         <?php if ($_note): ?>
-            <div class="note<?php echo $_class ? " {$_class}-note" : ''; ?>" id="note_<?php echo $_element->getId(); ?>">
+            <div class="admin__field-note<?php echo $_class ? " {$_class}-note" : ''; ?>" id="note_<?php echo $_element->getId(); ?>">
                 <span><?php echo $_note; ?></span>
             </div>
         <?php endif; ?>

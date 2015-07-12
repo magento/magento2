@@ -17,11 +17,11 @@ class AdminAccount
     /**#@+
      * Data keys
      */
-    const KEY_USERNAME = 'admin_username';
-    const KEY_PASSWORD = 'admin_password';
-    const KEY_EMAIL = 'admin_email';
-    const KEY_FIRST_NAME = 'admin_firstname';
-    const KEY_LAST_NAME = 'admin_lastname';
+    const KEY_USER = 'admin-user';
+    const KEY_PASSWORD = 'admin-password';
+    const KEY_EMAIL = 'admin-email';
+    const KEY_FIRST_NAME = 'admin-firstname';
+    const KEY_LAST_NAME = 'admin-lastname';
     /**#@- */
 
     /**
@@ -102,7 +102,7 @@ class AdminAccount
         $result = $this->setup->getConnection()->fetchRow(
             'SELECT user_id, username, email FROM ' . $this->setup->getTable('admin_user') . ' ' .
             'WHERE username = :username OR email = :email',
-            ['username' => $this->data[self::KEY_USERNAME], 'email' => $this->data[self::KEY_EMAIL]]
+            ['username' => $this->data[self::KEY_USER], 'email' => $this->data[self::KEY_EMAIL]]
         );
 
         if (!empty($result)) {
@@ -113,11 +113,11 @@ class AdminAccount
             $this->setup->getConnection()->update(
                 $this->setup->getTable('admin_user'),
                 $adminData,
-                $this->setup->getConnection()->quoteInto('username = ?', $this->data[self::KEY_USERNAME])
+                $this->setup->getConnection()->quoteInto('username = ?', $this->data[self::KEY_USER])
             );
         } else {
             // User does not exist, create it
-            $adminData['username'] = $this->data[self::KEY_USERNAME];
+            $adminData['username'] = $this->data[self::KEY_USER];
             $adminData['email'] = $this->data[self::KEY_EMAIL];
             $adminData['extra'] = serialize(null);
             $this->setup->getConnection()->insert(
@@ -140,18 +140,18 @@ class AdminAccount
     private function validateUserMatches($username, $email)
     {
         if ((strcasecmp($email, $this->data[self::KEY_EMAIL]) == 0) &&
-            (strcasecmp($username, $this->data[self::KEY_USERNAME]) != 0)) {
+            (strcasecmp($username, $this->data[self::KEY_USER]) != 0)) {
             // email matched but username did not
             throw new \Exception(
-                'An existing user has the given email but different username. ' . self::KEY_USERNAME .
+                'An existing user has the given email but different username. ' . self::KEY_USER .
                 ' and ' . self::KEY_EMAIL . ' both need to match an existing user or both be new.'
             );
         }
-        if ((strcasecmp($username, $this->data[self::KEY_USERNAME]) == 0) &&
+        if ((strcasecmp($username, $this->data[self::KEY_USER]) == 0) &&
             (strcasecmp($email, $this->data[self::KEY_EMAIL]) != 0)) {
             // username matched but email did not
             throw new \Exception(
-                'An existing user has the given username but different email. ' . self::KEY_USERNAME .
+                'An existing user has the given username but different email. ' . self::KEY_USER .
                 ' and ' . self::KEY_EMAIL . ' both need to match an existing user or both be new.'
             );
         }
@@ -180,7 +180,7 @@ class AdminAccount
                 'role_type'  => User::ROLE_TYPE,
                 'user_id'    => $adminId,
                 'user_type'  => UserContextInterface::USER_TYPE_ADMIN,
-                'role_name'  => $this->data[self::KEY_USERNAME],
+                'role_name'  => $this->data[self::KEY_USER],
             ];
             $this->setup->getConnection()->insert($this->setup->getTable('authorization_role'), $adminRoleData);
         }

@@ -26,7 +26,7 @@ class Resolver extends \Magento\Framework\Locale\Resolver
     protected $_request;
 
     /**
-     * @var \Magento\Framework\Locale\Validator
+     * @var \Magento\Framework\Validator\Locale
      */
     protected $_localeValidator;
 
@@ -37,7 +37,7 @@ class Resolver extends \Magento\Framework\Locale\Resolver
      * @param \Magento\Backend\Model\Session $session
      * @param Manager $localeManager
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Locale\Validator $localeValidator
+     * @param \Magento\Framework\Validator\Locale $localeValidator
      * @param null $locale
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -48,7 +48,7 @@ class Resolver extends \Magento\Framework\Locale\Resolver
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Locale\Manager $localeManager,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Locale\Validator $localeValidator,
+        \Magento\Framework\Validator\Locale $localeValidator,
         $locale = null
     ) {
         $this->_session = $session;

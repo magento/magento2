@@ -31,6 +31,7 @@
     <php>
         <includePath>./testsuite</includePath>
         <const name="TESTS_INSTALL_CONFIG_FILE" value="config/install-config-mysql.php"/>
+        <const name="TESTS_GLOBAL_CONFIG_FILE" value="config/config-global.php"/>
         <!-- WebSerivice Type. Possible values: soap, rest -->
         <const name="TESTS_WEB_API_ADAPTER" value="rest"/>
         <!-- Webserver URL -->

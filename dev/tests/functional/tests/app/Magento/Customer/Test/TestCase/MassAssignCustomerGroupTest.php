@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Mtf\TestCase\Injectable;
@@ -81,10 +81,10 @@ class MassAssignCustomerGroupTest extends Injectable
      * Mass assign customer group
      *
      * @param Customer $customer
-     * @param CustomerGroupInjectable $customerGroup
+     * @param CustomerGroup $customerGroup
      * @return void
      */
-    public function test(Customer $customer, CustomerGroupInjectable $customerGroup)
+    public function test(Customer $customer, CustomerGroup $customerGroup)
     {
         // Steps
         $customerGroup->persist();

@@ -21,7 +21,7 @@
             <?php foreach ($_specificInfo as $_label => $_value):?>
                 <tr>
                     <th scope="row"><?php echo $block->escapeHtml($_label)?></th>
-                    <td><?php echo nl2br(implode($block->getValueAsArray($_value, true), "\n"))?></td>
+                    <td><?php echo nl2br(implode("\n", $block->getValueAsArray($_value, true)))?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

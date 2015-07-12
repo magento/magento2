@@ -7,6 +7,7 @@
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Ajax;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Controller\ResultFactory;
 
 class SuggestTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,9 +16,6 @@ class SuggestTest extends \PHPUnit_Framework_TestCase
 
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
-
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $response;
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $request;
@@ -31,6 +29,21 @@ class SuggestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Search\Model\AutocompleteInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $autocomplete;
 
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultJsonMock;
+
     protected function setUp()
     {
         $this->autocomplete = $this->getMockBuilder('Magento\Search\Model\AutocompleteInterface')
@@ -41,27 +54,41 @@ class SuggestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $this->response = $this->getMockBuilder('\Magento\Framework\App\ResponseInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['representJson', 'setRedirect'])
-            ->getMockForAbstractClass();
         $this->url = $this->getMockBuilder('Magento\Framework\UrlInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->context = $this->getMockBuilder('Magento\Framework\App\Action\Context')
-            ->setMethods(['getRequest', 'getResponse', 'getUrl'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->atLeastOnce())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
-        $this->context->expects($this->atLeastOnce())
-            ->method('getResponse')
-            ->will($this->returnValue($this->response));
         $this->context->expects($this->any())
             ->method('getUrl')
             ->will($this->returnValue($this->url));
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturnMap(
+                [
+                    [ResultFactory::TYPE_REDIRECT, [], $this->resultRedirectMock],
+                    [ResultFactory::TYPE_JSON, [], $this->resultJsonMock]
+                ]
+            );
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->controller = $this->objectManagerHelper->getObject(
             'Magento\Search\Controller\Ajax\Suggest',
@@ -95,23 +122,30 @@ class SuggestTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->will($this->returnValue([$firstItemMock, $secondItemMock]));
 
-        $this->response->expects($this->once())
-            ->method('representJson');
-        $this->controller->execute();
+        $this->resultJsonMock->expects($this->once())
+            ->method('setData')
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultJsonMock, $this->controller->execute());
     }
 
     public function testExecuteEmptyQuery()
     {
-        $searchString = "";
+        $url = 'some url';
+        $searchString = '';
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('q')
             ->will($this->returnValue($searchString));
         $this->url->expects($this->once())
-            ->method('getBaseUrl');
-        $this->response->expects($this->once())
-            ->method('setRedirect');
-        $this->controller->execute();
+            ->method('getBaseUrl')
+            ->willReturn($url);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setUrl')
+            ->with($url)
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultRedirectMock, $this->controller->execute());
     }
 }

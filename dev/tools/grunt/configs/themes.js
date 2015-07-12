@@ -25,7 +25,9 @@ module.exports = {
         locale: 'en_US',
         files: [
             'css/styles-m',
-            'css/styles-l'
+            'css/styles-l',
+            'css/email',
+            'css/email-inline'
         ],
         dsl: 'less'
     },
@@ -45,8 +47,7 @@ module.exports = {
         locale: 'en_US',
         files: [
             'css/styles-old',
-            'css/styles',
-            'css/styles-migration'
+            'css/styles'
         ],
         dsl: 'less'
     }

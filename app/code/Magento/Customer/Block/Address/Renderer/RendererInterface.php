@@ -6,6 +6,7 @@
 namespace Magento\Customer\Block\Address\Renderer;
 
 use Magento\Directory\Model\Country\Format;
+use Magento\Customer\Model\Address\AddressModelInterface;
 
 /**
  * Address renderer interface
@@ -32,12 +33,12 @@ interface RendererInterface
     /**
      * Render address
      *
-     * @param \Magento\Customer\Model\Address\AbstractAddress $address
+     * @param AddressModelInterface $address
      * @param string|null $format
      * @return mixed
      * @deprecated All new code should use renderArray based on Metadata service
      */
-    public function render(\Magento\Customer\Model\Address\AbstractAddress $address, $format = null);
+    public function render(AddressModelInterface $address, $format = null);
 
     /**
      * Get a format object for a given address attributes, based on the type set earlier.

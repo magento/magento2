@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface CartItemInterface
+ * @api
+ */
 interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
@@ -119,14 +123,14 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Returns Quote id.
      *
-     * @return int
+     * @return string
      */
     public function getQuoteId();
 
     /**
      * Sets Quote id.
      *
-     * @param int $quoteId
+     * @param string $quoteId
      * @return $this
      */
     public function setQuoteId($quoteId);

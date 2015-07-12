@@ -24,4 +24,10 @@
             <argument name="dataStorage" xsi:type="object">Magento\Payment\Model\Config\Data</argument>
         </arguments>
     </type>
+    <preference for="Magento\Payment\Gateway\Validator\ResultInterface" type="Magento\Payment\Gateway\Validator\Result"/>
+    <type name="Magento\Payment\Block\ConfigurableInfo">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Payment\Gateway\Config\Config</argument>
+        </arguments>
+    </type>
 </config>

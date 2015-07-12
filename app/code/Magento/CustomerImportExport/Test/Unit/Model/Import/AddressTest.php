@@ -335,7 +335,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $updateResult = [
-            'entity_row' => $this->_customBehaviour['update_id'],
+            'entity_row_new' => [],
+            'entity_row_update' => $this->_customBehaviour['update_id'],
             'attributes' => [],
             'defaults' => [],
         ];
@@ -565,8 +566,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * Test Address::validateRow()
      * with 2 rows with identical PKs in case when add/update behavior is performed
      *
-     * covers \Magento\CustomerImportExport\Model\Import\Address::validateRow
-     * covers \Magento\CustomerImportExport\Model\Import\Address::_validateRowForUpdate
+     * @covers \Magento\CustomerImportExport\Model\Import\Address::validateRow
+     * @covers \Magento\CustomerImportExport\Model\Import\Address::_validateRowForUpdate
      */
     public function testValidateRowForUpdateDuplicateRows()
     {
@@ -615,7 +616,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Test Address::validateRow() with delete action
      *
-     * covers \Magento\CustomerImportExport\Model\Import\Address::validateRow
+     * @covers \Magento\CustomerImportExport\Model\Import\Address::validateRow
      * @dataProvider validateRowForDeleteDataProvider
      *
      * @param array $rowData
@@ -664,7 +665,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if correct methods are invoked according to different custom behaviours
      *
-     * covers \Magento\CustomerImportExport\Model\Import\Address::_importData
+     * @covers \Magento\CustomerImportExport\Model\Import\Address::_importData
      */
     public function testImportDataWithCustomBehaviour()
     {
@@ -678,13 +679,15 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Validation method for _saveAddressEntities (callback for _saveAddressEntities)
      *
-     * @param array $addUpdateRows
+     * @param array $addRows
+     * @param array $updateRows
      * @return Address|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function validateSaveAddressEntities(array $addUpdateRows)
+    public function validateSaveAddressEntities(array $addRows, array $updateRows)
     {
-        $this->assertCount(1, $addUpdateRows);
-        $this->assertContains($this->_customBehaviour['update_id'], $addUpdateRows);
+        $this->assertCount(0, $addRows);
+        $this->assertCount(1, $updateRows);
+        $this->assertContains($this->_customBehaviour['update_id'], $updateRows);
         return $this->_model;
     }
 

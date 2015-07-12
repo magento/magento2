@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     /**
@@ -31,7 +34,14 @@ class Observer
      *
      * @var \Magento\Catalog\Model\Layer
      */
-    protected $_catalogLayer;
+    private $_catalogLayer = null;
+
+    /**
+     * Catalog layer resolver
+     *
+     * @var \Magento\Catalog\Model\Layer\Resolver
+     */
+    protected $layerResolver;
 
     /**
      * Store manager
@@ -62,16 +72,23 @@ class Observer
     protected $_productResourceFactory;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Category $categoryResource
-     * @param \Magento\Catalog\Model\Resource\Product $catalogProduct
+     * @var \Magento\Framework\Registry
+     */
+    protected $_registry;
+
+    /**
+     * @param \Magento\Framework\Registry $registry
+     * @param Resource\Category $categoryResource
+     * @param Resource\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+     * @param Layer\Resolver $layerResolver
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Indexer\Category\Flat\State $categoryFlatState
-     * @param \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
+     * @param Resource\ProductFactory $productResourceFactory
      */
     public function __construct(
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Resource\Category $categoryResource,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -81,10 +98,11 @@ class Observer
         \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState,
         \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
     ) {
+        $this->_registry = $registry;
         $this->_categoryResource = $categoryResource;
         $this->_catalogProduct = $catalogProduct;
         $this->_storeManager = $storeManager;
-        $this->_catalogLayer = $layerResolver->get();
+        $this->layerResolver = $layerResolver;
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogData = $catalogData;
         $this->categoryFlatConfig = $categoryFlatState;
@@ -131,18 +149,10 @@ class Observer
             if (!$category->getIsActive()) {
                 continue;
             }
-
-            $nodeId = 'category-node-' . $category->getId();
-
             $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG . '_' . $category->getId());
 
             $tree = $parentCategoryNode->getTree();
-            $categoryData = [
-                'name' => $category->getName(),
-                'id' => $nodeId,
-                'url' => $this->_catalogCategory->getCategoryUrl($category),
-                'is_active' => $this->_isActiveMenuCategory($category),
-            ];
+            $categoryData = $this->getMenuCategoryData($category);
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
 
@@ -157,23 +167,64 @@ class Observer
     }
 
     /**
+     * Get category data to be added to the Menu
+     *
+     * @param \Magento\Framework\Data\Tree\Node $category
+     * @return array
+     */
+    public function getMenuCategoryData($category)
+    {
+        $nodeId = 'category-node-' . $category->getId();
+
+        $isActiveCategory = false;
+        /** @var \Magento\Catalog\Model\Category $currentCategory */
+        $currentCategory = $this->_registry->registry('current_category');
+        if ($currentCategory && $currentCategory->getId() == $category->getId()) {
+            $isActiveCategory = true;
+        }
+
+        $categoryData = [
+            'name' => $category->getName(),
+            'id' => $nodeId,
+            'url' => $this->_catalogCategory->getCategoryUrl($category),
+            'has_active' => $this->hasActive($category),
+            'is_active' => $isActiveCategory,
+        ];
+
+        return $categoryData;
+    }
+
+    /**
      * Checks whether category belongs to active category's path
      *
      * @param \Magento\Framework\Data\Tree\Node $category
      * @return bool
      */
-    protected function _isActiveMenuCategory($category)
+    protected function hasActive($category)
     {
-        if (!$this->_catalogLayer) {
+        $catalogLayer = $this->getCatalogLayer();
+        if (!$catalogLayer) {
             return false;
         }
 
-        $currentCategory = $this->_catalogLayer->getCurrentCategory();
+        $currentCategory = $catalogLayer->getCurrentCategory();
         if (!$currentCategory) {
             return false;
         }
 
         $categoryPathIds = explode(',', $currentCategory->getPathInStore());
         return in_array($category->getId(), $categoryPathIds);
+    }
+
+    /**
+     * Get catalog layer
+     * @return \Magento\Catalog\Model\Layer
+     */
+    private function getCatalogLayer()
+    {
+        if ($this->_catalogLayer === null) {
+            $this->_catalogLayer = $this->layerResolver->get();
+        }
+        return $this->_catalogLayer;
     }
 }

@@ -22,13 +22,13 @@ class Store implements \Magento\Framework\App\ScopeResolverInterface
 
     /**
      * {@inheritdoc}
-     * @throws \Magento\Framework\App\InitException
+     * @throws \Magento\Framework\Exception\State\InitException
      */
     public function getScope($scopeId = null)
     {
         $scope = $this->_storeManager->getStore($scopeId);
         if (!$scope instanceof \Magento\Framework\App\ScopeInterface) {
-            throw new \Magento\Framework\App\InitException('Invalid scope object');
+            throw new \Magento\Framework\Exception\State\InitException(__('Invalid scope object'));
         }
 
         return $scope;

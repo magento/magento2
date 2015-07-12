@@ -7,7 +7,9 @@
  */
 namespace Magento\Framework\Phrase\Renderer;
 
-class Placeholder implements \Magento\Framework\Phrase\RendererInterface
+use Magento\Framework\Phrase\RendererInterface;
+
+class Placeholder implements RendererInterface
 {
     /**
      * Render source text
@@ -23,7 +25,7 @@ class Placeholder implements \Magento\Framework\Phrase\RendererInterface
         if ($arguments) {
             $placeholders = [];
             foreach (array_keys($arguments) as $key) {
-                $placeholders[] = "%" . (is_int($key) ? strval($key + 1) : $key);
+                $placeholders[] = '%' . (is_int($key) ? strval($key + 1) : $key);
             }
             $text = str_replace($placeholders, $arguments, $text);
         }

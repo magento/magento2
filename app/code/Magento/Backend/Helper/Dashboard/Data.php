@@ -6,6 +6,7 @@
 namespace Magento\Backend\Helper\Dashboard;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Data helper for dashboard
@@ -13,7 +14,7 @@ use Magento\Framework\App\DeploymentConfig;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\Framework\Data\Collection\Db
+     * @var \Magento\Framework\Data\Collection\AbstractDb
      */
     protected $_stores;
 
@@ -21,11 +22,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var string
      */
     protected $_installDate;
-
-    /**
-     * Configuration key to installation date
-     */
-    const INSTALL_DATE = 'install/date';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -45,14 +41,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         parent::__construct(
             $context
         );
-        $this->_installDate = $deploymentConfig->get(self::INSTALL_DATE);
+        $this->_installDate = $deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE);
         $this->_storeManager = $storeManager;
     }
 
     /**
      * Retrieve stores configured in system.
      *
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     public function getStores()
     {

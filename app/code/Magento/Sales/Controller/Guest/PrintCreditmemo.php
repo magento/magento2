@@ -6,7 +6,6 @@
  */
 namespace Magento\Sales\Controller\Guest;
 
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
@@ -22,7 +21,6 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
      * @param OrderViewAuthorization $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
-     * @param RedirectFactory $resultRedirectFactory
      * @param OrderLoader $orderLoader
      */
     public function __construct(
@@ -30,7 +28,6 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
         OrderViewAuthorization $orderAuthorization,
         \Magento\Framework\Registry $registry,
         PageFactory $resultPageFactory,
-        RedirectFactory $resultRedirectFactory,
         OrderLoader $orderLoader
     ) {
         $this->orderLoader = $orderLoader;
@@ -38,8 +35,7 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
             $context,
             $orderAuthorization,
             $registry,
-            $resultPageFactory,
-            $resultRedirectFactory
+            $resultPageFactory
         );
     }
 

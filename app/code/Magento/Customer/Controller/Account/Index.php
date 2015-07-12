@@ -17,7 +17,6 @@ class Index extends \Magento\Customer\Controller\Account
     {
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->initMessages();
         $resultPage->getConfig()->getTitle()->set(__('My Account'));
         return $resultPage;
     }

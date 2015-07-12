@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use \Magento\Sales\Model\OrderNotifier;
 
-use Magento\Framework\Mail\Exception;
+use Magento\Framework\Exception\MailException;
 use Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory;
 
 /**
@@ -130,7 +130,7 @@ class OrderNotifierTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotifyException()
     {
-        $exception = new Exception('Email has not been sent');
+        $exception = new MailException(__('Email has not been sent'));
         $this->orderSenderMock->expects($this->once())
             ->method('send')
             ->with($this->equalTo($this->order))

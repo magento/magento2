@@ -8,16 +8,19 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Controller\ResultFactory;
 
 class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**
      * Delete the integration.
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
         try {
             if ($integrationId) {
@@ -29,8 +32,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
                             $this->escaper->escapeHtml($integrationData[Info::DATA_NAME])
                         )
                     );
-                    $this->_redirect('*/*/');
-                    return;
+                    return $resultRedirect->setPath('*/*/');
                 }
                 $integrationData = $this->_integrationService->delete($integrationId);
                 if (!$integrationData[Info::DATA_ID]) {
@@ -56,6 +58,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
-        $this->_redirect('*/*/');
+
+        return $resultRedirect->setPath('*/*/');
     }
 }

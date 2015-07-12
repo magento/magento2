@@ -62,14 +62,12 @@ class AssertTermAbsentOnCheckout extends AbstractConstraint
         $catalogProductView->getMessagesBlock()->waitSuccessMessage();
         $checkoutCart->open();
         $checkoutCart->getCartBlock()->getOnepageLinkBlock()->proceedToCheckout();
-        $checkoutOnepage->getLoginBlock()->guestCheckout();
         $checkoutOnepage->getLoginBlock()->clickContinue();
         $checkoutOnepage->getBillingBlock()->fill($billingAddress);
         $checkoutOnepage->getBillingBlock()->clickContinue();
         $checkoutOnepage->getShippingMethodBlock()->selectShippingMethod($shipping);
         $checkoutOnepage->getShippingMethodBlock()->clickContinue();
-        $checkoutOnepage->getPaymentMethodsBlock()->selectPaymentMethod($payment);
-        $checkoutOnepage->getPaymentMethodsBlock()->clickContinue();
+        $checkoutOnepage->getPaymentBlock()->selectPaymentMethod($payment);
 
         \PHPUnit_Framework_Assert::assertFalse(
             $checkoutOnepage->getAgreementReview()->checkAgreement($agreement),

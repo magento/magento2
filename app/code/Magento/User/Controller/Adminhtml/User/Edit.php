@@ -6,6 +6,8 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\Framework\Locale\Resolver;
+
 class Edit extends \Magento\User\Controller\Adminhtml\User
 {
     /**
@@ -25,7 +27,7 @@ class Edit extends \Magento\User\Controller\Adminhtml\User
                 return;
             }
         } else {
-            $model->setInterfaceLocale(\Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE);
+            $model->setInterfaceLocale(Resolver::DEFAULT_LOCALE);
         }
 
         // Restore previously entered form data from session

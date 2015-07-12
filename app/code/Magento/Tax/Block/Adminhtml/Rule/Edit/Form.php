@@ -298,6 +298,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Retrieve Tax Rate load URL
+     *
+     * @return string
+     */
+    public function getTaxRateLoadUrl()
+    {
+        return $this->getUrl('tax/rate/ajaxLoad/');
+    }
+
+    /**
      * Extract tax rule data in a format which is
      *
      * @param \Magento\Tax\Api\Data\TaxRuleInterface $taxRule

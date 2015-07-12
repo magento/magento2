@@ -1,12 +1,8 @@
 **/var
 /composer.lock
-/config/*
 /generated
 /lib/Magento/Mtf/Util/Generate/testcase.xml
+/var
 /vendor
-!/config/application.yml.dist
-!/config/handler.yml.dist
-!/config/isolation.yml.dist
-!/config/server.yml.dist
 phpunit.xml
 credentials.xml

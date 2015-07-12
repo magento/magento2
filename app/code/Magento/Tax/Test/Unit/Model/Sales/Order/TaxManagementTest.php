@@ -71,14 +71,14 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
         $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
         $this->taxItemResourceMock = $this->getMock(
-            'Magento\Tax\Model\Resource\Sales\Order\Tax\Item',
+            'Magento\Sales\Model\Resource\Order\Tax\Item',
             [],
             [],
             '',
             false
         );
         $this->taxItemFactoryMock = $this->getMock(
-            'Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory',
+            'Magento\Sales\Model\Resource\Order\Tax\ItemFactory',
             ['create'],
             [],
             '',
@@ -94,7 +94,7 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->appliedTaxDataObject);
 
-        $this->itemDataObject = $objectManager->getObject('Magento\Tax\Model\Sales\Order\Tax\Item');
+        $this->itemDataObject = $objectManager->getObject('Magento\Sales\Model\Order\Tax\Item');
         $this->itemDataObjectFactoryMock =
             $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory', $methods, [], '', false);
         $this->itemDataObjectFactoryMock->expects($this->atLeastOnce())

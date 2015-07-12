@@ -8,7 +8,7 @@ namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 /**
  * @magentoAppArea adminhtml
  */
-class CartTest extends \Magento\Backend\Utility\Controller
+class CartTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @var \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory
@@ -58,7 +58,8 @@ class CartTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParam('id', $itemId);
         $this->dispatch('backend/customer/cart_product_composite_cart/configure');
         $this->assertContains(
-            '<input id="product_composite_configure_input_qty" class="input-text" type="text" name="qty" value="1">',
+            '<input id="product_composite_configure_input_qty" class="input-text admin__control-text qty"'
+            . ' type="text" name="qty" value="1">',
             $this->getResponse()->getBody()
         );
     }

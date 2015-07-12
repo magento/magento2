@@ -8,6 +8,6 @@ namespace Magento\Catalog\Model;
 /**
  * Catalog session model
  */
-class Session extends \Magento\Framework\Session\Generic
+class Session extends \Magento\Framework\Session\SessionManager
 {
 }

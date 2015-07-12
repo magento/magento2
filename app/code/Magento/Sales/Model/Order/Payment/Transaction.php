@@ -9,8 +9,8 @@
 namespace Magento\Sales\Model\Order\Payment;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Sales\Api\Data\TransactionInterface;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  * Payment transaction model
@@ -19,13 +19,12 @@ use Magento\Sales\Api\Data\TransactionInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction getResource()
- * @method \Magento\Sales\Model\Order\Payment\Transaction setCreatedAt(string $value)
 
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Transaction extends AbstractExtensibleModel implements TransactionInterface
+class Transaction extends AbstractModel implements TransactionInterface
 {
     /**#@+
      * Supported transaction types
@@ -160,7 +159,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param TransactionFactory $transactionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -174,7 +173,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
         TransactionFactory $transactionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_paymentFactory = $paymentFactory;
@@ -615,8 +614,12 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
     {
         $this->_verifyThisTransactionExists();
         if (null === $this->_paymentObject && $shouldLoad) {
+            /** @var \Magento\Sales\Model\Order\Payment $payment */
             $payment = $this->_paymentFactory->create()->load($this->getPaymentId());
             if ($payment->getId()) {
+                if (!$payment->getOrder()) {
+                    $payment->setOrder($this->getOrder());
+                }
                 $this->setOrderPaymentObject($payment);
             }
         }
@@ -893,7 +896,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
     protected function _verifyTxnId($txnId)
     {
         if (null !== $txnId && 0 == strlen($txnId)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The Transaction ID field cannot be empty.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a Transaction ID.'));
         }
     }
 
@@ -912,6 +915,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
         $this->_verifyTxnType();
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns transaction_id
      *
@@ -920,6 +924,14 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
     public function getTransactionId()
     {
         return $this->getData(TransactionInterface::TRANSACTION_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTransactionId($id)
+    {
+        return $this->setData(TransactionInterface::TRANSACTION_ID, $id);
     }
 
     /**
@@ -973,6 +985,17 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
     }
 
     /**
+     * Get HTML format for transaction id
+     *
+     * @return string
+     */
+    public function getHtmlTxnId()
+    {
+        $this->_eventManager->dispatch($this->_eventPrefix . '_html_txn_id', $this->_getEventData());
+        return isset($this->_data['html_txn_id']) ? $this->_data['html_txn_id'] : $this->getTxnId();
+    }
+
+    /**
      * Returns parent_txn_id
      *
      * @return string
@@ -1003,7 +1026,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
     }
 
     /**
-     * Returns created_at
+     * Gets the created-at timestamp for the transaction.
      *
      * @return string
      */
@@ -1012,7 +1035,14 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
         return $this->getData(TransactionInterface::CREATED_AT);
     }
 
-    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(TransactionInterface::CREATED_AT, $createdAt);
+    }
+
     /**
      * {@inheritdoc}
      */

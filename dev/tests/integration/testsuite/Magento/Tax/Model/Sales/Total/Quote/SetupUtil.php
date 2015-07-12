@@ -8,6 +8,7 @@
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Calculation;
 
@@ -221,7 +222,7 @@ class SetupUtil
             $config->saveConfig(
                 $path,
                 $value,
-                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                 0
             );
         }

@@ -1,0 +1,147 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Forms -> Dropdown element
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+//
+//  Utilities
+//  ---------------------------------------------
+
+.admin__action-dropdown-menu__align(
+    @_align
+) when (@_align = left) {
+    .admin__action-dropdown-text {
+        &:after {
+            left: -(@component__shadow-size__base + 1);
+            right: 0;
+        }
+    }
+    .admin__action-dropdown-menu {
+        left: auto;
+        right: 0;
+    }
+}
+
+.admin__action-dropdown-menu__align(
+    @_align
+) when (@_align = right) {
+    .admin__action-dropdown-text {
+        &:after {
+            right: -(@component__shadow-size__base + 1);
+            left: 0;
+        }
+    }
+    .admin__action-dropdown-menu {
+        left: 0;
+        right: auto;
+    }
+}
+
+.action-dropdown-menu-link-pattern() {
+    color: @action-dropdown__color;
+    display: block;
+    text-decoration: none;
+}
+
+//
+
+.admin__action-dropdown-wrap {
+    .admin__action-dropdown-menu__align(left);
+    display: inline-block;
+    position: relative;
+    &.active,
+    &._active {
+        .admin__action-dropdown {
+            border-color: @action-dropdown__active__border-color;
+            box-shadow: @component__box-shadow__base;
+        }
+        //  Dropdown helper to prevent box shadow unnecessary appearing
+        .admin__action-dropdown-text {
+            &:after {
+                background-color: @action-dropdown__background-color;
+                content: '';
+                height: @component__shadow-size__base + 1;
+                position: absolute;
+                top: 100%;
+            }
+        }
+        .admin__action-dropdown-menu {
+            .appearing__on();
+        }
+    }
+    &._disabled {
+        .admin__action-dropdown {
+            cursor: default;
+        }
+        &:hover {
+            .admin__action-dropdown {
+                color: @action-dropdown__color;
+            }
+        }
+    }
+}
+
+.admin__action-dropdown {
+    .action-toggle-triangle(
+        @_dropdown__padding-right: @action-dropdown__padding-right;
+    );
+    box-shadow: none;
+    background-color: @action-dropdown__background-color;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 0;
+    color: @action-dropdown__color;
+    display: inline-block;
+    font-size: @action-dropdown__font-size;
+    font-weight: @font-weight__regular;
+    letter-spacing: -.025em;
+    padding: @action-dropdown__padding-top @action-dropdown__padding-right @action-dropdown__padding-bottom @action-dropdown__padding-horizontal;
+    position: relative;
+    transition: border-color @appearing__transition-duration @apperaing__transition-timing-function;
+    vertical-align: baseline;
+    z-index: 2;
+    &:hover,
+    &:focus {
+        background-color: @action-dropdown__background-color;
+        color: @action-dropdown__hover__color;
+        text-decoration: none;
+    }
+    //  Triangle
+    &:after {
+        right: @action-dropdown__padding-horizontal;
+    }
+    //  Icon
+    &:before {
+        margin-right: 1rem;
+    }
+}
+
+.admin__action-dropdown-menu {
+    .appearing__off();
+    background-color: @action-dropdown__background-color;
+    border: 1px solid @action-dropdown__active__border-color;
+    box-shadow: @component__box-shadow__base;
+    line-height: @line-height__base;
+    margin-top: -1px;
+    min-width: 120%;
+    padding: @action-dropdown-menu__padding-vertical @action-dropdown-menu__padding-horizontal;
+    position: absolute;
+    top: 100%;
+    transition: all @appearing__transition-duration @apperaing__transition-timing-function;
+    z-index: 1;
+    > li {
+        display: block;
+        > a {
+            .action-dropdown-menu-link-pattern();
+            padding: @action-dropdown-menu-link__padding-vertical @action-dropdown-menu-link__padding-horizontal;
+        }
+    }
+}

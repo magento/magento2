@@ -13,6 +13,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
@@ -58,11 +59,11 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
     /**
      * Implementation for get category prices function
      *
-     * @param string $productName
+     * @param FixtureInterface $product
      * @param array $actualPrices
      * @return array
      */
-    abstract protected function getCategoryPrices($productName, $actualPrices);
+    abstract protected function getCategoryPrices(FixtureInterface $product, $actualPrices);
 
     /**
      * Implementation for get product page prices function
@@ -112,14 +113,15 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $shipping = ['shipping_service' => 'Flat Rate', 'shipping_method' => 'Fixed'];
         $actualPrices = [];
         //Assertion steps
-        $productName = $product->getName();
         $productCategory = $product->getCategoryIds()[0];
         $this->openCategory($productCategory);
-        $actualPrices = $this->getCategoryPrices($productName, $actualPrices);
-        $catalogCategoryView->getListProductBlock()->openProductViewPage($productName);
+        $actualPrices = $this->getCategoryPrices($product, $actualPrices);
+        $catalogCategoryView->getListProductBlock()->getProductItem($product)->open();
         $catalogProductView->getViewBlock()->fillOptions($product);
         $actualPrices = $this->getProductPagePrices($actualPrices);
         $catalogProductView->getViewBlock()->setQtyAndClickAddToCart($qty);
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        $this->checkoutCart->open();
         $this->fillEstimateBlock($address, $shipping);
         $actualPrices = $this->getCartPrices($product, $actualPrices);
         $actualPrices = $this->getTotals($actualPrices);
@@ -150,6 +152,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
      */
     public function getCartPrices(InjectableFixture $product, $actualPrices)
     {
+        $this->checkoutCart->open();
         $actualPrices['cart_item_price_excl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
         $actualPrices['cart_item_price_incl_tax'] =

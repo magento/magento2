@@ -11,31 +11,30 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Items
- * Adminhtml sales order create items block
+ * Adminhtml sales order create items block.
  */
 class Items extends Block
 {
     /**
-     * 'Add Products' button
+     * 'Add Products' button.
      *
      * @var string
      */
     protected $addProducts = "//button[span='Add Products']";
 
     /**
-     * Item product
+     * Item product.
      *
      * @var string
      */
     protected $itemProduct = '//tr[td//*[normalize-space(text())="%s"]]';
 
     /**
-     * Product names
+     * Product names.
      *
      * @var string
      */
-    protected $productNames = '//td[@class="col-product"]//span';
+    protected $productNames = '//td[@class="col-product"]/span';
 
     /**
      * Selector for template block.
@@ -45,7 +44,7 @@ class Items extends Block
     protected $template = './ancestor::body';
 
     /**
-     * Click 'Add Products' button
+     * Click 'Add Products' button.
      *
      * @return void
      */
@@ -60,10 +59,11 @@ class Items extends Block
             }
         );
         $this->_rootElement->find($this->addProducts, Locator::SELECTOR_XPATH)->click();
+        $this->getTemplateBlock()->waitLoader();
     }
 
     /**
-     * Get item product block
+     * Get item product block.
      *
      * @param string $name
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items\ItemProduct

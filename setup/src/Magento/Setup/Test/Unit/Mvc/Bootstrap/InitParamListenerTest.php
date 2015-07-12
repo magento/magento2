@@ -29,73 +29,6 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener = new InitParamListener();
     }
 
-    public function testAttachToConsoleRoutesEmpty()
-    {
-        $inputConfig = [];
-        $expectedConfig = [];
-        $this->assertEquals(
-            $expectedConfig,
-            InitParamListener::attachToConsoleRoutes($inputConfig)
-        );
-    }
-
-    public function testAttachToConsoleRoutesOneRoute()
-    {
-        $inputConfig = [
-            'console' => ['router' => ['routes' => [['options' => ['route' => 'one_route']]]]]
-        ];
-        $expectedConfig = [
-            'console' => ['router' => ['routes' => [['options' => ['route' => 'one_route [--magento_init_params=]']]]]]
-        ];
-
-        $this->assertEquals(
-            $expectedConfig,
-            InitParamListener::attachToConsoleRoutes($inputConfig)
-        );
-    }
-
-    public function testAttachToConsoleRoutesManyRoute()
-    {
-        $inputConfig = [
-            'console' => ['router' => ['routes' => [
-                ['options' => ['route' => 'one_route']],
-                ['options' => ['route' => 'two_route']],
-                ['options' => ['route' => 'three_route']],
-                ['options' => ['route' => 'four_route']],
-                ['options' => ['route' => 'five_route']],
-            ]]]
-        ];
-        $expectedConfig = [
-            'console' => ['router' => ['routes' => [
-                ['options' => ['route' => 'one_route [--magento_init_params=]']],
-                ['options' => ['route' => 'two_route [--magento_init_params=]']],
-                ['options' => ['route' => 'three_route [--magento_init_params=]']],
-                ['options' => ['route' => 'four_route [--magento_init_params=]']],
-                ['options' => ['route' => 'five_route [--magento_init_params=]']],
-            ]]]
-        ];
-
-        $this->assertEquals(
-            $expectedConfig,
-            InitParamListener::attachToConsoleRoutes($inputConfig)
-        );
-    }
-
-    public function testGetConsoleUsage()
-    {
-        $usage = InitParamListener::getConsoleUsage();
-
-        // usage statement should be an array and have a blank line followed by a line containing the parameter
-        $this->assertArrayHasKey(0, $usage);
-        $this->assertGreaterThanOrEqual(2, count($usage));
-
-        // First element should be a blank line
-        $this->assertEquals('', $usage[0]);
-
-        // Parameter definition is added to the usage statement
-        $this->assertContains(InitParamListener::BOOTSTRAP_PARAM, implode($usage[1]));
-    }
-
     public function testAttach()
     {
         $events = $this->prepareEventManager();
@@ -186,7 +119,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $request->expects($this->any())
             ->method('getContent')
             ->willReturn(
-                $cliParam ? ['install', '--magento_init_params=' . $cliParam ] : ['install']
+                $cliParam ? ['install', '--magento-init-params=' . $cliParam ] : ['install']
             );
         $mvcApplication->expects($this->any())->method('getConfig')->willReturn(
             $zfAppConfig ? [InitParamListener::BOOTSTRAP_PARAM => $zfAppConfig]:[]

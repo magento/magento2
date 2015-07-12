@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 
 class NewAction extends \Magento\Backend\App\Action
 {
@@ -24,25 +23,17 @@ class NewAction extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param PageFactory $resultPageFactory
-     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
-        PageFactory $resultPageFactory,
-        RedirectFactory $resultRedirectFactory
+        PageFactory $resultPageFactory
     ) {
         $this->registry = $registry;
         $this->resultPageFactory = $resultPageFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -83,11 +74,13 @@ class NewAction extends \Magento\Backend\App\Action
             /** @var \Magento\Sales\Model\Order $order */
             $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
             if (!$order->getId()) {
-                throw new \Magento\Framework\Exception(__('The order no longer exists.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('The order no longer exists.'));
             }
 
             if (!$order->canInvoice()) {
-                throw new \Magento\Framework\Exception(__('The order does not allow an invoice to be created.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The order does not allow an invoice to be created.')
+                );
             }
 
             /** @var \Magento\Sales\Model\Order\Invoice $invoice */
@@ -95,7 +88,9 @@ class NewAction extends \Magento\Backend\App\Action
                 ->prepareInvoice($invoiceItems);
 
             if (!$invoice->getTotalQty()) {
-                throw new \Magento\Framework\Exception(__('Cannot create an invoice without products.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('You can\'t create an invoice without products.')
+                );
             }
             $this->registry->register('current_invoice', $invoice);
 
@@ -110,7 +105,7 @@ class NewAction extends \Magento\Backend\App\Action
             $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
             $resultPage->getConfig()->getTitle()->prepend(__('New Invoice'));
             return $resultPage;
-        } catch (\Magento\Framework\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             $this->messageManager->addError($exception->getMessage());
             return $this->_redirectToOrder($orderId);
         } catch (\Exception $exception) {

@@ -47,7 +47,7 @@ class AppIsolationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation invalid
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEndTestIsolationInvalid()
     {
@@ -57,7 +57,7 @@ class AppIsolationTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoAppIsolation disabled
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEndTestIsolationAmbiguous()
     {

@@ -147,7 +147,7 @@ class Account extends AbstractForm
         switch ($element->getId()) {
             case 'email':
                 $element->setRequired(0);
-                $element->setClass('validate-email');
+                $element->setClass('validate-email admin__control-text');
                 break;
         }
         return $this;

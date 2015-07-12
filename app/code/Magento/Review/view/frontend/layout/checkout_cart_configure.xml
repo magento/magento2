@@ -10,6 +10,15 @@
     <body>
         <referenceBlock name="reviews.tab">
             <block class="Magento\Review\Block\Form\Configure" name="product.review.form" as="review_form">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="review-form" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Review/js/view/review</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
                 <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
             </block>
         </referenceBlock>

@@ -14,8 +14,8 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private static $fixture = [
-        'segment1' => 'scalar_value',
-        'segment2' => [
+        'configData1' => 'scalar_value',
+        'configData2' => [
             'foo' => 1,
             'bar' => ['baz' => 2],
         ],
@@ -25,9 +25,14 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private static $flattenedFixture = [
-        'segment1' => 'scalar_value',
-        'segment2/foo' => 1,
-        'segment2/bar/baz' => 2,
+        'configData1' => 'scalar_value',
+        'configData2' => [
+            'foo' => 1,
+            'bar' => ['baz' => 2],
+        ],
+        'configData2/foo' => 1,
+        'configData2/bar' => ['baz' => 2],
+        'configData2/bar/baz' => 2,
     ];
 
     /**
@@ -77,8 +82,8 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
         // second time to ensure loader will be invoked only once
         $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
-        $this->assertSame('scalar_value', $this->_deploymentConfig->getSegment('segment1'));
-        $this->assertSame(self::$fixture['segment2'], $this->_deploymentConfig->getSegment('segment2'));
+        $this->assertSame('scalar_value', $this->_deploymentConfig->getConfigData('configData1'));
+        $this->assertSame(self::$fixture['configData2'], $this->_deploymentConfig->getConfigData('configData2'));
     }
 
     public function testIsAvailable()

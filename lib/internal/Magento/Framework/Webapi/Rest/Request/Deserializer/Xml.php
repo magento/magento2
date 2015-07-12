@@ -66,7 +66,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
             if ($this->_appState->getMode() !== State::MODE_DEVELOPER) {
                 $exceptionMessage = new Phrase('Decoding error.');
             } else {
-                $exceptionMessage = 'Decoding Error: ' . $this->_errorMessage;
+                $exceptionMessage = new Phrase('Decoding Error: %1', [$this->_errorMessage]);
             }
             throw new \Magento\Framework\Webapi\Exception($exceptionMessage);
         }
@@ -87,7 +87,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
      */
     public function handleErrors($errorNumber, $errorMessage, $errorFile, $errorLine)
     {
-        if (is_null($this->_errorMessage)) {
+        if ($this->_errorMessage === null) {
             $this->_errorMessage = $errorMessage;
         } else {
             $this->_errorMessage .= $errorMessage;

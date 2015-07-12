@@ -14,12 +14,12 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $this->objectManager->getObject('Magento\CheckoutAgreements\Model\Agreement');
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject('Magento\CheckoutAgreements\Model\Agreement');
     }
 
     /**
-     * covers \Magento\CheckoutAgreements\Model\Agreement::validateData
+     * @covers \Magento\CheckoutAgreements\Model\Agreement::validateData
      *
      * @dataProvider validateDataDataProvider
      * @param \Magento\Framework\Object $inputData

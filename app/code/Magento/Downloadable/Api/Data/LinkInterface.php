@@ -119,9 +119,24 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setLinkFile($linkFile);
 
     /**
-     * Return URL or NULL when type is 'file'
+     * Return file content
      *
-     * @return string|null file URL
+     * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null
+     */
+    public function getLinkFileContent();
+
+    /**
+     * Set file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent
+     * @return $this
+     */
+    public function setLinkFileContent(\Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent = null);
+
+    /**
+     * Return link url or null when type is 'file'
+     *
+     * @return string|null
      */
     public function getLinkUrl();
 
@@ -158,6 +173,23 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setSampleFile($sampleFile);
+
+    /**
+     * Return sample file content when type is 'file'
+     *
+     * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null relative file path
+     */
+    public function getSampleFileContent();
+
+    /**
+     * Set sample file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
+     * @return $this
+     */
+    public function setSampleFileContent(
+        \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null
+    );
 
     /**
      * Return URL or NULL when type is 'file'

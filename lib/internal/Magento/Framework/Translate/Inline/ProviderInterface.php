@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Translate\Inline;
 
+/**
+ * Factory like class to return an instance of the inline translate.
+ */
 interface ProviderInterface
 {
     /**

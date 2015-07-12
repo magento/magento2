@@ -118,6 +118,16 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
+     * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
+     * @param \Magento\Framework\Model\AbstractModel|string|null $currency
+     * @return string
+     */
+    public function getCurrencySymbol($scope = null, $currency = null)
+    {
+        return $this->getCurrency($scope, $currency)->getCurrencySymbol();
+    }
+
+    /**
      * Get store model
      *
      * @param null|string|bool|int|ScopeInterface $scope

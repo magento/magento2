@@ -5,8 +5,11 @@
  */
 namespace Magento\Ui\Component\Control;
 
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
 
 /**
  * Class ActionPool
@@ -40,7 +43,7 @@ class ActionPool implements ActionPoolInterface
     protected $itemFactory;
 
     /**
-     * @var \Magento\Framework\View\Element\AbstractBlock
+     * @var AbstractBlock
      */
     protected $toolbarBlock;
 
@@ -54,8 +57,18 @@ class ActionPool implements ActionPoolInterface
     {
         $this->context = $context;
         $this->itemFactory = $itemFactory;
-        $this->toolbarBlock = $this->context->getPageLayout()
-            ? $this->context->getPageLayout()->getBlock(static::ACTIONS_PAGE_TOOLBAR) : false;
+    }
+
+    /**
+     * Get toolbar block
+     *
+     * @return bool|BlockInterface
+     */
+    public function getToolbar()
+    {
+        return $this->context->getPageLayout()
+            ? $this->context->getPageLayout()->getBlock(static::ACTIONS_PAGE_TOOLBAR)
+            : false;
     }
 
     /**
@@ -63,18 +76,19 @@ class ActionPool implements ActionPoolInterface
      *
      * @param string $key
      * @param array $data
-     * @param UiComponentInterface $view
+     * @param UiComponentInterface $component
      * @return void
      */
-    public function add($key, array $data, UiComponentInterface $view)
+    public function add($key, array $data, UiComponentInterface $component)
     {
         $data['id'] = isset($data['id']) ? $data['id'] : $key;
 
-        if ($this->toolbarBlock !== false) {
+        $toolbar = $this->getToolbar();
+        if ($toolbar !== false) {
             $this->items[$key] = $this->itemFactory->create();
             $this->items[$key]->setData($data);
-            $container = $this->createContainer($key, $view);
-            $this->toolbarBlock->setChild($key, $container);
+            $container = $this->createContainer($key, $component);
+            $toolbar->setChild($key, $container);
         }
     }
 
@@ -108,13 +122,13 @@ class ActionPool implements ActionPoolInterface
      *
      * @param string $key
      * @param UiComponentInterface $view
-     * @return \Magento\Ui\Component\Control\Container
+     * @return Container
      */
     protected function createContainer($key, UiComponentInterface $view)
     {
         $container = $this->context->getPageLayout()->createBlock(
             'Magento\Ui\Component\Control\Container',
-            'container-' . $key,
+            'container-' . $view->getName() . '-' . $key,
             [
                 'data' => [
                     'button_item' => $this->items[$key],
@@ -122,6 +136,7 @@ class ActionPool implements ActionPoolInterface
                 ]
             ]
         );
+
         return $container;
     }
 }

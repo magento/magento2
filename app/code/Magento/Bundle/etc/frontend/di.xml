@@ -9,4 +9,11 @@
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="append_bundle_data_to_order" type="Magento\Bundle\Model\Plugin\QuoteItem"/>
     </type>
+    <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
+        <arguments>
+            <argument name="instancesByType" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Helper\Catalog\Product\Configuration</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -177,6 +177,13 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
         $this->orderFactoryMock = $this->getMock(
             'Magento\Sales\Model\OrderFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $appStateMock = $this->getMock(
+            'Magento\Framework\App\State',
             [],
             [],
             '',
@@ -201,11 +208,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'storage' => $this->storageMock,
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
+                'appState' => $appStateMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'orderFactory' => $this->orderFactoryMock,
                 'storeManager' => $this->storeManagerMock,
-                'groupManagement' => $this->groupManagementMock
+                'groupManagement' => $this->groupManagementMock,
             ],
             '',
             true
@@ -217,29 +225,25 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testGetQuote()
+    public function testGetQuoteWithoutQuoteId()
     {
-        $storeId = 10;
         $quoteId = 22;
-        $customerGroupId = 77;
+        $storeId = 10;
         $customerId = 66;
+        $customerGroupId = 77;
 
-        $quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
-            [
-                'setStoreId',
-                'setCustomerGroupId',
-                'setIsActive',
-                'getId',
-                'assignCustomer',
-                'setIgnoreOldQty',
-                'setIsSuperMode',
-                '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->quote->expects($this->any())
+            ->method('getQuoteId')
+            ->will($this->returnValue(null));
+        $this->quote->expects($this->any())
+            ->method('setQuoteId')
+            ->with($quoteId);
+        $this->quote->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue($storeId));
+        $this->quote->expects($this->any())
+            ->method('getCustomerId')
+            ->will($this->returnValue($customerId));
 
         $defaultGroup = $this->getMockBuilder('Magento\Customer\Api\Data\GroupInterface')
             ->getMock();
@@ -250,38 +254,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getDefaultGroup')
             ->will($this->returnValue($defaultGroup));
 
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($quoteMock));
-        $this->quote->expects($this->any())
-            ->method('getStoreId')
-            ->will($this->returnValue($storeId));
-        $quoteMock->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId);
-        $this->quote->expects($this->any())
-            ->method('getQuoteId')
-            ->will($this->returnValue(null));
-        $quoteMock->expects($this->once())
-            ->method('setCustomerGroupId')
-            ->with($customerGroupId)
-            ->will($this->returnSelf());
-        $quoteMock->expects($this->once())
-            ->method('setIsActive')
-            ->with(false)
-            ->will($this->returnSelf());
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($quoteMock);
-        $quoteMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($quoteId));
-        $this->quote->expects($this->any())
-            ->method('setQuoteId')
-            ->with($quoteId);
-        $this->quote->expects($this->any())
-            ->method('getCustomerId')
-            ->will($this->returnValue($customerId));
         $dataCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -289,29 +261,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getById')
             ->with($customerId)
             ->willReturn($dataCustomerMock);
-        $quoteMock->expects($this->once())
-            ->method('assignCustomer')
-            ->with($dataCustomerMock);
-        $quoteMock->expects($this->once())
-            ->method('setIgnoreOldQty')
-            ->with(true);
-        $quoteMock->expects($this->once())
-            ->method('setIsSuperMode')
-            ->with(true);
-
-        $this->assertEquals($quoteMock, $this->quote->getQuote());
-    }
-
-    /**
-     * Run test getQuote method
-     *
-     * @return void
-     */
-    public function testGetQuoteGet()
-    {
-        $storeId = 10;
-        $quoteId = 22;
-        $customerId = 66;
 
         $quoteMock = $this->getMock(
             'Magento\Quote\Model\Quote',
@@ -329,36 +278,20 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($quoteMock));
-        $this->quote->expects($this->any())
-            ->method('getStoreId')
-            ->will($this->returnValue($storeId));
         $quoteMock->expects($this->once())
             ->method('setStoreId')
             ->with($storeId);
-        $this->quote->expects($this->any())
-            ->method('getQuoteId')
+        $quoteMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with($customerGroupId)
+            ->will($this->returnSelf());
+        $quoteMock->expects($this->once())
+            ->method('setIsActive')
+            ->with(false)
+            ->will($this->returnSelf());
+        $quoteMock->expects($this->once())
+            ->method('getId')
             ->will($this->returnValue($quoteId));
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($quoteId)
-            ->willReturn($quoteMock);
-        $this->quote->expects($this->any())
-            ->method('setQuoteId')
-            ->with($quoteId);
-        $this->quote->expects($this->any())
-            ->method('getCustomerId')
-            ->will($this->returnValue($customerId));
-        $dataCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($dataCustomerMock);
         $quoteMock->expects($this->once())
             ->method('assignCustomer')
             ->with($dataCustomerMock);
@@ -369,6 +302,100 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('setIsSuperMode')
             ->with(true);
 
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($quoteMock);
+
         $this->assertEquals($quoteMock, $this->quote->getQuote());
+    }
+
+    /**
+     * Run test getQuote method
+     *
+     * @return void
+     * @dataProvider getQuoteDataProvider
+     */
+    public function testGetQuoteWithQuoteId($customerId, $quoteCustomerId, $expectedNumberOfInvokes)
+    {
+        $quoteId = 22;
+        $storeId = 10;
+
+        $this->quote->expects($this->any())
+            ->method('getQuoteId')
+            ->will($this->returnValue($quoteId));
+        $this->quote->expects($this->any())
+            ->method('setQuoteId')
+            ->with($quoteId);
+        $this->quote->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue($storeId));
+        $this->quote->expects($this->any())
+            ->method('getCustomerId')
+            ->will($this->returnValue($customerId));
+
+        $dataCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->customerRepositoryMock->expects($this->$expectedNumberOfInvokes())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($dataCustomerMock);
+
+        $quoteMock = $this->getMock(
+            'Magento\Quote\Model\Quote',
+            [
+                'setStoreId',
+                'setCustomerGroupId',
+                'setIsActive',
+                'getId',
+                'assignCustomer',
+                'setIgnoreOldQty',
+                'setIsSuperMode',
+                'getCustomerId',
+                '__wakeup'
+            ],
+            [],
+            '',
+            false
+        );
+        $quoteMock->expects($this->once())
+            ->method('setStoreId')
+            ->with($storeId);
+        $quoteMock->expects($this->$expectedNumberOfInvokes())
+            ->method('assignCustomer')
+            ->with($dataCustomerMock);
+        $quoteMock->expects($this->once())
+            ->method('setIgnoreOldQty')
+            ->with(true);
+        $quoteMock->expects($this->once())
+            ->method('setIsSuperMode')
+            ->with(true);
+        $quoteMock->expects($this->once())
+            ->method('getCustomerId')
+            ->will($this->returnValue($quoteCustomerId));
+
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($quoteId)
+            ->willReturn($quoteMock);
+
+        $this->assertEquals($quoteMock, $this->quote->getQuote());
+    }
+
+    /**
+     * @return array
+     */
+    public function getQuoteDataProvider()
+    {
+        return [
+            'customer ids different' => [66, null, 'once'],
+            'customer ids same' => [66, 66, 'never'],
+        ];
     }
 }

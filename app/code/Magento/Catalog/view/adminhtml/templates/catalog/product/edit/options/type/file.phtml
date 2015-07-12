@@ -10,7 +10,7 @@
 <?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\File */ ?>
 <script id="custom-option-file-type-template" type="text/x-magento-template">
     <div id="product_option_<%- data.option_id %>_type_<%- data.group %>" class="fieldset">
-        <table class="data-table" cellspacing="0">
+        <table class="data-table">
             <thead>
             <tr>
                 <?php if ($block->getCanReadPrice() !== false) : ?>
@@ -18,7 +18,7 @@
                 <th><?php echo __('Price Type'); ?></th>
                 <?php endif; ?>
                 <th><?php echo __('SKU'); ?></th>
-                <th><?php echo __('Allowed File Extensions'); ?></th>
+                <th><?php echo __('Compatible File Extensions'); ?></th>
                 <th><?php echo __('Maximum Image Size'); ?></th>
             </tr>
             </thead>

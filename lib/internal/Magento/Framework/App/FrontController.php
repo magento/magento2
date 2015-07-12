@@ -45,7 +45,7 @@ class FrontController implements FrontControllerInterface
                         $result = $actionInstance->dispatch($request);
                         break;
                     }
-                } catch (Action\NotFoundException $e) {
+                } catch (\Magento\Framework\Exception\NotFoundException $e) {
                     $request->initForward();
                     $request->setActionName('noroute');
                     $request->setDispatched(false);

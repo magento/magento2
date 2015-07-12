@@ -5,7 +5,6 @@
  */
 namespace Magento\TestFixture\Controller\Adminhtml;
 
-use Magento\Framework\App\Action;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
@@ -19,7 +18,7 @@ class Noroute implements \Magento\Framework\App\ActionInterface
      *
      * @param RequestInterface $request
      * @return ResponseInterface
-     * @throws Action\NotFoundException
+     * @throws \Magento\Framework\Exception\NotFoundException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

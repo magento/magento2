@@ -16,13 +16,26 @@ class CanUseForCountryTest extends \PHPUnit_Framework_TestCase
     const EXPECTED_COUNTRY_ID = 1;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $countryProvider;
+
+    /**
      * @var CanUseForCountry
      */
     protected $_model;
 
     public function setUp()
     {
-        $this->_model = new CanUseForCountry();
+        $this->countryProvider = $this->getMock(
+            'Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider',
+            [],
+            [],
+            '',
+            false,
+            false
+        );
+        $this->_model = new CanUseForCountry($this->countryProvider);
     }
 
     /**
@@ -34,20 +47,14 @@ class CanUseForCountryTest extends \PHPUnit_Framework_TestCase
         $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
-        $billingAddressMock = $this->getMockBuilder(
-            'Magento\Quote\Model\Quote\Address'
-        )->disableOriginalConstructor()->setMethods([])->getMock();
-        $billingAddressMock->expects($this->once())->method('getCountry')->will(
-            $this->returnValue(self::EXPECTED_COUNTRY_ID)
-        );
-        $quoteMock->expects($this->once())->method('getBillingAddress')->will($this->returnValue($billingAddressMock));
 
         $paymentMethod = $this->getMockBuilder(
-            'Magento\Payment\Model\Checks\PaymentMethodChecksInterface'
+            '\Magento\Payment\Model\MethodInterface'
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCountry')->with(
             self::EXPECTED_COUNTRY_ID
         )->will($this->returnValue($expectation));
+        $this->countryProvider->expects($this->once())->method('getCountry')->willReturn(self::EXPECTED_COUNTRY_ID);
 
         $this->assertEquals($expectation, $this->_model->isApplicable($paymentMethod, $quoteMock));
     }

@@ -6,11 +6,10 @@
 namespace Magento\Customer\Block\Adminhtml\Edit;
 
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Ui\Component\Control\ButtonProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class SaveAndContinueButton
- * @package Magento\Customer\Block\Adminhtml\Edit
  */
 class SaveAndContinueButton extends GenericButton implements ButtonProviderInterface
 {

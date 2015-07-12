@@ -184,10 +184,10 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     /**
      * Collect and get rates
      *
-     * @param RateRequest $request
+     * @param \Magento\Framework\Object $request
      * @return Result|bool|null
      */
-    public function collectRates(RateRequest $request)
+    public function collectRates(\Magento\Framework\Object $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;
@@ -991,7 +991,7 @@ XMLAuth;
      */
     protected function _parseXmlTrackingResponse($trackingValue, $xmlResponse)
     {
-        $errorTitle = 'Unable to retrieve tracking';
+        $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
         $resultArr = [];
         $packageProgress = [];
 

@@ -86,6 +86,7 @@ class Config
      * Retrieve active system payments
      *
      * @return array
+     * @api
      */
     public function getActiveMethods()
     {
@@ -94,7 +95,8 @@ class Config
             if (isset($data['active']) && (bool)$data['active'] && isset($data['model'])) {
                 /** @var AbstractMethod|null $methodModel Actually it's wrong interface */
                 $methodModel = $this->_paymentMethodFactory->create($data['model']);
-                $methodModel->setId($code)->setStore(null);
+                $methodModel->setId($code);
+                $methodModel->setStore(null);
                 if ($methodModel->getConfigData('active', null)) {
                     $methods[$code] = $methodModel;
                 }
@@ -107,6 +109,7 @@ class Config
      * Get list of credit card types
      *
      * @return array
+     * @api
      */
     public function getCcTypes()
     {
@@ -117,6 +120,7 @@ class Config
      * Retrieve array of payment methods information
      *
      * @return array
+     * @api
      */
     public function getMethodsInfo()
     {
@@ -127,6 +131,7 @@ class Config
      * Get payment groups
      *
      * @return array
+     * @api
      */
     public function getGroups()
     {
@@ -137,6 +142,7 @@ class Config
      * Retrieve list of months translation
      *
      * @return array
+     * @api
      */
     public function getMonths()
     {
@@ -155,6 +161,7 @@ class Config
      * Retrieve array of available years
      *
      * @return array
+     * @api
      */
     public function getYears()
     {

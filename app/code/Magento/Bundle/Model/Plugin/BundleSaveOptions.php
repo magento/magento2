@@ -17,8 +17,9 @@ class BundleSaveOptions
     /**
      * @param \Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository
      */
-    public function __construct(\Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository)
-    {
+    public function __construct(
+        \Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository
+    ) {
         $this->optionRepository = $optionRepository;
     }
 
@@ -45,13 +46,37 @@ class BundleSaveOptions
         }
 
         /* @var \Magento\Bundle\Api\Data\OptionInterface[] $options */
-        $bundleProductOptions = $product->getExtensionAttributes()->getBundleProductOptions();
+        $extendedAttributes = $product->getExtensionAttributes();
+        if ($extendedAttributes === null) {
+            return $result;
+        }
+        $bundleProductOptions = $extendedAttributes->getBundleProductOptions();
+        if ($bundleProductOptions == null) {
+            return $result;
+        }
 
-        if (is_array($bundleProductOptions)) {
-            foreach ($bundleProductOptions as $option) {
-                $this->optionRepository->save($result, $option);
+        /** @var \Magento\Bundle\Api\Data\OptionInterface[] $bundleProductOptions */
+        $existingOptions = $this->optionRepository->getList($product->getSku());
+        $existingOptionsMap = [];
+        foreach ($existingOptions as $existingOption) {
+            $existingOptionsMap[$existingOption->getOptionId()] = $existingOption;
+        }
+        $updatedOptionIds = [];
+        foreach ($bundleProductOptions as $bundleOption) {
+            $optionId = $bundleOption->getOptionId();
+            if ($optionId) {
+                $updatedOptionIds[] = $optionId;
             }
         }
-        return $result;
+        $optionIdsToDelete = array_diff(array_keys($existingOptionsMap), $updatedOptionIds);
+        //Handle new and existing options
+        foreach ($bundleProductOptions as $option) {
+            $this->optionRepository->save($result, $option);
+        }
+        //Delete options that are not in the list
+        foreach ($optionIdsToDelete as $optionId) {
+            $this->optionRepository->delete($existingOptionsMap[$optionId]);
+        }
+        return $subject->get($result->getSku(), false, $result->getStoreId(), true);
     }
 }

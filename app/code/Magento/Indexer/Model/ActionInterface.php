@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Model;
 
+/**
+ * @api
+ */
 interface ActionInterface
 {
     /**

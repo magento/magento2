@@ -31,14 +31,14 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framew
      * Send a mail using this transport
      *
      * @return void
-     * @throws \Magento\Framework\Mail\Exception
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function sendMessage()
     {
         try {
             parent::send($this->_message);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Mail\Exception($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\MailException(new \Magento\Framework\Phrase($e->getMessage()), $e);
         }
     }
 }

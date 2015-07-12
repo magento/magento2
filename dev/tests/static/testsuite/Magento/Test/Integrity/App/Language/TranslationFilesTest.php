@@ -13,7 +13,7 @@ class TranslationFilesTest extends TranslationFiles
     /**
      * Context
      *
-     * @var \Magento\Tools\I18n\Context
+     * @var \Magento\Setup\Module\I18n\Context
      */
     protected $context;
 
@@ -45,7 +45,7 @@ class TranslationFilesTest extends TranslationFiles
     {
         $parser = $this->prepareParser();
 
-        $optionResolverFactory = new \Magento\Tools\I18n\Dictionary\Options\ResolverFactory();
+        $optionResolverFactory = new \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory();
         $optionResolver = $optionResolverFactory->create(
             \Magento\Framework\App\Utility\Files::init()->getPathToSource(),
             true
@@ -70,7 +70,7 @@ class TranslationFilesTest extends TranslationFiles
     }
 
     /**
-     * @param \Magento\Tools\I18n\Dictionary\Phrase $phrase
+     * @param \Magento\Setup\Module\I18n\Dictionary\Phrase $phrase
      * @param array $context
      * @return string
      */
@@ -78,41 +78,41 @@ class TranslationFilesTest extends TranslationFiles
     {
         $path = $this->getContext()->buildPathToLocaleDirectoryByContext($phrase->getContextType(), $context);
         return \Magento\Framework\App\Utility\Files::init()->getPathToSource() . '/'
-        . $path . \Magento\Tools\I18n\Locale::DEFAULT_SYSTEM_LOCALE
-        . '.' . \Magento\Tools\I18n\Pack\Writer\File\Csv::FILE_EXTENSION;
+        . $path . \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE
+        . '.' . \Magento\Setup\Module\I18n\Pack\Writer\File\Csv::FILE_EXTENSION;
     }
 
     /**
-     * @return \Magento\Tools\I18n\Context
+     * @return \Magento\Setup\Module\I18n\Context
      */
     protected function getContext()
     {
         if ($this->context === null) {
-            $this->context = new \Magento\Tools\I18n\Context();
+            $this->context = new \Magento\Setup\Module\I18n\Context();
         }
         return $this->context;
     }
 
     /**
-     * @return \Magento\Tools\I18n\Parser\Contextual
+     * @return \Magento\Setup\Module\I18n\Parser\Contextual
      */
     protected function prepareParser()
     {
-        $filesCollector = new \Magento\Tools\I18n\FilesCollector();
+        $filesCollector = new \Magento\Setup\Module\I18n\FilesCollector();
 
-        $phraseCollector = new \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
-            new \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer()
+        $phraseCollector = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
+            new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer()
         );
         $adapters = [
-            'php' => new \Magento\Tools\I18n\Parser\Adapter\Php($phraseCollector),
-            'js' =>  new \Magento\Tools\I18n\Parser\Adapter\Js(),
-            'xml' => new \Magento\Tools\I18n\Parser\Adapter\Xml(),
+            'php' => new \Magento\Setup\Module\I18n\Parser\Adapter\Php($phraseCollector),
+            'js' =>  new \Magento\Setup\Module\I18n\Parser\Adapter\Js(),
+            'xml' => new \Magento\Setup\Module\I18n\Parser\Adapter\Xml(),
         ];
 
-        $parserContextual = new \Magento\Tools\I18n\Parser\Contextual(
+        $parserContextual = new \Magento\Setup\Module\I18n\Parser\Contextual(
             $filesCollector,
-            new \Magento\Tools\I18n\Factory(),
-            new \Magento\Tools\I18n\Context()
+            new \Magento\Setup\Module\I18n\Factory(),
+            new \Magento\Setup\Module\I18n\Context()
         );
         foreach ($adapters as $type => $adapter) {
             $parserContextual->addAdapter($type, $adapter);

@@ -129,34 +129,38 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
 
-        $redirectFactoryMock = $this->getMock(
-            'Magento\Framework\Controller\Result\RedirectFactory',
+        $resultFactoryMock = $this->getMock(
+            'Magento\Framework\Controller\ResultFactory',
             ['create'],
             [],
             '',
             false
         );
-        $redirectFactoryMock->expects($this->once())
+        $resultFactoryMock->expects($this->once())
             ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->redirectResultMock);
 
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $this->contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $this->contextMock->expects($this->any())
             ->method('getRedirect')
-            ->will($this->returnValue($this->redirectMock));
+            ->willReturn($this->redirectMock);
         $this->contextMock->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($viewMock));
+            ->willReturn($viewMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
+        $this->contextMock->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($resultFactoryMock);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -171,7 +175,6 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'addressHelper' => $this->addressHelperMock,
                 'urlFactory' => $urlFactoryMock,
-                'resultRedirectFactory' => $redirectFactoryMock,
             ]
         );
     }
@@ -314,8 +317,8 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [1, 1, false, null, __('Thank you for registering with')],
-            [1, 1, true, Address::TYPE_BILLING, __('enter you billing address for proper VAT calculation')],
-            [1, 1, true, Address::TYPE_SHIPPING, __('enter you shipping address for proper VAT calculation')],
+            [1, 1, true, Address::TYPE_BILLING, __('enter your billing address for proper VAT calculation')],
+            [1, 1, true, Address::TYPE_SHIPPING, __('enter your shipping address for proper VAT calculation')],
         ];
     }
 
@@ -391,15 +394,15 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->redirectMock->expects($this->never())
             ->method('success')
             ->with($this->equalTo($resultUrl))
-            ->will($this->returnValue($resultUrl));
+            ->willReturn($resultUrl);
 
         $this->scopeConfigMock->expects($this->never())
             ->method('isSetFlag')
             ->with(
-                $this->equalTo(Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD),
-                $this->equalTo(ScopeInterface::SCOPE_STORE)
+                Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
+                ScopeInterface::SCOPE_STORE
             )
-            ->will($this->returnValue($isSetFlag));
+            ->willReturn($isSetFlag);
 
         $this->model->execute();
     }

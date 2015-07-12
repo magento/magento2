@@ -19,13 +19,20 @@
     <?php if ($block->canParentReturnToStock($_item)) : ?>
         <td class="col-return-to-stock">
         <?php if ($block->canReturnItemToStock($_item)) : ?>
-            <input type="checkbox" name="creditmemo[items][<?php echo $_item->getOrderItemId() ?>][back_to_stock]" value="1"<?php if ($_item->getBackToStock()):?> checked<?php endif;?>/>
+            <input type="checkbox"
+                   class="admin__control-checkbox"
+                   name="creditmemo[items][<?php echo $_item->getOrderItemId() ?>][back_to_stock]"
+                   value="1"<?php if ($_item->getBackToStock()):?> checked<?php endif;?>/>
+            <label class="admin__field-label"></label>
         <?php endif; ?>
         </td>
     <?php endif; ?>
-    <td class="col-refund">
+    <td class="col-refund col-qty">
     <?php if ($block->canEditQty()) : ?>
-        <input type="text" class="input-text qty-input" name="creditmemo[items][<?php echo $_item->getOrderItemId() ?>][qty]" value="<?php echo $_item->getQty()*1 ?>"/>
+        <input type="text"
+               class="input-text admin__control-text qty-input"
+               name="creditmemo[items][<?php echo $_item->getOrderItemId() ?>][qty]"
+               value="<?php echo $_item->getQty()*1 ?>"/>
     <?php else : ?>
         <?php echo $_item->getQty()*1 ?>
     <?php endif; ?>

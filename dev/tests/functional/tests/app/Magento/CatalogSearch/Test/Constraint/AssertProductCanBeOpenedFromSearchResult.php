@@ -30,14 +30,16 @@ class AssertProductCanBeOpenedFromSearchResult extends AbstractConstraint
         CatalogProductView $catalogProductViewPage
     ) {
         $product = $catalogSearch->getDataFieldConfig('query_text')['source']->getProduct();
-        $productName = $product->getName();
-        $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($productName);
+
+        $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
         while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage()) {
-            $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($productName);
+            $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
         }
+
+        $productName = $product->getName();
         \PHPUnit_Framework_Assert::assertTrue($isProductVisible, "A product with name $productName was not found.");
 
-        $resultPage->getListProductBlock()->openProductViewPage($productName);
+        $resultPage->getListProductBlock()->getProductItem($product)->open();
         \PHPUnit_Framework_Assert::assertEquals(
             $productName,
             $catalogProductViewPage->getViewBlock()->getProductName(),

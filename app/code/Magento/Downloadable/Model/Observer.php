@@ -114,10 +114,10 @@ class Observer
             //order not saved in the database
             return $this;
         }
-        $product = $orderItem->getProduct();
-        if ($product && $product->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
+        if ($orderItem->getProductType() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
             return $this;
         }
+        $product = $orderItem->getProduct();
         $purchasedLink = $this->_createPurchasedModel()->load($orderItem->getId(), 'order_item_id');
         if ($purchasedLink->getId()) {
             return $this;

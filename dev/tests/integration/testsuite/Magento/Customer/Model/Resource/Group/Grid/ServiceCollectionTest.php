@@ -96,7 +96,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage When passing in a field array there must be a matching condition array.
      */
     public function testAddToFilterException()

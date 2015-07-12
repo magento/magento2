@@ -71,6 +71,13 @@ class Sidebar extends ListCompare
      */
     public function clickClearAll()
     {
+        $rootElement = $this->_rootElement;
+        $selector = $this->clearAll;
+        $this->_rootElement->waitUntil(
+            function () use ($rootElement, $selector) {
+                return $rootElement->find($selector)->isVisible() ? true : null;
+            }
+        );
         $this->_rootElement->find($this->clearAll)->click();
         $this->browser->acceptAlert();
     }

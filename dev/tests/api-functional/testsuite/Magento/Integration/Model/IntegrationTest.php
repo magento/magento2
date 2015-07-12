@@ -17,8 +17,8 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        /** @var $integrationService \Magento\Integration\Service\V1\IntegrationInterface */
-        $integrationService = $objectManager->get('Magento\Integration\Service\V1\IntegrationInterface');
+        /** @var $integrationService \Magento\Integration\Api\IntegrationServiceInterface */
+        $integrationService = $objectManager->get('Magento\Integration\Api\IntegrationServiceInterface');
 
         $params = [
             'all_resources' => true,

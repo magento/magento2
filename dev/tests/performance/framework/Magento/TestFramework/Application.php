@@ -63,9 +63,9 @@ class Application
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Shell $shell
     ) {
-        $shellDir = $config->getApplicationBaseDir() . '/setup';
+        $shellDir = $config->getApplicationBaseDir() . '/bin';
         $this->_objectManager = $objectManager;
-        $this->_script = $this->_assertPath($shellDir . '/index.php');
+        $this->_script = $this->_assertPath($shellDir . '/magento');
         $this->_config = $config;
         $this->_shell = $shell;
     }
@@ -75,12 +75,12 @@ class Application
      *
      * @param string $path
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function _assertPath($path)
     {
         if (!is_file($path)) {
-            throw new \Magento\Framework\Exception("File '{$path}' is not found.");
+            throw new \Magento\Framework\Exception\LocalizedException(__("File '%1' is not found.", $path));
         }
         return realpath($path);
     }
@@ -118,7 +118,7 @@ class Application
     public function reindex()
     {
         $this->_shell->execute(
-            'php -f ' . $this->_config->getApplicationBaseDir() . '/dev/shell/indexer.php -- reindexall'
+            'php -f ' . $this->_config->getApplicationBaseDir() . '/bin/magento indexer:reindex --all'
         );
         return $this;
     }
@@ -130,7 +130,7 @@ class Application
      */
     protected function _uninstall()
     {
-        $this->_shell->execute('php -f %s uninstall', [$this->_script]);
+        $this->_shell->execute('php -f %s setup:uninstall -n', [$this->_script]);
 
         $this->_isInstalled = false;
         $this->_fixtures = [];
@@ -142,20 +142,22 @@ class Application
      * Install application according to installation options
      *
      * @return \Magento\TestFramework\Application
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _install()
     {
         $installOptions = $this->_config->getInstallOptions();
         $installOptionsNoValue = $this->_config->getInstallOptionsNoValue();
         if (!$installOptions) {
-            throw new \Magento\Framework\Exception('Trying to install Magento, but installation options are not set');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Trying to install Magento, but installation options are not set')
+            );
         }
 
         // Populate install options with global options
         $baseUrl = 'http://' . $this->_config->getApplicationUrlHost() . $this->_config->getApplicationUrlPath();
-        $installOptions = array_merge($installOptions, ['base_url' => $baseUrl, 'base_url_secure' => $baseUrl]);
-        $installCmd = 'php -f %s install';
+        $installOptions = array_merge($installOptions, ['base-url' => $baseUrl, 'base-url-secure' => $baseUrl]);
+        $installCmd = 'php -f %s setup:install';
         $installCmdArgs = [$this->_script];
         foreach ($installOptions as $optionName => $optionValue) {
             $installCmd .= " --{$optionName}=%s";

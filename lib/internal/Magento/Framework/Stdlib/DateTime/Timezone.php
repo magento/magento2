@@ -146,7 +146,7 @@ class Timezone implements TimezoneInterface
         $locale = $locale ?: $this->_localeResolver->getLocale();
         $timezone = $useTimezone
             ? $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType)
-            : 'UTC';
+            : date_default_timezone_get();
 
         if (empty($date)) {
             return new \DateTime('now', new \DateTimeZone($timezone));
@@ -157,7 +157,7 @@ class Timezone implements TimezoneInterface
                 $locale,
                 \IntlDateFormatter::SHORT,
                 \IntlDateFormatter::SHORT,
-                $timezone
+                new \DateTimeZone($timezone)
             );
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }
@@ -251,7 +251,7 @@ class Timezone implements TimezoneInterface
             $locale ?: $this->_localeResolver->getLocale(),
             $dateType,
             $timeType,
-            $timezone ?: $date->getTimezone(),
+            $timezone ?: $date->getTimezone() ?: new \DateTimeZone(\DateTimeZone::UTC),
             null,
             $pattern
         );

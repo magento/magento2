@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB\Tree;
 
-use Magento\Framework\DB\Tree\Node\NodeException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
@@ -60,15 +60,15 @@ class Node
     /**
      * @param array $nodeData
      * @param array $keys
-     * @throws NodeException
+     * @throws LocalizedException
      */
     public function __construct($nodeData, $keys)
     {
         if (empty($nodeData)) {
-            throw new NodeException('Empty array of node information');
+            throw new LocalizedException(new \Magento\Framework\Phrase('Empty array of node information'));
         }
         if (empty($keys)) {
-            throw new NodeException('Empty keys array');
+            throw new LocalizedException(new \Magento\Framework\Phrase('Empty keys array'));
         }
 
         $this->id = $nodeData[$keys['id']];

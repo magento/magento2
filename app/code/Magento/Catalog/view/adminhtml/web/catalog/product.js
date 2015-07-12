@@ -3,62 +3,74 @@
  * See COPYING.txt for license details.
  */
 require([
-    "jquery",
-    "prototype"
-], function(jQuery){
+    'jquery'
+], function ($) {
+    'use strict';
 
     window.Product = {};
 
-    function toogleFieldEditMode(toogleIdentifier, fieldContainer) {
-        if ($(toogleIdentifier).checked) {
-            enableFieldEditMode(fieldContainer);
+    function byId(id) {
+        return $('#' + id);
+    }
+
+    function toogleFieldEditMode(toogleIdentifier, fieldId) {
+        if ($(toogleIdentifier).is(':checked')) {
+            enableFieldEditMode(fieldId);
         } else {
-            disableFieldEditMode(fieldContainer);
+            disableFieldEditMode(fieldId);
         }
     }
 
-    function disableFieldEditMode(fieldContainer) {
-        $(fieldContainer).disabled = true;
-        if ($(fieldContainer + '_hidden')) {
-            $(fieldContainer + '_hidden').disabled = true;
+    function disableFieldEditMode(fieldId) {
+        byId(fieldId).prop('disabled', true);
+
+        if (byId(fieldId + '_hidden').length) {
+            byId(fieldId + '_hidden').prop('disabled', true);
         }
     }
 
-    function enableFieldEditMode(fieldContainer) {
-        $(fieldContainer).disabled = false;
-        if ($(fieldContainer + '_hidden')) {
-            $(fieldContainer + '_hidden').disabled = false;
+    function enableFieldEditMode(fieldId) {
+        byId(fieldId).prop('disabled', false);
+
+        if (byId(fieldId + '_hidden').length) {
+            byId(fieldId + '_hidden').prop('disabled', false);
         }
     }
 
     function onCompleteDisableInited() {
-        jQuery.each(jQuery('[data-disable]'), function () {
-            var item = jQuery(this).data('disable');
+        $.each($('[data-disable]'), function () {
+            var item = $(this).data('disable');
             disableFieldEditMode(item);
         });
     }
 
     function onUrlkeyChanged(urlKey) {
-        urlKey = $(urlKey);
-        var hidden = urlKey.next('input[type=hidden]');
-        var chbx = urlKey.next('input[type=checkbox]');
-        var oldValue = chbx.value;
-        chbx.disabled = (oldValue == urlKey.value);
-        hidden.disabled = chbx.disabled;
+        urlKey = byId(urlKey);
+        var hidden = urlKey.siblings('input[type=hidden]');
+        var chbx = urlKey.siblings('input[type=checkbox]');
+        var oldValue = chbx.val();
+
+        chbx.prop('disabled', oldValue === urlKey.val());
+        hidden.prop('disabled', chbx.prop('disabled'));
     }
 
     function onCustomUseParentChanged(element) {
-        var useParent = (element.value == 1) ? true : false;
-        element.up(2).select('input', 'select', 'textarea').each(function (el) {
-            if (element.id != el.id) {
-                el.disabled = useParent;
+        element = $(element);
+        var useParent = element.val() == 1,
+            parent = element.offsetParent().parent();
+
+        parent.find('input, select, textarea').each(function (i, el) {
+            el = $(el);
+            if (element.prop('id') != el.prop('id')) {
+                el.prop('disabled', useParent);
             }
         });
-        element.up(2).select('img').each(function (el) {
+
+        parent.find('img').each(function (i, el) {
             if (useParent) {
-                el.hide();
+                $(el).hide();
             } else {
-                el.show();
+                $(el).show();
             }
         });
     }
@@ -67,5 +79,5 @@ require([
     window.onUrlkeyChanged = onUrlkeyChanged;
     window.toogleFieldEditMode = toogleFieldEditMode;
 
-    Event.observe(window, 'load', onCompleteDisableInited);
+    $(onCompleteDisableInited);
 });

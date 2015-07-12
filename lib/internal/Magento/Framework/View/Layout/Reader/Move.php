@@ -43,7 +43,7 @@ class Move implements Layout\ReaderInterface
      *
      * @param \Magento\Framework\View\Layout\ScheduledStructure $scheduledStructure
      * @param \Magento\Framework\View\Layout\Element $currentElement
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     protected function scheduleMove(Layout\ScheduledStructure $scheduledStructure, Layout\Element $currentElement)
@@ -58,7 +58,9 @@ class Move implements Layout\ReaderInterface
                 [$destination, $siblingName, $isAfter, $alias]
             );
         } else {
-            throw new \Magento\Framework\Exception('Element name and destination must be specified.');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Element name and destination must be specified.')
+            );
         }
         return $this;
     }

@@ -23,7 +23,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Escaper::escapeHtml
+     * @covers \Magento\Framework\Escaper::escapeHtml
      * @dataProvider escapeHtmlDataProvider
      */
     public function testEscapeHtml($data, $expected, $allowedTags = null)
@@ -58,7 +58,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Escaper::escapeUrl
+     * @covers \Magento\Framework\Escaper::escapeUrl
      */
     public function testEscapeUrl()
     {
@@ -69,7 +69,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Escaper::escapeJsQuote
+     * @covers \Magento\Framework\Escaper::escapeJsQuote
      */
     public function testEscapeJsQuote()
     {
@@ -80,7 +80,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Escaper::escapeQuote
+     * @covers \Magento\Framework\Escaper::escapeQuote
      */
     public function testEscapeQuote()
     {
@@ -91,5 +91,17 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertEquals($expected[0], $this->_escaper->escapeQuote($data));
         $this->assertEquals($expected[1], $this->_escaper->escapeQuote($data, true));
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::escapeXssInUrl
+     */
+    public function testEscapeXssInUrl()
+    {
+        $data = 'javascript%3Aalert%28String.fromCharCode%280x78%29%2BString.'
+            . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29';
+        $expected = '%3Aalert%28String.fromCharCode%280x78%29%2BString.'
+            . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29';
+        $this->assertEquals($expected, $this->_escaper->escapeXssInUrl($data));
     }
 }

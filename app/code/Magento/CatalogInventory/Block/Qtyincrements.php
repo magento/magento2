@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogInventory\Block;
 
-use Magento\Framework\View\Block\IdentityInterface;
+use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 
 /**

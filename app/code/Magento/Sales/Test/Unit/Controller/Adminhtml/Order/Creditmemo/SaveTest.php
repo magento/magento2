@@ -126,6 +126,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'session' => $this->_sessionMock,
             'objectManager' => $this->_objectManager,
             'messageManager' => $this->_messageManager,
+            'resultRedirectFactory' => $this->resultRedirectFactoryMock
         ];
 
         $context = $helper->getObject('Magento\Backend\App\Action\Context', $arguments);
@@ -138,7 +139,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $context,
                 'creditmemoLoader' => $this->memoLoaderMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
     }
@@ -235,7 +235,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('sales/*/new', ['_current' => true])
             ->willReturnSelf();
 
-        $this->_setSaveActionExpectationForMageCoreException($data, 'Credit memo\'s total must be positive.');
+        $this->_setSaveActionExpectationForMageCoreException($data, 'The credit memo\'s total must be positive.');
 
         $this->_controller->execute();
     }

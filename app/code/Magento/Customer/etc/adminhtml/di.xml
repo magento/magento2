@@ -12,11 +12,5 @@
             <argument name="modelName" xsi:type="string">Magento\Customer\Model\Backend\Customer</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Url\SecurityInfo">
-        <arguments>
-            <argument name="secureUrlList" xsi:type="array">
-                <item name="customer" xsi:type="string">/customer/</item>
-            </argument>
-        </arguments>
-    </type>
+    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Backend\Model\Session" />
 </config>

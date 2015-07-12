@@ -7,8 +7,8 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div class="grid">
-    <table cellspacing="0" class="data order-tables">
+<div class="admin__table-wrapper">
+    <table class="data-table admin__table-primary order-invoice-tables">
         <thead>
             <tr class="headings">
                 <th class="col-product"><span><?php echo __('Product') ?></span></th>
@@ -23,10 +23,10 @@
         <?php $_items = $block->getInvoice()->getAllItems() ?>
         <?php $i = 0; foreach ($_items as $_item): ?>
             <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} else {
-    $i++;
-} ?>
+            continue;
+        } else {
+            $i++;
+        } ?>
             <tbody class="<?php echo $i%2 ? 'even' : 'odd' ?>">
                 <?php echo $block->getItemHtml($_item) ?>
                 <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>

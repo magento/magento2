@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 use Magento\Framework\App\Bootstrap;
 
 /**
- * covers \Magento\Framework\App\ObjectManagerFactory
+ * @covers \Magento\Framework\App\ObjectManagerFactory
  */
 class ObjectManagerFactoryTest extends \PHPUnit_Framework_TestCase
 {

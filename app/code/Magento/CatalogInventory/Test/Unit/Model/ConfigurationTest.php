@@ -70,7 +70,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ->willReturn($id);
         $this->storeManagerMock->expects($this->once())
             ->method('getWebsite')
-            ->with(true)
             ->willReturn($websiteMock);
         $this->assertEquals($id, $this->model->getDefaultWebsiteId());
     }
@@ -259,5 +258,15 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'is_decimal_divided',
         ];
         $this->assertEquals($fields, $this->model->getConfigItemOptions());
+    }
+
+    public function testGetManageStock()
+    {
+        $store = 1;
+        $this->scopeConfigMock->expects($this->once())
+            ->method('isSetFlag')
+            ->with(Configuration::XML_PATH_MANAGE_STOCK, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+            ->willReturn(1);
+        $this->assertEquals(1, $this->model->getManageStock($store));
     }
 }

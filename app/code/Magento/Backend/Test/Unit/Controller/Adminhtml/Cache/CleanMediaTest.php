@@ -32,7 +32,7 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
         );
         $context = $this->getMock(
             'Magento\Backend\App\Action\Context',
-            ['getRequest', 'getResponse', 'getMessageManager', 'getSession'],
+            ['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'],
             $helper->getConstructArguments(
                 'Magento\Backend\App\Action\Context',
                 [
@@ -45,28 +45,27 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($request));
-        $context->expects($this->once())->method('getResponse')->will($this->returnValue($response));
-        $context->expects($this->once())->method('getSession')->will($this->returnValue($session));
-        $context->expects($this->once())->method('getMessageManager')->will($this->returnValue($messageManager));
-
-        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultRedirectFactory->expects($this->atLeastOnce())
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultFactory->expects($this->atLeastOnce())
             ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
+        $context->expects($this->once())->method('getRequest')->willReturn($request);
+        $context->expects($this->once())->method('getResponse')->willReturn($response);
+        $context->expects($this->once())->method('getSession')->willReturn($session);
+        $context->expects($this->once())->method('getMessageManager')->willReturn($messageManager);
+        $context->expects($this->once())->method('getResultFactory')->willReturn($resultFactory);
 
         $controller = $helper->getObject(
             'Magento\Backend\Controller\Adminhtml\Cache\CleanMedia',
             [
-                'context' => $context,
-                'resultRedirectFactory' => $resultRedirectFactory
+                'context' => $context
             ]
         );
 

@@ -13,7 +13,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * Interface StockItemCollectionInterface
- * @package Magento\CatalogInventory\Api\Data
+ * @api
  */
 interface StockItemCollectionInterface extends SearchResultsInterface
 {
@@ -30,7 +30,7 @@ interface StockItemCollectionInterface extends SearchResultsInterface
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 
     /**
      * Get search criteria.

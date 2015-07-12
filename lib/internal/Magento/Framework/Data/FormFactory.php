@@ -33,8 +33,10 @@ class FormFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = 'Magento\Framework\Data\Form')
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $instanceName = 'Magento\Framework\Data\Form'
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
     }
@@ -44,14 +46,16 @@ class FormFactory
      *
      * @param array $data
      * @return \Magento\Framework\Data\Form
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create(array $data = [])
     {
         /** @var $form \Magento\Framework\Data\Form */
         $form = $this->_objectManager->create($this->_instanceName, $data);
         if (!$form instanceof \Magento\Framework\Data\Form) {
-            throw new \Magento\Framework\Exception($this->_instanceName . ' doesn\'t extend \Magento\Framework\Data\Form');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('%1 doesn\'t extend \Magento\Framework\Data\Form', [$this->_instanceName])
+            );
         }
         return $form;
     }

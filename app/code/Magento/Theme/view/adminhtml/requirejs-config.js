@@ -5,9 +5,15 @@
 
 var config = {
     "shim": {
+        "extjs/ext-tree": [
+            "prototype"
+        ],
         "extjs/ext-tree-checkbox": [
             "extjs/ext-tree",
             "extjs/defaults"
+        ],
+        "jquery/editableMultiselect/js/jquery.editable": [
+            "jquery"
         ]
     },
     "bundles": {
@@ -46,7 +52,8 @@ var config = {
     },
     "deps": [
         "js/theme",
-        "mage/backend/bootstrap"
+        "mage/backend/bootstrap",
+        "mage/adminhtml/globals"
     ],
     "paths": {
         "jquery/ui": "jquery/jquery-ui-1.9.2"

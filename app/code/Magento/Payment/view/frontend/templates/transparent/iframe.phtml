@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Payment\Block\Transparent\Iframe $block */
+$params = $block->getParams();
+?>
+<html>
+    <head>
+        <script>
+        <?php if (isset($params['redirect'])): ?>
+            window.location="<?php echo $block->escapeXssInUrl($params['redirect']) ?>";
+        <?php elseif (isset($params['redirect_parent'])): ?>
+            window.top.location="<?php echo $block->escapeXssInUrl($params['redirect_parent']) ?>";
+        <?php elseif (isset($params['error_msg'])): ?>
+            window.top.alert(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
+            var require = window.top.require;
+            require(['jquery'], function($) {
+                $('#opc-review').trigger('hideAjaxLoader');
+            });
+        <?php elseif (isset($params['order_success'])): ?>
+            window.top.location = "<?php echo $params['order_success'] ?>";
+        <?php else: ?>
+            var require = window.top.require;
+            require(
+                [
+                    'Magento_Checkout/js/model/quote',
+                    'Magento_Checkout/js/action/place-order'
+                ],
+                function(quote, placeOrderAction) {
+                    placeOrderAction(quote.paymentMethod(), true);
+                }
+            );
+        <?php endif; ?>
+        </script>
+    </head>
+    <body></body>
+</html>

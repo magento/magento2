@@ -21,20 +21,20 @@ class AssertOrderGrandTotal extends AbstractConstraint
      * @param SalesOrderView $salesOrderView
      * @param string $orderId
      * @param OrderIndex $salesOrder
-     * @param string $grandTotal
+     * @param array $prices
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
         $orderId,
-        $grandTotal
+        array $prices
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
         \PHPUnit_Framework_Assert::assertEquals(
-            $grandTotal,
+            $prices['grandTotal'],
             $salesOrderView->getOrderTotalsBlock()->getGrandTotal(),
             'Grand Total price does not equal to price from data set.'
         );

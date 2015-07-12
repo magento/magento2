@@ -3,13 +3,15 @@
  * See COPYING.txt for license details.
  */
 define([
-    './collapsible'
-], function(Collapsible) {
+    'Magento_Ui/js/lib/collapsible'
+], function (Collapsible) {
     'use strict';
 
     return Collapsible.extend({
         defaults: {
-            template: 'ui/fieldset/fieldset'
+            template: 'ui/form/fieldset',
+            collapsible: false,
+            opened: true
         }
     });
 });

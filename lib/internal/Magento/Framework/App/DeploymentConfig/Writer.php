@@ -6,8 +6,10 @@
 
 namespace Magento\Framework\App\DeploymentConfig;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Deployment configuration writer
@@ -36,52 +38,36 @@ class Writer
     private $formatter;
 
     /**
+     * @var ConfigFilePool
+     */
+    private $configFilePool;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Constructor
      *
      * @param Reader $reader
      * @param Filesystem $filesystem
+     * @param ConfigFilePool $configFilePool
+     * @param DeploymentConfig $deploymentConfig
      * @param Writer\FormatterInterface $formatter
      */
-    public function __construct(Reader $reader, Filesystem $filesystem, Writer\FormatterInterface $formatter = null)
-    {
+    public function __construct(
+        Reader $reader,
+        Filesystem $filesystem,
+        ConfigFilePool $configFilePool,
+        DeploymentConfig $deploymentConfig,
+        Writer\FormatterInterface $formatter = null
+    ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;
         $this->formatter = $formatter ?: new Writer\PhpFormatter();
-    }
-
-    /**
-     * Creates the deployment configuration file
-     *
-     * Will overwrite a file, if it exists.
-     *
-     * @param SegmentInterface[] $segments
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    public function create($segments)
-    {
-        $data = [];
-        foreach ($segments as $segment) {
-            if (!($segment instanceof SegmentInterface)) {
-                throw new \InvalidArgumentException('An instance of SegmentInterface is expected.');
-            }
-            $data[$segment->getKey()] = $segment->getData();
-        }
-        $this->write($data);
-    }
-
-    /**
-     * Update data in the configuration file using specified segment object
-     *
-     * @param SegmentInterface $segment
-     * @return void
-     */
-    public function update(SegmentInterface $segment)
-    {
-        $key = $segment->getKey();
-        $data = $this->reader->load();
-        $data[$key] = $segment->getData();
-        $this->write($data);
+        $this->configFilePool = $configFilePool;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -92,21 +78,46 @@ class Writer
     public function checkIfWritable()
     {
         $configDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-        if ($configDirectory->isWritable($this->reader->getFile())) {
-            return true;
+        foreach ($this->reader->getFiles() as $file) {
+            if (!$configDirectory->isWritable($file)) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     /**
-     * Persists the data into file
+     * Saves config
      *
      * @param array $data
+     * @param bool $override
      * @return void
      */
-    private function write($data)
+    public function saveConfig(array $data, $override = false)
     {
-        $contents = $this->formatter->format($data);
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($this->reader->getFile(), $contents);
+        $paths = $this->configFilePool->getPaths();
+
+        foreach ($data as $fileKey => $config) {
+            if (isset($paths[$fileKey])) {
+
+                if ($this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isExist($paths[$fileKey])) {
+                    $currentData = $this->reader->load($fileKey);
+                    if ($override) {
+                        $config = array_merge($currentData, $config);
+                    } else {
+                        $config = array_replace_recursive($currentData, $config);
+                    }
+                }
+
+                $contents = $this->formatter->format($config);
+                $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($paths[$fileKey], $contents);
+                if (function_exists('opcache_invalidate')) {
+                    opcache_invalidate(
+                        $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath($paths[$fileKey])
+                    );
+                }
+            }
+        }
+        $this->deploymentConfig->resetData();
     }
 }

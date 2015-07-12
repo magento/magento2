@@ -8,26 +8,32 @@ module.exports = function (grunt) {
     'use strict';
 
     var _ = require('underscore'),
-        path = require('path');
+        path = require('path'),
+        configDir = './dev/tools/grunt/configs',
+        taskDir = './dev/tools/grunt/tasks';
 
-    require('./dev/tools/grunt/tasks/mage-minify')(grunt);
-    require('time-grunt')(grunt);
+    [
+        taskDir + '/mage-minify',
+        taskDir + '/deploy',
+        'time-grunt'
+    ].forEach(function (task) {
+        require(task)(grunt);
+    });
 
     require('load-grunt-config')(grunt, {
-        configPath: path.join(process.cwd(), 'dev/tools/grunt/configs'),
+        configPath: path.join(__dirname, configDir),
         init: true,
-        loadGruntTasks: {
-            pattern: [
-                'grunt-*',
-                '!grunt-template-jasmine-requirejs'
-            ]
+        jitGrunt: {
+            staticMappings: {
+                usebanner: 'grunt-banner'
+            }
         }
     });
 
     _.each({
         /**
          * Assembling tasks.
-         * ToDo UI: define default tasks.
+         * ToDo: define default tasks.
          */
         default: function () {
             grunt.log.subhead('I\'m default task and at the moment I\'m empty, sorry :/');
@@ -37,17 +43,19 @@ module.exports = function (grunt) {
          * Production preparation task.
          */
         prod: function (component) {
-            if (component === 'setup') {
-                grunt.task.run([
-                    'less:' + component,
-                    'autoprefixer:' + component,
-                    'cssmin:' + component,
-                    'usebanner:' + component
-                ]);
-            }
+            var tasks = [
+                'less',
+                'autoprefixer',
+                'cssmin',
+                'usebanner'
+            ].map(function(task){
+                return task + ':' + component;
+            });
 
             if (typeof component === 'undefined') {
                 grunt.log.subhead('Tip: Please make sure that u specify prod subtask. By default prod task do nothing');
+            } else {
+                grunt.task.run(tasks);
             }
         },
 
@@ -60,51 +68,32 @@ module.exports = function (grunt) {
             'less:luma',
             'less:backend'
         ],
-        /**
-         * Styles for backend theme
-         */
-        backend: [
-            'less:backend',
-            'replace:escapeCalc',
-            'less:override'
-        ],
+
         /**
          * Documentation
          */
         documentation: [
+            'replace:documentation',
             'less:documentation',
             'styledocco:documentation',
+            'usebanner:documentationCss',
+            'usebanner:documentationLess',
+            'usebanner:documentationHtml',
             'clean:var',
             'clean:pub'
-        ],
-
-        spec: [
-            'specRunner:lib',
-            'specRunner:backend',
-            'specRunner:frontend'
-        ],
-
-        unit: [
-            'jasmine:lib-unit',
-            'jasmine:backend-unit',
-            'jasmine:frontend-unit'
-        ],
-
-        integration: [
-            'jasmine:lib-integration',
-            'jasmine:backend-integration',
-            'jasmine:frontend-integration'
         ],
 
         'legacy-build': [
             'mage-minify:legacy'
         ],
 
-        'documentation-banners': [
-            'usebanner:documentationCss',
-            'usebanner:documentationLess',
-            'usebanner:documentationHtml'
-        ]
+        spec: function (theme) {
+            var runner = require('./dev/tests/js/jasmine/spec_runner');
+
+            runner.init(grunt, { theme: theme });
+
+            grunt.task.run(runner.getTasks());
+        }
     }, function (task, name) {
         grunt.registerTask(name, task);
     });

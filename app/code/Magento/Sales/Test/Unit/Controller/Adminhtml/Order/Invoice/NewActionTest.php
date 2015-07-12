@@ -134,51 +134,6 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
         $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $contextMock->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())
-            ->method('getTitle')
-            ->will($this->returnValue($titleMock));
-        $contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
-        $contextMock->expects($this->any())
-            ->method('getView')
-            ->will($this->returnValue($this->viewMock));
-        $contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
-        $contextMock->expects($this->any())
-            ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlagMock));
-        $contextMock->expects($this->any())
-            ->method('getHelper')
-            ->will($this->returnValue($this->helperMock));
-        $contextMock->expects($this->any())
-            ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
-        $contextMock->expects($this->any())
-            ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
-        $this->viewMock->expects($this->any())
-            ->method('getPage')
-            ->willReturn($this->resultPageMock);
-        $this->resultPageMock->expects($this->any())
-            ->method('getConfig')
-            ->willReturn($this->pageConfigMock);
-        $this->pageConfigMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($this->pageTitleMock);
-
         $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -189,11 +144,58 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $contextMock->expects($this->any())
+            ->method('getRequest')
+            ->willReturn($this->requestMock);
+        $contextMock->expects($this->any())
+            ->method('getResponse')
+            ->willReturn($this->responseMock);
+        $contextMock->expects($this->any())
+            ->method('getTitle')
+            ->willReturn($titleMock);
+        $contextMock->expects($this->any())
+            ->method('getObjectManager')
+            ->willReturn($this->objectManagerMock);
+        $contextMock->expects($this->any())
+            ->method('getView')
+            ->willReturn($this->viewMock);
+        $contextMock->expects($this->any())
+            ->method('getObjectManager')
+            ->willReturn($this->objectManagerMock);
+        $contextMock->expects($this->any())
+            ->method('getActionFlag')
+            ->willReturn($this->actionFlagMock);
+        $contextMock->expects($this->any())
+            ->method('getHelper')
+            ->willReturn($this->helperMock);
+        $contextMock->expects($this->any())
+            ->method('getSession')
+            ->willReturn($this->sessionMock);
+        $contextMock->expects($this->any())
+            ->method('getMessageManager')
+            ->willReturn($this->messageManagerMock);
+        $contextMock->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactoryMock);
+
+        $this->viewMock->expects($this->any())
+            ->method('getPage')
+            ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->any())
+            ->method('getConfig')
+            ->willReturn($this->pageConfigMock);
+        $this->pageConfigMock->expects($this->any())
+            ->method('getTitle')
+            ->willReturn($this->pageTitleMock);
+
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\NewAction',
             [
                 'context' => $contextMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
                 'resultPageFactory' => $this->resultPageFactoryMock
             ]
         );

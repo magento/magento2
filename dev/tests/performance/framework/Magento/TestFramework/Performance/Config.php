@@ -58,14 +58,16 @@ class Config
      * @param string $testsBaseDir
      * @param string $appBaseDir
      * @throws \InvalidArgumentException
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(array $configData, $testsBaseDir, $appBaseDir)
     {
         $this->_validateData($configData);
 
         if (!is_dir($testsBaseDir)) {
-            throw new \Magento\Framework\Exception("Base directory '{$testsBaseDir}' does not exist.");
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Base directory '%1' does not exist.", $testsBaseDir)
+            );
         }
         $this->_testsBaseDir = $testsBaseDir;
         $this->_reportDir = $this->_getTestsRelativePath($configData['report_dir']);
@@ -100,7 +102,7 @@ class Config
      * Validate high-level configuration structure
      *
      * @param array $configData
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _validateData(array $configData)
     {
@@ -108,16 +110,18 @@ class Config
         $requiredKeys = ['application', 'scenario', 'report_dir'];
         foreach ($requiredKeys as $requiredKeyName) {
             if (empty($configData[$requiredKeyName])) {
-                throw new \Magento\Framework\Exception("Configuration array must define '{$requiredKeyName}' key.");
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("Configuration array must define '%1' key.", $requiredKeyName)
+                );
             }
         }
 
         // Validate admin options data
-        $requiredAdminKeys = ['admin_username', 'admin_password', 'backend_frontname'];
+        $requiredAdminKeys = ['admin-user', 'admin-password', 'backend-frontname'];
         foreach ($requiredAdminKeys as $requiredKeyName) {
             if (empty($configData['application']['installation']['options'][$requiredKeyName])) {
-                throw new \Magento\Framework\Exception(
-                    "Installation options array must define '{$requiredKeyName}' key."
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("Installation options array must define '%1' key.", $requiredKeyName)
                 );
             }
         }
@@ -273,9 +277,9 @@ class Config
             \Magento\TestFramework\Performance\Scenario::ARG_HOST => $this->getApplicationUrlHost(),
             \Magento\TestFramework\Performance\Scenario::ARG_PATH => $this->getApplicationUrlPath(),
             \Magento\TestFramework\Performance\Scenario::ARG_BASEDIR => $this->getApplicationBaseDir(),
-            \Magento\TestFramework\Performance\Scenario::ARG_BACKEND_FRONTNAME => $options['backend_frontname'],
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME => $options['admin_username'],
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD => $options['admin_password'],
+            \Magento\TestFramework\Performance\Scenario::ARG_BACKEND_FRONTNAME => $options['backend-frontname'],
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USER => $options['admin-user'],
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD => $options['admin-password'],
             'jmeter.save.saveservice.output_format' => 'xml',
         ];
     }

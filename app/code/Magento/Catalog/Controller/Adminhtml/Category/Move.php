@@ -25,19 +25,17 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory,
      * @param \Psr\Log\LoggerInterface $logger,
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Psr\Log\LoggerInterface $logger
     ) {
-        parent::__construct($context, $resultRedirectFactory);
+        parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->logger = $logger;
@@ -72,7 +70,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $error = true;
             $this->messageManager->addError(__('There was a category move error.'));
-        } catch (\Magento\UrlRewrite\Model\Storage\DuplicateEntryException $e) {
+        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
             $error = true;
             $this->messageManager->addError(__('There was a category move error. %1', $e->getMessage()));
         } catch (\Exception $e) {

@@ -8,9 +8,7 @@
 namespace Magento\Mtf\Util\Generate\Factory;
 
 /**
- * Class Page
- *
- * Page Factory generator
+ * Page Factory generator.
  *
  */
 class Page extends AbstractFactory
@@ -18,7 +16,7 @@ class Page extends AbstractFactory
     protected $type = 'Page';
 
     /**
-     * Collect Items
+     * Collect Items.
      */
     protected function generateContent()
     {
@@ -30,7 +28,20 @@ class Page extends AbstractFactory
     }
 
     /**
-     * Add Page to content
+     * Convert class name to camel-case.
+     *
+     * @param string $class
+     * @return string
+     */
+    private function toCamelCase($class)
+    {
+        $classNameExcessSymbols = ['_', '\\', '/', 'https:', 'http:', 'com', 'www', '.', '-'];
+        $class = str_replace($classNameExcessSymbols, ' ', $class);
+        return str_replace(' ', '', ucwords($class));
+    }
+
+    /**
+     * Add Page to content.
      *
      * @param array $item
      */
@@ -39,7 +50,7 @@ class Page extends AbstractFactory
         $realClass = $this->_resolveClass($item);
         $reflectionClass = new \ReflectionClass($realClass);
         $mca = $reflectionClass->getConstant('MCA');
-        $methodNameSuffix = $this->_toCamelCase($mca);
+        $methodNameSuffix = $this->toCamelCase($mca);
 
         $fallbackComment = $this->_buildFallbackComment($item);
 

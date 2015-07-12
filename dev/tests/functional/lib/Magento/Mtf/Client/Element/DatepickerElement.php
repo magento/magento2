@@ -18,7 +18,7 @@ class DatepickerElement extends SimpleElement
      *
      * @var string
      */
-    protected $datePickerButton = './../img[contains(@class,"ui-datepicker-trigger")]';
+    protected $datePickerButton = './../button[contains(@class,"ui-datepicker-trigger")]';
 
     /**
      * DatePicker block.

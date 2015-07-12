@@ -5,11 +5,14 @@
  */
 namespace Magento\Search\Controller\Term;
 
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Controller\ResultFactory;
 
-class Popular extends \Magento\Framework\App\Action\Action
+class Popular extends Action
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -17,10 +20,10 @@ class Popular extends \Magento\Framework\App\Action\Action
     protected $scopeConfig;
 
     /**
-     * @param Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
-    public function __construct(Context $context, \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
+    public function __construct(Context $context, ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
@@ -29,14 +32,14 @@ class Popular extends \Magento\Framework\App\Action\Action
     /**
      * Dispatch request
      *
-     * @param RequestInterface $request
-     * @return ResponseInterface
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
         $searchTerms = $this->scopeConfig->getValue(
             'catalog/seo/search_terms',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         if (!$searchTerms) {
             $this->_redirect('noroute');
@@ -46,11 +49,12 @@ class Popular extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return void
+     * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        return $resultPage;
     }
 }

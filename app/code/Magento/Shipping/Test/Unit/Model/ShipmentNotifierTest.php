@@ -8,7 +8,7 @@ namespace Magento\Shipping\Test\Unit\Model;
 
 use \Magento\Shipping\Model\ShipmentNotifier;
 
-use Magento\Framework\Mail\Exception;
+use Magento\Framework\Exception\MailException;
 use Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory;
 
 /**
@@ -130,7 +130,7 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotifyException()
     {
-        $exception = new Exception('Email has not been sent');
+        $exception = new MailException(__('Email has not been sent'));
         $this->shipmentSenderMock->expects($this->once())
             ->method('send')
             ->with($this->equalTo($this->shipment))

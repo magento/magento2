@@ -9,6 +9,7 @@ namespace Magento\Sales\Api\Data;
  * Invoice search result interface.
  *
  * An invoice is a record of the receipt of payment for an order.
+ * @api
  */
 interface InvoiceSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -25,5 +26,5 @@ interface InvoiceSearchResultInterface extends \Magento\Framework\Api\SearchResu
      * @param \Magento\Sales\Api\Data\InvoiceInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

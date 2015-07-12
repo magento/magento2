@@ -1,0 +1,85 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Actions -> Actions multiselect
+//  _____________________________________________
+
+//  Action multiselect is a combining of checkbox and dropdown elements
+
+.action-multiselect-wrap {
+    &:extend(.abs-clearfix all);
+    display: inline-block;
+    padding-top: 1px;
+    position: relative;
+    height: @control-checkbox-radio__size;
+    width: @control-checkbox-radio__size * 2 - .1rem;
+    z-index: @action-multiselect__z-index;
+    &:hover {
+        .admin__control-checkbox + label:before,
+        .action-multiselect-toggle {
+            border-color: @field-control__hover__border-color;
+        }
+    }
+    &._active {
+        .admin__control-checkbox + label:before,
+        .action-multiselect-toggle {
+            border-color: @action__active__border-color;
+        }
+        .action-menu {
+            .appearing__on();
+        }
+    }
+    &._disabled {
+        .admin__control-checkbox {
+            + label {
+                &:before {
+                    background-color: @control-checkbox-radio__background-color;
+                }
+            }
+        }
+        .admin__control-checkbox + label:before,
+        .action-multiselect-toggle {
+            border-color: @field-control__border-color;
+            opacity: 1;
+        }
+    }
+    .admin__control-checkbox,
+    .admin__control-checkbox + label,
+    .action-multiselect-toggle {
+        float: left;
+    }
+    .action-multiselect-toggle {
+        .action-toggle-triangle(
+            @_triangle__height: @button-marker-triangle__height;
+            @_triangle__width: @button-marker-triangle__width;
+        );
+        border-radius: 0 1px 1px 0;
+        height: @control-checkbox-radio__size;
+        margin-left: -1px;
+        padding: 0;
+        position: relative;
+        transition: @smooth__border-color;
+        width: @control-checkbox-radio__size;
+        &:focus {
+            border-color: @action__active__border-color;
+        }
+        &:after {
+            right: .3rem;
+        }
+        > span {
+            .visually-hidden();
+        }
+    }
+    .action-menu {
+        left: -(@data-grid-cell__padding-horizontal + @data-grid-cell__border-width + .1rem);
+        right: auto;
+        text-align: left;
+        margin-top: 1px;
+    }
+    .action-menu-item {
+        white-space: nowrap;
+    }
+}

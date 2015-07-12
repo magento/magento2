@@ -7,10 +7,9 @@ namespace Magento\Sales\Model\Resource\Collection;
 
 /**
  * Flat sales abstract collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\VersionControl\Collection
 {
     /**
      * @var \Zend_Db_Select
@@ -149,25 +148,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     public function getAllIds($limit = null, $offset = null)
     {
         return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
-    }
-
-    /**
-     * Backward compatibility with EAV collection
-     *
-     * @param string $alias
-     * @param string $attribute
-     * @param string $bind
-     * @param string $filter
-     * @param string $joinType
-     * @param int $storeId
-     * @return $this
-     *
-     * @todo implement join functionality if necessary
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function joinAttribute($alias, $attribute, $bind, $filter = null, $joinType = 'inner', $storeId = null)
-    {
-        return $this;
     }
 
     /**

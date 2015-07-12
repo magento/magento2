@@ -46,7 +46,6 @@ class Billing extends \Magento\Multishipping\Controller\Checkout
 
         $this->_getState()->setActiveStep(State::STEP_BILLING);
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 }

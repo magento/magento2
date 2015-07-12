@@ -16,7 +16,7 @@ class Fs extends AbstractRollback
      * Files rollback implementation via local filesystem
      *
      * @return void
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see AbstractRollback::run()
      */
@@ -25,7 +25,9 @@ class Fs extends AbstractRollback
         $snapshotPath = $this->_snapshot->getBackupPath();
 
         if (!is_file($snapshotPath) || !is_readable($snapshotPath)) {
-            throw new \Magento\Framework\Backup\Exception\CantLoadSnapshot('Cant load snapshot archive');
+            throw new \Magento\Framework\Backup\Exception\CantLoadSnapshot(
+                new \Magento\Framework\Phrase('Can\'t load snapshot archive')
+            );
         }
 
         $fsHelper = new \Magento\Framework\Backup\Filesystem\Helper();
@@ -38,7 +40,7 @@ class Fs extends AbstractRollback
 
         if (!$filesInfo['writable']) {
             throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
-                'Unable to make rollback because not all files are writable'
+                new \Magento\Framework\Phrase('Unable to make rollback because not all files are writable')
             );
         }
 
@@ -52,6 +54,7 @@ class Fs extends AbstractRollback
         new \Magento\Framework\Archive\Gz();
         new \Magento\Framework\Archive\Helper\File('');
         new \Magento\Framework\Archive\Helper\File\Gz('');
+        new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase(''));
 
         $fsHelper->rm($this->_snapshot->getRootDir(), $this->_snapshot->getIgnorePaths());
         $archiver->unpack($snapshotPath, $this->_snapshot->getRootDir());

@@ -6,6 +6,10 @@
 
 namespace Magento\Tax\Api\Data;
 
+/**
+ * Interface for tax rule search results.
+ * @api
+ */
 interface TaxRuleSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
@@ -21,5 +25,5 @@ interface TaxRuleSearchResultsInterface extends \Magento\Framework\Api\SearchRes
      * @param \Magento\Tax\Api\Data\TaxRuleInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

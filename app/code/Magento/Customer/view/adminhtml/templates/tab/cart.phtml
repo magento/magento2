@@ -10,7 +10,7 @@
 <?php /* @var $block \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart */ ?>
 <?php if ($block->getCartHeader()): ?>
 <div class="content-header skip-header">
-    <table cellspacing="0">
+    <table>
         <tr>
             <td style="width:50%;"><h4><?php echo $block->getCartHeader(); ?></h4></td>
         </tr>
@@ -55,7 +55,7 @@ require([
             alert('<?php echo $block->escapeJsQuote(__('No item specified.')) ?>');
             return false;
         }
-        if(!confirm('<?php echo $block->escapeJsQuote(__('Are you sure that you want to remove this item?')) ?>')) {
+        if(!confirm('<?php echo $block->escapeJsQuote(__('Are you sure you want to remove this item?')) ?>')) {
             return false;
         }
 

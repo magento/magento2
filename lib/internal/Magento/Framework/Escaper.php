@@ -71,6 +71,24 @@ class Escaper
     }
 
     /**
+     * Escape xss in urls
+     *
+     * @param string $data
+     * @return string
+     */
+    public function escapeXssInUrl($data)
+    {
+        $result = $data;
+        $urlQuery = parse_url($data, PHP_URL_QUERY);
+        if ($urlQuery !== null && strpos($urlQuery, 'javascript') !== false) {
+            $result = str_replace($urlQuery, '', $data);
+        } elseif (parse_url($data, PHP_URL_HOST) === null) {
+            $result = str_replace('javascript', '', $data);
+        }
+        return htmlspecialchars($result, ENT_COMPAT, 'UTF-8', false);
+    }
+
+    /**
      * Escape quotes inside html attributes
      * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
      *

@@ -33,14 +33,12 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
     public function testGetContents()
     {
         $this->directoryReadMock
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('readFile')
-            ->with(License::LICENSE_FILENAME)
             ->will($this->returnValue('License text'));
         $this->directoryReadMock
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('isFile')
-            ->with(License::LICENSE_FILENAME)
             ->will($this->returnValue(true));
 
         $license = new License($this->filesystemMock);
@@ -50,9 +48,8 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
     public function testGetContentsNoFile()
     {
         $this->directoryReadMock
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('isFile')
-            ->with(License::LICENSE_FILENAME)
             ->will($this->returnValue(false));
 
         $license = new License($this->filesystemMock);

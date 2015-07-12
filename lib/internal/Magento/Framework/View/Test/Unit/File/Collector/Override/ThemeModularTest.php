@@ -113,7 +113,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = 'design/area/theme_path/Module_One/override/theme/vendor/parent_theme/1.xml';
         $this->setExpectedException(
-            'Magento\Framework\Exception',
+            'Magento\Framework\Exception\LocalizedException',
             "Trying to override modular view file '$filePath' for theme 'vendor/parent_theme'"
                 . ", which is not ancestor of theme 'vendor/theme_path'"
         );

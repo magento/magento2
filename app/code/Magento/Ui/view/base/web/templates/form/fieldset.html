@@ -1,0 +1,26 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div
+        class="admin__fieldset-wrapper"
+        data-bind="css: {'admin__collapsible-block-wrapper': collapsible, 'opened': opened}">
+    <div
+            class="admin__fieldset-wrapper-title"
+            tabindex="3"
+            data-bind="click: toggleOpened, keyboard: { 13: toggleOpened }">
+        <strong class="title">
+            <span data-bind="text: label"></span>
+        </strong>
+    </div>
+    <div class="admin__fieldset-wrapper-content" data-bind="visible: opened">
+        <fieldset class="admin__fieldset">
+            <!-- ko foreach: { data: elems, as: 'element' } -->
+            <!-- ko template: element.getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+        </fieldset>
+    </div>
+</div>

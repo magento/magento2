@@ -8,6 +8,7 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
@@ -52,10 +53,13 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     /**
      * Role form submit action to save or create new role
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
         $rid = $this->getRequest()->getParam('role_id', false);
         $resource = $this->getRequest()->getParam('resource', false);
         $roleUsers = $this->getRequest()->getParam('in_role_user', null);
@@ -74,13 +78,11 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         $role = $this->_initRole('role_id');
         if (!$role->getId() && $rid) {
             $this->messageManager->addError(__('This role no longer exists.'));
-            $this->_redirect('adminhtml/*/');
-            return;
+            return $resultRedirect->setPath('adminhtml/*/');
         }
 
         try {
             $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
-
             $role->setName($roleName)
                 ->setPid($this->getRequest()->getParam('parent_id', false))
                 ->setRoleType(RoleGroup::ROLE_TYPE)
@@ -106,7 +108,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred while saving this role.'));
         }
-        $this->_redirect('adminhtml/*/');
-        return;
+
+        return $resultRedirect->setPath('adminhtml/*/');
     }
 }

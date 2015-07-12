@@ -94,7 +94,6 @@ class Index extends \Magento\Framework\App\Action\Action
             $this->_objectManager->get('Magento\CatalogSearch\Helper\Data')->checkNotes();
 
             $this->_view->loadLayout();
-            $this->_view->getLayout()->initMessages();
             $this->_view->renderLayout();
 
             if (!$this->_objectManager->get('Magento\CatalogSearch\Helper\Data')->isMinQueryLength()) {

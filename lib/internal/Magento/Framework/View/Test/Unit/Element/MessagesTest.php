@@ -9,6 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use Magento\Framework\Message\Manager;
 use \Magento\Framework\View\Element\Messages;
 
 use Magento\Framework\Message\ManagerInterface;
@@ -229,7 +230,7 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($emptyMessagesCacheKey, $this->messages->getCacheKeyInfo());
 
         $messagesCacheKey = ['storage_types' => 'a:1:{i:0;s:7:"default";}'];
-        $this->messages->addStorageType(ManagerInterface::DEFAULT_GROUP);
+        $this->messages->addStorageType(Manager::DEFAULT_GROUP);
         $this->assertEquals($messagesCacheKey, $this->messages->getCacheKeyInfo());
     }
 

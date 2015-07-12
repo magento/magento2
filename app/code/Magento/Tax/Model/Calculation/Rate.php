@@ -20,8 +20,24 @@ use Magento\Tax\Api\Data\TaxRateInterface;
  * @method \Magento\Tax\Model\Resource\Calculation\Rate getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Tax\Api\Data\TaxRateInterface
+class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_ID              = 'id';
+    const KEY_COUNTRY_ID      = 'tax_country_id';
+    const KEY_REGION_ID       = 'tax_region_id';
+    const KEY_REGION_NAME     = 'region_name';
+    const KEY_POSTCODE        = 'tax_postcode';
+    const KEY_ZIP_IS_RANGE    = 'zip_is_range';
+    const KEY_ZIP_RANGE_FROM  = 'zip_from';
+    const KEY_ZIP_RANGE_TO    = 'zip_to';
+    const KEY_PERCENTAGE_RATE = 'rate';
+    const KEY_CODE            = 'code';
+    const KEY_TITLES          = 'titles';
+    /**#@-*/
+
     /**
      * List of tax titles
      *
@@ -57,7 +73,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
      * @param Rate\TitleFactory $taxTitleFactory
      * @param Region $directoryRegion
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -70,7 +86,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
         \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory,
         Region $directoryRegion,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_regionFactory = $regionFactory;
@@ -116,13 +132,13 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
 
         if ($isEmptyValues || $isWrongRange) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please fill all required fields with valid information.')
+                __('Make sure all required information is valid.')
             );
         }
 
         if (!is_numeric($this->getRate()) || $this->getRate() < 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Rate Percent should be a positive number.')
+                __('The Rate Percent should be a positive number.')
             );
         }
 
@@ -136,7 +152,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
 
             if (!is_numeric($zipFrom) || !is_numeric($zipTo) || $zipFrom < 0 || $zipTo < 0) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Zip code should not contain characters other than digits.')
+                    __('Use digits only for the zip code.')
                 );
             }
 

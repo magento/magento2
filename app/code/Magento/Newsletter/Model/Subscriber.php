@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Model;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Mail\Exception as MailException;
+use Magento\Framework\Exception\MailException;
 
 /**
  * Subscriber model
@@ -134,7 +134,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -150,7 +150,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         AccountManagementInterface $customerAccountManagement,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_newsletterData = $newsletterData;
@@ -442,7 +442,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->setStatusChanged(true);
 
         try {
-            $this->save();
             if ($isConfirmNeed === true
                 && $isOwnSubscribes === false
             ) {
@@ -450,6 +449,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             } else {
                 $this->sendConfirmationSuccessEmail();
             }
+            $this->save();
             return $this->getStatus();
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());

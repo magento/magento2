@@ -43,26 +43,49 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
      */
     protected $attributeValueFactoryMock;
 
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $methodsMapProcessor;
+
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $joinProcessorMock;
+
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->objectFactoryMock = $this->getMockBuilder('\Magento\Framework\Api\ObjectFactory')
+        $this->objectFactoryMock = $this->getMockBuilder('Magento\Framework\Api\ObjectFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectProcessorMock = $this->getMockBuilder('\Magento\Framework\Reflection\DataObjectProcessor')
+        $this->objectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeValueFactoryMock = $this->getMockBuilder('\Magento\Framework\Api\AttributeValueFactory')
+        $this->methodsMapProcessor = $this->getMockBuilder('Magento\Framework\Reflection\MethodsMap')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeProcessor = $this->objectManager->getObject('\Magento\Framework\Reflection\TypeProcessor');
+        $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->joinProcessorMock = $this->getMockBuilder('\Magento\Framework\Api\ExtensionAttribute\JoinProcessor')
+            ->setMethods(['extractExtensionAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->joinProcessorMock->expects($this->any())
+            ->method('extractExtensionAttributes')
+            ->willReturnArgument(1);
+        $this->typeProcessor = $this->objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
+
         $this->dataObjectHelper = $this->objectManager->getObject(
             'Magento\Framework\Api\DataObjectHelper',
             [
                 'objectFactory' => $this->objectFactoryMock,
                 'typeProcessor' => $this->typeProcessor,
                 'objectProcessor' => $this->objectProcessorMock,
+                'methodsMapProcessor' => $this->methodsMapProcessor,
+                'joinProcessor' => $this->joinProcessorMock
             ]
         );
     }
@@ -103,11 +126,11 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->objectProcessorMock->expects($this->at(0))
+        $this->methodsMapProcessor->expects($this->at(0))
             ->method('getMethodReturnType')
             ->with('\Magento\Customer\Api\Data\AddressInterface', 'getStreet')
             ->willReturn('string[]');
-        $this->objectProcessorMock->expects($this->at(1))
+        $this->methodsMapProcessor->expects($this->at(1))
             ->method('getMethodReturnType')
             ->with('\Magento\Customer\Api\Data\AddressInterface', 'getRegion')
             ->willReturn('\Magento\Customer\Api\Data\RegionInterface');
@@ -317,11 +340,11 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             ->method('buildOutputDataArray')
             ->with($secondAddressDataObject, get_class($firstAddressDataObject))
             ->willReturn($data2);
-        $this->objectProcessorMock->expects($this->at(1))
+        $this->methodsMapProcessor->expects($this->at(0))
             ->method('getMethodReturnType')
             ->with('Magento\Customer\Model\Data\Address', 'getStreet')
             ->willReturn('string[]');
-        $this->objectProcessorMock->expects($this->at(2))
+        $this->methodsMapProcessor->expects($this->at(1))
             ->method('getMethodReturnType')
             ->with('Magento\Customer\Model\Data\Address', 'getRegion')
             ->willReturn('\Magento\Customer\Api\Data\RegionInterface');

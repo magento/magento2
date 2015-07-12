@@ -85,7 +85,7 @@ class Create extends Block
      *
      * @var string
      */
-    protected $updateItems = '#order-items_grid p button';
+    protected $updateItems = '[onclick="order.itemsUpdate()"]';
 
     /**
      * 'Add Selected Product(s) to Order' button.
@@ -256,17 +256,19 @@ class Create extends Block
      *
      * @param FixtureInterface $address
      * @param string $saveAddress
+     * @param bool $setShippingAddress [optional]
      * @return void
      */
-    public function fillAddresses(FixtureInterface $address, $saveAddress = 'No')
+    public function fillAddresses(FixtureInterface $address, $saveAddress = 'No', $setShippingAddress = true)
     {
         $this->getShippingAddressBlock()->uncheckSameAsBillingShippingAddress();
-        $this->getTemplateBlock()->waitLoader();
         $this->getBillingAddressBlock()->fill($address);
         $this->getBillingAddressBlock()->saveInAddressBookBillingAddress($saveAddress);
         $this->getTemplateBlock()->waitLoader();
-        $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
-        $this->getTemplateBlock()->waitLoader();
+        if ($setShippingAddress) {
+            $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
+            $this->getTemplateBlock()->waitLoader();
+        }
     }
 
     /**
@@ -289,6 +291,8 @@ class Create extends Block
      */
     public function selectPaymentMethod(array $paymentCode)
     {
+        $this->getTemplateBlock()->waitLoader();
+        $this->_rootElement->click();
         $this->getBillingMethodBlock()->selectPaymentMethod($paymentCode);
         $this->getTemplateBlock()->waitLoader();
     }

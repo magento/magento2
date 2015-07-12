@@ -6,6 +6,9 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * Interface AreaInterface
+ */
 interface AreaInterface
 {
     const PART_CONFIG = 'config';

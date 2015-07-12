@@ -6,6 +6,9 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
@@ -55,6 +58,11 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     protected $configurableAttributeFactory;
 
     /**
+     * @var Resource\Product\Type\Configurable
+     */
+    private $configurableTypeResource;
+
+    /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory
      * @param ConfigurableType $configurableType
@@ -62,6 +70,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param ConfigurableType\AttributeFactory $configurableAttributeFactory
+     * @param Resource\Product\Type\Configurable $configurableTypeResource
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -70,7 +79,8 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $optionResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory,
+        \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurableTypeResource
     ) {
         $this->productRepository = $productRepository;
         $this->optionValueFactory = $optionValueFactory;
@@ -79,6 +89,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $this->storeManager = $storeManager;
         $this->productAttributeRepository = $productAttributeRepository;
         $this->configurableAttributeFactory = $configurableAttributeFactory;
+        $this->configurableTypeResource = $configurableTypeResource;
     }
 
     /**
@@ -87,26 +98,17 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     public function get($sku, $id)
     {
         $product = $this->getProduct($sku);
-        $collection = $this->getConfigurableAttributesCollection($product);
-        $collection->addFieldToFilter($collection->getResource()->getIdFieldName(), $id);
-        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
-        $configurableAttribute = $collection->getFirstItem();
-        if (!$configurableAttribute->getId()) {
-            throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $id));
-        }
-        $prices = $configurableAttribute->getPrices();
-        if (is_array($prices)) {
-            foreach ($prices as $price) {
-                /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
-                $value = $this->optionValueFactory->create();
-                $value->setValueIndex($price['value_index'])
-                    ->setPricingValue($price['pricing_value'])
-                    ->setIsPercent($price['is_percent']);
-                $values[] = $value;
+
+        $extensionAttribute = $product->getExtensionAttributes();
+        if ($extensionAttribute !== null) {
+            $options = $extensionAttribute->getConfigurableProductOptions();
+            foreach ($options as $option) {
+                if ($option->getId() == $id) {
+                    return $option;
+                }
             }
         }
-        $configurableAttribute->setValues($values);
-        return $configurableAttribute;
+        throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $id));
     }
 
     /**
@@ -116,21 +118,10 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     {
         $options = [];
         $product = $this->getProduct($sku);
-        foreach ($this->getConfigurableAttributesCollection($product) as $option) {
-            $values = [];
-            $prices = $option->getPrices();
-            if (is_array($prices)) {
-                foreach ($prices as $price) {
-                    /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
-                    $value = $this->optionValueFactory->create();
-                    $value->setValueIndex($price['value_index'])
-                        ->setPricingValue($price['pricing_value'])
-                        ->setIsPercent($price['is_percent']);
-                    $values[] = $value;
-                }
-            }
-            $option->setValues($values);
-            $options[] = $option;
+
+        $extensionAttribute = $product->getExtensionAttributes();
+        if ($extensionAttribute !== null) {
+            $options = $extensionAttribute->getConfigurableProductOptions();
         }
         return $options;
     }
@@ -138,8 +129,16 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     /**
      * {@inheritdoc}
      */
-    public function delete(\Magento\ConfigurableProduct\Api\Data\OptionInterface $option)
+    public function delete(OptionInterface $option)
     {
+        $product = $this->getProductById($option->getProductId());
+        try {
+            $this->configurableTypeResource->saveProducts($product, []);
+        } catch (\Exception $exception) {
+            throw new StateException(
+                __('Cannot delete variations from product: %1', $option->getProductId())
+            );
+        }
         try {
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
@@ -169,12 +168,12 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function save($sku, \Magento\ConfigurableProduct\Api\Data\OptionInterface $option)
+    public function save($sku, OptionInterface $option)
     {
         /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
         $configurableAttribute = $this->configurableAttributeFactory->create();
         if ($option->getId()) {
-            /** @var \Magento\Catalog\Model\Product $product */
+            /** @var Product $product */
             $product = $this->getProduct($sku);
             $configurableAttribute->load($option->getId());
             if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getId()) {
@@ -187,7 +186,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             }
             $configurableAttribute->addData($option->getData());
             $configurableAttribute->setValues(
-                $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getPrices()
+                $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getOptions()
             );
 
             try {
@@ -202,7 +201,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             }
         } else {
             $this->validateNewOptionData($option);
-            /** @var \Magento\Catalog\Model\Product $product */
+            /** @var Product $product */
             $product = $this->productRepository->get($sku);
             $allowedTypes = [ProductType::TYPE_SIMPLE, ProductType::TYPE_VIRTUAL, ConfigurableType::TYPE_CODE];
             if (!in_array($product->getTypeId(), $allowedTypes)) {
@@ -229,14 +228,14 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
                 $product->setStoreId($this->storeManager->getStore(Store::ADMIN_CODE)->getId());
                 $product->save();
             } catch (\Exception $e) {
-                throw new CouldNotSaveException(__('An error occurred while saving option'));
+                throw new CouldNotSaveException(__('Something went wrong while saving option.'));
             }
 
             $configurableAttribute = $this->configurableAttributeFactory->create();
             $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
         }
         if (!$configurableAttribute->getId()) {
-            throw new CouldNotSaveException(__('An error occurred while saving option'));
+            throw new CouldNotSaveException(__('Something went wrong while saving option.'));
         }
         return $configurableAttribute->getId();
     }
@@ -245,7 +244,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * Retrieve product instance by sku
      *
      * @param string $sku
-     * @return \Magento\Catalog\Model\Product
+     * @return ProductInterface
      * @throws InputException
      */
     private function getProduct($sku)
@@ -260,32 +259,36 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * Retrieve configurable attribute collection through product object
+     * Retrieve product instance by id
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection
+     * @param int $id
+     * @return ProductInterface
+     * @throws InputException
      */
-    private function getConfigurableAttributesCollection(\Magento\Catalog\Model\Product $product)
+    private function getProductById($id)
     {
-        return $this->configurableType->getConfigurableAttributeCollection($product);
+        $product = $this->productRepository->getById($id);
+        if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE !== $product->getTypeId()) {
+            throw new InputException(
+                __('Only implemented for configurable product: %1', $id)
+            );
+        }
+        return $product;
     }
 
     /**
      * Ensure that all necessary data is available for a new option creation.
      *
-     * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
+     * @param OptionInterface $option
      * @return void
      * @throws InputException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function validateNewOptionData(\Magento\ConfigurableProduct\Api\Data\OptionInterface $option)
+    public function validateNewOptionData(OptionInterface $option)
     {
         $inputException = new InputException();
         if (!$option->getAttributeId()) {
             $inputException->addError(__('Option attribute ID is not specified.'));
-        }
-        if (!$option->getType()) {
-            $inputException->addError(__('Option type is not specified.'));
         }
         if (!$option->getLabel()) {
             $inputException->addError(__('Option label is not specified.'));
@@ -296,12 +299,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             foreach ($option->getValues() as $optionValue) {
                 if (!$optionValue->getValueIndex()) {
                     $inputException->addError(__('Value index is not specified for an option.'));
-                }
-                if (null === $optionValue->getPricingValue()) {
-                    $inputException->addError(__('Price is not specified for an option.'));
-                }
-                if (null === $optionValue->getIsPercent()) {
-                    $inputException->addError(__('Percent/absolute is not specified for an option.'));
                 }
             }
         }

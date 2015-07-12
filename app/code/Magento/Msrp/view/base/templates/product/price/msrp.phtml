@@ -46,7 +46,7 @@ if ($product->isSaleable()) {
 }
 ?>
 <?php if ($product->getMsrp()): ?>
-    <span class="old-price map-old-price msrp-price-wrapper"><?php echo $msrpPrice ?></span>
+    <span class="old-price map-old-price"><?php echo $msrpPrice ?></span>
 <?php endif; ?>
 
 <?php if ($priceType->isShowPriceOnGesture()): ?>

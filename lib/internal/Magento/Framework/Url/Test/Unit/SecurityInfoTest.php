@@ -19,7 +19,7 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Framework\Url\SecurityInfo(['/account', '/cart']);
+        $this->_model = new \Magento\Framework\Url\SecurityInfo(['/account', '/cart'], ['/cart/remove', 'customer']);
     }
 
     /**
@@ -39,7 +39,9 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
             ['/product', false],
             ['/product/12312', false],
             ['/cart', true],
-            ['/cart/add', true]
+            ['/cart/add', true],
+            ['/cart/remove', false],
+            ['/customer', false]
         ];
     }
 }

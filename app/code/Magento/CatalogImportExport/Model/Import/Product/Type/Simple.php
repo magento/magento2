@@ -22,5 +22,8 @@ class Simple extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         'related_tgtr_position_limit',
         'upsell_tgtr_position_behavior',
         'upsell_tgtr_position_limit',
+        'thumbnail_label',
+        'small_image_label',
+        'image_label',
     ];
 }

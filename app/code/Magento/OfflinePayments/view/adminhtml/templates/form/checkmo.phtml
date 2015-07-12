@@ -7,14 +7,14 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<fieldset class="fieldset payment method" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none">
+<fieldset class="admin__fieldset payment-method" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none">
     <?php if ($block->getMethod()->getPayableTo()): ?>
         <?php echo __('<label class="label"><span>Make Check payable to:</span></label> %1', $block->escapeHtml($block->getMethod()->getPayableTo())) ?>
     <?php endif; ?>
     <?php if ($block->getMethod()->getMailingAddress()): ?>
-        <div class="field field-check">
-            <label class="label"><span><?php echo __('Send Check to:') ?></span></label>
-            <div class="control checkmo-mailing-address">
+        <div class="admin__field">
+            <label class="admin__field-label"><span><?php echo __('Send Check to:') ?></span></label>
+            <div class="admin__field-control checkmo-mailing-address">
                 <?php echo nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
             </div>
         </div>

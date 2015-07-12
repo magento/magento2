@@ -15,7 +15,7 @@ class Info extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Object
      */
-    protected $_paymentSpecificInformation = null;
+    protected $_paymentSpecificInformation;
 
     /**
      * @var string
@@ -25,13 +25,13 @@ class Info extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve info model
      *
-     * @return \Magento\Payment\Model\Info
+     * @return \Magento\Payment\Model\InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getInfo()
     {
         $info = $this->getData('info');
-        if (!$info instanceof \Magento\Payment\Model\Info) {
+        if (!$info instanceof \Magento\Payment\Model\InfoInterface) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot retrieve the payment info model object.')
             );
@@ -152,10 +152,6 @@ class Info extends \Magento\Framework\View\Element\Template
             } elseif (is_array($transport)) {
                 $transport = new \Magento\Framework\Object($transport);
             }
-            $this->_eventManager->dispatch(
-                'payment_info_block_prepare_specific_information',
-                ['transport' => $transport, 'payment' => $this->getInfo(), 'block' => $this]
-            );
             $this->_paymentSpecificInformation = $transport;
         }
         return $this->_paymentSpecificInformation;

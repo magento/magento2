@@ -39,4 +39,25 @@ class Curl extends AbstractCurl implements GroupedProductInterface
 
         return $data;
     }
+
+    /**
+     * Preparation of stock data.
+     *
+     * @param array $fields
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function prepareStockData(array $fields)
+    {
+        $fields = parent::prepareStockData($fields);
+        if (
+            isset($fields['quantity_and_stock_status']['is_in_stock'])
+            && $fields['quantity_and_stock_status']['is_in_stock']
+        ) {
+            $fields['quantity_and_stock_status']['use_config_manage_stock'] = 1;
+        }
+        return $fields;
+    }
 }

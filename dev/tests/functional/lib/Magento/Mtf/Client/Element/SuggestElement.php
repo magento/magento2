@@ -9,7 +9,6 @@ namespace Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class SuggestElement
  * General class for suggest elements.
  */
 class SuggestElement extends SimpleElement
@@ -20,35 +19,35 @@ class SuggestElement extends SimpleElement
     const BACKSPACE = "\xEE\x80\x83";
 
     /**
-     * Selector suggest input
+     * Selector suggest input.
      *
      * @var string
      */
     protected $suggest = '.mage-suggest-inner > .search';
 
     /**
-     * Selector search result
+     * Selector search result.
      *
      * @var string
      */
     protected $searchResult = '.mage-suggest-dropdown';
 
     /**
-     * Selector item of search result
+     * Selector item of search result.
      *
      * @var string
      */
     protected $resultItem = './/ul/li/a[text()="%s"]';
 
     /**
-     * Suggest state loader
+     * Suggest state loader.
      *
      * @var string
      */
     protected $suggestStateLoader = '.mage-suggest-state-loading';
 
     /**
-     * Set value
+     * Set value.
      *
      * @param string $value
      * @return void
@@ -63,16 +62,32 @@ class SuggestElement extends SimpleElement
             return;
         }
         foreach (str_split($value) as $symbol) {
-            $input = $this->find($this->suggest);
-            $input->click();
-            $input->keys([$symbol]);
-            $this->waitResult();
+            $this->keys([$symbol]);
             $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
             if ($searchedItem->isVisible()) {
-                $searchedItem->click();
-                break;
+                try {
+                    $searchedItem->click();
+                    break;
+                } catch (\Exception $e) {
+                    // In parallel run on windows change the focus is lost on element
+                    // that causes disappearing of category suggest list.
+                }
             }
         }
+    }
+
+    /**
+     * Send keys.
+     *
+     * @param array $keys
+     * @return void
+     */
+    public function keys(array $keys)
+    {
+        $input = $this->find($this->suggest);
+        $input->click();
+        $input->keys($keys);
+        $this->waitResult();
     }
 
     /**
@@ -89,7 +104,7 @@ class SuggestElement extends SimpleElement
     }
 
     /**
-     * Wait for search result is visible
+     * Wait for search result is visible.
      *
      * @return void
      */
@@ -106,7 +121,7 @@ class SuggestElement extends SimpleElement
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return string
      */
@@ -118,21 +133,25 @@ class SuggestElement extends SimpleElement
     }
 
     /**
-     * Checking exist value in search result
+     * Checking exist value in search result.
      *
      * @param string $value
      * @return bool
      */
     public function isExistValueInSearchResult($value)
     {
-        $searchResult = $this->find($this->searchResult);
-
-        $this->find($this->suggest)->setValue($value);
-        $this->waitResult();
-        if (!$searchResult->isVisible()) {
-            return false;
+        $needle = $this->find($this->searchResult)->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+        $keys = str_split($value);
+        $this->keys($keys);
+        if ($needle->isVisible()) {
+            try {
+                return true;
+            } catch (\Exception $e) {
+                // In parallel run on windows change the focus is lost on element
+                // that causes disappearing of attribute suggest list.
+            }
         }
 
-        return $searchResult->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH)->isVisible();
+        return false;
     }
 }

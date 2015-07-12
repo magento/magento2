@@ -110,7 +110,7 @@
             </field>
             <field name="status" xsi:type="string">Product online</field>
             <field name="category_ids" xsi:type="array">
-                <item name="preset" xsi:type="string">default</item>
+                <item name="presets" xsi:type="string">default_subcategory</item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="is_virtual" xsi:type="string">Yes</field>
@@ -144,7 +144,7 @@
             </field>
             <field name="status" xsi:type="string">Product online</field>
             <field name="category_ids" xsi:type="array">
-                <item name="preset" xsi:type="string">default</item>
+                <item name="presets" xsi:type="string">default_subcategory</item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="is_virtual" xsi:type="string">Yes</field>
@@ -175,7 +175,7 @@
             </field>
             <field name="status" xsi:type="string">Product online</field>
             <field name="category_ids" xsi:type="array">
-                <item name="preset" xsi:type="string">default</item>
+                <item name="presets" xsi:type="string">default_subcategory</item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="is_virtual" xsi:type="string">Yes</field>
@@ -202,7 +202,7 @@
                 <item name="value" xsi:type="string">1</item>
             </field>
             <field name="category_ids" xsi:type="array">
-                <item name="preset" xsi:type="string">default</item>
+                <item name="presets" xsi:type="string">default_subcategory</item>
             </field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="preset" xsi:type="string">one_no_separately_link</item>

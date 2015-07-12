@@ -1,0 +1,128 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@login-box__background-color: @color-white;
+@login-box__border: 1px solid @color-gray89;
+@login-box__max-width: 45rem;
+@login-box__min-height: 30rem;
+@login-box__shadow: 0 5px 30px 0 rgba(0, 0, 0, 1);
+@login-page__background-color: @color-very-dark-grayish-orange;
+
+//
+//  Admin user auth pages layout
+//  ---------------------------------------------
+
+//  Header
+.login-header {
+    margin: 0 0 3rem;
+}
+
+//  Login box
+.page-layout-admin-login {
+    align-items: center;
+    .vendor-prefix-display(flex);
+    background-color: @login-page__background-color;
+    padding: 2rem 0 20rem;
+    .page-wrapper {
+        .vendor-prefix-flex-shrink(0);
+        .vendor-prefix-flex-grow(0);
+        background-color: @login-box__background-color;
+        border: @login-box__border;
+        box-shadow: @login-box__shadow;
+        display: block;
+        float: none;
+        margin: auto;
+        max-width: @login-box__max-width;
+        min-height: @login-box__min-height;
+        min-width: 0;
+        padding: 40px 80px 50px;
+        position: relative;
+        width: 100%;
+        z-index: 1;
+        .ie9 & {
+            margin-top: 10%;
+        }
+    }
+    :-ms-input-placeholder {
+        color: transparent;
+    }
+    ::-webkit-input-placeholder {
+        color: transparent;
+    }
+    ::-moz-placeholder {
+        color: transparent;
+    }
+    .admin__legend {
+        color: @color-phoenix;
+        font-size: 2.6rem;
+        font-weight: @font-weight__light;
+        line-height: @line-height__s;
+        margin: -1rem 0 2.5rem;
+    }
+    .admin__field-info {
+        margin-bottom: 3rem;
+    }
+    .admin__field {
+        &:extend(.abs-field-rows all);
+    }
+    .messages {
+        margin-top: -1rem;
+        + form .admin__legend {
+            display: none;
+        }
+    }
+    .actions {
+        padding: 0 0 3rem;
+    }
+    .action-primary {
+        &:extend(.abs-action-l all);
+    }
+}
+
+// @todo ui - Find out if this trick still relevant app/code/Magento/Backend/view/adminhtml/templates/admin/login.phtml:23
+.admin__control-dummy {
+    display: none;
+}
+
+// Footer
+.login-footer {
+    left: 0;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    .copyright {
+        color: @color-heathered-grey;
+        font-size: @font-size__xs;
+        font-weight: @font-weight__regular;
+        margin: 5rem 0 2rem;
+        text-align: center;
+        .link-copyright {
+            &:before {
+                display: none;
+            }
+        }
+    }
+}
+
+//
+//  Login page features
+//  ---------------------------------------------
+
+.adminhtml-auth-login {
+    .form-actions {
+        display: table;
+        margin-top: -2rem;
+        .links {
+            display: table-header-group;
+        }
+        .actions {
+            padding: 3rem 0 0;
+        }
+    }
+}

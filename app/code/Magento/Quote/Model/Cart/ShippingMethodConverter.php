@@ -19,17 +19,25 @@ class ShippingMethodConverter
     protected $shippingMethodDataFactory;
 
     /**
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $taxHelper;
+
+    /**
      * Constructs a shipping method converter object.
      *
      * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $shippingMethodDataFactory Shipping method factory.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager interface.
+     * @param \Magento\Tax\Helper\Data $taxHelper Tax data helper.
      */
     public function __construct(
         \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $shippingMethodDataFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Tax\Helper\Data $taxHelper
     ) {
         $this->shippingMethodDataFactory = $shippingMethodDataFactory;
         $this->storeManager = $storeManager;
+        $this->taxHelper = $taxHelper;
     }
 
     /**
@@ -37,7 +45,7 @@ class ShippingMethodConverter
      *
      * @param string $quoteCurrencyCode The quote currency code.
      * @param \Magento\Quote\Model\Quote\Address\Rate $rateModel The rate model.
-     * @return mixed Shipping method data object.
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface Shipping method data object.
      */
     public function modelToDataObject($rateModel, $quoteCurrencyCode)
     {
@@ -52,6 +60,30 @@ class ShippingMethodConverter
             ->setMethodTitle($rateModel->getMethodTitle())
             ->setAmount($currency->convert($rateModel->getPrice(), $quoteCurrencyCode))
             ->setBaseAmount($rateModel->getPrice())
-            ->setAvailable(empty($errorMessage));
+            ->setAvailable(empty($errorMessage))
+            ->setErrorMessage(empty($errorMessage) ? false : $errorMessage)
+            ->setPriceExclTax(
+                $currency->convert($this->getShippingPriceWithFlag($rateModel, false), $quoteCurrencyCode)
+            )
+            ->setPriceInclTax(
+                $currency->convert($this->getShippingPriceWithFlag($rateModel, true), $quoteCurrencyCode)
+            );
+    }
+
+    /**
+     * Get Shipping Price including or excluding tax
+     *
+     * @param \Magento\Quote\Model\Quote\Address\Rate $rateModel
+     * @param bool $flag
+     * @return float
+     */
+    private function getShippingPriceWithFlag($rateModel, $flag)
+    {
+        return $this->taxHelper->getShippingPrice(
+            $rateModel->getPrice(),
+            $flag,
+            $rateModel->getAddress(),
+            $rateModel->getAddress()->getQuote()->getCustomerTaxClassId()
+        );
     }
 }

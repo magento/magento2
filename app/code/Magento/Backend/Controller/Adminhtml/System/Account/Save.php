@@ -5,27 +5,13 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Controller\ResultFactory;
 
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
-    /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
-        parent::__construct($context);
-        $this->resultRedirectFactory = $resultRedirectFactory;
-    }
-
     /**
      * Saving edited user information
      *
@@ -42,19 +28,13 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         /** @var $user \Magento\User\Model\User */
         $user = $this->_objectManager->create('Magento\User\Model\User')->load($userId);
 
-        $user->setId(
-            $userId
-        )->setUsername(
-            $this->getRequest()->getParam('username', false)
-        )->setFirstname(
-            $this->getRequest()->getParam('firstname', false)
-        )->setLastname(
-            $this->getRequest()->getParam('lastname', false)
-        )->setEmail(
-            strtolower($this->getRequest()->getParam('email', false))
-        );
+        $user->setId($userId)
+            ->setUsername($this->getRequest()->getParam('username', false))
+            ->setFirstname($this->getRequest()->getParam('firstname', false))
+            ->setLastname($this->getRequest()->getParam('lastname', false))
+            ->setEmail(strtolower($this->getRequest()->getParam('email', false)));
 
-        if ($this->_objectManager->get('Magento\Framework\Locale\Validator')->isValid($interfaceLocale)) {
+        if ($this->_objectManager->get('Magento\Framework\Validator\Locale')->isValid($interfaceLocale)) {
             $user->setInterfaceLocale($interfaceLocale);
             /** @var \Magento\Backend\Model\Locale\Manager $localeManager */
             $localeManager = $this->_objectManager->get('Magento\Backend\Model\Locale\Manager');
@@ -77,19 +57,20 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             if ($password !== '') {
                 $user->sendPasswordResetNotificationEmail();
             }
-            $this->messageManager->addSuccess(__('The account has been saved.'));
-        } catch (\Magento\Framework\Validator\Exception $e) {
+            $this->messageManager->addSuccess(__('You saved the account.'));
+        } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {
                 $this->messageManager->addError($e->getMessage());
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred while saving account.'));
         }
+
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath("*/*/");
     }
 }

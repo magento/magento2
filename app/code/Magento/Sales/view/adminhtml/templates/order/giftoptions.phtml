@@ -8,8 +8,8 @@
 
 ?>
 <?php if ($block->getChildHtml()): ?>
-<div class="fieldset-wrapper order-gift-options clearfix">
-    <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Gift Options') ?></span></div>
+<section class="admin__page-section order-gift-options">
+    <div class="admin__page-section-title"><strong class="title"><?php echo __('Gift Options') ?></strong></div>
     <?php echo $block->getChildHtml() ?>
-</div>
+</section>
 <?php endif ?>

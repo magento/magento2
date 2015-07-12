@@ -33,7 +33,7 @@ class AssertProductNotSearchableBySku extends AbstractConstraint
         $cmsIndex->open();
         $cmsIndex->getSearchBlock()->search($product->getSku());
         \PHPUnit_Framework_Assert::assertFalse(
-            $catalogSearchResult->getListProductBlock()->isProductVisible($product->getName()),
+            $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible(),
             'Product was found by SKU.'
         );
     }

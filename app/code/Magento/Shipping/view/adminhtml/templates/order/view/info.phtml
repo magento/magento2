@@ -10,33 +10,32 @@
 <?php /** @var $block \Magento\Shipping\Block\Adminhtml\View */ ?>
 <?php $order = $block->getOrder() ?>
 <?php if ($order->getIsVirtual()) : return '';endif; ?>
-<div class="order-shipping-method">
-    <!--Shipping Method-->
-    <div class="fieldset-wrapper">
-        <div class="fieldset-wrapper-title">
-            <span class="title"><?php echo __('Shipping &amp; Handling Information') ?></span>
-        </div>
-        <div class="shipping-description-wrapper">
-            <?php  if ($order->getTracksCollection()->count()) : ?>
-                <p><a href="#" id="linkId" onclick="popWin('<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($order) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php echo __('Track Order') ?>"><?php echo __('Track Order') ?></a></p>
-            <?php endif; ?>
-            <?php if ($order->getShippingDescription()): ?>
-                <strong><?php echo $block->escapeHtml($order->getShippingDescription()) ?></strong>
 
-                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
-                    <?php $_excl = $block->displayShippingPriceInclTax($order); ?>
-                <?php else: ?>
-                    <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
-                <?php endif; ?>
-                <?php $_incl = $block->displayShippingPriceInclTax($order); ?>
+<?php /* Shipping Method */ ?>
+<div class="admin__page-section-item order-shipping-method">
+    <div class="admin__page-section-item-title">
+        <span class="title"><?php echo __('Shipping &amp; Handling Information') ?></span>
+    </div>
+    <div class="admin__page-section-item-content">
+        <?php  if ($order->getTracksCollection()->count()) : ?>
+            <p><a href="#" id="linkId" onclick="popWin('<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($order) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php echo __('Track Order') ?>"><?php echo __('Track Order') ?></a></p>
+        <?php endif; ?>
+        <?php if ($order->getShippingDescription()): ?>
+            <strong><?php echo $block->escapeHtml($order->getShippingDescription()) ?></strong>
 
-                <?php echo $_excl; ?>
-                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                    (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                <?php endif; ?>
+            <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
+                <?php $_excl = $block->displayShippingPriceInclTax($order); ?>
             <?php else: ?>
-                <?php echo __('No shipping information available'); ?>
+                <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
             <?php endif; ?>
-        </div>
+            <?php $_incl = $block->displayShippingPriceInclTax($order); ?>
+
+            <?php echo $_excl; ?>
+            <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
+            <?php endif; ?>
+        <?php else: ?>
+            <?php echo __('No shipping information available'); ?>
+        <?php endif; ?>
     </div>
 </div>

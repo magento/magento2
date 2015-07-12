@@ -22,7 +22,7 @@
         <dt>Username:</dt>
         <dd>{{admin.username}}</dd>
 
-        <dt>E-Mail:</dt>
+        <dt>Email:</dt>
         <dd>{{admin.email}}</dd>
 
         <dt>Password:</dt>
@@ -30,12 +30,12 @@
 
         <dt>Your Store Address:</dt>
         <dd>
-            <a href="{{config.address.actual_base_url}}" target="_blank">{{config.address.actual_base_url}}</a>
+            <a href="{{url.front}}" target="_blank">{{url.front}}</a>
         </dd>
 
         <dt>Magento Admin Address:</dt>
         <dd>
-            <a href="{{config.address.actual_base_url}}{{config.address.admin}}/" target="_blank">{{config.address.actual_base_url}}{{config.address.admin}}/</a>
+            <a href="{{url.admin}}" target="_blank">{{url.admin}}</a>
         </dd>
 
         <dt>Encryption Key:</dt>
@@ -62,7 +62,7 @@
     <div ng-show="config.address.actual_base_url">
         <a
             class="btn btn-large btn-prime"
-            href="{{config.address.actual_base_url}}{{config.address.admin}}/"
+            href="{{url.admin}}"
             target="_blank"
             >
             Launch Magento Admin

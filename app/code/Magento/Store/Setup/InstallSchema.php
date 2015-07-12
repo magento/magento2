@@ -133,7 +133,6 @@ class InstallSchema implements InstallSchemaInterface
             'website_id',
             $installer->getTable('store_website'),
             'website_id',
-            Table::ACTION_CASCADE,
             Table::ACTION_CASCADE
         )->setComment(
             'Store Groups'
@@ -209,14 +208,12 @@ class InstallSchema implements InstallSchemaInterface
             'group_id',
             $installer->getTable('store_group'),
             'group_id',
-            Table::ACTION_CASCADE,
             Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('store', 'website_id', 'store_website', 'website_id'),
             'website_id',
             $installer->getTable('store_website'),
             'website_id',
-            Table::ACTION_CASCADE,
             Table::ACTION_CASCADE
         )->setComment(
             'Stores'

@@ -12,9 +12,9 @@ return [
             'options' => [
                 'option1' => 'value 1',
                 'option2' => 'value 2',
-                'backend_frontname' => 'backend',
-                'admin_username' => 'admin',
-                'admin_password' => 'password1',
+                'backend-frontname' => 'backend',
+                'admin-user' => 'admin',
+                'admin-password' => 'password1',
             ],
         ],
     ],

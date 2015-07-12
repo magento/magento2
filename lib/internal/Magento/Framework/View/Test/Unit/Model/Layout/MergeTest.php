@@ -12,7 +12,9 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     /**
      * Fixture XML instruction(s) to be used in tests
      */
+    // @codingStandardsIgnoreStart
     const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>';
+    // @codingStandardsIgnoreEnd
 
     /**
      * @var \Magento\Framework\View\Model\Layout\Merge
@@ -189,11 +191,11 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array_merge($nonPageHandles, $expectedPageHandles), $this->_model->getHandles());
 
         /* test that new handles override the previous ones */
-        $expectedPageHandles = ['default', 'checkout_onepage_index'];
+        $expectedPageHandles = ['default', 'checkout_index_index'];
         $this->_model->removeHandle('catalog_category_default');
         $this->_model->removeHandle('catalog_product_view');
         $this->_model->removeHandle('catalog_product_view_type_simple');
-        $this->assertTrue($this->_model->addPageHandles(['default', 'checkout_onepage_index']));
+        $this->assertTrue($this->_model->addPageHandles(['default', 'checkout_index_index']));
         $this->assertEquals($expectedPageHandles, $this->_model->getPageHandles());
         $this->assertEquals(array_merge($nonPageHandles, $expectedPageHandles), $this->_model->getHandles());
     }
@@ -291,7 +293,10 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $handles = ['fixture_handle_one'];
         $this->_model->load($handles);
         $this->assertEquals($handles, $this->_model->getHandles());
-        $this->assertXmlStringEqualsXmlString('<body>' . self::FIXTURE_LAYOUT_XML . '</body>', $this->_model->asString());
+        $this->assertXmlStringEqualsXmlString(
+            '<body>' . self::FIXTURE_LAYOUT_XML . '</body>',
+            $this->_model->asString()
+        );
     }
 
     public function testGetFileLayoutUpdatesXml()
@@ -378,7 +383,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \Magento\Framework\Exception
+     * @expectedException        \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid layout update handle
      */
     public function testLoadWithInvalidArgumentThrowsException()

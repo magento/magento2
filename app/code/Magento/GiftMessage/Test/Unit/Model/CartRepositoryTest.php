@@ -4,8 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\GiftMessage\Test\Unit\Model;
+
+// @codingStandardsIgnoreFile
 
 use Magento\GiftMessage\Model\CartRepository;
 
@@ -163,7 +164,6 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
-
         $this->cartRepository->save($this->cartId, $this->messageMock);
     }
 
@@ -173,7 +173,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
         $this->helperMock->expects($this->once())
-            ->method('getIsMessagesAvailable')
+            ->method('isMessagesAllowed')
             ->with('quote', $this->quoteMock, $this->storeMock)
             ->will($this->returnValue(true));
         $this->giftMessageManagerMock->expects($this->once())

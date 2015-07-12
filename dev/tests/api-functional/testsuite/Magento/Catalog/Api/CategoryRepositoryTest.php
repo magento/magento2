@@ -40,7 +40,8 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->assertArrayHasKey('created_at', $result);
         $this->assertArrayHasKey('updated_at', $result);
         $this->assertArrayHasKey('children', $result);
-        unset($result['created_at'], $result['updated_at'], $result['children']);
+        $this->assertArrayHasKey('custom_attributes', $result);
+        unset($result['created_at'], $result['updated_at'], $result['children'], $result['custom_attributes']);
         ksort($expected);
         ksort($result);
         $this->assertEquals($expected, $result);

@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Model\Sample;
 
-use Magento\Downloadable\Api\Data\SampleContentInterface;
+use Magento\Downloadable\Api\Data\SampleInterface;
 use Magento\Downloadable\Model\File\ContentValidator as FileContentValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Url\Validator as UrlValidator;
@@ -37,38 +37,41 @@ class ContentValidator
     /**
      * Check if sample content is valid
      *
-     * @param SampleContentInterface $sampleContent
+     * @param SampleInterface $sample
+     * @param bool $validateSampleContent
      * @return bool
      * @throws InputException
      */
-    public function isValid(SampleContentInterface $sampleContent)
+    public function isValid(SampleInterface $sample, $validateSampleContent = true)
     {
-        if (!is_int($sampleContent->getSortOrder()) || $sampleContent->getSortOrder() < 0) {
+        if (!is_int($sample->getSortOrder()) || $sample->getSortOrder() < 0) {
             throw new InputException(__('Sort order must be a positive integer.'));
         }
 
-        $this->validateSampleResource($sampleContent);
+        if ($validateSampleContent) {
+            $this->validateSampleResource($sample);
+        }
         return true;
     }
 
     /**
      * Validate sample resource (file or URL)
      *
-     * @param SampleContentInterface $sampleContent
+     * @param SampleInterface $sample
      * @throws InputException
      * @return void
      */
-    protected function validateSampleResource(SampleContentInterface $sampleContent)
+    protected function validateSampleResource(SampleInterface $sample)
     {
-        $sampleFile = $sampleContent->getSampleFile();
-        if ($sampleContent->getSampleType() == 'file'
+        $sampleFile = $sample->getSampleFileContent();
+        if ($sample->getSampleType() == 'file'
             && (!$sampleFile || !$this->fileContentValidator->isValid($sampleFile))
         ) {
             throw new InputException(__('Provided file content must be valid base64 encoded data.'));
         }
 
-        if ($sampleContent->getSampleType() == 'url'
-            && !$this->urlValidator->isValid($sampleContent->getSampleUrl())
+        if ($sample->getSampleType() == 'url'
+            && !$this->urlValidator->isValid($sample->getSampleUrl())
         ) {
             throw new InputException(__('Sample URL must have valid format.'));
         }

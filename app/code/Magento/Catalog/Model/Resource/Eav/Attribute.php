@@ -107,7 +107,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper
      * @param LockValidatorInterface $lockValidator
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -132,7 +132,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper,
         LockValidatorInterface $lockValidator,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
@@ -530,6 +530,30 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     public function getIsFilterableInSearch()
     {
         return $this->getData(self::IS_FILTERABLE_IN_SEARCH);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsUsedInGrid()
+    {
+        return (bool)$this->getData(self::IS_USED_IN_GRID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsVisibleInGrid()
+    {
+        return (bool)$this->getData(self::IS_VISIBLE_IN_GRID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsFilterableInGrid()
+    {
+        return (bool)$this->getData(self::IS_FILTERABLE_IN_GRID);
     }
 
     /**

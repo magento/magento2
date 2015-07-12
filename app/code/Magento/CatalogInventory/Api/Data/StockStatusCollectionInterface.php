@@ -9,6 +9,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * Stock Status collection interface
+ * @api
  */
 interface StockStatusCollectionInterface extends SearchResultsInterface
 {
@@ -26,7 +27,7 @@ interface StockStatusCollectionInterface extends SearchResultsInterface
      * @param \Magento\CatalogInventory\Api\Data\StockStatusInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 
     /**
      * Get search criteria.

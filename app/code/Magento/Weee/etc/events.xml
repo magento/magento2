@@ -9,4 +9,7 @@
     <event name="catalog_entity_attribute_save_before">
         <observer name="weee" instance="Magento\Weee\Model\Observer" method="assignBackendModelToAttribute" shared="false" />
     </event>
+    <event name="catalog_product_option_price_configuration_after">
+        <observer name="weee" instance="Magento\Weee\Model\Observer" method="getPriceConfiguration" shared="false" />
+    </event>
 </config>

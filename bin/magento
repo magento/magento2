@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Framework\AppInterface;
+
+try {
+    require __DIR__ . '/../app/bootstrap.php';
+    if (PHP_SAPI == 'cli') {
+        // For Cli we are using our customized error handler
+        $handler = new \Magento\Framework\App\ErrorHandler();
+        set_error_handler([$handler, 'handler']);
+
+        $application = new Magento\Framework\Console\Cli('Magento CLI', AppInterface::VERSION);
+        $application->run();
+    }
+
+} catch (\Exception $e) {
+    if (PHP_SAPI == 'cli') {
+        echo 'Autoload error: ' . $e->getMessage();
+    }
+    exit(1);
+}

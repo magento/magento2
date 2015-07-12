@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="CustomerAccountIndex" mca="customer/account/index" module="Magento_Customer">
-    <block name="messages" class="Magento\Core\Test\Block\Messages" locator=".page.messages" strategy="css selector"/>
+    <block name="messages" class="Magento\Backend\Test\Block\Messages" locator=".page.messages" strategy="css selector"/>
     <block name="dashboardAddress" class="Magento\Customer\Test\Block\Account\Dashboard\Address" locator=".block-dashboard-addresses" strategy="css selector"/>
     <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper" strategy="css selector"/>
     <block name="accountMenuBlock" class="Magento\Customer\Test\Block\Account\Links" locator=".nav.items" strategy="css selector"/>

@@ -24,7 +24,7 @@ class Config
      * Constructor
      *
      * @param string $source
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct($source)
     {
@@ -32,7 +32,9 @@ class Config
         $config->loadXML($source);
         $errors = Dom::validateDomDocument($config, $this->getSchemaFile());
         if (!empty($errors)) {
-            throw new \Magento\Framework\Exception("Invalid Document: \n" . implode("\n", $errors));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase("Invalid Document: \n%1", [implode("\n", $errors)])
+            );
         }
         $this->_data = $this->_extractData($config);
     }

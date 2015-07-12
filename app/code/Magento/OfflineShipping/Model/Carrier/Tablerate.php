@@ -5,6 +5,8 @@
  */
 namespace Magento\OfflineShipping\Model\Carrier;
 
+use Magento\Framework\Exception\LocalizedException;
+
 class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -72,13 +74,13 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Framework\Object $request
      * @return \Magento\Shipping\Model\Rate\Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function collectRates(\Magento\Quote\Model\Quote\Address\RateRequest $request)
+    public function collectRates(\Magento\Framework\Object $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;
@@ -197,7 +199,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param string $type
      * @param string $code
      * @return array
-     * @throws \Magento\Shipping\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCode($type, $code = '')
     {
@@ -215,7 +217,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         ];
 
         if (!isset($codes[$type])) {
-            throw new \Magento\Shipping\Exception(__('Please correct Table Rate code type: %1.', $type));
+            throw new LocalizedException(__('Please correct Table Rate code type: %1.', $type));
         }
 
         if ('' === $code) {
@@ -223,7 +225,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         }
 
         if (!isset($codes[$type][$code])) {
-            throw new \Magento\Shipping\Exception(__('Please correct Table Rate code for type %1: %2.', $type, $code));
+            throw new LocalizedException(__('Please correct Table Rate code for type %1: %2.', $type, $code));
         }
 
         return $codes[$type][$code];

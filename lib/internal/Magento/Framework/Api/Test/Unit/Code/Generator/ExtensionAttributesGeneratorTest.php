@@ -6,12 +6,14 @@
 // @codingStandardsIgnoreFile
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
+
 class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Api\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configReaderMock;
+    protected $configMock;
 
     /**
      * @var \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -20,7 +22,7 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configReaderMock = $this->getMockBuilder('Magento\Framework\Api\Config\Reader')
+        $this->configMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\Config')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -28,7 +30,7 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject(
             'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator',
             [
-                'configReader' => $this->configReaderMock,
+                'config' => $this->configMock,
                 'sourceClassName' => '\Magento\Catalog\Api\Data\Product',
                 'resultClassName' => '\Magento\Catalog\Api\Data\ProductExtension',
                 'classGenerator' => null
@@ -39,16 +41,26 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerate()
     {
-        $this->configReaderMock->expects($this->any())
-            ->method('read')
+        $this->configMock->expects($this->any())
+            ->method('get')
             ->willReturn(
                 [
                     'Magento\Catalog\Api\Data\ProductInterface' => [
-                        'string_attribute' => 'string',
-                        'complex_object_attribute' => '\Magento\Bundle\Api\Data\OptionInterface[]'
+                        'string_attribute' => [
+                            Converter::DATA_TYPE => 'string',
+                            Converter::RESOURCE_PERMISSIONS => [],
+
+                        ],
+                        'complex_object_attribute' => [
+                            Converter::DATA_TYPE => '\Magento\Bundle\Api\Data\OptionInterface[]',
+                            Converter::RESOURCE_PERMISSIONS => [],
+                        ],
                     ],
                     'Magento\Catalog\Api\Data\Product' => [
-                        'should_not_include' => 'string',
+                        'should_not_include' => [
+                            Converter::DATA_TYPE => 'string',
+                            Converter::RESOURCE_PERMISSIONS => [],
+                        ],
                     ],
                 ]
             );
@@ -58,8 +70,8 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateEmptyExtension()
     {
-        $this->configReaderMock->expects($this->any())
-            ->method('read')
+        $this->configMock->expects($this->any())
+            ->method('get')
             ->willReturn(['Magento\Catalog\Api\Data\Product' => ['should_not_include' => 'string']]);
         $expectedResult = file_get_contents(__DIR__ . '/_files/SampleEmptyExtension.txt');
         $this->validateGeneratedCode($expectedResult);
@@ -104,6 +116,8 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
         $reflectionMethod = $reflectionObject->getMethod('_generateCode');
         $reflectionMethod->setAccessible(true);
         $generatedCode = $reflectionMethod->invoke($this->model);
+        $expectedResult = preg_replace('/\s+/', ' ', $expectedResult);
+        $generatedCode = preg_replace('/\s+/', ' ', $generatedCode);
         $this->assertEquals($expectedResult, $generatedCode);
     }
 }

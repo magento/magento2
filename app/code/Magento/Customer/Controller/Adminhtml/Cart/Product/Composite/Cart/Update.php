@@ -9,25 +9,6 @@ namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart;
 class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
-        parent::__construct($context, $quoteRepository);
-        $this->resultRedirectFactory = $resultRedirectFactory;
-    }
-
-    /**
      * IFrame handler for submitted configuration for quote item
      *
      * @return \Magento\Backend\Model\View\Result\Redirect

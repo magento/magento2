@@ -6,7 +6,8 @@
 namespace Magento\Sales\Model\Resource\Order\Status;
 
 use Magento\Sales\Model\Order\Status\History\Validator;
-use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Resource\EntityAbstract;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\OrderStatusHistoryResourceInterface;
 
 /**
@@ -14,7 +15,7 @@ use Magento\Sales\Model\Spi\OrderStatusHistoryResourceInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class History extends Entity implements OrderStatusHistoryResourceInterface
+class History extends EntityAbstract implements OrderStatusHistoryResourceInterface
 {
     /**
      * @var Validator
@@ -24,21 +25,30 @@ class History extends Entity implements OrderStatusHistoryResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\Sales\Model\Increment $salesIncrement
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
+     * @param Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param Validator $validator
-     * @param string|null $resourcePrefix
-     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\Sales\Model\Increment $salesIncrement,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         Validator $validator,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        parent::__construct(
+            $context,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
+            $resourcePrefix
+        );
     }
 
     /**

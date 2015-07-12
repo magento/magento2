@@ -33,6 +33,7 @@
     </variation>
     <variation name="NewAccountsReportEntityTestVariation4">
       <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="total" xsi:type="string">0</data>
       <data name="customersReport/report_from" xsi:type="string">m/d/Y 12:00 a+1 day</data>
       <data name="customersReport/report_to" xsi:type="string">m/d/Y 12:00 a+1 day</data>
       <data name="customersReport/report_period" xsi:type="string">Day</data>

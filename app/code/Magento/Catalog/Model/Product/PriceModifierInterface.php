@@ -17,6 +17,7 @@ interface PriceModifierInterface
      * @param mixed $price
      * @param Product $product
      * @return mixed
+     * @api
      */
     public function modifyPrice($price, Product $product);
 }

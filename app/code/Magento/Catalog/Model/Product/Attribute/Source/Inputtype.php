@@ -53,7 +53,6 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
         $response = new \Magento\Framework\Object();
         $response->setTypes([]);
         $this->_eventManager->dispatch('adminhtml_product_attribute_types', ['response' => $response]);
-        $_disabledTypes = [];
         $_hiddenFields = [];
         foreach ($response->getTypes() as $type) {
             $inputTypes[] = $type;

@@ -8,12 +8,7 @@
     <input type="checkbox" class="admin__control-checkbox" data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
 
     <label class="admin__field-label" data-bind="checked: value, attr: { for: uid }">
-        <!-- ko if: $parent.isSingle() -->
-            <span data-bind="text: description"></span>
-        <!-- /ko -->
-        <!-- ko if: !$parent.isSingle() -->
-            <span data-bind="text: description || label"></span>
-        <!-- /ko -->
+        <span data-bind="text: description || label"></span>
     </label>
 
     <!-- ko if: notice -->

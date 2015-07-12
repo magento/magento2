@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
     <fixture name="catalogAttributeSet" module="Magento_Catalog" type="flat" entity_type="eav_attribute_set" collection="Magento\Catalog\Model\Resource\Product\Link\Product\Collection" repository_class="Magento\Catalog\Test\Repository\CatalogAttributeSet" handler_interface="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface" class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
     <dataset name="default">
         <field name="attribute_set_name" xsi:type="string">Default_attribute_set_%isolation%</field>

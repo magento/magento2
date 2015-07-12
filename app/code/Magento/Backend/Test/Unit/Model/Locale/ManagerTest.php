@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Locale;
 
+use Magento\Framework\Locale\Resolver;
+
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -67,7 +69,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $locale
      * @dataProvider switchBackendInterfaceLocaleDataProvider
-     * covers \Magento\Backend\Model\Locale\Manager::switchBackendInterfaceLocale
+     * @covers \Magento\Backend\Model\Locale\Manager::switchBackendInterfaceLocale
      */
     public function testSwitchBackendInterfaceLocale($locale)
     {
@@ -81,17 +83,17 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Backend\Model\Locale\Manager::getUserInterfaceLocale
+     * @covers \Magento\Backend\Model\Locale\Manager::getUserInterfaceLocale
      */
     public function testGetUserInterfaceLocaleDefault()
     {
         $locale = $this->_model->getUserInterfaceLocale();
 
-        $this->assertEquals($locale, \Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE);
+        $this->assertEquals($locale, Resolver::DEFAULT_LOCALE);
     }
 
     /**
-     * covers \Magento\Backend\Model\Locale\Manager::getUserInterfaceLocale
+     * @covers \Magento\Backend\Model\Locale\Manager::getUserInterfaceLocale
      */
     public function testGetUserInterfaceLocale()
     {

@@ -28,5 +28,7 @@ $closeBrace = ')';
               data-label="<?php echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute); ?>"><?php echo $block->renderWeeeTaxAttribute($weeeTaxAttribute); ?></span>
     <?php endforeach; ?>
     <span class="price-final_price"
+          data-price-type="weeePrice"
+          data-price-amount="<?php echo $block->getRawFinalAmount(); ?>"
           data-label="<?php echo __('Final Price'); ?>"><?php echo $block->getFinalAmount(); ?></span>
 <?php endif; ?>

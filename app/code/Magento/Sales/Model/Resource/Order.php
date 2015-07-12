@@ -7,17 +7,18 @@ namespace Magento\Sales\Model\Resource;
 
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
-use Magento\Sales\Model\Increment as SalesIncrement;
-use Magento\Sales\Model\Resource\Entity as SalesResource;
-use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
-use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
+use Magento\SalesSequence\Model\Manager;
+use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
 
 /**
  * Flat sales order resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Order extends SalesResource implements OrderResourceInterface
 {
@@ -41,11 +42,6 @@ class Order extends SalesResource implements OrderResourceInterface
     protected $stateHandler;
 
     /**
-     * @var AddressHandler
-     */
-    protected $addressHandler;
-
-    /**
      * Model Initialization
      *
      * @return void
@@ -58,24 +54,30 @@ class Order extends SalesResource implements OrderResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SalesIncrement $salesIncrement
-     * @param AddressHandler $addressHandler
+     * @param Manager $sequenceManager
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
      * @param StateHandler $stateHandler
-     * @param OrderGrid $gridAggregator
-     * @param string|null $resourcePrefix
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        RelationComposite $entityRelationComposite,
         Attribute $attribute,
-        SalesIncrement $salesIncrement,
-        AddressHandler $addressHandler,
+        Manager $sequenceManager,
         StateHandler $stateHandler,
-        OrderGrid $gridAggregator,
         $resourcePrefix = null
     ) {
         $this->stateHandler = $stateHandler;
-        $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        parent::__construct(
+            $context,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
+            $resourcePrefix
+        );
     }
 
     /**
@@ -89,21 +91,22 @@ class Order extends SalesResource implements OrderResourceInterface
     public function aggregateProductsByTypes($orderId, $productTypeIds = [], $isProductTypeIn = false)
     {
         $adapter = $this->getReadConnection();
-        $select = $adapter->select()->from(
-            ['o' => $this->getTable('sales_order_item')],
-            ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
-        )->joinInner(
-            ['p' => $this->getTable('catalog_product_entity')],
-            'o.product_id=p.entity_id',
-            []
-        )->where(
-            'o.order_id=?',
-            $orderId
-        )->group(
-            'o.product_type'
-        );
+        $select = $adapter->select()
+            ->from(
+                ['o' => $this->getTable('sales_order_item')],
+                ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
+            )
+            ->where('o.order_id=?', $orderId)
+            ->where('o.product_id IS NOT NULL')
+            ->group('o.product_type');
         if ($productTypeIds) {
-            $select->where(sprintf('(o.product_type %s (?))', $isProductTypeIn ? 'IN' : 'NOT IN'), $productTypeIds);
+            $select->where(
+                sprintf(
+                    '(o.product_type %s (?))',
+                    $isProductTypeIn ? 'IN' : 'NOT IN'
+                ),
+                $productTypeIds
+            );
         }
         return $adapter->fetchPairs($select);
     }
@@ -137,9 +140,6 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        /** @var \Magento\Sales\Model\Order $object */
-        $this->addressHandler->removeEmptyAddresses($object);
-        $this->stateHandler->check($object);
         if (!$object->getId()) {
             /** @var \Magento\Store\Model\Store $store */
             $store = $object->getStore();
@@ -148,7 +148,7 @@ class Order extends SalesResource implements OrderResourceInterface
                 $store->getGroup()->getName(),
                 $store->getName(),
             ];
-            $object->setStoreName(implode("\n", $name));
+            $object->setStoreName(implode(PHP_EOL, $name));
             $object->setTotalItemCount($this->calculateItems($object));
         }
         $object->setData(
@@ -163,42 +163,12 @@ class Order extends SalesResource implements OrderResourceInterface
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
+     * {@inheritdoc}
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order $object */
-        $this->addressHandler->process($object);
-
-        if (null !== $object->getItems()) {
-            /** @var \Magento\Sales\Model\Order\Item $item */
-            foreach ($object->getItems() as $item) {
-                $item->setOrderId($object->getId());
-                $item->setOrder($object);
-                $item->save();
-            }
-        }
-        if (null !== $object->getPayments()) {
-            /** @var \Magento\Sales\Model\Order\Payment $payment */
-            foreach ($object->getPayments() as $payment) {
-                $payment->setParentId($object->getId());
-                $payment->setOrder($object);
-                $payment->save();
-            }
-        }
-        if (null !== $object->getStatusHistories()) {
-            /** @var \Magento\Sales\Model\Order\Status\History $statusHistory */
-            foreach ($object->getStatusHistories() as $statusHistory) {
-                $statusHistory->setParentId($object->getId());
-                $statusHistory->save();
-                $statusHistory->setOrder($object);
-            }
-        }
-        foreach ($object->getRelatedObjects() as $relatedObject) {
-            $relatedObject->save();
-            $relatedObject->setOrder($object);
-        }
-        return parent::_afterSave($object);
+        $this->stateHandler->check($object);
+        return parent::save($object);
     }
 }

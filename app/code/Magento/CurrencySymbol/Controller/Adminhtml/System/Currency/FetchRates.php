@@ -6,13 +6,15 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Controller\ResultFactory;
+
 class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
 {
     /**
      * Fetch rates action
      *
-     * @return void
-     * @throws \Exception|\Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -22,17 +24,14 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
             $service = $this->getRequest()->getParam('rate_services');
             $this->_getSession()->setCurrencyRateService($service);
             if (!$service) {
-                throw new \Exception(__('Please specify a correct Import Service.'));
+                throw new LocalizedException(__('Please specify a correct Import Service.'));
             }
             try {
                 /** @var \Magento\Directory\Model\Currency\Import\ImportInterface $importModel */
-                $importModel = $this->_objectManager->get(
-                    'Magento\Directory\Model\Currency\Import\Factory'
-                )->create(
-                    $service
-                );
+                $importModel = $this->_objectManager->get('Magento\Directory\Model\Currency\Import\Factory')
+                    ->create($service);
             } catch (\Exception $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t initialize the import model.'));
+                throw new LocalizedException(__('We can\'t initialize the import model.'));
             }
             $rates = $importModel->fetchRates();
             $errors = $importModel->getMessages();
@@ -41,16 +40,19 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
                     $this->messageManager->addWarning($error);
                 }
                 $this->messageManager->addWarning(
-                    __('All possible rates were fetched, please click on "Save" to apply')
+                    __('Click "Save" to apply the rates we found.')
                 );
             } else {
-                $this->messageManager->addSuccess(__('All rates were fetched, please click on "Save" to apply'));
+                $this->messageManager->addSuccess(__('Click "Save" to apply the rates we found.'));
             }
 
             $backendSession->setRates($rates);
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         }
-        $this->_redirect('adminhtml/*/');
+
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('adminhtml/*/');
     }
 }

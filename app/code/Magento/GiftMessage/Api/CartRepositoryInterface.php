@@ -5,10 +5,14 @@
  */
 namespace Magento\GiftMessage\Api;
 
+/**
+ * Interface CartRepositoryInterface
+ * @api
+ */
 interface CartRepositoryInterface
 {
     /**
-     * Returns the gift message for a specified order.
+     * Return the gift message for a specified order.
      *
      * @param int $cartId The shopping cart ID.
      * @return \Magento\GiftMessage\Api\Data\MessageInterface Gift message.
@@ -16,7 +20,7 @@ interface CartRepositoryInterface
     public function get($cartId);
 
     /**
-     * Sets the gift message for an entire order.
+     * Set the gift message for an entire order.
      *
      * @param int $cartId The cart ID.
      * @param \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage The gift message.

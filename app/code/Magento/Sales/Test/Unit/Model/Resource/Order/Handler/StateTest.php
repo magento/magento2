@@ -40,12 +40,16 @@ class StateTest extends \PHPUnit_Framework_TestCase
                 'setState',
                 'getTotalRefunded',
                 'hasForcedCanCreditmemo',
-                'getIsInProcess'
+                'getIsInProcess',
+                'getConfig'
             ],
             [],
             '',
             false
         );
+        $this->orderMock->expects($this->any())
+            ->method('getConfig')
+            ->willReturnSelf();
         $this->addressMock = $this->getMock(
             'Magento\Sales\Model\Order\Address',
             [],
@@ -83,12 +87,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue(1));
         $this->orderMock->expects($this->once())
-            ->method('hasCustomerNoteNotify')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->once())
-            ->method('getCustomerNoteNotify')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->once())
             ->method('isCanceled')
             ->will($this->returnValue(false));
         $this->orderMock->expects($this->once())
@@ -111,7 +109,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(Order::STATE_PROCESSING));
         $this->orderMock->expects($this->once())
             ->method('setState')
-            ->with(Order::STATE_COMPLETE, true, '', true)
+            ->with(Order::STATE_COMPLETE)
             ->will($this->returnSelf());
         $this->assertEquals($this->state, $this->state->check($this->orderMock));
     }
@@ -124,12 +122,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())
-            ->method('hasCustomerNoteNotify')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->once())
-            ->method('getCustomerNoteNotify')
-            ->will($this->returnValue(true));
         $this->orderMock->expects($this->once())
             ->method('isCanceled')
             ->will($this->returnValue(false));
@@ -159,7 +151,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(Order::STATE_PROCESSING));
         $this->orderMock->expects($this->once())
             ->method('setState')
-            ->with(Order::STATE_CLOSED, true, '', true)
+            ->with(Order::STATE_CLOSED)
             ->will($this->returnSelf());
         $this->assertEquals($this->state, $this->state->check($this->orderMock));
     }
@@ -172,12 +164,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())
-            ->method('hasCustomerNoteNotify')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->once())
-            ->method('getCustomerNoteNotify')
-            ->will($this->returnValue(true));
         $this->orderMock->expects($this->once())
             ->method('isCanceled')
             ->will($this->returnValue(false));
@@ -198,7 +184,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->orderMock->expects($this->once())
             ->method('setState')
-            ->with(Order::STATE_PROCESSING, true, '', true)
+            ->with(Order::STATE_PROCESSING)
             ->will($this->returnSelf());
         $this->assertEquals($this->state, $this->state->check($this->orderMock));
     }

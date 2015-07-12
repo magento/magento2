@@ -45,6 +45,13 @@ class CustomerForm extends FormTabs
     protected $fieldWrapperControl = './/*[contains(@class, "admin__field")]/*[contains(@class,"control")]';
 
     /**
+     * Selector for wainting tab content to load.
+     *
+     * @var string
+     */
+    protected $tabReadiness = '.admin__page-nav-item._active._loading';
+
+    /**
      * Fill Customer forms on tabs by customer, addresses data.
      *
      * @param FixtureInterface $customer
@@ -62,7 +69,7 @@ class CustomerForm extends FormTabs
         }
         if (null !== $address) {
             $this->openTab('addresses');
-            $this->getTabElement('addresses')->fillAddresses($address);
+            $this->getTab('addresses')->fillAddresses($address);
         }
 
         return $this;
@@ -85,7 +92,7 @@ class CustomerForm extends FormTabs
         }
         if (null !== $address) {
             $this->openTab('addresses');
-            $this->getTabElement('addresses')->updateAddresses($address);
+            $this->getTab('addresses')->updateAddresses($address);
         }
 
         return $this;
@@ -105,7 +112,7 @@ class CustomerForm extends FormTabs
         $data = ['customer' => $customer->hasData() ? parent::getData($customer) : parent::getData()];
         if (null !== $address) {
             $this->openTab('addresses');
-            $data['addresses'] = $this->getTabElement('addresses')->getDataAddresses($address);
+            $data['addresses'] = $this->getTab('addresses')->getDataAddresses($address);
         }
 
         return $data;
@@ -136,5 +143,19 @@ class CustomerForm extends FormTabs
         $this->waitForElementVisible($this->fieldLabel, Locator::SELECTOR_XPATH);
         /* Wait for field's control block is visible in the form */
         $this->waitForElementVisible($this->fieldWrapperControl, Locator::SELECTOR_XPATH);
+    }
+
+    /**
+     * Open tab.
+     *
+     * @param string $tabName
+     * @return CustomerForm
+     */
+    public function openTab($tabName)
+    {
+        parent::openTab($tabName);
+        $this->waitForElementNotVisible($this->tabReadiness);
+
+        return $this;
     }
 }

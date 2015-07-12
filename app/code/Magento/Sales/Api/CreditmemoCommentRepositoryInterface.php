@@ -15,6 +15,7 @@ namespace Magento\Sales\Api;
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases. A credit memo usually includes comments that detail
  * why the credit memo amount was credited to the customer.
+ * @api
  */
 interface CreditmemoCommentRepositoryInterface
 {

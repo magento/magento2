@@ -49,18 +49,18 @@ class Address implements FixtureInterface
         $this->params = $params;
 
         if (isset($data['presets'])) {
-            $data['presets'] = explode(',', $data['presets']);
+            $data['presets'] = array_map('trim', explode(',', $data['presets']));
             foreach ($data['presets'] as $value) {
-                /** @var AddressFixture $addresses*/
-                $addresses = $fixtureFactory->createByCode('address', ['dataSet' => $value]);
-                $this->data[] = $addresses->getData();
-                $this->addressesFixture[] = $addresses;
+                /** @var AddressFixture $address*/
+                $address = $fixtureFactory->createByCode('address', ['dataSet' => $value]);
+                $this->data[] = $address->getData();
+                $this->addressesFixture[] = $address;
             }
         } elseif (empty($data['presets']) && !empty($data['addresses'])) {
-            foreach ($data['addresses'] as $addresses) {
-                /** @var AddressFixture $addresses */
-                $this->data[] = $addresses->getData();
-                $this->addressesFixture[] = $addresses;
+            foreach ($data['addresses'] as $address) {
+                /** @var AddressFixture $address */
+                $this->data[] = $address->getData();
+                $this->addressesFixture[] = $address;
             }
         }
     }

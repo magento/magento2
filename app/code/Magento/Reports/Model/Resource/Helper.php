@@ -37,17 +37,10 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
     }
 
     /**
-     * Update rating position
-     *
-     * @param string $type day|month|year
-     * @param string $column
-     * @param string $mainTable
-     * @param string $aggregationTable
-     * @return $this
+     * @inheritdoc
      */
-    public function updateReportRatingPos($type, $column, $mainTable, $aggregationTable)
+    public function updateReportRatingPos($adapter, $type, $column, $mainTable, $aggregationTable)
     {
-        $adapter = $this->_getWriteAdapter();
         $periodSubSelect = $adapter->select();
         $ratingSubSelect = $adapter->select();
         $ratingSelect = $adapter->select();

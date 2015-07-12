@@ -7,9 +7,10 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\DeploymentConfig\DbConfig;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Resource\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class Resource
 {
@@ -18,8 +19,6 @@ class Resource
     const AUTO_UPDATE_NEVER = -1;
 
     const AUTO_UPDATE_ALWAYS = 1;
-
-    const PARAM_TABLE_PREFIX = 'db/table_prefix';
 
     const DEFAULT_READ_RESOURCE = 'core_read';
 
@@ -86,6 +85,7 @@ class Resource
      *
      * @param string $resourceName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @codeCoverageIgnore
      */
     public function getConnection($resourceName)
     {
@@ -105,12 +105,10 @@ class Resource
             return $this->_connections[$connectionName];
         }
 
-        $dbInfo = $this->deploymentConfig->getSegment(DbConfig::CONFIG_KEY);
-        if (null === $dbInfo) {
-            return false;
-        }
-        $dbConfig = new DbConfig($dbInfo);
-        $connectionConfig = $dbConfig->getConnection($connectionName);
+        $connectionConfig = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . $connectionName
+        );
+
         if ($connectionConfig) {
             $connection = $this->_connectionFactory->create($connectionConfig);
         }
@@ -128,6 +126,7 @@ class Resource
      * @param   string|string[] $modelEntity
      * @param   string $connectionName
      * @return  string
+     * @api
      */
     public function getTableName($modelEntity, $connectionName = self::DEFAULT_READ_RESOURCE)
     {
@@ -155,11 +154,25 @@ class Resource
     }
 
     /**
+     * Build a trigger name
+     *
+     * @param string $tableName  The table that is the subject of the trigger
+     * @param string $time  Either "before" or "after"
+     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @return string
+     */
+    public function getTriggerName($tableName, $time, $event)
+    {
+        return $this->getConnection(self::DEFAULT_READ_RESOURCE)->getTriggerName($tableName, $time, $event);
+    }
+
+    /**
      * Set mapped table name
      *
      * @param string $tableName
      * @param string $mappedName
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setMappedTableName($tableName, $mappedName)
     {
@@ -195,13 +208,12 @@ class Resource
         $fields,
         $indexType = \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
     ) {
-        return $this->getConnection(
-            self::DEFAULT_READ_RESOURCE
-        )->getIndexName(
-            $this->getTableName($tableName),
-            $fields,
-            $indexType
-        );
+        return $this->getConnection(self::DEFAULT_READ_RESOURCE)
+            ->getIndexName(
+                $this->getTableName($tableName),
+                $fields,
+                $indexType
+            );
     }
 
     /**
@@ -233,7 +245,9 @@ class Resource
     private function getTablePrefix()
     {
         if (null === $this->_tablePrefix) {
-            $this->_tablePrefix = (string)$this->deploymentConfig->get(self::PARAM_TABLE_PREFIX);
+            $this->_tablePrefix = (string)$this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX
+            );
         }
         return $this->_tablePrefix;
     }

@@ -240,7 +240,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @param bool $skipRoot
      * @param bool $finalize
      * @return void
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _createTar($skipRoot = false, $finalize = false)
     {
@@ -254,7 +254,9 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
             $dirFiles = scandir($file);
 
             if (false === $dirFiles) {
-                throw new \Magento\Framework\Exception('Can\'t scan dir: ' . $file);
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase('Can\'t scan dir: %1', [$file])
+                );
             }
 
             array_shift($dirFiles);
@@ -381,7 +383,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *
      * @param string $destination path to file is unpacked
      * @return string[] list of files
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _unpackCurrentTar($destination)
@@ -404,7 +406,9 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
                     $mkdirResult = @mkdir($dirname, 0777, true);
 
                     if (false === $mkdirResult) {
-                        throw new \Magento\Framework\Exception('Failed to create directory ' . $dirname);
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            new \Magento\Framework\Phrase('Failed to create directory %1', [$dirname])
+                        );
                     }
                 }
 
@@ -415,7 +419,9 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
                     $mkdirResult = @mkdir($currentFile, $header['mode'], true);
 
                     if (false === $mkdirResult) {
-                        throw new \Magento\Framework\Exception('Failed to create directory ' . $currentFile);
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            new \Magento\Framework\Phrase('Failed to create directory %1', [$currentFile])
+                        );
                     }
                 }
                 $list[] = $currentFile . '/';
@@ -464,8 +470,8 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
         $checksumOk = $header['checksum'] == $checksum;
         if (isset($header['name']) && $checksumOk) {
+            $header['name'] = trim($header['name']);
             if (!($header['name'] == '././@LongLink' && $header['type'] == 'L')) {
-                $header['name'] = trim($header['name']);
                 return $header;
             }
 

@@ -39,7 +39,7 @@ $utilityFiles = new Magento\Framework\App\Utility\Files($magentoBaseDir);
 $map = [];
 $compositeModules = getFilesCombinedArray(__DIR__ . '/aliases_map', '/^composite_modules_.*\.php$/');
 // PHP code
-foreach ($utilityFiles->getPhpFiles(true, true, true, false) as $file) {
+foreach ($utilityFiles->getPhpFiles(true, true, true, false, false) as $file) {
     $content = file_get_contents($file);
     $classes = \Magento\Framework\App\Utility\Classes::collectPhpCodeClasses($content);
     if ($classes) {

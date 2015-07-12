@@ -11,6 +11,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * Initialize integration edit page tabs
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {

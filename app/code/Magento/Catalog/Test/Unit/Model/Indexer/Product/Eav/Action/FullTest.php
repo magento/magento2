@@ -36,7 +36,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
             $eavSourceFactory
         );
 
-        $this->setExpectedException('\Magento\Catalog\Exception', $exceptionMessage);
+        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', $exceptionMessage);
 
         $model->execute();
     }

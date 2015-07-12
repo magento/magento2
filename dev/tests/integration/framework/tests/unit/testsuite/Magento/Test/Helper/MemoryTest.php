@@ -27,7 +27,7 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->stringStartsWith('tasklist.exe ')
         )->will(
-            $this->throwException(new \Magento\Framework\Exception('command not found'))
+            $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('command not found')))
         );
         $this->_shell->expects(
             $this->at(1)

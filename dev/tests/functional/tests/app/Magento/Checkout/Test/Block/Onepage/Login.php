@@ -10,8 +10,7 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Login
- * One page checkout status login block
+ * One page checkout status login block.
  */
 class Login extends Form
 {
@@ -30,7 +29,7 @@ class Login extends Form
     protected $continue = '#onepage-guest-register-button';
 
     /**
-     * 'Checkout as Guest' radio button
+     * Locator value for "Check Out as Guest" radio button.
      *
      * @var string
      */
@@ -51,7 +50,7 @@ class Login extends Form
     protected $loadingMask = '.loading-mask';
 
     /**
-     * Select how to perform checkout whether guest or registered customer
+     * Select how to perform checkout whether guest or registered customer.
      *
      * @param FixtureInterface $fixture
      * @return void
@@ -61,9 +60,6 @@ class Login extends Form
         /** @var Checkout $fixture */
         if ($fixture->isRegisteredCustomer()) {
             $this->loginCustomer($fixture->getCustomer());
-        } elseif ($fixture->getCustomer()) {
-            $this->registerCustomer();
-            $this->clickContinue();
         } else {
             $this->guestCheckout();
             $this->clickContinue();
@@ -71,27 +67,18 @@ class Login extends Form
     }
 
     /**
-     * Perform guest checkout
+     * Perform guest checkout.
      *
      * @return void
      */
     public function guestCheckout()
     {
+        $this->waitForElementVisible($this->guestCheckout);
         $this->_rootElement->find($this->guestCheckout)->click();
     }
 
     /**
-     * Register customer during checkout
-     *
-     * @return void
-     */
-    public function registerCustomer()
-    {
-        $this->_rootElement->find($this->registerCustomer)->click();
-    }
-
-    /**
-     * Login customer during checkout
+     * Login customer during checkout.
      *
      * @param FixtureInterface $customer
      * @return void
@@ -104,7 +91,7 @@ class Login extends Form
     }
 
     /**
-     * Click continue on checkout method block
+     * Click continue on checkout method block.
      *
      * @return void
      */

@@ -1,12 +1,18 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Controller\Adminhtml\Edit;
 
-class Popup extends \Magento\Backend\App\AbstractAction
+use Magento\Backend\App\AbstractAction;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Catalog\Model\ProductFactory;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Controller\ResultFactory;
+
+class Popup extends AbstractAction
 {
     /**
      * @var \Magento\Framework\Registry
@@ -30,10 +36,10 @@ class Popup extends \Magento\Backend\App\AbstractAction
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Model\ProductFactory $factory,
-        \Psr\Log\LoggerInterface $logger
+        Context $context,
+        Registry $registry,
+        ProductFactory $factory,
+        LoggerInterface $logger
     ) {
         $this->registry = $registry;
         $this->factory = $factory;
@@ -54,7 +60,7 @@ class Popup extends \Magento\Backend\App\AbstractAction
     /**
      * Get associated grouped products grid popup
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
@@ -84,8 +90,8 @@ class Popup extends \Magento\Backend\App\AbstractAction
             $product->setAttributeSetId($setId);
         }
         $this->registry->register('current_product', $product);
-
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
+        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+        $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
+        return $resultLayout;
     }
 }

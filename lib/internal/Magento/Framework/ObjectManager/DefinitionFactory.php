@@ -62,7 +62,7 @@ class DefinitionFactory
      *
      * @var array
      */
-    protected $_definitionClasses = [
+    protected static $definitionClasses = [
         Binary::MODE_NAME => '\Magento\Framework\ObjectManager\Definition\Compiled\Binary',
         Serialized::MODE_NAME => '\Magento\Framework\ObjectManager\Definition\Compiled\Serialized',
     ];
@@ -98,7 +98,7 @@ class DefinitionFactory
             if (is_string($definitions)) {
                 $definitions = $this->_unpack($definitions);
             }
-            $definitionModel = $this->_definitionClasses[$this->_definitionFormat];
+            $definitionModel = self::$definitionClasses[$this->_definitionFormat];
             $result = new $definitionModel($definitions);
         } else {
             $autoloader = new \Magento\Framework\Code\Generator\Autoloader($this->getCodeGenerator());
@@ -141,6 +141,16 @@ class DefinitionFactory
         } else {
             return new \Magento\Framework\ObjectManager\Relations\Runtime();
         }
+    }
+
+    /**
+     * Gets supported definition formats
+     *
+     * @return array
+     */
+    public static function getSupportedFormats()
+    {
+        return array_keys(self::$definitionClasses);
     }
 
     /**

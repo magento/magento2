@@ -23,6 +23,11 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     const SESSION_NAMESPACE = 'adminhtml';
 
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
+    /**
      * Array of actions which can be processed without secret key validation
      *
      * @var array
@@ -97,7 +102,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isAllowed()
     {
-        return true;
+        return $this->_authorization->isAllowed(self::ADMIN_RESOURCE);
     }
 
     /**
@@ -228,14 +233,10 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isUrlChecked()
     {
-        return !$this->_actionFlag->get(
-            '',
-            self::FLAG_IS_URLS_CHECKED
-        ) && !$this->getRequest()->getParam(
-            'forwarded'
-        ) && !$this->_getSession()->getIsUrlNotice(
-            true
-        ) && !$this->_canUseBaseUrl;
+        return !$this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED)
+        && !$this->getRequest()->isForwarded()
+        && !$this->_getSession()->getIsUrlNotice(true)
+        && !$this->_canUseBaseUrl;
     }
 
     /**
@@ -285,7 +286,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected function _processLocaleSettings()
     {
         $forceLocale = $this->getRequest()->getParam('locale', null);
-        if ($this->_objectManager->get('Magento\Framework\Locale\Validator')->isValid($forceLocale)) {
+        if ($this->_objectManager->get('Magento\Framework\Validator\Locale')->isValid($forceLocale)) {
             $this->_getSession()->setSessionLocale($forceLocale);
         }
 

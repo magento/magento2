@@ -49,7 +49,7 @@ class AssertCategoryIsNotIncludeInMenu extends AbstractConstraint
             $products = $category->getDataFieldConfig('category_products')['source']->getProducts();
             foreach ($products as $productFixture) {
                 \PHPUnit_Framework_Assert::assertTrue(
-                    $categoryView->getListProductBlock()->isProductVisible($productFixture->getName()),
+                    $categoryView->getListProductBlock()->getProductItem($productFixture)->isVisible(),
                     "Products '{$productFixture->getName()}' not find."
                 );
             }

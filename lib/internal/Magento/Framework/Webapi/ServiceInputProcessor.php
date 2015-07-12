@@ -9,7 +9,6 @@ namespace Magento\Framework\Webapi;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\Cache\Type\Webapi as WebapiCache;
 use Magento\Framework\Exception\InputException;
@@ -138,8 +137,7 @@ class ServiceInputProcessor
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
         }
-        $factory = $this->objectManager->get($className . 'Factory');
-        $object = $factory->create();
+        $object = $this->objectManager->create($className);
 
         foreach ($data as $propertyName => $value) {
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
@@ -184,7 +182,10 @@ class ServiceInputProcessor
         $camelCaseAttributeCodeKey = lcfirst(
             SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
         );
-        foreach ($customAttributesValueArray as $customAttribute) {
+        foreach ($customAttributesValueArray as $key => $customAttribute) {
+            if (!is_array($customAttribute)) {
+                $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
+            }
             if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
                 $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
             } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
@@ -200,10 +201,10 @@ class ServiceInputProcessor
             if (is_array($customAttributeValue)) {
                 //If type for AttributeValue's value as array is mixed, further processing is not possible
                 if ($type === TypeProcessor::ANY_TYPE) {
-                    continue;
+                    $attributeValue = $customAttributeValue;
+                } else {
+                    $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
                 }
-
-                $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
             } else {
                 $attributeValue = $this->_convertValue($customAttributeValue, $type);
             }
@@ -244,6 +245,7 @@ class ServiceInputProcessor
      * @param mixed $value
      * @param string $type Convert given value to the this type
      * @return mixed
+     * @throws WebapiException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _convertValue($value, $type)
@@ -256,7 +258,7 @@ class ServiceInputProcessor
             try {
                 $result = $this->typeProcessor->processSimpleAndAnyType($value, $type);
             } catch (SerializationException $e) {
-                throw new WebapiException($e->getMessage());
+                throw new WebapiException(new Phrase($e->getMessage()));
             }
         } else {
             /** Complex type or array of complex types */

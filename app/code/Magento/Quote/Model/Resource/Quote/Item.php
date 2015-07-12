@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\Resource\Quote;
 
-use Magento\Framework\Model\Resource\Db\AbstractDb;
+use Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb;
 
 /**
  * Quote resource model
@@ -29,7 +29,7 @@ class Item extends AbstractDb
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $hasDataChanges = $object->hasDataChanges();
+        $hasDataChanges = $this->isModified($object);
         $object->setIsOptionsSaved(false);
 
         $result = parent::save($object);
@@ -38,5 +38,19 @@ class Item extends AbstractDb
             $object->saveItemOptions();
         }
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function prepareDataForUpdate($object)
+    {
+        $data = parent::prepareDataForUpdate($object);
+
+        if (isset($data['updated_at'])) {
+            unset($data['updated_at']);
+        }
+
+        return $data;
     }
 }

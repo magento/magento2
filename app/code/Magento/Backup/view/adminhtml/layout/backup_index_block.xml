@@ -46,7 +46,6 @@
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Name</argument>
                             <argument name="index" xsi:type="string">display_name</argument>
-                            <argument name="filter" xsi:type="string">0</argument>
                             <argument name="sortable" xsi:type="string">1</argument>
                             <argument name="column_css_class" xsi:type="string">col-name</argument>
                             <argument name="header_css_class" xsi:type="string">col-name</argument>

@@ -395,4 +395,66 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             [0, $this->storeId],
         ];
     }
+
+    public function testGetLowStockDate()
+    {
+        // ensure we do *not* return '2015' due to casting to an int
+        $date = '2015-4-17';
+        $this->item->setLowStockDate($date);
+        $this->assertEquals($date, $this->item->getLowStockDate());
+    }
+
+    /**
+     * @param array $config
+     * @param mixed $expected
+     * @dataProvider getQtyIncrementsDataProvider(
+     */
+    public function testGetQtyIncrements($config, $expected)
+    {
+        $this->setDataArrayValue('qty_increments', $config['qty_increments']);
+        $this->setDataArrayValue('enable_qty_increments', $config['enable_qty_increments']);
+        $this->setDataArrayValue('use_config_qty_increments', $config['use_config_qty_increments']);
+        if ($config['use_config_qty_increments']) {
+            $this->stockConfiguration->expects($this->once())
+                ->method('getQtyIncrements')
+                ->with($this->storeId)
+                ->willReturn($config['qty_increments']);
+        } else {
+            $this->setDataArrayValue('qty_increments', $config['qty_increments']);
+        }
+        $this->assertEquals($expected, $this->item->getQtyIncrements());
+    }
+
+    /**
+     * @return array
+     */
+    public function getQtyIncrementsDataProvider()
+    {
+        return [
+            [
+                [
+                    'qty_increments' => 1,
+                    'enable_qty_increments' => true,
+                    'use_config_qty_increments' => true
+                ],
+                1
+            ],
+            [
+                [
+                    'qty_increments' => -2,
+                    'enable_qty_increments' => true,
+                    'use_config_qty_increments' => true
+                ],
+                false
+            ],
+            [
+                [
+                    'qty_increments' => 3,
+                    'enable_qty_increments' => true,
+                    'use_config_qty_increments' => false
+                ],
+                3
+            ],
+        ];
+    }
 }

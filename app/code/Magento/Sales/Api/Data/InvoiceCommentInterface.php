@@ -10,6 +10,7 @@ namespace Magento\Sales\Api\Data;
  *
  * An invoice is a record of the receipt of payment for an order. An invoice can include comments that detail the
  * invoice history.
+ * @api
  */
 interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -51,14 +52,22 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Gets the created-at timestamp for the invoice.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
+     * Sets the created-at timestamp for the invoice.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
+    /**
      * Gets the ID for the invoice.
      *
-     * @return int Invoice ID.
+     * @return int|null Invoice ID.
      */
     public function getEntityId();
 

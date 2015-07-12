@@ -8,9 +8,8 @@
 
 ?>
 <?php $_order = $block->getOrder() ?>
-<div class="grid">
-  <div class="hor-scroll">
-    <table cellspacing="0" class="data-table">
+<div class="admin__table-wrapper">
+    <table class="data-table admin__table-primary edit-order-table">
         <thead>
             <tr class="headings">
                 <th class="col-product"><span><?php echo __('Product') ?></span></th>
@@ -25,18 +24,17 @@
                 <th class="col-total last"><span><?php echo __('Row Total') ?></span></th>
             </tr>
         </thead>
-        <?php $_items = $block->getItemsCollection() ?>
+        <?php $_items = $block->getItemsCollection();?>
         <?php $i = 0; foreach ($_items as $_item):?>
             <?php if ($_item->getParentItem()) {
-    continue;
-} else {
-    $i++;
-}?>
+                continue;
+            } else {
+                $i++;
+            }?>
             <tbody class="<?php echo $i%2 ? 'even' : 'odd' ?>">
                 <?php echo $block->getItemHtml($_item) ?>
                 <?php echo $block->getItemExtraInfoHtml($_item) ?>
             </tbody>
         <?php endforeach; ?>
     </table>
-  </div>
 </div>

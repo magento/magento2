@@ -17,11 +17,18 @@ use Magento\Framework\Filesystem;
 class License
 {
     /**
+     * Default License File location
+     *
+     * @var string
+     */
+    const DEFAULT_LICENSE_FILENAME = 'LICENSE.txt';
+
+    /**
      * License File location
      *
      * @var string
      */
-    const LICENSE_FILENAME = 'LICENSE.txt';
+    const LICENSE_FILENAME = 'LICENSE_EE.txt';
 
     /**
      * Directory that contains license file
@@ -43,13 +50,16 @@ class License
     /**
      * Returns contents of License file.
      *
-     * @return string
+     * @return string|boolean
      */
     public function getContents()
     {
-        if (!$this->dir->isFile(self::LICENSE_FILENAME)) {
+        if ($this->dir->isFile(self::LICENSE_FILENAME)) {
+            return $this->dir->readFile(self::LICENSE_FILENAME);
+        } elseif ($this->dir->isFile(self::DEFAULT_LICENSE_FILENAME)) {
+            return $this->dir->readFile(self::DEFAULT_LICENSE_FILENAME);
+        } else {
             return false;
         }
-        return $this->dir->readFile(self::LICENSE_FILENAME);
     }
 }

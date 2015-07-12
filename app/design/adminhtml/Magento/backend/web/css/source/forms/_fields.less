@@ -4,52 +4,62 @@
 //  */
 
 //
-//  Variables
+//  Components
 //  _____________________________________________
 
-@field-divider__background-color: @color-lighter-grayish;
-@field-label__color: @color-very-dark-gray-black;
-@field-label__disabled__color: @color-gray65-almost;
-@field-label__font-size: @font-size__base;
-@field-label__line-height: @line-height__s;
-@field-label__required__color: @color-phoenix;
-@field-note__color: @color-very-dark-gray-black;
-@field-note__font-size: @font-size__s;
-@field-scope__color: @color-dark-gray;
-
-@field-error-control__border-color: @color-tomato-brick;
-@field-error-message__background-color: @color-lazy-sun;
-@field-error-message__border-color: @color-apricot;
-@field-error-message__color: @color-very-dark-gray2;
+@import 'fields/_control-table.less';
+@import 'fields/_field-tooltips.less';
 
 //
 //  Form Fields
 //  _____________________________________________
 
-// Fieldset
+//
+//  Fieldset
+//  ---------------------------------------------
+
 .admin__fieldset {
     border: 0;
     margin: 0;
     min-width: 0;
     padding: 0;
-
     > .admin__field {
         border: 0;
         margin: 0;
         padding: 0;
         #mix-grid .row();
 
+        &.admin__field-wide {
+            &:extend(.abs-field-rows all);
+        }
         > .admin__field-control {
-            #mix-grid .column(4,9);
+            #mix-grid .column(@field-control-grid__column, @field-grid__columns);
         }
 
         > .admin__field-label {
-            #mix-grid .column(3,9);
+            #mix-grid .column(@field-label-grid__column, @field-grid__columns);
         }
     }
 }
 
-// Label
+.admin__form-field {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.admin__form-field-control,
+.admin__field-control {
+    .admin__control-text,
+    .admin__control-textarea {
+        width: 100%;
+    }
+}
+
+//
+//  Label
+//  ---------------------------------------------
+
 .admin__field-label {
     color: @field-label__color;
     margin: 0;
@@ -59,20 +69,20 @@
         display: none;
     }
 
-    [class]:not(.admin__field-option) > & {
+    .admin__field:not(.admin__field-option) > & {
         font-family: @font-family__base;
         font-size: @field-label__font-size;
         font-weight: @font-weight__semibold;
         line-height: 3.2rem;
         padding: 0;
         white-space: nowrap;
+        word-wrap: break-word;
 
         &:before {
+            .appearing__off();
             content: '.';
             margin-left: -7px;
             overflow: hidden;
-            visibility: hidden;
-            width: 0;
         }
 
         span {
@@ -103,7 +113,10 @@
     }
 }
 
-// Field
+//
+//  Field
+//  ---------------------------------------------
+
 .admin__field {
     margin-bottom: 0;
 
@@ -126,24 +139,22 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
-        z-index: 1;
-        &:hover {
-            z-index: 2;
-        }
     }
 
     &[data-config-scope] {
         &:before {
-            #mix-grid .return_length(7,9);
+            #mix-grid .return_length(7, @field-grid__columns);
             color: @field-scope__color;
             content: attr(data-config-scope);
             display: inline-block;
-            position: absolute;
+            font-size: @font-size__s;
             left: @_length;
+            line-height: 3.2rem;
             margin-left: 2 * @temp_gutter;
+            position: absolute;
 
             & {
-                #mix-grid .return_length(2,9);
+                #mix-grid .return_length(2, @field-grid__columns);
                 width: @_length;
             }
         }
@@ -159,8 +170,17 @@
         }
     }
 }
+.admin__field-control {
+    & + & {
+        margin-top: 1.5rem;
+    }
+}
 
-// Field error message
+//
+//  Field messages
+//  ---------------------------------------------
+
+//  Field error message
 .admin__field-error {
     background: @field-error-message__background-color;
     border: 1px solid @field-error-message__border-color;
@@ -174,7 +194,7 @@
     padding: .8rem 1rem .9rem;
 }
 
-// Field notice message
+//  Field notice message
 .admin__field-note {
     color: @field-note__color;
     font-size: @field-note__font-size;
@@ -182,9 +202,9 @@
     padding: 0;
 }
 
-// Field containing checkbox or radio
+//  Field containing checkbox or radio
 .admin__field-option {
-    padding-top: 8px;
+    padding-top: @field-option__padding-top;
 
     .admin__field-label {
         text-align: left;
@@ -212,6 +232,11 @@
     }
 }
 
+//  Field containing a value
+.admin__field-value {
+    padding-top: @field-option__padding-top;
+}
+
 //
 //  Field containing multiple fields
 //  _____________________________________________
@@ -221,7 +246,7 @@
     & > .admin__field:first-child {
         position: static;
         & > .admin__field-label {
-            #mix-grid .column(3, 9);
+            #mix-grid .column(@field-label-grid__column, @field-grid__columns);
             cursor: pointer;
             left: 0;
             opacity: 0;
@@ -231,7 +256,7 @@
     }
 }
 
-// In rows
+//  In rows
 .admin__control-fields {
     .admin__field-label ~ .admin__field-control {
         width: 100%;
@@ -243,7 +268,7 @@
     }
 }
 
-// In line
+//  In line
 [class*='admin__control-grouped'] {
     box-sizing: border-box;
     display: table;
@@ -263,5 +288,22 @@
                 .visually-hidden();
             }
         }
+    }
+}
+
+//
+//  Form legend
+//  _____________________________________________
+
+.admin__legend {
+    //  ToDo UI: add form legend styles. Check if they doon't conflict with create order page form legend styles
+    float: left;
+    position: static;
+    width: 100%;
+    & + br {
+        display: block;
+        height: 0;
+        overflow: hidden;
+        clear: left;
     }
 }

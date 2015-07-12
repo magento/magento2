@@ -4,8 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\GiftMessage\Test\Unit\Model;
+
+// @codingStandardsIgnoreFile
 
 use Magento\GiftMessage\Model\ItemRepository;
 
@@ -211,7 +212,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $quoteItem->expects($this->once())->method('getIsVirtual')->will($this->returnValue(0));
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
         $this->helperMock->expects($this->once())
-            ->method('getIsMessagesAvailable')
+            ->method('isMessagesAllowed')
             ->with('items', $this->quoteMock, $this->storeMock)
             ->will($this->returnValue(true));
         $this->giftMessageManagerMock->expects($this->once())

@@ -27,6 +27,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_SORT_ORDER = 'sort_order';
     const KEY_SAMPLE_TYPE = 'sample_type';
     const KEY_SAMPLE_FILE = 'sample_file';
+    const KEY_SAMPLE_FILE_CONTENT = 'sample_file_content';
     const KEY_SAMPLE_URL = 'sample_url';
     /**#@-*/
 
@@ -36,7 +37,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -45,7 +46,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -167,6 +168,15 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      * @codeCoverageIgnore
      */
+    public function getSampleFileContent()
+    {
+        return $this->getData(self::KEY_SAMPLE_FILE_CONTENT);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
     public function getSampleUrl()
     {
         return $this->getData(self::KEY_SAMPLE_URL);
@@ -212,6 +222,17 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setSampleFile($sampleFile)
     {
         return $this->setData(self::KEY_SAMPLE_FILE, $sampleFile);
+    }
+
+    /**
+     * Set sample file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
+     * @return $this
+     */
+    public function setSampleFileContent(\Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null)
+    {
+        return $this->setData(self::KEY_SAMPLE_FILE_CONTENT, $sampleFileContent);
     }
 
     /**

@@ -8,6 +8,10 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="product_tabs">
+            <!-- @todo ui: remove arguments within .admin__scope-old -->
+            <arguments>
+                <argument name="excluded_panel" xsi:type="string">product_info_tabs_downloadable_items_content</argument>
+            </arguments>
             <action method="addTab">
                 <argument name="name" xsi:type="string">downloadable_items</argument>
                 <argument name="block" xsi:type="string">Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable</argument>

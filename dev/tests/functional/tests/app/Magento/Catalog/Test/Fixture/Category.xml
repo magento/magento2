@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="category" module="Magento_Catalog" type="eav" entity_type="catalog_category_entity" collection="Magento\Catalog\Model\Resource\Category\Collection" repository_class="Magento\Catalog\Test\Repository\Category" handler_interface="Magento\Catalog\Test\Handler\Category\CategoryInterface" class="Magento\Catalog\Test\Fixture\Category">
     <dataset name="default">
         <field name="name" xsi:type="string">Category%isolation%</field>

@@ -76,12 +76,7 @@ class Order extends \Magento\Framework\Object
                 'id' => 'order/1/' . $order->getId(),
                 'type' => __('Order'),
                 'name' => __('Order #%1', $order->getIncrementId()),
-                'description' => $order->getBillingFirstname() . ' ' . $order->getBillingLastname(),
-                'form_panel_title' => __(
-                    'Order #%1 (%2)',
-                    $order->getIncrementId(),
-                    $order->getBillingFirstname() . ' ' . $order->getBillingLastname()
-                ),
+                'description' => $order->getFirstname() . ' ' . $order->getLastname(),
                 'url' => $this->_adminhtmlData->getUrl('sales/order/view', ['order_id' => $order->getId()]),
             ];
         }

@@ -14,6 +14,7 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
     /**
      * Retrieve all attributes filtered by form code
      *
+     * @api
      * @param string $formCode
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -23,6 +24,7 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
     /**
      * Retrieve attribute metadata.
      *
+     * @api
      * @param string $attributeCode
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -33,6 +35,7 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
     /**
      * Get all attribute metadata.
      *
+     * @api
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -41,6 +44,7 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
     /**
      *  Get custom attributes metadata for the given data interface.
      *
+     * @api
      * @param string $dataInterfaceName
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException

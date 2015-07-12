@@ -7,7 +7,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\ForwardFactory;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
@@ -23,7 +22,6 @@ class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param PageFactory $resultPageFactory
-     * @param RedirectFactory $resultRedirectFactory
      * @param ForwardFactory $resultForwardFactory
      * @param RawFactory $resultRawFactory
      */
@@ -32,7 +30,6 @@ class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
         PageFactory $resultPageFactory,
-        RedirectFactory $resultRedirectFactory,
         ForwardFactory $resultForwardFactory,
         RawFactory $resultRawFactory
     ) {
@@ -42,7 +39,6 @@ class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $productHelper,
             $escaper,
             $resultPageFactory,
-            $resultRedirectFactory,
             $resultForwardFactory
         );
     }

@@ -1,0 +1,47 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__field" data-bind="visible: visible, css: {'_required': element.required, '_disabled': element.disabled, '_error': element.error}">
+
+    <!-- ko if: element.label -->
+    <label class="admin__field-label" data-bind="attr: { for: element.uid }">
+        <span data-bind="text: element.label"></span>
+    </label>
+    <!-- /ko -->
+
+    <div class="admin__field-control">
+        <!-- ko ifnot: element.hasAddons() -->
+            <!-- ko template: element.elementTmpl --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: element.hasAddons() -->
+            <div class="admin__control-addon">
+                <!-- ko template: element.elementTmpl --><!-- /ko -->
+
+                <!-- ko if: element.addbefore -->
+                    <label class="admin__addon-prefix" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addbefore"></span></label>
+                <!-- /ko -->
+
+                <!-- ko if: element.addafter -->
+                    <label class="admin__addon-suffix" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addafter"></span></label>
+                <!-- /ko -->
+            </div>
+        <!-- /ko -->
+
+        <!-- ko if: element.tooltip -->
+            <!-- ko template: element.tooltipTpl --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: element.notice -->
+            <div class="admin__field-note" data-bind="attr: { id: element.noticeId }"><span data-bind="text: element.notice"></span></div>
+        <!-- /ko -->
+
+        <!-- ko if: element.error() -->
+            <label class="admin__field-error" data-bind="attr: { for: element.uid }, text: element.error"></label>
+        <!-- /ko -->
+    </div>
+</div>
+<!-- /ko -->

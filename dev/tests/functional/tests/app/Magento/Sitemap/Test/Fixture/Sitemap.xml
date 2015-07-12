@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="sitemap" module="Magento_Sitemap" type="flat" entity_type="sitemap" collection="Magento\Sitemap\Model\Resource\Sitemap\Collection" repository_class="Magento\Sitemap\Test\Repository\Sitemap" handler_interface="Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface" class="Magento\Sitemap\Test\Fixture\Sitemap">
     <dataset name="default">
         <field name="sitemap_filename" xsi:type="string">sitemap.xml</field>

@@ -113,4 +113,13 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    public function testGetSupportedFormats()
+    {
+        $actual = \Magento\Framework\ObjectManager\DefinitionFactory::getSupportedFormats();
+        $this->assertInternalType('array', $actual);
+        foreach ($actual as $className) {
+            $this->assertInternalType('string', $className);
+        }
+    }
 }
