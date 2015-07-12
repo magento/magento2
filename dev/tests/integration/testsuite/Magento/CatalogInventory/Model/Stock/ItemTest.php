@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogInventory\Model\Stock;
 
-use Magento\Indexer\Model\Indexer\State;
-
 class ItemTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,7 +21,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
-     * @magentoAppIsolation enabled
      */
     public function testSaveWithNullQty()
     {
@@ -34,11 +31,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $product->load(1);
 
         /** @var \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository */
-        $stockItemRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $stockItemRepository = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\CatalogInventory\Model\Stock\StockItemRepository');
 
         /** @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface $stockItemCriteria */
-        $stockItemCriteria = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $stockItemCriteria = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\CatalogInventory\Api\StockItemCriteriaInterface');
 
         $savedStockItem = current($stockItemRepository->getList($stockItemCriteria)->getItems());
@@ -63,49 +60,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
-     * @magentoAppIsolation enabled
-     */
-    public function testIndexerInvalidation()
-    {
-        /** @var \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository */
-        $stockItemRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CatalogInventory\Model\Stock\StockItemRepository');
-
-        /** @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface $stockItemCriteria */
-        $stockItemCriteria = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CatalogInventory\Api\StockItemCriteriaInterface');
-        /** @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor $indexerProcessor */
-        $indexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CatalogInventory\Model\Indexer\Stock\Processor');
-        $indexer = $indexerProcessor->getIndexer();
-        $indexer->setScheduled(true);
-        $indexer->getState()->setStatus(State::STATUS_VALID)->save();
-
-        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterface $savedStockItem */
-        $savedStockItem = current($stockItemRepository->getList($stockItemCriteria)->getItems());
-        $savedStockItem->setQty(1);
-        $savedStockItem->setIsInStock(false);
-        $savedStockItem->save();
-
-
-        $this->assertEquals('invalid', $indexerProcessor->getIndexer()->getStatus());
-
-        $indexer->setScheduled(false);
-        $indexer->getState()->setStatus(State::STATUS_VALID)->save();
-    }
-
-    /**
-     * @magentoDataFixture Magento/Catalog/_files/products.php
-     * @magentoAppIsolation enabled
      */
     public function testStockStatusChangedAuto()
     {
         /** @var \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository */
-        $stockItemRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $stockItemRepository = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\CatalogInventory\Model\Stock\StockItemRepository');
 
         /** @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface $stockItemCriteria */
-        $stockItemCriteria = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $stockItemCriteria = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\CatalogInventory\Api\StockItemCriteriaInterface');
 
         $savedStockItem = current($stockItemRepository->getList($stockItemCriteria)->getItems());
