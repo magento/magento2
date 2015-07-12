@@ -101,10 +101,9 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $isWebsiteScope
      * @param array $websites
-     * @param int $quoteId
      * @dataProvider dispatchDataProvider
      */
-    public function testDispatch($isWebsiteScope, $websites, $quoteId)
+    public function testDispatch($isWebsiteScope, $websites)
     {
         $this->configMock->expects($this->once())
             ->method('isWebsiteScope')
@@ -167,14 +166,10 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
     public function dispatchDataProvider()
     {
         return [
-            [true, ['website1'], 3],
-            [true, ['website1', 'website2'], 3],
-            [false, ['website1'], 3],
-            [false, ['website1', 'website2'], 3],
-            [true, ['website1'], null],
-            [true, ['website1', 'website2'], null],
-            [false, ['website1'], null],
-            [false, ['website1', 'website2'], null],
+            [true, ['website1']],
+            [true, ['website1', 'website2']],
+            [false, ['website1']],
+            [false, ['website1', 'website2']],
         ];
     }
 }
