@@ -13,7 +13,7 @@ namespace Magento\SalesRule\Api\Data;
 interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     const FREE_SHIPPING_NONE = 'NONE';
-    const FREE_SHIPPING_MATCHING_ITEMs_ONLY = 'MATCHING_ITEMS_ONLY';
+    const FREE_SHIPPING_MATCHING_ITEMS_ONLY = 'MATCHING_ITEMS_ONLY';
     const FREE_SHIPPING_WITH_MATCHING_ITEMS = 'FREE_WITH_MATCHING_ITEMS';
 
     const DISCOUNT_ACTION_BY_PERCENT = 'by_percent';

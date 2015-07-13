@@ -188,8 +188,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface $extensionAttributes
-    )
-    {
+    ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

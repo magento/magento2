@@ -42,6 +42,13 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      */
     protected $extensionAttributesJoinProcessor;
 
+    /**
+     * @param CouponFactory $couponFactory
+     * @param RuleFactory $ruleFactory
+     * @param Resource\Coupon\CollectionFactory $collectionFactory
+     * @param Spi\CouponResourceInterface $resourceModel
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     */
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,

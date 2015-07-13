@@ -41,6 +41,7 @@ class ToDataModel
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Api\Data\RuleInterfaceFactory $ruleDataFactory
      * @param \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory
+     * @param \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory $ruleLabelFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(

@@ -42,6 +42,13 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      */
     protected $resourceModel;
 
+    /**
+     * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
+     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
+     * @param \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $collectionFactory
+     * @param \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator
+     * @param \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel
+     */
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
