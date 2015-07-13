@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Backend Directory currency backend model
  * Allows dispatching before and after events for each controller action
@@ -14,15 +12,15 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 
 class Base extends AbstractCurrency
 {
-    /** @var \Magento\Directory\Model\Currency */
-    private $currency;
+    /** @var \Magento\Directory\Model\CurrencyFactory */
+    private $currencyFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Directory\Model\Currency $currency
+     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -32,14 +30,15 @@ class Base extends AbstractCurrency
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Directory\Model\Currency $currency,
+        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $config, $scopeConfig, $resource, $resourceCollection, $data);
-        $this->currency = $currency;
+        $this->currencyFactory = $currencyFactory;
     }
+
     /**
      * Check base currency is available in installed currencies
      *
@@ -50,10 +49,12 @@ class Base extends AbstractCurrency
     {
         $value = $this->getValue();
         if (!in_array($value, $this->_getInstalledCurrencies())) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Sorry, we haven\'t installed the base currency you selected.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Sorry, we haven\'t installed the base currency you selected.'));
+            
         }
 
-        $this->currency->saveRates([$value =>[$value => 1]]);
+        $this->currencyFactory->create()->saveRates([$value =>[$value => 1]]);
         return $this;
     }
 }
