@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Query;
 /**
  * MatchContainer Factory
  */
-class QueryContainerFactory
+class MatchContainerFactory
 {
     /**
      * Object Manager instance
@@ -32,7 +32,7 @@ class QueryContainerFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer'
+        $instanceName = 'Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer'
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
