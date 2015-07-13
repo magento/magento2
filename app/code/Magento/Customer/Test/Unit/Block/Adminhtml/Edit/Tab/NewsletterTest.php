@@ -13,26 +13,32 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter
      */
     protected $model;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $registryMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $formFactoryMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $subscriberFactoryMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $accountManagementMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
