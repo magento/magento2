@@ -10,7 +10,8 @@ use Magento\Authorizenet\Controller\Directpost\Payment;
 use Magento\Authorizenet\Helper\DataFactory;
 use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Object;
 use Magento\Framework\Registry;
 use Magento\Payment\Model\IframeConfigProvider;
@@ -24,29 +25,45 @@ use Magento\Quote\Api\CartManagementInterface;
 class Place extends Payment
 {
     /**
-     * @var CartManagementInterface
+     * @var \Magento\Quote\Api\CartManagementInterface
      */
     protected $cartManagement;
 
     /**
-     * @var ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $eventManager;
+
+    /**
+     * @var \Magento\Checkout\Model\Type\Onepage
+     */
+    protected $onepageCheckout;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    protected $jsonHelper;
 
     /**
      * @param Context $context
      * @param Registry $coreRegistry
      * @param DataFactory $dataFactory
      * @param CartManagementInterface $cartManagement
+     * @param Onepage $onepageCheckout
+     * @param JsonHelper $jsonHelper
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         DataFactory $dataFactory,
-        CartManagementInterface $cartManagement
+        CartManagementInterface $cartManagement,
+        Onepage $onepageCheckout,
+        JsonHelper $jsonHelper
     ) {
         $this->eventManager = $context->getEventManager();
         $this->cartManagement = $cartManagement;
+        $this->onepageCheckout = $onepageCheckout;
+        $this->jsonHelper = $jsonHelper;
         parent::__construct($context, $coreRegistry, $dataFactory);
     }
 
@@ -59,20 +76,19 @@ class Place extends Payment
     {
         $paymentParam = $this->getRequest()->getParam('payment');
         $controller = $this->getRequest()->getParam('controller');
+        $response = $this->getResponse();
 
         if (isset($paymentParam['method'])) {
             $this->_getDirectPostSession()->setQuoteId($this->_getCheckout()->getQuote()->getId());
-            $this->_getCheckout()->getQuote()->setCheckoutMethod($this->getCheckoutMethod());
+            $this->onepageCheckout->getCheckoutMethod();
 
             if ($controller == IframeConfigProvider::CHECKOUT_IDENTIFIER) {
                 return $this->placeCheckoutOrder();
             }
 
-            $params = $this->_objectManager->get(
-                'Magento\Authorizenet\Helper\Data'
-            )->getSaveOrderUrlParams(
-                $controller
-            );
+            $params = $this->dataFactory
+                ->create(DataFactory::AREA_FRONTEND)
+                ->getSaveOrderUrlParams($controller);
             $this->_forward(
                 $params['action'],
                 $params['controller'],
@@ -81,32 +97,10 @@ class Place extends Payment
             );
         } else {
             $result = ['error_messages' => __('Please choose a payment method.'), 'goto_section' => 'payment'];
-            $this->getResponse()->representJson($this->getJsonHelper()->jsonEncode($result));
-        }
-    }
-
-    /**
-     * Get quote checkout method
-     *
-     * @return string
-     */
-    protected function getCheckoutMethod()
-    {
-        $checkoutMethod = $this->_getCheckout()->getQuote()->getCheckoutMethod();
-
-        if ($this->getCustomerSession()->isLoggedIn()) {
-            $checkoutMethod = Onepage::METHOD_CUSTOMER;
-        }
-
-        if (!$checkoutMethod) {
-            if ($this->getCheckoutHelper()->isAllowedGuestCheckout($this->_getCheckout()->getQuote())) {
-                $checkoutMethod = Onepage::METHOD_GUEST;
-            } else {
-                $checkoutMethod = Onepage::METHOD_REGISTER;
+            if ($response instanceof Http) {
+                $response->representJson($this->jsonHelper->jsonEncode($result));
             }
         }
-
-        return $checkoutMethod;
     }
 
     /**
@@ -117,6 +111,7 @@ class Place extends Payment
     protected function placeCheckoutOrder()
     {
         $result = new Object();
+        $response = $this->getResponse();
         try {
             $this->cartManagement->placeOrder($this->_getCheckout()->getQuote()->getId());
             $result->setData('success', true);
@@ -131,30 +126,8 @@ class Place extends Payment
             $result->setData('error', true);
             $result->setData('error_messages', __('Cannot place order.'));
         }
-        $this->getResponse()->representJson($this->getJsonHelper()->jsonEncode($result));
-    }
-
-    /**
-     * @return \Magento\Customer\Model\Session
-     */
-    protected function getCustomerSession()
-    {
-        return $this->_objectManager->get('Magento\Checkout\Model\Cart')->getCustomerSession();
-    }
-
-    /**
-     * @return \Magento\Checkout\Helper\Data
-     */
-    protected function getCheckoutHelper()
-    {
-        return $this->_objectManager->get('Magento\Checkout\Helper\Data');
-    }
-
-    /**
-     * @return \Magento\Framework\Json\Helper\Data
-     */
-    protected function getJsonHelper()
-    {
-        return $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
+        if ($response instanceof Http) {
+            $response->representJson($this->jsonHelper->jsonEncode($result));
+        }
     }
 }
