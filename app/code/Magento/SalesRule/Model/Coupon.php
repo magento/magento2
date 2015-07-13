@@ -297,8 +297,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\CouponExtensionInterface $extensionAttributes
-    )
-    {
+    ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
