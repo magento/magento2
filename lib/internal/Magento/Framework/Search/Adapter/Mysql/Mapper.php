@@ -8,6 +8,8 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
+use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
+use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainerFactory;
 use Magento\Framework\Search\EntityMetadata;
@@ -23,7 +25,6 @@ use Magento\Framework\Search\RequestInterface;
  */
 class Mapper
 {
-    const SQL_ENTITIES_LIMIT = 10000;
     /**
      * @var ScoreBuilder
      */
@@ -33,11 +34,6 @@ class Mapper
      * @var Filter\Builder
      */
     private $filterBuilder;
-
-    /**
-     * @var Dimensions
-     */
-    private $dimensionsBuilder;
 
     /**
      * @var ConditionManager
@@ -63,35 +59,39 @@ class Mapper
      * @var QueryContainerFactory
      */
     private $queryContainerFactory;
+    /**
+     * @var Query\Builder\Match
+     */
+    private $matchBuilder;
 
     /**
      * @param ScoreBuilderFactory $scoreBuilderFactory
      * @param Builder $filterBuilder
-     * @param Dimensions $dimensionsBuilder
      * @param ConditionManager $conditionManager
      * @param Resource|Resource $resource
      * @param EntityMetadata $entityMetadata
      * @param QueryContainerFactory $queryContainerFactory
+     * @param Query\Builder\Match $matchBuilder
      * @param IndexBuilderInterface[] $indexProviders
      */
     public function __construct(
         ScoreBuilderFactory $scoreBuilderFactory,
         Builder $filterBuilder,
-        Dimensions $dimensionsBuilder,
         ConditionManager $conditionManager,
         Resource $resource,
         EntityMetadata $entityMetadata,
         QueryContainerFactory $queryContainerFactory,
+        Match $matchBuilder,
         array $indexProviders
     ) {
         $this->scoreBuilderFactory = $scoreBuilderFactory;
         $this->filterBuilder = $filterBuilder;
-        $this->dimensionsBuilder = $dimensionsBuilder;
         $this->conditionManager = $conditionManager;
         $this->resource = $resource;
         $this->entityMetadata = $entityMetadata;
         $this->indexProviders = $indexProviders;
         $this->queryContainerFactory = $queryContainerFactory;
+        $this->matchBuilder = $matchBuilder;
     }
 
     /**
@@ -125,9 +125,6 @@ class Mapper
             BoolQuery::QUERY_CONDITION_MUST,
             $queryContainer
         );
-        $select = $this->processDimensions($request, $select);
-        $select->columns($scoreBuilder->build());
-        $select->limit(self::SQL_ENTITIES_LIMIT);
 
         $filtersCount = $queryContainer->getFiltersCount();
         if ($filtersCount > 1) {
@@ -135,34 +132,15 @@ class Mapper
             $select->having('COUNT(DISTINCT search_index.attribute_id) = ' . $filtersCount);
         }
 
-        $select = $this->createAroundSelect($select, $scoreBuilder);
+        $select = $this->addMatchQueries(
+            $request,
+            $queryContainer->getDerivedQueries(),
+            $scoreBuilder,
+            $select,
+            $indexBuilder
+        );
+
         $select->limit($request->getSize());
-
-        $matchQueries = $queryContainer->getDerivedQueries();
-
-        if ($matchQueries) {
-            $subSelect = $select;
-            $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
-            $tables = array_merge($queryContainer->getDerivedQueryNames(), ['main_select.relevance']);
-            $relevance = implode('.relevance + ', $tables);
-            $select
-                ->from(
-                    ['main_select' => $subSelect],
-                    [
-                        $this->entityMetadata->getEntityId() => 'entity_id',
-                        'relevance' => sprintf('(%s)', $relevance),
-                    ]
-                );
-
-            foreach ($matchQueries as $matchName => $matchSelect) {
-                $select->join(
-                    [$matchName => $this->createAroundSelect($matchSelect, $scoreBuilder)],
-                    $matchName . '.entity_id = main_select.entity_id',
-                    []
-                );
-            }
-        }
-
         $select->order('relevance ' . Select::SQL_DESC);
         return $select;
     }
@@ -345,24 +323,67 @@ class Mapper
     }
 
     /**
-     * Add filtering by dimensions
-     *
      * @param RequestInterface $request
+     * @param MatchContainer[] $matchQueries
+     * @param ScoreBuilder $scoreBuilder
      * @param Select $select
-     * @return \Magento\Framework\DB\Select
+     * @param IndexBuilderInterface $indexBuilder
+     * @return Select
+     * @internal param QueryContainer $queryContainer
      */
-    private function processDimensions(RequestInterface $request, Select $select)
-    {
-        $dimensions = [];
-        foreach ($request->getDimensions() as $dimension) {
-            $dimensions[] = $this->dimensionsBuilder->build($dimension);
-        }
+    private function addMatchQueries(
+        RequestInterface $request,
+        array $matchQueries,
+        ScoreBuilder $scoreBuilder,
+        Select $select,
+        IndexBuilderInterface $indexBuilder
+    ) {
+        if (!$matchQueries) {
+            $select->columns($scoreBuilder->build());
+            $select = $this->createAroundSelect($select, $scoreBuilder);
+        } elseif (count($matchQueries) === 1) {
+            $matchContainer = reset($matchQueries);
+            $this->matchBuilder->build(
+                $scoreBuilder,
+                $select,
+                $matchContainer->getRequest(),
+                $matchContainer->getConditionType()
+            );
+            $select->columns($scoreBuilder->build());
+            $select = $this->createAroundSelect($select, $scoreBuilder);
+        } elseif (count($matchQueries) > 1) {
+            $select->columns($scoreBuilder->build());
+            $select = $this->createAroundSelect($select, $scoreBuilder);
+            $subSelect = $select;
+            $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
+            $tables = array_merge(array_keys($matchQueries), ['main_select.relevance']);
+            $relevance = implode('.relevance + ', $tables);
+            $select
+                ->from(
+                    ['main_select' => $subSelect],
+                    [
+                        $this->entityMetadata->getEntityId() => 'entity_id',
+                        'relevance' => sprintf('(%s)', $relevance),
+                    ]
+                );
 
-        $query = $this->conditionManager->combineQueries($dimensions, Select::SQL_OR);
-        if (!empty($query)) {
-            $select->where($this->conditionManager->wrapBrackets($query));
+            foreach ($matchQueries as $matchName => $matchContainer) {
+                $matchSelect = $indexBuilder->build($request);
+                $matchScoreBuilder = $this->scoreBuilderFactory->create();
+                $matchSelect = $this->matchBuilder->build(
+                    $matchScoreBuilder,
+                    $matchSelect,
+                    $matchContainer->getRequest(),
+                    $matchContainer->getConditionType()
+                );
+                $matchSelect->columns($matchScoreBuilder->build());
+                $select->join(
+                    [$matchName => $this->createAroundSelect($matchSelect, $scoreBuilder)],
+                    $matchName . '.entity_id = main_select.entity_id',
+                    []
+                );
+            }
         }
-
         return $select;
     }
 }

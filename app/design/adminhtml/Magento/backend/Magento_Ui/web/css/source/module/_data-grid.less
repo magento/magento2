@@ -48,10 +48,6 @@
 
 @data-grid-row-parent-marker__size: 1rem;
 
-@data-grid-td__dragging__opacity: 95%;
-@data-grid-dragging-copy__border-color: @color-blue-pure;
-@data-grid-dragging-copy__border: 1px solid @data-grid-dragging-copy__border-color;
-
 //
 
 .admin__data-grid-outer-wrap {
@@ -72,7 +68,7 @@
     right: 0;
     top: 0;
     position: absolute;
-    z-index: @overlay__z-index;
+    z-index: @data-grid-overlay__z-index;
 
     .grid-loader {
         background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
@@ -199,7 +195,8 @@
         }
         .action-menu {
             left: auto;
-            right: auto;
+            min-width: 10rem;
+            right: 0;
             top: auto;
             z-index: 1;
         }
@@ -265,9 +262,18 @@
             cursor: default;
         }
     }
+    .data-grid-thumbnail-cell {
+        width: 7rem;
+        text-align: center;
+        img {
+            border: 1px solid @data-grid-td__border-color;
+            max-width: 5rem;
+        }
+    }
     .data-grid-multiselect-cell {
         padding: @data-grid-th__padding-horizontal @data-grid-th__padding-vertical @data-grid-th__padding-horizontal - .1rem;
         text-align: center;
+        vertical-align: middle;
     }
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;
@@ -332,7 +338,7 @@
         opacity: .95;
         position: fixed;
         top: 0;
-        z-index: @overlay__z-index;
+        z-index: @data-grid-overlay__z-index;
         .data-grid-th {
             border: @data-grid-dragging-copy__border;
             border-bottom: none;

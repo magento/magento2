@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-shipping" data-bind="fadeVisible: visible()">
+<li id="opc-shipping" class="checkout-shipping-address" data-bind="fadeVisible: visible()">
     <div class="step-title" data-bind="text: $t('Shipping Address')" data-role="title"></div>
     <div id="checkout-step-shipping"
          class="step-content"
@@ -48,9 +48,12 @@
 
 
 <!--Shipping method template-->
-<li id="opc-shipping_method" data-bind="fadeVisible: visible(), blockLoader: isLoading" role="presentation">
+<li id="opc-shipping_method"
+    class="checkout-shipping-method"
+    data-bind="fadeVisible: visible(), blockLoader: isLoading"
+    role="presentation">
     <div class="checkout-shipping-method">
-        <div class="step-title" data-bind="text: $t('Shipping Method')" data-role="title"></div>
+        <div class="step-title" data-bind="text: $t('Shipping Methods')" data-role="title"></div>
         <!-- ko foreach: getRegion('before-shipping-method-form') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
@@ -126,6 +129,11 @@
                     <!-- ko template: getTemplate() --><!-- /ko -->
                     <!-- /ko -->
                 </div>
+                <!-- ko if: errorValidationMessage().length > 0 -->
+                <div class="message notice">
+                    <span><!-- ko text: $t(errorValidationMessage())--><!-- /ko --></span>
+                </div>
+                <!-- /ko -->
                 <div class="actions-toolbar" id="shipping-method-buttons-container">
                     <div class="primary">
                         <button data-role="opc-continue" type="submit" class="button action continue primary">

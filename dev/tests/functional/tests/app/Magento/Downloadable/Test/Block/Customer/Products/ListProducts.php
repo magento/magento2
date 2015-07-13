@@ -32,4 +32,15 @@ class ListProducts extends Block
     {
         $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->click();
     }
+
+    /**
+     * Get link url by title.
+     *
+     * @param string $title
+     * @return string
+     */
+    public function getLinkUrl($title)
+    {
+        return $this->_rootElement->find(sprintf($this->link, $title), Locator::SELECTOR_XPATH)->getAttribute('href');
+    }
 }
