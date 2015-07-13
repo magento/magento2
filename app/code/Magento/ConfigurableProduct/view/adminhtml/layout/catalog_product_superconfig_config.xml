@@ -102,5 +102,16 @@
                 </block>
             </block>
         </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
+                    <uiComponent name="product_attributes_listing"/>
+                </block>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3"
+                       template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
+            </block>
+        </referenceContainer>
     </body>
 </page>
