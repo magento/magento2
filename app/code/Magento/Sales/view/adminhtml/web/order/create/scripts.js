@@ -1131,6 +1131,7 @@ AdminOrder.prototype = {
             disableElements('save');
             jQuery('#edit_form').on('invalid-form.validate', function() {
                 enableElements('save');
+                jQuery('#edit_form').trigger('processStop');
                 jQuery('#edit_form').off('invalid-form.validate');
             });
             jQuery('#edit_form').triggerHandler('save');
