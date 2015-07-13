@@ -194,4 +194,24 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
             ['test.min', false]
         ];
     }
+
+    /**
+     * @return void
+     */
+    public function testGetExcludes()
+    {
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with('dev/js/minify_exclude')
+            ->willReturn(
+                "    /tiny_mce/  \n" .
+                "  /tiny_mce2/  "
+            );
+
+        $expected = ['/tiny_mce/', '/tiny_mce2/'];
+        $this->assertEquals($expected, $this->minification->getExcludes('js'));
+        /** check cache: */
+        $this->assertEquals($expected, $this->minification->getExcludes('js'));
+    }
 }

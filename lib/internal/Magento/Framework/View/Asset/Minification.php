@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
-use Magento\Store\Model\ScopeInterface;
 
 class Minification
 {
@@ -15,6 +14,8 @@ class Minification
      * XML path for asset minification configuration
      */
     const XML_PATH_MINIFICATION_ENABLED = 'dev/%s/minify_files';
+
+    const XML_PATH_MINIFICATION_EXCLUDES = 'dev/%s/minify_exclude';
 
     /**
      * @var ScopeConfigInterface
@@ -28,6 +29,10 @@ class Minification
      * @var string
      */
     private $scope;
+    /**
+     * @var array
+     */
+    private $excludes = [];
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -69,6 +74,7 @@ class Minification
 
         if (
             $this->isEnabled($extension) &&
+            !$this->isExcluded($filename) &&
             !$this->isMinifiedFilename($filename)
         ) {
             $filename = substr($filename, 0, -strlen($extension)) . 'min.' . $extension;
@@ -88,6 +94,7 @@ class Minification
 
         if (
             $this->isEnabled($extension) &&
+            !$this->isExcluded($filename) &&
             $this->isMinifiedFilename($filename)
         ) {
             $filename = substr($filename, 0, -strlen($extension) - 4) . $extension;
@@ -102,5 +109,37 @@ class Minification
     public function isMinifiedFilename($filename)
     {
         return substr($filename, strrpos($filename, '.') - 4, 5) == '.min.';
+    }
+
+    /**
+     * @param string $filename
+     * @return boolean
+     */
+    public function isExcluded($filename)
+    {
+        foreach ($this->getExcludes(pathinfo($filename, PATHINFO_EXTENSION)) as $exclude) {
+            if (preg_match('/' . str_replace('/', '\/', $exclude) . '/', $filename)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $contentType
+     * @return string[]
+     */
+    public function getExcludes($contentType)
+    {
+        if (!isset($this->excludes[$contentType])) {
+            $this->excludes[$contentType] = [];
+            $key = sprintf(self::XML_PATH_MINIFICATION_EXCLUDES, $contentType);
+            foreach (explode("\n", $this->scopeConfig->getValue($key, $this->scope)) as $exclude) {
+                if (trim($exclude) != '') {
+                    $this->excludes[$contentType][] = trim($exclude);
+                }
+            };
+        }
+        return $this->excludes[$contentType];
     }
 }
