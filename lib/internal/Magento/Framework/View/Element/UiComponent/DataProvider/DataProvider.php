@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -74,6 +73,8 @@ class DataProvider implements DataProviderInterface
      * @param string $requestFieldName
      * @param Reporting $reporting
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
      * @param array $meta
      * @param array $data
      */
