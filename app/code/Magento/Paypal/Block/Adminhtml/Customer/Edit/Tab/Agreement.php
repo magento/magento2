@@ -150,10 +150,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      */
     protected function _prepareCollection()
     {
-        $customerId = $this->_coreRegistry->registry('current_customer_id');
-        if (!$customerId) {
-            $customerId = $this->_coreRegistry->registry('current_customer')->getId();
-        }
+        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         $collection = $this->_agreementFactory->create()->addFieldToFilter(
             'customer_id',
             $customerId
