@@ -3796,4 +3796,11 @@ return [
     ['Magento\GoogleShopping\Test\Unit\Model\ServiceTest'],
     ['Magento\Framework\Code\Minifier\Adapter\Js\JSMin'],
     ['Magento\Framework\Code\Minifier\Adapter\Css\CssMinifier'],
+    ['Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Settings'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tabs\Configurable'],
+    [
+        'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
+        . '\Configurable'
+    ],
 ];
