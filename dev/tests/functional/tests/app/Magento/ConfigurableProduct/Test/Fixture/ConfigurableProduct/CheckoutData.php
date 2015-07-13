@@ -165,10 +165,11 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                 ],
                 'qty' => 1,
+                //TODO: adopt fixture MAGETWO-40002
                 'cartItem' => [
                     'price' => 11,
                     'qty' => 1,
-                    'subtotal' => 11,
+                    'subtotal' => 10,
                 ],
             ],
             'with_special_price' => [
