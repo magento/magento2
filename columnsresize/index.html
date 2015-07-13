@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <title>
+            Table resize
+        </title>
+        <style>
+            body {
+                margin-top: 200px;
+            }
+            .table-wrapp {
+                max-width: 100%;
+                width: 100%;
+            }
+            table {
+                width: 100%;
+                border-spacing: 0;
+            }
+            tr {
+                text-align: left;
+            }
+            td {
+                padding: 5px;
+                border: 5px solid blue;
+            }
+            ._column-resize-clearfix:before,
+            ._column-resize-clearfix:after {
+                content: " "; /* 1 */
+                display: table; /* 2 */
+            }
+            ._column-resize-clearfix:after {
+                clear: both;
+            }
+            ._column-resize-clearfix {
+                *zoom: 1;
+            }
+            ._column-resize-change-cursor {
+                -moz-user-select: none !important;
+                -khtml-user-select: none !important;
+                -webkit-user-select: none !important;
+                user-select: none !important;
+                cursor: e-resize !important;
+            }
+        </style>
+    </head>
+    <body>
+    <div class="table-wrapp">
+        <table id="table" style="visibility: hidden">
+            <tr>
+                <td>Lorem
+                    ipsum
+                </td>
+                <td>Lorem
+                    ipsum
+                    dolor
+                    dolor
+                    dolor
+                    dolor
+                    dolor
+                    dolor
+                    sit
+                    dsds
+                    dsds
+                    dsds
+                </td>
+                <td style="font-size: 24px">Lorem </td>
+                <td>Lorem ip</td>
+                <td>Lorem ipsum d</td>
+            </tr>
+            <tr>
+                <td>Lorem ipsum</td>
+                <td>Lorem ipsum d</td>
+                <td>Lorem ipsum dolor sit </td>
+                <td>Lorem </td>
+                <td>Lorem ip</td>
+            </tr>
+            <tr>
+                <td>Lorem ipsum dolor sit </td>
+                <td>Lorem ipsum dolor sit ametelit</td>
+                <td>Lorem ipsum dolor</td>
+                <td>Lorem
+                    ipsum
+                    dolor
+                    dolor
+                    dolor
+                    dolor
+                    dolor
+                    dolor
+                    sit
+                    dsds
+                    dsds
+                    dsds</td>
+                <td>Lorem ipsum dolor s</td>
+            </tr>
+            <tr>
+                <td>Lorem ipsum</td>
+                <td>Lorem ipsum d</td>
+                <td>Loremdsdss </td>
+                <td>Lorem ip</td>
+                <td>Lorem ipsum dolor sit </td>
+            </tr>
+        </table>
+    </div>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+        <script src="tableresize.js"></script>
+    </body>
+</html>
