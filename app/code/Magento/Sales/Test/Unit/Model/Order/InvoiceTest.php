@@ -50,6 +50,11 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     protected $paymentMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManagerMock;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $helperManager;
@@ -73,12 +78,19 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->paymentMock = $this->getMockBuilder(
             'Magento\Sales\Model\Order\Payment'
         )->disableOriginalConstructor()->setMethods(
-            ['canVoid', '__wakeup', 'canCapture']
+            ['canVoid', '__wakeup', 'canCapture', 'capture', 'pay', 'hasForcedState', 'getForcedState']
         )->getMock();
 
         $this->orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
 
+        $this->eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\Context', [], [], '', false);
+        $contextMock->expects($this->any())
+            ->method('getEventDispatcher')
+            ->willReturn($this->eventManagerMock);
+
         $arguments = [
+            'context' => $contextMock,
             'orderFactory' => $this->orderFactory,
             'orderResourceFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\OrderFactory',
@@ -282,6 +294,111 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             [Invoice::STATE_OPEN, true],
             [Invoice::STATE_CANCELED, false],
             [Invoice::STATE_PAID, false]
+        ];
+    }
+
+    /**
+     * @dataProvider canRefundDataProvider
+     * @param string $state
+     * @param float $baseGrandTotal
+     * @param float $baseTotalRefunded
+     * @param bool $expectedResult
+     */
+    public function testCanRefund($state, $baseGrandTotal, $baseTotalRefunded, $expectedResult)
+    {
+        $this->model->setState($state);
+        $this->model->setBaseGrandTotal($baseGrandTotal);
+        $this->model->setBaseTotalRefunded($baseTotalRefunded);
+        $this->assertEquals($expectedResult, $this->model->canRefund());
+    }
+
+    /**
+     * Data provider for testCanRefund
+     *
+     * @return array
+     */
+    public function canRefundDataProvider()
+    {
+        return [
+            [Invoice::STATE_OPEN, 0.00, 0.00, false],
+            [Invoice::STATE_CANCELED, 1.00, 0.01, false],
+            [Invoice::STATE_PAID, 1.00, 0.00, true],
+            [Invoice::STATE_PAID, 1.00, 1.00, false],//!!!Wty it must be false?
+            [Invoice::STATE_PAID, 1.000101, 1.0000, true],
+            [Invoice::STATE_PAID, 1.0001, 1.00, false],
+            [Invoice::STATE_PAID, 1.00, 1.0001, false],
+        ];
+    }
+
+    public function testCaptureNotPaid()
+    {
+        $this->model->setIsPaid(false);
+        $this->orderMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
+        $this->paymentMock->expects($this->once())->method('capture')->with($this->model)->willReturnSelf();
+        $this->paymentMock->expects($this->never())->method('pay');
+        $this->assertEquals($this->model, $this->model->capture());
+    }
+
+    public function testCapturePaid()
+    {
+        $this->model->setIsPaid(true);
+        $this->orderMock->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
+        $this->paymentMock->expects($this->any())->method('capture')->with($this->model)->willReturnSelf();
+        $this->mockPay(false, null);
+        $this->assertEquals($this->model, $this->model->capture());
+    }
+
+    public function mockPay($hasForcedState, $forcedState)
+    {
+        $this->orderMock->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
+        $this->paymentMock->expects($this->once())->method('hasForcedState')->willReturn($hasForcedState);
+        if ($hasForcedState) {
+            $this->paymentMock->expects($this->once())->method('getForcedState')->willReturn($forcedState);
+        } else {
+            $this->paymentMock->expects($this->never())->method('getForcedState');
+        }
+        $this->paymentMock->expects($this->once())->method('pay')->with($this->model)->willReturnSelf();
+        $this->eventManagerMock
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with('sales_order_invoice_pay');
+    }
+
+    /**
+     * @dataProvider payDataProvider
+     * @param bool $hasForcedState
+     * @param string|null $forcedState
+     * @param float $orderTotalPaid
+     * @param float $orderBaseTotalPaid
+     * @param float $grandTotal
+     * @param float $baseGrandTotal
+     * @param float $expectedState
+     * @param float $expectedTotalPaid
+     * @param float $expectedBaseTotalPaid
+     */
+    public function testPay($hasForcedState, $forcedState, $orderTotalPaid, $orderBaseTotalPaid, $grandTotal,
+                            $baseGrandTotal, $expectedState, $expectedTotalPaid, $expectedBaseTotalPaid)
+    {
+        $this->mockPay($hasForcedState, $forcedState);
+        $this->model->setGrandTotal($grandTotal);
+        $this->model->setBaseGrandTotal($baseGrandTotal);
+        $this->orderMock->setTotalPaid($orderTotalPaid);
+        $this->orderMock->setBaseTotalPaid($orderBaseTotalPaid);
+        $this->assertFalse($this->model->wasPayCalled());
+        $this->assertEquals($this->model, $this->model->pay());
+        $this->assertTrue($this->model->wasPayCalled());
+        $this->assertEquals($expectedState, $this->model->getState());
+        //$this->assertEquals($expectedTotalPaid, $this->model->getTotalPaid());
+        //$this->assertEquals($expectedBaseTotalPaid, $this->model->getBaseTotalPaid());
+        #second call of pay() method must do nothing
+        $this->model->pay();
+    }
+
+    public function payDataProvider()
+    {
+        //ToDo: fill data provider and uncomment assertings totals in testPay
+        return [
+            [true, 'payment_state', 10.99, 1.00, 10.99, 1.00, 'payment_state', 11.99, 11.99]
         ];
     }
 }
