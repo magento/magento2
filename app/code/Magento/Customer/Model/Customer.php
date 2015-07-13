@@ -11,7 +11,6 @@ use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\Resource\Address\CollectionFactory;
 use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\EmailNotConfirmedException;
@@ -392,52 +391,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $this->_getResource()->loadByEmail($this, $customerEmail);
         return $this;
-    }
-
-    /**
-     * Processing object before save data
-     *
-     * @return $this
-     */
-    public function beforeSave()
-    {
-        parent::beforeSave();
-
-        $storeId = $this->getStoreId();
-        if ($storeId === null) {
-            $this->setStoreId($this->_storeManager->getStore()->getId());
-        }
-
-        $this->getGroupId();
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function afterSave()
-    {
-        $customerData = (array)$this->getData();
-        $customerData[CustomerData::ID] = $this->getId();
-        $dataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $dataObject,
-            $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
-        );
-        $customerOrigData = (array)$this->getOrigData();
-        $customerOrigData[CustomerData::ID] = $this->getId();
-        $origDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $origDataObject,
-            $customerOrigData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
-        );
-        $this->_eventManager->dispatch(
-            'customer_save_after_data_object',
-            ['customer_data_object' => $dataObject, 'orig_customer_data_object' => $origDataObject]
-        );
-        return parent::afterSave();
     }
 
     /**
