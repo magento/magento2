@@ -83,11 +83,6 @@ class IndexBuilder
     protected $batchCount;
 
     /**
-     * @var \Magento\Catalog\Model\Product
-     */
-    protected $product;
-
-    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\App\Resource $resource
