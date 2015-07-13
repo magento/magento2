@@ -172,7 +172,6 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      * @param $paymentMethod
      * @param $controller
      * @param $quoteId
-     * @param $isLoggedIn
      * @param $orderId
      * @param $result
      * @dataProvider textExecuteDataProvider
@@ -181,7 +180,6 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
         $paymentMethod,
         $controller,
         $quoteId,
-        $isLoggedIn,
         $orderId,
         $result
     ) {
@@ -214,15 +212,13 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      * @param $paymentMethod
      * @param $controller
      * @param $quoteId
-     * @param $isLoggedIn
      * @param $result
      * @dataProvider textExecuteFailedPlaceOrderDataProvider
      */
-    public function testExecuteFailePlaceOrder(
+    public function testExecuteFailedPlaceOrder(
         $paymentMethod,
         $controller,
         $quoteId,
-        $isLoggedIn,
         $result
     ) {
         $this->requestMock->expects($this->at(0))
@@ -263,7 +259,6 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
                 ['method' => null],
                 IframeConfigProvider::CHECKOUT_IDENTIFIER,
                 1,
-                true,
                 1,
                 ['error_messages' => __('Please choose a payment method.'), 'goto_section' => 'payment']
             ],
@@ -271,7 +266,6 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
                 ['method' => 'authorizenet_directpost'],
                 IframeConfigProvider::CHECKOUT_IDENTIFIER,
                 1,
-                true,
                 1,
                 $objectSuccess
             ],
@@ -292,7 +286,6 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
                 ['method' => 'authorizenet_directpost'],
                 IframeConfigProvider::CHECKOUT_IDENTIFIER,
                 1,
-                true,
                 $objectFailed
             ],
         ];
