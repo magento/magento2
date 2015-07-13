@@ -69,7 +69,7 @@ class DependencyReadinessCheck
         $this->file->copy($composerJson, $this->directoryList->getPath(DirectoryList::VAR_DIR) .  '/composer.json');
         $workingDir = $this->directoryList->getPath(DirectoryList::VAR_DIR);
         try {
-            $this->composerApp->runUpdateDryRun($packages, $workingDir);
+            $this->composerApp->runRequireUpdateDryRun($packages, $workingDir);
             return ['success' => true];
         } catch (\RuntimeException $e) {
             $message = str_replace(PHP_EOL, '<br/>', htmlspecialchars($e->getMessage()));

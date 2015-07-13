@@ -62,7 +62,7 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
     public function testRunReadinessCheckFailed()
     {
         $this->composerApp->expects($this->once())
-            ->method('runUpdateDryRun')
+            ->method('runRequireUpdateDryRun')
             ->with([], 'var')
             ->willThrowException(new \RuntimeException('Failed' . PHP_EOL . 'dependency readiness check'));
         $expected = ['success' => false, 'error' => 'Failed<br/>dependency readiness check'];
@@ -72,7 +72,7 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
     public function testRunReadinessCheck()
     {
         $this->composerApp->expects($this->once())
-            ->method('runUpdateDryRun')
+            ->method('runRequireUpdateDryRun')
             ->with([], 'var')
             ->willReturn('Success');
         $expected = ['success' => true];
