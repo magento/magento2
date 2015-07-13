@@ -2301,6 +2301,16 @@ return [
         'Magento\Authorizenet\Model\Directpost',
         'Magento\Authorizenet\Model\Directpost::setDataHelper()'
     ],
+    [
+        '_initCustomer',
+        'Magento\Paypal\Controller\Adminhtml\Billing\Agreement\CustomerGrid',
+        'Magento\Paypal\Controller\Adminhtml\Billing\Agreement\CustomerGrid::initCurrentCustomer'
+    ],
+    [
+        '_initCustomer',
+        'Magento\Customer\Controller\Adminhtml\Index',
+        'Magento\Customer\Controller\Adminhtml\Index::initCurrentCustomer',
+    ],
     ['prepareIndexdata', 'Magento\Search\Helper\Data'],
     ['getPriceValues', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'],
     ['getPricingValue', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue'],
