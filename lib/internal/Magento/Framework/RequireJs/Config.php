@@ -200,14 +200,11 @@ config;
     protected function getMinificationCode()
     {
         return <<<code
-    if (!require.s.contexts._._nameToUrl) {
-        require.s.contexts._._nameToUrl = require.s.contexts._.nameToUrl;
-        require.s.contexts._.nameToUrl = function (moduleName, ext, skipExt) {
-            if (!ext && !skipExt) {
-                ext = '.min.js';
-            }
-            return require.s.contexts._._nameToUrl.apply(require.s.contexts._, [moduleName, ext, skipExt])
-                .replace(/(\.min\.min\.js)(\?.*)*$/, '.min.js$2');
+    if (!require.s.contexts._.__load) {
+        require.s.contexts._.__load = require.s.contexts._.load;
+        require.s.contexts._.load = function(id, url) {
+            url = url.replace(/(\.min)?\.js$/, '.min.js');
+            return require.s.contexts._.__load.apply(require.s.contexts._, [id, url]);
         }
     }
 
