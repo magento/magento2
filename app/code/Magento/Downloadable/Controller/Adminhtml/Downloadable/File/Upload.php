@@ -6,12 +6,68 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\File;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File
 {
     /**
+     * @var \Magento\Downloadable\Model\Link
+     */
+    protected $_link;
+
+    /**
+     * @var \Magento\Downloadable\Model\Sample
+     */
+    protected $_sample;
+
+    /**
+     * Downloadable file helper.
+     *
+     * @var \Magento\Downloadable\Helper\File
+     */
+    protected $_fileHelper;
+
+    /**
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     */
+    private $uploaderFactory;
+
+    /**
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     */
+    private $storageDatabase;
+
+    /**
+     *
+     * Copyright © 2015 Magento. All rights reserved.
+     * See COPYING.txt for license details.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Downloadable\Model\Link $link
+     * @param \Magento\Downloadable\Model\Sample $sample
+     * @param \Magento\Downloadable\Helper\File $fileHelper
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $storageDatabase
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Downloadable\Model\Link $link,
+        \Magento\Downloadable\Model\Sample $sample,
+        \Magento\Downloadable\Helper\File $fileHelper,
+        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
+        \Magento\MediaStorage\Helper\File\Storage\Database $storageDatabase
+    ) {
+        parent::__construct($context);
+        $this->_link = $link;
+        $this->_sample = $sample;
+        $this->_fileHelper = $fileHelper;
+        $this->uploaderFactory = $uploaderFactory;
+        $this->storageDatabase = $storageDatabase;
+    }
+
+    /**
      * Upload file controller action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -26,7 +82,7 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
         }
 
         try {
-            $uploader = $this->_objectManager->create('Magento\MediaStorage\Model\File\Uploader', ['fileId' => $type]);
+            $uploader = $this->uploaderFactory->create(['fileId' => $type]);
 
             $result = $this->_fileHelper->uploadFromTmp($tmpPath, $uploader);
 
@@ -42,8 +98,7 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
 
             if (isset($result['file'])) {
                 $relativePath = rtrim($tmpPath, '/') . '/' . ltrim($result['file'], '/');
-                $this->_objectManager->get('Magento\MediaStorage\Helper\File\Storage\Database')
-                    ->saveFile($relativePath);
+                $this->storageDatabase->saveFile($relativePath);
             }
 
             $result['cookie'] = [
@@ -56,9 +111,6 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
         } catch (\Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
-
-        $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
-        );
+        return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($result);
     }
 }

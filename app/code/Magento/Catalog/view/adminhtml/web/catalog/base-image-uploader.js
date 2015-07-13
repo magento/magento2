@@ -19,7 +19,7 @@ define([
          */
         _create: function () {
             var $container = this.element,
-                imageTmpl = mageTemplate(this.element.find('.image-template').html()),
+                imageTmpl = mageTemplate(this.element.find('[data-template=image]').html()),
                 $dropPlaceholder = this.element.find('.image-placeholder'),
                 $galleryContainer = $('#media_gallery_content'),
                 mainClass = 'base-image',
