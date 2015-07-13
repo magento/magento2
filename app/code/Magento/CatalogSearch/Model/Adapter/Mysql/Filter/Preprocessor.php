@@ -64,11 +64,10 @@ class Preprocessor implements PreprocessorInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function process(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
     {
-        return $resultQuery = $this->processQueryWithField($filter, $isNegation, $query, $queryContainer);
+        return $this->processQueryWithField($filter, $isNegation, $query, $queryContainer);
     }
 
     /**
@@ -134,7 +133,7 @@ class Preprocessor implements PreprocessorInterface
             }
         }
 
-        return 'search_index.product_id IN (
+        return 'search_index.entity_id IN (
             select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
             )';
     }

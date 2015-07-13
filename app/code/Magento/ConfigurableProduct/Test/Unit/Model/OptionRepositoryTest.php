@@ -410,8 +410,6 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             [null, 'Label', ['v' => 1, 'p' => 1, 'r' => 1], 'Option attribute ID is not specified.'],
             [1, '', ['v' => 1, 'p' => 1, 'r' => 1], 'Option label is not specified.'],
             [1, 'Label', ['v' => null, 'p' => 1, 'r' => 1], 'Value index is not specified for an option.'],
-            [1, 'Label', ['v' => 1, 'p' => null, 'r' => 1], 'Price is not specified for an option.'],
-            [1, 'Label', ['v' => 1, 'p' => 1, 'r' => null], 'Percent/absolute is not specified for an option.'],
         ];
     }
 }

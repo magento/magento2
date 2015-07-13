@@ -140,6 +140,10 @@ define([
                 return false;
             }
 
+            if (node.disabled) {
+                return false;
+            }
+
             return node;
         },
 
