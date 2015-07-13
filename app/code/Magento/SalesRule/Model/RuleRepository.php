@@ -14,6 +14,7 @@ use \Magento\SalesRule\Model\Resource\Rule\Collection;
 /**
  * Sales rule CRUD class
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 {
