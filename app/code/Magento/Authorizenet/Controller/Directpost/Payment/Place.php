@@ -80,6 +80,10 @@ class Place extends Payment
 
         if (isset($paymentParam['method'])) {
             $this->_getDirectPostSession()->setQuoteId($this->_getCheckout()->getQuote()->getId());
+            /**
+             * Current workaround depends on Onepage checkout model defect
+             * Method Onepage::getCheckoutMethod performs setCheckoutMethod
+             */
             $this->onepageCheckout->getCheckoutMethod();
 
             if ($controller == IframeConfigProvider::CHECKOUT_IDENTIFIER) {
