@@ -64,6 +64,8 @@ class Session extends SessionManager
     }
 
     /**
+     * Set quote id to session
+     *
      * @param int|string $id
      * @return $this
      */
