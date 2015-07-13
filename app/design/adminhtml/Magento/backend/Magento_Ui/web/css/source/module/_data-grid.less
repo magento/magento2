@@ -195,7 +195,8 @@
         }
         .action-menu {
             left: auto;
-            right: auto;
+            min-width: 10rem;
+            right: 0;
             top: auto;
             z-index: 1;
         }
@@ -259,6 +260,14 @@
         width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
         &:hover {
             cursor: default;
+        }
+    }
+    .data-grid-thumbnail-cell {
+        width: 7rem;
+        text-align: center;
+        img {
+            border: 1px solid @data-grid-td__border-color;
+            max-width: 5rem;
         }
     }
     .data-grid-multiselect-cell {

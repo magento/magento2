@@ -5,8 +5,6 @@
  */
 namespace Magento\Webapi\Model\Soap\Config;
 
-use Zend\Server\Reflection;
-use Zend\Server\Reflection\ReflectionMethod;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
@@ -66,8 +64,8 @@ class ClassReflector
     public function reflectClassMethods($className, $methods)
     {
         $data = [];
-        $classReflection = new \Zend\Server\Reflection\ReflectionClass(new \ReflectionClass($className));
-        /** @var $methodReflection ReflectionMethod */
+        $classReflection = new \Zend\Code\Reflection\ClassReflection($className);
+        /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
         foreach ($classReflection->getMethods() as $methodReflection) {
             $methodName = $methodReflection->getName();
             if (array_key_exists($methodName, $methods)) {
@@ -80,33 +78,30 @@ class ClassReflector
     /**
      * Retrieve method interface and documentation description.
      *
-     * @param ReflectionMethod $method
+     * @param \Zend\Code\Reflection\MethodReflection $method
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function extractMethodData(ReflectionMethod $method)
+    public function extractMethodData(\Zend\Code\Reflection\MethodReflection $method)
     {
         $methodData = ['documentation' => $this->extractMethodDescription($method), 'interface' => []];
-        $prototypes = $method->getPrototypes();
-        /** Take the fullest interface that also includes optional parameters. */
-        /** @var \Zend\Server\Reflection\Prototype $prototype */
-        $prototype = end($prototypes);
-        /** @var \Zend\Server\Reflection\ReflectionParameter $parameter */
-        foreach ($prototype->getParameters() as $parameter) {
+        /** @var \Zend\Code\Reflection\ParameterReflection $parameter */
+        foreach ($method->getParameters() as $parameter) {
             $parameterData = [
-                'type' => $this->_typeProcessor->register($parameter->getType()),
+                'type' => $this->_typeProcessor->register($this->_typeProcessor->getParamType($parameter)),
                 'required' => !$parameter->isOptional(),
-                'documentation' => $parameter->getDescription(),
+                'documentation' => $this->_typeProcessor->getParamDescription($parameter),
             ];
             if ($parameter->isOptional()) {
                 $parameterData['default'] = $parameter->getDefaultValue();
             }
             $methodData['interface']['in']['parameters'][$parameter->getName()] = $parameterData;
         }
-        if ($prototype->getReturnType() != 'void' && $prototype->getReturnType() != 'null') {
+        $returnType = $this->_typeProcessor->getGetterReturnType($method);
+        if ($returnType != 'void' && $returnType != 'null') {
             $methodData['interface']['out']['parameters']['result'] = [
-                'type' => $this->_typeProcessor->register($prototype->getReturnType()),
-                'documentation' => $prototype->getReturnValue()->getDescription(),
+                'type' => $this->_typeProcessor->register($returnType['type']),
+                'documentation' => $returnType['description'],
                 'required' => true,
             ];
         }
@@ -117,10 +112,10 @@ class ClassReflector
     /**
      * Retrieve method full documentation description.
      *
-     * @param ReflectionMethod $method
+     * @param \Zend\Code\Reflection\MethodReflection $method
      * @return string
      */
-    protected function extractMethodDescription(ReflectionMethod $method)
+    protected function extractMethodDescription(\Zend\Code\Reflection\MethodReflection $method)
     {
         $methodReflection = new MethodReflection(
             $method->getDeclaringClass()->getName(),
