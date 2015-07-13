@@ -39,5 +39,4 @@ class Action implements ActionInterface
         $indexer = $this->indexerFactory->create()->load(Fulltext::INDEXER_ID);
         $indexer->reindexList($ids);
     }
-
 }
