@@ -84,7 +84,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     }
 
     /**
-     * @return \Magento\Store\Api\Data\StoreInterface[]
+     * {@inheritdoc}
      */
     public function getList()
     {
