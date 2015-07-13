@@ -5,20 +5,14 @@
  */
 -->
 <div class="shipping-policy-block field-tooltip"
-     data-block="shipping-policy-block"
      data-bind="visible: config.isEnabled">
-    <span class="field-tooltip-action" data-trigger="shipping-tooltip-action">
+    <span class="field-tooltip-action"
+          data-toggle="dropdown"
+          data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}">
         <!-- ko text: $t('See our Shipping Policy') --><!-- /ko -->
     </span>
     <div class="field-tooltip-content"
-         data-bind="mageInit: {
-            'dropdownDialog':{
-                'appendTo': '[data-block=shipping-policy-block]',
-                'triggerTarget': '[data-trigger=shipping-tooltip-action]',
-                'closeOnMouseLeave': false,
-                'triggerClass': '_active',
-                'buttons': []
-            }}">
+         data-target="dropdown">
         <span data-bind="html: config.shippingPolicyContent"></span>
     </div>
 </div>
