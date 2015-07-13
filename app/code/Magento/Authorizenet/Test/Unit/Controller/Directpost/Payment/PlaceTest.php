@@ -29,6 +29,9 @@ use Magento\Quote\Model\Quote;
  */
 class PlaceTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ObjectManager
+     */
     protected $objectManager;
     /**
      * @var Place
@@ -99,7 +102,6 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
     {
         $this->directpostSessionMock = $this
             ->getMockBuilder('Magento\Authorizenet\Model\Directpost\Session')
-            ->setMethods(['setQuoteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->quoteMock = $this
