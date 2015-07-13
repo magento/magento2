@@ -6,7 +6,6 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Api\Data;
 
 class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 {
@@ -21,12 +20,12 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     protected $websiteCollectionFactory;
 
     /**
-     * @var Data\WebsiteInterface[]
+     * @var \Magento\Store\Api\Data\WebsiteInterface[]
      */
     protected $entities = [];
 
     /**
-     * @var Data\WebsiteInterface[]
+     * @var \Magento\Store\Api\Data\WebsiteInterface[]
      */
     protected $entitiesById = [];
 
@@ -36,7 +35,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     protected $allLoaded = false;
 
     /**
-     * @var Data\WebsiteInterface
+     * @var \Magento\Store\Api\Data\WebsiteInterface[]
      */
     protected $default;
 

@@ -6,7 +6,6 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Api\Data;
 
 class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
 {
@@ -16,7 +15,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     protected $groupFactory;
 
     /**
-     * @var Data\GroupInterface[]
+     * @var \Magento\Store\Api\Data\GroupInterface[]
      */
     protected $entities = [];
 
@@ -60,7 +59,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     }
 
     /**
-     * @return Data\StoreInterface[]
+     * {@inheritdoc}
      */
     public function getList()
     {
