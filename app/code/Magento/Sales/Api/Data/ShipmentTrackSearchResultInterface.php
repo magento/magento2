@@ -28,5 +28,5 @@ interface ShipmentTrackSearchResultInterface extends \Magento\Framework\Api\Sear
      * @param \Magento\Sales\Api\Data\ShipmentTrackInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

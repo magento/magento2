@@ -3671,6 +3671,31 @@ return [
     ['Magento\Framework\View\Element\UiComponent\JsConfigInterface'],
     ['Magento\GiftMessage\Model\Plugin\TotalsDataProcessorPlugin'],
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['Magento\Authorizenet\Block\Authorizenet\Form\Cc'],
+    ['Magento\Authorizenet\Block\Authorizenet\Info\Cc'],
+    ['Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Payment\Cancel'],
+    ['Magento\Authorizenet\Controller\Authorizenet\Payment\Cancel'],
+    [
+        'Magento\Authorizenet\Model\Authorizenet\Source\Cctype',
+        'Magento\Authorizenet\Model\Source\Cctype'
+    ],
+    [
+        'Magento\Authorizenet\Model\Authorizenet\Source\PaymentAction',
+        'Magento\Authorizenet\Model\Source\PaymentAction'
+    ],
+    ['Magento\Authorizenet\Model\Authorizenet\Cards'],
+    [
+        'Magento\Authorizenet\Model\Authorizenet\Debug',
+        'Magento\Authorizenet\Model\Debug'
+    ],
+    [
+        'Magento\Authorizenet\Model\Resource\Authorizenet\Debug\Collection',
+        'Magento\Authorizenet\Model\Resource\Debug\Collection'
+    ],
+    [
+        'Magento\Authorizenet\Model\Resource\Authorizenet\Debug',
+        'Magento\Authorizenet\Model\Resource\Debug'
+    ],
     ['Magento\GoogleShopping\Block\SiteVerification'],
     ['Magento\GoogleShopping\Block\Adminhtml\Items\Renderer\Id'],
     ['Magento\GoogleShopping\Block\Adminhtml\Items\Item'],
@@ -3761,7 +3786,13 @@ return [
     ['Magento\GoogleShopping\Test\Unit\Model\MassOperationsTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\ObserverTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\ServiceTest'],
-    ['Magento\GoogleShopping\Test\Unit\Model\ServiceTest'],
+    ['Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Settings'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tabs\Configurable'],
+    [
+        'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
+        . '\Configurable'
+    ],
     ['Magento\Store\Model\Storage\Db', 'Magento\Store\Model\StoreManagerInterface'],
     ['Magento\Store\Model\Storage\DefaultStorage', 'Magento\Store\Model\StoreManagerInterface'],
     ['Magento\Store\Model\StorageFactory'],

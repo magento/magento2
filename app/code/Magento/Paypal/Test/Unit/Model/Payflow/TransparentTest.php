@@ -79,10 +79,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturnSelf();
-        $this->configMock = $this->getMockBuilder('\Magento\Payment\Model\Method\ConfigInterface')
-            ->setMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
+        $this->configMock = $this->getMockBuilder('Magento\Paypal\Model\PayflowConfig')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->configFactoryMock = $this->getMockBuilder('\Magento\Payment\Model\Method\ConfigInterfaceFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
