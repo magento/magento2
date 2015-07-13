@@ -14,6 +14,32 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 
 class Base extends AbstractCurrency
 {
+    /** @var \Magento\Directory\Model\Currency */
+    private $currency;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Directory\Model\Currency $currency
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Directory\Model\Currency $currency,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $config, $scopeConfig, $resource, $resourceCollection, $data);
+        $this->currency = $currency;
+    }
     /**
      * Check base currency is available in installed currencies
      *
@@ -22,9 +48,12 @@ class Base extends AbstractCurrency
      */
     public function afterSave()
     {
-        if (!in_array($this->getValue(), $this->_getInstalledCurrencies())) {
+        $value = $this->getValue();
+        if (!in_array($value, $this->_getInstalledCurrencies())) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Sorry, we haven\'t installed the base currency you selected.'));
         }
+
+        $this->currency->saveRates([$value =>[$value => 1]]);
         return $this;
     }
 }
