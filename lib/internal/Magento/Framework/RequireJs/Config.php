@@ -199,11 +199,19 @@ config;
      */
     protected function getMinificationCode()
     {
+        $excludes = [];
+        foreach ($this->minification->getExcludes('js') as $expression) {
+            $excludes[] = '!url.match(/' . str_replace('/', '\/', $expression) . '/)';
+        }
+        $excludesCode = empty($excludes) ? 'true' : implode('&&', $excludes);
+
         return <<<code
     if (!require.s.contexts._.__load) {
         require.s.contexts._.__load = require.s.contexts._.load;
         require.s.contexts._.load = function(id, url) {
-            url = url.replace(/(\.min)?\.js$/, '.min.js');
+            if ({$excludesCode}) {
+                url = url.replace(/(\.min)?\.js$/, '.min.js');
+            }
             return require.s.contexts._.__load.apply(require.s.contexts._, [id, url]);
         }
     }

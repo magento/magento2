@@ -77,6 +77,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('getExcludes')
+            ->willReturn([]);
+
         $this->minifyAdapterMock = $this->getMockBuilder('Magento\Framework\Code\Minifier\AdapterInterface')
             ->getMockForAbstractClass();
 
@@ -129,14 +134,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $expected = <<<expected
 (function(require){
-    if (!require.s.contexts._._nameToUrl) {
-        require.s.contexts._._nameToUrl = require.s.contexts._.nameToUrl;
-        require.s.contexts._.nameToUrl = function (moduleName, ext, skipExt) {
-            if (!ext && !skipExt) {
-                ext = '.min.js';
+    if (!require.s.contexts._.__load) {
+        require.s.contexts._.__load = require.s.contexts._.load;
+        require.s.contexts._.load = function(id, url) {
+            if (true) {
+                url = url.replace(/(\.min)?\.js$/, '.min.js');
             }
-            return require.s.contexts._._nameToUrl.apply(require.s.contexts._, [moduleName, ext, skipExt])
-                .replace(/(\.min\.min\.js)(\?.*)*$/, '.min.js$2');
+            return require.s.contexts._.__load.apply(require.s.contexts._, [id, url]);
         }
     }
 require.config({"baseUrl":""});
