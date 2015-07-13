@@ -9,19 +9,19 @@ namespace Magento\Indexer\Setup;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Json\EncoderInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Indexer\Model\ConfigInterface;
 use Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\Indexer\StateFactory;
+use Magento\Framework\Setup\InstallDataInterface;
 
 /**
  * @codeCoverageIgnore
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpgradeData implements UpgradeDataInterface
+class InstallData implements InstallDataInterface
 {
     /**
      * Indexer collection factory
@@ -80,30 +80,28 @@ class UpgradeData implements UpgradeDataInterface
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '2.0.1') < 0) {
-            /** @var State[] $stateIndexers */
-            $stateIndexers = [];
-            $states = $this->statesFactory->create();
-            foreach ($states->getItems() as $state) {
-                /** @var State $state */
-                $stateIndexers[$state->getIndexerId()] = $state;
-            }
+        /** @var State[] $stateIndexers */
+        $stateIndexers = [];
+        $states = $this->statesFactory->create();
+        foreach ($states->getItems() as $state) {
+            /** @var State $state */
+            $stateIndexers[$state->getIndexerId()] = $state;
+        }
 
-            foreach ($this->config->getIndexers() as $indexerId => $indexerConfig) {
-                $hash = $this->encryptor->hash($this->encoder->encode($indexerConfig), Encryptor::HASH_VERSION_MD5);
-                if (isset($stateIndexers[$indexerId])) {
-                    $stateIndexers[$indexerId]->setHashConfig($hash);
-                    $stateIndexers[$indexerId]->save();
-                } else {
-                    /** @var State $state */
-                    $state = $this->stateFactory->create();
-                    $state->loadByIndexer($indexerId);
-                    $state->setHashConfig($hash);
-                    $state->setStatus(State::STATUS_INVALID);
-                    $state->save();
-                }
+        foreach ($this->config->getIndexers() as $indexerId => $indexerConfig) {
+            $hash = $this->encryptor->hash($this->encoder->encode($indexerConfig), Encryptor::HASH_VERSION_MD5);
+            if (isset($stateIndexers[$indexerId])) {
+                $stateIndexers[$indexerId]->setHashConfig($hash);
+                $stateIndexers[$indexerId]->save();
+            } else {
+                /** @var State $state */
+                $state = $this->stateFactory->create();
+                $state->loadByIndexer($indexerId);
+                $state->setHashConfig($hash);
+                $state->setStatus(State::STATUS_INVALID);
+                $state->save();
             }
         }
     }
