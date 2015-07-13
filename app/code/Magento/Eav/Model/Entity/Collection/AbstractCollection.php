@@ -19,6 +19,11 @@ use Magento\Framework\Exception\LocalizedException;
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
     /**
+     * Attribute table alias prefix
+     */
+    const ATTRIBUTE_TABLE_ALIAS_PREFIX = 'at_';
+
+    /**
      * Array of items with item id key
      *
      * @var array
@@ -1250,7 +1255,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _getAttributeTableAlias($attributeCode)
     {
-        return $this->getConnection()->getTableName('at_' . $attributeCode);
+        return $this->getConnection()->getTableName(self::ATTRIBUTE_TABLE_ALIAS_PREFIX . $attributeCode);
     }
 
     /**
@@ -1574,12 +1579,35 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
-     * @param string $fieldName
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @param string $field
      * @param string $alias
-     * @return $this
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
      */
-    public function addFieldToSelect($fieldName, $alias)
+    public function addFieldToSelect($field, $alias = null)
     {
-        return $this->addAttributeToSelect($fieldName);
+        return $this->addAttributeToSelect($field);
+    }
+
+    /**
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @param string $field
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     */
+    public function removeFieldFromSelect($field)
+    {
+        return $this->removeAttributeToSelect($field);
+    }
+
+    /**
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     */
+    public function removeAllFieldsFromSelect()
+    {
+        return $this->removeAttributeToSelect();
     }
 }
