@@ -13,6 +13,11 @@ namespace Magento\Sales\Block\Adminhtml\Order;
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
+     * @var string
+     */
+    protected $componentName;
+
+    /**
      * @var \Magento\Framework\View\Element\UiComponentFactory
      */
     protected $componentFactory;
@@ -21,15 +26,19 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
+     * @param string $componentName
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\View\Element\UiComponentFactory $componentFactory,
+        $componentName = 'sales_order_grid',
         array $data = []
     ) {
+        $this->componentName = $componentName;
         $this->componentFactory = $componentFactory;
+
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -39,7 +48,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      */
     protected function _prepareCollection()
     {
-        $component = $this->componentFactory->create('sales_order_grid');
+        $component = $this->componentFactory->create($this->componentName);
         $this->prepareComponent($component);
         $collection = $component->getContext()->getDataProvider()->getCollection();
         $this->setData('dataSource', $collection);

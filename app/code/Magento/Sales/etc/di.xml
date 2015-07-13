@@ -611,4 +611,19 @@
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Creditmemo</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Magento\Sales\Block\Adminhtml\Order\Invoice\Grid" type="Magento\Sales\Block\Adminhtml\Order\Grid">
+        <arguments>
+            <argument name="componentName" xsi:type="string">sales_order_invoice_grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Block\Adminhtml\Order\Shipment\Grid" type="Magento\Sales\Block\Adminhtml\Order\Grid">
+        <arguments>
+            <argument name="componentName" xsi:type="string">sales_order_shipment_grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Grid" type="Magento\Sales\Block\Adminhtml\Order\Grid">
+        <arguments>
+            <argument name="componentName" xsi:type="string">sales_order_creditmemo_grid</argument>
+        </arguments>
+    </virtualType>
 </config>
