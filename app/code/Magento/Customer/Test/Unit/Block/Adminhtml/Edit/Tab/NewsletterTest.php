@@ -51,7 +51,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
         $this->formFactoryMock = $this->getMock('\Magento\Framework\Data\FormFactory', [], [], '', false);
         $this->subscriberFactoryMock = $this->getMock(
             '\Magento\Newsletter\Model\SubscriberFactory',
-            [],
+            ['create'],
             [],
             '',
             false
