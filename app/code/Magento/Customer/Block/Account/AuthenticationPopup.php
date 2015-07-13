@@ -40,7 +40,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     public function getConfig()
     {
         return [
-            'checkoutUrl' => $this->getCheckoutUrl(),
             'customerRegisterUrl' => $this->getCustomerRegisterUrlUrl(),
             'customerForgotPasswordUrl' => $this->getCustomerForgotPasswordUrl(),
             'baseUrl' => $this->getBaseUrl()
@@ -55,16 +54,6 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     public function getBaseUrl()
     {
         return $this->_storeManager->getStore()->getBaseUrl();
-    }
-
-    /**
-     * Get one page checkout page url
-     *
-     * @return string
-     */
-    public function getCheckoutUrl()
-    {
-        return $this->getUrl('checkout');
     }
 
     /**

@@ -53,9 +53,9 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
         ['config']['agreementConfiguration'] = null;
 
         $expectedResult = $jsLayout;
-        $expectedResult['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']
-        ['children']['payments-list']['children']['before-place-order']['children']['checkout-agreements-modal']
-        ['config']['agreementConfiguration'][] = $agreementData;
+        $expectedResult['components']['checkout']['children']['steps']['children']['billing-step']['children']
+        ['payment']['children']['payments-list']['children']['before-place-order']['children']
+        ['checkout-agreements-modal']['config']['agreementConfiguration'][] = $agreementData;
 
         $agreementMock = $this->getMock('\Magento\CheckoutAgreements\Api\Data\AgreementInterface');
         $this->agreementsRepositoryMock->expects($this->once())->method('getList')->willReturn([$agreementMock]);
@@ -81,9 +81,9 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
         ['config']['agreementConfiguration'] = null;
 
         $expectedResult = $jsLayout;
-        $expectedResult['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']
-        ['children']['payments-list']['children']['before-place-order']['children']['checkout-agreements-modal']
-        ['config']['agreementConfiguration'][] = $agreementData;
+        $expectedResult['components']['checkout']['children']['steps']['children']['billing-step']['children']
+        ['payment']['children']['payments-list']['children']['before-place-order']['children']
+        ['checkout-agreements-modal']['config']['agreementConfiguration'][] = $agreementData;
 
         $agreementMock = $this->getMock('\Magento\CheckoutAgreements\Api\Data\AgreementInterface');
         $this->agreementsRepositoryMock->expects($this->once())->method('getList')->willReturn([$agreementMock]);

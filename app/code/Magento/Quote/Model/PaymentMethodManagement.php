@@ -38,7 +38,6 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator,
         \Magento\Payment\Model\MethodList $methodList
-
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->zeroTotalValidator = $zeroTotalValidator;

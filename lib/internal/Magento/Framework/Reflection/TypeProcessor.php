@@ -473,20 +473,51 @@ class TypeProcessor
      *
      * @param ParameterReflection $param
      * @return string
+     * @throws \LogicException
      */
     public function getParamType(ParameterReflection $param)
     {
         $type = $param->getType();
+        if ($param->getType() == 'null') {
+            throw new \LogicException(sprintf(
+                '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
+                . ' First declared type should not be null. E.g. string|null',
+                $param->getName(),
+                $param->getDeclaringClass()->getName(),
+                $param->getDeclaringFunction()->name
+            ));
+        }
         if ($type == 'array') {
             // try to determine class, if it's array of objects
             $docBlock = $param->getDeclaringFunction()->getDocBlock();
             $pattern = "/\@param\s+([\w\\\_]+\[\])\s+\\\${$param->getName()}\n/";
+            $matches = [];
             if (preg_match($pattern, $docBlock->getContents(), $matches)) {
                 return $matches[1];
             }
             return "{$type}[]";
         }
         return $type;
+    }
+
+    /**
+     * Get parameter description
+     *
+     * @param ParameterReflection $param
+     * @return string|null
+     */
+    public function getParamDescription(ParameterReflection $param)
+    {
+        $docBlock = $param->getDeclaringFunction()->getDocBlock();
+        $docBlockLines = explode("\n", $docBlock->getContents());
+        $pattern = "/\@param\s+([\w\\\_\[\]\|]+)\s+(\\\${$param->getName()})\s(.*)/";
+        $matches = [];
+
+        foreach ($docBlockLines as $line) {
+            if (preg_match($pattern, $line, $matches)) {
+                return $matches[3];
+            }
+        }
     }
 
     /**
