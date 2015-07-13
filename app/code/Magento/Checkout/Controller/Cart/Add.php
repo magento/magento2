@@ -169,7 +169,7 @@ class Add extends \Magento\Checkout\Controller\Cart
         $result = [];
 
         if ($backUrl || $backUrl = $this->getBackUrl()) {
-            $result['backUrl'] = $backUrl;
+            $result['redirect'] = $backUrl;
         } else {
             if ($product && !$product->getIsSalable()) {
                 $result['product'] = [
