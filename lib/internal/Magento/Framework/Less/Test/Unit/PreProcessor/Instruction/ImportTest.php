@@ -91,6 +91,21 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                 'Magento_Module/something.css',
                 "@import (type) 'Magento_Module/something.css';",
             ],
+            'with single line comment' => [
+                '@import (type) "some/file.css" media;' . PHP_EOL
+                    . '// @import (type) "unnecessary/file.css" media;',
+                'some/file.css',
+                'some/file.css',
+                "@import (type) 'some/file.css' media;" . PHP_EOL,
+            ],
+            'with multi line comment' => [
+                '@import (type) "some/file.css" media;' . PHP_EOL
+                    . '/* @import (type) "unnecessary/file.css" media;' . PHP_EOL
+                    . '@import (type) "another/unnecessary/file.css" media; */',
+                'some/file.css',
+                'some/file.css',
+                "@import (type) 'some/file.css' media;" . PHP_EOL,
+            ],
         ];
     }
 

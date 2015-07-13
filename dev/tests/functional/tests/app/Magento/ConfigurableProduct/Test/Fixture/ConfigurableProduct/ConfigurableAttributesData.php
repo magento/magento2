@@ -596,18 +596,19 @@ class ConfigurableAttributesData implements FixtureInterface
             'attributes_data' => [
                 'attribute_key_0' => [
                     'options' => [
+                        //TODO: adopt fixture MAGETWO-40002
                         'option_key_0' => [
-                            'pricing_value' => 1,
+                            'pricing_value' => 0,
                             'include' => 'Yes',
                             'is_percent' => 'No',
                         ],
                         'option_key_1' => [
-                            'pricing_value' => 2,
+                            'pricing_value' => 0,
                             'include' => 'Yes',
                             'is_percent' => 'No',
                         ],
                         'option_key_2' => [
-                            'pricing_value' => 3,
+                            'pricing_value' => 0,
                             'include' => 'Yes',
                             'is_percent' => 'No',
                         ],

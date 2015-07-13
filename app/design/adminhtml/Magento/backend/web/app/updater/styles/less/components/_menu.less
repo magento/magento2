@@ -1,0 +1,69 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Menu
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@menu-logo__padding-top: 2.4rem;
+@menu-logo-img__height: 4.2rem;
+
+//
+
+.admin__menu {
+    .level-0 {
+        &:first-child {
+            > a {
+                margin-top: 1.6rem;
+                &:after {
+                    top: -1.6rem;
+                }
+            }
+        }
+        > a {
+            padding-top: 1.3rem;
+            padding-bottom: 1.3rem;
+            &:before {
+                &:extend(.abs-icon all);
+                margin-bottom: .7rem;
+            }
+        }
+    }
+    .item-home {
+        > a {
+            &:before {
+                @_menu-item-home__size: 2.3rem;
+                content: @icon-home__content;
+                font-size: @_menu-item-home__size;
+                padding-top: @menu-item-icon__height - @_menu-item-home__size;
+            }
+        }
+    }
+    .item-component {
+        > a {
+            &:before {
+                content: @icon-lego__content;
+            }
+        }
+    }
+    .item-upgrade {
+        > a {
+            &:before {
+                content: @icon-upgrade__content;
+            }
+        }
+    }
+    .item-system-config {
+        > a {
+            &:before {
+                content: @icon-system-config__content;
+            }
+        }
+    }
+}

@@ -49,7 +49,7 @@ class FulltextFilter implements FilterApplierInterface
         foreach ($filters as $filter) {
             $collection->getSelect()
                 ->where(
-                    'MATCH(' . implode(',', $columns) . ') AGAINST(? IN BOOLEAN MODE)',
+                    'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
                     $filter['condition']
                 );
         }
