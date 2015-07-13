@@ -61,7 +61,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Load Shopping Cart Price Rule by coupon code
+     * Load Cart Price Rule by coupon code
      *
      * @param string $couponCode
      * @return $this

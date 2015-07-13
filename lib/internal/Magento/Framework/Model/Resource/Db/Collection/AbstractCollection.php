@@ -7,12 +7,14 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Model\Resource\Db\Collection;
+use Magento\Framework\App\Resource\SourceProviderInterface;
 
 /**
  * Abstract Resource Collection
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
+    implements SourceProviderInterface
 {
     /**
      * Model name

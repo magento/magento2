@@ -10,13 +10,17 @@
     <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
-                <item name="checkout_onepage" xsi:type="string">/checkout/onepage</item>
+                <item name="checkout_index" xsi:type="string">/checkout</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout">
         <plugin name="checkout-session-depersonalize"
                 type="Magento\Checkout\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
+    </type>
+    <type name="Magento\Customer\Block\Account\AuthenticationPopup">
+        <plugin name="authentication-popup-checkout-url"
+                type="Magento\Checkout\Model\Customer\Autentication\ConfigPlugin" sortOrder="20"/>
     </type>
     <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>

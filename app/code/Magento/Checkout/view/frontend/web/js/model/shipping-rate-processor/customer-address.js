@@ -10,9 +10,9 @@ define(
         'mage/storage',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/shipping-rate-registry',
-        'Magento_Ui/js/model/messageList'
+        'Magento_Checkout/js/model/error-processor'
     ],
-    function (resourceUrlManager, quote, storage, shippingService, rateRegistry, messageList) {
+    function (resourceUrlManager, quote, storage, shippingService, rateRegistry, errorProcessor) {
         "use strict";
         return {
             getRates: function(address) {
@@ -35,9 +35,8 @@ define(
 
                     ).fail(
                         function(response) {
-                            var error = JSON.parse(response.responseText);
-                            messageList.addErrorMessage(error);
-                            shippingService.setShippingRates([])
+                            shippingService.setShippingRates([]);
+                            errorProcessor.process(response);
                         }
                     ).always(
                         function () {

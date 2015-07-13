@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Paypal\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">paypal</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Paypal\Model\Session\Storage</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Model\PayflowSession\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">paypal_payflow</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Model\PayflowSession" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Paypal\Model\PayflowSession\Storage</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="paypal" xsi:type="string">/paypal/</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Controller\Transparent\RequestSecureToken">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Checkout\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Block\Payment\Info">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item xsi:type="string" name="is_secure_mode">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="PaypalCcConfigProvider" type="Magento\Payment\Model\CcGenericConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="payflowpro" xsi:type="const">Magento\Paypal\Model\Config::METHOD_PAYFLOWPRO</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PaypalIframeCcConfigProvider" type="Magento\Payment\Model\IframeConfigProvider">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_PAYFLOWPRO</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="paypal_express_config_provider" xsi:type="object">Magento\Paypal\Model\ExpressConfigProvider</item>
+                <item name="paypal_iframe_config_provider" xsi:type="object">Magento\Paypal\Model\IframeConfigProvider</item>
+                <item name="paypal_billing_agreement_config_provider" xsi:type="object">Magento\Paypal\Model\BillingAgreementConfigProvider</item>
+                <item name="paypal_cc_config_provider" xsi:type="object">PaypalCcConfigProvider</item>
+                <item name="paypal_iframe_cc_config_provider" xsi:type="object">PaypalIframeCcConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
