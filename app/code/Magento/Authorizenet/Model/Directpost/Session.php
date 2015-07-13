@@ -5,10 +5,12 @@
  */
 namespace Magento\Authorizenet\Model\Directpost;
 
+use Magento\Framework\Session\SessionManager;
+
 /**
  * Authorize.net DirectPost session model
  */
-class Session extends \Magento\Framework\Session\SessionManager
+class Session extends SessionManager
 {
     /**
      * Add order IncrementId to session
@@ -59,5 +61,17 @@ class Session extends \Magento\Framework\Session\SessionManager
             return true;
         }
         return false;
+    }
+
+    /**
+     * Set quote id to session
+     *
+     * @param int|string $id
+     * @return $this
+     */
+    public function setQuoteId($id)
+    {
+        $this->storage->setQuoteId($id);
+        return $this;
     }
 }
