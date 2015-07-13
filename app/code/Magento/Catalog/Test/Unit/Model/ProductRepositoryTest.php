@@ -216,9 +216,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceModelMock = $this->getMock('\Magento\Catalog\Model\Resource\Product', [], [], '', false);
-        $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
-        $this->eavConfigMock->expects($this->any())->method('getEntityType')
-            ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
         $this->objectManager = new ObjectManager($this);
         $this->extensibleDataObjectConverterMock = $this
             ->getMockBuilder('\Magento\Framework\Api\ExtensibleDataObjectConverter')
@@ -229,7 +226,13 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->mimeTypeExtensionMapMock =
             $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap')->getMock();
-        $this->contentFactoryMock = $this->getMock('Magento\Framework\Api\Data\ImageContentInterfaceFactory', ['create'], [], '', false);
+        $this->contentFactoryMock = $this->getMock(
+            'Magento\Framework\Api\Data\ImageContentInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ImageContentValidatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -271,7 +274,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'searchResultsFactory' => $this->searchResultsFactoryMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
                 'optionConverter' => $optionConverter,
-                'eavConfig' => $this->eavConfigMock,
                 'contentValidator' => $this->contentValidatorMock,
                 'fileSystem' => $this->fileSystemMock,
                 'contentFactory' => $this->contentFactoryMock,
@@ -595,8 +597,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteriaInterface', [], [], '', false);
         $attributeCode = 'attribute_code';
         $collectionMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
-        $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $searchCriteriaBuilderMock = $this->getMock('\Magento\Framework\Api\SearchCriteriaBuilder', [], [], '', false);
         $extendedSearchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $productAttributeSearchResultsMock = $this->getMockForAbstractClass(
             '\Magento\Catalog\Api\Data\ProductAttributeInterface',
@@ -620,15 +620,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $itemsMock = $this->getMock('\Magento\Framework\Object', [], [], '', false);
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
-        $this->filterBuilderMock->expects($this->any())->method('setField')->with('attribute_set_id')
-            ->will($this->returnSelf());
-        $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
-        $this->filterBuilderMock->expects($this->once())->method('setValue')
-            ->with(4)
-            ->willReturn($this->filterBuilderMock);
-        $this->searchCriteriaBuilderMock->expects($this->once())->method('addFilters')->with([$filterMock])
-            ->willReturn($searchCriteriaBuilderMock);
-        $searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($extendedSearchCriteriaMock);
+        $this->searchCriteriaBuilderMock->expects($this->once())->method('create')
+            ->willReturn($extendedSearchCriteriaMock);
         $this->metadataServiceMock->expects($this->once())->method('getList')->with($extendedSearchCriteriaMock)
             ->willReturn($productAttributeSearchResultsMock);
         $productAttributeSearchResultsMock->expects($this->once())->method('getItems')
