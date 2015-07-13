@@ -6,7 +6,6 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Api\Data;
 
 class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 {
@@ -21,12 +20,12 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     protected $storeCollectionFactory;
 
     /**
-     * @var Data\StoreInterface[]
+     * @var \Magento\Store\Api\Data\StoreInterface[]
      */
     protected $entities = [];
 
     /**
-     * @var Data\StoreInterface[]
+     * @var \Magento\Store\Api\Data\StoreInterface[]
      */
     protected $entitiesById = [];
 
@@ -85,7 +84,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     }
 
     /**
-     * @return Data\StoreInterface[]
+     * @return \Magento\Store\Api\Data\StoreInterface[]
      */
     public function getList()
     {
