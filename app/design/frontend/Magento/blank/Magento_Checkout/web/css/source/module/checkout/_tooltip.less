@@ -37,13 +37,10 @@
 & when (@media-common = true) {
 
     .field-tooltip {
+        cursor: pointer;
         position: absolute;
         right: 0;
         top: 1px;
-
-        &:hover {
-            cursor: pointer;
-        }
 
         &._active {
             .css(z-index, @checkout-tooltip__hover__z-index);
@@ -68,9 +65,15 @@
                 @_icon-font-color-active: false
             );
 
-            &._active {
-                &:before {
-                    .css(color, @checkout-tooltip-icon__hover__color);
+            &:focus {
+                ._keyfocus & {
+                    .css(z-index, @checkout-tooltip__hover__z-index);
+                    + .field-tooltip-content {
+                        display: block;
+                    }
+                    &:before {
+                        .css(color, @checkout-tooltip-icon__hover__color);
+                    }
                 }
             }
         }
