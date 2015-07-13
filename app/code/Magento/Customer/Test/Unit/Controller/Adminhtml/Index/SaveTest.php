@@ -9,6 +9,8 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Framework\Controller\Result\Redirect;
 
 /**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @covers \Magento\Customer\Controller\Adminhtml\Index\Save
  * @TODO: Add coverage code with addresses logic
  */
