@@ -13,6 +13,7 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 /**
  * Class Rule
  *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @codeCoverageIgnore
  */
 class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
@@ -176,6 +177,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Whether the rule is active
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsActive()
     {
@@ -239,6 +241,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Whether to stop rule processing
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getStopRulesProcessing()
     {
@@ -260,6 +263,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * TODO: is this field needed
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsAdvanced()
     {
@@ -466,6 +470,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Whether the rule applies to shipping
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getApplyToShipping()
     {
@@ -508,6 +513,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Return whether the rule is in RSS
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsRss()
     {
@@ -550,6 +556,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Whether to auto generate coupon
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseAutoGeneration()
     {
