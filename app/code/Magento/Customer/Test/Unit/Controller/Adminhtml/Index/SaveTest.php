@@ -333,7 +333,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($customerMock);
 
         $this->customerRepositoryMock->expects($this->once())
@@ -503,7 +502,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($customerMock);
 
         $this->managementMock->expects($this->once())
@@ -560,13 +558,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->redirectFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($redirectMock);
 
         $redirectMock->expects($this->once())
             ->method('setPath')
             ->with('customer/index', [])
-            ->willReturn(true);
+            ->willReturnSelf();
 
         $this->assertEquals($redirectMock, $this->model->execute());
     }
@@ -660,7 +657,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($customerMock);
 
         $this->managementMock->expects($this->once())
@@ -801,7 +797,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($customerMock);
 
         $this->managementMock->expects($this->once())
@@ -942,7 +937,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($customerMock);
 
         $exception = new \Exception(__('Exception'));
