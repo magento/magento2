@@ -8,6 +8,8 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
+use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
+use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainerFactory;
 use Magento\Framework\Search\EntityMetadata;
@@ -57,6 +59,10 @@ class Mapper
      * @var QueryContainerFactory
      */
     private $queryContainerFactory;
+    /**
+     * @var Query\Builder\Match
+     */
+    private $matchBuilder;
 
     /**
      * @param ScoreBuilderFactory $scoreBuilderFactory
@@ -65,6 +71,7 @@ class Mapper
      * @param Resource|Resource $resource
      * @param EntityMetadata $entityMetadata
      * @param QueryContainerFactory $queryContainerFactory
+     * @param Query\Builder\Match $matchBuilder
      * @param IndexBuilderInterface[] $indexProviders
      */
     public function __construct(
@@ -74,6 +81,7 @@ class Mapper
         Resource $resource,
         EntityMetadata $entityMetadata,
         QueryContainerFactory $queryContainerFactory,
+        Match $matchBuilder,
         array $indexProviders
     ) {
         $this->scoreBuilderFactory = $scoreBuilderFactory;
@@ -83,6 +91,7 @@ class Mapper
         $this->entityMetadata = $entityMetadata;
         $this->indexProviders = $indexProviders;
         $this->queryContainerFactory = $queryContainerFactory;
+        $this->matchBuilder = $matchBuilder;
     }
 
     /**
@@ -116,7 +125,6 @@ class Mapper
             BoolQuery::QUERY_CONDITION_MUST,
             $queryContainer
         );
-        $select->columns($scoreBuilder->build());
 
         $filtersCount = $queryContainer->getFiltersCount();
         if ($filtersCount > 1) {
@@ -124,34 +132,13 @@ class Mapper
             $select->having('COUNT(DISTINCT search_index.attribute_id) = ' . $filtersCount);
         }
 
-        $select = $this->createAroundSelect($select, $scoreBuilder);
-
-        $matchQueries = $queryContainer->getDerivedQueries();
-
-        if ($matchQueries) {
-            $subSelect = $select;
-            $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
-            $tables = array_merge($queryContainer->getDerivedQueryNames(), ['main_select.relevance']);
-            $relevance = implode('.relevance + ', $tables);
-            $select
-                ->from(
-                    ['main_select' => $subSelect],
-                    [
-                        $this->entityMetadata->getEntityId() => 'entity_id',
-                        'relevance' => sprintf('(%s)', $relevance),
-                    ]
-                );
-
-            foreach ($matchQueries as $matchName => $matchSelect) {
-                $select->join(
-                    [$matchName => $this->createAroundSelect($matchSelect, $scoreBuilder)],
-                    $matchName . '.entity_id = main_select.entity_id',
-                    []
-                );
-            }
-        }
-
-        $select->limit($request->getSize());
+        $select = $this->addMatchQueries(
+            $request,
+            $queryContainer->getDerivedQueries(),
+            $scoreBuilder,
+            $select,
+            $indexBuilder
+        );
 
         $select->limit($request->getSize());
         $select->order('relevance ' . Select::SQL_DESC);
@@ -332,6 +319,71 @@ class Mapper
                 break;
         }
         $scoreBuilder->endQuery($query->getBoost());
+        return $select;
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @param MatchContainer[] $matchQueries
+     * @param ScoreBuilder $scoreBuilder
+     * @param Select $select
+     * @param IndexBuilderInterface $indexBuilder
+     * @return Select
+     * @internal param QueryContainer $queryContainer
+     */
+    private function addMatchQueries(
+        RequestInterface $request,
+        array $matchQueries,
+        ScoreBuilder $scoreBuilder,
+        Select $select,
+        IndexBuilderInterface $indexBuilder
+    ) {
+        if (!$matchQueries) {
+            $select->columns($scoreBuilder->build());
+            $select = $this->createAroundSelect($select, $scoreBuilder);
+        } elseif (count($matchQueries) === 1) {
+            $matchContainer = reset($matchQueries);
+            $this->matchBuilder->build(
+                $scoreBuilder,
+                $select,
+                $matchContainer->getRequest(),
+                $matchContainer->getConditionType()
+            );
+            $select->columns($scoreBuilder->build());
+            $select = $this->createAroundSelect($select, $scoreBuilder);
+        } elseif (count($matchQueries) > 1) {
+            $select->columns($scoreBuilder->build());
+            $select = $this->createAroundSelect($select, $scoreBuilder);
+            $subSelect = $select;
+            $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
+            $tables = array_merge(array_keys($matchQueries), ['main_select.relevance']);
+            $relevance = implode('.relevance + ', $tables);
+            $select
+                ->from(
+                    ['main_select' => $subSelect],
+                    [
+                        $this->entityMetadata->getEntityId() => 'entity_id',
+                        'relevance' => sprintf('(%s)', $relevance),
+                    ]
+                );
+
+            foreach ($matchQueries as $matchName => $matchContainer) {
+                $matchSelect = $indexBuilder->build($request);
+                $matchScoreBuilder = $this->scoreBuilderFactory->create();
+                $matchSelect = $this->matchBuilder->build(
+                    $matchScoreBuilder,
+                    $matchSelect,
+                    $matchContainer->getRequest(),
+                    $matchContainer->getConditionType()
+                );
+                $matchSelect->columns($matchScoreBuilder->build());
+                $select->join(
+                    [$matchName => $this->createAroundSelect($matchSelect, $scoreBuilder)],
+                    $matchName . '.entity_id = main_select.entity_id',
+                    []
+                );
+            }
+        }
         return $select;
     }
 }
