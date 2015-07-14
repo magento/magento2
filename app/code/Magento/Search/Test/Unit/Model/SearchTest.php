@@ -67,11 +67,9 @@ class SearchTest extends \PHPUnit_Framework_TestCase
     public function testSearch()
     {
         $requestName = 'requestName';
-        $searchTerm = 'searchTerm';
         $storeId = 333;
         $filterField = 'filterField';
         $filterValue = 'filterValue';
-        $priceRangeCalculation = 'auto';
 
         $filter = $this->getMockBuilder('Magento\Framework\Api\Filter')
             ->disableOriginalConstructor()
