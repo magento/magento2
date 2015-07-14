@@ -7,6 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Directory\Test\Repository\CurrencyRate">
+        <dataset name="default">
+            <field name="currency_from" xsi:type="string">USD</field>
+            <field name="currency_to" xsi:type="string">EUR</field>
+            <field name="rate" xsi:type="number">0.8</field>
+        </dataset>
+
         <dataset name="usd_chf_rate_0_9">
             <field name="currency_from" xsi:type="string">USD</field>
             <field name="currency_to" xsi:type="string">CHF</field>
