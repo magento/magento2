@@ -11,7 +11,6 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Create customer.
  * 2. Create product.
