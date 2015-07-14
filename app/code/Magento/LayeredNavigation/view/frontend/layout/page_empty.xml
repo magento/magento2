@@ -7,6 +7,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" label="All Empty Layout Pages" design_abstraction="page_layout">
     <body>
-        <move element="catalog.leftnav" destination="category.product.list.additional" before="-"/>
+        <move name="catalog.leftnav" destination="category.product.list.additional" before="-"/>
     </body>
 </page>

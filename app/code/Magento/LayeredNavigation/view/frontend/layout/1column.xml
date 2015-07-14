@@ -7,6 +7,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" label="All One-Column Layout Pages" design_abstraction="page_layout">
     <body>
-        <move element="catalog.leftnav" destination="content.top" after="-"/>
+        <move name="catalog.leftnav" destination="content.top" after="-"/>
     </body>
 </page>

@@ -10,9 +10,9 @@
         <referenceContainer name="header.container">
             <container name="header.panel.wrapper" htmlClass="panel wrapper" htmlTag="div" before="-"/>
         </referenceContainer>
-        <move element="header.panel" destination="header.panel.wrapper"/>
-        <move element="top.links" destination="header.panel" after="-"/>
-        <move element="catalog.topnav" destination="store.menu" before="-"/>
+        <move name="header.panel" destination="header.panel.wrapper"/>
+        <move name="top.links" destination="header.panel" after="-"/>
+        <move name="catalog.topnav" destination="store.menu" before="-"/>
         <referenceContainer name="page.top">
             <block class="Magento\Framework\View\Element\Template" name="navigation.sections" before="-" template="Magento_Theme::html/sections.phtml">
                 <arguments>
