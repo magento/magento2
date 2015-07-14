@@ -13,17 +13,15 @@ use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
- *
  * Preconditions:
- * 1. Create product according to dataSet.
+ * 1. Create product according to dataset.
  * 2. Go to frontend.
  * 3. Add product to cart.
  *
  * Steps:
  * 1. Click on mini shopping cart icon.
  * 2. Click Edit.
- * 3. Fill data from dataSet.
+ * 3. Fill data from dataset.
  * 4. Click Update.
  * 5. Perform all assertions.
  *
