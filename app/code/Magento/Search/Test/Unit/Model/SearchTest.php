@@ -139,7 +139,7 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             ->method('bindDimension')
             ->with('scope', $storeId);
         $this->requestBuilder->expects($this->any())
-            ->method('bind');;
+            ->method('bind');
         $this->requestBuilder->expects($this->once())
             ->method('create')
             ->willReturn($request);
