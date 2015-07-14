@@ -11,7 +11,7 @@ namespace Magento\Search\Api;
 interface SearchInterface
 {
     /**
-     * Search documents by index
+     * Make Full Text Search and return found Documents
      *
      * @param \Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Framework\Api\Search\SearchResultInterface
