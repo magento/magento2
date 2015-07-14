@@ -2301,5 +2301,29 @@ return [
         'Magento\Authorizenet\Model\Directpost',
         'Magento\Authorizenet\Model\Directpost::setDataHelper()'
     ],
+    [
+        '_initCustomer',
+        'Magento\Paypal\Controller\Adminhtml\Billing\Agreement\CustomerGrid',
+        'Magento\Paypal\Controller\Adminhtml\Billing\Agreement\CustomerGrid::initCurrentCustomer'
+    ],
+    [
+        '_initCustomer',
+        'Magento\Customer\Controller\Adminhtml\Index',
+        'Magento\Customer\Controller\Adminhtml\Index::initCurrentCustomer',
+    ],
     ['prepareIndexdata', 'Magento\Search\Helper\Data'],
+    ['getPriceValues', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'],
+    ['getPricingValue', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue'],
+    ['getIsPercent', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue'],
+    ['addPrice', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute'],
+    ['getPricingValue', 'Magento\ConfigurableProduct\Api\Data\OptionValueInterface'],
+    ['setPricingValue', 'Magento\ConfigurableProduct\Api\Data\OptionValueInterface'],
+    ['getIsPercent', 'Magento\ConfigurableProduct\Api\Data\OptionValueInterface'],
+    ['setIsPercent', 'Magento\ConfigurableProduct\Api\Data\OptionValueInterface'],
+    ['_loadPrices', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute'],
+    ['getPriceValues', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute'],
+    ['savePrices', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'],
+    ['loadPrices', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'],
+    ['_parseVariationPrices', '\Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
+    ['_collectSuperDataPrice', '\Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
 ];
