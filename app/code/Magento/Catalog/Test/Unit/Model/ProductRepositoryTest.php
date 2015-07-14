@@ -9,13 +9,16 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class ProductRepositoryTest
  * @package Magento\Catalog\Test\Unit\Model
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -128,6 +131,31 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\Framework\Search\Request\Builder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $requestBuilder;
+
+    /**
+     * @var \Magento\Search\Model\SearchEngine|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchEngine;
+
+    /**
+     * @var \Magento\Catalog\Model\SearchResponseBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchResponseBuilder;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManager;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -188,9 +216,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceModelMock = $this->getMock('\Magento\Catalog\Model\Resource\Product', [], [], '', false);
-        $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
-        $this->eavConfigMock->expects($this->any())->method('getEntityType')
-            ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
         $this->objectManager = new ObjectManager($this);
         $this->extensibleDataObjectConverterMock = $this
             ->getMockBuilder('\Magento\Framework\Api\ExtensibleDataObjectConverter')
@@ -201,7 +226,13 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->mimeTypeExtensionMapMock =
             $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap')->getMock();
-        $this->contentFactoryMock = $this->getMock('Magento\Framework\Api\Data\ImageContentInterfaceFactory', ['create'], [], '', false);
+        $this->contentFactoryMock = $this->getMock(
+            'Magento\Framework\Api\Data\ImageContentInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ImageContentValidatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -209,6 +240,26 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->linkTypeProviderMock = $this->getMock('Magento\Catalog\Model\Product\LinkTypeProvider',
             ['getLinkTypes'], [], '', false);
         $this->imageProcessorMock = $this->getMock('Magento\Framework\Api\ImageProcessorInterface', [], [], '', false);
+
+        $this->requestBuilder = $this->getMockBuilder('Magento\Framework\Search\Request\Builder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->searchEngine = $this->getMockBuilder('Magento\Search\Model\SearchEngine')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->searchResponseBuilder = $this->getMockBuilder('Magento\Catalog\Model\SearchResponseBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
@@ -223,13 +274,17 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'searchResultsFactory' => $this->searchResultsFactoryMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
                 'optionConverter' => $optionConverter,
-                'eavConfig' => $this->eavConfigMock,
                 'contentValidator' => $this->contentValidatorMock,
                 'fileSystem' => $this->fileSystemMock,
                 'contentFactory' => $this->contentFactoryMock,
                 'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
                 'linkTypeProvider' => $this->linkTypeProviderMock,
                 'imageProcessor' => $this->imageProcessorMock,
+                'requestBuilder' => $this->requestBuilder,
+                'searchEngine' => $this->searchEngine,
+                'searchResponseBuilder' => $this->searchResponseBuilder,
+                'scopeConfig' => $this->scopeConfig,
+                'storeManager' => $this->storeManager,
             ]
         );
     }
@@ -542,8 +597,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteriaInterface', [], [], '', false);
         $attributeCode = 'attribute_code';
         $collectionMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
-        $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $searchCriteriaBuilderMock = $this->getMock('\Magento\Framework\Api\SearchCriteriaBuilder', [], [], '', false);
         $extendedSearchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $productAttributeSearchResultsMock = $this->getMockForAbstractClass(
             '\Magento\Catalog\Api\Data\ProductAttributeInterface',
@@ -567,15 +620,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $itemsMock = $this->getMock('\Magento\Framework\Object', [], [], '', false);
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
-        $this->filterBuilderMock->expects($this->any())->method('setField')->with('attribute_set_id')
-            ->will($this->returnSelf());
-        $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
-        $this->filterBuilderMock->expects($this->once())->method('setValue')
-            ->with(4)
-            ->willReturn($this->filterBuilderMock);
-        $this->searchCriteriaBuilderMock->expects($this->once())->method('addFilter')->with([$filterMock])
-            ->willReturn($searchCriteriaBuilderMock);
-        $searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($extendedSearchCriteriaMock);
+        $this->searchCriteriaBuilderMock->expects($this->once())->method('create')
+            ->willReturn($extendedSearchCriteriaMock);
         $this->metadataServiceMock->expects($this->once())->method('getList')->with($extendedSearchCriteriaMock)
             ->willReturn($productAttributeSearchResultsMock);
         $productAttributeSearchResultsMock->expects($this->once())->method('getItems')
@@ -1189,5 +1235,99 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->model->save($this->productMock);
         $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));
+    }
+
+    public function testSearch()
+    {
+        $requestName = 'requestName';
+        $searchTerm = 'searchTerm';
+        $storeId = 333;
+        $filterField = 'filterField';
+        $filterValue = 'filterValue';
+        $priceRangeCalculation = 'auto';
+
+        $filter = $this->getMockBuilder('Magento\Framework\Api\Filter')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filter->expects($this->once())
+            ->method('getField')
+            ->willReturn($filterField);
+        $filter->expects($this->once())
+            ->method('getValue')
+            ->willReturn($filterValue);
+
+        $filterGroup = $this->getMockBuilder('Magento\Framework\Api\Search\FilterGroup')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filterGroup->expects($this->once())
+            ->method('getFilters')
+            ->willReturn([$filter]);
+
+        $searchCriteria = $this->getMockBuilder('Magento\Framework\Api\Search\SearchCriteriaInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $searchCriteria->expects($this->once())
+            ->method('getRequestName')
+            ->willReturn($requestName);
+        $searchCriteria->expects($this->once())
+            ->method('getSearchTerm')
+            ->willReturn($searchTerm);
+        $searchCriteria->expects($this->once())
+            ->method('getFilterGroups')
+            ->willReturn([$filterGroup]);
+
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn($storeId);
+
+        $searchResult = $this->getMockBuilder('Magento\Framework\Api\Search\SearchResult')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $request = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $response = $this->getMockBuilder('Magento\Framework\Search\ResponseInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->requestBuilder->expects($this->once())
+            ->method('setRequestName')
+            ->with($requestName);
+        $this->requestBuilder->expects($this->once())
+            ->method('bindDimension')
+            ->with('scope', $storeId);
+        $this->requestBuilder->expects($this->any())
+            ->method('bind');;
+        $this->requestBuilder->expects($this->once())
+            ->method('create')
+            ->willReturn($request);
+
+        $this->searchEngine->expects($this->once())
+            ->method('search')
+            ->with($request)
+            ->willReturn($response);
+
+        $this->searchResponseBuilder->expects($this->once())
+            ->method('build')
+            ->with($response)
+            ->willReturn($searchResult);
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
+
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with(AlgorithmFactory::XML_PATH_RANGE_CALCULATION, ScopeInterface::SCOPE_STORE)
+            ->willReturn($priceRangeCalculation);
+
+        $searchResult = $this->model->search($searchCriteria);
+
+        $this->assertInstanceOf('Magento\Framework\Api\Search\SearchResultInterface', $searchResult);
     }
 }

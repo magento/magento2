@@ -8,6 +8,7 @@
 //  _____________________________________________
 
 @checkout-shipping-address__max-width: 600px;
+@checkout-shipping-address__margin-top: 28px;
 
 @checkout-shipping-item-icon__background-color: @checkout-shipping-item__active__border-color;
 @checkout-shipping-item-icon__color: @color-white;
@@ -50,6 +51,7 @@
 
         .form-login,
         .form-shipping-address {
+            .css(margin-top, @checkout-shipping-address__margin-top);
             margin-bottom: @indent__base;
 
             .fieldset {
@@ -204,6 +206,7 @@
             .css(margin, @checkout-shipping-item-mobile__padding);
             .css(padding, @checkout-shipping-item-mobile__padding);
         }
+
         .shipping-address-item {
             .css(border-bottom, 1px solid @checkout-shipping-item-before__border-color);
             .css(margin, @checkout-shipping-item-mobile__margin);
@@ -217,6 +220,11 @@
                     .css(right, @checkout-shipping-item-icon__selected__width + @indent__s);
                 }
             }
+        }
+
+        .form-login,
+        .form-shipping-address {
+            .css(margin-top, @checkout-shipping-address__margin-top);
         }
 
         .action-select-shipping-item {
