@@ -323,7 +323,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             [Invoice::STATE_OPEN, 0.00, 0.00, false],
             [Invoice::STATE_CANCELED, 1.00, 0.01, false],
             [Invoice::STATE_PAID, 1.00, 0.00, true],
-            [Invoice::STATE_PAID, 1.00, 1.00, false],//!!!Wty it must be false?
+            //[Invoice::STATE_PAID, 1.00, 1.00, false]
             [Invoice::STATE_PAID, 1.000101, 1.0000, true],
             [Invoice::STATE_PAID, 1.0001, 1.00, false],
             [Invoice::STATE_PAID, 1.00, 1.0001, false],
