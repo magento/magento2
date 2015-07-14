@@ -122,7 +122,6 @@ ColumsResize.prototype.init = function() {
     this.createDraggableTemplate(cfg.tableColumnsArray, cfg.tableBorderWidth);
     this.createResizeTemplate(cfg.tableColumnsArray);
     this.minWidth(cfg.tableColumnsDataObj, cfg.cellsInColumn);
-    this.minWidth(cfg.tableColumnsDataObj, cfg.cellsInColumn);
     this.draggableInit(cfg.tableColumnsDataObj);
     this.resizeTableInit(cfg.tableColumnsDataObj);
     this.eventListener();
