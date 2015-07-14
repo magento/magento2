@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Catalog\Model\Plugin\PageCache\Product;
+namespace Magento\Catalog\Plugin\Model\Product\Action;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Action;
 use Magento\Indexer\Model\CacheContext;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 
-class Action
+class UpdateAttributesFlushCache
 {
     /**
      * @var CacheContext
@@ -35,17 +35,17 @@ class Action
     }
 
     /**
-     * @param Product\Action $subject
+     * @param Action $subject
      * @param \Closure $proceed
      * @param array $productIds
      * @param array $attrData
      * @param int $storeId
-     * @return Product\Action
+     * @return Action
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundUpdateAttributes(
-        Product\Action $subject,
+        Action $subject,
         \Closure $proceed,
         $productIds,
         $attrData,
