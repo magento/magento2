@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Test\Unit\Controller\Stub;
+namespace Magento\Braintree\Test\Unit\Controller\Stub;
 
-class OnepageStub extends \Magento\Checkout\Controller\Onepage
+class MyCreditCardsStub extends \Magento\Braintree\Controller\MyCreditCards
 {
     protected function execute()
     {
