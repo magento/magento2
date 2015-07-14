@@ -49,6 +49,7 @@ class OrderLoader implements OrderLoaderInterface
      * @param Registry $registry
      * @param \Magento\Framework\UrlInterface $url
      * @param ForwardFactory $resultForwardFactory
+     * @param RedirectFactory $redirectFactory
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
