@@ -665,9 +665,9 @@ class IndexBuilder
         );
         $select->columns([
             'default_price' => $this->getReadAdapter()->getIfNullSql(
-                    'gp.value',
-                    $this->getReadAdapter()->getIfNullSql($tableAlias . '.value', 'pp_default.value')
-                ),
+                'gp.value',
+                $this->getReadAdapter()->getIfNullSql($tableAlias . '.value', 'pp_default.value')
+            ),
         ]);
 
         return $read->query($select);
