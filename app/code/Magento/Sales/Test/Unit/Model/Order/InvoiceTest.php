@@ -367,18 +367,22 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider payDataProvider
      * @param bool $hasForcedState
-     * @param string|null $forcedState
+     * @param float string|null $forcedState
      * @param float $orderTotalPaid
      * @param float $orderBaseTotalPaid
      * @param float $grandTotal
      * @param float $baseGrandTotal
      * @param float $expectedState
-     * @param float $expectedTotalPaid
-     * @param float $expectedBaseTotalPaid
      */
-    public function testPay($hasForcedState, $forcedState, $orderTotalPaid, $orderBaseTotalPaid, $grandTotal,
-                            $baseGrandTotal, $expectedState, $expectedTotalPaid, $expectedBaseTotalPaid)
-    {
+    public function testPay(
+        $hasForcedState,
+        $forcedState,
+        $orderTotalPaid,
+        $orderBaseTotalPaid,
+        $grandTotal,
+        $baseGrandTotal,
+        $expectedState
+    ) {
         $this->mockPay($hasForcedState, $forcedState);
         $this->model->setGrandTotal($grandTotal);
         $this->model->setBaseGrandTotal($baseGrandTotal);
@@ -388,8 +392,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model, $this->model->pay());
         $this->assertTrue($this->model->wasPayCalled());
         $this->assertEquals($expectedState, $this->model->getState());
-        //$this->assertEquals($expectedTotalPaid, $this->model->getTotalPaid());
-        //$this->assertEquals($expectedBaseTotalPaid, $this->model->getBaseTotalPaid());
         #second call of pay() method must do nothing
         $this->model->pay();
     }
@@ -398,7 +400,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         //ToDo: fill data provider and uncomment assertings totals in testPay
         return [
-            [true, 'payment_state', 10.99, 1.00, 10.99, 1.00, 'payment_state', 11.99, 11.99]
+            [true, 'payment_state', 10.99, 1.00, 10.99, 1.00, 'payment_state']
         ];
     }
 }
