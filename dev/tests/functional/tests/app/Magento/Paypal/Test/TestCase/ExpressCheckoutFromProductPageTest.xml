@@ -11,7 +11,7 @@
             <data name="description" xsi:type="string">MAGETWO-12415 - Check Out as a Guest using "Checkout with PayPal" button from Product Page and Free Shipping</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="sandboxCustomer/dataSet" xsi:type="string">sandbox_us_default</data>
+            <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping" xsi:type="array">
                 <item name="shipping_method" xsi:type="string">Free</item>

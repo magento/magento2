@@ -21,9 +21,6 @@
     <event name="adminhtml_cache_flush_all">
         <observer name="magento_all_pagecache" instance="Magento\PageCache\Model\Observer\FlushAllCache" method="execute" />
     </event>
-    <event name="adminhtml_cache_refresh_type">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\FlushAllCache" method="execute" />
-    </event>
     <event name="clean_media_cache_after">
         <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\InvalidateCache" method="execute" />
     </event>
