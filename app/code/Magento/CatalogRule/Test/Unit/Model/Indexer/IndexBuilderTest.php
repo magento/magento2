@@ -206,7 +206,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     public function testUpdateCatalogRuleGroupWebsiteData()
     {
         $groupPriceAttrMock = $this->getMock(
-            'Magento\Catalog\Model\Entity\AttributeGroup',
+            'Magento\Catalog\Model\Entity\Attribute',
             ['getBackend'],
             [],
             '',
