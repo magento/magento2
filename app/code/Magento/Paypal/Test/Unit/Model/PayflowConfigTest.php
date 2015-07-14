@@ -46,10 +46,9 @@ class PayflowConfigTest extends \PHPUnit_Framework_TestCase
         $this->config = $om->getObject(
             'Magento\Paypal\Model\PayflowConfig',
             [
-                'scopeConfig' => $this->scopeConfigMock,
+                'scopeConfig' => $this->scopeConfigMock
             ]
         );
-//        $this->config = new PayflowConfig($this->scopeConfigMock);
     }
 
     /**
