@@ -3785,5 +3785,12 @@ return [
     ['Magento\GoogleShopping\Test\Unit\Model\ConfigTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\MassOperationsTest'],
     ['Magento\GoogleShopping\Test\Unit\Model\ObserverTest'],
-    ['Magento\GoogleShopping\Test\Unit\Model\ServiceTest']
+    ['Magento\GoogleShopping\Test\Unit\Model\ServiceTest'],
+    ['Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Settings'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tabs\Configurable'],
+    [
+        'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
+        . '\Configurable'
+    ],
 ];

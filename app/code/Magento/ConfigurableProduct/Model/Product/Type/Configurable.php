@@ -158,6 +158,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected $jsonHelper;
 
+    /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Media */
+    protected $media;
+
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
@@ -187,6 +190,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -212,7 +216,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
     ) {
         $this->_typeConfigurableFactory = $typeConfigurableFactory;
         $this->_entityFactory = $entityFactory;
@@ -226,6 +231,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->stockConfiguration = $stockConfiguration;
         $this->jsonHelper = $jsonHelper;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->media = $media;
+
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -421,7 +428,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 'label' => $attribute->getLabel(),
                 'use_default' => $attribute->getUseDefault(),
                 'position' => $attribute->getPosition(),
-                'values' => $attribute->getPrices() ? $attribute->getPrices() : [],
+                'values' => $attribute->getOptions() ? $attribute->getOptions() : [],
                 'attribute_id' => $eavAttribute->getId(),
                 'attribute_code' => $eavAttribute->getAttributeCode(),
                 'frontend_label' => $eavAttribute->getFrontend()->getLabel(),
@@ -681,7 +688,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
             $productObject = $productCollection->getFirstItem();
             if ($productObject->getId()) {
-                return $productObject;
+                return $this->productRepository->getById($productObject->getId());
             }
 
             foreach ($this->getUsedProducts($product) as $productObject) {
@@ -768,6 +775,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             $result = parent::_prepareProduct($buyRequest, $product, $processMode);
             if (is_array($result)) {
+                //TODO: MAGETWO-23739 get id from _POST and retrieve product from repository immediately.
+
                 /**
                  * $attributes = array($attributeId=>$attributeValue)
                  */
@@ -932,7 +941,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (count($attributes)) {
             foreach ($attributes as $attribute) {
                 /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
-                if ($attribute->getData('prices')) {
+                if ($attribute->getData('options')) {
                     return true;
                 }
             }
@@ -1085,6 +1094,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         $this->_prepareAttributeSetToBeBaseForNewVariations($parentProduct);
         $generatedProductIds = [];
+        $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
             $configurableAttribute = $this->jsonHelper->jsonDecode($simpleProductData['configurable_attribute']);
@@ -1192,7 +1202,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $configDefaultValue = $this->stockConfiguration->getManageStock($product->getStoreId());
         $postData['stock_data']['use_config_manage_stock'] = $postData['stock_data']['manage_stock'] ==
             $configDefaultValue ? 1 : 0;
-        if (!empty($postData['image'])) {
+        if (!empty($postData['image']) && empty($postData['media_gallery'])) {
             $postData['small_image'] = $postData['thumbnail'] = $postData['image'];
             $postData['media_gallery']['images'][] = [
                 'position' => 1,
@@ -1201,14 +1211,55 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 'label' => '',
             ];
         }
+        $postData['status'] = isset($postData['status'])
+            ? $postData['status']
+            : \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
         $product->addData(
             $postData
         )->setWebsiteIds(
             $parentProduct->getWebsiteIds()
-        )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         )->setVisibility(
             \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
         );
+    }
+
+    /**
+     * Duplicate images for variations
+     *
+     * @param $productsData
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function duplicateImagesForVariations(&$productsData)
+    {
+        $imagesForCopy = [];
+        foreach ($productsData as $variationId => $simpleProductData) {
+            if (!isset($simpleProductData['media_gallery']['images'])) {
+                continue;
+            }
+
+            foreach ($simpleProductData['media_gallery']['images'] as $imageId => $image) {
+                $image['variation_id'] = $variationId;
+                if (isset($imagesForCopy[$imageId][0])) {
+                    // skip duplicate image for first product
+                    unset($imagesForCopy[$imageId][0]);
+                }
+                $imagesForCopy[$imageId][] = $image;
+            }
+        }
+        foreach ($imagesForCopy as $imageId => $variationImages) {
+            foreach ($variationImages as $image) {
+                $file = $image['file'];
+                $variationId = $image['variation_id'];
+                $newFile = $this->media->duplicateImageFromTmp($file);
+                $productsData[$variationId]['media_gallery']['images'][$imageId]['file'] = $newFile;
+                foreach (['small_image', 'thumbnail', 'image'] as $imageType) {
+                    if (isset($productsData[$variationId][$imageType])
+                        && $productsData[$variationId][$imageType] == $file
+                    ) {
+                        $productsData[$variationId][$imageType] = $newFile;
+                    }
+                }
+            }
+        }
     }
 }

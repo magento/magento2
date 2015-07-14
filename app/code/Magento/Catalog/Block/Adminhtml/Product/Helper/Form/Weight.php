@@ -32,10 +32,16 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
     protected $_helper;
 
     /**
+     * @var \Magento\Framework\Locale\Format
+     */
+    protected $localeFormat;
+
+    /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Catalog\Helper\Product $helper
+     * @param \Magento\Framework\Locale\Format $localeFormat
      * @param array $data
      */
     public function __construct(
@@ -43,9 +49,11 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
         \Magento\Catalog\Helper\Product $helper,
+        \Magento\Framework\Locale\Format $localeFormat,
         array $data = []
     ) {
         $this->_helper = $helper;
+        $this->localeFormat = $localeFormat;
         $this->_virtual = $factoryElement->create('checkbox');
         $this->_virtual->setId(
             self::VIRTUAL_FIELD_HTML_ID
@@ -54,8 +62,8 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
         )->setLabel(
             $this->_helper->getTypeSwitcherControlLabel()
         );
-        $data['class'] = 'validate-number validate-zero-or-greater validate-number-range number-range-0-99999999.9999';
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $this->addClass('validate-zero-or-greater');
     }
 
     /**
@@ -94,5 +102,29 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
     {
         $this->_virtual->setForm($form);
         return parent::setForm($form);
+    }
+
+    /**
+     * @param null|int|string $index
+     * @return null|string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getEscapedValue($index = null)
+    {
+        $value = $this->getValue();
+
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        if ($this->getEntityAttribute()) {
+            $format= $this->localeFormat->getPriceFormat();
+            $value = number_format($value, $format['precision'], $format['decimalSymbol'], $format['groupSymbol']);
+        } else {
+            // default format:  1234.56
+            $value = number_format($value, 2, null, '');
+        }
+
+        return $value;
     }
 }

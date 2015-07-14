@@ -113,7 +113,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">increment_id</item>
-                        <item name="label" xsi:type="string" translate="true">Credit Memo</item>
+                        <item name="label" xsi:type="string" translate="true">Credit Memo #</item>
                     </item>
                 </argument>
             </filterInput>
@@ -152,7 +152,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">order_increment_id</item>
-                        <item name="label" xsi:type="string" translate="true">Order</item>
+                        <item name="label" xsi:type="string" translate="true">Order #</item>
                     </item>
                 </argument>
             </filterInput>
@@ -382,6 +382,64 @@
                     </argument>
                 </filterInput>
             </filterRange>
+            <filterRange name="adjustment_positive">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">adjustment_positive</item>
+                        <item name="label" xsi:type="string" translate="true">Adjustment Refund</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
+            <filterRange name="adjustment_negative">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">adjustment_negative</item>
+                        <item name="label" xsi:type="string" translate="true">Adjustment Fee</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
             <filterRange name="order_base_grand_total">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -420,7 +478,7 @@
                     <item name="actions" xsi:type="array">
                         <item name="pdfcreditmemos_order" xsi:type="array">
                             <item name="type" xsi:type="string">pdfcreditmemos_order</item>
-                            <item name="label" xsi:type="string" translate="true">PDF Creditmemos</item>
+                            <item name="label" xsi:type="string" translate="true">PDF Credit Memos</item>
                             <item name="url" xsi:type="string">sales/creditmemo/pdfcreditmemos</item>
                         </item>
                     </item>
