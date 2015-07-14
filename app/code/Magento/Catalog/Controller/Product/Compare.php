@@ -15,7 +15,7 @@ use Magento\Framework\View\Result\PageFactory;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Compare extends \Magento\Framework\App\Action\Action
+abstract class Compare extends \Magento\Framework\App\Action\Action
 {
     /**
      * Customer id

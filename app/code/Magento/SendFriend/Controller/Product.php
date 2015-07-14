@@ -14,7 +14,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Product extends \Magento\Framework\App\Action\Action
+abstract class Product extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
