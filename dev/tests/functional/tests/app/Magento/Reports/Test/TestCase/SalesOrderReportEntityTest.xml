@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Reports\Test\TestCase\SalesOrderReportEntityTest">
         <variation name="SalesOrderReportEntityTestVariation1">
-            <data name="order/dataSet" xsi:type="string">default</data>
-            <data name="order/data/price/preset" xsi:type="string">full_invoice</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="salesReport/report_type" xsi:type="string">Order Created</data>
             <data name="salesReport/period_type" xsi:type="string">Year</data>
             <data name="salesReport/from" xsi:type="string">m/d/Y 12:00 a-2 days</data>
@@ -21,8 +21,8 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
         </variation>
         <variation name="SalesOrderReportEntityTestVariation2">
-            <data name="order/dataSet" xsi:type="string">default</data>
-            <data name="order/data/price/preset" xsi:type="string">full_invoice</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="salesReport/report_type" xsi:type="string">Order Created</data>
             <data name="salesReport/period_type" xsi:type="string">Month</data>
             <data name="salesReport/from" xsi:type="string">m/d/Y</data>
@@ -34,8 +34,8 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
         </variation>
         <variation name="SalesOrderReportEntityTestVariation3">
-            <data name="order/dataSet" xsi:type="string">default</data>
-            <data name="order/data/price/preset" xsi:type="string">full_invoice</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="salesReport/report_type" xsi:type="string">Order Updated</data>
             <data name="salesReport/period_type" xsi:type="string">Day</data>
             <data name="salesReport/from" xsi:type="string">m/d/Y</data>
