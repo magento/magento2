@@ -132,6 +132,11 @@ define([
                             at: 'center top',
                             of: 'body'
                         },
+                        create: function (event, ui) {
+                            $(document).on('click', '#productGrid_massaction-form button', function () {
+                                $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
+                            });
+                        },
                         open: function () {
                             $(this).closest('.ui-dialog').addClass('ui-dialog-active');
 
@@ -139,10 +144,6 @@ define([
                             $(this).closest('.ui-dialog').css('margin-top', topMargin);
 
                             $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
-
-                            $('#productGrid_massaction-form button').on('click', function () {
-                                $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
-                            });
                         },
                         close: function () {
                             $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
