@@ -23,13 +23,16 @@ class Placeholder implements RendererInterface
         $text = end($source);
 
         if ($arguments) {
-            $placeholders = [];
-            foreach (array_keys($arguments) as $key) {
-                $placeholders[] = '%' . (is_int($key) ? strval($key + 1) : $key);
-            }
-            $text = str_replace($placeholders, $arguments, $text);
+            $placeholders = array_map([$this, 'keyToPlaceholder'], array_keys($arguments));
+            $pairs = array_combine($placeholders, $arguments);
+            $text = strtr($text, $pairs);
         }
 
         return $text;
+    }
+
+    private function keyToPlaceholder($key)
+    {
+        return '%' . (is_int($key) ? strval($key + 1) : $key);
     }
 }
