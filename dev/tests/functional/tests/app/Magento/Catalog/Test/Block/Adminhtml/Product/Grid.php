@@ -6,56 +6,71 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
-use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
+use \Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Class Grid
  * Backend catalog product grid
  */
-class Grid extends ParentGrid
+class Grid extends DataGrid
 {
     /**
-     * Initialize block elements
+     * @var string
+     */
+    protected $rowPattern = './/tr[%s]';
+
+    /**
+     * Filters array mapping.
      *
      * @var array
      */
     protected $filters = [
         'name' => [
-            'selector' => '#productGrid_product_filter_name',
+            'selector' => '[name="filters[name]"]',
         ],
         'sku' => [
-            'selector' => '#productGrid_product_filter_sku',
+            'selector' => '[name="filters[sku]"]',
         ],
         'type' => [
-            'selector' => '#productGrid_product_filter_type',
+            'selector' => '[name="filters[type_id]"]',
             'input' => 'select',
         ],
         'price_from' => [
-            'selector' => '#productGrid_product_filter_price_from',
+            'selector' => '[name="filters[price][from]"]',
         ],
         'price_to' => [
-            'selector' => '#productGrid_product_filter_price_to',
+            'selector' => '[name="filters[price][to]"]',
         ],
         'qty_from' => [
-            'selector' => '#productGrid_product_filter_qty_from',
+            'selector' => '[name="filters[qty][from]"]',
         ],
         'qty_to' => [
-            'selector' => '#productGrid_product_filter_qty_to',
+            'selector' => '[name="filters[qty][to]"]',
         ],
         'visibility' => [
-            'selector' => '#productGrid_product_filter_visibility',
+            'selector' => '[name="filters[visibility]"]',
             'input' => 'select',
         ],
         'status' => [
-            'selector' => '#productGrid_product_filter_status',
+            'selector' => '[name="filters[status]"]',
             'input' => 'select',
         ],
         'set_name' => [
-            'selector' => '#productGrid_product_filter_set_name',
+            'selector' => '[name="filters[attribute_set_id]"]',
             'input' => 'select',
         ],
     ];
 
+    /**
+     * Temporary solution for fix grid loader
+     *
+     * {@inheritdoc}
+     */
+    public function waitLoader()
+    {
+        parent::waitLoader();
+        sleep(4);
+    }
     /**
      * Update attributes for selected items
      *

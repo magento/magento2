@@ -57,6 +57,7 @@ class Bool implements QueryInterface
      * @param array $must
      * @param array $should
      * @param array $not
+     * @codeCoverageIgnore
      */
     public function __construct($name, $boost, array $must = [], array $should = [], array $not = [])
     {
@@ -77,6 +78,7 @@ class Bool implements QueryInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -95,6 +97,7 @@ class Bool implements QueryInterface
      * Get Should queries
      *
      * @return QueryInterface[]
+     * @codeCoverageIgnore
      */
     public function getShould()
     {
@@ -105,6 +108,7 @@ class Bool implements QueryInterface
      * Get Must queries
      *
      * @return QueryInterface[]
+     * @codeCoverageIgnore
      */
     public function getMust()
     {
@@ -115,6 +119,7 @@ class Bool implements QueryInterface
      * Get Must Not queries
      *
      * @return QueryInterface[]
+     * @codeCoverageIgnore
      */
     public function getMustNot()
     {
