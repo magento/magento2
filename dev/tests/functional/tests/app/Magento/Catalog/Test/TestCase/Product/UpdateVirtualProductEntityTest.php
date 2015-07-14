@@ -93,7 +93,7 @@ class UpdateVirtualProductEntityTest extends Injectable
         $this->product = $fixtureFactory->createByCode(
             'catalogProductVirtual',
             [
-                'dataSet' => 'default',
+                'dataset' => 'default',
                 'data' => [
                     'category_ids' => [
                         'category' => $category,
