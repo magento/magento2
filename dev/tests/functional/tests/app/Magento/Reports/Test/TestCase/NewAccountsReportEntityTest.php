@@ -12,7 +12,6 @@ use Magento\Reports\Test\Page\Adminhtml\CustomerAccounts;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Delete all existing customers.
  * 2. Create customer.
