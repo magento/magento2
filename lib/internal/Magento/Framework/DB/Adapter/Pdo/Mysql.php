@@ -1801,9 +1801,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $fields = $cols;
         }
 
-        // quote column names
-        // $cols = array_map(array($this, 'quoteIdentifier'), $cols);
-
         // prepare ON DUPLICATE KEY conditions
         foreach ($fields as $k => $v) {
             $field = $value = null;
