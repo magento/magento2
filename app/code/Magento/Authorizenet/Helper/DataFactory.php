@@ -13,6 +13,8 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class DataFactory
 {
+    const AREA_FRONTEND = 'frontend';
+    const AREA_BACKEND = 'adminhtml';
     /**
      * @var ObjectManagerInterface
      */
@@ -22,8 +24,8 @@ class DataFactory
      * @var array
      */
     protected $helperMap = [
-        'frontend' => 'Magento\Authorizenet\Helper\Data',
-        'adminhtml' => 'Magento\Authorizenet\Helper\Backend\Data'
+        self::AREA_FRONTEND => 'Magento\Authorizenet\Helper\Data',
+        self::AREA_BACKEND => 'Magento\Authorizenet\Helper\Backend\Data'
     ];
 
     /**
