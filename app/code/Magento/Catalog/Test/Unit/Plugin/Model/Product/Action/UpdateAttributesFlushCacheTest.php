@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Test\Unit\Model\Plugin\PageCache\Product;
+namespace Magento\Catalog\Test\Unit\Plugin\Model\Product\Action;
 
 use Magento\Catalog\Model\Product;
 
-class ActionTest extends \PHPUnit_Framework_TestCase
+class UpdateAttributesFlushCacheTest extends \PHPUnit_Framework_TestCase
 {
     public function testAroundUpdateAttributes()
     {
@@ -23,12 +23,19 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             ->with(Product::CACHE_TAG, $productIds);
 
 
-        $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with('clean_cache_by_tags', ['object' => $cacheContextMock]);
 
-        $model = new \Magento\Catalog\Model\Plugin\PageCache\Product\Action($cacheContextMock, $eventManagerMock);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $model = $objectManager->getObject(
+            'Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache',
+            [
+                'cacheContext' => $cacheContextMock,
+                'eventManager' => $eventManagerMock,
+            ]
+        );
 
         $closureMock = function () use ($productActionMock) {
             return $productActionMock;
