@@ -45,14 +45,14 @@ class AdvancedSearchEntityTest extends Injectable
         /** @var CatalogProductSimple $productSymbols */
         $productSymbols = $fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'abc_dfj_simple_for_advancedsearch']
+            ['dataset' => 'abc_dfj_simple_for_advancedsearch']
         );
         $productSymbols->persist();
 
         /** @var CatalogProductSimple $productNumbers */
         $productNumbers = $fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'adc_123_simple_for_advancedsearch']
+            ['dataset' => 'adc_123_simple_for_advancedsearch']
         );
         $productNumbers->persist();
 
