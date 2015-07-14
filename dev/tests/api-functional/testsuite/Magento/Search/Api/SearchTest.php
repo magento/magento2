@@ -21,9 +21,21 @@ class SearchTest extends WebapiAbstract
     {
         $searchCriteria = [
             'searchCriteria' => [
-                'search_term' => 'simple',
                 'request_name' => 'quick_search_container',
-                'filter_groups' => [],
+                'filter_groups' => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => 'search_term',
+                                'value' => 'simple',
+                            ],
+                            [
+                                'field' => 'price_dynamic_algorithm',
+                                'value' => 'auto',
+                            ]
+                        ]
+                    ]
+                ],
                 'page_size' => 20000000000000,
                 'current_page' => 1,
             ],

@@ -32,11 +32,6 @@ class SearchTest extends \PHPUnit_Framework_TestCase
     protected $searchResponseBuilder;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeConfig;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
@@ -57,10 +52,6 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -69,7 +60,6 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             'requestBuilder' => $this->requestBuilder,
             'searchEngine' => $this->searchEngine,
             'searchResponseBuilder' => $this->searchResponseBuilder,
-            'scopeConfig' => $this->scopeConfig,
             'storeManager' => $this->storeManager,
         ]);
     }
@@ -106,9 +96,6 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         $searchCriteria->expects($this->once())
             ->method('getRequestName')
             ->willReturn($requestName);
-        $searchCriteria->expects($this->once())
-            ->method('getSearchTerm')
-            ->willReturn($searchTerm);
         $searchCriteria->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroup]);
@@ -157,11 +144,6 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($store);
-
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->with(AlgorithmFactory::XML_PATH_RANGE_CALCULATION, ScopeInterface::SCOPE_STORE)
-            ->willReturn($priceRangeCalculation);
 
         $searchResult = $this->model->search($searchCriteria);
 
