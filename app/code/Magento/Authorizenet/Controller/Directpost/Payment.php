@@ -12,7 +12,7 @@ use Magento\Payment\Block\Transparent\Iframe;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Payment extends \Magento\Framework\App\Action\Action
+abstract class Payment extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
