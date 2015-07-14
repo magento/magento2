@@ -5,63 +5,31 @@
  */
 namespace Magento\Cms\Model\Page;
 
-use Magento\Cms\Model\Resource\Page\Collection;
 use Magento\Cms\Model\Resource\Page\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
  */
-class DataProvider implements DataProviderInterface
+class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
-     * Data Provider name
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Data Provider Primary Identifier name
-     *
-     * @var string
-     */
-    protected $primaryFieldName;
-
-    /**
-     * Data Provider Request Parameter Identifier name
-     *
-     * @var string
-     */
-    protected $requestFieldName;
-
-    /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var Collection
+     * @var \Magento\Cms\Model\Resource\Block\Collection
      */
     protected $collection;
 
     /**
-     * @var array
+     * @var FilterPool
      */
-    protected $meta = [];
-
-    /**
-     * Provider configuration data
-     *
-     * @var array
-     */
-    protected $data = [];
+    protected $filterPool;
 
     /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
+     * @param FilterPool $filterPool
      * @param array $meta
      * @param array $data
      */
@@ -70,154 +38,30 @@ class DataProvider implements DataProviderInterface
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
+        FilterPool $filterPool,
         array $meta = [],
         array $data = []
     ) {
-        $this->name = $name;
-        $this->primaryFieldName = $primaryFieldName;
-        $this->requestFieldName = $requestFieldName;
-
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        $this->filterPool = $filterPool;
         $this->collection = $collectionFactory->create();
         $this->collection->setFirstStoreFlag(true);
-        $this->meta = $meta;
-        $this->data = $data;
     }
 
     /**
-     * Get Data Provider name
-     *
-     * @return string
+     * @return \Magento\Cms\Model\Resource\Page\Collection
      */
-    public function getName()
+    protected function getCollection()
     {
-        return $this->name;
-    }
-
-    /**
-     * Get primary field name
-     *
-     * @return string
-     */
-    public function getPrimaryFieldName()
-    {
-        return $this->primaryFieldName;
-    }
-
-    /**
-     * Get field name in request
-     *
-     * @return string
-     */
-    public function getRequestFieldName()
-    {
-        return $this->requestFieldName;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMeta()
-    {
-        return $this->meta;
-    }
-
-    /**
-     * Get field Set meta info
-     *
-     * @param string $fieldSetName
-     * @return array
-     */
-    public function getFieldSetMetaInfo($fieldSetName)
-    {
-        return isset($this->meta[$fieldSetName]) ? $this->meta[$fieldSetName] : [];
-    }
-
-    /**
-     * @param string $fieldSetName
-     * @return array
-     */
-    public function getFieldsMetaInfo($fieldSetName)
-    {
-        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
-    }
-
-    /**
-     * @param string $fieldSetName
-     * @param string $fieldName
-     * @return array
-     */
-    public function getFieldMetaInfo($fieldSetName, $fieldName)
-    {
-        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
-            ? $this->meta[$fieldSetName]['fields'][$fieldName]
-            : [];
+        return $this->collection;
     }
 
     /**
      * @inheritdoc
      */
-    public function addFilter($field, $condition = null)
+    public function addFilter($condition, $field = null, $type = 'regular')
     {
-        $this->collection->addFieldToFilter($field, $condition);
-    }
-
-    /**
-     * Add field to select
-     *
-     * @param string|array $field
-     * @param string|null $alias
-     * @return void
-     */
-    public function addField($field, $alias = null)
-    {
-        $this->collection->addFieldToSelect($field, $alias);
-    }
-
-    /**
-     * self::setOrder() alias
-     *
-     * @param string $field
-     * @param string $direction
-     * @return void
-     */
-    public function addOrder($field, $direction)
-    {
-        $this->collection->addOrder($field, $direction);
-    }
-
-    /**
-     * Set Query limit
-     *
-     * @param int $offset
-     * @param int $size
-     * @return void
-     */
-    public function setLimit($offset, $size)
-    {
-        $this->collection->setPageSize($size);
-        $this->collection->setCurPage($offset);
-    }
-
-    /**
-     * Removes field from select
-     *
-     * @param string|null $field
-     * @param bool $isAlias Alias identifier
-     * @return void
-     */
-    public function removeField($field, $isAlias = false)
-    {
-        $this->collection->removeFieldFromSelect($field, $isAlias);
-    }
-
-    /**
-     * Removes all fields from select
-     *
-     * @return void
-     */
-    public function removeAllFields()
-    {
-        $this->collection->removeAllFieldsFromSelect();
+        $this->filterPool->registerNewFilter($condition, $field, $type);
     }
 
     /**
@@ -227,6 +71,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
+        $this->filterPool->applyFilters($this->collection);
         return $this->collection->toArray();
     }
 
@@ -237,27 +82,7 @@ class DataProvider implements DataProviderInterface
      */
     public function count()
     {
+        $this->filterPool->applyFilters($this->collection);
         return $this->collection->count();
-    }
-
-    /**
-     * Get config data
-     *
-     * @return mixed
-     */
-    public function getConfigData()
-    {
-        return isset($this->data['config']) ? $this->data['config'] : [];
-    }
-
-    /**
-     * Set data
-     *
-     * @param mixed $config
-     * @return void
-     */
-    public function setConfigData($config)
-    {
-        $this->data['config'] = $config;
     }
 }

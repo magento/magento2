@@ -7,6 +7,19 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Customer\Test\Repository\Address">
+        <dataset name="default">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+        </dataset>
+
         <dataset name="US_address">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
@@ -53,16 +66,16 @@
         </dataset>
 
         <dataset name="US_address_1">
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
             <field name="city" xsi:type="string">Culver City</field>
             <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
-            <field name="postcode" xsi:type="string">90230</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
             <field name="country_id" xsi:type="string">United States</field>
             <field name="region_id" xsi:type="string">California</field>
-            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="postcode" xsi:type="string">90230</field>
         </dataset>
 
         <dataset name="US_address_1_without_email">
@@ -71,10 +84,10 @@
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="city" xsi:type="string">Culver City</field>
             <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
-            <field name="postcode" xsi:type="string">90230</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
             <field name="country_id" xsi:type="string">United States</field>
             <field name="region_id" xsi:type="string">California</field>
-            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="postcode" xsi:type="string">90230</field>
         </dataset>
 
         <dataset name="US_address_2">
@@ -186,7 +199,7 @@
             <field name="street" xsi:type="string">172, Westminster Bridge Rd</field>
             <field name="postcode" xsi:type="string">SE1 7RW</field>
             <field name="country_id" xsi:type="string">United Kingdom</field>
-            <field name="region_id" xsi:type="string">London</field>
+            <field name="region" xsi:type="string">London</field>
             <field name="telephone" xsi:type="string">444-44-444-44</field>
             <field name="vat_id" xsi:type="string">584451913</field>
             <field name="default_billing" xsi:type="string">Yes</field>

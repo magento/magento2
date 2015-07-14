@@ -23,7 +23,7 @@
     </argument>
     <dataSource name="cms_block_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Cms\Model\Block\DataProvider</argument>
+            <argument name="class" xsi:type="string">BlockGridDataProvider</argument>
             <argument name="name" xsi:type="string">cms_block_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">block_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
@@ -69,7 +69,7 @@
                 </item>
             </argument>
         </container>
-        <container name="search">
+        <filterSearch name="fulltext">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
@@ -82,7 +82,7 @@
                     </item>
                 </item>
             </argument>
-        </container>
+        </filterSearch>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

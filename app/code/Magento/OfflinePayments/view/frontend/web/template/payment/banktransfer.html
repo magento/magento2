@@ -19,7 +19,7 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <p data-bind="text: getInstructions()"></p>
+        <p data-bind="html: getInstructions()"></p>
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
@@ -29,7 +29,12 @@
             <div class="primary">
                 <button class="action primary checkout"
                         type="submit"
-                        data-bind="click: placeOrder, attr: {'title': $t('Place Order')}, enable: (getCode() == isChecked())"
+                        data-bind="
+                        click: placeOrder,
+                        attr: {'title': $t('Place Order')},
+                        enable: (getCode() == isChecked()),
+                        css: {disabled: !isPlaceOrderActionAllowed()}
+                        "
                         disabled>
                     <span data-bind="text: $t('Place Order')"></span>
                 </button>
@@ -37,4 +42,3 @@
         </div>
     </div>
 </div>
-        

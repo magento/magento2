@@ -17,6 +17,7 @@ define(
         'use strict';
         return Component.extend({
             redirectAfterPlaceOrder: true,
+            isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),
             /**
              * Initialize view.
              *
@@ -24,6 +25,11 @@ define(
              */
             initialize: function () {
                 this._super().initChildren();
+
+                quote.billingAddress.subscribe(function(address) {
+                    this.isPlaceOrderActionAllowed((address !== null));
+                }, this);
+
                 return this;
             },
 
@@ -39,16 +45,28 @@ define(
             /**
              * Place order.
              */
-            placeOrder: function () {
-                var emailValidationResult = customer.isLoggedIn(),
+            placeOrder: function (data, event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                var self = this,
+                    placeOrder,
+                    emailValidationResult = customer.isLoggedIn(),
                     loginFormSelector = 'form[data-role=email-with-possible-login]';
                 if (!customer.isLoggedIn()) {
                     $(loginFormSelector).validation();
                     emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
                 }
                 if (emailValidationResult && this.validate()) {
-                    placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
+                    this.isPlaceOrderActionAllowed(false);
+                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
+
+                    $.when(placeOrder).fail(function(){
+                        self.isPlaceOrderActionAllowed(true);
+                    });
+                    return true;
                 }
+                return false;
             },
 
             selectPaymentMethod: function() {
