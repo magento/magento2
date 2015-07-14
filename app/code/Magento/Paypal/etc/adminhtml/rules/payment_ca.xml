@@ -148,7 +148,6 @@
             <rule type="paypal/express/unlock-configuration" event="deactivate-rule">
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
-            <rule type="paypal/express/lock-configuration-conditional" event=":load"/>
         </relation>
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate-rule"/>
@@ -188,6 +187,9 @@
             </rule>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
+            <rule type="paypal/express/lock-configuration-conditional" event=":load">
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
         </relation>
