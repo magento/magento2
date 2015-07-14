@@ -17,7 +17,7 @@ class BackendTemplate extends Template
     /**
      * @var \Magento\Config\Model\Config\Structure
      */
-    private $_structure;
+    private $structure;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -51,7 +51,7 @@ class BackendTemplate extends Template
         \Magento\Config\Model\Config\Structure $structure,
         array $data = []
     ) {
-        $this->_structure = $structure;
+        $this->structure = $structure;
         parent::__construct(
             $context,
             $design,
@@ -69,59 +69,18 @@ class BackendTemplate extends Template
     }
 
     /**
-     * Collect all system config paths where current template is used as default
-     *
-     * @return array
-     */
-    public function getSystemConfigPathsWhereUsedAsDefault()
-    {
-        $templateCode = $this->getOrigTemplateCode();
-        if (!$templateCode) {
-            return [];
-        }
-
-        $configData = $this->scopeConfig->getValue(null, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
-        $paths = $this->_findEmailTemplateUsages($templateCode, $configData, '');
-        return $paths;
-    }
-
-    /**
-     * Find nodes which are using $templateCode value
-     *
-     * @param string $code
-     * @param array $data
-     * @param string $path
-     * @return array
-     */
-    protected function _findEmailTemplateUsages($code, array $data, $path)
-    {
-        $output = [];
-        foreach ($data as $key => $value) {
-            $configPath = $path ? $path . '/' . $key : $key;
-            if (is_array($value)) {
-                $output = array_merge($output, $this->_findEmailTemplateUsages($code, $value, $configPath));
-            } else {
-                if ($value == $code) {
-                    $output[] = ['path' => $configPath];
-                }
-            }
-        }
-        return $output;
-    }
-
-    /**
      * Collect all system config paths where current template is currently used
      *
      * @return array
      */
-    public function getSystemConfigPathsWhereUsedCurrently()
+    public function getSystemConfigPathsWhereCurrentlyUsed()
     {
         $templateId = $this->getId();
         if (!$templateId) {
             return [];
         }
 
-        $templatePaths = $this->_structure->getFieldPathsByAttribute(
+        $templatePaths = $this->structure->getFieldPathsByAttribute(
             'source_model',
             'Magento\Config\Model\Config\Source\Email\Template'
         );
@@ -131,8 +90,19 @@ class BackendTemplate extends Template
         }
 
         $configData = $this->_getResource()->getSystemConfigByPathsAndTemplateId($templatePaths, $templateId);
-        if (!$configData) {
-            return [];
+        foreach ($templatePaths as $path) {
+            if ($this->scopeConfig->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT) == $templateId) {
+                foreach ($configData as $data) {
+                    if ($data['path'] == $path) {
+                        continue 2;   // don't add final fallback value if it was found in stored config
+                    }
+                }
+
+                $configData[] = [
+                    'scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    'path' => $path
+                ];
+            }
         }
 
         return $configData;

@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Log\Model;
+
 /**
  * Log Cron Model
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-namespace Magento\Log\Model;
-
 class Cron extends \Magento\Framework\Model\AbstractModel
 {
     const XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE = 'system/log/error_email_template';
@@ -114,8 +114,8 @@ class Cron extends \Magento\Framework\Model\AbstractModel
             )
         )->setTemplateOptions(
             [
-                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId(),
+                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             ]
         )->setTemplateVars(
             ['warnings' => join("\n", $this->_errors)]
