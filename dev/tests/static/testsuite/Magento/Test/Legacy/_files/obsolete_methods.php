@@ -2301,6 +2301,16 @@ return [
         'Magento\Authorizenet\Model\Directpost',
         'Magento\Authorizenet\Model\Directpost::setDataHelper()'
     ],
+    [
+        '_initCustomer',
+        'Magento\Paypal\Controller\Adminhtml\Billing\Agreement\CustomerGrid',
+        'Magento\Paypal\Controller\Adminhtml\Billing\Agreement\CustomerGrid::initCurrentCustomer'
+    ],
+    [
+        '_initCustomer',
+        'Magento\Customer\Controller\Adminhtml\Index',
+        'Magento\Customer\Controller\Adminhtml\Index::initCurrentCustomer',
+    ],
     ['prepareIndexdata', 'Magento\Search\Helper\Data'],
     ['isAssetMinification', 'Magento\Framework\View\Asset\ConfigInterface', 'Magento\Framework\View\Asset\Minification::isEnabled'],
     ['isAssetMinification', 'Magento\Framework\View\Asset\Config', 'Magento\Framework\View\Asset\Minification::isEnabled'],
