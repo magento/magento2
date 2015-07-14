@@ -69,6 +69,8 @@ abstract class AbstractAction
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
+     * @param \Magento\Indexer\Model\CacheContext $cacheContext
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -76,7 +78,6 @@ abstract class AbstractAction
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Indexer\Model\CacheContext $cacheContext,
         \Magento\Framework\Event\ManagerInterface $eventManager
-
     ) {
         $this->_resource = $resource;
         $this->_indexerFactory = $indexerFactory;
@@ -248,7 +249,7 @@ abstract class AbstractAction
 
         $select = $adapter->select()
             ->distinct(true)
-            ->from($this->_getTable('catalog_category_product'), [ 'category_id'])
+            ->from($this->_getTable('catalog_category_product'), ['category_id'])
             ->where('product_id IN(?)', $processIds);
 
         $affectedCategories = $adapter->fetchCol($select);

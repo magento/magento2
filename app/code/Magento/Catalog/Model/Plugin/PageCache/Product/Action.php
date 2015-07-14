@@ -36,10 +36,10 @@ class Action
 
     /**
      * @param Product\Action $subject
-     * @param callable $proceed
-     * @param $productIds
-     * @param $attrData
-     * @param $storeId
+     * @param \Closure $proceed
+     * @param array $productIds
+     * @param array $attrData
+     * @param int $storeId
      * @return Product\Action
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
