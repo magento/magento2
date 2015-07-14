@@ -6,35 +6,21 @@
 
 namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
-use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**
  * Source for attribute field.
  */
-class CustomAttribute implements FixtureInterface
+class CustomAttribute extends DataSource
 {
-    /**
-     * Attribute name.
-     *
-     * @var string
-     */
-    protected $data;
-
     /**
      * Attribute fixture.
      *
      * @var CatalogProductAttribute
      */
     protected $attribute;
-
-    /**
-     * Data set configuration settings.
-     *
-     * @var array
-     */
-    protected $params;
 
     /**
      * @constructor
@@ -45,9 +31,9 @@ class CustomAttribute implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data)
     {
         $this->params = $params;
-        if (is_array($data) && isset($data['dataSet'])) {
+        if (is_array($data) && isset($data['dataset'])) {
             /** @var CatalogProductAttribute $data */
-            $data = $fixtureFactory->createByCode('catalogProductAttribute', ['dataSet' => $data['dataSet']]);
+            $data = $fixtureFactory->createByCode('catalogProductAttribute', ['dataset' => $data['dataset']]);
         }
         $this->data['value'] = $this->getDefaultAttributeValue($data);
         $this->data['code'] = $data->hasData('attribute_code') == false
@@ -85,29 +71,6 @@ class CustomAttribute implements FixtureInterface
     }
 
     /**
-     * Persist attribute options.
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set.
-     *
-     * @param string|null $key
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
      * Return CatalogProductAttribute fixture.
      *
      * @return CatalogProductAttribute
@@ -115,16 +78,6 @@ class CustomAttribute implements FixtureInterface
     public function getAttribute()
     {
         return $this->attribute;
-    }
-
-    /**
-     * Return data set configuration settings.
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 
     /**

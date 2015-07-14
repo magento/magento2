@@ -76,7 +76,28 @@ class AttributeForm extends FormTabs
             }
         }
 
-        return $data;
+        return $this->removeEmptyValues($data);
+    }
+
+    /**
+     * Remove recursive all empty values in array.
+     *
+     * @param mixed $input
+     * @return mixed
+     */
+    protected function removeEmptyValues($input)
+    {
+        if (!is_array($input)) {
+            return $input;
+        }
+        $filteredArray = [];
+        foreach ($input as $key => $value) {
+            if ($value) {
+                $filteredArray[$key] = $this->removeEmptyValues($value);
+            }
+        }
+
+        return $filteredArray;
     }
 
     /**

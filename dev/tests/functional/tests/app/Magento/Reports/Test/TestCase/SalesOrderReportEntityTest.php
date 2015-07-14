@@ -11,10 +11,6 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for SalesOrderReportEntity
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. Open Backend
  * 2. Go to Reports > Sales > Orders
@@ -45,14 +41,14 @@ class SalesOrderReportEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Sales Report page
+     * Sales Report page.
      *
      * @var SalesReport
      */
     protected $salesReport;
 
     /**
-     * Inject page
+     * Inject page.
      *
      * @param SalesReport $salesReport
      * @return void
@@ -63,7 +59,7 @@ class SalesOrderReportEntityTest extends Injectable
     }
 
     /**
-     * Sales order report
+     * Sales order report.
      *
      * @param OrderInjectable $order
      * @param array $salesReport
