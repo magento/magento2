@@ -71,7 +71,9 @@ define([
             this.options.values = this.options.spConfig.defaultValues || {};
             this.options.parentImage = $('[data-role=base-image-container] img').attr('src');
 
-            this.initialGalleryImages = $(this.options.mediaGallerySelector).gallery('option', 'images');
+            this.initialGalleryImages = $(this.options.mediaGallerySelector).data('mageGallery')
+                ? $(this.options.mediaGallerySelector).gallery('option', 'images')
+                : [];
             this.inputSimpleProduct = this.element.find(this.options.selectSimpleProduct);
         },
 
