@@ -5,10 +5,14 @@
  */
 namespace Magento\Search\Api;
 
-
+/**
+ * @api
+ */
 interface SearchInterface
 {
     /**
+     * Search documents by index
+     *
      * @param \Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Framework\Api\Search\SearchResultInterface
      */
