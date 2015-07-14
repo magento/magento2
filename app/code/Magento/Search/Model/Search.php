@@ -48,8 +48,13 @@ class Search implements SearchInterface
      * @param SearchResponseBuilder $searchResponseBuilder
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(Builder $requestBuilder, StoreManagerInterface $storeManager, SearchEngineInterface $searchEngine, SearchResponseBuilder $searchResponseBuilder, ScopeConfigInterface $scopeConfig)
-    {
+    public function __construct(
+        Builder $requestBuilder,
+        StoreManagerInterface $storeManager,
+        SearchEngineInterface $searchEngine,
+        SearchResponseBuilder $searchResponseBuilder,
+        ScopeConfigInterface $scopeConfig
+    ) {
         $this->requestBuilder = $requestBuilder;
         $this->storeManager = $storeManager;
         $this->searchEngine = $searchEngine;
