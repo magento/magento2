@@ -2326,4 +2326,9 @@ return [
     ['loadPrices', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'],
     ['_parseVariationPrices', '\Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
     ['_collectSuperDataPrice', '\Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
+    [
+        'validateForPayment',
+        'Magento\Sales\Model\Order\Address\Validator',
+        'Magento\Sales\Model\Order\Address\Validator::validateForCustomer'
+    ],
 ];
