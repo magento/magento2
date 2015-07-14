@@ -330,6 +330,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $post = [
             'customer' => ['entity_id' => $customerId],
+            'subscription' => 'false'
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);

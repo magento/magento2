@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\Review\Test\TestCase\ModerateProductReviewEntityTest">
     <variation name="ModerateProductReviewEntityTestVariation1">
-      <data name="reviewInitial/dataSet" xsi:type="string">frontend_review</data>
+      <data name="reviewInitial/dataset" xsi:type="string">frontend_review</data>
       <data name="review/data/status_id" xsi:type="string">Approved</data>
       <data name="review/data/nickname" xsi:type="string">Nick%isolation%</data>
       <data name="review/data/title" xsi:type="string">Title %isolation%</data>
@@ -18,7 +18,7 @@
       <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage"/>
     </variation>
     <variation name="ModerateProductReviewEntityTestVariation2">
-      <data name="reviewInitial/dataSet" xsi:type="string">frontend_review</data>
+      <data name="reviewInitial/dataset" xsi:type="string">frontend_review</data>
       <data name="review/data/status_id" xsi:type="string">Not Approved</data>
       <data name="review/data/nickname" xsi:type="string">Nick%isolation%</data>
       <data name="review/data/title" xsi:type="string">Title %isolation%</data>
