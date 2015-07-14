@@ -11,8 +11,8 @@ use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Search\Model\ScopeResolver\FlatScopeResolver;
-use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Indexer\Model\ScopeResolver\FlatScopeResolver;
+use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
 
 class IndexStructure
 {
@@ -21,7 +21,7 @@ class IndexStructure
      */
     private $resource;
     /**
-     * @var IndexScopeResolver
+     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver
      */
     private $indexScopeResolver;
     /**
@@ -41,7 +41,7 @@ class IndexStructure
     /**
      * @param Resource|Resource $resource
      * @param IndexScopeResolver $indexScopeResolver
-     * @param FlatScopeResolver $flatScopeResolver
+     * @param \Magento\Indexer\Model\ScopeResolver\FlatScopeResolver $flatScopeResolver
      * @param array $columnTypesMap
      */
     public function __construct(
