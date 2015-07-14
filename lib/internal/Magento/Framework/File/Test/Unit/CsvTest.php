@@ -54,7 +54,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage File "FileNameThatShouldNotExist" do not exists
+     * @expectedExceptionMessage File "FileNameThatShouldNotExist" does not exist
      */
     public function testGetDataFileNonExistent()
     {
