@@ -12,11 +12,10 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Framework\Search\Request\Query\Bool;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
