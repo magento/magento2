@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: aohorodnyk
- * Date: 14.07.2015
- * Time: 9:56
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
 
