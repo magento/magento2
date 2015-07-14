@@ -15,8 +15,9 @@ class SearchTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @covers \Magento\Search\Model\Search::search
      */
-    public function testSearch()
+    public function testCatalogSearch()
     {
         $searchCriteria = [
             'searchCriteria' => [
