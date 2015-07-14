@@ -50,8 +50,8 @@ class Base extends AbstractCurrency
         $value = $this->getValue();
         if (!in_array($value, $this->_getInstalledCurrencies())) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, we haven\'t installed the base currency you selected.'));
-            
+                __('Sorry, we haven\'t installed the base currency you selected.')
+            );
         }
 
         $this->currencyFactory->create()->saveRates([$value =>[$value => 1]]);
