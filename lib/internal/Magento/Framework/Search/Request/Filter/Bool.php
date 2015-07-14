@@ -43,6 +43,7 @@ class Bool implements FilterInterface
      * @param array $must
      * @param array $should
      * @param array $not
+     * @codeCoverageIgnore
      */
     public function __construct($name, array $must = [], array $should = [], array $not = [])
     {
@@ -62,6 +63,7 @@ class Bool implements FilterInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -72,6 +74,7 @@ class Bool implements FilterInterface
      * Get Must filters
      *
      * @return \Magento\Framework\Search\Request\FilterInterface[]
+     * @codeCoverageIgnore
      */
     public function getMust()
     {
@@ -82,6 +85,7 @@ class Bool implements FilterInterface
      * Get Should filters
      *
      * @return \Magento\Framework\Search\Request\FilterInterface[]
+     * @codeCoverageIgnore
      */
     public function getShould()
     {
@@ -92,6 +96,7 @@ class Bool implements FilterInterface
      * Get Must Not filters
      *
      * @return \Magento\Framework\Search\Request\FilterInterface[]
+     * @codeCoverageIgnore
      */
     public function getMustNot()
     {
