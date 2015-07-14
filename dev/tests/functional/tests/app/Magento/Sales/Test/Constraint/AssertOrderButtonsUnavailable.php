@@ -12,12 +12,12 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that buttons from dataSet are not present on page
+ * Assert that buttons from dataset are not present on page
  */
 class AssertOrderButtonsUnavailable extends AbstractConstraint
 {
     /**
-     * Assert that buttons from dataSet are not present on page
+     * Assert that buttons from dataset are not present on page
      *
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
@@ -54,6 +54,6 @@ class AssertOrderButtonsUnavailable extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Buttons from dataSet are not present on order page.';
+        return 'Buttons from dataset are not present on order page.';
     }
 }
