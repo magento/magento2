@@ -6,38 +6,20 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="store" module="Magento_Store" type="flat" entity_type="store" collection="Magento\Store\Model\Resource\Store\Collection" repository_class="Magento\Store\Test\Repository\Store" handler_interface="Magento\Store\Test\Handler\Store\StoreInterface" class="Magento\Store\Test\Fixture\Store">
-        <dataset name="default">
-            <field name="group_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
-            </field>
-            <field name="name" xsi:type="string">Default Store View</field>
-            <field name="code" xsi:type="string">default</field>
-            <field name="is_active" xsi:type="string">Enabled</field>
-            <field name="store_id" xsi:type="string">1</field>
-        </dataset>
-        <field name="store_id" is_required="1">
-            <default_value xsi:type="string">1</default_value>
-        </field>
-        <field name="code" is_required="">
-            <default_value xsi:type="string">default</default_value>
-        </field>
-        <field name="website_id" is_required="">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="group_id" is_required="" source="Magento\Store\Test\Fixture\Store\GroupId">
-            <default_value xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
-            </default_value>
-        </field>
-        <field name="name" is_required="">
-            <default_value xsi:type="string">Default Store View</default_value>
-        </field>
-        <field name="sort_order" is_required="">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="is_active" is_required="">
-            <default_value xsi:type="string">Enabled</default_value>
-        </field>
+    <fixture name="store"
+             module="Magento_Store"
+             type="flat"
+             entity_type="store"
+             collection="Magento\Store\Model\Resource\Store\Collection"
+             repository_class="Magento\Store\Test\Repository\Store"
+             handler_interface="Magento\Store\Test\Handler\Store\StoreInterface"
+             class="Magento\Store\Test\Fixture\Store">
+        <field name="store_id" is_required="1" />
+        <field name="code" is_required="" />
+        <field name="website_id" is_required="" />
+        <field name="group_id" is_required="" source="Magento\Store\Test\Fixture\Store\GroupId" />
+        <field name="name" is_required="" />
+        <field name="sort_order" is_required="" />
+        <field name="is_active" is_required="" />
     </fixture>
 </config>

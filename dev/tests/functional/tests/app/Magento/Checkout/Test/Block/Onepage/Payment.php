@@ -19,22 +19,36 @@ class Payment extends Block
      *
      * @var string
      */
-    protected $paymentMethodInput = '#p_method_%s';
+    protected $paymentMethodInput = '#%s';
 
     /**
      * Labels for payment methods.
      *
      * @var string
      */
-    protected $paymentMethodLabels = '[for^=p_method_]';
+    protected $paymentMethodLabels = '.payment-method:not([style="display: none;"]) .payment-method-title label';
 
     /**
      * Label for payment methods.
      *
      * @var string
      */
-    protected $paymentMethodLabel = '[for=%s]';
+    protected $paymentMethodLabel = '[for="%s"]';
 
+    /**
+     * Continue checkout button.
+     *
+     * @var string
+     */
+    protected $continue = '#payment-buttons-container button';
+
+    /**
+     * Place order button.
+     *
+     * @var string
+     */
+    protected $placeOrder = '.action.primary.checkout';
+    
     /**
      * Wait element.
      *
@@ -56,6 +70,7 @@ class Payment extends Block
      */
     protected $activePaymentMethodSelector = '.payment-method._active';
 
+
     /**
      * Select payment method.
      *
@@ -70,8 +85,8 @@ class Payment extends Block
         if ($paymentSelector->isVisible()) {
             $paymentSelector->click();
         } else {
-            $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodLabel, $payment['method']));
-            if (!$paymentSelector->isVisible()) {
+            $paymentLabel = $this->_rootElement->find(sprintf($this->paymentMethodLabel, $payment['method']));
+            if (!$paymentLabel->isVisible()) {
                 throw new \Exception('Such payment method is absent.');
             }
         }
@@ -100,6 +115,24 @@ class Payment extends Block
         return $this->blockFactory->create(
             '\Magento\Checkout\Test\Block\Onepage\Payment\Method',
             ['element' => $element]
+        );
+    }
+
+    /*
+     * Press "Place Order" button.
+     *
+     * @return void
+    */
+    public function placeOrder()
+    {
+        $this->_rootElement->find($this->placeOrder)->click();
+        $browser = $this->browser;
+        $selector = $this->waitElement;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector);
+                return $element->isVisible() == false ? true : null;
+            }
         );
     }
 }

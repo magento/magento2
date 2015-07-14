@@ -9,7 +9,7 @@
   <testCase name="Magento\CheckoutAgreements\Test\TestCase\DeleteTermEntityTest">
     <variation name="DeleteTermEntityTestVariation1">
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
-      <data name="agreement/dataSet" xsi:type="string">term_enabled_text</data>
+      <data name="agreement/dataset" xsi:type="string">term_enabled_text</data>
       <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
       <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
       <data name="payment/method" xsi:type="string">checkmo</data>
