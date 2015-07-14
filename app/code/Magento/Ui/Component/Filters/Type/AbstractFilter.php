@@ -59,7 +59,7 @@ abstract class AbstractFilter extends AbstractComponent
         $this->uiComponentFactory = $uiComponentFactory;
         $this->filterBuilder = $filterBuilder;
         parent::__construct($context, $components, $data);
-        $this->filterData = $this->getContext()->getRequestParam(static::FILTER_VAR);
+        $this->filterData = $this->getContext()->getFiltersParams();
     }
 
     /**
