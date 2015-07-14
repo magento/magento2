@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Search\Test\Unit\Model\ScopeResolver;
+namespace Magento\Indexer\Test\Unit\Model\ScopeResolver;
 
 use Magento\Framework\Search\Request\Dimension;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for \Magento\Search\Model\ScopeResolver\IndexScopeResolver
+ * Test for \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver
  */
 class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
     private $resource;
 
     /**
-     * @var \Magento\Search\Model\ScopeResolver\IndexScopeResolver
+     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver
      */
     private $target;
 
@@ -45,7 +45,7 @@ class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->target = $objectManager->getObject(
-            '\Magento\Search\Model\ScopeResolver\IndexScopeResolver',
+            '\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver',
             [
                 'resource' => $this->resource,
                 'scopeResolver' => $this->scopeResolver
