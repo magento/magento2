@@ -51,6 +51,6 @@ class AssertBestsellerReportResult extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Bestseller total result is equals to data from dataSet.';
+        return 'Bestseller total result is equals to data from dataset.';
     }
 }

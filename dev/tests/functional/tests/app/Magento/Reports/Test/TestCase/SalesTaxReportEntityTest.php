@@ -28,7 +28,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Steps:
  * 1. Login to backend.
  * 2. Go to Reports > Sales > Tax.
- * 3. Fill data from dataSet.
+ * 3. Fill data from dataset.
  * 4. Click "Show report".
  * 5. Perform all assertions.
  *

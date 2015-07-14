@@ -35,7 +35,7 @@
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation2">
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Dropdown</data>
-            <data name="attribute/data/options/preset" xsi:type="string">two_options</data>
+            <data name="attribute/data/options/dataset" xsi:type="string">two_options</data>
             <data name="attribute/data/is_required" xsi:type="string">No</data>
             <data name="attribute/data/attribute_code" xsi:type="string">attr_dropdown_%isolation%</data>
             <data name="attribute/data/is_global" xsi:type="string">Global</data>
