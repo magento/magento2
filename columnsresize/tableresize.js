@@ -15,10 +15,11 @@ var ColumsResize = function(config) {
         localData;
     this.selfProp = selfProp;
 
-    localData = this.get().localStorage(cfg.table);
+    localData = false;//this.get().localStorage(cfg.table);
 
     if (localData) {
         cfg = localData;
+        cfg.tableRow = $(selfProp.idPfx + cfg.table).find('tr');
         cfg.tableCells = $(selfProp.idPfx  + cfg.table).find('td', 'th');
         cfg.tableColumnsArray = this.get().tableColumnsArray(cfg.tableCells, cfg.cellsInColumn);
         this.set().dataAttr(cfg.tableColumnsArray, selfProp.dataAttr);
@@ -121,6 +122,7 @@ ColumsResize.prototype.init = function() {
     this.createDraggableTemplate(cfg.tableColumnsArray, cfg.tableBorderWidth);
     this.createResizeTemplate(cfg.tableColumnsArray);
     this.minWidth(cfg.tableColumnsDataObj, cfg.cellsInColumn);
+    this.minWidth(cfg.tableColumnsDataObj, cfg.cellsInColumn);
     this.draggableInit(cfg.tableColumnsDataObj);
     this.resizeTableInit(cfg.tableColumnsDataObj);
     this.eventListener();
@@ -220,22 +222,22 @@ ColumsResize.prototype.resizeTableInit = function( columnsObj ){
         curElCurPos,
         curRange,
         floatSide;
-        resizeTableMousemove = function(event){
-            var width = event.pageX - curElCurPos,
-                newWidth,
-                newColumnWidth;
-            if (curEl.hasClass(cfg.table+'resize-table') && cfg.tableMW < cfg.tableW + width && cfg.tableMW < cfg.tableW - width) {
-                newWidth = curRange === 'left' ? cfg.tableW - width : cfg.tableW + width;
-                for (el in co) {
-                    newColumnWidth = newWidth*(co[el].width / cfg.tableW);
-                    co[el].width = newColumnWidth;
-                    co[el].elements.width(newColumnWidth);
-                }
-                cfg.tableW = newWidth;
-                curEl.width(newWidth)
-                curElCurPos = event.pageX;
+    resizeTableMousemove = function(event){
+        var width = event.pageX - curElCurPos,
+            newWidth,
+            newColumnWidth;
+        if (curEl.hasClass(cfg.table+'resize-table') && cfg.tableMW < cfg.tableW + width && cfg.tableMW < cfg.tableW - width) {
+            newWidth = curRange === 'left' ? cfg.tableW - width : cfg.tableW + width;
+            for (el in co) {
+                newColumnWidth = newWidth*(co[el].width / cfg.tableW);
+                co[el].width = newColumnWidth;
+                co[el].elements.width(newColumnWidth);
             }
-        },
+            cfg.tableW = newWidth;
+            curEl.width(newWidth)
+            curElCurPos = event.pageX;
+        }
+    },
         resizeTableMouseup = function(){
             $('body')
                 .removeClass('_column-resize-change-cursor')
@@ -404,14 +406,10 @@ ColumsResize.prototype.set = function() {
                 data = {
                     tableCells: obj.tableCells
                 };
-            console.log(obj, JSON.stringify(data));
-            console.log(JSON.stringify($(obj.tableCells)));
             localStorage.setItem(key, JSON.stringify(obj));
         },
         _cellsWidth : function(co){
             for (el in co) {
-                console.log(co[el].elements);
-                console.log(co[el].width);
                 co[el].elements.width(co[el].width);
             }
         }
