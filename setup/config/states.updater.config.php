@@ -38,8 +38,7 @@ return [
             'templateUrl' => "{$base}/component-grid",
             'title'       => "Component Grid",
             'controller'  => 'componentGridController',
-            'header'      => 'Step 1: Component Grid',
-            'nav-bar'     => true,
+            'nav-bar'     => false,
             'order'       => 1,
         ],
         [
