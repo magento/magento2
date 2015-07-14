@@ -9,7 +9,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class SearchTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'searchSearchV1';
+    const SERVICE_NAME = 'searchV1';
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/search';
 
