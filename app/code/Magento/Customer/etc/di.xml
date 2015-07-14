@@ -70,6 +70,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Resource\Address">
+        <arguments>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
+            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+            <argument name="entityRelationComposite" xsi:type="object">CustomerAddressRelationsComposite</argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Model\Address\Config">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Customer\Model\Address\Config\Reader\Proxy</argument>
@@ -154,12 +161,6 @@
     <type name="Magento\Customer\Model\Resource\Customer\Collection">
         <arguments>
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Model\Resource\Address">
-        <arguments>
-            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
-            <argument name="entityRelationComposite" xsi:type="object">CustomerAddressRelationsComposite</argument>
         </arguments>
     </type>
     <type name="Magento\Customer\Model\Resource\Address\Collection">

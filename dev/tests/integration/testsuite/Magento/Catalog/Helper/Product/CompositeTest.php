@@ -35,7 +35,6 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
     {
         $this->registry->unregister('composite_configure_result_error_message');
         $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
-        $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER);
         $this->registry->unregister('current_product');
         $this->registry->unregister('product');
     }

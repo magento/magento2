@@ -124,8 +124,8 @@ class Content extends Tab
         if (isset($fields['content_heading']['value'])) {
             $element->find($this->contentHeading)->setValue($fields['content_heading']['value']);
         }
-        if (isset($fields['content']['value']['widget']['preset'])) {
-            foreach ($fields['content']['value']['widget']['preset'] as $widget) {
+        if (isset($fields['content']['value']['widget']['dataset'])) {
+            foreach ($fields['content']['value']['widget']['dataset'] as $widget) {
                 $this->clickInsertWidget();
                 $this->getWidgetBlock()->addWidget($widget);
             }

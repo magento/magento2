@@ -10,8 +10,6 @@ use Magento\Review\Test\Fixture\Review;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for ProductReviewReportEntity
- *
  * Preconditions:
  * 1. Create simple product
  * 2. Create review for this product
