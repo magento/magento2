@@ -24,7 +24,7 @@ define(
              */
             if (!customer.isLoggedIn()) {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/selected-payment-method', {
-                    quoteId: quote.getQuoteId()
+                    cartId: quote.getQuoteId()
                 });
                 payload = {
                     cartId: quote.getQuoteId(),
