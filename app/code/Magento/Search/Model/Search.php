@@ -5,7 +5,6 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\Request\Builder;
@@ -37,29 +36,21 @@ class Search implements SearchInterface
     private $searchResponseBuilder;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param Builder $requestBuilder
      * @param StoreManagerInterface $storeManager
      * @param SearchEngineInterface $searchEngine
      * @param SearchResponseBuilder $searchResponseBuilder
-     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Builder $requestBuilder,
         StoreManagerInterface $storeManager,
         SearchEngineInterface $searchEngine,
-        SearchResponseBuilder $searchResponseBuilder,
-        ScopeConfigInterface $scopeConfig
+        SearchResponseBuilder $searchResponseBuilder
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->storeManager = $storeManager;
         $this->searchEngine = $searchEngine;
         $this->searchResponseBuilder = $searchResponseBuilder;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -69,11 +60,6 @@ class Search implements SearchInterface
     {
         $this->requestBuilder->setRequestName($searchCriteria->getRequestName());
 
-        $searchTerm = $searchCriteria->getSearchTerm();
-        if (!empty($searchTerm)) {
-            $this->requestBuilder->bind('search_term', $searchTerm);
-        }
-
         $storeId = $this->storeManager->getStore(true)->getId();
         $this->requestBuilder->bindDimension('scope', $storeId);
 
@@ -81,14 +67,6 @@ class Search implements SearchInterface
             foreach ($filterGroup->getFilters() as $filter) {
                 $this->addFieldToFilter($filter->getField(), $filter->getValue());
             }
-        }
-
-        $priceRangeCalculation = $this->scopeConfig->getValue(
-            AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
-            ScopeInterface::SCOPE_STORE
-        );
-        if ($priceRangeCalculation) {
-            $this->requestBuilder->bind('price_dynamic_algorithm', $priceRangeCalculation);
         }
 
         $this->requestBuilder->setFrom($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
