@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Search\Model\ScopeResolver;
+namespace Magento\Indexer\Model\ScopeResolver;
 
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
 
 class FlatScopeResolver implements IndexScopeResolverInterface
 {
