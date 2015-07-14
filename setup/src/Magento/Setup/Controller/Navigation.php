@@ -55,7 +55,7 @@ class Navigation extends AbstractActionController
                 $view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
             }
 
-            $view->setTemplate('/magento/setup/navigation-wizard/menu.phtml');
+            $view->setTemplate('/magento/setup/navigation-updater/menu.phtml');
 
         }
 
