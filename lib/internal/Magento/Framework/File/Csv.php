@@ -84,7 +84,7 @@ class Csv
     {
         $data = [];
         if (!file_exists($file)) {
-            throw new \Exception('File "' . $file . '" do not exists');
+            throw new \Exception('File "' . $file . '" does not exist');
         }
 
         $fh = fopen($file, 'r');

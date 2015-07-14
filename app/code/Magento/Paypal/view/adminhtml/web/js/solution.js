@@ -6,10 +6,9 @@ define([
     "jquery",
     "Magento_Ui/js/lib/class",
     "Magento_Paypal/js/rule",
-    "Magento_Paypal/js/rules/disable",
     "mageUtils",
     "underscore"
-], function ($, Class, Rule, disableSolution, utils, _) {
+], function ($, Class, Rule, utils, _) {
     "use strict";
     return Class.extend({
         defaults: {
@@ -56,15 +55,15 @@ define([
          * Initialization events
          */
         initEvents: function () {
-
             _.each(this.config.events, function (elementEvents, selector) {
                 var solution = this,
                     selectorButton = solution.$self.find(selector),
-                    $self = solution.$self;
-                _.each(elementEvents, function (elementEvent, name) {
-                    selectorButton.on(this.systemEvent, function(event) {
-                        var predicate = elementEvent.predicate;
-                        var result = true;
+                    $self = solution.$self,
+                    events = elementEvents;
+                selectorButton.on(solution.systemEvent, function (event) {
+                    _.each(events, function (elementEvent, name) {
+                        var predicate = elementEvent.predicate,
+                            result = true;
                         if ($(this).val() === elementEvent.value) {
                             if (predicate.name) {
                                 require([
@@ -80,11 +79,10 @@ define([
                             } else {
                                 $self.trigger(name);
                             }
-                        }
+                            }
+                    }, this);
                     });
-                }, this);
             }, this);
-
             return this;
         },
         /**
