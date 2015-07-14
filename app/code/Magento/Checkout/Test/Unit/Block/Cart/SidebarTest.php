@@ -116,8 +116,6 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $checkoutUrl = 'http://url.com/checkout';
         $updateItemQtyUrl = 'http://url.com/updateItemQty';
         $removeItemUrl = 'http://url.com/removeItem';
-        $customerRegisterUrl = 'http://url.com/register';
-        $customerForgotPasswordUrl = 'http://url.com/forgot';
         $baseUrl = 'http://url.com/';
         $imageTemplate = 'Magento_Catalog/product/image_with_borders';
 
@@ -127,8 +125,6 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             'updateItemQtyUrl' => $updateItemQtyUrl,
             'removeItemUrl' => $removeItemUrl,
             'imageTemplate' => $imageTemplate,
-            'customerRegisterUrl' => $customerRegisterUrl,
-            'customerForgotPasswordUrl' => $customerForgotPasswordUrl,
             'baseUrl' => $baseUrl
         ];
 
@@ -136,12 +132,10 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ['checkout/cart', [], $shoppingCartUrl],
             ['checkout', [], $checkoutUrl],
             ['checkout/sidebar/updateItemQty', [], $updateItemQtyUrl],
-            ['checkout/sidebar/removeItem', [], $removeItemUrl],
-            ['customer/account/create', [], $customerRegisterUrl],
-            ['customer/account/forgotpassword', [], $customerForgotPasswordUrl]
+            ['checkout/sidebar/removeItem', [], $removeItemUrl]
         ];
 
-        $this->urlBuilderMock->expects($this->exactly(6))
+        $this->urlBuilderMock->expects($this->exactly(4))
             ->method('getUrl')
             ->willReturnMap($valueMap);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
