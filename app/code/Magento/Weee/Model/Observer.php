@@ -5,7 +5,6 @@
  */
 namespace Magento\Weee\Model;
 
-use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -216,7 +215,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
     public function getPriceConfiguration(\Magento\Framework\Event\Observer $observer)
     {
         if ($this->_weeeData->isEnabled()) {
-            $priceConfigObj=$observer->getData('configObj');
+            $priceConfigObj = $observer->getData('configObj');
             try {
                 $calcPrice = 'finalPrice';
                 if ($this->_taxData->priceIncludesTax() &&
@@ -240,6 +239,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      * @param   string $searchKey
      * @param   string $calcPrice
      * @return  array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice)
     {
@@ -253,10 +253,9 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                         (array_key_exists($calcPrice, $holder[$key]))
                         ) {
                             $holder[$key]['weeePrice'] = $holder[$key][$calcPrice];
-
+                            $product = $this->_registry->registry('current_product');
                             // only do processing on product options
-                            if (array_key_exists('optionId', $input)) {
-                                $product = $this->_registry->registry('current_product');
+                            if (array_key_exists('optionId', $input) && $product) {
                                 $typeInstance = $product->getTypeInstance();
                                 if ($typeInstance instanceof \Magento\Bundle\Model\Product\Type) {
                                     $typeInstance->setStoreFilter($product->getStoreId(), $product);
@@ -264,10 +263,14 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                                         $typeInstance->getOptionsIds($product),
                                         $product
                                     );
-
                                     foreach ($selectionCollection as $selectionItem) {
                                         if ($selectionItem->getId() == $input['optionId']) {
-                                            $weeAttributes = $this->_weeeTax->getProductWeeeAttributes($selectionItem);
+                                            $weeAttributes = $this->_weeeData->getProductWeeeAttributes(
+                                                $selectionItem,
+                                                null,
+                                                null,
+                                                $product->getStore()->getWebsiteId()
+                                            );
                                             foreach ($weeAttributes as $weeAttribute) {
                                                 $holder[$key]['weeePrice' . $weeAttribute->getCode()] =
                                                     ['amount' => $weeAttribute->getAmount()];
@@ -291,6 +294,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function updateProductOptions(\Magento\Framework\Event\Observer $observer)
     {
@@ -304,8 +308,8 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($this->_weeeData->isEnabled() &&
-            !$this->geDisplayIncl($product->getStoreId()) &&
-            !$this->geDisplayExcl($product->getStoreId())
+            !$this->_weeeData->geDisplayIncl($product->getStoreId()) &&
+            !$this->_weeeData->geDisplayExcl($product->getStoreId())
         ) {
             $typeInstance = $product->getTypeInstance();
             // only do processing on bundle product
@@ -316,23 +320,25 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                     $typeInstance->getOptionsIds($product),
                     $product
                 );
-
                 if (!array_key_exists('optionTemplate', $options)) {
                     $options['optionTemplate'] = '<%- data.label %>'
                         . '<% if (data.finalPrice.value) { %>'
                         . ' +<%- data.finalPrice.formatted %>'
                         . '<% } %>';
                 }
-
                 $insertedWeeCodesArray = [];
                 foreach ($selectionCollection as $selectionItem) {
-                    $weeAttributes = $this->_weeeTax->getProductWeeeAttributes($selectionItem);
+                    $weeAttributes = $this->_weeeData->getProductWeeeAttributes(
+                        $selectionItem,
+                        null,
+                        null,
+                        $product->getStore()->getWebsiteId()
+                    );
                     foreach ($weeAttributes as $weeAttribute) {
                         if (!array_key_exists($weeAttribute->getCode(), $insertedWeeCodesArray)) {
                             $options['optionTemplate'] .= sprintf(
                                 ' <%% if (data.weeePrice' . $weeAttribute->getCode() . ') { %%>'
-                                . '  ('
-                                . $weeAttribute->getName()
+                                . '  (' . $weeAttribute->getName()
                                 . ':<%%= data.weeePrice' . $weeAttribute->getCode()
                                 . '.formatted %%>)'
                                 . '<%% } %%>'
@@ -341,8 +347,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                         }
                     }
                 }
-
-                if ($this->geDisplayExlDescIncl($product->getStoreId())) {
+                if ($this->_weeeData->geDisplayExlDescIncl($product->getStoreId())) {
                     $options['optionTemplate'] .= sprintf(
                         ' <%% if (data.weeePrice) { %%>'
                         . '<%%= data.weeePrice.formatted %%>'
@@ -352,34 +357,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
 
             }
         }
-
         $response->setAdditionalOptions($options);
         return $this;
-    }
-
-    private function geDisplayIncl($storeId = null)
-    {
-        return $this->_weeeData->typeOfDisplay(
-            WeeeDisplayConfig::DISPLAY_INCL,
-            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
-            $storeId
-        );
-    }
-
-    private function geDisplayExlDescIncl($storeId = null)
-    {
-        return $this->_weeeData->typeOfDisplay(
-            WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
-            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
-            $storeId
-        );
-    }
-    private function geDisplayExcl($storeId = null)
-    {
-        return $this->_weeeData->typeOfDisplay(
-            WeeeDisplayConfig::DISPLAY_EXCL,
-            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
-            $storeId
-        );
     }
 }

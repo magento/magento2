@@ -7,6 +7,7 @@ namespace Magento\Weee\Helper;
 
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
+use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
  * WEEE data helper
@@ -673,5 +674,50 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
         return $weeeTotal;
+    }
+
+    /**
+     * get FPT DISPLAY_INCL setting
+     *
+     * @param  int|null $storeId
+     * @return bool
+     */
+    public function geDisplayIncl($storeId = null)
+    {
+        return $this->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_INCL,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+
+    /**
+     * get FPT DISPLAY_EXCL_DESCR_INCL setting
+     *
+     * @param  int|null $storeId
+     * @return bool
+     */
+    public function geDisplayExlDescIncl($storeId = null)
+    {
+        return $this->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+
+    /**
+     * get FPT DISPLAY_EXCL setting
+     *
+     * @param  int|null $storeId
+     * @return bool
+     */
+    public function geDisplayExcl($storeId = null)
+    {
+        return $this->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_EXCL,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
     }
 }
