@@ -130,6 +130,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected $addressDataFactoryMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
