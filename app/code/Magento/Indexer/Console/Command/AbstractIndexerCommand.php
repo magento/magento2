@@ -53,7 +53,7 @@ abstract class AbstractIndexerCommand extends Command
 
         /** @var \Magento\Framework\App\State $appState */
         $appState = $objectManager->get('Magento\Framework\App\State');
-        $appState->setAreaCode('adminmhtml'); //TODO: temporary fix.
+        $appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
         $this->collectionFactory = $objectManager->create('Magento\Indexer\Model\Indexer\CollectionFactory');
         $this->indexerFactory = $objectManager->create('Magento\Indexer\Model\IndexerFactory');
         parent::__construct();

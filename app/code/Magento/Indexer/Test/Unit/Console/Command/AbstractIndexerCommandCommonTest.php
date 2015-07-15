@@ -36,7 +36,10 @@ abstract class AbstractIndexerCommandCommonTest extends \PHPUnit_Framework_TestC
 
         //TODO: temporary fix unit
         $stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $stateMock->expects($this->once())->method('setAreaCode')->with('adminmhtml')->willReturnSelf();
+        $stateMock->expects($this->once())
+            ->method('setAreaCode')
+            ->with(\Magento\Framework\App\Area::AREA_ADMIN)
+            ->willReturnSelf();
 
         $this->objectManager->expects($this->once())
             ->method('get')
