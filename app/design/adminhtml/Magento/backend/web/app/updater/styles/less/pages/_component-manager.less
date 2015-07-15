@@ -7,20 +7,21 @@
 //  Upgrade -> Pages -> Magento Connect Account
 //  _____________________________________________
 
+//
+//  Variables
+//  ---------------------------------------------
+
+@component-manager-wrap__border-color: @color-gray-light2;
+@component-manager-title__background-color: @color-white-fog;
+@component-manager-title__border-color: @color-gray89;
+@component-manager-title__color: @color-brown-darkie;
+
+//
+
 .componenet-manager-wrap {
-    border: 1px solid @color-gray-light2;
+    border: 1px solid @component-manager-wrap__border-color;
     border-top: 0;
     margin: 0 0 @indent__xl;
-    .title {
-        &:extend(.abs-clearer all);
-        background: @color-white-fog;
-        border-bottom: 1px solid @color-gray89;
-        border-top: 1px solid @color-gray89;
-        color: @color-brown-darkie;
-        font-size: 2rem;
-        line-height: 1.2;
-        padding: @indent__base;
-    }
     .componenet-manager-account {
         .font-size(14);
         float: right;
@@ -29,10 +30,22 @@
             margin-left: @indent__base;
         }
     }
-    .content {
-        &:extend(.abs-clearer all);
-        padding: @indent__m @indent__base @indent__base;
-    }
+}
+
+.component-manager-title {
+    &:extend(.abs-clearer all);
+    background-color: @component-manager-title__background-color;
+    border-bottom: 1px solid @component-manager-title__border-color;
+    border-top: 1px solid @component-manager-title__border-color;
+    color: @component-manager-title__color;
+    font-size: 2rem;
+    line-height: 1.2;
+    padding: @indent__base;
+}
+
+.component-manager-content {
+    &:extend(.abs-clearer all);
+    padding: @indent__m @indent__base @indent__base;
 }
 
 .componenet-manager-items {
