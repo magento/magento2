@@ -47,7 +47,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * @var string
      */
-    private $pathPattern;
+    protected $pathPattern;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

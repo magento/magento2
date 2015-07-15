@@ -11,10 +11,6 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for SalesInvoiceReportEntity
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. Open Backend
  * 2. Go to Reports > Sales > Invoiced
@@ -45,7 +41,7 @@ class SalesInvoiceReportEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Sales invoice report
+     * Sales invoice report.
      *
      * @param SalesInvoiceReport $salesInvoiceReport
      * @param OrderInjectable $order

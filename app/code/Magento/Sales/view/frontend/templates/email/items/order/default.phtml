@@ -13,37 +13,44 @@ $_item = $block->getItem();
 $_order = $_item->getOrder();
 ?>
 <tr>
-    <td align="left" valign="top" style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;">
-        <strong style="font-size:11px;"><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+    <td class="item-info<?php if ($block->getItemOptions()): ?> has-extra<?php endif; ?>">
+        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
-        <dl style="margin:0; padding:0;">
+            <dl class="item-options">
             <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
-            <dd style="margin:0; padding:0 0 0 9px;">
-                <?php echo nl2br($option['value']) ?>
-            </dd>
+                <dt><strong><em><?= $option['label'] ?></em></strong></dt>
+                <dd>
+                    <?= nl2br($option['value']) ?>
+                </dd>
             <?php endforeach; ?>
-        </dl>
+            </dl>
         <?php endif; ?>
         <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
         <?php if ($addInfoBlock) :?>
-            <?php echo $addInfoBlock->setItem($_item)->toHtml(); ?>
+            <?= $addInfoBlock->setItem($_item)->toHtml() ?>
         <?php endif; ?>
-        <?php echo $block->escapeHtml($_item->getDescription()) ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td align="left" valign="top" style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;"><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
-    <td align="center" valign="top" style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;"><?php echo $_item->getQtyOrdered()*1 ?></td>
-    <td align="right" valign="top" style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;">
-        <?php echo $block->getItemPrice($_item); ?>
+    <td class="item-qty"><?= $_item->getQtyOrdered() * 1 ?></td>
+    <td class="item-price">
+        <?= $block->getItemPrice($_item); ?>
     </td>
 </tr>
 <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
 <tr>
-    <td colspan="4" style=" border-bottom:2px solid #CCCCCC; padding:3px 9px;">
-        <strong style="color:#444444; font-size:11px;"><?php echo __('Gift Message') ?></strong>
-        <?php echo __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?><br />
-        <?php echo __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?><br />
-        <strong><?php echo __('Message:'); ?></strong><br /><?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+    <td colspan="3" class="item-extra">
+        <table class="message-gift">
+            <tr>
+                <td>
+                    <h3><?= __('Gift Message') ?></h3>
+                    <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                    <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                    <br /><strong><?= __('Message:'); ?></strong>
+                    <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                </td>
+            </tr>
+        </table>
     </td>
 </tr>
 <?php endif; ?>

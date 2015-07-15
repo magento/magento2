@@ -45,7 +45,7 @@ define([
         getFromServer: function (sectionNames) {
             var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
-                throw new Error(jqXHR.responseJSON.message);
+                throw new Error(jqXHR);
             });
         }
     };
@@ -134,6 +134,10 @@ define([
             var sections = sectionConfig.getAffectedSections(settings.url);
             if (sections) {
                 customerData.invalidate(sections);
+                var redirects = ['redirect', 'backUrl'];
+                if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) {
+                    return ;
+                }
                 customerData.reload(sections);
             }
         }
