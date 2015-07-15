@@ -25,20 +25,36 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      */
     protected function getIndexers(InputInterface $input, OutputInterface $output)
     {
-        $inputArguments = $input->getArgument(self::INPUT_KEY_INDEXERS);
-        if (isset($inputArguments) && sizeof($inputArguments)>0) {
+        $requestedTypes = [];
+        if ($input->getArgument(self::INPUT_KEY_INDEXERS)) {
+            $requestedTypes = $input->getArgument(self::INPUT_KEY_INDEXERS);
+            $requestedTypes = array_filter(array_map('trim', $requestedTypes), 'strlen');
+        }
+        if (empty($requestedTypes)) {
+            return $this->getAllIndexers();
+        } else {
             $indexers = [];
-            foreach ($inputArguments as $code) {
+            $unsupportedTypes = [];
+            foreach ($requestedTypes as $code) {
                 $indexer = $this->indexerFactory->create();
                 try {
                     $indexer->load($code);
                     $indexers[] = $indexer;
                 } catch (\Exception $e) {
-                    $output->writeln('Warning: Unknown indexer with code ' . trim($code));
+                    $unsupportedTypes[] = $code;
                 }
             }
-        } else {
-            $indexers = $this->getAllIndexers();
+            if ($unsupportedTypes) {
+                $availableTypes = [];
+                $indexers = $this->getAllIndexers();
+                foreach ($indexers as $indexer) {
+                    $availableTypes[] = $indexer->getId();
+                }
+                throw new \InvalidArgumentException(
+                    "The following requested index types are not supported: '" . join("', '", $unsupportedTypes)
+                    . "'." . PHP_EOL . 'Supported types: ' . join(", ", $availableTypes)
+                );
+            }
         }
         return $indexers;
     }
