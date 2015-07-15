@@ -97,11 +97,11 @@ define([
                         'amount': 0,
                         'adjustments': {}
                     };
-                    additionalPrice[priceCode].amount = parseInt(additionalPrice[priceCode].amount || 0, 10)
+                    additionalPrice[priceCode].amount =  0 + (additionalPrice[priceCode].amount || 0)
                         + priceValue.amount;
                     _.each(priceValue.adjustments, function (adValue, adCode) {
-                        additionalPrice[priceCode].adjustments[adCode] =
-                            parseInt(additionalPrice[priceCode].adjustments[adCode] || 0, 10) + adValue;
+                        additionalPrice[priceCode].adjustments[adCode] = 0
+                            + (additionalPrice[priceCode].adjustments[adCode] || 0) + adValue;
                     });
                 });
             });
@@ -117,9 +117,9 @@ define([
                     origin.adjustments = origin.adjustments || {};
                     final.adjustments = final.adjustments || {};
 
-                    final.amount = parseInt(origin.amount, 10) + option.amount;
+                    final.amount = 0 + origin.amount + option.amount;
                     _.each(option.adjustments, function (pa, paCode) {
-                        final.adjustments[paCode] = parseInt(origin.adjustments[paCode] || 0, 10) + pa;
+                        final.adjustments[paCode] = 0 + (origin.adjustments[paCode] || 0) + pa;
                     });
                 }, this);
             }

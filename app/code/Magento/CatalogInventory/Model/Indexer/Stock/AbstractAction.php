@@ -8,6 +8,8 @@
 
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
 
+use Magento\Catalog\Model\Category;
+
 /**
  * Abstract action reindex class
  *
@@ -53,18 +55,35 @@ abstract class AbstractAction
     protected $_isNeedUseIdxTable = false;
 
     /**
+     * @var \Magento\Indexer\Model\CacheContext
+     */
+    private $cacheContext;
+
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
+     * @param \Magento\Indexer\Model\CacheContext $cacheContext
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory,
-        \Magento\Catalog\Model\Product\Type $catalogProductType
+        \Magento\Catalog\Model\Product\Type $catalogProductType,
+        \Magento\Indexer\Model\CacheContext $cacheContext,
+        \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
         $this->_resource = $resource;
         $this->_indexerFactory = $indexerFactory;
         $this->_catalogProductType = $catalogProductType;
+        $this->cacheContext = $cacheContext;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -227,6 +246,16 @@ abstract class AbstractAction
                 $indexer->reindexEntity($byType[$indexer->getTypeId()]);
             }
         }
+
+        $select = $adapter->select()
+            ->distinct(true)
+            ->from($this->_getTable('catalog_category_product'), ['category_id'])
+            ->where('product_id IN(?)', $processIds);
+
+        $affectedCategories = $adapter->fetchCol($select);
+        $this->cacheContext->registerEntities(Category::CACHE_TAG, $affectedCategories);
+
+        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
 
         return $this;
     }
