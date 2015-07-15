@@ -59,11 +59,6 @@ class Cli extends SymfonyApplication
             $setupCommands = $setupCommandList->getCommands();
         }
 
-        if (class_exists('Magento\Tools\Console\CommandList')) {
-            $toolsCommandList = new \Magento\Tools\Console\CommandList();
-            $toolsCommands = $toolsCommandList->getCommands();
-        }
-
         if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
             $commandList = $objectManager->create('Magento\Framework\Console\CommandList');
             $modulesCommands = $commandList->getCommands();
