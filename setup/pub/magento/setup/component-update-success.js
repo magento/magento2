@@ -4,8 +4,8 @@
  */
 
 'use strict';
-angular.module('component-upgrade-success', ['ngStorage'])
-    .controller('componentUpgradeSuccessController', ['$scope', '$state', '$localStorage', '$window', function ($scope, $state, $localStorage, $window) {
+angular.module('component-update-success', ['ngStorage'])
+    .controller('componentUpdateSuccessController', ['$scope', '$state', '$localStorage', '$window', function ($scope, $state, $localStorage, $window) {
         if ($localStorage.packages) {
             $scope.packages = $localStorage.packages;
         }
