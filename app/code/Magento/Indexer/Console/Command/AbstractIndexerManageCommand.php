@@ -16,6 +16,13 @@ use Magento\Indexer\Model\IndexerInterface;
  */
 abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
 {
+    /**#@+
+     * Names of input arguments or options
+     */
+    const INPUT_KEY_ALL = 'all';
+    const INPUT_KEY_INDEXERS = 'index';
+    /**#@- */
+
     /**
      * Gets list of indexers
      *
@@ -27,9 +34,10 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
     {
         $inputArguments = $input->getArgument(self::INPUT_KEY_INDEXERS);
         if (isset($inputArguments) && sizeof($inputArguments)>0) {
+            $indexerFactory = $this->getObjectManager()->create('Magento\Indexer\Model\IndexerFactory');
             $indexers = [];
             foreach ($inputArguments as $code) {
-                $indexer = $this->indexerFactory->create();
+                $indexer = $indexerFactory->create();
                 try {
                     $indexer->load($code);
                     $indexers[] = $indexer;
