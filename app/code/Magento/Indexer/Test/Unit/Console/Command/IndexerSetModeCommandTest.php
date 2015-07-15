@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Command for updating installed application after the code base has changed
  */
-class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
+class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonTest
 {
     /**
      * Command being tested
