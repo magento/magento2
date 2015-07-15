@@ -7,20 +7,20 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Framework\App\ObjectManagerFactory;
 
-class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
+abstract class AbstractIndexerCommandCommonTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerFactory
      */
     protected $indexerFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CollectionFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerFactory
      */
     protected $collectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManagerFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManagerFactory
      */
     protected $objectManagerFactory;
 
