@@ -53,7 +53,7 @@ class SimpleProductsFixture extends Fixture
                     $pathSize  = count($structure);
                     if ($pathSize > 1) {
                         $path = [];
-                        for ($i = 1; $i < $pathSize; $i++) {
+                        for ($i = 0; $i < $pathSize; $i++) {
                             $path[] = $category->load($structure[$i])->getName();
                         }
                         array_shift($path);
@@ -102,33 +102,33 @@ class SimpleProductsFixture extends Fixture
     protected function getPattern($productWebsiteClosure, $productCategoryClosure)
     {
         return [
-            '_attribute_set'    => 'Default',
-            '_type'             => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-            '_product_websites' => $productWebsiteClosure,
-            '_category'         => $productCategoryClosure,
+            'attribute_set_code'    => 'Default',
+            'product_type'             => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
+            'product_websites' => $productWebsiteClosure,
+            'categories'         => $productCategoryClosure,
             'name'              => 'Simple Product %s',
             'short_description' => 'Short simple product description %s',
             'weight'            => 1,
             'description'       => 'Full simple product Description %s',
             'sku'               => 'product_dynamic_%s',
             'price'             => 10,
-            'visibility'        => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
-            'status'            => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
-            'tax_class_id'      => 2,
+            'visibility'        => 'Catalog, Search',
+            'product_online'            => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
+            'tax_class_name'      => 'Taxable Goods',
             /**
              * actually it saves without stock data, but by default system won't show on the
              * frontend products out of stock
              */
             'is_in_stock'                   => 1,
             'qty'                           => 100500,
-            'use_config_min_qty'            => '1',
-            'use_config_backorders'         => '1',
-            'use_config_min_sale_qty'       => '1',
-            'use_config_max_sale_qty'       => '1',
-            'use_config_notify_stock_qty'   => '1',
-            'use_config_manage_stock'       => '1',
-            'use_config_qty_increments'     => '1',
-            'use_config_enable_qty_inc'     => '1',
+            'out_of_stock_qty'            => 'Use Config',
+            'allow_backorders'         => 'Use Config',
+            'min_cart_qty'       => 'Use Config',
+            'max_cart_qty'       => 'Use Config',
+            'notify_on_stock_below'   => 'Use Config',
+            'manage_stock'       => 'Use Config',
+            'qty_increments'     => 'Use Config',
+            'enable_qty_incremements'     => 'Use Config',
         ];
     }
 

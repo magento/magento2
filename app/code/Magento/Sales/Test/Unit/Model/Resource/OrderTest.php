@@ -5,7 +5,10 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Resource;
 
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
 use \Magento\Sales\Model\Resource\Order;
+
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class OrderTest
@@ -24,18 +27,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceMock;
     /**
-     * @var \Magento\Sales\Model\Resource\Attribute|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $attributeMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Handler\Address|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $addressHandlerMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Handler\State|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stateHandlerMock;
-    /**
      * @var \Magento\SalesSequence\Model\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $salesSequenceManagerMock;
@@ -44,95 +35,68 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $salesSequenceMock;
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Grid|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $gridAggregatorMock;
-    /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderMock;
+    /**
+     * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderItemMock;
     /**
      * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeMock;
     /**
-     * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeGroupMock;
-    /**
-     * \Magento\Sales\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $websiteMock;
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderItemCollectionMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Payment\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderPaymentCollectionMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Status\History\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderStatusHistoryCollectionMock;
+    protected $storeGroupMock;
     /**
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $adapterMock;
     /**
-     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
+    /**
+     * @var RelationComposite|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $relationCompositeMock;
+
+    /**
+     * @var \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectRelationProcessorMock;
     /**
      * Mock class dependencies
      */
     public function setUp()
     {
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->attributeMock = $this->getMock('Magento\Sales\Model\Resource\Attribute', [], [], '', false);
-        $this->addressHandlerMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Handler\Address',
-            ['removeEmptyAddresses'],
+        $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $this->orderItemMock = $this->getMock(
+            'Magento\Sales\Model\Order\Item',
+            ['getQuoteParentItemId', 'setTotalItemCount', 'getChildrenItems'],
             [],
             '',
             false
         );
-        $this->stateHandlerMock = $this->getMock('Magento\Sales\Model\Resource\Order\Handler\State', [], [], '', false);
-        $this->salesIncrementMock = $this->getMock('Magento\Sales\Model\Increment', [], [], '', false);
-        $this->gridAggregatorMock = $this->getMock('Magento\Sales\Model\Resource\Order\Grid', [], [], '', false);
-        $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
-            [],
+        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->storeGroupMock = $this->getMock(
+            'Magento\Store\Model\Group',
+            ['getName', 'getDefaultStoreId'],
             [],
             '',
             false
         );
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', ['__wakeup'], [], '', false);
-        $this->storeGroupMock = $this->getMock('Magento\Store\Model\Group', ['__wakeup'], [], '', false);
-        $this->websiteMock = $this->getMock('Magento\Sales\Model\Website', ['__wakeup'], [], '', false);
-        $this->customerMock = $this->getMock('Magento\Customer\Model\Customer', ['__wakeup'], [], '', false);
-        $this->orderItemCollectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Item\Collection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderPaymentCollectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\Collection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderStatusHistoryCollectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\History\Collection',
-            [],
+        $this->websiteMock = $this->getMock(
+            'Magento\Store\Model\Website',
+            ['getName'],
             [],
             '',
             false
@@ -160,9 +124,23 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->salesSequenceMock = $this->getMock('Magento\SalesSequence\Sequence', [], [], '', false);
+        $this->salesSequenceMock = $this->getMock('Magento\SalesSequence\Model\Sequence', [], [], '', false);
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Sales\Model\Resource\EntitySnapshot',
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->relationCompositeMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->objectRelationProcessorMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
             [],
             [],
             '',
@@ -170,19 +148,89 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
+        $contextMock->expects($this->once())
+            ->method('getObjectRelationProcessor')
+            ->willReturn($this->objectRelationProcessorMock);
 
-        $this->resource = new Order(
-            $contextMock,
-            $this->attributeMock,
-            $this->salesSequenceManagerMock,
-            $this->entitySnapshotMock,
-            $this->addressHandlerMock,
-            $this->stateHandlerMock
+        $objectManager = new ObjectManagerHelper($this);
+        $this->resource = $objectManager->getObject(
+            'Magento\Sales\Model\Resource\Order',
+            [
+                'context' => $contextMock,
+                'sequenceManager' => $this->salesSequenceManagerMock,
+                'entitySnapshot' => $this->entitySnapshotMock,
+                'entityRelationComposite' => $this->relationCompositeMock
+            ]
         );
     }
 
     public function testSave()
     {
+        $this->orderMock->expects($this->exactly(3))
+            ->method('getId')
+            ->willReturn(null);
+        $this->orderItemMock->expects($this->once())
+            ->method('getChildrenItems')
+            ->willReturn([]);
+        $this->orderItemMock->expects($this->once())
+            ->method('getQuoteParentItemId')
+            ->willReturn(null);
+        $this->orderMock->expects($this->once())
+            ->method('setTotalItemCount')
+            ->with(1);
+        $this->storeGroupMock->expects($this->once())
+            ->method('getDefaultStoreId')
+            ->willReturn(1);
+        $this->orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn([$this->orderItemMock]);
+        $this->orderMock->expects($this->once())
+            ->method('validateBeforeSave')
+            ->willReturnSelf();
+        $this->orderMock->expects($this->once())
+            ->method('beforeSave')
+            ->willReturnSelf();
+        $this->orderMock->expects($this->once())
+            ->method('isSaveAllowed')
+            ->willReturn(true);
+        $this->orderMock->expects($this->once())
+            ->method('getEntityType')
+            ->willReturn('order');
+        $this->orderMock->expects($this->exactly(2))
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+        $this->storeMock->expects($this->exactly(2))
+            ->method('getGroup')
+            ->willReturn($this->storeGroupMock);
+        $this->storeMock->expects($this->once())
+            ->method('getWebsite')
+            ->willReturn($this->websiteMock);
+        $this->storeGroupMock->expects($this->once())
+            ->method('getDefaultStoreId')
+            ->willReturn(1);
+        $this->salesSequenceManagerMock->expects($this->once())
+            ->method('getSequence')
+            ->with('order', 1)
+            ->willReturn($this->salesSequenceMock);
+        $this->salesSequenceMock->expects($this->once())
+            ->method('getNextValue')
+            ->willReturn('10000001');
+        $this->orderMock->expects($this->once())
+            ->method('setIncrementId')
+            ->with('10000001')
+            ->willReturnSelf();
+        $this->orderMock->expects($this->once())
+            ->method('getIncrementId')
+            ->willReturn(null);
+        $this->orderMock->expects($this->once())
+            ->method('getData')
+            ->willReturn(['increment_id' => '10000001']);
+        $this->objectRelationProcessorMock->expects($this->once())
+            ->method('validateDataIntegrity')
+            ->with(null, ['increment_id' => '10000001']);
+        $this->relationCompositeMock->expects($this->once())
+            ->method('processRelations')
+            ->with($this->orderMock);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapterMock);

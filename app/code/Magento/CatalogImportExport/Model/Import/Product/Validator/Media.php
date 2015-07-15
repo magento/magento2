@@ -24,10 +24,6 @@ class Media extends AbstractValidator implements RowValidatorInterface
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!empty($value['_media_image']) && empty($value['_media_attribute_id'])) {
-            $this->_addMessages([self::ERROR_MEDIA_DATA_INCOMPLETE]);
-            return false;
-        }
         return true;
     }
 }

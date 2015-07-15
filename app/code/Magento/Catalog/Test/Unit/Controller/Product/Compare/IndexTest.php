@@ -69,7 +69,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context',
+        $this->contextMock = $this->getMock(
+            'Magento\Framework\App\Action\Context',
             ['getRequest', 'getResponse', 'getResultRedirectFactory'],
             [],
             '',
@@ -90,10 +91,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->redirectFactoryMock);
 
-        $this->itemFactoryMock = $this->getMock('Magento\Catalog\Model\Product\Compare\ItemFactory', [], [], '', false);
+        $this->itemFactoryMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Compare\ItemFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->collectionFactoryMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
@@ -131,10 +138,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $beforeUrl = 'test_url';
         $this->request->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
+            ->willReturnMap(
+                [
                     ['items', null, null],
                     ['uenc', null, $beforeUrl],
-                ]);
+                ]
+            );
         $this->decoderMock->expects($this->once())
             ->method('decode')
             ->with($beforeUrl)
@@ -152,10 +161,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
+            ->willReturnMap(
+                [
                     ['items', null, '1,2,3'],
                     ['uenc', null, null],
-                ]);
+                ]
+            );
         $this->decoderMock->expects($this->never())->method('decode');
         $this->catalogSession->expects($this->never())->method('setBeforeCompareUrl');
 

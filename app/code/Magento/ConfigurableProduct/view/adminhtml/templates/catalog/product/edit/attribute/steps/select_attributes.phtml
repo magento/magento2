@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
+?>
+<div class="select-attributes-block">
+    <div class="select-attributes-actions">
+        <?= $block->getAddNewAttributeButton(); ?>
+    </div>
+    <h2 class="steps-wizard-title"><?= __('Step 1: Select Attributes') ?></h2>
+    <div class="selected-attributes" data-bind="scope: '<?= $block->getComponentName()?>'">
+        <?= __('Selected Attributes:') ?>
+        <div data-bind="text: selectedAttributes() || '--'"></div>
+    </div>
+    <?= $block->getChildHtml(); ?>
+</div>
+
+
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "<?= $block->getComponentName()?>": {
+                        "component": "Magento_ConfigurableProduct/js/variations/steps/select_attributes",
+                        "multiselectName":
+                            "product_attributes_listing.product_attributes_listing.product_attributes_columns.ids",
+                        "providerName": "product_attributes_listing.product_attributes_listing_data_source",
+                        "appendTo": "<?= $block->getParentComponentName()?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

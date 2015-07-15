@@ -54,6 +54,8 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const KEY_CUSTOMER_TAX_CLASS_ID = 'customer_tax_class_id';
 
+    const KEY_STORE_ID = 'store_id';
+
     /**#@-*/
 
     /**
@@ -349,6 +351,21 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setCustomerTaxClassId($customerTaxClassId);
+
+    /**
+     * Get store identifier
+     *
+     * @return int
+     */
+    public function getStoreId();
+
+    /**
+     * Sets store identifier
+     *
+     * @param int $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

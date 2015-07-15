@@ -10,7 +10,7 @@
 <?php /** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */ ?>
 <?php $parentItem = $block->getItem() ?>
 
-<?php $items = $block->getChilds($parentItem) ?>
+<?php $items = $block->getChildren($parentItem) ?>
 <?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
 <?php $_count = count($items) ?>
 <?php $_index = 0 ?>
@@ -50,7 +50,7 @@
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
+    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Quantity')); ?>">
         <?php if ($block->canShowPriceInfo($_item)): ?>
             <?php echo $_item->getQty()*1 ?>
         <?php else: ?>

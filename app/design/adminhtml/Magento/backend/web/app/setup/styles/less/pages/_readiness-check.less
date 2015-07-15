@@ -1,0 +1,64 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+//  Sizes
+
+@readiness-check-side__width: 22rem;
+@readiness-check-content__indent: 7.5rem;
+
+//
+//  Common
+//  ---------------------------------------------
+
+.readiness-check-item {
+    margin-bottom: 4rem;
+}
+
+.readiness-check-title {
+    font-size: @base__font-size;
+    font-weight: @font-weight__bold;
+    margin-bottom: .1rem;
+    margin-left: @readiness-check-content__indent;
+}
+
+.readiness-check-content {
+    margin-left: @readiness-check-content__indent;
+    margin-right: @readiness-check-side__width;
+    .readiness-check-title {
+        margin-left: 0;
+    }
+    .list {
+        margin-top: -.3rem;
+    }
+}
+
+.readiness-check-side {
+    float: right;
+    padding-left: 2.4rem;
+    width: @readiness-check-side__width;
+    .side-title {
+        margin-bottom: 0;
+    }
+}
+
+.readiness-check-icon {
+    float: left;
+    margin-left: 2rem;
+    margin-top: .7rem;
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .readiness-check-content {
+        margin-right: 2rem;
+    }
+}

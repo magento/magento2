@@ -27,4 +27,9 @@ class NewProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals([\Magento\Catalog\Model\Product::CACHE_TAG], $this->block->getIdentities());
     }
+
+    public function testScope()
+    {
+        $this->assertFalse($this->block->isScopePrivate());
+    }
 }

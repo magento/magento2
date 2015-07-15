@@ -6,20 +6,29 @@ define([
     'uiComponent',
     'Magento_Customer/js/customer-data',
     'jquery',
-    'ko'
+    'ko',
+    'sidebar'
 ], function (Component, customerData, $, ko) {
     'use strict';
 
     var sidebarInitialized = false;
+    var addToCartCalls = 0;
+
+    var minicart = $("[data-block='minicart']");
+    minicart.on('dropdowndialogopen', function () {
+        initSidebar();
+    });
 
     function initSidebar() {
-        var minicart = $("[data-block='minicart']");
+        if (!$('[data-role=product-item]').length) {
+            return false;
+        }
         minicart.trigger('contentUpdated');
         if (sidebarInitialized) {
             return false;
         }
         sidebarInitialized = true;
-        minicart.mage('sidebar', {
+        minicart.sidebar({
             "targetElement": "div.block.block-minicart",
             "url": {
                 "checkout": window.checkout.checkoutUrl,
@@ -55,14 +64,23 @@ define([
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
         initialize: function () {
+            var self = this;
             this._super();
             this.cart = customerData.get('cart');
             this.cart.subscribe(function () {
+                addToCartCalls--;
+                this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
+                initSidebar();
+            }, this);
+            $('[data-block="minicart"]').on('contentLoading', function(event) {
+                addToCartCalls++;
+                self.isLoading(true);
             });
         },
-        initSidebar: ko.observable(initSidebar),
-        closeSidebar: function(element) {
+        isLoading: ko.observable(false),
+        initSidebar: initSidebar,
+        closeSidebar: function() {
             var minicart = $('[data-block="minicart"]');
             minicart.on('click', '[data-action="close"]', function(event) {
                 event.stopPropagation();

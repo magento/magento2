@@ -31,7 +31,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -62,13 +62,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
+            ->setMethods(['getReadConnection', 'getMainTable', 'getTable'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->adapterMock = $this->getMock(
             'Zend_Db_Adapter_Pdo_Mysql',
             ['select', 'query'],
@@ -85,17 +82,25 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->selectMock));
         $this->resourceMock->expects($this->once())
-            ->method('getConnection')
+            ->method('getReadConnection')
             ->will($this->returnValue($this->adapterMock));
         $this->resourceMock->expects($this->once())
-            ->method('getTableName')
+            ->method('getMainTable')
+            ->willReturn('main_table_name');
+
+        $this->resourceMock->expects($this->once())
+            ->method('getTable')
             ->will($this->returnArgument(0));
 
-        $this->collection = new Collection(
-            $this->entityFactoryMock,
-            $this->loggerMock,
-            $this->fetchStrategyMock,
-            $this->resourceMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->collection = $objectManager->getObject(
+            'Magento\Review\Model\Resource\Review\Summary\Collection',
+            [
+                'entityFactory' => $this->entityFactoryMock,
+                'logger' => $this->loggerMock,
+                'fetchStrategy' => $this->fetchStrategyMock,
+                'resource' => $this->resourceMock
+            ]
         );
     }
 
@@ -112,7 +117,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with($this->selectMock, $this->anything())
             ->will($this->returnValue($statementMock));
 
-        $objectMock = $this->getMock('Magento\Framework\Object', ['setData'], []);
+        $objectMock = $this->getMock('Magento\Framework\Model\AbstractModel', ['setData'], [], '', false);
         $objectMock->expects($this->once())
             ->method('setData')
             ->with($data);
@@ -123,7 +128,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $item = $this->collection->fetchItem();
 
         $this->assertEquals($objectMock, $item);
-        $this->assertEquals('primary_id', $item->getIdFieldName());
+        $this->assertEquals('id', $item->getIdFieldName());
     }
 
     public function testLoad()

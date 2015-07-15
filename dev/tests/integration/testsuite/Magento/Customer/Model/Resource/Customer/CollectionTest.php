@@ -26,10 +26,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->_collection->addNameToSelect();
         $joinParts = $this->_collection->getSelect()->getPart(\Zend_Db_Select::FROM);
 
-        $this->assertArrayHasKey('at_prefix', $joinParts);
-        $this->assertArrayHasKey('at_firstname', $joinParts);
-        $this->assertArrayHasKey('at_middlename', $joinParts);
-        $this->assertArrayHasKey('at_lastname', $joinParts);
-        $this->assertArrayHasKey('at_suffix', $joinParts);
+        $this->assertArrayHasKey('e', $joinParts);
+        $this->assertCount(1, $joinParts);
     }
 }

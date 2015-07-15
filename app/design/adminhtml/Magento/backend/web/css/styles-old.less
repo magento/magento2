@@ -345,10 +345,6 @@ input.no-display,
     .data-table .action-locked.active,
     .data-table .action-locked[disabled],
     #product-variations-matrix .action-choose,
-    #product-variations-matrix .action-choose:hover,
-    #product-variations-matrix .action-choose:active,
-    #product-variations-matrix .action-choose.active,
-    #product-variations-matrix .action-choose[disabled],
     .action-manage-images,
     .action-manage-images:hover,
     .action-manage-images:active,
@@ -406,7 +402,6 @@ input.no-display,
     .data-table .action-.delete[disabled],
     .data-table .action-delete[disabled],
     .data-table .action-locked[disabled],
-    #product-variations-matrix .action-choose[disabled],
     .image-panel .action-close[disabled],
     .image-panel-controls .action-remove[disabled],
     .suggest-expandable .action-show-all[disabled],
@@ -1273,10 +1268,13 @@ input.no-display,
         border-bottom: 0;
     }
 
-    .fieldset-wrapper-title > .actions,
     .fieldset .legend > .actions {
         float: right;
         padding-top: 8px;
+    }
+
+    .fieldset-wrapper-title > .actions {
+        float: right;
     }
 
     .fieldset > .legend + br {
@@ -2926,14 +2924,6 @@ input.no-display,
         width: 100%;
     }
 
-    .adminhtml-googleshopping-types-new #attribute_set {
-        padding: 0;
-    }
-
-    .adminhtml-googleshopping-types-new #gcontent_attributes_container {
-        margin-top: -6px;
-    }
-
     //
     //  Sales
     //  --------------------------------------
@@ -3776,7 +3766,7 @@ input.no-display,
     }
 
     //
-    //  Shopping Cart Price Rule
+    //  Cart Price Rule
     //  --------------------------------------
 
     .fieldset .field-coupon_code,
@@ -4332,23 +4322,6 @@ input.no-display,
             ul.options-list strong {
                 .style28();
             }
-        }
-    }
-}
-
-.adminhtml-googleshopping-items-index {
-    .admin__scope-old {
-        .grid-title {
-            padding: 15px;
-            .title {
-                font-size: 18px;
-            }
-        }
-        .grid {
-            padding-bottom: 25px;
-        }
-        .page-actions {
-            float: right;
         }
     }
 }

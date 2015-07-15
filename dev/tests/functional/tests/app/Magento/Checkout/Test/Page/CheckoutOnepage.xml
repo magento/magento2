@@ -6,12 +6,11 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
-  <page name="CheckoutOnepage" mca="checkout/onepage" module="Magento_Checkout">
-    <block name="loginBlock" class="Magento\Checkout\Test\Block\Onepage\Login" locator="#checkout-step-authentication" strategy="css selector"/>
-    <block name="billingBlock" class="Magento\Checkout\Test\Block\Onepage\Billing" locator="#checkout-step-billing" strategy="css selector"/>
+  <page name="CheckoutOnepage" mca="checkout" module="Magento_Checkout">
+    <block name="loginBlock" class="Magento\Checkout\Test\Block\Onepage\Login" locator="[data-role='email-with-possible-login']" strategy="css selector"/>
     <block name="shippingBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping" locator="#checkout-step-shipping" strategy="css selector"/>
     <block name="shippingMethodBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping\Method" locator="#checkout-step-shipping_method" strategy="css selector"/>
-    <block name="paymentMethodsBlock" class="Magento\Checkout\Test\Block\Onepage\Payment\Methods" locator="#checkout-step-payment" strategy="css selector"/>
-    <block name="reviewBlock" class="Magento\Checkout\Test\Block\Onepage\Review" locator=".columns" strategy="css selector"/>
+    <block name="paymentBlock" class="Magento\Checkout\Test\Block\Onepage\Payment" locator="#checkout-step-payment" strategy="css selector"/>
+    <block name="reviewBlock" class="Magento\Checkout\Test\Block\Onepage\Review" locator=".opc-block-summary" strategy="css selector"/>
   </page>
 </config>

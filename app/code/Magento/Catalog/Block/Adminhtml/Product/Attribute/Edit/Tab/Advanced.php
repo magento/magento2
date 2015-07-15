@@ -56,7 +56,7 @@ class Advanced extends Generic
      * Adding product form elements for editing attribute
      *
      * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD)
      */
     protected function _prepareForm()
     {
@@ -85,7 +85,7 @@ class Advanced extends Generic
                 'label' => __('Attribute Code'),
                 'title' => __('Attribute Code'),
                 'note' => __(
-                    'For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols',
+                    'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
                     \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
                 ),
                 'class' => $validateClass
@@ -159,6 +159,41 @@ class Advanced extends Generic
                 'label' => __('Input Validation for Store Owner'),
                 'title' => __('Input Validation for Store Owner'),
                 'values' => $this->_eavData->getFrontendClasses($attributeObject->getEntityType()->getEntityTypeCode())
+            ]
+        );
+
+        $fieldset->addField(
+            'is_used_in_grid',
+            'select',
+            [
+                'name' => 'is_used_in_grid',
+                'label' => __('Add to Column Options'),
+                'title' => __('Add to Column Options'),
+                'values' => $yesno,
+                'value' => $attributeObject->getData('is_used_in_grid') ?: 1,
+                'note' => __('Select "Yes" to add this attribute to the list of column options in the product grid.'),
+            ]
+        );
+
+        $fieldset->addField(
+            'is_visible_in_grid',
+            'hidden',
+            [
+                'name' => 'is_visible_in_grid',
+                'value' => $attributeObject->getData('is_visible_in_grid') ?: 1,
+            ]
+        );
+
+        $fieldset->addField(
+            'is_filterable_in_grid',
+            'select',
+            [
+                'name' => 'is_filterable_in_grid',
+                'label' => __('Use in Filter Options'),
+                'title' => __('Use in Filter Options'),
+                'values' => $yesno,
+                'value' => $attributeObject->getData('is_filterable_in_grid') ?: 1,
+                'note' => __('Select "Yes" to add this attribute to the list of filter options in the product grid.'),
             ]
         );
 

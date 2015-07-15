@@ -229,7 +229,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager
             ->expects($this->once())
             ->method('addError')
-            ->with('An error occurred while deleting the item from wish list: Message')
+            ->with('We can\'t delete the item from Wish List right now because of an error: Message.')
             ->willReturn(true);
 
         $wishlistHelper = $this->getMock('Magento\Wishlist\Helper\Data', [], [], '', false);
@@ -314,7 +314,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager
             ->expects($this->once())
             ->method('addError')
-            ->with('An error occurred while deleting the item from wish list.')
+            ->with('We can\'t delete the item from the Wish List right now.')
             ->willReturn(true);
 
         $wishlistHelper = $this->getMock('Magento\Wishlist\Helper\Data', [], [], '', false);

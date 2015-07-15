@@ -32,7 +32,7 @@
                     <validate>validate-number</validate>
                 </field>
                 <field id="display_product_stock_status" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Display products availability in stock in the frontend</label>
+                    <label>Display products availability in stock on Storefront.</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -58,7 +58,7 @@
                     <validate>validate-number</validate>
                 </field>
                 <field id="min_qty" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Qty for Item's Status to Become Out of Stock</label>
+                    <label>Out-of-Stock Threshold</label>
                     <validate>validate-number</validate>
                     <backend_model>Magento\CatalogInventory\Model\System\Config\Backend\Minqty</backend_model>
                 </field>

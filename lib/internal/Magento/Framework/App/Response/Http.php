@@ -21,6 +21,9 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     /** Format for expiration timestamp headers */
     const EXPIRATION_TIMESTAMP_FORMAT = 'D, d M Y H:i:s T';
 
+    /** X-FRAME-OPTIONS Header name */
+    const HEADER_X_FRAME_OPT = 'X-Frame-Options';
+
     /** @var \Magento\Framework\Stdlib\CookieManagerInterface */
     protected $cookieManager;
 
@@ -52,19 +55,18 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     }
 
     /**
-     * Send the response, including all headers, rendering exceptions if so
-     * requested.
+     * Sends the X-FRAME-OPTIONS header to protect against click-jacking
      *
+     * @param string $value
      * @return void
      */
-    public function sendResponse()
+    public function setXFrameOptions($value)
     {
-        $this->sendVary();
-        parent::sendResponse();
+        $this->setHeader(self::HEADER_X_FRAME_OPT, $value);
     }
 
     /**
-     * Send Vary coookie
+     * Send Vary cookie
      *
      * @return void
      */
@@ -74,12 +76,10 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
         if (!empty($data)) {
             ksort($data);
             $cookieValue = sha1(serialize($data));
-            $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()
-                ->setPath('/');
+            $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
             $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $cookieValue, $sensitiveCookMetadata);
         } else {
-            $cookieMetadata = $this->cookieMetadataFactory->createCookieMetadata()
-                ->setPath('/');
+            $cookieMetadata = $this->cookieMetadataFactory->createCookieMetadata()->setPath('/');
             $this->cookieManager->deleteCookie(self::COOKIE_VARY_STRING, $cookieMetadata);
         }
     }
@@ -123,6 +123,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * Set headers for no-cache responses
      *
      * @return void
+     * @codeCoverageIgnore
      */
     public function setNoCacheHeaders()
     {
@@ -136,6 +137,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      *
      * @param string $content String in JSON format
      * @return \Magento\Framework\App\Response\Http
+     * @codeCoverageIgnore
      */
     public function representJson($content)
     {
@@ -145,6 +147,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 
     /**
      * @return string[]
+     * @codeCoverageIgnore
      */
     public function __sleep()
     {
@@ -155,6 +158,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * Need to reconstruct dependencies when being de-serialized.
      *
      * @return void
+     * @codeCoverageIgnore
      */
     public function __wakeup()
     {
@@ -168,6 +172,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      *
      * @param string $time
      * @return string
+     * @codeCoverageIgnore
      */
     protected function getExpirationHeader($time)
     {

@@ -11,6 +11,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Block\AbstractConfigureBlock;
+use Magento\Backend\Test\Block\Template;
 
 /**
  * Adminhtml catalog product composite configure block.
@@ -30,6 +31,13 @@ class Configure extends AbstractConfigureBlock
      * @var string
      */
     protected $customOptionsSelector = '#product_composite_configure_fields_options';
+
+    /**
+     * Product quantity selector.
+     *
+     * @var string
+     */
+    protected $qty = '[name="qty"]';
 
     /**
      * Selector for "Ok" button.
@@ -53,7 +61,7 @@ class Configure extends AbstractConfigureBlock
      */
     public function setQty($qty)
     {
-        $this->_fill($this->dataMapping(['qty' => $qty]));
+        $this->_rootElement->find($this->qty)->setValue($qty);
     }
 
     /**
@@ -94,11 +102,9 @@ class Configure extends AbstractConfigureBlock
      */
     protected function waitForFormVisible()
     {
-        $context = $this->_rootElement;
-        $selector = $this->configureForm;
-        return $this->browser->waitUntil(
-            function () use ($context, $selector) {
-                return $context->find($selector)->isVisible() ? true : null;
+        $this->browser->waitUntil(
+            function () {
+                return $this->_rootElement->find($this->configureForm)->isVisible() ? true : null;
             }
         );
     }
@@ -110,11 +116,9 @@ class Configure extends AbstractConfigureBlock
      */
     protected function waitForFormNotVisible()
     {
-        $context = $this->_rootElement;
-        $selector = $this->configureForm;
-        return $this->browser->waitUntil(
-            function () use ($context, $selector) {
-                return $context->find($selector)->isVisible() ? null : true;
+        $this->browser->waitUntil(
+            function () {
+                return $this->_rootElement->find($this->configureForm)->isVisible() ? null : true;
             }
         );
     }
@@ -122,7 +126,7 @@ class Configure extends AbstractConfigureBlock
     /**
      * Get backend abstract block.
      *
-     * @return \Magento\Backend\Test\Block\Template
+     * @return Template
      */
     public function getTemplateBlock()
     {

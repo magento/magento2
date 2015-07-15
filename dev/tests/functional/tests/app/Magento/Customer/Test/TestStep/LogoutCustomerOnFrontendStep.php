@@ -8,40 +8,54 @@ namespace Magento\Customer\Test\TestStep;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Customer\Test\Page\CustomerAccountIndex;
 
 /**
- * Class LogoutCustomerOnFrontendStep
- * Logout customer on frontend
+ * Logout customer on frontend.
  */
 class LogoutCustomerOnFrontendStep implements TestStepInterface
 {
     /**
-     * Cms index page
+     * Logout page title.
+     */
+    const LOGOUT_PAGE_TITLE = 'You are signed out.';
+
+    /**
+     * Cms index page.
      *
      * @var CmsIndex
      */
     protected $cmsIndex;
 
     /**
+     * Customer account page.
+     *
+     * @var CustomerAccountIndex
+     */
+    protected $customerAccount;
+
+    /**
      * @constructor
      * @param CmsIndex $cmsIndex
+     * @param CustomerAccountIndex $customerAccount
      */
-    public function __construct(CmsIndex $cmsIndex)
+    public function __construct(CmsIndex $cmsIndex, CustomerAccountIndex $customerAccount)
     {
         $this->cmsIndex = $cmsIndex;
+        $this->customerAccount = $customerAccount;
     }
 
     /**
-     * Logout customer
+     * Logout customer.
      *
      * @return void
      */
     public function run()
     {
-        $this->cmsIndex->open();
+        $this->customerAccount->open();
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-        if ($this->cmsIndex->getLinksBlock()->isLinkVisible("Log Out")) {
-            $this->cmsIndex->getLinksBlock()->openLink("Log Out");
+        if ($this->cmsIndex->getLinksBlock()->isLinkVisible('Sign Out')) {
+            $this->cmsIndex->getLinksBlock()->openLink('Sign Out');
             $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
             $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         }

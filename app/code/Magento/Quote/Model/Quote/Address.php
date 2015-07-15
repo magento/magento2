@@ -72,14 +72,14 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
  * @method Address setBaseSubtotalTotalInclTax(float $value)
  * @method int getGiftMessageId()
  * @method Address setGiftMessageId(int $value)
- * @method float getHiddenTaxAmount()
- * @method Address setHiddenTaxAmount(float $value)
- * @method float getBaseHiddenTaxAmount()
- * @method Address setBaseHiddenTaxAmount(float $value)
- * @method float getShippingHiddenTaxAmount()
- * @method Address setShippingHiddenTaxAmount(float $value)
- * @method float getBaseShippingHiddenTaxAmnt()
- * @method Address setBaseShippingHiddenTaxAmnt(float $value)
+ * @method float getDiscountTaxCompensationAmount()
+ * @method Address setDiscountTaxCompensationAmount(float $value)
+ * @method float getBaseDiscountTaxCompensationAmount()
+ * @method Address setBaseDiscountTaxCompensationAmount(float $value)
+ * @method float getShippingDiscountTaxCompensationAmount()
+ * @method Address setShippingDiscountTaxCompensationAmount(float $value)
+ * @method float getBaseShippingDiscountTaxCompensationAmnt()
+ * @method Address setBaseShippingDiscountTaxCompensationAmnt(float $value)
  * @method float getShippingInclTax()
  * @method Address setShippingInclTax(float $value)
  * @method float getBaseShippingInclTax()
@@ -251,7 +251,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param Address\Validator $validator
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param Address\CustomAttributeListInterface $attributeList
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -285,7 +285,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         Address\CustomAttributeListInterface $attributeList,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
@@ -424,23 +424,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * Save child collections
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        parent::afterSave();
-        if (null !== $this->_items) {
-            $this->getItemsCollection()->save();
-        }
-        if (null !== $this->_rates) {
-            $this->getShippingRatesCollection()->save();
-        }
-        return $this;
-    }
-
-    /**
      * Declare address quote model object
      *
      * @param   \Magento\Quote\Model\Quote $quote
@@ -538,7 +521,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve address items collection
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getItemsCollection()
     {
@@ -779,7 +762,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve collection of quote shipping rates
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getShippingRatesCollection()
     {
@@ -1115,6 +1098,26 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function itemsCollectionWasSet()
+    {
+        return null !== $this->_items;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function shippingRatesCollectionWasSet()
+    {
+        return null !== $this->_rates;
+    }
+
+    /**
      * Validate minimum amount
      *
      * @return bool
@@ -1294,6 +1297,27 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
+     * Get subtotal amount with applied discount in base currency
+     *
+     * @return float
+     */
+    public function getBaseSubtotalWithDiscount()
+    {
+        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
+    }
+
+    /**
+     * Get subtotal amount with applied discount
+     *
+     * @return float
+     */
+    public function getSubtotalWithDiscount()
+    {
+        return $this->getSubtotal() + $this->getDiscountAmount();
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
      * Get all total amount values
      *
      * @return array
@@ -1314,26 +1338,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * Get subtotal amount with applied discount in base currency
-     *
-     * @return float
-     */
-    public function getBaseSubtotalWithDiscount()
-    {
-        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
-    }
-
-    /**
-     * Get subtotal amount with applied discount
-     *
-     * @return float
-     */
-    public function getSubtotalWithDiscount()
-    {
-        return $this->getSubtotal() + $this->getDiscountAmount();
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function _getValidationRulesBeforeSave()
@@ -1343,7 +1347,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnoreStart
      */
     public function getCountryId()
     {
@@ -1572,7 +1575,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getEmail()
     {
-        return $this->getData(self::KEY_EMAIL);
+        $email = $this->getData(self::KEY_EMAIL);
+        if (!$email) {
+            $email = $this->getQuote()->getCustomerEmail();
+            $this->setEmail($email);
+        }
+        return $email;
     }
 
     /**

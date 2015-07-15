@@ -24,11 +24,10 @@ interface ProductLinkManagementInterface
      * Assign a product link to another product
      *
      * @param string $sku
-     * @param string $type
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $items
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return bool
      */
-    public function setProductLinks($sku, $type, array $items);
+    public function setProductLinks($sku, array $items);
 }

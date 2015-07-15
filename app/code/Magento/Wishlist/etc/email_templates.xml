@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Email/etc/email_templates.xsd">
-    <template id="wishlist_email_email_template" label="Wishlist Sharing" file="share_notification.html" type="html" module="Magento_Wishlist"/>
+    <template id="wishlist_email_email_template" label="Wish List Sharing" file="share_notification.html" type="html" module="Magento_Wishlist" area="frontend"/>
 </config>

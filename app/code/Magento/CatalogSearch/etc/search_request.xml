@@ -19,8 +19,8 @@
                 <queryReference clause="must" ref="visibility"/>
             </query>
             <query xsi:type="matchQuery" value="$search_term$" name="search">
-                <match field="sku" boost="1"/>
-                <match field="*" boost="1"/>
+                <match field="sku"/>
+                <match field="*"/>
             </query>
             <query xsi:type="filteredQuery" name="category">
                 <filterReference clause="must" ref="category_filter"/>
@@ -78,6 +78,6 @@
             <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
         </filters>
         <from>0</from>
-        <size>10</size>
+        <size>10000</size>
     </request>
 </requests>

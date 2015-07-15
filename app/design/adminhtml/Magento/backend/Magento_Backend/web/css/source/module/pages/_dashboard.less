@@ -131,8 +131,8 @@
 }
 
 .dashboard-totals-list {
+    &:extend(.abs-clearfix all);
     display: table;
-    .extend__clearfix();
     .extend__list-reset-styles();
     width: 100%;
 }
@@ -165,7 +165,7 @@
 
 .dashboard-store-stats {
     .ui-tabs {
-        .extend__clearfix();
+        &:extend(.abs-clearfix all);
         margin-bottom: 0;
         position: relative;
         &:before {

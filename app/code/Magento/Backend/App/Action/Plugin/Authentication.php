@@ -147,46 +147,25 @@ class Authentication
         if ($request->getPost('login') && $this->_performLogin($request)) {
             $isRedirectNeeded = $this->_redirectIfNeededAfterLogin($request);
         }
-        if (!$isRedirectNeeded && !$request->getParam('forwarded')) {
+        if (!$isRedirectNeeded && !$request->isForwarded()) {
             if ($request->getParam('isIframe')) {
-                $request->setParam(
-                    'forwarded',
-                    true
-                )->setRouteName(
-                    'adminhtml'
-                )->setControllerName(
-                    'auth'
-                )->setActionName(
-                    'deniedIframe'
-                )->setDispatched(
-                    false
-                );
+                $request->setForwarded(true)
+                    ->setRouteName('adminhtml')
+                    ->setControllerName('auth')
+                    ->setActionName('deniedIframe')
+                    ->setDispatched(false);
             } elseif ($request->getParam('isAjax')) {
-                $request->setParam(
-                    'forwarded',
-                    true
-                )->setRouteName(
-                    'adminhtml'
-                )->setControllerName(
-                    'auth'
-                )->setActionName(
-                    'deniedJson'
-                )->setDispatched(
-                    false
-                );
+                $request->setForwarded(true)
+                    ->setRouteName('adminhtml')
+                    ->setControllerName('auth')
+                    ->setActionName('deniedJson')
+                    ->setDispatched(false);
             } else {
-                $request->setParam(
-                    'forwarded',
-                    true
-                )->setRouteName(
-                    'adminhtml'
-                )->setControllerName(
-                    'auth'
-                )->setActionName(
-                    'login'
-                )->setDispatched(
-                    false
-                );
+                $request->setForwarded(true)
+                    ->setRouteName('adminhtml')
+                    ->setControllerName('auth')
+                    ->setActionName('login')
+                    ->setDispatched(false);
             }
         }
     }

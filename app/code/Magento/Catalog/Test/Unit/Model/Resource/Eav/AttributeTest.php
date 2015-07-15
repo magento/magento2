@@ -121,7 +121,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_processor->expects($this->once())->method('markIndexerAsInvalid');
 
-        $this->_model->setData(['id' => 2, 'used_in_product_listing' => 1]);
+        $this->_model->setData('id', 2);
+        $this->_model->setData('used_in_product_listing', 1);
 
         $this->_model->afterSave();
     }

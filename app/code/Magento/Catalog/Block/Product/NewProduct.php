@@ -67,7 +67,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
             $context,
             $data
         );
-        $this->_isScopePrivate = true;
     }
 
     /**

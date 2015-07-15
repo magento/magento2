@@ -3,11 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/** @var \Magento\Catalog\Setup\CategorySetup $installer */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Setup\CategorySetup',
-    ['resourceName' => 'catalog_setup']
-);
+$defaultAttributeSet = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    Magento\Eav\Model\Config::class
+)->getEntityType('catalog_product')->getDefaultAttributeSetId();
 
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2
@@ -149,7 +147,7 @@ $category->setId(12)
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(1)
-    ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
+    ->setAttributeSetId($defaultAttributeSet)
     ->setStoreId(1)
     ->setWebsiteIds([1])
     ->setName('Simple Product')
@@ -165,7 +163,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(2)
-    ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
+    ->setAttributeSetId($defaultAttributeSet)
     ->setStoreId(1)
     ->setWebsiteIds([1])
     ->setName('Simple Product Two')
@@ -181,10 +179,10 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(3)
-    ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
+    ->setAttributeSetId($defaultAttributeSet)
     ->setStoreId(1)
     ->setWebsiteIds([1])
-    ->setName('Simple Product Not Visible On Frontend')
+    ->setName('Simple Product Not Visible On Storefront')
     ->setSku('simple')
     ->setPrice(15)
     ->setWeight(2)
@@ -198,7 +196,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(4)
-    ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
+    ->setAttributeSetId($defaultAttributeSet)
     ->setStoreId(1)
     ->setWebsiteIds([1])
     ->setName('Simple Product Three')

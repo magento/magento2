@@ -123,8 +123,10 @@
                     <label class="admin__field-label" for="send_email"><?php echo __('Email Copy of Invoice') ?></label>
                 </div>
                 <?php endif; ?>
+                <?php echo $block->getChildHtml('submit_before') ?>
                 <div class="actions">
                     <?php echo $block->getChildHtml('submit_button') ?>
+                    <?php echo $block->getChildHtml('submit_after') ?>
                 </div>
             </div>
         </div>
@@ -132,7 +134,7 @@
 </section>
 
 <script>
-require(['jquery', 'prototype'], function($){
+require(['jquery', 'prototype'], function(jQuery){
 
 //<![CDATA[
 var submitButtons = $$('.submit-button');
@@ -143,7 +145,7 @@ var fields = $$('.qty-input');
 updateButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});
 
 for(var i=0;i<fields.length;i++){
-    $(fields[i]).on('keyup', checkButtonsRelation);
+    jQuery(fields[i]).on('keyup', checkButtonsRelation);
     fields[i].baseValue = fields[i].value;
 }
 

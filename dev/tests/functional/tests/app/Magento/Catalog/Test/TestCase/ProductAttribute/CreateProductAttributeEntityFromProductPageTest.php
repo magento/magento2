@@ -10,8 +10,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Scenario;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create Product.
  *
@@ -34,7 +32,6 @@ class CreateProductAttributeEntityFromProductPageTest extends Scenario
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'MX';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
@@ -47,7 +44,7 @@ class CreateProductAttributeEntityFromProductPageTest extends Scenario
     {
         $product = $fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'product_with_category_with_anchor']
+            ['dataset' => 'product_with_category_with_anchor']
         );
         $product->persist();
         return ['product' => $product];

@@ -45,7 +45,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         if (isset($customerData['disable_auto_group_change'])) {
-            $customerData['disable_auto_group_change'] = (int)$customerData['disable_auto_group_change'];
+            $customerData['disable_auto_group_change'] = (int) filter_var(
+                $customerData['disable_auto_group_change'],
+                FILTER_VALIDATE_BOOLEAN
+            );
         }
 
         return $customerData;
@@ -71,7 +74,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Customer\Model\Metadata\Form $metadataForm = null
     ) {
         if ($metadataForm === null) {
-            $metadataForm = $this->_objectManager->get('Magento\Customer\Model\Metadata\FormFactory')->create(
+            $metadataForm = $this->_formFactory->create(
                 $entityType,
                 $formCode,
                 [],
@@ -233,14 +236,16 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $customerId = $customer->getId();
                 }
 
-                $isSubscribed = false;
+                $isSubscribed = null;
                 if ($this->_authorization->isAllowed(null)) {
-                    $isSubscribed = $this->getRequest()->getPost('subscription') !== null;
+                    $isSubscribed = $this->getRequest()->getPost('subscription');
                 }
-                if ($isSubscribed) {
-                    $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
-                } else {
-                    $this->_subscriberFactory->create()->unsubscribeCustomerById($customerId);
+                if ($isSubscribed !== null) {
+                    if ($isSubscribed !== 'false') {
+                        $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
+                    } else {
+                        $this->_subscriberFactory->create()->unsubscribeCustomerById($customerId);
+                    }
                 }
 
                 // After save
@@ -266,7 +271,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             } catch (\Exception $exception) {
-                $this->messageManager->addException($exception, __('An error occurred while saving the customer.'));
+                $this->messageManager->addException($exception, __('Something went wrong while saving the customer.'));
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             }

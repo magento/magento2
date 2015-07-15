@@ -9,26 +9,26 @@
 /** @var $block \Magento\ProductAlert\Block\Email\Price */
 ?>
 <?php if ($_products = $block->getProducts()): ?>
-<p><?php echo __('You are receiving this notification because you subscribed to receive alerts when the prices for the following products changed:') ?></p>
+<p><?= __('Price change alert! We wanted you to know that prices have changed for these products:') ?></p>
 <table>
 <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
 <?php foreach ($_products as $_product): ?>
     <tr>
         <td class="col photo">
-            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $block->escapeHtml($_product->getName()) ?>" class="product photo">
-                <img src="<?php echo $block->getThumbnailUrl($_product) ?>" width="<?php echo $block->getThumbnailSize()?>" height="<?php echo $block->getThumbnailSize()?>" alt="<?php echo $block->escapeHtml($_product->getName()) ?>" class="photo image" />
+            <a href="<?= $_product->getProductUrl() ?>" title="<?= $block->escapeHtml($_product->getName()) ?>" class="product photo">
+                <img src="<?= $block->getThumbnailUrl($_product) ?>" height="<?= $block->getThumbnailSize() ?>" alt="<?= $block->escapeHtml($_product->getName()) ?>" class="photo image" />
             </a>
         </td>
         <td class="col item">
             <p>
                 <strong class="product name">
-                    <a href="<?php echo $_product->getProductUrl() ?>"><?php echo $block->escapeHtml($_product->getName()) ?></a>
+                    <a href="<?= $_product->getProductUrl() ?>"><?= $block->escapeHtml($_product->getName()) ?></a>
                 </strong>
             </p>
             <?php if ($shortDescription = $block->getFilteredContent($_product->getShortDescription())): ?>
-                <p><small><?php echo $shortDescription ?></small></p>
+                <p><small><?= $shortDescription ?></small></p>
             <?php endif; ?>
-            <p><?php echo $block->getProductPriceHtml(
+            <?= $block->getProductPriceHtml(
                     $_product,
                     \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                     \Magento\Framework\Pricing\Render::ZONE_EMAIL,
@@ -37,11 +37,10 @@
                     ]
                 );
                 ?>
-            </p>
-            <p><small><a href="<?php echo $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo __('Click here not to receive alerts for this product.') ?></a></small></p>
+            <p><small><a href="<?= $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?= __('Click here to stop alerts for this product.') ?></a></small></p>
         </td>
     </tr>
 <?php endforeach; ?>
 </table>
-<p><a href="<?php echo $block->getUnsubscribeUrl() ?>"><?php echo __('Unsubscribe from all price alerts') ?></a></p>
+<p><a href="<?= $block->getUnsubscribeUrl() ?>"><?= __('Unsubscribe from all price alerts') ?></a></p>
 <?php endif; ?>

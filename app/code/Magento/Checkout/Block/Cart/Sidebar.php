@@ -53,6 +53,23 @@ class Sidebar extends AbstractCart
     }
 
     /**
+     * Returns minicart config
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        return [
+            'shoppingCartUrl' => $this->getShoppingCartUrl(),
+            'checkoutUrl' => $this->getCheckoutUrl(),
+            'updateItemQtyUrl' => $this->getUpdateItemQtyUrl(),
+            'removeItemUrl' => $this->getRemoveItemUrl(),
+            'imageTemplate' => $this->getImageHtmlTemplate(),
+            'baseUrl' => $this->getBaseUrl()
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getImageHtmlTemplate()
@@ -69,7 +86,7 @@ class Sidebar extends AbstractCart
      */
     public function getCheckoutUrl()
     {
-        return $this->getUrl('checkout/onepage');
+        return $this->getUrl('checkout');
     }
 
     /**
@@ -138,5 +155,15 @@ class Sidebar extends AbstractCart
     public function getTotalsHtml()
     {
         return $this->getLayout()->getBlock('checkout.cart.minicart.totals')->toHtml();
+    }
+
+    /**
+     * Return base url.
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl();
     }
 }

@@ -8,13 +8,17 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="sales_order_guest_info_links"/>
     <body>
-        <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
-                <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
-            </block>
+        <referenceContainer name="page.main.title">
+            <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
+            <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
+            <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
+                <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false">
+                    <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+                </block>
+            </container>
         </referenceContainer>
-        <referenceContainer name="sales.order.info.buttons">
-            <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+        <referenceContainer name="content">
+            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" after="sales.order.shipment"/>
         </referenceContainer>
     </body>
 </page>

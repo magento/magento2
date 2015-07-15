@@ -35,10 +35,6 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  */
 class Item extends AbstractModel implements ItemInterface
 {
-    const EXCEPTION_CODE_NOT_SALABLE = 901;
-
-    const EXCEPTION_CODE_HAS_REQUIRED_OPTIONS = 902;
-
     /**
      * Custom path to download attached file
      * @var string
@@ -135,7 +131,7 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -150,7 +146,7 @@ class Item extends AbstractModel implements ItemInterface
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->productTypeConfig = $productTypeConfig;

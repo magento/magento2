@@ -75,7 +75,7 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert()
     {
-        $methodInterface = $this->getMock('Magento\Payment\Model\MethodInterface', [], [], '', false);
+        $methodInterface = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
 
         $paymentData = ['test' => 'test2'];
         $data = ['some_id' => 1];

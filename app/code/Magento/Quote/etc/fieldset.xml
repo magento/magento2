@@ -84,16 +84,16 @@
             <field name="base_grand_total">
                 <aspect name="to_order" />
             </field>
-            <field name="hidden_tax_amount">
+            <field name="discount_tax_compensation_amount">
                 <aspect name="to_order" />
             </field>
-            <field name="base_hidden_tax_amount">
+            <field name="base_discount_tax_compensation_amount">
                 <aspect name="to_order" />
             </field>
-            <field name="shipping_hidden_tax_amount">
+            <field name="shipping_discount_tax_compensation_amount">
                 <aspect name="to_order" />
             </field>
-            <field name="base_shipping_hidden_tax_amount">
+            <field name="base_shipping_discount_tax_compensation_amount">
                 <aspect name="to_order" />
             </field>
             <field name="prefix">
@@ -251,10 +251,10 @@
             <field name="store_id">
                 <aspect name="to_order_item" />
             </field>
-            <field name="hidden_tax_amount">
+            <field name="discount_tax_compensation_amount">
                 <aspect name="to_order_item" />
             </field>
-            <field name="base_hidden_tax_amount">
+            <field name="base_discount_tax_compensation_amount">
                 <aspect name="to_order_item" />
             </field>
             <field name="product_id">
@@ -315,6 +315,53 @@
             </field>
             <field name="cc_ss_start_year">
                 <aspect name="to_order_payment" />
+            </field>
+        </fieldset>
+        <fieldset id="order_address">
+            <field name="prefix">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="firstname">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="middlename">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="lastname">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="suffix">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="company">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="street">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="city">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="region">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="region_id">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="postcode">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="country_id">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="telephone">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="fax">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="email">
+                <aspect name="to_customer_address" />
             </field>
         </fieldset>
     </scope>

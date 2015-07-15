@@ -1,0 +1,56 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @var $block \Magento\Paypal\Block\Payflow\Link\Iframe
+ */
+?>
+<html>
+<head>
+</head>
+<body>
+<script>
+    (function() {
+        'use strict';
+
+        function redirect(cartUrl, errorMessage, goToSuccessPage, successUrl) {
+            if (!!errorMessage.message) {
+                alert(errorMessage.message);
+                window.location = cartUrl;
+            } else if (!!goToSuccessPage) {
+                window.location = successUrl;
+            } else {
+                window.location = cartUrl;
+            }
+        }
+
+        var cartUrl = '<?php echo $block->getUrl('checkout/cart') ?>',
+            successUrl = '<?php echo $block->getUrl('checkout/onepage/success') ?>',
+            goToSuccessPage = '<?php echo $block->getGotoSuccessPage() ?>',
+            require = window.top.require,
+            windowContext = window,
+            errorMessage = {
+                message: '<?php echo $block->getErrorMsg() ?>'
+            };
+
+        if(typeof(require) == "undefined") {
+            redirect(cartUrl, errorMessage, goToSuccessPage, successUrl);
+        } else {
+            require([
+                'underscore',
+                'Magento_Paypal/js/model/iframe-redirect'
+            ], function(_, iframeRedirect) {
+                _.bind(iframeRedirect, windowContext)(cartUrl, errorMessage, goToSuccessPage, successUrl);
+            })
+        }
+
+
+    })();
+</script>
+</body>
+</html>

@@ -19,7 +19,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     /**
      * Full reindex
      *
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
+     * @var \Magento\Indexer\Model\IndexerInterface
      */
     protected $indexer;
 
@@ -39,8 +39,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full indexer */
-        $this->indexer =  $this->objectManager->create('Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full');
+        /** @var \Magento\Indexer\Model\IndexerRegistry $indexerRegistry */
+        $indexerRegistry = $this->objectManager->create('\Magento\Indexer\Model\IndexerRegistry');
+        $this->indexer =  $indexerRegistry->get('catalogsearch_fulltext');
 
         $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
         $this->adapter = $this->resource->getConnection('core_read');
@@ -48,15 +49,14 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
-     * @covers \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::reindexAll
-     * @covers \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::prepareProductIndex
+     * @covers \Magento\Indexer\Model\Indexer::reindexAll
      * @covers \Magento\Bundle\Model\Product\Type::getSearchableData
      */
-    public function testPrepareProductIndexForBundlePeoduct()
+    public function testPrepareProductIndexForBundleProduct()
     {
         $this->indexer->reindexAll();
 
-        $select = $this->adapter->select()->from($this->resource->getTableName('catalogsearch_fulltext'))
+        $select = $this->adapter->select()->from($this->resource->getTableName('catalogsearch_fulltext_scope1'))
             ->where('`data_index` LIKE ?', '%' . 'Bundle Product Items' . '%');
 
         $result = $this->adapter->fetchAll($select);
