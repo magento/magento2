@@ -258,7 +258,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $product=$this->getMock(
             '\Magento\Bundle\Model\Product\Type',
-            ['getTypeInstance','getStoreId','getStore'],
+            ['getTypeInstance', 'getStoreId', 'getStore'],
             [],
             '',
             false

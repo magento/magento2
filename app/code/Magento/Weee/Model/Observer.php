@@ -243,7 +243,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      */
     private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice)
     {
-        $holder = array();
+        $holder = [];
         if (is_array($input)) {
             foreach ($input as $key => $el) {
                 if (is_array($el)) {
