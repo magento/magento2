@@ -9,6 +9,9 @@ angular.module('component-update-success', ['ngStorage'])
         if ($localStorage.packages) {
             $scope.packages = $localStorage.packages;
         }
+        if (typeof $localStorage.rollbackStarted !== 'undefined') {
+            $scope.rollbackStarted = $localStorage.rollbackStarted;
+        }
         $scope.back = function () {
             $window.location.href = '';
         }
