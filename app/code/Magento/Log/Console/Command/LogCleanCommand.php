@@ -46,6 +46,7 @@ class LogCleanCommand extends AbstractLogCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->initApplicationArea();
         $errorMsg = 'Invalid value for option "' . self::INPUT_KEY_DAYS
             . '". It should be a whole number greater than 0.';
         $days = $input->getOption(self::INPUT_KEY_DAYS);
