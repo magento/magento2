@@ -432,4 +432,14 @@ abstract class AbstractGroupPrice extends Price
 
         return $data;
     }
+
+    /**
+     * Get resource model instance
+     *
+     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice
+     */
+    public function getResource()
+    {
+        return $this->_getResource();
+    }
 }

@@ -82,11 +82,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
         $provider = [];
         $provider[] = [
-            ['baseImage' => 'http://example.com/base_img_url'],
+            [],
             [
                 'allowed_products' => [],
                 'current_product_mock' => $currentProductMock,
-                'baseImage' => 'http://example.com/base_img_url'
             ],
         ];
 
@@ -163,12 +162,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'attribute_id_2' => [
                     'attribute_code_value_2' => ['product_id_1', 'product_id_2'],
                 ],
-                'baseImage' => 'http://example.com/base_img_url',
             ],
             [
                 'allowed_products' => $allowedProducts,
                 'current_product_mock' => $currentProductMock,
-                'baseImage' => 'http://example.com/base_img_url'
             ],
         ];
         return $provider;

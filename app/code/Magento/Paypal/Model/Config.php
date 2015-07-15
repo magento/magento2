@@ -971,7 +971,7 @@ class Config extends AbstractConfig
             case self::PAYMENT_MARK_LARGE:
                 break;
             default:
-                $staticSize = self::PAYMENT_MARK_SMALL;
+                $staticSize = self::PAYMENT_MARK_MEDIUM;
         }
 
         return sprintf(
