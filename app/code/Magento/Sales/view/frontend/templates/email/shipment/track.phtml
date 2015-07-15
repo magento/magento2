@@ -10,18 +10,19 @@
 <?php $_shipment = $block->getShipment() ?>
 <?php $_order = $block->getOrder() ?>
 <?php if ($_shipment && $_order && $_shipment->getAllTracks()): ?>
-<table cellspacing="0" cellpadding="0" border="0" width="650" style="border:1px solid #EAEAEA;">
+<br />
+<table class="shipment-track">
     <thead>
         <tr>
-            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Shipped By') ?></th>
-            <th align="center" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Tracking Number') ?></th>
+            <th><?= __('Shipped By') ?></th>
+            <th><?= __('Tracking Number') ?></th>
         </tr>
     </thead>
     <tbody>
-    <?php $i = 0; foreach ($_shipment->getAllTracks() as $_item): $i++ ?>
-        <tr <?php echo $i%2 ? 'bgcolor="#F6F6F6"' : '' ?>>
-            <td align="left" valign="top" style="padding:3px 9px"><?php echo $block->escapeHtml($_item->getTitle()) ?></td>
-            <td align="center" valign="top" style="padding:3px 9px"><?php echo $block->escapeHtml($_item->getNumber()) ?></td>
+    <?php foreach ($_shipment->getAllTracks() as $_item): ?>
+        <tr>
+            <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
+            <td><?= $block->escapeHtml($_item->getNumber()) ?></td>
         </tr>
     <?php endforeach ?>
     </tbody>

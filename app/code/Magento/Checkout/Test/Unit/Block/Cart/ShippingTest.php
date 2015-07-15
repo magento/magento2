@@ -85,6 +85,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     /** @var  Quote |\PHPUnit_Framework_MockObject_MockObject */
     protected $quote;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $collectQuote;
+
     protected function setUp()
     {
         $this->prepareContext();
@@ -117,7 +120,12 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->customerRepository = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
             ->getMockForAbstractClass();
 
+        $this->collectQuote = $this->getMockBuilder('Magento\Checkout\Model\Cart\CollectQuote')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->prepareQuoteRepository();
+
 
         $this->model = new Shipping(
             $this->context,
@@ -130,7 +138,8 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             $this->shippingMethodManager,
             $this->addressReporitory,
             $this->customerRepository,
-            $this->quoteRepository
+            $this->quoteRepository,
+            $this->collectQuote
         );
     }
 
@@ -259,180 +268,17 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ->with('advanced/modules_disable_output/Magento_Checkout', ScopeInterface::SCOPE_STORE)
             ->willReturn(false);
 
-        $this->customerSession->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(false);
-
-        $this->assertEquals('', $this->model->toHtml());
-    }
-
-    public function testBeforeToHtmlNoDefaultShippingAddress()
-    {
-        $customerId = 1;
-        $defaultShipping = 0;
-
-        $this->eventManager->expects($this->once())
-            ->method('dispatch')
-            ->with('view_block_abstract_to_html_before', ['block' => $this->model])
-            ->willReturnSelf();
-
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->with('advanced/modules_disable_output/Magento_Checkout', ScopeInterface::SCOPE_STORE)
-            ->willReturn(false);
-
-        $this->customerSession->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(true);
-        $this->customerSession->expects($this->once())
-            ->method('getCustomerId')
-            ->willReturn($customerId);
-
-        $customerData = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->setMethods([
-                'getDefaultShipping',
-            ])
-            ->getMockForAbstractClass();
-        $customerData->expects($this->once())
-            ->method('getDefaultShipping')
-            ->willReturn($defaultShipping);
-
-        $this->customerRepository->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($customerData);
-
-        $this->assertEquals('', $this->model->toHtml());
-    }
-
-    /**
-     * @param int $customerId
-     * @param int $defaultShipping
-     * @param int $countryId
-     * @param string $postcode
-     * @param string $region
-     * @param int $regionId
-     * @param int $quoteId
-     * @dataProvider dataProviderBeforeToHtml
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testBeforeToHtml(
-        $customerId,
-        $defaultShipping,
-        $countryId,
-        $postcode,
-        $region,
-        $regionId,
-        $quoteId
-    ) {
-        $this->eventManager->expects($this->once())
-            ->method('dispatch')
-            ->with('view_block_abstract_to_html_before', ['block' => $this->model])
-            ->willReturnSelf();
-
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->with('advanced/modules_disable_output/Magento_Checkout', ScopeInterface::SCOPE_STORE)
-            ->willReturn(false);
-
-        $this->customerSession->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(true);
-        $this->customerSession->expects($this->once())
-            ->method('getCustomerId')
-            ->willReturn($customerId);
-
-        $customerDataMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->setMethods([
-                'getDefaultShipping',
-            ])
-            ->getMockForAbstractClass();
-        $customerDataMock->expects($this->once())
-            ->method('getDefaultShipping')
-            ->willReturn($defaultShipping);
-
-        $this->customerRepository->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($customerDataMock);
-
-        $this->addressReporitory->expects($this->once())
-            ->method('getById')
-            ->with($defaultShipping)
-            ->willReturn($this->address);
-
-        $regionMock = $this->getMockBuilder('Magento\Customer\Api\Data\RegionInterface')
-            ->setMethods([
-                'getRegion',
-            ])
-            ->getMockForAbstractClass();
-        $regionMock->expects($this->once())
-            ->method('getRegion')
-            ->willReturn($region);
-
-        $this->address->expects($this->once())
-            ->method('getCountryId')
-            ->willReturn($countryId);
-        $this->address->expects($this->once())
-            ->method('getPostcode')
-            ->willReturn($postcode);
-        $this->address->expects($this->once())
-            ->method('getRegion')
-            ->willReturn($regionMock);
-        $this->address->expects($this->once())
-            ->method('getRegionId')
-            ->willReturn($regionId);
-
-        $this->estimatedAddress->expects($this->once())
-            ->method('setCountryId')
-            ->with($countryId)
-            ->willReturnSelf();
-        $this->estimatedAddress->expects($this->once())
-            ->method('setPostcode')
-            ->with($postcode)
-            ->willReturnSelf();
-        $this->estimatedAddress->expects($this->once())
-            ->method('setRegion')
-            ->with($region)
-            ->willReturnSelf();
-        $this->estimatedAddress->expects($this->once())
-            ->method('setRegionId')
-            ->with($regionId)
-            ->willReturnSelf();
-
-        $this->checkoutSession->expects($this->once())
+        $quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->checkoutSession->expects($this->any())
             ->method('getQuote')
-            ->willReturn($this->quote);
-
-        $this->quote->expects($this->once())
-            ->method('getId')
-            ->willReturn($quoteId);
-
-        $this->shippingMethodManager->expects($this->once())
-            ->method('estimateByAddress')
-            ->with($quoteId, $this->estimatedAddress)
-            ->willReturnSelf();
-
-        $this->quoteRepository->expects($this->once())
-            ->method('save')
-            ->with($this->quote)
-            ->willReturnSelf();
+            ->willReturn($quote);
+        $this->collectQuote->expects($this->once())
+            ->method('collect')
+            ->with($quote);
 
         $this->assertEquals('', $this->model->toHtml());
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderBeforeToHtml()
-    {
-        return [
-            [1, 1, 1, '12345', '', 1, 1],
-            [1, 1, 1, '12345', '', 0, 1],
-            [1, 1, 1, '', '', 0, 1],
-            [1, 1, 1, '12345', 'California', 0, 1],
-            [1, 1, 1, '12345', 'California', 1, 1],
-        ];
     }
 
     /**

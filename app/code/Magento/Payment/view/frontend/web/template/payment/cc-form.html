@@ -99,15 +99,27 @@
             <span><!-- ko text: $t('Card Verification Number')--><!-- /ko --></span>
         </label>
         <div class="control _with-tooltip">
-            <input type="number" autocomplete="off" class="input-text cvv" name="payment[cc_cid]" value=""
-                   data-bind="attr: {id: getCode() + '_cc_cid', title: $t('Card Verification Number'), 'data-container': getCode() + '-cc-cvv', 'data-validate': JSON.stringify({'required-number':true, 'validate-card-cvv':'#' + getCode() + '_cc_type'})},
-                             enable: isActive($parents),
-                             value: creditCardVerificationNumber"/>
+            <input type="number"
+                   autocomplete="off"
+                   class="input-text cvv"
+                   name="payment[cc_cid]"
+                   value=""
+                   data-bind="attr: {id: getCode() + '_cc_cid',
+                        title: $t('Card Verification Number'),
+                        'data-container': getCode() + '-cc-cvv',
+                        'data-validate': JSON.stringify({'required-number':true, 'validate-card-cvv':'#' + getCode() + '_cc_type'})},
+                        enable: isActive($parents),
+                        value: creditCardVerificationNumber" />
             <div class="field-tooltip toggle">
-                <span class="field-tooltip-action action-cvv" data-bind="attr: {title: $t('What is this?')}">
+                <span class="field-tooltip-action action-cvv"
+                      tabindex="0"
+                      data-toggle="dropdown"
+                      data-bind="attr: {title: $t('What is this?')}, mageInit: {'dropdown':{'activeClass': '_active'}}">
                     <span><!-- ko text: $t('What is this?')--><!-- /ko --></span>
                 </span>
-                <div class="field-tooltip-content" data-bind="html: getCvvImageHtml()"></div>
+                <div class="field-tooltip-content"
+                     data-target="dropdown"
+                     data-bind="html: getCvvImageHtml()"></div>
             </div>
         </div>
     </div>

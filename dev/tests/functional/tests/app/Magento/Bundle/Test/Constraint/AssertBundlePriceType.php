@@ -112,7 +112,7 @@ class AssertBundlePriceType extends AbstractConstraint
                 'Bundle item ' . ($index + 1) . ' options on frontend don\'t equal to fixture.'
             );
         }
-        $sumOptionsPrice = $product->getDataFieldConfig('price')['source']->getPreset()['cart_price'];
+        $sumOptionsPrice = $product->getDataFieldConfig('price')['source']->getPriceData()['cart_price'];
 
         $subTotal = number_format($cartItem->getPrice(), 2);
         \PHPUnit_Framework_Assert::assertEquals(
