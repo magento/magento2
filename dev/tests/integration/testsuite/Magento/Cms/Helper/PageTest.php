@@ -38,7 +38,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $pageHelper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Helper\Page');
         $result = $pageHelper->prepareResultPage(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Cms\Helper\Stub\ActionStub',
+                'Magento\Framework\App\Test\Unit\Action\Stub\ActionStub',
                 ['context' => $context]
             ),
             $page->getId()
