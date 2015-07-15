@@ -6,76 +6,26 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="review" module="Magento_Review" type="composite" collection="Magento\Review\Model\Resource\Review\Collection" repository_class="Magento\Review\Test\Repository\Review" handler_interface="Magento\Review\Test\Handler\Review\ReviewInterface" class="Magento\Review\Test\Fixture\Review">
-    <dataset name="default">
-        <field name="status_id" xsi:type="string">Approved</field>
-        <field name="select_stores" xsi:type="array">
-            <item name="0" xsi:type="string">Main Website/Main Website Store/Default Store View</item>
-        </field>
-        <field name="nickname" xsi:type="string">Guest customer %isolation%</field>
-        <field name="title" xsi:type="string">Summary review %isolation%</field>
-        <field name="detail" xsi:type="string">Text review %isolation%</field>
-        <field name="ratings" xsi:type="array">
-            <item name="0" xsi:type="array">
-                <item name="dataSet" xsi:type="string">visibleOnDefaultWebsite</item>
-                <item name="rating" xsi:type="string">4</item>
-            </item>
-        </field>
-        <field name="entity_id" xsi:type="array">
-            <item name="dataSet" xsi:type="string">catalogProductSimple::default</item>
-        </field>
-        <field name="type" xsi:type="string">Administrator</field>
-    </dataset>
-    <field name="review_id" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="created_at" is_required="">
-      <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
-    </field>
-    <field name="entity_id" is_required="" source="Magento\Review\Test\Fixture\Review\EntityId">
-      <default_value xsi:type="array">
-                <item name="dataSet" xsi:type="string">catalogProductSimple::default</item>
-            </default_value>
-    </field>
-    <field name="entity_pk_value" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="status_id" is_required="">
-      <default_value xsi:type="string">Approved</default_value>
-    </field>
-    <field name="detail_id" is_required="1">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="store_id" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="title" is_required="">
-      <default_value xsi:type="string">Summary review %isolation%</default_value>
-    </field>
-    <field name="detail" is_required="">
-      <default_value xsi:type="string">Text review %isolation%</default_value>
-    </field>
-    <field name="nickname" is_required="">
-      <default_value xsi:type="string">Guest customer %isolation%</default_value>
-    </field>
-    <field name="customer_id" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="select_stores" is_required="1">
-      <default_value xsi:type="array">
-                <item name="0" xsi:type="string">Main Website/Main Website Store/Default Store View</item>
-            </default_value>
-    </field>
-    <field name="ratings" source="Magento\Review\Test\Fixture\Review\Ratings">
-      <default_value xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="dataSet" xsi:type="string">visibleOnDefaultWebsite</item>
-                    <item name="rating" xsi:type="number">4</item>
-                </item>
-            </default_value>
-    </field>
-    <field name="type" is_required="">
-      <default_value xsi:type="string">Administrator</default_value>
-    </field>
-  </fixture>
+    <fixture name="review"
+             module="Magento_Review"
+             type="composite"
+             collection="Magento\Review\Model\Resource\Review\Collection"
+             repository_class="Magento\Review\Test\Repository\Review"
+             handler_interface="Magento\Review\Test\Handler\Review\ReviewInterface"
+             class="Magento\Review\Test\Fixture\Review">
+        <field name="review_id" is_required="" />
+        <field name="created_at" is_required="" />
+        <field name="entity_id" is_required="" source="Magento\Review\Test\Fixture\Review\EntityId" />
+        <field name="entity_pk_value" is_required="" />
+        <field name="status_id" is_required="" />
+        <field name="detail_id" is_required="1" />
+        <field name="store_id" is_required="" />
+        <field name="title" is_required="" />
+        <field name="detail" is_required="" />
+        <field name="nickname" is_required="" />
+        <field name="customer_id" is_required="" />
+        <field name="select_stores" is_required="1" />
+        <field name="ratings" source="Magento\Review\Test\Fixture\Review\Ratings" />
+        <field name="type" is_required="" />
+    </fixture>
 </config>
