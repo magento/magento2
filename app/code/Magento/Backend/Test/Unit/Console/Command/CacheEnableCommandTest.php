@@ -9,7 +9,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheEnableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheEnableManageCommandTest extends CacheManageCommandTestAbstract
+class CacheEnableManageCommandTest extends AbstractCacheSetCommandTest
 {
     public function setUp()
     {
@@ -18,10 +18,10 @@ class CacheEnableManageCommandTest extends CacheManageCommandTestAbstract
     }
 
     /**
-     * @param $param
-     * @param $enable
-     * @param $result
-     * @param $output
+     * @param array $param
+     * @param array $enable
+     * @param array $result
+     * @param string $output
      * @dataProvider testExecuteDataProvider
      */
     public function testExecute($param, $enable, $result, $output)
@@ -37,45 +37,9 @@ class CacheEnableManageCommandTest extends CacheManageCommandTestAbstract
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function testExecuteDataProvider()
-    {
-        return [
-            'no parameters' => [
-                [],
-                ['A', 'B', 'C'],
-                ['A', 'B', 'C'],
-                $this->getExpectedEnableOutput(['A', 'B', 'C']),
-            ],
-            'explicit --all' => [
-                ['--all' => true, 'types' => 'A'],
-                ['A', 'B', 'C'],
-                ['A', 'B', 'C'],
-                $this->getExpectedEnableOutput(['A', 'B', 'C']),
-            ],
-            'specific types' => [
-                ['types' => ['A', 'B']],
-                ['A', 'B'],
-                ['A', 'B'],
-                $this->getExpectedEnableOutput(['A', 'B']),
-            ],
-            'no changes' => [
-                ['types' => ['A', 'B']],
-                ['A', 'B'],
-                [],
-                $this->getExpectedEnableOutput([]),
-            ],
-        ];
-    }
-
-    /**
-     * Formats expected output string of cache enable command
-     *
-     * @param array $enabled
-     * @return string
-     */
-    public function getExpectedEnableOutput(array $enabled)
+    public function getExpectedExecutionOutput(array $enabled)
     {
         $output = $this->getExpectedChangeOutput($enabled, true);
         if ($enabled) {
