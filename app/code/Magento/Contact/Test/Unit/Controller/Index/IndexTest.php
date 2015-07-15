@@ -1,32 +1,37 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Contact\Test\Unit\Controller\Index;
 
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Contact\Controller\Index\Index|\PHPUnit_Framework_MockObject_MockObject
+     * Controller
+     *
+     * @var \Magento\Contact\Controller\Index\Index
      */
     protected $_controller;
 
     /**
+     * Scope config mock
+     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeConfig;
 
     /**
+     * View mock
+     *
      * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_view;
 
     /**
+     * Url mock
+     *
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_url;
@@ -34,7 +39,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_scopeConfig = $this->getMockForAbstractClass(
-            '\Magento\Framework\App\Config\ScopeConfigInterface', ['isSetFlag'], '', false
+            '\Magento\Framework\App\Config\ScopeConfigInterface',
+            ['isSetFlag'],
+            '',
+            false
         );
         $context = $this->getMock(
             '\Magento\Framework\App\Action\Context',

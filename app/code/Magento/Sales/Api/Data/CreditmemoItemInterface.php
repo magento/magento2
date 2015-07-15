@@ -108,13 +108,13 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      */
     const NAME = 'name';
     /*
-     * Hidden tax amount.
+     * Discount tax compensation amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
-     * Base hidden tax amount.
+     * Base discount tax compensation amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /*
      * WEEE tax disposition.
      */
@@ -155,7 +155,7 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Gets the additional data for a credit memo item.
      *
-     * @return string Additional data.
+     * @return string|null Additional data.
      */
     public function getAdditionalData();
 
@@ -174,11 +174,11 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getBaseDiscountAmount();
 
     /**
-     * Gets the base hidden tax amount for a credit memo item.
+     * Gets the base discount tax compensation amount for a credit memo item.
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the base price for a credit memo item.
@@ -190,70 +190,70 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Gets the base price including tax for a credit memo item.
      *
-     * @return float Base price including tax.
+     * @return float|null Base price including tax.
      */
     public function getBasePriceInclTax();
 
     /**
      * Gets the base row total for a credit memo item.
      *
-     * @return float Base row total.
+     * @return float|null Base row total.
      */
     public function getBaseRowTotal();
 
     /**
      * Gets the base row total including tax for a credit memo item.
      *
-     * @return float Base row total including tax.
+     * @return float|null Base row total including tax.
      */
     public function getBaseRowTotalInclTax();
 
     /**
      * Gets the base tax amount for a credit memo item.
      *
-     * @return float Base tax amount.
+     * @return float|null Base tax amount.
      */
     public function getBaseTaxAmount();
 
     /**
      * Gets the base WEEE tax applied amount for a credit memo item.
      *
-     * @return float Base WEEE tax applied amount.
+     * @return float|null Base WEEE tax applied amount.
      */
     public function getBaseWeeeTaxAppliedAmount();
 
     /**
      * Gets the base WEEE tax applied row amount for a credit memo item.
      *
-     * @return float Base WEEE tax applied row amount.
+     * @return float|null Base WEEE tax applied row amount.
      */
     public function getBaseWeeeTaxAppliedRowAmnt();
 
     /**
      * Gets the base WEEE tax disposition for a credit memo item.
      *
-     * @return float Base WEEE tax disposition.
+     * @return float|null Base WEEE tax disposition.
      */
     public function getBaseWeeeTaxDisposition();
 
     /**
      * Gets the base WEEE tax row disposition for a credit memo item.
      *
-     * @return float Base WEEE tax row disposition.
+     * @return float|null Base WEEE tax row disposition.
      */
     public function getBaseWeeeTaxRowDisposition();
 
     /**
      * Gets the description for a credit memo item.
      *
-     * @return string Description.
+     * @return string|null Description.
      */
     public function getDescription();
 
     /**
      * Gets the discount amount for a credit memo item.
      *
-     * @return float Discount amount.
+     * @return float|null Discount amount.
      */
     public function getDiscountAmount();
 
@@ -273,16 +273,16 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function setEntityId($entityId);
 
     /**
-     * Gets the hidden tax amount for a credit memo item.
+     * Gets the discount tax compensation amount for a credit memo item.
      *
-     * @return float Hidden tax amount.
+     * @return float Discount tax compensation amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the name for a credit memo item.
      *
-     * @return string Name.
+     * @return string|null Name.
      */
     public function getName();
 
@@ -296,28 +296,28 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Gets the parent ID for a credit memo item.
      *
-     * @return int Parent ID.
+     * @return int|null Parent ID.
      */
     public function getParentId();
 
     /**
      * Gets the price for a credit memo item.
      *
-     * @return float Price.
+     * @return float|null Price.
      */
     public function getPrice();
 
     /**
      * Gets the price including tax for a credit memo item.
      *
-     * @return float Price including tax.
+     * @return float|null Price including tax.
      */
     public function getPriceInclTax();
 
     /**
      * Gets the product ID for a credit memo item.
      *
-     * @return int Product ID.
+     * @return int|null Product ID.
      */
     public function getProductId();
 
@@ -331,63 +331,63 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Gets the row total for a credit memo item.
      *
-     * @return float Row total.
+     * @return float|null Row total.
      */
     public function getRowTotal();
 
     /**
      * Gets the row total including tax for a credit memo item.
      *
-     * @return float Row total including tax.
+     * @return float|null Row total including tax.
      */
     public function getRowTotalInclTax();
 
     /**
      * Gets the SKU for a credit memo item.
      *
-     * @return string SKU.
+     * @return string|null SKU.
      */
     public function getSku();
 
     /**
      * Gets the tax amount for a credit memo item.
      *
-     * @return float Tax amount.
+     * @return float|null Tax amount.
      */
     public function getTaxAmount();
 
     /**
      * Gets the WEEE tax applied for a credit memo item.
      *
-     * @return string WEEE tax applied.
+     * @return string|null WEEE tax applied.
      */
     public function getWeeeTaxApplied();
 
     /**
      * Gets the WEEE tax applied amount for a credit memo item.
      *
-     * @return float WEEE tax applied amount.
+     * @return float|null WEEE tax applied amount.
      */
     public function getWeeeTaxAppliedAmount();
 
     /**
      * Gets the WEEE tax applied row amount for a credit memo item.
      *
-     * @return float WEEE tax applied row amount.
+     * @return float|null WEEE tax applied row amount.
      */
     public function getWeeeTaxAppliedRowAmount();
 
     /**
      * Gets the WEEE tax disposition for a credit memo item.
      *
-     * @return float WEEE tax disposition.
+     * @return float|null WEEE tax disposition.
      */
     public function getWeeeTaxDisposition();
 
     /**
      * Gets the WEEE tax row disposition for a credit memo item.
      *
-     * @return float WEEE tax row disposition.
+     * @return float|null WEEE tax row disposition.
      */
     public function getWeeeTaxRowDisposition();
 
@@ -560,20 +560,20 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function setName($name);
 
     /**
-     * Sets the hidden tax amount for a credit memo item.
+     * Sets the discount tax compensation amount for a credit memo item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the base hidden tax amount for a credit memo item.
+     * Sets the base discount tax compensation amount for a credit memo item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the WEEE tax disposition for a credit memo item.

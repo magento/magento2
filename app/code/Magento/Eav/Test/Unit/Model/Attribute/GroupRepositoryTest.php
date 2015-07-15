@@ -183,7 +183,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $attributeSetId = 42;
         $groupId = 20;
-        $groupMock = $this->getMock('\Magento\Eav\Api\Data\AttributeGroupInterface');
+        $groupMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Group', [], [], '', false);
         $existingGroupMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Group', [], [], '', false);
         $attributeSetMock = $this->getMock('\Magento\Eav\Api\Data\AttributeSetInterface');
         $groupMock->expects($this->any())->method('getAttributeSetId')->willReturn($attributeSetId);
@@ -195,6 +195,9 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->groupResourceMock->expects($this->once())->method('load')->with($existingGroupMock, $groupId);
         $existingGroupMock->expects($this->any())->method('getId')->willReturn($groupId);
         $existingGroupMock->expects($this->once())->method('getAttributeSetId')->willReturn($attributeSetId);
+        $this->groupResourceMock->expects($this->once())
+            ->method('save')
+            ->will($this->throwException(new \Exception()));
         $this->model->save($groupMock);
     }
 
@@ -211,7 +214,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $attributeSetId = 42;
         $groupId = 20;
-        $groupMock = $this->getMock('\Magento\Eav\Api\Data\AttributeGroupInterface');
+        $groupMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Group', [], [], '', false);
         $existingGroupMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Group', [], [], '', false);
         $attributeSetMock = $this->getMock('\Magento\Eav\Api\Data\AttributeSetInterface');
         $groupMock->expects($this->any())->method('getAttributeSetId')->willReturn($attributeSetId);
@@ -238,7 +241,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $attributeSetId = 42;
         $groupId = 20;
-        $groupMock = $this->getMock('\Magento\Eav\Api\Data\AttributeGroupInterface');
+        $groupMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Group', [], [], '', false);
         $existingGroupMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Group', [], [], '', false);
         $attributeSetMock = $this->getMock('\Magento\Eav\Api\Data\AttributeSetInterface');
         $groupMock->expects($this->any())->method('getAttributeSetId')->willReturn($attributeSetId);

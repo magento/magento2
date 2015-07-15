@@ -110,7 +110,9 @@ class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
             'onmouseup',
             'onkeydown',
             'onkeypress',
-            'onkeyup'
+            'onkeyup',
+            'data-role',
+            'data-action'
         ];
     }
 }

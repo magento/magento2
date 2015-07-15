@@ -52,7 +52,7 @@ class AssertProductTemplateGroupOnProductForm extends AbstractConstraint
         $productSimple = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => 'default',
+                'dataset' => 'default',
                 'data' => [
                     'attribute_set_id' => ['attribute_set' => $attributeSet],
                 ],
@@ -61,7 +61,7 @@ class AssertProductTemplateGroupOnProductForm extends AbstractConstraint
         $productBlockForm->fill($productSimple);
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $productEdit->getProductForm()->isTabVisible($attributeSet->getGroup()),
+            $productEdit->getProductForm()->isCustomTabVisible($attributeSet->getGroup()),
             "Product Group is absent on Product form tabs."
         );
 

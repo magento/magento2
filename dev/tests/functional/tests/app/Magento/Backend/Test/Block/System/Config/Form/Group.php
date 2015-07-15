@@ -9,7 +9,7 @@
 namespace Magento\Backend\Test\Block\System\Config\Form;
 
 use Magento\Mtf\Client\Locator;
-use Magento\Backend\Test\Block\Widget\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class Group

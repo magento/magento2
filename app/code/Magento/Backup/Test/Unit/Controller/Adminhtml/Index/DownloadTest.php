@@ -94,6 +94,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->backupModelFactoryMock = $this->getMockBuilder('Magento\Backup\Model\BackupFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->backupModelMock = $this->getMockBuilder('Magento\Backup\Model\Backup')
             ->disableOriginalConstructor()

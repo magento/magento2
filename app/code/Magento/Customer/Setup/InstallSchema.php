@@ -36,18 +36,6 @@ class InstallSchema implements InstallSchemaInterface
             ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
             'Entity Id'
         )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
-        )->addColumn(
-            'attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Attribute Set Id'
-        )->addColumn(
             'website_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
@@ -101,12 +89,97 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Disable automatic group change based on VAT ID'
+        )->addColumn(
+            'created_in',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Created From'
+        )->addColumn(
+            'prefix',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            40,
+            ['nullable' => true, 'default' => null],
+            'Prefix'
+        )->addColumn(
+            'firstname',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'First Name'
+        )->addColumn(
+            'middlename',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Middle Name/Initial'
+        )->addColumn(
+            'lastname',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Last Name'
+        )->addColumn(
+            'suffix',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            40,
+            ['nullable' => true, 'default' => null],
+            'Suffix'
+        )->addColumn(
+            'dob',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
+            null,
+            [],
+            'Date Of Birth'
+        )->addColumn(
+            'password_hash',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128
+        )->addColumn(
+            'rp_token',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            ['nullable' => true, 'default' => null],
+            'Reset password token'
+        )->addColumn(
+            'rp_token_created_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+            null,
+            ['nullable' => true, 'default' => null],
+            'Reset password token creation time'
+        )->addColumn(
+            'default_billing',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
+            'Default Billing Address'
+        )->addColumn(
+            'default_shipping',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
+            'Default Shipping Address'
+        )->addColumn(
+            'taxvat',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            50,
+            [],
+            'Tax/VAT Number'
+        )->addColumn(
+            'confirmation',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            64,
+            ['nullable' => true, 'default' => null],
+            'Is Confirmed'
+        )->addColumn(
+            'gender',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
+            'Gender'
         )->addIndex(
             $installer->getIdxName('customer_entity', ['store_id']),
             ['store_id']
-        )->addIndex(
-            $installer->getIdxName('customer_entity', ['entity_type_id']),
-            ['entity_type_id']
         )->addIndex(
             $installer->getIdxName(
                 'customer_entity',
@@ -118,6 +191,12 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('customer_entity', ['website_id']),
             ['website_id']
+        )->addIndex(
+            $installer->getIdxName('customer_entity', ['firstname']),
+            ['firstname']
+        )->addIndex(
+            $installer->getIdxName('customer_entity', ['lastname']),
+            ['lastname']
         )->addForeignKey(
             $installer->getFkName('customer_entity', 'store_id', 'store', 'store_id'),
             'store_id',
@@ -146,18 +225,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
             'Entity Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
-        )->addColumn(
-            'attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Attribute Set Id'
         )->addColumn(
             'increment_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -188,6 +255,120 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '1'],
             'Is Active'
+        )->addColumn(
+            'city',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'City'
+        )->addColumn(
+            'company',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Company'
+        )->addColumn(
+            'country_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'Country'
+        )->addColumn(
+            'fax',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Fax'
+        )->addColumn(
+            'firstname',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'First Name'
+        )->addColumn(
+            'lastname',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'Last Name'
+        )->addColumn(
+            'middlename',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Middle Name'
+        )->addColumn(
+            'postcode',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Zip/Postal Code'
+        )->addColumn(
+            'prefix',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            40,
+            ['nullable' => true, 'default' => null],
+            'Prefix'
+        )->addColumn(
+            'region',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'State/Province'
+        )->addColumn(
+            'region_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
+            'State/Province'
+        )->addColumn(
+            'street',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            null,
+            ['nullable' => false],
+            'Street Address'
+        )->addColumn(
+            'suffix',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            40,
+            ['nullable' => true, 'default' => null],
+            'Suffix'
+        )->addColumn(
+            'telephone',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'Phone Number'
+        )->addColumn(
+            'vat_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'VAT number'
+        )->addColumn(
+            'vat_is_valid',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
+            'VAT number validity'
+        )->addColumn(
+            'vat_request_date',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'VAT number validation request date'
+        )->addColumn(
+            'vat_request_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'VAT number validation request ID'
+        )->addColumn(
+            'vat_request_success',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
+            'VAT number validation request success'
         )->addIndex(
             $installer->getIdxName('customer_address_entity', ['parent_id']),
             ['parent_id']
@@ -215,12 +396,6 @@ class InstallSchema implements InstallSchemaInterface
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
         )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
-        )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
@@ -247,9 +422,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_address_entity_datetime', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_address_entity_datetime', ['attribute_id']),
             ['attribute_id']
         )->addIndex(
@@ -272,17 +444,6 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('customer_address_entity'),
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName(
-                'customer_address_entity_datetime',
-                'entity_type_id',
-                'eav_entity_type',
-                'entity_type_id'
-            ),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Datetime'
         );
@@ -299,12 +460,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -332,9 +487,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_address_entity_decimal', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_address_entity_decimal', ['attribute_id']),
             ['attribute_id']
         )->addIndex(
@@ -357,17 +509,6 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('customer_address_entity'),
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName(
-                'customer_address_entity_decimal',
-                'entity_type_id',
-                'eav_entity_type',
-                'entity_type_id'
-            ),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Decimal'
         );
@@ -384,12 +525,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -417,9 +552,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_address_entity_int', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_address_entity_int', ['attribute_id']),
             ['attribute_id']
         )->addIndex(
@@ -437,12 +569,6 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('customer_address_entity'),
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('customer_address_entity_int', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Int'
         );
@@ -459,12 +585,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -492,9 +612,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_address_entity_text', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_address_entity_text', ['attribute_id']),
             ['attribute_id']
         )->addForeignKey(
@@ -508,17 +625,6 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('customer_address_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName(
-                'customer_address_entity_text',
-                'entity_type_id',
-                'eav_entity_type',
-                'entity_type_id'
-            ),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Text'
@@ -536,12 +642,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -569,9 +669,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_address_entity_varchar', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_address_entity_varchar', ['attribute_id']),
             ['attribute_id']
         )->addIndex(
@@ -594,17 +691,6 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('customer_address_entity'),
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName(
-                'customer_address_entity_varchar',
-                'entity_type_id',
-                'eav_entity_type',
-                'entity_type_id'
-            ),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Varchar'
         );
@@ -621,12 +707,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -654,9 +734,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_entity_datetime', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_entity_datetime', ['attribute_id']),
             ['attribute_id']
         )->addIndex(
@@ -674,12 +751,6 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('customer_entity'),
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('customer_entity_datetime', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Datetime'
         );
@@ -696,12 +767,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -729,9 +794,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_entity_decimal', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_entity_decimal', ['attribute_id']),
             ['attribute_id']
         )->addIndex(
@@ -749,12 +811,6 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('customer_entity'),
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('customer_entity_decimal', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Decimal'
         );
@@ -771,12 +827,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -804,9 +854,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_entity_int', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_entity_int', ['attribute_id']),
             ['attribute_id']
         )->addIndex(
@@ -824,12 +871,6 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('customer_entity'),
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('customer_entity_int', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Int'
         );
@@ -846,12 +887,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -879,9 +914,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_entity_text', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_entity_text', ['attribute_id']),
             ['attribute_id']
         )->addForeignKey(
@@ -895,12 +927,6 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('customer_entity_text', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Text'
@@ -918,12 +944,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'Value Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -951,9 +971,6 @@ class InstallSchema implements InstallSchemaInterface
             ['entity_id', 'attribute_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $installer->getIdxName('customer_entity_varchar', ['entity_type_id']),
-            ['entity_type_id']
-        )->addIndex(
             $installer->getIdxName('customer_entity_varchar', ['attribute_id']),
             ['attribute_id']
         )->addIndex(
@@ -970,12 +987,6 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('customer_entity_varchar', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
-            'entity_type_id',
-            $installer->getTable('eav_entity_type'),
-            'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Varchar'
@@ -1178,6 +1189,12 @@ class InstallSchema implements InstallSchemaInterface
             ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
             'Visitor ID'
         )->addColumn(
+            'customer_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Customer Id'
+        )->addColumn(
             'session_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             64,
@@ -1189,9 +1206,70 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['nullable' => false],
             'Last Visit Time'
+        )->addIndex(
+            $installer->getIdxName('customer_visitor', ['customer_id']),
+            ['customer_id']
         )->setComment(
             'Visitor Table'
         );
+        $installer->getConnection()->createTable($table);
+
+        $table = $installer->getConnection()
+            ->newTable(
+                $installer->getTable('customer_log')
+            )
+            ->addColumn(
+                'log_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                [
+                    'nullable' => false,
+                    'identity' => true,
+                    'primary' => true
+                ],
+                'Log ID'
+            )
+            ->addColumn(
+                'customer_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                [
+                    'nullable' => false
+                ],
+                'Customer ID'
+            )
+            ->addColumn(
+                'last_login_at',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                null,
+                [
+                    'nullable' => true,
+                    'default' => null
+                ],
+                'Last Login Time'
+            )
+            ->addColumn(
+                'last_logout_at',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                null,
+                [
+                    'nullable' => true,
+                    'default' => null
+                ],
+                'Last Logout Time'
+            )
+            ->addIndex(
+                $installer->getIdxName(
+                    $installer->getTable('customer_log'),
+                    ['customer_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['customer_id'],
+                [
+                    'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ]
+            )
+            ->setComment('Customer Log Table');
         $installer->getConnection()->createTable($table);
 
         $installer->endSetup();

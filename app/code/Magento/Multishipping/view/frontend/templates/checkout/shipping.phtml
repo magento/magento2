@@ -34,7 +34,7 @@
                 </strong>
                 <div class="box-content">
                     <?php if (!($_shippingRateGroups = $block->getShippingRates($_address))): ?>
-                        <p><?php echo __('Sorry, no quotes are available for this order at this time.') ?></p>
+                        <p><?php echo __('Sorry, no quotes are available for this order right now.') ?></p>
                     <?php else: ?>
                     <dl class="items methods-shipping">
                         <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>

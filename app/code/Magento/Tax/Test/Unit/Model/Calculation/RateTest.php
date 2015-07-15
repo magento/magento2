@@ -49,7 +49,10 @@ class RateTest extends \PHPUnit_Framework_TestCase
             'Magento\Tax\Model\Calculation\Rate',
             ['resource' => $this->resourceMock]
         );
-        $rate->setData($data)->beforeSave();
+        foreach ($data as $key => $value) {
+            $rate->setData($key, $value);
+        }
+        $rate->beforeSave();
     }
 
     /**
@@ -61,16 +64,16 @@ class RateTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'fill all required fields 1' => [
-                'exceptionMessage' => 'Please fill all required fields with valid information.',
+                'exceptionMessage' => 'Make sure all required information is valid.',
                 'data' => ['zip_is_range' => true, 'zip_from' => '0111', 'zip_to' => '',
                     'code' => '', 'tax_country_id' => '', 'rate' => '', 'tax_postcode' => '', ],
             ],
             'fill all required fields 2' => [
-                'exceptionMessage' => 'Please fill all required fields with valid information.',
+                'exceptionMessage' => 'Make sure all required information is valid.',
                 'data' => ['zip_is_range' => '', 'zip_from' => '', 'zip_to' => '',
                     'code' => '', 'tax_country_id' => '', 'rate' => '0.2', 'tax_postcode' => '1234', ], ],
             'positive number' => [
-                'exceptionMessage' => 'Rate Percent should be a positive number.',
+                'exceptionMessage' => 'The Rate Percent should be a positive number.',
                 'data' => ['zip_is_range' => '', 'zip_from' => '', 'zip_to' => '', 'code' => 'code',
                     'tax_country_id' => 'US', 'rate' => '-1', 'tax_postcode' => '1234', ],
             ],
@@ -80,7 +83,7 @@ class RateTest extends \PHPUnit_Framework_TestCase
                     'code' => 'code', 'tax_country_id' => 'US', 'rate' => '1.1', 'tax_postcode' => '1234', ],
             ],
             'contain characters' => [
-                'exceptionMessage' => 'Zip code should not contain characters other than digits.',
+                'exceptionMessage' => 'Use digits only for the zip code.',
                 'data' => ['zip_is_range' => true, 'zip_from' => 'foo', 'zip_to' => '1234', 'code' => 'code',
                     'tax_country_id' => 'US', 'rate' => '1.1', 'tax_postcode' => '1234', ],
             ],

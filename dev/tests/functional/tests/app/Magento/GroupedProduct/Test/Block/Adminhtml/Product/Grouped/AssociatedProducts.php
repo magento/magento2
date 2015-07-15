@@ -7,61 +7,69 @@
 namespace Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped;
 
 use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\AssociatedProducts\ListAssociatedProducts;
+use Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\AssociatedProducts\Search\Grid;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class AssociatedProducts
- * Grouped products tab
+ * Grouped products tab.
  */
 class AssociatedProducts extends Tab
 {
     /**
-     * 'Create New Option' button
+     * 'Create New Option' button.
      *
      * @var string
      */
     protected $addNewOption = '#grouped-product-container>button';
 
     /**
-     * Associated products grid locator
+     * Associated products grid locator.
      *
      * @var string
      */
-    protected $productSearchGrid = "./ancestor::body//div[div[contains(@data-role,'add-product-dialog')]]";
+    protected $productSearchGrid = './/*[@data-role="modal"][.//*[@data-role="add-product-dialog"]]';
 
     /**
-     * Associated products list block
+     * Associated products list block.
      *
      * @var string
      */
     protected $associatedProductsBlock = '[data-role=grouped-product-grid]';
 
     /**
-     * Selector for delete button
+     * Selector for delete button.
      *
      * @var string
      */
     protected $deleteButton = '[data-role="delete"]';
 
     /**
-     * Get search grid
+     * Selector for loading mask element.
      *
-     * @return AssociatedProducts\Search\Grid
+     * @var string
+     */
+    protected $loadingMask = '.loading-mask';
+
+    /**
+     * Get search grid.
+     *
+     * @return Grid
      */
     protected function getSearchGridBlock()
     {
         return $this->blockFactory->create(
             'Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\AssociatedProducts\Search\Grid',
-            ['element' => $this->_rootElement->find($this->productSearchGrid, Locator::SELECTOR_XPATH)]
+            ['element' => $this->browser->find($this->productSearchGrid, Locator::SELECTOR_XPATH)]
         );
     }
 
     /**
-     * Get associated products list block
+     * Get associated products list block.
      *
-     * @return AssociatedProducts\ListAssociatedProducts
+     * @return ListAssociatedProducts
      */
     protected function getListAssociatedProductsBlock()
     {
@@ -72,7 +80,7 @@ class AssociatedProducts extends Tab
     }
 
     /**
-     * Fill data to fields on tab
+     * Fill data to fields on tab.
      *
      * @param array $fields
      * @param SimpleElement|null $element
@@ -90,6 +98,7 @@ class AssociatedProducts extends Tab
             foreach ($fields['associated']['value']['assigned_products'] as $key => $groupedProduct) {
                 $element->find($this->addNewOption)->click();
                 $searchBlock = $this->getSearchGridBlock();
+                $this->waitLoaderNotVisible();
                 $searchBlock->searchAndSelect(['name' => $groupedProduct['name']]);
                 $searchBlock->addProducts();
                 $this->getListAssociatedProductsBlock()->fillProductOptions($groupedProduct, ($key + 1));
@@ -99,7 +108,7 @@ class AssociatedProducts extends Tab
     }
 
     /**
-     * Get data to fields on group tab
+     * Get data to fields on group tab.
      *
      * @param array|null $fields
      * @param SimpleElement|null $element
@@ -117,5 +126,22 @@ class AssociatedProducts extends Tab
             }
         }
         return $newFields;
+    }
+
+    /**
+     * Wait until loader is not visible.
+     *
+     * return void
+     */
+    protected function waitLoaderNotVisible()
+    {
+        $browser = $this->browser;
+        $selector = $this->loadingMask;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector);
+                return $element->isVisible() === false ? true : null;
+            }
+        );
     }
 }

@@ -67,6 +67,58 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     }
 
     /**
+     * Return ID
+     *
+     * @codeCoverageIgnore
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->getData($this->_idFieldName);
+    }
+
+    /**
+     * Set ID
+     *
+     * @codeCoverageIgnore
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->setData($this->_idFieldName, $id);
+        return $this;
+    }
+
+    /**
+     * Id field name setter
+     *
+     * @codeCoverageIgnore
+     *
+     * @param  string $name
+     * @return $this
+     */
+    public function setIdFieldName($name)
+    {
+        $this->_idFieldName = $name;
+        return $this;
+    }
+
+    /**
+     * Id field name getter
+     *
+     * @codeCoverageIgnore
+     *
+     * @return string
+     */
+    public function getIdFieldName()
+    {
+        return $this->_idFieldName;
+    }
+
+    /**
      * Return indexer's view ID
      *
      * @return string
@@ -104,6 +156,36 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     public function getDescription()
     {
         return $this->getData('description');
+    }
+
+    /**
+     * Return indexer fields
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->getData('fields');
+    }
+
+    /**
+     * Return indexer sources
+     *
+     * @return array
+     */
+    public function getSources()
+    {
+        return $this->getData('sources');
+    }
+
+    /**
+     * Return indexer handlers
+     *
+     * @return array
+     */
+    public function getHandlers()
+    {
+        return $this->getData('handlers');
     }
 
     /**
@@ -270,7 +352,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     protected function getActionInstance()
     {
-        return $this->actionFactory->get($this->getActionClass());
+        return $this->actionFactory->create($this->getActionClass(), ['data' => $this->getData()]);
     }
 
     /**

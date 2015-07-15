@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Con
 /**
  * @magentoAppArea adminhtml
  */
-class MatrixTest extends \Magento\Backend\Utility\Controller
+class MatrixTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     const ATTRIBUTE_LABEL = 'New Attribute Label';
     const ATTRIBUTE_POSITION = 42;

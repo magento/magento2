@@ -46,6 +46,6 @@ class AssertWishlistShareMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Wishlist success share message is present.';
+        return 'Wish List success share message is present.';
     }
 }

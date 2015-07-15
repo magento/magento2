@@ -28,7 +28,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Search and open product from preconditions
  * 3. Open Review tab
  * 4. Search and open review created in preconditions
- * 5. Fill data according to dataSet
+ * 5. Fill data according to dataset
  * 6. Save changes
  * 7. Perform all assertions
  *
@@ -95,7 +95,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     {
         $this->reviewInitial = $fixtureFactory->createByCode(
             'review',
-            ['dataSet' => 'review_for_simple_product_with_rating']
+            ['dataset' => 'review_for_simple_product_with_rating']
         );
         $this->reviewInitial->persist();
         $this->fixtureFactory = $fixtureFactory;
@@ -144,7 +144,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
             'title' => $this->reviewInitial->getTitle(),
             'sku' => $product->getSku(),
         ];
-        $this->catalogProductEdit->getProductForm()->getTabElement('product_reviews')->getReviewsGrid()
+        $this->catalogProductEdit->getProductForm()->getTab('product_reviews')->getReviewsGrid()
             ->searchAndOpen($filter);
         $this->reviewEdit->getReviewForm()->fill($review);
         $this->reviewEdit->getPageActions()->save();

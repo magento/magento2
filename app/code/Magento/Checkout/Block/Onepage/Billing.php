@@ -17,7 +17,7 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
     /**
-     * Sales Qoute Billing Address instance
+     * Sales Quote Billing Address instance
      *
      * @var \Magento\Quote\Model\Quote\Address
      */

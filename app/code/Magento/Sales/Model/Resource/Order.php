@@ -9,9 +9,10 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
 use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
-use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
 use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
 
 /**
  * Flat sales order resource
@@ -41,11 +42,6 @@ class Order extends SalesResource implements OrderResourceInterface
     protected $stateHandler;
 
     /**
-     * @var AddressHandler
-     */
-    protected $addressHandler;
-
-    /**
      * Model Initialization
      *
      * @return void
@@ -59,23 +55,29 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
-     * @param AddressHandler $addressHandler
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
      * @param StateHandler $stateHandler
-     * @param null $resourcePrefix
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        RelationComposite $entityRelationComposite,
         Attribute $attribute,
         Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
-        AddressHandler $addressHandler,
         StateHandler $stateHandler,
         $resourcePrefix = null
     ) {
         $this->stateHandler = $stateHandler;
-        $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
+        parent::__construct(
+            $context,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
+            $resourcePrefix
+        );
     }
 
     /**
@@ -124,7 +126,9 @@ class Order extends SalesResource implements OrderResourceInterface
                 $parent = $item->getQuoteParentItemId();
                 if ($parent && !$item->getParentItem()) {
                     $item->setParentItem($object->getItemByQuoteItemId($parent));
-                } elseif (!$parent) {
+                }
+                $childItems = $item->getChildrenItems();
+                if (empty($childItems)) {
                     $itemsCount++;
                 }
             }
@@ -138,9 +142,6 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        /** @var \Magento\Sales\Model\Order $object */
-        $this->addressHandler->removeEmptyAddresses($object);
-        $this->stateHandler->check($object);
         if (!$object->getId()) {
             /** @var \Magento\Store\Model\Store $store */
             $store = $object->getStore();
@@ -149,7 +150,7 @@ class Order extends SalesResource implements OrderResourceInterface
                 $store->getGroup()->getName(),
                 $store->getName(),
             ];
-            $object->setStoreName(implode("\n", $name));
+            $object->setStoreName(implode(PHP_EOL, $name));
             $object->setTotalItemCount($this->calculateItems($object));
         }
         $object->setData(
@@ -164,44 +165,12 @@ class Order extends SalesResource implements OrderResourceInterface
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
+     * {@inheritdoc}
      */
-    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
+    public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order $object */
-        $this->addressHandler->process($object);
-
-        if (null !== $object->getItems()) {
-            /** @var \Magento\Sales\Model\Order\Item $item */
-            foreach ($object->getItems() as $item) {
-                $item->setOrderId($object->getId());
-                $item->setOrder($object);
-                $item->save();
-            }
-        }
-        if (null !== $object->getPayments()) {
-            /** @var \Magento\Sales\Model\Order\Payment $payment */
-            foreach ($object->getPayments() as $payment) {
-                $payment->setParentId($object->getId());
-                $payment->setOrder($object);
-                $payment->save();
-            }
-        }
-        if (null !== $object->getStatusHistories()) {
-            /** @var \Magento\Sales\Model\Order\Status\History $statusHistory */
-            foreach ($object->getStatusHistories() as $statusHistory) {
-                $statusHistory->setParentId($object->getId());
-                $statusHistory->save();
-                $statusHistory->setOrder($object);
-            }
-        }
-        if (null !== $object->getRelatedObjects()) {
-            foreach ($object->getRelatedObjects() as $relatedObject) {
-                $relatedObject->save();
-                $relatedObject->setOrder($object);
-            }
-        }
-        return parent::processRelations($object);
+        $this->stateHandler->check($object);
+        return parent::save($object);
     }
 }

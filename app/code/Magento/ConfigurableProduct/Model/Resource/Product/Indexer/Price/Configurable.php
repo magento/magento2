@@ -17,7 +17,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->reindex();
@@ -63,10 +63,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     protected function _getConfigurableOptionAggregateTable()
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_price_cfg_opt_agr_idx');
-        }
-        return $this->getTable('catalog_product_index_price_cfg_opt_agr_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_cfg_opt_agr');
     }
 
     /**
@@ -76,10 +73,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     protected function _getConfigurableOptionPriceTable()
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_price_cfg_opt_idx');
-        }
-        return $this->getTable('catalog_product_index_price_cfg_opt_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_cfg_opt');
     }
 
     /**
@@ -131,24 +125,6 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
             ['customer_group_id', 'website_id'],
             'i'
         )->join(
-            ['a' => $this->getTable('catalog_product_super_attribute')],
-            'l.parent_id = a.product_id',
-            []
-        )->join(
-            ['cp' => $this->getTable('catalog_product_entity_int')],
-            'l.product_id = cp.entity_id AND cp.attribute_id = a.attribute_id AND cp.store_id = 0',
-            []
-        )->joinLeft(
-            ['apd' => $this->getTable('catalog_product_super_attribute_pricing')],
-            'a.product_super_attribute_id = apd.product_super_attribute_id' .
-            ' AND apd.website_id = 0 AND cp.value = apd.value_index',
-            []
-        )->joinLeft(
-            ['apw' => $this->getTable('catalog_product_super_attribute_pricing')],
-            'a.product_super_attribute_id = apw.product_super_attribute_id' .
-            ' AND apw.website_id = i.website_id AND cp.value = apw.value_index',
-            []
-        )->join(
             ['le' => $this->getTable('catalog_product_entity')],
             'le.entity_id = l.product_id',
             []
@@ -157,23 +133,9 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         )->group(
             ['l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
-
-        $priceExpression = $write->getCheckSql('apw.value_id IS NOT NULL', 'apw.pricing_value', 'apd.pricing_value');
-        $percentExpr = $write->getCheckSql('apw.value_id IS NOT NULL', 'apw.is_percent', 'apd.is_percent');
-        $roundExpr = "ROUND(i.price * ({$priceExpression} / 100), 4)";
-        $roundPriceExpr = $write->getCheckSql("{$percentExpr} = 1", $roundExpr, $priceExpression);
-        $priceColumn = $write->getCheckSql("{$priceExpression} IS NULL", '0', $roundPriceExpr);
-        $priceColumn = new \Zend_Db_Expr("SUM({$priceColumn})");
-
-        $tierPrice = $priceExpression;
-        $tierRoundPriceExp = $write->getCheckSql("{$percentExpr} = 1", $roundExpr, $tierPrice);
-        $tierPriceExp = $write->getCheckSql("{$tierPrice} IS NULL", '0', $tierRoundPriceExp);
-        $tierPriceColumn = $write->getCheckSql("MIN(i.tier_price) IS NOT NULL", "SUM({$tierPriceExp})", 'NULL');
-
-        $groupPrice = $priceExpression;
-        $groupRoundPriceExp = $write->getCheckSql("{$percentExpr} = 1", $roundExpr, $groupPrice);
-        $groupPriceExp = $write->getCheckSql("{$groupPrice} IS NULL", '0', $groupRoundPriceExp);
-        $groupPriceColumn = $write->getCheckSql("MIN(i.group_price) IS NOT NULL", "SUM({$groupPriceExp})", 'NULL');
+        $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
+        $tierPriceColumn = $write->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');
+        $groupPriceColumn = $write->getCheckSql("MIN(i.group_price) IS NOT NULL", "i.group_price", 'NULL');
 
         $select->columns(
             ['price' => $priceColumn, 'tier_price' => $tierPriceColumn, 'group_price' => $groupPriceColumn]
@@ -188,8 +150,8 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
                 'parent_id',
                 'customer_group_id',
                 'website_id',
-                'MIN(price)',
-                'MAX(price)',
+                $write->getCheckSql("MIN(group_price) IS NOT NULL", "group_price", 'MIN(price)'),
+                $write->getCheckSql("MIN(group_price) IS NOT NULL", "group_price", 'MAX(price)'),
                 'MIN(tier_price)',
                 'MIN(group_price)'
             ]
@@ -209,18 +171,10 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         );
         $select->columns(
             [
-                'min_price' => new \Zend_Db_Expr('i.min_price + io.min_price'),
-                'max_price' => new \Zend_Db_Expr('i.max_price + io.max_price'),
-                'tier_price' => $write->getCheckSql(
-                    'i.tier_price IS NOT NULL',
-                    'i.tier_price + io.tier_price',
-                    'NULL'
-                ),
-                'group_price' => $write->getCheckSql(
-                    'i.group_price IS NOT NULL',
-                    'i.group_price + io.group_price',
-                    'NULL'
-                ),
+                'min_price' => new \Zend_Db_Expr('i.min_price - i.orig_price + io.min_price'),
+                'max_price' => new \Zend_Db_Expr('i.max_price - i.orig_price + io.max_price'),
+                'tier_price' => 'io.tier_price',
+                'group_price' => 'io.group_price'
             ]
         );
 

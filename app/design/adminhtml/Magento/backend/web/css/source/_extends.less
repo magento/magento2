@@ -35,6 +35,19 @@
 }
 
 //
+//  Modals
+//  ---------------------------------------------
+
+.abs-modal-overlay {
+    background: @popup-overlay__background-color;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+//
 //  Other
 //  ---------------------------------------------
 
@@ -56,13 +69,9 @@
     &:extend(.abs-visually-hidden-reset all);
 }
 
-//  Clearfix
+//  Clearfixes
 .abs-clearfix {
     .clearfix();
-}
-
-.extend__clearfix() {
-    &:extend(.abs-clearfix all);
 }
 
 //  Clearer - clearing container using only :after element

@@ -203,21 +203,10 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected function _isUrlInternal($url)
     {
         if (strpos($url, 'http') !== false) {
-            $unsecure = strpos(
-                $url,
-                $this->_storeManager->getStore()->getBaseUrl(
-                    \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK,
-                    false
-                )
-            ) === 0;
-            $secure = strpos(
-                $url,
-                $this->_storeManager->getStore()->getBaseUrl(
-                    \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK,
-                    true
-                )
-            ) === 0;
-            return $unsecure || $secure;
+            $directLinkType = \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK;
+            $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, false);
+            $secureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, true);
+            return (strpos($url, $unsecureBaseUrl) === 0) || (strpos($url, $secureBaseUrl) === 0);
         }
         return false;
     }

@@ -35,7 +35,7 @@ class DbSchemaUpgradeCommandTest extends DbDataUpgradeCommandTest
         );
         $commandTester->execute([]);
         $this->assertStringMatchesFormat(
-            'No information is available: the application is not installed.%w',
+            'No information is available: the Magento application is not installed.%w',
             $commandTester->getDisplay()
         );
     }

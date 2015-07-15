@@ -7,6 +7,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Builder\Query;
 
 use Magento\Framework\App\Resource\Config;
 use Magento\Framework\Search\Request\Query\Bool;
+use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class MatchTest extends \PHPUnit_Framework_TestCase
@@ -28,8 +29,8 @@ class MatchTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildQuery($conditionType, $expectedSuffix)
     {
-        $expectedScoreCondition = "(MATCH (data_index) AGAINST ('{$expectedSuffix}someValue*' " .
-            "IN BOOLEAN MODE) * 3.14) AS global_score";
+        $conditionPattern = "(MATCH (data_index) AGAINST ('%ssomeValue*' IN BOOLEAN MODE) * POW(2, %s)) AS score";
+        $expectedScoreCondition = sprintf($conditionPattern, $expectedSuffix, ScoreBuilder::WEIGHT_FIELD);
         $expectedSql = "SELECT `someTable`.* FROM `someTable` WHERE (MATCH (data_index) " .
             "AGAINST ('{$expectedSuffix}someValue*' IN BOOLEAN MODE))";
 

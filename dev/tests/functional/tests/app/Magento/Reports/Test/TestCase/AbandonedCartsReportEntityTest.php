@@ -13,7 +13,6 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Create simple product.
  * 2. Create customer.
@@ -86,7 +85,6 @@ class AbandonedCartsReportEntityTest extends Injectable
      */
     public function test($products, Customer $customer)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-31737');
         // Precondition
         $products = $this->createProducts($products);
         $customer->persist();

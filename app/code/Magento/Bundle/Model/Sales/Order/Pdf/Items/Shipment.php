@@ -23,7 +23,7 @@ class Shipment extends AbstractItems
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -34,7 +34,7 @@ class Shipment extends AbstractItems
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->string = $string;
@@ -66,7 +66,7 @@ class Shipment extends AbstractItems
 
         $this->_setFontRegular();
 
-        $shipItems = $this->getChilds($item);
+        $shipItems = $this->getChildren($item);
         $items = array_merge([$item->getOrderItem()], $item->getOrderItem()->getChildrenItems());
 
         $prevOptionId = '';

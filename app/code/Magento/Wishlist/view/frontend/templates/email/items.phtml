@@ -9,43 +9,40 @@
 /* @var $block \Magento\Wishlist\Block\Share\Email\Items */
 ?>
 <?php $l = $block->getWishlistItemsCount() ?>
-<div style="border:1px solid #E0E0E0; padding:15px; background:#F9F9F9;">
-    <table cellspacing="0" cellpadding="0" border="0" width="650">
+<div>
+    <table>
         <tr>
             <?php $i = 0;
             foreach ($block->getWishlistItems() as $item): $i++ ?>
             <?php /* @var $item \Magento\Wishlist\Model\Item */ ?>
             <?php /* @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php $_product = $item->getProduct(); ?>
-            <td width="32%" class="col product">
-                <p align="center" style="font-size:12px;">
-                    <a href="<?php echo $block->getProductUrl($_product) ?>">
-                        <img src="<?php echo $block->getSmallImageUrl($_product); ?>" width="<?php echo $block->getSmallImageSize() ?>" height="<?php echo $block->getSmallImageSize() ?>" style="border:1px solid #ccc;" alt=""/>
+            <td class="col product">
+                <p>
+                    <a href="<?= $block->getProductUrl($_product) ?>">
+                        <img src="<?= $block->getSmallImageUrl($_product) ?>" height="<?= $block->getSmallImageSize() ?>" alt=""/>
                     </a>
                 </p>
 
-                <p align="center" style="font-size:12px;">
-                    <a href="<?php echo $block->getProductUrl($_product) ?>" style="color:#203548;">
-                        <strong><?php echo $block->escapeHtml($_product->getName()) ?></strong>
+                <p>
+                    <a href="<?= $block->getProductUrl($_product) ?>">
+                        <strong><?= $block->escapeHtml($_product->getName()) ?></strong>
                     </a>
                 </p>
                 <?php if ($block->hasDescription($item)): ?>
-                    <p align="center" style="font-size:12px;"><?php echo __('Comment') ?>:
-                    <br/><?php echo $block->getEscapedDescription($item) ?></p><?php endif; ?>
-                    <p align="center" style="font-size:12px;">
-                        <a href="<?php echo $block->getProductUrl($_product) ?>" style="color:#1E7EC8;">
-                            <?php echo __('View Product') ?>
-                        </a>
-                    <small>|</small>
-                    <?php if ($_product->getIsSalable()): ?>
-                    <a href="<?php echo $block->getAddToCartUrl($_product) ?>" style="color:#1E7EC8;">
-                        <strong><?php echo __('Add to Cart') ?></strong>
+                    <p>
+                        <strong><?= __('Comment') ?>:</strong>
+                        <br/><?= $block->getEscapedDescription($item) ?>
+                    </p>
+                <?php endif; ?>
+                <p>
+                    <a href="<?= $block->getProductUrl($_product) ?>">
+                        <?= __('View Product') ?>
                     </a>
-                    <?php endif; ?>
                 </p>
             </td>
             <?php if ($i % 3 != 0): ?>
-                <td width="2%"></td>
+                <td></td>
             <?php else: ?>
         </tr>
         <tr>

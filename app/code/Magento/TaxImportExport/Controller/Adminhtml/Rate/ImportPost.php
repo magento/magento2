@@ -36,4 +36,17 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
         return $resultRedirect;
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed(
+            'Magento_Tax::manage_tax'
+        ) || $this->_authorization->isAllowed(
+            'Magento_TaxImportExport::import_export'
+        );
+
+    }
 }

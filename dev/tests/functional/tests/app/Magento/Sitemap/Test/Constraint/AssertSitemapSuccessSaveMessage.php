@@ -14,7 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertSitemapSuccessSaveMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'The sitemap has been saved.';
+    const SUCCESS_MESSAGE = 'You saved the sitemap.';
 
     /**
      * Assert that success message is displayed after sitemap save

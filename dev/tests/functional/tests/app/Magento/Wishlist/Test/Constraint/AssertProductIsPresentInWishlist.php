@@ -37,7 +37,7 @@ class AssertProductIsPresentInWishlist extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertTrue(
             $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)->isVisible(),
-            $product->getName() . ' is not visible on wishlist page.'
+            $product->getName() . ' is not visible on Wish List page.'
         );
     }
 
@@ -48,6 +48,6 @@ class AssertProductIsPresentInWishlist extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product is present in default wishlist.';
+        return 'Product is present in default Wish List.';
     }
 }

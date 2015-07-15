@@ -26,7 +26,7 @@ class Invoice extends AbstractItems
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\String $coreString
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -37,7 +37,7 @@ class Invoice extends AbstractItems
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\String $coreString,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->string = $coreString;
@@ -69,7 +69,7 @@ class Invoice extends AbstractItems
         $page = $this->getPage();
 
         $this->_setFontRegular();
-        $items = $this->getChilds($item);
+        $items = $this->getChildren($item);
 
         $prevOptionId = '';
         $drawItems = [];

@@ -44,6 +44,6 @@ class AssertMoveProductToWishlistSuccessMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Success message appears on Checkout Cart page after moving product to wishlist.';
+        return 'Success message appears on Checkout Cart page after moving product to Wish List.';
     }
 }

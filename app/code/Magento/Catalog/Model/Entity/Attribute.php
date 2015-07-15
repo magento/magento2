@@ -87,7 +87,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param LockValidatorInterface $lockValidator
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -109,7 +109,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         LockValidatorInterface $lockValidator,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->attrLockValidator = $lockValidator;

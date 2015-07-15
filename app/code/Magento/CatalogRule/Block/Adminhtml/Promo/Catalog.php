@@ -20,7 +20,7 @@ class Catalog extends \Magento\Backend\Block\Widget\Grid\Container
     {
         $this->_blockGroup = 'Magento_CatalogRule';
         $this->_controller = 'adminhtml_promo_catalog';
-        $this->_headerText = __('Catalog Price Rules');
+        $this->_headerText = __('Catalog Price Rule');
         $this->_addButtonLabel = __('Add New Rule');
         parent::_construct();
 

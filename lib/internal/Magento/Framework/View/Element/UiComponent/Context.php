@@ -191,6 +191,23 @@ class Context implements ContextInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getFiltersParams()
+    {
+        return $this->getRequestParam(self::FILTER_VAR, []);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterParam($key, $defaultValue = null)
+    {
+        $filter = $this->getFiltersParams();
+        return isset($filter[$key]) ? $filter[$key] : $defaultValue;
+    }
+
+    /**
      * Get data provider
      *
      * @return DataProviderInterface
@@ -206,25 +223,8 @@ class Context implements ContextInterface
      */
     public function getDataSourceData(UiComponentInterface $component)
     {
-        $dataSource = [];
-        $id = $this->getRequestParam($this->getDataProvider()->getRequestFieldName());
-        if ($id) { // case form
-            $this->getDataProvider()->addFilter($this->getDataProvider()->getPrimaryFieldName(), $id);
-            $data = $this->getDataProvider()->getData();
-            if (isset($data[$id])) {
-                $dataSource = [
-                    'data' => $data[$id]
-                ];
-            }
-        } else { // case listing
-            $dataSource = [
-                'data' => $this->getDataProvider()->getData(),
-                'totalCount' => $this->getDataProvider()->count()
-            ];
-        }
-
+        $dataSource = $component->getDataSourceData();
         $this->prepareDataSource($dataSource, $component);
-
         $dataProviderConfig = $this->getDataProvider()->getConfigData();
         return [
             $this->getDataProvider()->getName() => [

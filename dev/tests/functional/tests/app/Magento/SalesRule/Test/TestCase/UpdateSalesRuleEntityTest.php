@@ -32,7 +32,6 @@ class UpdateSalesRuleEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
@@ -66,7 +65,7 @@ class UpdateSalesRuleEntityTest extends Injectable
     {
         $productForSalesRule1 = $fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'simple_for_salesrule_1']
+            ['dataset' => 'simple_for_salesrule_1']
         );
         $productForSalesRule1->persist();
         return [

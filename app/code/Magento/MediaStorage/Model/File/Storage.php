@@ -99,7 +99,7 @@ class Storage extends AbstractModel
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $databaseFactory
      * @param Filesystem $filesystem
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -114,7 +114,7 @@ class Storage extends AbstractModel
         \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $databaseFactory,
         Filesystem $filesystem,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_coreFileStorage = $coreFileStorage;

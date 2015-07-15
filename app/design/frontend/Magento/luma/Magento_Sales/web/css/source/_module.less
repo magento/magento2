@@ -4,8 +4,8 @@
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  ---------------------------------------------
 
 & when (@media-common = true) {
 
@@ -268,7 +268,9 @@
 }
 
 .account,
-.sales-guest-view {
+[class^="sales-guest-"],
+.sales-guest-view,
+.magento-rma-guest-returns {
     &:extend(.abs-title-orders all);
 }
 
@@ -305,8 +307,10 @@
 }
 
 //
-//    Guest order view page
-//--------------------------------------
+//  Guest order view page
+//  ---------------------------------------------
+
+[class^="sales-guest-"],
 .sales-guest-view {
     .column.main {
         .block:not(.widget) {
@@ -315,11 +319,24 @@
     }
 }
 
+.magento-rma-guest-returns {
+    .column.main {
+        .order-details-items {
+            .table-wrapper {
+                .data.table {
+                    &:extend(.abs-table-striped all);
+                }
+            }
+        }
+    }
+}
+
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .table-wrapper {
         &.orders-recent {
@@ -352,6 +369,7 @@
         }
     }
     .account,
+    [class^="sales-guest-"],
     .sales-guest-view {
         &:extend(.abs-title-orders-mobile all);
     }
@@ -412,8 +430,9 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
     .order-details-items {
         .order-title {
@@ -427,9 +446,6 @@
     }
 }
 
-//
-//    Desktop
-//--------------------------------------
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .table-wrapper.orders-recent {
         &:extend(.abs-account-table-margin-desktop all);
@@ -459,6 +475,7 @@
     }
 
     .account,
+    [class^="sales-guest-"],
     .sales-guest-view {
         &:extend(.abs-title-orders-desktop all);
         .column.main .block.block-order-details-view {

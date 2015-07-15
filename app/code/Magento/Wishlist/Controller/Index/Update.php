@@ -100,7 +100,7 @@ class Update extends Action\Action implements IndexInterface
                         $item->delete();
                     } catch (\Exception $e) {
                         $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-                        $this->messageManager->addError(__('Can\'t delete item from wishlist'));
+                        $this->messageManager->addError(__('We can\'t delete item from Wish List right now.'));
                     }
                 }
 

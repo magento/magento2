@@ -38,18 +38,11 @@ class InstallSchema implements InstallSchemaInterface
                 'Entity ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_set_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Attribute Set ID'
+                'Product Template ID'
             )
             ->addColumn(
                 'type_id',
@@ -94,10 +87,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Update Time'
             )
             ->addIndex(
-                $installer->getIdxName('catalog_product_entity', ['entity_type_id']),
-                ['entity_type_id']
-            )
-            ->addIndex(
                 $installer->getIdxName('catalog_product_entity', ['attribute_set_id']),
                 ['attribute_set_id']
             )
@@ -117,13 +106,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_set_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
-            ->addForeignKey(
-                $installer->getFkName('catalog_product_entity', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
-                'entity_type_id',
-                $installer->getTable('eav_entity_type'),
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-            )
             ->setComment('Catalog Product Table');
         $installer->getConnection()->createTable($table);
 
@@ -138,13 +120,6 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 ['identity' => true, 'nullable' => false, 'primary' => true],
                 'Value ID'
-            )
-            ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
             )
             ->addColumn(
                 'attribute_id',
@@ -238,13 +213,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Value ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -336,13 +304,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Value ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -422,13 +383,6 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 ['identity' => true, 'nullable' => false, 'primary' => true],
                 'Value ID'
-            )
-            ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
             )
             ->addColumn(
                 'attribute_id',
@@ -522,13 +476,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Value ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -620,13 +567,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Value ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -664,10 +604,10 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName(
                     'catalog_product_entity_gallery',
-                    ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                    ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                ['entity_id', 'attribute_id', 'store_id'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
@@ -727,13 +667,6 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Entity ID'
-            )
-            ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
             )
             ->addColumn(
                 'attribute_set_id',
@@ -811,13 +744,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Value ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -848,10 +774,10 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName(
                     'catalog_category_entity_datetime',
-                    ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                    ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                ['entity_id', 'attribute_id', 'store_id'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
@@ -913,13 +839,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Value ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -950,10 +869,10 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName(
                     'catalog_category_entity_decimal',
-                    ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                    [ 'entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                ['entity_id', 'attribute_id', 'store_id'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
@@ -1015,13 +934,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Value ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -1052,10 +964,10 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName(
                     'catalog_category_entity_int',
-                    ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                    ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                ['entity_id', 'attribute_id', 'store_id'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
@@ -1112,13 +1024,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Value ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -1149,10 +1054,10 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName(
                     'catalog_category_entity_text',
-                    ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                    ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                ['entity_id', 'attribute_id', 'store_id'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
@@ -1209,13 +1114,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Value ID'
             )
             ->addColumn(
-                'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )
-            ->addColumn(
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -1246,10 +1144,10 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName(
                     'catalog_category_entity_varchar',
-                    ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                    ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['entity_type_id', 'entity_id', 'attribute_id', 'store_id'],
+                ['entity_id', 'attribute_id', 'store_id'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
@@ -2825,6 +2723,27 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Is Required In Admin Store'
+            )
+            ->addColumn(
+                'is_used_in_grid',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is Used in Grid'
+            )
+            ->addColumn(
+                'is_visible_in_grid',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is Visible in Grid'
+            )
+            ->addColumn(
+                'is_filterable_in_grid',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is Filterable in Grid'
             )
             ->addIndex(
                 $installer->getIdxName('catalog_eav_attribute', ['used_for_sort_by']),
@@ -4638,7 +4557,6 @@ class InstallSchema implements InstallSchemaInterface
             );
         $installer->getConnection()
             ->createTable($table);
-
         $installer->endSetup();
 
     }

@@ -37,6 +37,11 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceModelMock;
 
+    /**
+     * @var \Magento\Framework\App\ObjectManager
+     */
+    protected $objectManagerBackup;
+
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -54,6 +59,13 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Magento\Email\Model\Resource\Template')
             ->will($this->returnValue($this->resourceModelMock));
+
+        try {
+            $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            $this->objectManagerBackup = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER)
+                ->create($_SERVER);
+        }
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $this->model = $helper->getObject(
@@ -62,25 +74,20 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetSystemConfigPathsWhereUsedAsDefaultNoTemplateCode()
+    protected function tearDown()
     {
-        $this->assertEquals([], $this->model->getSystemConfigPathsWhereUsedAsDefault());
+        parent::tearDown();
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
     }
 
-    public function testGetSystemConfigPathsWhereUsedAsDefaultValidTemplateCode()
+    public function testGetSystemConfigPathsWhereCurrentlyUsedNoId()
     {
-        $this->model->setData('orig_template_code', 1);
-        $this->assertEquals([['path' => 'test']], $this->model->getSystemConfigPathsWhereUsedAsDefault());
+        $this->assertEquals([], $this->model->getSystemConfigPathsWhereCurrentlyUsed());
     }
 
-    public function testGetSystemConfigPathsWhereUsedCurrentlyNoId()
-    {
-        $this->assertEquals([], $this->model->getSystemConfigPathsWhereUsedCurrently());
-    }
-
-    public function testGetSystemConfigPathsWhereUsedCurrentlyValidId()
+    public function testGetSystemConfigPathsWhereCurrentlyUsedValidId()
     {
         $this->model->setId(1);
-        $this->assertEquals(['test_config' => 2015], $this->model->getSystemConfigPathsWhereUsedCurrently());
+        $this->assertEquals(['test_config' => 2015], $this->model->getSystemConfigPathsWhereCurrentlyUsed());
     }
 }

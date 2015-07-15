@@ -43,7 +43,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -53,7 +53,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
@@ -108,7 +108,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
                 //@codingStandardsIgnoreStart
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
-                        'Cannot share customer accounts globally because some customer accounts with the same emails exist on multiple websites and cannot be merged.'
+                        'We can\'t share customer accounts globally when the accounts share identical email addresses on more than one website.'
                     )
                 );
                 //@codingStandardsIgnoreEnd

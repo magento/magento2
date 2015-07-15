@@ -12,7 +12,7 @@
             <block class="Magento\CatalogSearch\Block\Result" name="search.result" template="result.phtml" cacheable="false">
                 <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="product/list.phtml" cacheable="false">
                     <arguments>
-                        <!-- If position of argument is depend on image size changable in VDE:
+                        <!-- If argument's position depends on image size changeable in VDE:
                         positions:list-secondary,grid-secondary,list-actions,grid-actions,list-primary,grid-primary
                     -->
                         <argument name="positioned" xsi:type="string">positions:list-secondary</argument>
@@ -23,6 +23,9 @@
                     <action method="setToolbarBlockName">
                         <argument name="name" xsi:type="string">product_list_toolbar</argument>
                     </action>
+                    <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
+                        <block class="Magento\Framework\View\Element\Template" as="default"/>
+                    </block>
                 </block>
                 <action method="setListOrders"/>
                 <action method="setListModes"/>

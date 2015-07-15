@@ -7,12 +7,14 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Model\Resource\Db\Collection;
+use Magento\Framework\App\Resource\SourceProviderInterface;
 
 /**
  * Abstract Resource Collection
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
+abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
+    implements SourceProviderInterface
 {
     /**
      * Model name
@@ -569,7 +571,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
         parent::_afterLoad();
         foreach ($this->_items as $item) {
             $item->setOrigData();
-            if ($this->_resetItemsDataChanged) {
+            if ($this->_resetItemsDataChanged && ($item instanceof \Magento\Framework\Model\AbstractModel)) {
                 $item->setDataChanges(false);
             }
         }

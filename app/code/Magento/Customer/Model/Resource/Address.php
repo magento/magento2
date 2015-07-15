@@ -7,9 +7,7 @@
  */
 namespace Magento\Customer\Model\Resource;
 
-use Magento\Framework\Exception\InputException;
-
-class Address extends \Magento\Eav\Model\Entity\AbstractEntity
+class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
      * @var \Magento\Framework\Validator\Factory
@@ -17,25 +15,29 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $_validatorFactory;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerFactory;
+    protected $customerRepository;
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
      * @param \Magento\Framework\Validator\Factory $validatorFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Framework\Validator\Factory $validatorFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         $data = []
     ) {
+        $this->customerRepository = $customerRepository;
         $this->_validatorFactory = $validatorFactory;
-        $this->_customerFactory = $customerFactory;
-        parent::__construct($context, $data);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
     }
 
     /**
@@ -61,31 +63,6 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
             $this->setType('customer_address');
         }
         return parent::getEntityType();
-    }
-
-    /**
-     * Set default shipping to address
-     *
-     * @param \Magento\Framework\Object $address
-     * @return $this
-     */
-    protected function _afterSave(\Magento\Framework\Object $address)
-    {
-        if ($address->getIsCustomerSaveTransaction()) {
-            return $this;
-        }
-        if ($address->getId() && ($address->getIsDefaultBilling() || $address->getIsDefaultShipping())) {
-            $customer = $this->_createCustomer()->load($address->getCustomerId());
-
-            if ($address->getIsDefaultBilling()) {
-                $customer->setDefaultBilling($address->getId());
-            }
-            if ($address->getIsDefaultShipping()) {
-                $customer->setDefaultShipping($address->getId());
-            }
-            $customer->save();
-        }
-        return $this;
     }
 
     /**
@@ -124,14 +101,6 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     }
 
     /**
-     * @return \Magento\Customer\Model\Customer
-     */
-    protected function _createCustomer()
-    {
-        return $this->_customerFactory->create();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function delete($object)
@@ -147,14 +116,14 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _afterDelete(\Magento\Framework\Object $address)
     {
         if ($address->getId()) {
-            $customer = $this->_createCustomer()->load($address->getCustomerId());
+            $customer = $this->customerRepository->getById($address->getCustomerId());
             if ($customer->getDefaultBilling() == $address->getId()) {
                 $customer->setDefaultBilling(null);
             }
             if ($customer->getDefaultShipping() == $address->getId()) {
                 $customer->setDefaultShipping(null);
             }
-            $customer->save();
+            $this->customerRepository->save($customer);
         }
         return parent::_afterDelete($address);
     }

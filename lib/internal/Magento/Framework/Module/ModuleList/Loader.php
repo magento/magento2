@@ -10,9 +10,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
+use Magento\Framework\Module\ModuleRegistryInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Loader of module list information from the filesystem
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Loader
 {
@@ -38,33 +42,54 @@ class Loader
     private $parser;
 
     /**
+     * Module registry
+     *
+     * @var ModuleRegistryInterface
+     */
+    private $moduleRegistry;
+
+    /**
+     * Filesystem driver to allow reading of module.xml files which live outside of app/code
+     *
+     * @var DriverInterface
+     */
+    private $filesystemDriver;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param Dom $converter
      * @param Parser $parser
+     * @param ModuleRegistryInterface $moduleRegistry
+     * @param DriverInterface $filesystemDriver
      */
-    public function __construct(Filesystem $filesystem, Dom $converter, Parser $parser)
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        Dom $converter,
+        Parser $parser,
+        ModuleRegistryInterface $moduleRegistry,
+        DriverInterface $filesystemDriver
+    ) {
         $this->filesystem = $filesystem;
         $this->converter = $converter;
         $this->parser = $parser;
         $this->parser->initErrorHandler();
+        $this->moduleRegistry = $moduleRegistry;
+        $this->filesystemDriver = $filesystemDriver;
     }
 
     /**
-     * Loads the full module list information
+     * Loads the full module list information. Excludes modules specified in $exclude.
      *
+     * @param array $exclude
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
      */
-    public function load()
+    public function load(array $exclude = [])
     {
         $result = [];
-        $dir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
-        foreach ($dir->search('*/*/etc/module.xml') as $file) {
-            $contents = $dir->readFile($file);
-
+        foreach ($this->getModuleConfigs() as list($file, $contents)) {
             try {
                 $this->parser->loadXML($contents);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -79,9 +104,36 @@ class Loader
 
             $data = $this->converter->convert($this->parser->getDom());
             $name = key($data);
-            $result[$name] = $data[$name];
+            if (!in_array($name, $exclude)) {
+                $result[$name] = $data[$name];
+            }
         }
         return $this->sortBySequence($result);
+    }
+
+    /**
+     * Returns module config data and a path to the module.xml file.
+     *
+     * Example of data returned by generator:
+     * <code>
+     *     [ 'vendor/module/etc/module.xml', '<xml>contents</xml>' ]
+     * </code>
+     *
+     * @return \Traversable
+     *
+     * @author Josh Di Fabio <joshdifabio@gmail.com>
+     */
+    private function getModuleConfigs()
+    {
+        $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
+        foreach ($modulesDir->search('*/*/etc/module.xml') as $filePath) {
+            yield [$filePath, $modulesDir->readFile($filePath)];
+        }
+
+        foreach ($this->moduleRegistry->getModulePaths() as $modulePath) {
+            $filePath =  str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
+            yield [$filePath, $this->filesystemDriver->fileGetContents($filePath)];
+        }
     }
 
     /**

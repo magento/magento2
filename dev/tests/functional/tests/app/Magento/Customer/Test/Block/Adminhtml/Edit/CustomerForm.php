@@ -69,7 +69,7 @@ class CustomerForm extends FormTabs
         }
         if (null !== $address) {
             $this->openTab('addresses');
-            $this->getTabElement('addresses')->fillAddresses($address);
+            $this->getTab('addresses')->fillAddresses($address);
         }
 
         return $this;
@@ -92,7 +92,7 @@ class CustomerForm extends FormTabs
         }
         if (null !== $address) {
             $this->openTab('addresses');
-            $this->getTabElement('addresses')->updateAddresses($address);
+            $this->getTab('addresses')->updateAddresses($address);
         }
 
         return $this;
@@ -112,7 +112,7 @@ class CustomerForm extends FormTabs
         $data = ['customer' => $customer->hasData() ? parent::getData($customer) : parent::getData()];
         if (null !== $address) {
             $this->openTab('addresses');
-            $data['addresses'] = $this->getTabElement('addresses')->getDataAddresses($address);
+            $data['addresses'] = $this->getTab('addresses')->getDataAddresses($address);
         }
 
         return $data;

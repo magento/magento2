@@ -30,7 +30,7 @@ class Save extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Edit
             $response = ['message' => $message];
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $response = ['error' => true, 'message' => __('Sorry, there was an unknown error.')];
+            $response = ['error' => true, 'message' => __('Sorry, something went wrong. That\'s all we know.')];
         }
 
         /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */

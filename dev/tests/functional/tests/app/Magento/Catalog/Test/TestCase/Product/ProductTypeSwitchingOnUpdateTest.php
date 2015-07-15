@@ -19,14 +19,14 @@ use Magento\Mtf\TestCase\Injectable;
  * Test Flow:
  *
  * Preconditions:
- * 1. Create product according to dataSet
+ * 1. Create product according to dataset
  *
  * Steps:
  * 1. Open backend
  * 2. Go to Products > Catalog
  * 3. Open created product in preconditions
- * 4. Perform Actions from dataSet
- * 5. Fill data from dataSet
+ * 4. Perform Actions from dataset
+ * 5. Fill data from dataset
  * 6. Save
  * 7. Perform all assertions
  *
@@ -90,11 +90,11 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
     public function test($productOrigin, $product, $actionName)
     {
         // Preconditions
-        list($fixtureClass, $dataSet) = explode('::', $productOrigin);
-        $productOrigin = $this->fixtureFactory->createByCode(trim($fixtureClass), ['dataSet' => trim($dataSet)]);
+        list($fixtureClass, $dataset) = explode('::', $productOrigin);
+        $productOrigin = $this->fixtureFactory->createByCode(trim($fixtureClass), ['dataset' => trim($dataset)]);
         $productOrigin->persist();
-        list($fixtureClass, $dataSet) = explode('::', $product);
-        $product = $this->fixtureFactory->createByCode(trim($fixtureClass), ['dataSet' => trim($dataSet)]);
+        list($fixtureClass, $dataset) = explode('::', $product);
+        $product = $this->fixtureFactory->createByCode(trim($fixtureClass), ['dataset' => trim($dataset)]);
 
         // Steps
         $this->catalogProductIndex->open();
@@ -129,7 +129,7 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
     {
         $this->catalogProductEdit->getProductForm()->openTab('variations');
         /** @var Config $variationsTab */
-        $variationsTab = $this->catalogProductEdit->getProductForm()->getTabElement('variations');
+        $variationsTab = $this->catalogProductEdit->getProductForm()->getTab('variations');
         $variationsTab->deleteAttributes();
     }
 
@@ -142,7 +142,7 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
     {
         $this->catalogProductEdit->getProductForm()->openTab('downloadable_information');
         /** @var Downloadable $downloadableInfoTab */
-        $downloadableInfoTab = $this->catalogProductEdit->getProductForm()->getTabElement('downloadable_information');
+        $downloadableInfoTab = $this->catalogProductEdit->getProductForm()->getTab('downloadable_information');
         $downloadableInfoTab->getDownloadableBlock('Links')->clearDownloadableData();
     }
 }

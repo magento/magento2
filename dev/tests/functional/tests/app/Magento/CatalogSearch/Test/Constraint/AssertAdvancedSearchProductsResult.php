@@ -23,7 +23,7 @@ class AssertAdvancedSearchProductsResult extends AbstractConstraint
     /**
      * Text for error messages
      */
-    const ERROR_MESSAGE = 'No items were found using the following search criteria.';
+    const ERROR_MESSAGE = 'We can\'t find any items matching these search criteria.';
 
     /**
      * Search results page

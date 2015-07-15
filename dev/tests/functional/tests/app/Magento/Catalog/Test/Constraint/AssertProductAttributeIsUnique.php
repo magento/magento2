@@ -28,12 +28,19 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
     const UNIQUE_MESSAGE = 'The value of attribute "%s" must be unique';
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
      * Check whether the attribute is unique.
      *
      * @param CatalogProductIndex $catalogProductIndex
      * @param CatalogProductEdit $catalogProductEdit
      * @param CatalogProductAttribute $attribute
-     * @param CatalogProductSimple $product,
+     * @param CatalogProductSimple $product ,
      * @param FixtureFactory $fixtureFactory
      * @throws \Exception
      * @return void
@@ -45,10 +52,50 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
         CatalogProductSimple $product,
         FixtureFactory $fixtureFactory
     ) {
-        $simpleProduct = $fixtureFactory->createByCode(
+        $this->fixtureFactory = $fixtureFactory;
+        $simpleProduct = $this->createSimpleProductFixture($product, $attribute);
+        $catalogProductIndex->open()->getGridPageActionBlock()->addProduct('simple');
+        $productForm = $catalogProductEdit->getProductForm();
+        $productForm->fill($simpleProduct);
+        $catalogProductEdit->getFormPageActions()->save();
+        $failedAttributes = $productForm->getRequireNoticeAttributes($simpleProduct);
+        $attributeLabel = $attribute->getFrontendLabel();
+        $actualMessage = $this->getActualMessage($failedAttributes, $attributeLabel);
+
+        \PHPUnit_Framework_Assert::assertEquals(
+            sprintf(self::UNIQUE_MESSAGE, $attributeLabel),
+            $actualMessage,
+            'JS error notice on product edit page is not equal to expected.'
+        );
+    }
+
+    /**
+     * Get actual message.
+     *
+     * @param array $errors
+     * @param string $attributeLabel
+     * @return mixed
+     */
+    protected function getActualMessage(array $errors, $attributeLabel)
+    {
+        return isset($errors['product-details'][$attributeLabel])
+            ? $errors['product-details'][$attributeLabel]
+            : null;
+    }
+
+    /**
+     * Create simple product fixture.
+     *
+     * @param CatalogProductSimple $product
+     * @param CatalogProductAttribute $attribute
+     * @return CatalogProductSimple
+     */
+    protected function createSimpleProductFixture(CatalogProductSimple $product, CatalogProductAttribute $attribute)
+    {
+        return $this->fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => 'product_with_category_with_anchor',
+                'dataset' => 'product_with_category_with_anchor',
                 'data' => [
                     'attribute_set_id' => [
                         'attribute_set' => $product->getDataFieldConfig('attribute_set_id')['source']->getAttributeSet()
@@ -56,20 +103,6 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
                     'custom_attribute' => $attribute,
                 ],
             ]
-        );
-        $catalogProductIndex->open()->getGridPageActionBlock()->addProduct('simple');
-        $productForm = $catalogProductEdit->getProductForm();
-        $productForm->fill($simpleProduct);
-        $catalogProductEdit->getFormPageActions()->save();
-        $failedAttributes = $productForm->getRequireNoticeAttributes($simpleProduct);
-        $actualMessage = isset($failedAttributes['product-details'][$attribute->getFrontendLabel()])
-            ? $failedAttributes['product-details'][$attribute->getFrontendLabel()]
-            : null;
-
-        \PHPUnit_Framework_Assert::assertEquals(
-            sprintf(self::UNIQUE_MESSAGE, $attribute->getFrontendLabel()),
-            $actualMessage,
-            'JS error notice on product edit page is not equal to expected.'
         );
     }
 

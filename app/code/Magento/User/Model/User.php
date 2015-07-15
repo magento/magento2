@@ -5,9 +5,12 @@
  */
 namespace Magento\User\Model;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Store\Model\Store;
+use Magento\User\Api\Data\UserInterface;
 
 /**
  * Admin user model
@@ -123,7 +126,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param UserValidationRules $validationRules
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -140,7 +143,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UserValidationRules $validationRules,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_encryptor = $encryptor;
@@ -364,20 +367,13 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function sendPasswordResetConfirmationEmail()
     {
-        // Set all required params and send emails
-        /** @var \Magento\Framework\Mail\TransportInterface $transport */
-        $transport = $this->_transportBuilder->setTemplateIdentifier(
-            $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE)
-        )->setTemplateOptions(
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0]
-        )->setTemplateVars(
-            ['user' => $this, 'store' => $this->_storeManager->getStore(0)]
-        )->setFrom(
-            $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
-        )->addTo(
-            $this->getEmail(),
-            $this->getName()
-        )->getTransport();
+        $templateId = $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE);
+        $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
+            ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
+            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
+            ->addTo($this->getEmail(), $this->getName())
+            ->getTransport();
 
         $transport->sendMessage();
         return $this;
@@ -390,20 +386,13 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function sendPasswordResetNotificationEmail()
     {
-        // Set all required params and send emails
-        /** @var \Magento\Framework\Mail\TransportInterface $transport */
-        $transport = $this->_transportBuilder->setTemplateIdentifier(
-            $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE)
-        )->setTemplateOptions(
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0]
-        )->setTemplateVars(
-            ['user' => $this, 'store' => $this->_storeManager->getStore(0)]
-        )->setFrom(
-            $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
-        )->addTo(
-            $this->getEmail(),
-            $this->getName()
-        )->getTransport();
+        $templateId = $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE);
+        $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
+            ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
+            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
+            ->addTo($this->getEmail(), $this->getName())
+            ->getTransport();
 
         $transport->sendMessage();
         return $this;
@@ -484,7 +473,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 throw new AuthenticationException(__('This account is inactive.'));
             }
             if (!$this->hasAssigned2Role($this->getId())) {
-                throw new AuthenticationException(__('Access denied.'));
+                throw new AuthenticationException(__('You need more permissions to access this.'));
             }
             $result = true;
         }

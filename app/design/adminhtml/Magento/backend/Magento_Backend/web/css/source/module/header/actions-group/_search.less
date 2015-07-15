@@ -25,6 +25,7 @@
 @search-global-input__active__padding-right: @search-global-icon__height + 2rem;
 @search-global-input__active__width: 25rem;
 
+@search-global-label-icon__color: @text__color;
 @search-global-icon__height: 2rem;
 @search-global-icon__width: 2.2rem;
 
@@ -95,6 +96,9 @@
             display: block;
             font-size: @font-size__s;
             padding: @search-global-input__padding-top @search-global-input__padding-side @search-global-input__padding-bottom;
+            &._active {
+                background-color: @color-blue-clear-sky;
+            }
         }
         .title {
             display: block;
@@ -125,6 +129,7 @@
     }
     &:before {
         &:extend(.abs-icon all);
+        color: @search-global-label-icon__color;
         content: @icon-search__content;
         font-size: @search-global-icon__height;
     }

@@ -15,7 +15,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**#@+
      * Constants
      */
-    const KEY_PRODUCT_SKU = 'product_sku';
+    const KEY_SKU = 'sku';
     const KEY_LINK_TYPE = 'link_type';
     const KEY_LINKED_PRODUCT_SKU = 'linked_product_sku';
     const KEY_LINKED_PRODUCT_TYPE = 'linked_product_type';
@@ -61,14 +61,14 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Get product SKU
+     * Get SKU
      *
      * @identifier
      * @return string
      */
-    public function getProductSku()
+    public function getSku()
     {
-        return $this->_get(self::KEY_PRODUCT_SKU);
+        return $this->_get(self::KEY_SKU);
     }
 
     /**
@@ -114,14 +114,14 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Set product SKU
+     * Set SKU
      *
-     * @param string $productSku
+     * @param string $sku
      * @return $this
      */
-    public function setProductSku($productSku)
+    public function setSku($sku)
     {
-        return $this->setData(self::KEY_PRODUCT_SKU, $productSku);
+        return $this->setData(self::KEY_SKU, $sku);
     }
 
     /**

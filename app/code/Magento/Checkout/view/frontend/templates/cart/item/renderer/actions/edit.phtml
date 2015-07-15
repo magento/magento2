@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit */
+?>
+<?php if ($block->isProductVisibleInSiteVisibility()): ?>
+    <a class="action action-edit"
+       href="<?php echo $block->getConfigureUrl() ?>"
+       title="<?php echo $block->escapeHtml(__('Edit item parameters')); ?>">
+        <span>
+            <?php echo __('Edit') ?>
+        </span>
+   </a>
+<?php endif ?>

@@ -6,7 +6,8 @@
 
 namespace Magento\Sales\Test\TestCase;
 
-use Magento\Mtf\TestCase\Scenario;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Preconditions:
@@ -22,7 +23,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 5. Check product in Recently Viewed Products section.
  * 6. Click Update Changes.
  * 7. Click Configure.
- * 8. Fill data from dataSet.
+ * 8. Fill data from dataset.
  * 9. Click OK.
  * 10. Click Update Items and Qty's button.
  * 11. Perform all assertions.
@@ -30,21 +31,59 @@ use Magento\Mtf\TestCase\Scenario;
  * @group Order_Management_(CS)
  * @ZephyrId MAGETWO-29723
  */
-class MoveRecentlyViewedProductsOnOrderPageTest extends Scenario
+class MoveRecentlyViewedProductsOnOrderPageTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
+
+    /**
+     * Create customer.
+     *
+     * @param Customer $customer
+     * @return array
+     */
+    public function __prepare(Customer $customer)
+    {
+        $customer->persist();
+        $this->objectManager
+            ->create('Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep', ['customer' => $customer])
+            ->run();
+
+        return ['customer' => $customer];
+    }
 
     /**
      * Runs Move Recently Viewed Products On Order Page.
      *
-     * @return void
+     * @param Customer $customer
+     * @param string $products
+     * @return array
      */
-    public function test()
+    public function test(Customer $customer, $products)
     {
-        $this->executeScenario();
+        // Preconditions
+        $products = $this->objectManager
+            ->create('Magento\Catalog\Test\TestStep\CreateProductsStep', ['products' => $products])
+            ->run()['products'];
+        $this->objectManager
+            ->create('Magento\Catalog\Test\TestStep\OpenProductsOnFrontendStep', ['products' => $products])
+            ->run();
+
+        // Steps
+        $this->objectManager
+            ->create('Magento\Customer\Test\TestStep\OpenCustomerOnBackendStep', ['customer' => $customer])
+            ->run();
+        $this->objectManager->create('Magento\Customer\Test\TestStep\CreateOrderFromCustomerAccountStep')->run();
+        $this->objectManager->create('Magento\Sales\Test\TestStep\SelectStoreStep')->run();
+        $this->objectManager
+            ->create('Magento\Sales\Test\TestStep\AddRecentlyViewedProductsToCartStep', ['products' => $products])
+            ->run();
+        $this->objectManager
+            ->create('Magento\Sales\Test\TestStep\ConfigureProductsStep', ['products' => $products])
+            ->run();
+
+        return ['products' => $products];
     }
 }

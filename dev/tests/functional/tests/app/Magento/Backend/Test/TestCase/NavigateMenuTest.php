@@ -13,7 +13,7 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
  * Steps:
  * 1. Log in to backend.
  * 2. Navigate throught menu to the page.
- * 6. Perform asserts.
+ * 3. Perform asserts.
  *
  * @ZephyrId MAGETWO-34874
  */
@@ -21,7 +21,7 @@ class NavigateMenuTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS, MX, PS';
+    const DOMAIN = 'PS';
     /* end tags */
 
     /**
