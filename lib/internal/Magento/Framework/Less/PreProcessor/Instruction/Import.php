@@ -9,7 +9,7 @@
 namespace Magento\Framework\Less\PreProcessor\Instruction;
 
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\View\Asset\ModuleNotation;
+use Magento\Framework\View\Asset\NotationResolver;
 use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
@@ -24,7 +24,7 @@ class Import implements PreProcessorInterface
         '#@import\s+(\((?P<type>\w+)\)\s+)?[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?(?P<media>.*?);#';
 
     /**
-     * @var \Magento\Framework\View\Asset\ModuleNotation\Resolver
+     * @var \Magento\Framework\View\Asset\NotationResolver\Module
      */
     private $notationResolver;
 
@@ -34,9 +34,9 @@ class Import implements PreProcessorInterface
     protected $relatedFiles = [];
 
     /**
-     * @param ModuleNotation\Resolver $notationResolver
+     * @param NotationResolver\Module $notationResolver
      */
-    public function __construct(ModuleNotation\Resolver $notationResolver)
+    public function __construct(NotationResolver\Module $notationResolver)
     {
         $this->notationResolver = $notationResolver;
     }
@@ -50,7 +50,19 @@ class Import implements PreProcessorInterface
         $replaceCallback = function ($matchContent) use ($asset) {
             return $this->replace($matchContent, $asset);
         };
-        $chain->setContent(preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $chain->getContent()));
+        $content = $this->removeComments($chain->getContent());
+        $chain->setContent(preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $content));
+    }
+
+    /**
+     * Returns the content without commented lines
+     *
+     * @param string $content
+     * @return string
+     */
+    private function removeComments($content)
+    {
+        return preg_replace("#(^\s*//.*$)|((^\s*/\*(?s).*?(\*/)(?!\*/))$)#m", '', $content);
     }
 
     /**

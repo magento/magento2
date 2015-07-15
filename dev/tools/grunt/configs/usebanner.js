@@ -39,6 +39,14 @@ module.exports = {
             src: '<%= path.css.setup %>/*.css'
         }
     },
+    updater: {
+        options: {
+            banner: printCopyright('css')
+        },
+        files: {
+            src: '<%= path.css.updater %>/updater.css'
+        }
+    },
     documentationCss: {
         options: {
             banner: printCopyright('css')

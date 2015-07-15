@@ -55,9 +55,9 @@ define([
             } else {
                 records = this.storage.get(elems);
 
-                return elems.length === 1 ?
-                    records[0] :
-                    records;
+                return elems.length > 1 ?
+                    records :
+                    records[0];
             }
         },
 

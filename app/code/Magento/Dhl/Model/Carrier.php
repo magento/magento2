@@ -946,7 +946,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     }
 
     /**
-     * Build qoutes request XML object
+     * Build quotes request XML object
      *
      * @return \SimpleXMLElement
      */
