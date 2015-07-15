@@ -14,12 +14,15 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use Magento\Setup\Module\Di\App\Task\OperationException;
+use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to run compile in single-tenant mode
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DiCompileCommand extends Command
 {
@@ -152,7 +155,27 @@ class DiCompileCommand extends Command
                     $arguments
                 );
             }
-            $this->taskManager->process();
+
+            $progressBar = new ProgressBar($output, count($operations));
+            $progressBar->setFormat(
+                '<info>%message%</info> %current%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s%'
+            );
+            $output->writeln('<info>Compilation was started.</info>');
+            $progressBar->start();
+            $progressBar->display();
+
+            $this->taskManager->process(
+                function (OperationInterface $operation) use ($progressBar) {
+                    $progressBar->setMessage($operation->getName() . '...');
+                    $progressBar->display();
+                },
+                function (OperationInterface $operation) use ($progressBar) {
+                    $progressBar->advance();
+                }
+            );
+
+            $progressBar->finish();
+            $output->writeln('');
             $output->writeln('<info>Generated code and dependency injection configuration successfully.</info>');
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
