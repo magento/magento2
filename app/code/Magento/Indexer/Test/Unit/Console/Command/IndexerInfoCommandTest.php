@@ -17,6 +17,12 @@ class IndexerInfoCommandTest extends IndexerCommandCommonTestSetup
      */
     private $command;
 
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->stateMock->expects($this->once())->method('setAreaCode')->with('adminmhtml');
+    }
+
     public function testExecute()
     {
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
@@ -26,7 +32,6 @@ class IndexerInfoCommandTest extends IndexerCommandCommonTestSetup
         $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne]);
 
         $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
-        $this->indexerFactory->expects($this->never())->method('create');
         $this->command = new IndexerInfoCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);

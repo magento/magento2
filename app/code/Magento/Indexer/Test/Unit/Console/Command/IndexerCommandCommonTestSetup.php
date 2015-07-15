@@ -15,6 +15,11 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
     protected $indexerFactory;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     */
+    protected $stateMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|CollectionFactory
      */
     protected $collectionFactory;
@@ -33,16 +38,13 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
 
-        //TODO: temporary fix unit
-        $stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $stateMock->expects($this->once())->method('setAreaCode')->with('adminmhtml')->willReturnSelf();
-
-        $this->objectManager->expects($this->once())
+        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->objectManager->expects($this->any())
             ->method('get')
             ->with('Magento\Framework\App\State')
-            ->willReturn($stateMock);
-        $this->objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
+            ->willReturn($this->stateMock);
 
         $this->collectionFactory = $this->getMockBuilder('Magento\Indexer\Model\Indexer\CollectionFactory')
             ->disableOriginalConstructor()
@@ -54,13 +56,11 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->objectManager
-            ->expects($this->exactly(2))
+            ->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
                 ['Magento\Indexer\Model\Indexer\CollectionFactory', [], $this->collectionFactory],
                 ['Magento\Indexer\Model\IndexerFactory', [], $this->indexerFactory],
             ]));
-
-        $this->objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
     }
 }
