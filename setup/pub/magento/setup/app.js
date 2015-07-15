@@ -20,8 +20,8 @@ var app = angular.module(
         'success',
         'create-backup',
         'complete-backup',
-        'component-upgrade',
-        'component-upgrade-success'
+        'component-update',
+        'component-update-success'
     ]);
 
 app.config(function ($stateProvider) {
