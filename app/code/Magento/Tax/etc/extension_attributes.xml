@@ -9,4 +9,9 @@
     <extension_attributes for="Magento\Quote\Api\Data\TotalsInterface">
         <attribute code="tax_grandtotal_details" type="Magento\Tax\Api\Data\GrandTotalDetailsInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
+        <attribute code="applied_taxes" type="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[]" />
+        <attribute code="item_applied_taxes" type="Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[]" />
+        <attribute code="converting_from_quote" type="boolean" />
+    </extension_attributes>
 </config>

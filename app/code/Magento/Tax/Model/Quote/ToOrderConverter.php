@@ -17,6 +17,20 @@ class ToOrderConverter
     protected $quoteAddress;
 
     /**
+     * @var \Magento\Sales\Api\Data\OrderExtensionFactory
+     */
+    protected $orderExtensionFactory;
+
+    /**
+     * @param \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory
+     */
+    public function __construct(
+        \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory
+    ) {
+        $this->orderExtensionFactory = $orderExtensionFactory;
+    }
+
+    /**
      * @param QuoteAddressToOrder $subject
      * @param QuoteAddress $address
      * @param array $additional
@@ -39,21 +53,20 @@ class ToOrderConverter
     {
         /** @var \Magento\Sales\Model\Order $order */
         $taxes = $this->quoteAddress->getAppliedTaxes();
-        if (is_array($taxes)) {
-            if (is_array($order->getAppliedTaxes())) {
-                $taxes = array_merge($order->getAppliedTaxes(), $taxes);
-            }
-            $order->setCustomAttribute('applied_taxes', $taxes);
-            $order->setCustomAttribute('converting_from_quote', true);
+        $extensionAttributes = $order->getExtensionAttributes();
+        if ($extensionAttributes == null) {
+            $extensionAttributes = $this->orderExtensionFactory->create();
+        }
+        if (!empty($taxes)) {
+            $extensionAttributes->setAppliedTaxes($taxes);
+            $extensionAttributes->setConvertingFromQuote(true);
         }
 
         $itemAppliedTaxes = $this->quoteAddress->getItemsAppliedTaxes();
-        if (is_array($itemAppliedTaxes)) {
-            if (is_array($order->getItemAppliedTaxes())) {
-                $itemAppliedTaxes = array_merge($order->getItemAppliedTaxes(), $itemAppliedTaxes);
-            }
-            $order->setCustomAttribute('item_applied_taxes', $itemAppliedTaxes);
+        if (!empty($itemAppliedTaxes)) {
+            $extensionAttributes->setItemAppliedTaxes($itemAppliedTaxes);
         }
+        $order->setExtensionAttributes($extensionAttributes);
         return $order;
     }
 }
