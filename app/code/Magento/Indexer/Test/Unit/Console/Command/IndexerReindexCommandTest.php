@@ -92,18 +92,24 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonTest
         $this->assertStringStartsWith('Title_indexerOne indexer process unknown error:', $actualValue);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessageRegExp The following requested cache types are not supported:.*
+     */
     public function testExecuteWithExceptionInLoad()
     {
+        $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne->expects($this->once())->method('getId')->willReturn('id_indexer1');
+        $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne]);
+
         $exception = new \Exception();
         $indexerOne->expects($this->once())->method('load')->will($this->throwException($exception));
         $indexerOne->expects($this->never())->method('getTitle');
-        $this->collectionFactory->expects($this->never())->method('create');
+        $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
         $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexerOne);
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['index' => ['id_indexerOne']]);
-        $actualValue = $commandTester->getDisplay();
-        $this->assertStringStartsWith('Warning: Unknown indexer with code', $actualValue);
     }
 }
