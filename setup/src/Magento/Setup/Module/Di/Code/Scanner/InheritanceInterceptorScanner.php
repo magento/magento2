@@ -17,9 +17,15 @@ class InheritanceInterceptorScanner implements ScannerInterface
     public function collectEntities(array $classes, array $interceptedEntities = [])
     {
         $output = [];
+        $interceptedEntitiesFiltered = [];
         foreach ($classes as $class) {
             foreach ($interceptedEntities as $interceptorClass) {
                 $interceptedEntity = substr($interceptorClass, 0, -12);
+                $reflectionInterceptedEntity = new \ReflectionClass($interceptedEntity);
+                if (!$reflectionInterceptedEntity->isAbstract() && !$reflectionInterceptedEntity->isFinal()) {
+                    $interceptedEntitiesFiltered[] = $interceptorClass;
+                }
+
                 if (is_subclass_of($class, $interceptedEntity)
                     && !$this->endsWith($class, 'RepositoryInterface\\Proxy')
                     && !$this->endsWith($class, '\\Interceptor')) {
@@ -30,7 +36,7 @@ class InheritanceInterceptorScanner implements ScannerInterface
                 }
             }
         }
-        $output = array_merge($interceptedEntities, $output);
+        $output = array_merge($interceptedEntitiesFiltered, $output);
         $output = array_unique($output);
         return $output;
     }
