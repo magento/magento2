@@ -33,7 +33,7 @@ class PathPattern
      */
     protected function translateGroupsFromGlob($pattern)
     {
-        preg_match_all('~\\\\\\{[^,\\}]+(?:,[^,\\}]+)*\\\\\\}~', $pattern, $matches, PREG_OFFSET_CAPTURE);
+        preg_match_all('~\\\\\\{[^,\\}]+(?:,[^,\\}]*)*\\\\\\}~', $pattern, $matches, PREG_OFFSET_CAPTURE);
         for ($index = count($matches[0]) - 1; $index >= 0; $index -= 1) {
             list($match, $offset) = $matches[0][$index];
             $replacement = substr_replace($match, '(?:', 0, 2);
