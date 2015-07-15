@@ -9,6 +9,37 @@ define([
 ], function (_, utils, superWrapper) {
     'use strict';
 
+    var Class;
+
+    /**
+     * Creates constructor function which allows
+     * initialization without usage of a 'new' operator.
+     *
+     * @param {Object} protoProps - Prototypal propeties of a new consturctor.
+     * @returns {Function} Created consturctor.
+     */
+    function createConstructor(protoProps) {
+        /**
+         * Constructor function.
+         */
+        var constr = function () {
+            var obj = this;
+
+            if (!obj || !Object.getPrototypeOf(obj) === constr.prototype) {
+                obj = Object.create(constr.prototype);
+            }
+
+            obj.initialize.apply(obj, arguments);
+
+            return obj;
+        };
+
+        constr.prototype = protoProps;
+        constr.prototype.constructor = constr;
+
+        return constr;
+    }
+
     /**
      * Creates new constructor based on a current prototype properties,
      * extending them with properties specified in 'exender' object.
@@ -17,29 +48,19 @@ define([
      * @returns {Function} New constructor.
      */
     function extend(extender) {
-        var parent = this,
-            defaults = extender.defaults || {},
+        var parent      = this,
             parentProto = parent.prototype,
-            child;
+            childProto  = Object.create(parentProto),
+            child       = createConstructor(childProto),
+            defaults    = extender.defaults || {};
 
         defaults = defaults || {};
         extender = extender || {};
 
         delete extender.defaults;
 
-        if (extender.hasOwnProperty('constructor')) {
-            child = extender.constructor;
-        } else {
-            child = function () {
-                parent.apply(this, arguments);
-            };
-        }
-
-        child.prototype = Object.create(parentProto);
-        child.prototype.constructor = child;
-
         _.each(extender, function (method, name) {
-            child.prototype[name] = superWrapper.create(method, parentProto, name);
+            childProto[name] = superWrapper.create(method, parentProto, name);
         });
 
         return _.extend(child, {
@@ -49,23 +70,7 @@ define([
         });
     }
 
-    /**
-     * Constructor.
-     */
-    function Class() {
-        this.initialize.apply(this, arguments);
-    }
-
-    _.extend(Class, {
-        defaults: {
-            ignoreTmpls: {
-                templates: true
-            }
-        },
-        extend: extend
-    });
-
-    _.extend(Class.prototype, {
+    Class = createConstructor({
         /**
          * Entry point to the initialization of consturctors' instance.
          *
@@ -101,6 +106,14 @@ define([
             return _.extend(this, config);
         }
     });
+
+    Class.defaults = {
+        ignoreTmpls: {
+            templates: true
+        }
+    };
+
+    Class.extend = extend;
 
     return Class;
 });
