@@ -6,10 +6,10 @@
 namespace Magento\Log\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Magento\Store\Model\StoreManager;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\App\ObjectManager;
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Abstract class for commands related to manage Magento logs
@@ -19,29 +19,51 @@ abstract class AbstractLogCommand extends Command
     /**
      * Object Manager
      *
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
+     * Config loader
+     *
+     * @var ConfigLoader
+     */
+    private $configLoader;
+
+    /**
+     * Application state
+     *
+     * @var State
+     */
+    private $state;
+
+    /**
      * Constructor
      *
-     * @param ObjectManagerFactory $objectManagerFactory
+     * @param ObjectManagerInterface $objectManager
+     * @param ConfigLoader $configLoader
+     * @param State $state
      */
-    public function __construct(ObjectManagerFactory $objectManagerFactory)
-    {
-        $params = $_SERVER;
-        $params[StoreManager::PARAM_RUN_CODE] = 'admin';
-        $params[StoreManager::PARAM_RUN_TYPE] = 'store';
-        $this->objectManager = $objectManagerFactory->create($params);
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        ConfigLoader $configLoader,
+        State $state
+    ) {
+        $this->objectManager = $objectManager;
+        $this->configLoader = $configLoader;
+        $this->state = $state;
         parent::__construct();
     }
 
     /**
-     * {@inheritdoc}
+     * Reinitialise object manager with correct area
+     *
+     * @return void
      */
-    protected function configure()
+    protected function initApplicationArea()
     {
-        parent::configure();
+        $area = FrontNameResolver::AREA_CODE;
+        $this->state->setAreaCode($area);
+        $this->objectManager->configure($this->configLoader->load($area));
     }
 }
