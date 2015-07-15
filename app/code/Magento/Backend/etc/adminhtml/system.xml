@@ -352,8 +352,9 @@
             <resource>Magento_Config::config_admin</resource>
             <group id="emails" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Admin User Emails</label>
-                <field id="forgot_email_template" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="forgot_email_template" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Forgot Password Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="forgot_email_identity" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">

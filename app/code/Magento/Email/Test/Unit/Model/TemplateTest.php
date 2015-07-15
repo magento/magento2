@@ -201,7 +201,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $expectedOrigTemplateVariables,
         $expectedTemplateStyles
     ) {
-        $model = $this->getModelMock();
+        $model = $this->getModelMock([
+            'getDesignParams'
+        ]);
+
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'Magento/blank',
+            'locale' => \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE,
+        ];
+
+        $model->expects($this->once())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
 
         $templateId = 'templateId';
 
@@ -230,7 +242,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MODULES)
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::ROOT)
             ->will($this->returnValue($modulesDir));
 
         $model->loadDefault($templateId);
@@ -266,10 +278,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'expectedOrigTemplateVariables' => null,
                 'expectedTemplateStyles' => null,
             ],
-            'copyright in HTML Remains' => [
+            'copyright in HTML Removed' => [
                 'templateType' => 'html',
                 'templateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
-                'parsedTemplateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
+                'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
                 'expectedTemplateStyles' => null,
@@ -554,7 +566,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'customer account new variables' => [
                 'withGroup' => false,
                 'templateVariables' => '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
-                . '"escapehtml var=$customer.name":"Customer Name"}',
+                . '"var customer.name":"Customer Name"}',
                 'expectedResult' => [
                     [
                         'value' => '{{store url=""}}',
@@ -565,7 +577,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                         'label' => __('%1', 'Email Logo Image Url'),
                     ],
                     [
-                        'value' => '{{escapehtml var=$customer.name}}',
+                        'value' => '{{var customer.name}}',
                         'label' => __('%1', 'Customer Name'),
                     ],
                 ],
@@ -573,7 +585,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'customer account new variables with grouped option' => [
                 'withGroup' => true,
                 'templateVariables' => '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
-                . '"escapehtml var=$customer.name":"Customer Name"}',
+                . '"var customer.name":"Customer Name"}',
                 'expectedResult' => [
                     'label' => __('Template Variables'),
                     'value' => [
@@ -586,7 +598,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                             'label' => __('%1', 'Email Logo Image Url'),
                         ],
                         [
-                            'value' => '{{escapehtml var=$customer.name}}',
+                            'value' => '{{var customer.name}}',
                             'label' => __('%1', 'Customer Name'),
                         ],
                     ],
