@@ -120,6 +120,10 @@ class Design implements \Magento\Framework\View\DesignInterface
      */
     public function getArea()
     {
+        // In order to support environment emulation of area, if area is set, return it
+        if ($this->_area && !$this->_appState->isAreaCodeEmulated()) {
+            return $this->_area;
+        }
         return $this->_appState->getAreaCode();
     }
 

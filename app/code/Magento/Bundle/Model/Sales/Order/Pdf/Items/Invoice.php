@@ -69,7 +69,7 @@ class Invoice extends AbstractItems
         $page = $this->getPage();
 
         $this->_setFontRegular();
-        $items = $this->getChilds($item);
+        $items = $this->getChildren($item);
 
         $prevOptionId = '';
         $drawItems = [];
