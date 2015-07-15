@@ -40,10 +40,10 @@
     <action name="checkout/onepage/saveOrder">
         <section name="last-ordered-items"/>
     </action>
-    <action name="rest/*/V1/carts/*/order">
+    <action name="rest/*/V1/carts/*/payment-information">
         <section name="cart"/>
     </action>
-    <action name="rest/*/V1/guest-carts/*/order">
+    <action name="rest/*/V1/guest-carts/*/payment-information">
         <section name="cart"/>
     </action>
 </config>

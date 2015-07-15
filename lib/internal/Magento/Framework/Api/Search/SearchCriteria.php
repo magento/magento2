@@ -10,24 +10,7 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 class SearchCriteria extends BaseSearchCriteria implements SearchCriteriaInterface
 {
-    const SEARCH_TERM = 'search_term';
     const REQUEST_NAME = 'request_name';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSearchTerm()
-    {
-        return $this->_get(self::SEARCH_TERM);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSearchTerm($searchTerm)
-    {
-        return $this->setData(self::SEARCH_TERM, $searchTerm);
-    }
 
     /**
      * {@inheritdoc}
