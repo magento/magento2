@@ -5,6 +5,7 @@
  */
 namespace Magento\Weee\Model;
 
+use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -216,38 +217,169 @@ class Observer extends \Magento\Framework\Model\AbstractModel
     {
         if ($this->_weeeData->isEnabled()) {
             $priceConfigObj=$observer->getData('configObj');
-            $priceConfig=$priceConfigObj->getConfig();
             try {
-                if (is_array($priceConfig)) {
-                    foreach ($priceConfig as $keyConfigs => $configs) {
-                        if (is_array($configs)) {
-                            foreach ($configs as $keyConfig => $config) {
-                                $calcPrice = 'finalPrice';
-                                if ($this->_taxData->priceIncludesTax() &&
-                                    $this->_taxData->displayPriceExcludingTax()
-                                ) {
-                                    $calcPrice = 'basePrice';
-                                }
-                                if (array_key_exists('prices', $configs)) {
-                                    $priceConfig[$keyConfigs]['prices']['weeePrice'] = [
-                                        'amount' => $configs['prices'][$calcPrice]['amount'],
-                                    ];
-                                } else {
-                                    foreach ($configs as $keyConfig => $config) {
-                                        $priceConfig[$keyConfigs][$keyConfig]['prices']['weeePrice'] = [
-                                            'amount' => $config['prices'][$calcPrice]['amount'],
-                                        ];
+                $calcPrice = 'finalPrice';
+                if ($this->_taxData->priceIncludesTax() &&
+                    $this->_taxData->displayPriceExcludingTax()
+                ) {
+                    $calcPrice = 'basePrice';
+                }
+                $priceConfig = $this->recurConfigAndInsertWeeePrice($priceConfigObj->getConfig(), 'prices', $calcPrice);
+                $priceConfigObj->setConfig($priceConfig);
+            } catch (\Exception $e) {
+                return $this;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Recur through the config array and insert the wee price
+     *
+     * @param   array $input
+     * @param   string $searchKey
+     * @param   string $calcPrice
+     * @return  array
+     */
+    private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice)
+    {
+        $holder = array();
+        if (is_array($input)) {
+            foreach ($input as $key => $el) {
+                if (is_array($el)) {
+                    $holder[$key] = $this->recurConfigAndInsertWeeePrice($el, $searchKey, $calcPrice);
+                    if ($key === $searchKey) {
+                        if ((!array_key_exists('weeePrice', $holder[$key])) &&
+                        (array_key_exists($calcPrice, $holder[$key]))
+                        ) {
+                            $holder[$key]['weeePrice'] = $holder[$key][$calcPrice];
+
+                            // only do processing on product options
+                            if (array_key_exists('optionId', $input)) {
+                                $product = $this->_registry->registry('current_product');
+                                $typeInstance = $product->getTypeInstance();
+                                if ($typeInstance instanceof \Magento\Bundle\Model\Product\Type) {
+                                    $typeInstance->setStoreFilter($product->getStoreId(), $product);
+                                    $selectionCollection = $typeInstance->getSelectionsCollection(
+                                        $typeInstance->getOptionsIds($product),
+                                        $product
+                                    );
+
+                                    foreach ($selectionCollection as $selectionItem) {
+                                        if ($selectionItem->getId() == $input['optionId']) {
+                                            $weeAttributes = $this->_weeeTax->getProductWeeeAttributes($selectionItem);
+                                            foreach ($weeAttributes as $weeAttribute) {
+                                                $holder[$key]['weeePrice' . $weeAttribute->getCode()] =
+                                                    ['amount' => $weeAttribute->getAmount()];
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                } else {
+                    $holder[$key] = $el;
                 }
-                $priceConfigObj->setConfig($priceConfig);
-            } catch (Exception $e) {
-                return $this;
             }
         }
+        return $holder;
+    }
+
+    /**
+     * Change default JavaScript templates for options rendering
+     *
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
+     */
+    public function updateProductOptions(\Magento\Framework\Event\Observer $observer)
+    {
+        $response = $observer->getEvent()->getResponseObject();
+        $options = $response->getAdditionalOptions();
+
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->_registry->registry('current_product');
+        if (!$product) {
+            return $this;
+        }
+
+        if ($this->_weeeData->isEnabled() &&
+            !$this->geDisplayIncl($product->getStoreId()) &&
+            !$this->geDisplayExcl($product->getStoreId())
+        ) {
+            $typeInstance = $product->getTypeInstance();
+            // only do processing on bundle product
+            if ($typeInstance instanceof \Magento\Bundle\Model\Product\Type) {
+                $typeInstance->setStoreFilter($product->getStoreId(), $product);
+
+                $selectionCollection = $typeInstance->getSelectionsCollection(
+                    $typeInstance->getOptionsIds($product),
+                    $product
+                );
+
+                if (!array_key_exists('optionTemplate', $options)) {
+                    $options['optionTemplate'] = '<%- data.label %>'
+                        . '<% if (data.finalPrice.value) { %>'
+                        . ' +<%- data.finalPrice.formatted %>'
+                        . '<% } %>';
+                }
+
+                $insertedWeeCodesArray = [];
+                foreach ($selectionCollection as $selectionItem) {
+                    $weeAttributes = $this->_weeeTax->getProductWeeeAttributes($selectionItem);
+                    foreach ($weeAttributes as $weeAttribute) {
+                        if (!array_key_exists($weeAttribute->getCode(), $insertedWeeCodesArray)) {
+                            $options['optionTemplate'] .= sprintf(
+                                ' <%% if (data.weeePrice' . $weeAttribute->getCode() . ') { %%>'
+                                . '  ('
+                                . $weeAttribute->getName()
+                                . ':<%%= data.weeePrice' . $weeAttribute->getCode()
+                                . '.formatted %%>)'
+                                . '<%% } %%>'
+                            );
+                            $insertedWeeCodesArray[$weeAttribute->getCode()] = $weeAttribute->getCode();
+                        }
+                    }
+                }
+
+                if ($this->geDisplayExlDescIncl($product->getStoreId())) {
+                    $options['optionTemplate'] .= sprintf(
+                        ' <%% if (data.weeePrice) { %%>'
+                        . '<%%= data.weeePrice.formatted %%>'
+                        . '<%% } %%>'
+                    );
+                }
+
+            }
+        }
+
+        $response->setAdditionalOptions($options);
         return $this;
+    }
+
+    private function geDisplayIncl($storeId = null)
+    {
+        return $this->_weeeData->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_INCL,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+
+    private function geDisplayExlDescIncl($storeId = null)
+    {
+        return $this->_weeeData->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+    private function geDisplayExcl($storeId = null)
+    {
+        return $this->_weeeData->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_EXCL,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
     }
 }
