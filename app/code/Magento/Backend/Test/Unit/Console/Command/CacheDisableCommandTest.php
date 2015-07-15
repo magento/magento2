@@ -9,7 +9,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheDisableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheDisableCommandTest extends CacheManageCommandTestAbstract
+class CacheDisableCommandTest extends AbstractCacheSetCommandTest
 {
     public function setUp()
     {
@@ -18,10 +18,10 @@ class CacheDisableCommandTest extends CacheManageCommandTestAbstract
     }
 
     /**
-     * @param $param
-     * @param $enable
-     * @param $result
-     * @param $output
+     * @param array $param
+     * @param array $enable
+     * @param array $result
+     * @param string $output
      * @dataProvider testExecuteDataProvider
      */
     public function testExecute($param, $enable, $result, $output)
@@ -36,35 +36,10 @@ class CacheDisableCommandTest extends CacheManageCommandTestAbstract
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function testExecuteDataProvider()
+    public function getExpectedExecutionOutput(array $changes)
     {
-        return [
-            'no parameters' => [
-                [],
-                ['A', 'B', 'C'],
-                ['A', 'B', 'C'],
-                $this->getExpectedChangeOutput(['A', 'B', 'C'], false),
-            ],
-            'explicit --all' => [
-                ['--all' => true, 'types' => 'A'],
-                ['A', 'B', 'C'],
-                ['A', 'B', 'C'],
-                $this->getExpectedChangeOutput(['A', 'B', 'C'], false),
-            ],
-            'specific types' => [
-                ['types' => ['A', 'B']],
-                ['A', 'B'],
-                ['A', 'B'],
-                $this->getExpectedChangeOutput(['A', 'B'], false),
-            ],
-            'no changes' => [
-                ['types' => ['A', 'B']],
-                ['A', 'B'],
-                [],
-                $this->getExpectedChangeOutput([], false),
-            ],
-        ];
+        return $this->getExpectedChangeOutput($changes, false);
     }
 }

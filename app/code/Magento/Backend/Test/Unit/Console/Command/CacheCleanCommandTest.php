@@ -9,7 +9,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheCleanCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheCleanCommandTest extends CacheManageCommandTestAbstract
+class CacheCleanCommandTest extends AbstractCacheManageCommandTest
 {
     public function setUp()
     {
@@ -18,9 +18,9 @@ class CacheCleanCommandTest extends CacheManageCommandTestAbstract
     }
 
     /**
-     * @param $param
-     * @param $types
-     * @param $output
+     * @param array $param
+     * @param array $types
+     * @param string $output
      * @dataProvider testExecuteDataProvider
      */
     public function testExecute($param, $types, $output)
@@ -35,36 +35,12 @@ class CacheCleanCommandTest extends CacheManageCommandTestAbstract
     }
 
     /**
-     * @return array
-     */
-    public function testExecuteDataProvider()
-    {
-        return [
-            'no parameters' => [
-                [],
-                ['A', 'B', 'C'],
-                $this->getExpectedOutput(['A', 'B', 'C']),
-            ],
-            'explicit --all' => [
-                ['--all' => true, 'types' => 'A'],
-                ['A', 'B', 'C'],
-                $this->getExpectedOutput(['A', 'B', 'C']),
-            ],
-            'specific types' => [
-                ['types' => ['A', 'B']],
-                ['A', 'B'],
-                $this->getExpectedOutput(['A', 'B']),
-            ],
-        ];
-    }
-
-    /**
      * Get expected output based on set of types operated on
      *
      * @param array $types
      * @return string
      */
-    public function getExpectedOutput(array $types)
+    public function getExpectedExecutionOutput(array $types)
     {
         return 'Cleaned cache types:' . PHP_EOL . implode(PHP_EOL, $types) . PHP_EOL;
     }
