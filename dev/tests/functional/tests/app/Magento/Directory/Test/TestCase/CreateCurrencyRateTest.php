@@ -20,7 +20,7 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
  * Steps:
  * 1. Login to backend.
  * 2. Go to Stores > Currency > Currency Rates.
- * 3. Fill currency rate according to dataSet.
+ * 3. Fill currency rate according to dataset.
  * 4. Click on 'Save Currency Rates' button.
  * 5. Perform assertions.
  *

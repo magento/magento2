@@ -13,7 +13,6 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Create simple product.
  * 2. Create customer.

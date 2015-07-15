@@ -21,7 +21,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     /**
      * Redirect url
      */
-    const REDIRECT_URL = '*/*/';
+    const REDIRECT_URL = 'sales/order/';
 
     /**
      * Resource collection

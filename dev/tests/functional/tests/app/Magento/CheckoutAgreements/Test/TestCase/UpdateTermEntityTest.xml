@@ -9,11 +9,11 @@
   <testCase name="Magento\CheckoutAgreements\Test\TestCase\UpdateTermEntityTest">
     <variation name="UpdateTermEntityTestVariation1">
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
-      <data name="agreementOrigin/dataSet" xsi:type="string">term_disabled_text</data>
+      <data name="agreementOrigin/dataset" xsi:type="string">term_disabled_text</data>
       <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
       <data name="agreement/data/is_active" xsi:type="string">Enabled</data>
       <data name="agreement/data/is_html" xsi:type="string">HTML</data>
-      <data name="agreement/data/stores/dataSet/0" xsi:type="string">default</data>
+      <data name="agreement/data/stores/dataset/0" xsi:type="string">default</data>
       <data name="agreement/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
       <data name="agreement/data/content" xsi:type="string">TestMessage%isolation%</data>
       <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
@@ -25,11 +25,11 @@
     </variation>
     <variation name="UpdateTermEntityTestVariation2">
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
-      <data name="agreementOrigin/dataSet" xsi:type="string">term_disabled_html</data>
+      <data name="agreementOrigin/dataset" xsi:type="string">term_disabled_html</data>
       <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
       <data name="agreement/data/is_active" xsi:type="string">Enabled</data>
       <data name="agreement/data/is_html" xsi:type="string">Text</data>
-      <data name="agreement/data/stores/dataSet/0" xsi:type="string">default</data>
+      <data name="agreement/data/stores/dataset/0" xsi:type="string">default</data>
       <data name="agreement/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
       <data name="agreement/data/content" xsi:type="string">&lt;html&gt;</data>
       <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
@@ -41,11 +41,11 @@
     </variation>
     <variation name="UpdateTermEntityTestVariation3">
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
-      <data name="agreementOrigin/dataSet" xsi:type="string">term_enabled_text</data>
+      <data name="agreementOrigin/dataset" xsi:type="string">term_enabled_text</data>
       <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
       <data name="agreement/data/is_active" xsi:type="string">Disabled</data>
       <data name="agreement/data/is_html" xsi:type="string">HTML</data>
-      <data name="agreement/data/stores/dataSet/0" xsi:type="string">default</data>
+      <data name="agreement/data/stores/dataset/0" xsi:type="string">default</data>
       <data name="agreement/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
       <data name="agreement/data/content" xsi:type="string">TestMessage%isolation%</data>
       <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
