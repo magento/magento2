@@ -1,4 +1,4 @@
-1.0.0-beta (Merchant Beta)
+1.0.0-beta
 =============
 * Framework improvements:
     * Improved the way the return type of a method is derived during WSDL generation
