@@ -56,7 +56,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
         $this->fixtureFactory = $fixtureFactory;
         $product = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'product_with_category']
+            ['dataset' => 'product_with_category']
         );
         $product->persist();
 

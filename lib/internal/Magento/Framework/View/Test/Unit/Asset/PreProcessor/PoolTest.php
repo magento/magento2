@@ -41,7 +41,8 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                     'css' =>
                         [
                             'Magento\Framework\Css\PreProcessor\Less',
-                            'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
+                            'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
+                            'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
                         ],
                     'less' =>
                         [
@@ -50,7 +51,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                         ],
                 ],
                 'css' => [
-                    'css' => ['Magento\Framework\View\Asset\PreProcessor\ModuleNotation']
+                    'css' => [
+                        'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
+                        'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
+                    ]
                 ],
             ]
         );
@@ -91,7 +95,8 @@ class PoolTest extends \PHPUnit_Framework_TestCase
             'css => css' => [
                 'css', 'css',
                 [
-                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
+                    'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
+                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
                 ],
             ],
             //all undefined types will be processed by Passthrough preprocessor
@@ -103,7 +108,8 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                 'less', 'css',
                 [
                     'Magento\Framework\Css\PreProcessor\Less',
-                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
+                    'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
+                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
                 ],
             ],
             'less => less' => [

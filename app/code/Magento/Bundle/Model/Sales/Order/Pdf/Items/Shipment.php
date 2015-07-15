@@ -66,7 +66,7 @@ class Shipment extends AbstractItems
 
         $this->_setFontRegular();
 
-        $shipItems = $this->getChilds($item);
+        $shipItems = $this->getChildren($item);
         $items = array_merge([$item->getOrderItem()], $item->getOrderItem()->getChildrenItems());
 
         $prevOptionId = '';

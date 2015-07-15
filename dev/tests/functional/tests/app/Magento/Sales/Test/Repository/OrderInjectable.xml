@@ -12,13 +12,13 @@
                 <item name="products" xsi:type="string">catalogProductSimple::default</item>
             </field>
             <field name="customer_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="billing_address_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">US_address</item>
+                <item name="dataset" xsi:type="string">US_address</item>
             </field>
             <field name="store_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_store_view</item>
+                <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
             <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
             <field name="payment_auth_expiration" xsi:type="array">
@@ -36,13 +36,13 @@
                 <item name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</item>
             </field>
             <field name="customer_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="billing_address_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">US_address</item>
+                <item name="dataset" xsi:type="string">US_address</item>
             </field>
             <field name="store_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_store_view</item>
+                <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
             <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
             <field name="payment_auth_expiration" xsi:type="array">
@@ -60,13 +60,13 @@
                 <item name="products" xsi:type="string">catalogProductVirtual::default</item>
             </field>
             <field name="customer_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="billing_address_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">US_address</item>
+                <item name="dataset" xsi:type="string">US_address</item>
             </field>
             <field name="store_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_store_view</item>
+                <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
             <field name="payment_auth_expiration" xsi:type="array">
                 <item name="method" xsi:type="string">checkmo</item>
@@ -83,13 +83,13 @@
                 <item name="products" xsi:type="string">downloadableProduct::with_two_bought_links</item>
             </field>
             <field name="customer_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="billing_address_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">US_address</item>
+                <item name="dataset" xsi:type="string">US_address</item>
             </field>
             <field name="store_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_store_view</item>
+                <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
             <field name="payment_auth_expiration" xsi:type="array">
                 <item name="method" xsi:type="string">checkmo</item>
@@ -106,13 +106,13 @@
                 <item name="products" xsi:type="string">downloadableProduct::with_two_bought_links, downloadableProduct::with_two_bought_links</item>
             </field>
             <field name="customer_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="billing_address_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">US_address</item>
+                <item name="dataset" xsi:type="string">US_address</item>
             </field>
             <field name="store_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_store_view</item>
+                <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
             <field name="payment_auth_expiration" xsi:type="array">
                 <item name="method" xsi:type="string">checkmo</item>
@@ -129,13 +129,13 @@
                 <item name="products" xsi:type="string">catalogProductSimple::default</item>
             </field>
             <field name="customer_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="billing_address_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">US_address</item>
+                <item name="dataset" xsi:type="string">US_address</item>
             </field>
             <field name="store_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_store_view</item>
+                <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
             <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
             <field name="payment_auth_expiration" xsi:type="array">
@@ -147,10 +147,10 @@
             <field name="base_currency_code" xsi:type="string">0</field>
             <field name="order_currency_code" xsi:type="string">USD</field>
             <field name="coupon_code" xsi:type="array">
-                <item name="dataSet" xsi:type="string">active_sales_rule_for_all_groups</item>
+                <item name="dataset" xsi:type="string">active_sales_rule_for_all_groups</item>
             </field>
             <field name="price" xsi:type="array">
-                <item name="preset" xsi:type="string">default_with_discount</item>
+                <item name="dataset" xsi:type="string">default_with_discount</item>
             </field>
         </dataset>
 
@@ -159,13 +159,13 @@
                 <item name="products" xsi:type="string">catalogProductSimple::default</item>
             </field>
             <field name="customer_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="billing_address_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">US_address</item>
+                <item name="dataset" xsi:type="string">US_address</item>
             </field>
             <field name="store_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_store_view</item>
+                <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
             <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
             <field name="payment_auth_expiration" xsi:type="array">
@@ -177,10 +177,10 @@
             <field name="base_currency_code" xsi:type="string">0</field>
             <field name="order_currency_code" xsi:type="string">USD</field>
             <field name="coupon_code" xsi:type="array">
-                <item name="dataSet" xsi:type="string">active_sales_rule_for_all_groups</item>
+                <item name="dataset" xsi:type="string">active_sales_rule_for_all_groups</item>
             </field>
             <field name="price" xsi:type="array">
-                <item name="preset" xsi:type="string">default_with_discount</item>
+                <item name="dataset" xsi:type="string">default_with_discount</item>
             </field>
         </dataset>
 
@@ -189,13 +189,13 @@
                 <item name="products" xsi:type="string">catalogProductSimple::simple_big_qty</item>
             </field>
             <field name="customer_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">johndoe_unique</item>
+                <item name="dataset" xsi:type="string">johndoe_unique</item>
             </field>
             <field name="billing_address_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">US_address</item>
+                <item name="dataset" xsi:type="string">US_address</item>
             </field>
             <field name="store_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_store_view</item>
+                <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
             <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
             <field name="payment_auth_expiration" xsi:type="array">
@@ -213,13 +213,13 @@
                 <item name="products" xsi:type="string">catalogProductVirtual::virtual_big_qty</item>
             </field>
             <field name="customer_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">johndoe_unique</item>
+                <item name="dataset" xsi:type="string">johndoe_unique</item>
             </field>
             <field name="billing_address_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">US_address</item>
+                <item name="dataset" xsi:type="string">US_address</item>
             </field>
             <field name="store_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_store_view</item>
+                <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
             <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
             <field name="payment_auth_expiration" xsi:type="array">
