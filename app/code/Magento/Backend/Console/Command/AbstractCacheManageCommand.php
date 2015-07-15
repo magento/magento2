@@ -19,11 +19,6 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
     const INPUT_KEY_TYPES = 'types';
 
     /**
-     * Input key all
-     */
-    const INPUT_KEY_ALL = 'all';
-
-    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -33,26 +28,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
             InputArgument::IS_ARRAY,
             'List of cache types, space separated. If omitted, all caches will be affected'
         );
-        $this->addOption(
-            self::INPUT_KEY_ALL,
-            null,
-            InputOption::VALUE_NONE,
-            'All cache types'
-        );
         parent::configure();
-    }
-
-    /**
-     * Initialize defaults dependent on argument input
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
-    protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-        if ($input->getArgument(self::INPUT_KEY_TYPES) === []) {
-            $input->setOption(self::INPUT_KEY_ALL, true);
-        }
     }
 
     /**
@@ -69,7 +45,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
             $requestedTypes = array_filter(array_map('trim', $requestedTypes), 'strlen');
         }
         if (empty($requestedTypes)) {
-            return [];
+            return $this->cacheManager->getAvailableTypes();
         } else {
             $availableTypes = $this->cacheManager->getAvailableTypes();
             $unsupportedTypes = array_diff($requestedTypes, $availableTypes);
