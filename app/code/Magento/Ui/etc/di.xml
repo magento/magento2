@@ -180,7 +180,7 @@
     <type name="Magento\Framework\Data\Argument\Interpreter\Composite">
         <arguments>
             <argument name="interpreters" xsi:type="array">
-                <item name="object" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Object</item>
+                <item name="object" xsi:type="object">configurableObjectArgumentInterpreterProxy</item>
                 <item name="configurableObject" xsi:type="object">configurableObjectArgumentInterpreterProxy</item>
                 <item name="array" xsi:type="object">arrayArgumentInterpreterProxy</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>

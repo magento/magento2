@@ -76,4 +76,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="invalidate_pagecache_after_update_product_attributes" type="Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache"/>
+    </type>
 </config>

@@ -134,7 +134,7 @@ define([
             var sections = sectionConfig.getAffectedSections(settings.url);
             if (sections) {
                 customerData.invalidate(sections);
-                var redirects = ['redirect'];
+                var redirects = ['redirect', 'backUrl'];
                 if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) {
                     return ;
                 }

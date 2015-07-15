@@ -10,29 +10,32 @@
 <?php $_creditmemo = $block->getCreditmemo() ?>
 <?php $_order      = $block->getOrder() ?>
 <?php if ($_creditmemo && $_order): ?>
-<table cellspacing="0" cellpadding="0" border="0" width="650" style="border:1px solid #EAEAEA;">
-    <thead>
-        <tr>
-            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Item') ?></th>
-            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Sku') ?></th>
-            <th align="center" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Qty') ?></th>
-            <th align="right" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Subtotal') ?></th>
-        </tr>
-    </thead>
-
-    <?php $i = 0; foreach ($_creditmemo->getAllItems() as $_item): ?>
-    <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} else {
-    $i++;
-} ?>
-    <tbody<?php echo $i%2 ? ' bgcolor="#F6F6F6"' : '' ?>>
-        <?php echo $block->getItemHtml($_item) ?>
-    </tbody>
-    <?php endforeach; ?>
-
-    <tfoot>
-        <?php echo $block->getChildHtml('creditmemo_totals');?>
-    </tfoot>
-</table>
+    <table class="email-items">
+        <thead>
+            <tr>
+                <th class="item-info">
+                    <?= __('Items'); ?>
+                </th>
+                <th class="item-qty">
+                    <?= __('Qty'); ?>
+                </th>
+                <th class="item-subtotal">
+                    <?= __('Subtotal'); ?>
+                </th>
+            </tr>
+        </thead>
+        <?php foreach ($_creditmemo->getAllItems() as $_item): ?>
+            <?php
+                if ($_item->getOrderItem()->getParentItem()) {
+                    continue;
+                }
+            ?>
+            <tbody>
+                <?= $block->getItemHtml($_item) ?>
+            </tbody>
+        <?php endforeach; ?>
+        <tfoot class="order-totals">
+            <?= $block->getChildHtml('creditmemo_totals') ?>
+        </tfoot>
+    </table>
 <?php endif; ?>
