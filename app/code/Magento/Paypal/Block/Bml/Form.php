@@ -31,7 +31,7 @@ class Form extends Express\Form
             'https://www.securecheckout.billmelater.com/paycapture-content/'
             . 'fetch?hash=AU826TU8&content=/bmlweb/ppwpsiw.html'
         )->setPaymentAcceptanceMarkSrc(
-            'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppc-acceptance-small.png'
+            'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppc-acceptance-medium.png'
         )->setPaymentWhatIs(__('See terms'));
 
         $this->_initializeRedirectTemplateWithMark($mark);
