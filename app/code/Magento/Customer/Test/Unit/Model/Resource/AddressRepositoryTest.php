@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Customer\Test\Unit\Model\Resource;
 
 class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -130,7 +131,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerId = 34;
         $addressId = 53;
         $customerAddress = $this->getMockForAbstractClass('Magento\Customer\Api\Data\AddressInterface', [], '', false);
-        $addressCollection = $this->getMock('Magento\Customer\Model\Resource\Address\Collection', [], [], '',false);
+        $addressCollection = $this->getMock('Magento\Customer\Model\Resource\Address\Collection', [], [], '', false);
         $customerAddress->expects($this->atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
@@ -187,7 +188,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerId = 34;
         $addressId = 53;
         $customerAddress = $this->getMockForAbstractClass('Magento\Customer\Api\Data\AddressInterface', [], '', false);
-        $addressCollection = $this->getMock('Magento\Customer\Model\Resource\Address\Collection', [], [], '',false);
         $customerAddress->expects($this->atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
@@ -318,15 +318,13 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setTotalCount')
             ->with(23);
         $sortOrder = $this->getMock('Magento\Framework\Api\SortOrder', [], [], '', false);
-        $searchCriteria
-            ->expects($this->once())
+        $searchCriteria->expects($this->once())
             ->method('getSortOrders')
             ->willReturn([$sortOrder]);
         $sortOrder->expects($this->once())
             ->method('getField')
             ->willReturn('Field');
-        $sortOrder
-            ->expects($this->once())
+        $sortOrder->expects($this->once())
             ->method('getDirection')
             ->willReturn(1);
         $collection->expects($this->once())
@@ -373,7 +371,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $addressId = 12;
         $customerId = 43;
 
-        $addressCollection = $this->getMock('Magento\Customer\Model\Resource\Address\Collection', [], [], '',false);
+        $addressCollection = $this->getMock('Magento\Customer\Model\Resource\Address\Collection', [], [], '', false);
         $customerAddress = $this->getMockForAbstractClass('Magento\Customer\Api\Data\AddressInterface', [], '', false);
         $customerAddress->expects($this->once())
             ->method('getId')
@@ -414,7 +412,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $addressCollection = $this->getMock('Magento\Customer\Model\Resource\Address\Collection', [], [], '',false);
+        $addressCollection = $this->getMock('Magento\Customer\Model\Resource\Address\Collection', [], [], '', false);
         $this->addressRegistry->expects($this->once())
             ->method('retrieve')
             ->with($addressId)
@@ -435,6 +433,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('remove')
             ->with($addressId);
 
-        $this->assertTrue($this->repository->deleteById($addressId));;
+        $this->assertTrue($this->repository->deleteById($addressId));
     }
 }
