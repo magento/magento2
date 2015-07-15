@@ -51,11 +51,10 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
     public function getInputList()
     {
         return [
-            new InputOption(self::INPUT_KEY_ALL, 'a', InputOption::VALUE_NONE, 'All Indexes'),
             new InputArgument(
                 self::INPUT_KEY_INDEXERS,
                 InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-                'List of Indexes'
+                'List of index types, space separated. If omitted, all indexes will be affected'
             ),
         ];
     }

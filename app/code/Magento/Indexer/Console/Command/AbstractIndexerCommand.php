@@ -18,12 +18,10 @@ use Magento\Framework\App\ObjectManagerFactory;
  */
 abstract class AbstractIndexerCommand extends Command
 {
-    /**#@+
+    /**
      * Names of input arguments or options
      */
-    const INPUT_KEY_ALL = 'all';
     const INPUT_KEY_INDEXERS = 'index';
-    /**#@- */
 
     /**
      * Collection of Indexers factory
@@ -66,7 +64,6 @@ abstract class AbstractIndexerCommand extends Command
      */
     protected function getAllIndexers()
     {
-        /** @var Indexer[] $indexers */
         return $this->collectionFactory->create()->getItems();
     }
 }
