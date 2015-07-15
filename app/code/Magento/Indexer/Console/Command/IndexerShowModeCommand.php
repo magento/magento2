@@ -21,6 +21,7 @@ class IndexerShowModeCommand extends AbstractIndexerManageCommand
         $this->setName('indexer:show-mode')
             ->setDescription('Shows Index Mode')
             ->setDefinition($this->getInputList());
+
         parent::configure();
     }
 

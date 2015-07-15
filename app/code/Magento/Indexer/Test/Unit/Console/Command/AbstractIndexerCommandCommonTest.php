@@ -5,8 +5,6 @@
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Framework\App\ObjectManagerFactory;
-
 abstract class AbstractIndexerCommandCommonTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -34,7 +32,6 @@ abstract class AbstractIndexerCommandCommonTest extends \PHPUnit_Framework_TestC
         $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
 
-        //TODO: temporary fix unit
         $stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $stateMock->expects($this->once())
             ->method('setAreaCode')

@@ -21,9 +21,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonTest
     {
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(2, sizeof($optionsList));
-        $this->assertSame('all', $optionsList[0]->getName());
-        $this->assertSame('index', $optionsList[1]->getName());
+        $this->assertSame(1, sizeof($optionsList));
+        $this->assertSame('index', $optionsList[0]->getName());
     }
 
     public function testExecuteAll()
