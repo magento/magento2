@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
-use \Magento\Framework\Filesystem\File\Write;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\File\Write;
+use Magento\Framework\Phrase;
 
 /**
  * Class WriteTest
@@ -126,12 +128,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function testWriteException()
     {
         $data = 'data';
+        $emptyTranslation = '';
+
         $this->driver->expects($this->once())
             ->method('fileWrite')
             ->with($this->resource, $data)
-            ->willThrowException(
-                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase(''))
-            );
+            ->willThrowException(new FileSystemException(new Phrase($emptyTranslation)));
+
         $this->file->write($data);
     }
 
@@ -143,12 +146,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $data = [];
         $delimiter = ',';
         $enclosure = '"';
+        $emptyTranslation = '';
+
         $this->driver->expects($this->once())
             ->method('filePutCsv')
             ->with($this->resource, $data, $delimiter, $enclosure)
-            ->willThrowException(
-                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase(''))
-            );
+            ->willThrowException(new FileSystemException(new Phrase($emptyTranslation)));
+
         $this->file->writeCsv($data, $delimiter, $enclosure);
     }
 
@@ -157,12 +161,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testFlushException()
     {
+        $emptyTranslation = '';
+
         $this->driver->expects($this->once())
             ->method('fileFlush')
             ->with($this->resource)
-            ->willThrowException(
-                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase(''))
-            );
+            ->willThrowException(new FileSystemException(new Phrase($emptyTranslation)));
+
         $this->file->flush();
     }
 
