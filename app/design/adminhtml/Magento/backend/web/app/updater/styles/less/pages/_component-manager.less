@@ -12,9 +12,12 @@
 //  ---------------------------------------------
 
 @component-manager-wrap__border-color: @color-gray-light2;
+
 @component-manager-title__background-color: @color-white-fog;
 @component-manager-title__border-color: @color-gray89;
 @component-manager-title__color: @color-brown-darkie;
+
+@component-manager-button__border-color: @color-gray68;
 
 //
 
@@ -52,6 +55,9 @@
     list-style: none;
     margin: 0;
     text-align: center;
+    .btn {
+        border: 1px solid @component-manager-button__border-color;
+    }
     .item-title {
         margin: 0 0 1.5rem;
     }
