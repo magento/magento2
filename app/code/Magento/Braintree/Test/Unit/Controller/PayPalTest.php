@@ -100,7 +100,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->controller = $this->objectManagerHelper->getObject(
-            '\Magento\Braintree\Controller\PayPal',
+            'Magento\Braintree\Test\Unit\Controller\Stub\PayPalStub',
             [
                 'context' => $contextMock,
                 'customerSession' => $this->customerSessionMock,
