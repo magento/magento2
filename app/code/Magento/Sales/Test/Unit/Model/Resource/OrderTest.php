@@ -39,9 +39,17 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderMock;
     /**
+     * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderItemMock;
+    /**
      * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeMock;
+    /**
+     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $websiteMock;
     /**
      * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -71,8 +79,28 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     {
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $this->orderItemMock = $this->getMock(
+            'Magento\Sales\Model\Order\Item',
+            ['getQuoteParentItemId', 'setTotalItemCount', 'getChildrenItems'],
+            [],
+            '',
+            false
+        );
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->storeGroupMock = $this->getMock('Magento\Store\Model\Group', [], [], '', false);
+        $this->storeGroupMock = $this->getMock(
+            'Magento\Store\Model\Group',
+            ['getName', 'getDefaultStoreId'],
+            [],
+            '',
+            false
+        );
+        $this->websiteMock = $this->getMock(
+            'Magento\Store\Model\Website',
+            ['getName'],
+            [],
+            '',
+            false
+        );
         $this->adapterMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [
@@ -138,7 +166,24 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-
+        $this->orderMock->expects($this->exactly(3))
+            ->method('getId')
+            ->willReturn(null);
+        $this->orderItemMock->expects($this->once())
+            ->method('getChildrenItems')
+            ->willReturn([]);
+        $this->orderItemMock->expects($this->once())
+            ->method('getQuoteParentItemId')
+            ->willReturn(null);
+        $this->orderMock->expects($this->once())
+            ->method('setTotalItemCount')
+            ->with(1);
+        $this->storeGroupMock->expects($this->once())
+            ->method('getDefaultStoreId')
+            ->willReturn(1);
+        $this->orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn([$this->orderItemMock]);
         $this->orderMock->expects($this->once())
             ->method('validateBeforeSave')
             ->willReturnSelf();
@@ -151,12 +196,15 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getEntityType')
             ->willReturn('order');
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects($this->exactly(2))
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())
+        $this->storeMock->expects($this->exactly(2))
             ->method('getGroup')
             ->willReturn($this->storeGroupMock);
+        $this->storeMock->expects($this->once())
+            ->method('getWebsite')
+            ->willReturn($this->websiteMock);
         $this->storeGroupMock->expects($this->once())
             ->method('getDefaultStoreId')
             ->willReturn(1);

@@ -52,6 +52,11 @@ class Resolver implements ResolverInterface
                         'fileMask' => '/\.(php|phtml)$/',
                     ],
                     [
+                        'type' => 'html',
+                        'paths' => [$this->directory . '/app/code/', $this->directory . '/app/design/'],
+                        'fileMask' => '/\.html$/',
+                    ],
+                    [
                         'type' => 'js',
                         'paths' => [
                             $this->directory . '/app/code/',
@@ -70,6 +75,7 @@ class Resolver implements ResolverInterface
             } else {
                 $this->options = [
                     ['type' => 'php', 'paths' => [$this->directory], 'fileMask' => '/\.(php|phtml)$/'],
+                    ['type' => 'html', 'paths' => [$this->directory], 'fileMask' => '/\.html/'],
                     ['type' => 'js', 'paths' => [$this->directory], 'fileMask' => '/\.(js|phtml)$/'],
                     ['type' => 'xml', 'paths' => [$this->directory], 'fileMask' => '/\.xml$/'],
                 ];
