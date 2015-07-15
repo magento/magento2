@@ -5,6 +5,7 @@
  */
 namespace Magento\Log\Test\Unit\Console\Command;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Log\Console\Command\LogCleanCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\ObjectManager;
@@ -23,10 +24,17 @@ class LogCleanCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
-        $this->commandTester = new CommandTester(new LogCleanCommand($objectManagerFactory));
+        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
+        $state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $configLoader->expects($this->once())
+            ->method('load')
+            ->with(FrontNameResolver::AREA_CODE)
+            ->will($this->returnValue([]));
+        $state->expects($this->once())
+            ->method('setAreaCode')
+            ->with(FrontNameResolver::AREA_CODE);
+        $this->commandTester = new CommandTester(new LogCleanCommand($this->objectManager, $configLoader, $state));
     }
 
     public function testExecute()

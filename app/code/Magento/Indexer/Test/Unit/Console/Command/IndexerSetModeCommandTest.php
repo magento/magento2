@@ -22,6 +22,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
 
     public function testGetOptions()
     {
+        $this->stateMock->expects($this->never())->method('setAreaCode')->with('adminmhtml');
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
         $this->assertSame(3, sizeof($optionsList));
@@ -36,6 +37,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
      */
     public function testExecuteInvalidArgument()
     {
+        $this->stateMock->expects($this->never())->method('setAreaCode')->with('adminmhtml');
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
@@ -47,6 +49,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
      */
     public function testExecuteInvalidMode()
     {
+        $this->stateMock->expects($this->never())->method('setAreaCode')->with('adminmhtml');
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['mode' => 'wrong_mode']);
@@ -54,6 +57,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteAll()
     {
+        $this->stateMock->expects($this->once())->method('setAreaCode')->with('adminmhtml');
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
 
@@ -87,6 +91,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
      */
     public function testExecuteWithIndex($isScheduled, $previous, $current, $mode, $expectedValue)
     {
+        $this->stateMock->expects($this->once())->method('setAreaCode')->with('adminmhtml');
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $indexerOne->expects($this->once())->method('load')->with('id_indexerOne')->willReturn($indexerOne);
@@ -147,6 +152,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithLocalizedException()
     {
+        $this->stateMock->expects($this->once())->method('setAreaCode')->with('adminmhtml');
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $localizedException = new \Magento\Framework\Exception\LocalizedException(__('Some Exception Message'));
         $indexerOne->expects($this->once())->method('setScheduled')->will($this->throwException($localizedException));
@@ -161,6 +167,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithException()
     {
+        $this->stateMock->expects($this->once())->method('setAreaCode')->with('adminmhtml');
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $exception = new \Exception();
         $indexerOne->expects($this->once())->method('setScheduled')->will($this->throwException($exception));

@@ -19,6 +19,7 @@ class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
 
     public function testGetOptions()
     {
+        $this->stateMock->expects($this->never())->method('setAreaCode')->with('adminmhtml');
         $this->command = new IndexerShowModeCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
         $this->assertSame(2, sizeof($optionsList));
@@ -28,7 +29,6 @@ class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteAll()
     {
-
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
