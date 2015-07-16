@@ -8,7 +8,6 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\Resource\Config;
 use Magento\Framework\App\Resource\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -111,8 +110,8 @@ class Resource
             if ($connectionConfig) {
                 $connection = $this->_connectionFactory->create($connectionConfig);
             }
-            if (empty($connection) && Config::DEFAULT_SETUP_CONNECTION !== $connectionName) {
-                return $this->getConnectionByName(Config::DEFAULT_SETUP_CONNECTION);
+            if (empty($connection) && \Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION !== $connectionName) {
+                return $this->getConnectionByName(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
             }
 
             $this->_connections[$connectionName] = $connection;
