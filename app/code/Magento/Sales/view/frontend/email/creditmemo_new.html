@@ -10,7 +10,7 @@
 "var comment":"Credit Memo Comment",
 "var creditmemo.increment_id":"Credit Memo Id",
 "layout handle=\"sales_email_order_creditmemo_items\" creditmemo=$creditmemo order=$order":"Credit Memo Items Grid",
-"var store.getUrl('customer/account/')":"Customer Account URL",
+"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
 "var order.getCustomerName()":"Customer Name",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
@@ -26,7 +26,7 @@
             <p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
-                {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/') |raw}}
+                {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/') |raw}}
                 {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
                 {{depend store_hours}}
                     {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
