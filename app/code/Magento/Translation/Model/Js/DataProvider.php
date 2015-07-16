@@ -70,10 +70,11 @@ class DataProvider implements DataProviderInterface
     public function getData($themePath)
     {
         $dictionary = [];
+        $areaCode = $this->appState->getAreaCode();
 
-        $files = $this->filesUtility->getJsFiles($this->appState->getAreaCode(), $themePath);
+        $files = $this->filesUtility->getJsFiles($areaCode, $themePath);
 
-        foreach ($this->filesUtility->getStaticHtmlFiles($this->appState->getAreaCode(), $themePath) as $staticFile) {
+        foreach ($this->filesUtility->getStaticHtmlFiles($areaCode, $themePath) as $staticFile) {
             $files[] = $staticFile;
         }
 
