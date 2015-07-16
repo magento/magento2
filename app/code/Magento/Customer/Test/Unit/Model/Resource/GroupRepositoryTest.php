@@ -6,6 +6,9 @@
 
 namespace Magento\Customer\Test\Unit\Model\Resource;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -256,7 +259,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn('Code');
         $this->group->expects($this->atLeastOnce())
             ->method('getId')
-            ->willReturn(false);;
+            ->willReturn(false);
         $this->group->expects($this->atLeastOnce())
             ->method('getTaxClassId')
             ->willReturn(234);
