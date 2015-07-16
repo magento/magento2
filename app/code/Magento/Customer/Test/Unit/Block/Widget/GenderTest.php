@@ -169,7 +169,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGenderOptions()
     {
-        $options = [['label' => __('Male'), 'value' => 'M'], ['label' => __('Female'), 'value' => 'F']];
+        $options = [['label' => __('Not Specified'), 'value' => 'NA'], ['label' => __('Male'), 'value' => 'M'], ['label' => __('Female'), 'value' => 'F']];
 
         $this->attribute->expects($this->once())->method('getOptions')->will($this->returnValue($options));
         $this->assertSame($options, $this->block->getGenderOptions());
