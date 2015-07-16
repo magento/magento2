@@ -136,9 +136,9 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_appState;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
-    protected $backendUrlBuilder;
+    protected $urlModel;
 
     /**
      * @var \Pelago\Emogrifier
@@ -156,7 +156,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
+     * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
      * @param array $variables
      *
@@ -173,7 +173,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
-        \Magento\Backend\Model\UrlInterface $backendUrlBuilder,
+        \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
         $variables = []
     ) {
@@ -187,7 +187,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_layout = $layout;
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
-        $this->backendUrlBuilder = $backendUrlBuilder;
+        $this->urlModel = $urlModel;
         $this->emogrifier = $emogrifier;
         parent::__construct($string, $variables);
     }
@@ -495,22 +495,19 @@ class Filter extends \Magento\Framework\Filter\Template
             unset($params['url']);
         }
 
-        return $this->getUrl($path, $params);
+        return $this->urlModel->getUrl($path, $params);
     }
 
     /**
-     * @param string $path
-     * @param array $params
-     * @return string
+     * Set current URL model, which will be used for URLs generation.
+     *
+     * @param \Magento\Framework\UrlInterface $urlModel
+     * @return $this
      */
-    protected function getUrl($path, $params)
+    public function setUrlModel(\Magento\Framework\UrlInterface $urlModel)
     {
-        $isBackendStore = \Magento\Store\Model\Store::DEFAULT_STORE_ID === $this->getStoreId()
-            || \Magento\Store\Model\Store::ADMIN_CODE === $this->getStoreId();
-
-        return $isBackendStore
-            ? $this->backendUrlBuilder->getUrl($path, $params)
-            : $this->_storeManager->getStore($this->getStoreId())->getUrl($path, $params);
+        $this->urlModel = $urlModel;
+        return $this;
     }
 
     /**
