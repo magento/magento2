@@ -36,21 +36,25 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->directory = $this->getMock(
             'Magento\Framework\Filesystem\Directory\Read',
-            ['getAbsolutePath', 'search'], [], '', false
+            ['getAbsolutePath', 'search'],
+            [],
+            '',
+            false
         );
         $this->pathPatternHelperMock = $this->getMockBuilder('Magento\Framework\View\Helper\PathPattern')
             ->disableOriginalConstructor()
             ->getMock();
-        $filesystem = $this->getMock(
-            'Magento\Framework\Filesystem', ['getDirectoryRead'], [], '', false
-        );
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', ['getDirectoryRead'], [], '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::THEMES)
             ->willReturn($this->directory);
         $this->fileFactory = $this->getMock('Magento\Framework\View\File\Factory', [], [], '', false);
         $this->model = new \Magento\Framework\View\File\Collector\Override\Base(
-            $filesystem, $this->fileFactory, $this->pathPatternHelperMock, 'override'
+            $filesystem,
+            $this->fileFactory,
+            $this->pathPatternHelperMock,
+            'override'
         );
     }
 
