@@ -25,7 +25,7 @@ class AddQuantityFilterToCollection implements AddFilterToCollectionInterface
                 (float)$condition['from']
             );
         }
-        if ($condition['to']) {
+        if (isset($condition['to'])) {
             $collection->getSelect()->where(
                 AbstractCollection::ATTRIBUTE_TABLE_ALIAS_PREFIX . 'qty.qty <= ?',
                 (float)$condition['to']
