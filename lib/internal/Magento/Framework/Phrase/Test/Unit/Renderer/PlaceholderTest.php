@@ -61,7 +61,10 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
                 ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven'],
                 'one two three four five six seven eight nine ten eleven',
             ],
-            ['A %table has four legs', ['tab' => 'Tab-Leiste', 'able' => '', 'table' => 'Tabelle'], 'A Tabelle has four legs'],
+            [
+                'A %table has four legs',
+                ['tab' => 'Tab-Leiste', 'able' => '', 'table' => 'Tabelle'], 'A Tabelle has four legs'
+            ],
         ];
     }
 }

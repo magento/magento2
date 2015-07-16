@@ -64,8 +64,8 @@ class GenericSchemaLocator implements SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return is_null($this->perFileSchema) ?
-            null :
-            $this->moduleDirReader->getModuleDir('etc', $this->moduleName) . '/' . $this->perFileSchema;
+        if ($this->perFileSchema !== null) {
+            return $this->moduleDirReader->getModuleDir('etc', $this->moduleName) . '/' . $this->perFileSchema;
+        }
     }
 }
