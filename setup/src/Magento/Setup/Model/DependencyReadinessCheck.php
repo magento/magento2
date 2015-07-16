@@ -27,9 +27,9 @@ class DependencyReadinessCheck
     private $directoryList;
 
     /**
-     * @var MagentoComposerApplication
+     * @var RequireUpdateDryRunCommand
      */
-    private $composerApp;
+    private $requireUpdateDryRunCommand;
 
     /**
      * @var File
@@ -53,7 +53,7 @@ class DependencyReadinessCheck
         $this->composerJsonFinder = $composerJsonFinder;
         $this->directoryList = $directoryList;
         $this->file = $file;
-        $this->composerApp = $composerAppFactory->create();
+        $this->requireUpdateDryRunCommand = $composerAppFactory->createRequireUpdateDryRunCommand();
     }
 
     /**
@@ -69,7 +69,7 @@ class DependencyReadinessCheck
         $this->file->copy($composerJson, $this->directoryList->getPath(DirectoryList::VAR_DIR) .  '/composer.json');
         $workingDir = $this->directoryList->getPath(DirectoryList::VAR_DIR);
         try {
-            $this->composerApp->runRequireUpdateDryRun($packages, $workingDir);
+            $this->requireUpdateDryRunCommand->run($packages, $workingDir);
             return ['success' => true];
         } catch (\RuntimeException $e) {
             $message = str_replace(PHP_EOL, '<br/>', htmlspecialchars($e->getMessage()));
