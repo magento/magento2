@@ -273,12 +273,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultRedirect, $this->abstractMassStatusController->execute());
     }
 
-    /**
-     * @param array $items
-     *
-     * @dataProvider dataProviderGetPageIdsWithSetSelectAll
-     */
-    public function testExecuteThrowsException(array $items)
+    public function testExecuteThrowsException()
     {
         $requestParams = [
             ['excluded', null, false],
