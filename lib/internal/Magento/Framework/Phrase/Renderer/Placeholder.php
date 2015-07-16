@@ -31,6 +31,13 @@ class Placeholder implements RendererInterface
         return $text;
     }
 
+    /**
+     * Get key to placeholder
+     *
+     * @param $key
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
     private function keyToPlaceholder($key)
     {
         return '%' . (is_int($key) ? strval($key + 1) : $key);
