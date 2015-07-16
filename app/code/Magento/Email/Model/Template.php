@@ -134,6 +134,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
         array $data = []
@@ -150,6 +151,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
             $scopeConfig,
             $emailConfig,
             $templateFactory,
+            $filterManager,
             $urlModel,
             $data
         );

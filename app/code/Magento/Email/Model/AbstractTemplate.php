@@ -147,6 +147,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $emailConfig;
 
     /**
+     * @var \Magento\Framework\Filter\FilterManager
+     */
+    protected $filterManager;
+
+    /**
      * @var \Magento\Framework\UrlInterface
      */
     private $urlModel;
@@ -162,7 +167,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
-     * @param \Magento\Framework\Url $urlModel
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param \Magento\Framework\Url|\Magento\Framework\UrlInterface $urlModel
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -178,6 +184,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         Template\Config $emailConfig,
         TemplateFactory $templateFactory,
+        \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         array $data = []
     ) {
@@ -191,6 +198,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->scopeConfig = $scopeConfig;
         $this->emailConfig = $emailConfig;
         $this->templateFactory = $templateFactory;
+        $this->filterManager = $filterManager;
         $this->urlModel = $urlModel;
         parent::__construct($context, $registry, null, null, $data);
     }
@@ -205,16 +213,25 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function getTemplateContent($configPath, array $variables)
     {
         $template = $this->getTemplateInstance();
+
         // Ensure child templates have the same area/store context as parent
-        $template->setDesignConfig($this->getDesignConfig()->toArray());
+        $template->setDesignConfig($this->getDesignConfig()->toArray())
+            ->loadByConfigPath($configPath, $variables)
+            ->setTemplateType($this->getType())
+            ->setIsChildTemplate(true);
 
-        $template->loadByConfigPath($configPath, $variables);
+        // automatically strip tags if in a plain-text parent
+        if ($this->isPlain()) {
+            $templateText = $this->filterManager->stripTags($template->getTemplateText());
+            $template->setTemplateText(trim($templateText));
+        }
 
-        // Indicate that this is a child template so that when the template is being filtered, directives such as
-        // inlinecss can respond accordingly
-        $template->setIsChildTemplate(true);
+        $processedTemplate = $template->getProcessedTemplate($variables);
+        if ($this->isPlain()) {
+            $processedTemplate = trim($processedTemplate);
+        }
 
-        return $template->getProcessedTemplate($variables);
+        return $processedTemplate;
     }
 
     /**
@@ -240,13 +257,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $templateId = $this->scopeConfig->getValue($configPath, ScopeInterface::SCOPE_STORE, $storeId);
 
         if (is_numeric($templateId)) {
-            // Template was overridden in backend, so load template from database
             $this->load($templateId);
         } else {
-            // Load from filesystem
             $this->loadDefault($templateId);
         }
-
         return $this;
     }
 
