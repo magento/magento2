@@ -753,6 +753,10 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function cssDirective($construction)
     {
+        if ($this->isPlainTemplateMode()) {
+            return '';
+        }
+
         $params = $this->getParameters($construction[2]);
         $file = isset($params['file']) ? $params['file'] : null;
         if (!$file) {
