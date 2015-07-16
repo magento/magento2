@@ -42,10 +42,13 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
 
         $filesystem->expects($this->any())->method('getDirectoryRead')
             ->with($this->equalTo(DirectoryList::THEMES))
-            ->will($this->returnValue($this->directory));
+            ->willReturn($this->directory);
         $this->fileFactory = $this->getMock('Magento\Framework\View\File\Factory', [], [], '', false);
         $this->model = new \Magento\Framework\View\File\Collector\Override\ThemeModular(
-            $filesystem, $this->fileFactory, $this->pathPatternHelperMock, 'override/theme'
+            $filesystem,
+            $this->fileFactory,
+            $this->pathPatternHelperMock,
+            'override/theme'
         );
     }
 
@@ -57,18 +60,18 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
 
         $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         $parentTheme->expects($this->once())->method('getCode')->willReturn('vendor/parent_theme');
-        $parentTheme->expects($this->once())->method('getParentTheme')->will($this->returnValue($grandparentTheme));
+        $parentTheme->expects($this->once())->method('getParentTheme')->willReturn($grandparentTheme);
 
         $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue('area/theme_path'));
-        $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue($parentTheme));
+        $theme->expects($this->once())->method('getFullPath')->willReturn('area/theme_path');
+        $theme->expects($this->once())->method('getParentTheme')->willReturn($parentTheme);
 
         $filePathOne = 'design/area/theme_path/Module_One/override/theme/vendor/parent_theme/1.xml';
         $filePathTwo = 'design/area/theme_path/Module_Two/override/theme/vendor/grand_parent_theme/2.xml';
         $this->directory->expects($this->once())
             ->method('search')
             ->with($this->equalTo('area/theme_path/*_*/override/theme/*/*/*.xml'))
-            ->will($this->returnValue([$filePathOne, $filePathTwo]));
+            ->willReturn([$filePathOne, $filePathTwo]);
         $this->pathPatternHelperMock->expects($this->any())
             ->method('translatePatternFromGlob')
             ->with($inputPath)
@@ -79,10 +82,12 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
         $this->fileFactory
             ->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValueMap([
-                [$filePathOne, 'Module_One', $parentTheme, false, $fileOne],
-                [$filePathTwo, 'Module_Two', $grandparentTheme, false, $fileTwo],
-            ]));
+            ->willReturnMap(
+                [
+                    [$filePathOne, 'Module_One', $parentTheme, false, $fileOne],
+                    [$filePathTwo, 'Module_Two', $grandparentTheme, false, $fileTwo],
+                ]
+            );
 
         $this->assertSame([$fileOne, $fileTwo], $this->model->getFiles($theme, $inputPath));
     }
@@ -95,24 +100,24 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
 
         $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         $parentTheme->expects($this->once())->method('getCode')->willReturn('vendor/parent_theme');
-        $parentTheme->expects($this->once())->method('getParentTheme')->will($this->returnValue($grandparentTheme));
+        $parentTheme->expects($this->once())->method('getParentTheme')->willReturn($grandparentTheme);
 
         $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue('area/theme_path'));
-        $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue($parentTheme));
+        $theme->expects($this->once())->method('getFullPath')->willReturn('area/theme_path');
+        $theme->expects($this->once())->method('getParentTheme')->willReturn($parentTheme);
 
         $filePathOne = 'design/area/theme_path/Module_Two/override/theme/vendor/grand_parent_theme/preset/3.xml';
         $this->directory->expects($this->once())
             ->method('search')
             ->with('area/theme_path/*_*/override/theme/*/*/preset/3.xml')
-            ->will($this->returnValue([$filePathOne]));
+            ->willReturn([$filePathOne]);
 
         $fileOne = new \Magento\Framework\View\File('3.xml', 'Module_Two', $grandparentTheme);
         $this->fileFactory
             ->expects($this->once())
             ->method('create')
             ->with($filePathOne, 'Module_Two', $grandparentTheme)
-            ->will($this->returnValue($fileOne));
+            ->willReturn($fileOne);
         $this->pathPatternHelperMock->expects($this->any())
             ->method('translatePatternFromGlob')
             ->with($inputPath)
@@ -125,21 +130,19 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
     {
         $inputPath = '*.xml';
         $filePath = 'design/area/theme_path/Module_One/override/theme/vendor/parent_theme/1.xml';
-        $this->setExpectedException(
-            'Magento\Framework\Exception\LocalizedException',
-            "Trying to override modular view file '$filePath' for theme 'vendor/parent_theme'"
-                . ", which is not ancestor of theme 'vendor/theme_path'"
-        );
+        $expectedMessage = "Trying to override modular view file '$filePath' for theme 'vendor/parent_theme'"
+            . ", which is not ancestor of theme 'vendor/theme_path'";
+        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', $expectedMessage);
 
         $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue('area/theme_path'));
-        $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue(null));
-        $theme->expects($this->once())->method('getCode')->will($this->returnValue('vendor/theme_path'));
+        $theme->expects($this->once())->method('getFullPath')->willReturn('area/theme_path');
+        $theme->expects($this->once())->method('getParentTheme')->willReturn(null);
+        $theme->expects($this->once())->method('getCode')->willReturn('vendor/theme_path');
 
         $this->directory->expects($this->once())
             ->method('search')
             ->with('area/theme_path/*_*/override/theme/*/*/*.xml')
-            ->will($this->returnValue([$filePath]));
+            ->willReturn([$filePath]);
         $this->pathPatternHelperMock->expects($this->any())
             ->method('translatePatternFromGlob')
             ->with($inputPath)
