@@ -126,20 +126,10 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
             ['selected', null, null]
         ];
 
-        $valueMap = [
-            [
-                'Magento\Framework\Model\Resource\Db\Collection\AbstractCollection',
-                $this->collectionMock,
-            ],
-            [
-                'Magento\Framework\Model\AbstractModel',
-                $this->modelMock
-            ],
-        ];
-
         $this->requestMock->expects($this->atLeastOnce())->method('getParam')->willReturnMap($requestParams);
 
-        $this->objectManagerMock->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
+        $this->objectManagerMock->expects($this->once())->method('get')->willReturn($this->collectionMock);
+        $this->objectManagerMock->expects($this->atLeastOnce())->method('create')->willReturn($this->modelMock);
 
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
@@ -170,20 +160,10 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
 
         $selectedIds = ['1', '7'];
 
-        $valueMap = [
-            [
-                'Magento\Framework\Model\Resource\Db\Collection\AbstractCollection',
-                $this->collectionMock,
-            ],
-            [
-                'Magento\Framework\Model\AbstractModel',
-                $this->modelMock
-            ],
-        ];
-
         $this->requestMock->expects($this->atLeastOnce())->method('getParam')->willReturnMap($requestParams);
 
-        $this->objectManagerMock->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
+        $this->objectManagerMock->expects($this->once())->method('get')->willReturn($this->collectionMock);
+        $this->objectManagerMock->expects($this->atLeastOnce())->method('create')->willReturn($this->modelMock);
 
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
@@ -218,20 +198,10 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
 
         $excludedIds = ['1', '3', '5'];
 
-        $valueMap = [
-            [
-                'Magento\Framework\Model\Resource\Db\Collection\AbstractCollection',
-                $this->collectionMock,
-            ],
-            [
-                'Magento\Framework\Model\AbstractModel',
-                $this->modelMock
-            ],
-        ];
-
         $this->requestMock->expects($this->atLeastOnce())->method('getParam')->willReturnMap($requestParams);
 
-        $this->objectManagerMock->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
+        $this->objectManagerMock->expects($this->once())->method('get')->willReturn($this->collectionMock);
+        $this->objectManagerMock->expects($this->atLeastOnce())->method('create')->willReturn($this->modelMock);
 
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
