@@ -22,7 +22,7 @@ angular.module('create-backup', ['ngStorage'])
             if ($scope.backupInfo.options.code || $scope.backupInfo.options.media || $scope.backupInfo.options.db) {
                 $scope.nextState();
             } else {
-                $state.go('root.component-upgrade')
+                $state.go('root.component-update')
             }
         };
 
