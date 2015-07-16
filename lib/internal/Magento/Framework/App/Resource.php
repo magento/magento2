@@ -99,24 +99,25 @@ class Resource
      * @param string $connectionName
      * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
      */
-    private function getConnectionByName($connectionName)
+    public function getConnectionByName($connectionName)
     {
-        if (!isset($this->_connections[$connectionName])) {
-
-            $connectionConfig = $this->deploymentConfig->get(
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . $connectionName
-            );
-
-            if ($connectionConfig) {
-                $connection = $this->_connectionFactory->create($connectionConfig);
-            }
-            if (empty($connection) && Resource\Config::DEFAULT_SETUP_CONNECTION !== $connectionName) {
-                return $this->getConnectionByName(Resource\Config::DEFAULT_SETUP_CONNECTION);
-            }
-
-            $this->_connections[$connectionName] = $connection;
+        if (isset($this->_connections[$connectionName])) {
+            return $this->_connections[$connectionName];
         }
-        return $this->_connections[$connectionName];
+
+        $connectionConfig = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . $connectionName
+        );
+
+        if ($connectionConfig) {
+            $connection = $this->_connectionFactory->create($connectionConfig);
+        }
+        if (empty($connection)) {
+            return false;
+        }
+
+        $this->_connections[$connectionName] = $connection;
+        return $connection;
     }
 
     /**
