@@ -22,8 +22,8 @@ define(
              * Checkout for guest and registered customer.
              */
             if (!customer.isLoggedIn()) {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/set-payment-information', {
-                    quoteId: quote.getQuoteId()
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/set-payment-information', {
+                    cartId: quote.getQuoteId()
                 });
                 payload = {
                     cartId: quote.getQuoteId(),
