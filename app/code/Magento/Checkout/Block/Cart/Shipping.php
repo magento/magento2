@@ -77,6 +77,11 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $quoteRepository;
 
     /**
+     * @var \Magento\Checkout\Model\Cart\CollectQuote
+     */
+    protected $collectQuote;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -88,6 +93,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param AddressRepositoryInterface $addressRepository
      * @param CustomerRepositoryInterface $customerRepository
      * @param QuoteRepository $quoteRepository
+     * @param \Magento\Checkout\Model\Cart\CollectQuote $collectQuote
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -103,6 +109,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         AddressRepositoryInterface $addressRepository,
         CustomerRepositoryInterface $customerRepository,
         QuoteRepository $quoteRepository,
+        \Magento\Checkout\Model\Cart\CollectQuote $collectQuote,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -113,12 +120,12 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->addressRepository = $addressRepository;
         $this->customerRepository = $customerRepository;
         $this->quoteRepository = $quoteRepository;
+        $this->collectQuote = $collectQuote;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
     }
 
-    /**
-     * Get config
+    /** Get config
      *
      * @param string $path
      * @return string|null
@@ -364,22 +371,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     protected function _beforeToHtml()
     {
-        if ($this->_customerSession->isLoggedIn()) {
-            $customer = $this->customerRepository->getById($this->_customerSession->getCustomerId());
-            if ($defaultShipping = $customer->getDefaultShipping()) {
-                $address = $this->addressRepository->getById($defaultShipping);
-                if ($address) {
-                    /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
-                    $estimatedAddress = $this->estimatedAddressFactory->create();
-                    $estimatedAddress->setCountryId($address->getCountryId());
-                    $estimatedAddress->setPostcode($address->getPostcode());
-                    $estimatedAddress->setRegion((string)$address->getRegion()->getRegion());
-                    $estimatedAddress->setRegionId($address->getRegionId());
-                    $this->shippingMethodManager->estimateByAddress($this->getQuote()->getId(), $estimatedAddress);
-                    $this->quoteRepository->save($this->getQuote());
-                }
-            }
-        }
+        $this->collectQuote->collect($this->getQuote());
         return parent::_beforeToHtml();
     }
 
