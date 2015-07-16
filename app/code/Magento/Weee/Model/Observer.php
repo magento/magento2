@@ -217,13 +217,22 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         if ($this->_weeeData->isEnabled()) {
             $priceConfigObj = $observer->getData('configObj');
             try {
+                $product = $this->_registry->registry('current_product');
+
+                $weeeAttributes = $this->_weeeData->getWeeAttributesForBundle($product);
+
                 $calcPrice = 'finalPrice';
                 if ($this->_taxData->priceIncludesTax() &&
                     $this->_taxData->displayPriceExcludingTax()
                 ) {
                     $calcPrice = 'basePrice';
                 }
-                $priceConfig = $this->recurConfigAndInsertWeeePrice($priceConfigObj->getConfig(), 'prices', $calcPrice);
+                $priceConfig = $this->recurConfigAndInsertWeeePrice(
+                    $priceConfigObj->getConfig(),
+                    'prices',
+                    $calcPrice,
+                    $weeeAttributes
+                );
                 $priceConfigObj->setConfig($priceConfig);
             } catch (\Exception $e) {
                 return $this;
@@ -235,52 +244,28 @@ class Observer extends \Magento\Framework\Model\AbstractModel
     /**
      * Recur through the config array and insert the wee price
      *
-     * @param   array $input
-     * @param   string $searchKey
-     * @param   string $calcPrice
-     * @return  array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param  array $input
+     * @param  string $searchKey
+     * @param  string $calcPrice
+     * @param  array $weeeAttributes
+     * @return array
      */
-    private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice)
+    private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice, $weeeAttributes = null)
     {
         $holder = [];
         if (is_array($input)) {
             foreach ($input as $key => $el) {
                 if (is_array($el)) {
-                    $holder[$key] = $this->recurConfigAndInsertWeeePrice($el, $searchKey, $calcPrice);
+                    $holder[$key] = $this->recurConfigAndInsertWeeePrice($el, $searchKey, $calcPrice, $weeeAttributes);
                     if ($key === $searchKey) {
                         if ((!array_key_exists('weeePrice', $holder[$key])) &&
                         (array_key_exists($calcPrice, $holder[$key]))
                         ) {
+                            //this is required for product options && bundle
                             $holder[$key]['weeePrice'] = $holder[$key][$calcPrice];
-                            $product = $this->_registry->registry('current_product');
                             // only do processing on product options
-                            if (array_key_exists('optionId', $input) && $product) {
-                                $typeInstance = $product->getTypeInstance();
-                                if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-                                    $typeInstance->setStoreFilter($product->getStoreId(), $product);
-                                    $selectionCollection = $typeInstance->getSelectionsCollection(
-                                        $typeInstance->getOptionsIds($product),
-                                        $product
-                                    );
-                                    foreach ($selectionCollection as $selectionItem) {
-                                        if ($selectionItem->getId() == $input['optionId']) {
-                                            $weeAttributes = $this->_weeeData->getProductWeeeAttributes(
-                                                $selectionItem,
-                                                null,
-                                                null,
-                                                $product->getStore()->getWebsiteId()
-                                            );
-                                            $weeSum = 0;
-                                            foreach ($weeAttributes as $weeAttribute) {
-                                                $holder[$key]['weeePrice' . $weeAttribute->getCode()] =
-                                                    ['amount' => (float) $weeAttribute->getAmount()];
-                                                $weeSum+= (float) $weeAttribute->getAmount();
-                                            }
-                                        }
-                                    }
-                                    $holder[$key]['weeePrice']['amount']+= (float) $weeSum;
-                                }
+                            if (array_key_exists('optionId', $input) && $weeeAttributes) {
+                                $holder = $this->insertWeePrice($holder, $key, $weeeAttributes);
                             }
                         }
                     }
@@ -293,11 +278,33 @@ class Observer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Insert the wee price for bundle product
+     *
+     * @param  array $holder
+     * @param  int|string $key
+     * @param  array $weeeAttributes
+     * @return array
+     */
+    private function insertWeePrice($holder, $key, $weeeAttributes)
+    {
+        if (count($weeeAttributes)>0) {
+            $weeSum = 0;
+            foreach ($weeeAttributes as $weeAttribute) {
+                $holder[$key]['weeePrice' . $weeAttribute->getCode()] =
+                    ['amount' => (float)$weeAttribute->getAmount()];
+                $weeSum += (float)$weeAttribute->getAmount();
+            }
+
+            $holder[$key]['weeePrice']['amount'] += (float)$weeSum;
+        }
+        return $holder;
+    }
+
+    /**
      * Change default JavaScript templates for options rendering
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function updateProductOptions(\Magento\Framework\Event\Observer $observer)
     {
@@ -314,42 +321,25 @@ class Observer extends \Magento\Framework\Model\AbstractModel
             !$this->_weeeData->geDisplayIncl($product->getStoreId()) &&
             !$this->_weeeData->geDisplayExcl($product->getStoreId())
         ) {
-            $typeInstance = $product->getTypeInstance();
             // only do processing on bundle product
             if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-                $typeInstance->setStoreFilter($product->getStoreId(), $product);
-
-                $selectionCollection = $typeInstance->getSelectionsCollection(
-                    $typeInstance->getOptionsIds($product),
-                    $product
-                );
                 if (!array_key_exists('optionTemplate', $options)) {
                     $options['optionTemplate'] = '<%- data.label %>'
                         . '<% if (data.finalPrice.value) { %>'
                         . ' +<%- data.finalPrice.formatted %>'
                         . '<% } %>';
                 }
-                $insertedWeeCodesArray = [];
-                foreach ($selectionCollection as $selectionItem) {
-                    $weeAttributes = $this->_weeeData->getProductWeeeAttributes(
-                        $selectionItem,
-                        null,
-                        null,
-                        $product->getStore()->getWebsiteId()
+
+                foreach ($this->_weeeData->getWeeAttributesForBundle($product) as $weeAttribute) {
+                    $options['optionTemplate'] .= sprintf(
+                        ' <%% if (data.weeePrice' . $weeAttribute->getCode() . ') { %%>'
+                        . '  (' . $weeAttribute->getName()
+                        . ':<%%= data.weeePrice' . $weeAttribute->getCode()
+                        . '.formatted %%>)'
+                        . '<%% } %%>'
                     );
-                    foreach ($weeAttributes as $weeAttribute) {
-                        if (!array_key_exists($weeAttribute->getCode(), $insertedWeeCodesArray)) {
-                            $options['optionTemplate'] .= sprintf(
-                                ' <%% if (data.weeePrice' . $weeAttribute->getCode() . ') { %%>'
-                                . '  (' . $weeAttribute->getName()
-                                . ':<%%= data.weeePrice' . $weeAttribute->getCode()
-                                . '.formatted %%>)'
-                                . '<%% } %%>'
-                            );
-                            $insertedWeeCodesArray[$weeAttribute->getCode()] = $weeAttribute->getCode();
-                        }
-                    }
                 }
+
                 if ($this->_weeeData->geDisplayExlDescIncl($product->getStoreId())) {
                     $options['optionTemplate'] .= sprintf(
                         ' <%% if (data.weeePrice) { %%>'
