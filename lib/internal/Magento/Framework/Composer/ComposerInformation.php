@@ -225,11 +225,7 @@ class ComposerInformation
      */
     public function getPackagesForUpdate()
     {
-        $data = $this->loadPackagesForUpdateFromCache();
-        if (!$data) {
-            return $this->syncPackagesForUpdate();
-        }
-        return $data;
+        return $this->loadPackagesForUpdateFromCache();
     }
 
     /**
@@ -297,7 +293,7 @@ class ComposerInformation
     private function savePackagesForUpdateToCache($availableVersions)
     {
         $syncInfo = [];
-        $syncInfo['lastSync'] = $this->dateTime->formatDate(true);
+        $syncInfo['lastSyncDate'] = $this->dateTime->formatDate(true);
         $syncInfo['packages'] = $availableVersions;
         $data = json_encode($syncInfo, JSON_UNESCAPED_SLASHES);
         try {

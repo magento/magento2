@@ -42,11 +42,38 @@ class ComponentGrid extends AbstractActionController
     }
 
     /**
+     * Get Components info action
+     *
      * @return JsonModel
      */
     public function componentsAction()
     {
         $components = $this->composerInformation->getRootRequiredPackageTypesByNameVersion();
-        return new JsonModel(['success' => true, 'components' => $components, 'total' => count($components)]);
+        $lastSyncData = $this->composerInformation->getPackagesForUpdate();
+        return new JsonModel(
+            [
+                'success' => true,
+                'components' => $components,
+                'total' => count($components),
+                'lastSyncData' => $lastSyncData
+            ]
+        );
+    }
+
+    /**
+     * Sync action
+     *
+     * @return JsonModel
+     */
+    public function syncAction()
+    {
+        $this->composerInformation->syncPackagesForUpdate();
+        $lastSyncData = $this->composerInformation->getPackagesForUpdate();
+        return new JsonModel(
+            [
+                'success' => true,
+                'lastSyncData' => $lastSyncData
+            ]
+        );
     }
 }
