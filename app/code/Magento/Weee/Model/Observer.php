@@ -257,7 +257,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                             // only do processing on product options
                             if (array_key_exists('optionId', $input) && $product) {
                                 $typeInstance = $product->getTypeInstance();
-                                if ($typeInstance instanceof \Magento\Bundle\Model\Product\Type) {
+                                if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
                                     $typeInstance->setStoreFilter($product->getStoreId(), $product);
                                     $selectionCollection = $typeInstance->getSelectionsCollection(
                                         $typeInstance->getOptionsIds($product),
@@ -313,7 +313,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         ) {
             $typeInstance = $product->getTypeInstance();
             // only do processing on bundle product
-            if ($typeInstance instanceof \Magento\Bundle\Model\Product\Type) {
+            if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
                 $typeInstance->setStoreFilter($product->getStoreId(), $product);
 
                 $selectionCollection = $typeInstance->getSelectionsCollection(
