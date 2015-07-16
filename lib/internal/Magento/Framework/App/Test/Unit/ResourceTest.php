@@ -89,12 +89,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetConnectionFail()
+    public function testGetConnectionDefault()
     {
-        $this->_connectionFactory->expects($this->once())
+        $this->_connectionFactory->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValue(null));
-        $this->assertFalse($this->resource->getConnection(self::RESOURCE_NAME));
+        $this->assertNull($this->resource->getConnection(self::RESOURCE_NAME));
     }
 
     public function testGetConnectionInitConnection()
