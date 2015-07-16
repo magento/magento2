@@ -31,7 +31,7 @@
                 </field>
                 <field id="meta_description" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Mask for Meta Description</label>
-                    <comment>Use {{name}} and {{description}} as Product Name and Product Description placeholders</comment>
+                    <comment>Use {{name}} as Product Name placeholder</comment>
                 </field>
             </group>
             <group id="frontend" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
