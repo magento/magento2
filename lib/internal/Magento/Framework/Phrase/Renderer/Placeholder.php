@@ -34,7 +34,7 @@ class Placeholder implements RendererInterface
     /**
      * Get key to placeholder
      *
-     * @param $key
+     * @param string|int $key
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
