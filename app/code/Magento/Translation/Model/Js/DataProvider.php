@@ -73,9 +73,12 @@ class DataProvider implements DataProviderInterface
         $areaCode = $this->appState->getAreaCode();
 
         $files = $this->filesUtility->getJsFiles($areaCode, $themePath);
+        $staticHtmlFiles = $this->filesUtility->getStaticHtmlFiles($areaCode, $themePath);
 
-        foreach ($this->filesUtility->getStaticHtmlFiles($areaCode, $themePath) as $staticFile) {
-            $files[] = $staticFile;
+        if (is_array($staticHtmlFiles)) {
+            foreach ($staticHtmlFiles as $staticFile) {
+                $files[] = $staticFile;
+            }
         }
 
         foreach ($files as $filePath) {
