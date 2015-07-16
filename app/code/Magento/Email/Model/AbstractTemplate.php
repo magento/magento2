@@ -147,6 +147,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $emailConfig;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private $urlModel;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
@@ -157,6 +162,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Framework\Url $urlModel
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -172,6 +178,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         Template\Config $emailConfig,
         TemplateFactory $templateFactory,
+        \Magento\Framework\UrlInterface $urlModel,
         array $data = []
     ) {
         $this->design = $design;
@@ -184,6 +191,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->scopeConfig = $scopeConfig;
         $this->emailConfig = $emailConfig;
         $this->templateFactory = $templateFactory;
+        $this->urlModel = $urlModel;
         parent::__construct($context, $registry, null, null, $data);
     }
 
@@ -645,11 +653,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     {
         if (empty($this->templateFilter)) {
             $this->templateFilter = $this->getFilterFactory()->create();
-            $this->templateFilter->setUseAbsoluteLinks(
-                $this->getUseAbsoluteLinks()
-            )->setStoreId(
-                $this->getDesignConfig()->getStore()
-            );
+            $this->templateFilter->setUseAbsoluteLinks($this->getUseAbsoluteLinks())
+                ->setStoreId($this->getDesignConfig()->getStore())
+                ->setUrlModel($this->urlModel);
         }
         return $this->templateFilter;
     }
@@ -716,4 +722,21 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @return int|string
      */
     abstract public function getType();
+
+    /**
+     * Generate URL for the specified store.
+     *
+     * @param \Magento\Store\Model\Store $store
+     * @param string $route
+     * @param array $params
+     * @return string
+     */
+    public function getUrl(\Magento\Store\Model\Store $store, $route = '', $params = [])
+    {
+        $url = $this->urlModel->setScope($store);
+        if ($this->storeManager->getStore()->getId() != $store->getId()) {
+            $params['_scope_to_url'] = true;
+        }
+        return $url->getUrl($route, $params);
+    }
 }
