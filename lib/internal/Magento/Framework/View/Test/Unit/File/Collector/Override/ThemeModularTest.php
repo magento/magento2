@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\File\Collector\Override;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,37 +12,46 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\View\File\Collector\Override\ThemeModular
      */
-    private $_model;
+    private $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_directory;
+    private $directory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_fileFactory;
+    private $fileFactory;
+
+    /**
+     * @var \Magento\Framework\View\Helper\PathPattern|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pathPatternHelperMock;
 
     protected function setUp()
     {
         $filesystem = $this->getMock('Magento\Framework\Filesystem', ['getDirectoryRead'], [], '', false);
-        $this->_directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->_directory->expects($this->any())
+        $this->directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $this->directory->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
+        $this->pathPatternHelperMock = $this->getMockBuilder('Magento\Framework\View\Helper\PathPattern')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $filesystem->expects($this->any())->method('getDirectoryRead')
             ->with($this->equalTo(DirectoryList::THEMES))
-            ->will($this->returnValue($this->_directory));
-        $this->_fileFactory = $this->getMock('Magento\Framework\View\File\Factory', [], [], '', false);
-        $this->_model = new \Magento\Framework\View\File\Collector\Override\ThemeModular(
-            $filesystem, $this->_fileFactory, 'override/theme'
+            ->will($this->returnValue($this->directory));
+        $this->fileFactory = $this->getMock('Magento\Framework\View\File\Factory', [], [], '', false);
+        $this->model = new \Magento\Framework\View\File\Collector\Override\ThemeModular(
+            $filesystem, $this->fileFactory, $this->pathPatternHelperMock, 'override/theme'
         );
     }
 
     public function testGetFiles()
     {
+        $inputPath = '*.xml';
         $grandparentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         $grandparentTheme->expects($this->once())->method('getCode')->willReturn('vendor/grand_parent_theme');
 
@@ -59,27 +65,31 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
 
         $filePathOne = 'design/area/theme_path/Module_One/override/theme/vendor/parent_theme/1.xml';
         $filePathTwo = 'design/area/theme_path/Module_Two/override/theme/vendor/grand_parent_theme/2.xml';
-        $this->_directory->expects($this->once())
+        $this->directory->expects($this->once())
             ->method('search')
             ->with($this->equalTo('area/theme_path/*_*/override/theme/*/*/*.xml'))
             ->will($this->returnValue([$filePathOne, $filePathTwo]));
+        $this->pathPatternHelperMock->expects($this->any())
+            ->method('translatePatternFromGlob')
+            ->with($inputPath)
+            ->willReturn('[^/]*\\.xml');
 
         $fileOne = new \Magento\Framework\View\File('1.xml', 'Module_One', $parentTheme);
         $fileTwo = new \Magento\Framework\View\File('2.xml', 'Module_Two', $grandparentTheme);
-        $this->_fileFactory
+        $this->fileFactory
             ->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValueMap([
                 [$filePathOne, 'Module_One', $parentTheme, false, $fileOne],
                 [$filePathTwo, 'Module_Two', $grandparentTheme, false, $fileTwo],
-            ]))
-        ;
+            ]));
 
-        $this->assertSame([$fileOne, $fileTwo], $this->_model->getFiles($theme, '*.xml'));
+        $this->assertSame([$fileOne, $fileTwo], $this->model->getFiles($theme, $inputPath));
     }
 
     public function testGetFilesWithPreset()
     {
+        $inputPath = 'preset/3.xml';
         $grandparentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         $grandparentTheme->expects($this->once())->method('getCode')->willReturn('vendor/grand_parent_theme');
 
@@ -92,25 +102,28 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue($parentTheme));
 
         $filePathOne = 'design/area/theme_path/Module_Two/override/theme/vendor/grand_parent_theme/preset/3.xml';
-        $this->_directory->expects($this->once())
+        $this->directory->expects($this->once())
             ->method('search')
             ->with('area/theme_path/*_*/override/theme/*/*/preset/3.xml')
-            ->will($this->returnValue([$filePathOne]))
-        ;
+            ->will($this->returnValue([$filePathOne]));
 
         $fileOne = new \Magento\Framework\View\File('3.xml', 'Module_Two', $grandparentTheme);
-        $this->_fileFactory
+        $this->fileFactory
             ->expects($this->once())
             ->method('create')
             ->with($filePathOne, 'Module_Two', $grandparentTheme)
-            ->will($this->returnValue($fileOne))
-        ;
+            ->will($this->returnValue($fileOne));
+        $this->pathPatternHelperMock->expects($this->any())
+            ->method('translatePatternFromGlob')
+            ->with($inputPath)
+            ->willReturn('preset/3.xml');
 
-        $this->assertSame([$fileOne], $this->_model->getFiles($theme, 'preset/3.xml'));
+        $this->assertSame([$fileOne], $this->model->getFiles($theme, $inputPath));
     }
 
     public function testGetFilesWrongAncestor()
     {
+        $inputPath = '*.xml';
         $filePath = 'design/area/theme_path/Module_One/override/theme/vendor/parent_theme/1.xml';
         $this->setExpectedException(
             'Magento\Framework\Exception\LocalizedException',
@@ -123,11 +136,15 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue(null));
         $theme->expects($this->once())->method('getCode')->will($this->returnValue('vendor/theme_path'));
 
-        $this->_directory->expects($this->once())
+        $this->directory->expects($this->once())
             ->method('search')
             ->with('area/theme_path/*_*/override/theme/*/*/*.xml')
             ->will($this->returnValue([$filePath]));
+        $this->pathPatternHelperMock->expects($this->any())
+            ->method('translatePatternFromGlob')
+            ->with($inputPath)
+            ->willReturn('[^/]*\\.xml');
 
-        $this->_model->getFiles($theme, '*.xml');
+        $this->model->getFiles($theme, $inputPath);
     }
 }

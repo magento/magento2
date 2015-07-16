@@ -7,6 +7,7 @@ namespace Magento\Framework\View\File\Collector\Override;
 
 use Magento\Framework\View\File\AbstractCollector;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Source of view files that explicitly override base files introduced by modules
