@@ -109,7 +109,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $this->catalogProductView = $catalogProductView;
         $this->checkoutCart = $checkoutCart;
         //Preconditions
-        $address = $fixtureFactory->createByCode('address', ['dataSet' => 'US_address_NY']);
+        $address = $fixtureFactory->createByCode('address', ['dataset' => 'US_address_NY']);
         $shipping = ['shipping_service' => 'Flat Rate', 'shipping_method' => 'Fixed'];
         $actualPrices = [];
         //Assertion steps
@@ -154,11 +154,11 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
     {
         $this->checkoutCart->open();
         $actualPrices['cart_item_price_excl_tax'] =
-            $this->checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
+            $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceExclTax();
         $actualPrices['cart_item_price_incl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceInclTax();
         $actualPrices['cart_item_subtotal_excl_tax'] =
-            $this->checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPrice();
+            $this->checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPriceExclTax();
         $actualPrices['cart_item_subtotal_incl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPriceInclTax();
 

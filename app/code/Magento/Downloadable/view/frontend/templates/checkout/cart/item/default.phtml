@@ -87,7 +87,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
     <?php endif; ?>
         <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
             <div class="control qty">
-                <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $block->getQty() ?>" type="number" size="4" title="<?php echo __('Qty') ?>" class="input-text qty" maxlength="12" data-validate="{'required-number':true,'validate-greater-than-zero':true}" data-role="cart-item-qty"/>
+                <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $block->getQty() ?>" type="number" size="4" title="<?php echo __('Qty') ?>" class="input-text qty" data-cart-item-id="<?php echo $block->escapeHtml(__($_item->getSku())) ?>" maxlength="12" data-validate="{'required-number':true,'validate-greater-than-zero':true}" data-role="cart-item-qty"/>
             </div>
             <?php $cols++; ?>
         </td>

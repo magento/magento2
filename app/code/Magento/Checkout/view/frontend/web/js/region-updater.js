@@ -194,7 +194,7 @@ define([
             if (this.options.isZipRequired) {
                 $.inArray(country, this.options.countriesWithOptionalZip) >= 0 ?
                     postcode.removeClass('required-entry').closest('.field').removeClass('required') :
-                    postcode.removeClass('required-entry').closest('.field').addClass('required');
+                    postcode.addClass('required-entry').closest('.field').addClass('required');
             }
 
             // Add defaultvalue attribute to state/province select element

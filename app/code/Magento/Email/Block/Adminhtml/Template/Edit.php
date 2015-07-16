@@ -250,14 +250,10 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
      */
     protected function _getDefaultTemplatesAsOptionsArray()
     {
-        $options = [['value' => '', 'label' => '', 'group' => '']];
-        foreach ($this->_emailConfig->getAvailableTemplates() as $templateId) {
-            $options[] = [
-                'value' => $templateId,
-                'label' => $this->_emailConfig->getTemplateLabel($templateId),
-                'group' => $this->_emailConfig->getTemplateModule($templateId),
-            ];
-        }
+        $options = array_merge(
+            [['value' => '', 'label' => '', 'group' => '']],
+            $this->_emailConfig->getAvailableTemplates()
+        );
         uasort(
             $options,
             function (array $firstElement, array $secondElement) {
@@ -371,34 +367,16 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     }
 
     /**
-     * Get paths of where current template is used as default
-     *
-     * @param bool $asJSON
-     * @return string
-     */
-    public function getUsedDefaultForPaths($asJSON = true)
-    {
-        /** @var $template \Magento\Email\Model\BackendTemplate */
-        $template = $this->getEmailTemplate();
-        $paths = $template->getSystemConfigPathsWhereUsedAsDefault();
-        $pathsParts = $this->_getSystemConfigPathsParts($paths);
-        if ($asJSON) {
-            return $this->jsonHelper->jsonEncode($pathsParts);
-        }
-        return $pathsParts;
-    }
-
-    /**
      * Get paths of where current template is currently used
      *
      * @param bool $asJSON
      * @return string
      */
-    public function getUsedCurrentlyForPaths($asJSON = true)
+    public function getCurrentlyUsedForPaths($asJSON = true)
     {
         /** @var $template \Magento\Email\Model\BackendTemplate */
         $template = $this->getEmailTemplate();
-        $paths = $template->getSystemConfigPathsWhereUsedCurrently();
+        $paths = $template->getSystemConfigPathsWhereCurrentlyUsed();
         $pathsParts = $this->_getSystemConfigPathsParts($paths);
         if ($asJSON) {
             return $this->_jsonEncoder->encode($pathsParts);
@@ -416,7 +394,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     protected function _getSystemConfigPathsParts($paths)
     {
         $result = $urlParams = $prefixParts = [];
-        $scopeLabel = __('GLOBAL');
+        $scopeLabel = __('Default Config');
         if ($paths) {
             /** @var $menu \Magento\Backend\Model\Menu */
             $menu = $this->_menuConfig->getMenu();

@@ -31,16 +31,8 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         );
 
         $configMock = $this->getMock(
-            'Magento\Payment\Model\Method\ConfigInterface',
-            [
-                'setStoreId',
-                'getValue',
-                'isMethodAvailable',
-                'getPaymentAction',
-                'setMethodInstance',
-                'setMethod',
-                'getBuildNotationCode'
-            ],
+            'Magento\Paypal\Model\PayflowConfig',
+            [],
             [],
             '',
             false
