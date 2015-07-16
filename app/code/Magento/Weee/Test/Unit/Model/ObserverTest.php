@@ -39,11 +39,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $productInstance=$this->getMock('\Magento\Catalog\Model\Product\Type\Simple', [], [], '', false);
 
-        $product=$this->getMock('\Magento\Bundle\Model\Product\Type', ['getTypeInstance'], [], '', false);
+        $product=$this->getMock('\Magento\Bundle\Model\Product\Type', ['getTypeInstance', 'getTypeId'], [], '', false);
         $product->expects($this->any())
             ->method('getTypeInstance')
             ->will($this->returnValue($productInstance));
 
+        $product->expects($this->any())
+            ->method('getTypeId')
+            ->will($this->returnValue('simple'));
 
         $registry=$this->getMock('Magento\Framework\Registry', [], [], '', false);
         $registry->expects($this->any())
@@ -258,7 +261,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $product=$this->getMock(
             '\Magento\Bundle\Model\Product\Type',
-            ['getTypeInstance', 'getStoreId', 'getStore'],
+            ['getTypeInstance', 'getStoreId', 'getStore', 'getTypeId'],
             [],
             '',
             false
@@ -275,7 +278,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($store));
 
-
+        $product->expects($this->any())
+            ->method('getTypeId')
+            ->will($this->returnValue('bundle'));
 
         $registry=$this->getMock('Magento\Framework\Registry', [], [], '', false);
         $registry->expects($this->any())
