@@ -296,18 +296,9 @@ abstract class AbstractDb extends AbstractResource
      * @param string $resourceName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
      */
-    protected function _getConnection($resourceName)
+    protected function _getConnection()
     {
-        if (isset($this->_connections[$resourceName])) {
-            return $this->_connections[$resourceName];
-        }
-        $fullResourceName = ($this->_resourcePrefix ? $this->_resourcePrefix . '_' : '') . $resourceName;
-        $connectionInstance = $this->_resources->getConnection($fullResourceName);
-        // cache only active connections to detect inactive ones as soon as they become active
-        if ($connectionInstance) {
-            $this->_connections[$resourceName] = $connectionInstance;
-        }
-        return $connectionInstance;
+        return $this->_resources->getConnection($this->_resourcePrefix);
     }
 
     /**
@@ -317,12 +308,7 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function _getReadAdapter()
     {
-        $writeAdapter = $this->_getWriteAdapter();
-        if ($writeAdapter && $writeAdapter->getTransactionLevel() > 0) {
-            // if transaction is started we should use write connection for reading
-            return $writeAdapter;
-        }
-        return $this->_getConnection('read');
+        return $this->_getConnection();
     }
 
     /**
@@ -332,7 +318,7 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function _getWriteAdapter()
     {
-        return $this->_getConnection('write');
+        return $this->_getConnection();
     }
 
     /**
