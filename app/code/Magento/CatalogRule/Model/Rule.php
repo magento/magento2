@@ -487,11 +487,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
-     * Check behavior changed
+     * Check if rule behavior changed
      *
      * @return bool
      */
-    public function isBehaviorChanged()
+    public function isRuleBehaviorChanged()
     {
         if (!$this->isObjectNew()) {
             $arrayDiff = $this->dataDiff($this->getOrigData(), $this->getStoredData());

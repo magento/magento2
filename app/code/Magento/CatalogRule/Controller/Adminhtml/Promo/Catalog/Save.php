@@ -64,7 +64,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     $this->getRequest()->setParam('rule_id', $model->getId());
                     $this->_forward('applyRules');
                 } else {
-                    if ($model->isBehaviorChanged()) {
+                    if ($model->isRuleBehaviorChanged()) {
                         $this->_objectManager
                             ->create('Magento\CatalogRule\Model\Flag')
                             ->loadSelf()
