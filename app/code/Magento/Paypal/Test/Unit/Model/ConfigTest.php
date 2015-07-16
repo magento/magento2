@@ -347,7 +347,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'en_US', null, null, Config::EC_FLAVOR_STATIC, false, Config::EC_BUTTON_TYPE_MARK,
-                'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-small.png'
+                'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png'
             ],
             [
                 'en_US', null, null, Config::EC_FLAVOR_STATIC, true, Config::EC_BUTTON_TYPE_SHORTCUT,
@@ -413,8 +413,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&buttontype=ecmark&locale=en_GB'
             ],
             [
-                'en_US', null, null, 'small', Config::EC_FLAVOR_STATIC, true,
-                'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-small.png'
+                'en_US', null, null, 'medium', Config::EC_FLAVOR_STATIC, true,
+                'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png'
             ],
             [
                 'en_US', null, null, 'medium', Config::EC_FLAVOR_STATIC, true,
@@ -426,7 +426,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'en_GB', null, null, 'affected', Config::EC_FLAVOR_STATIC, true,
-                'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-small.png'
+                'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png'
             ],
         ];
     }

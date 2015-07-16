@@ -280,13 +280,6 @@
     position: static;
 }
 
-/* Change Attribute Set */
-.admin__scope-old #product_info_tabs li.removed,
-.admin__scope-old div.removed,
-.admin__scope-old .field.removed {
-    display: none !important;
-}
-
 /*
     Custom Options
 -------------------------------------- */
