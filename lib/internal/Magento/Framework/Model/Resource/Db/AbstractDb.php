@@ -327,7 +327,12 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function _getReadAdapter()
     {
-        return $this->getConnection();
+        $writeAdapter = $this->_getWriteAdapter();
+        if ($writeAdapter && $writeAdapter->getTransactionLevel() > 0) {
+            // if transaction is started we should use write connection for reading
+            return $writeAdapter;
+        }
+        return $this->_getConnection('read');
     }
 
     /**
@@ -337,7 +342,7 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function _getWriteAdapter()
     {
-        return $this->getConnection();
+        return $this->_getConnection('write');
     }
 
     /**
