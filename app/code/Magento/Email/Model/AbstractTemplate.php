@@ -160,7 +160,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param Template\Config $emailConfig
+     * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Framework\Url $urlModel
      * @param array $data
@@ -236,11 +236,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function loadByConfigPath($configPath)
     {
-        $templateId = $this->scopeConfig->getValue(
-            $configPath,
-            ScopeInterface::SCOPE_STORE,
-            $this->getDesignConfig()->getStore()
-        );
+        $storeId = $this->getDesignConfig()->getStore();
+        $templateId = $this->scopeConfig->getValue($configPath, ScopeInterface::SCOPE_STORE, $storeId);
 
         if (is_numeric($templateId)) {
             // Template was overridden in backend, so load template from database

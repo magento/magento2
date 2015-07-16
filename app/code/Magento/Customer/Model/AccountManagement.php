@@ -20,6 +20,7 @@ use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Event\ManagerInterface;
@@ -34,6 +35,7 @@ use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\ObjectFactory;
 use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;
@@ -567,20 +569,11 @@ class AccountManagement implements AccountManagementInterface
     {
         try {
             if ($this->isConfirmationRequired($customer)) {
-                $this->sendNewAccountEmail(
-                    $customer,
-                    self::NEW_ACCOUNT_EMAIL_CONFIRMATION,
-                    $redirectUrl,
-                    $customer->getStoreId()
-                );
+                $templateType = self::NEW_ACCOUNT_EMAIL_CONFIRMATION;
             } else {
-                $this->sendNewAccountEmail(
-                    $customer,
-                    self::NEW_ACCOUNT_EMAIL_REGISTERED,
-                    $redirectUrl,
-                    $customer->getStoreId()
-                );
+                $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED;
             }
+            $this->sendNewAccountEmail($customer, $templateType, $redirectUrl, $customer->getStoreId());
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
@@ -682,10 +675,11 @@ class AccountManagement implements AccountManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function validate(\Magento\Customer\Api\Data\CustomerInterface $customer)
+    public function validate(CustomerInterface $customer)
     {
         $customerErrors = $this->validator->validateData(
-            $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
+            $this->extensibleDataObjectConverter
+                ->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
             [],
             'customer'
         );
@@ -852,27 +846,24 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
-        /** @var \Magento\Framework\Mail\TransportInterface $transport */
-        $transport = $this->transportBuilder->setTemplateIdentifier(
-            $this->scopeConfig->getValue(
-                self::XML_PATH_RESET_PASSWORD_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )
-        )->setTemplateOptions(
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
-        )->setTemplateVars(
-            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)]
-        )->setFrom(
-            $this->scopeConfig->getValue(
+
+        $templateId = $this->scopeConfig->getValue(
+            self::XML_PATH_RESET_PASSWORD_TEMPLATE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
+            ->setTemplateVars(['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)])
+            ->setFrom($this->scopeConfig->getValue(
                 self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
-            )
-        )->addTo(
-            $customer->getEmail(),
-            $this->customerViewHelper->getCustomerName($customer)
-        )->getTransport();
+            ))
+            ->addTo($customer->getEmail(), $this->customerViewHelper->getCustomerName($customer))
+            ->getTransport();
+
         $transport->sendMessage();
 
         return $this;
@@ -925,19 +916,14 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function sendEmailTemplate($customer, $template, $sender, $templateParams = [], $storeId = null)
     {
-        /** @var \Magento\Framework\Mail\TransportInterface $transport */
-        $transport = $this->transportBuilder->setTemplateIdentifier(
-            $this->scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
-        )->setTemplateOptions(
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
-        )->setTemplateVars(
-            $templateParams
-        )->setFrom(
-            $this->scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
-        )->addTo(
-            $customer->getEmail(),
-            $this->customerViewHelper->getCustomerName($customer)
-        )->getTransport();
+        $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
+        $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
+            ->setTemplateVars($templateParams)
+            ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
+            ->addTo($customer->getEmail(), $this->customerViewHelper->getCustomerName($customer))
+            ->getTransport();
+
         $transport->sendMessage();
 
         return $this;
@@ -956,11 +942,7 @@ class AccountManagement implements AccountManagementInterface
         }
         $storeId = $customer->getStoreId() ? $customer->getStoreId() : null;
 
-        return (bool)$this->scopeConfig->getValue(
-            self::XML_PATH_IS_CONFIRM,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**
@@ -1038,9 +1020,7 @@ class AccountManagement implements AccountManagementInterface
         if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
             $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
             $customerSecure->setRpToken($passwordLinkToken);
-            $customerSecure->setRpTokenCreatedAt(
-                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
-            );
+            $customerSecure->setRpTokenCreatedAt((new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT));
             $this->customerRepository->save($customer);
         }
         return true;
