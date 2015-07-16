@@ -271,12 +271,15 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                                                 null,
                                                 $product->getStore()->getWebsiteId()
                                             );
+                                            $weeSum = 0;
                                             foreach ($weeAttributes as $weeAttribute) {
                                                 $holder[$key]['weeePrice' . $weeAttribute->getCode()] =
-                                                    ['amount' => $weeAttribute->getAmount()];
+                                                    ['amount' => (float) $weeAttribute->getAmount()];
+                                                $weeSum+= (float) $weeAttribute->getAmount();
                                             }
                                         }
                                     }
+                                    $holder[$key]['weeePrice']['amount']+= (float) $weeSum;
                                 }
                             }
                         }
