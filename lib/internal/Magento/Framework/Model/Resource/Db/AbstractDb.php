@@ -317,7 +317,7 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function getConnection()
     {
-        $this->_resources->getConnection($this->_resourcePrefix);
+        return $this->_resources->getConnection($this->_resourcePrefix);
     }
 
     /**
