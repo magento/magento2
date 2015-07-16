@@ -235,7 +235,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($weeDisplay));
 
         $weeHelper->expects($this->any())
-            ->method('getProductWeeeAttributes')
+            ->method('getWeeAttributesForBundle')
             ->will($this->returnValue([$weeObject]));
 
         $responseObject=$this->getMock('Magento\Framework\Event\Observer', ['getResponseObject'], [], '', false);
@@ -248,35 +248,16 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->will($this->returnValue($responseObject));
 
-
-        $productSimple=$this->getMock('\Magento\Catalog\Model\Product\Type\Simple', [], [], '', false);
-
-        $productInstance=$this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
-        $productInstance->expects($this->any())
-            ->method('getSelectionsCollection')
-            ->will($this->returnValue([$productSimple]));
-
-        $store=$this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-
-
         $product=$this->getMock(
             '\Magento\Bundle\Model\Product\Type',
-            ['getTypeInstance', 'getStoreId', 'getStore', 'getTypeId'],
+            ['getTypeId', 'getStoreId'],
             [],
             '',
             false
         );
         $product->expects($this->any())
-            ->method('getTypeInstance')
-            ->will($this->returnValue($productInstance));
-
-        $product->expects($this->any())
             ->method('getStoreId')
             ->will($this->returnValue(1));
-
-        $product->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($store));
 
         $product->expects($this->any())
             ->method('getTypeId')

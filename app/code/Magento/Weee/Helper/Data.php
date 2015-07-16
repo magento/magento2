@@ -7,6 +7,7 @@ namespace Magento\Weee\Helper;
 
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
@@ -719,5 +720,38 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
             $storeId
         );
+    }
+
+    /**
+     * Return an array of FPT attributes for a bundle product
+     *
+     * @param  \Magento\Catalog\Model\Product $product
+     * @return array
+     */
+    public function getWeeAttributesForBundle($product)
+    {
+        if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+            $typeInstance = $product->getTypeInstance();
+            $typeInstance->setStoreFilter($product->getStoreId(), $product);
+
+            $selectionCollection = $typeInstance->getSelectionsCollection(
+                $typeInstance->getOptionsIds($product),
+                $product
+            );
+            $insertedWeeCodesArray = [];
+            foreach ($selectionCollection as $selectionItem) {
+                $weeAttributes = $this->getProductWeeeAttributes(
+                    $selectionItem,
+                    null,
+                    null,
+                    $product->getStore()->getWebsiteId()
+                );
+                foreach ($weeAttributes as $weeAttribute) {
+                    $insertedWeeCodesArray[$weeAttribute->getCode()]=$weeAttribute;
+                }
+            }
+            return $insertedWeeCodesArray;
+        }
+        return [];
     }
 }
