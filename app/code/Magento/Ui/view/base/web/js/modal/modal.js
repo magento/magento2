@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'underscore',
@@ -13,6 +14,27 @@ define([
     'mage/translate'
 ], function ($, _, template, popupTpl, slideTpl, customTpl) {
     'use strict';
+
+    /**
+     * Detect browser transition end event.
+     * @return {String|undefined} - transition event.
+     */
+    var whichTransitionEvent =  function () {
+        var transition,
+            elementStyle = document.body.style,
+            transitions = {
+                'transition': 'transitionend',
+                'OTransition': 'oTransitionEnd',
+                'MozTransition': 'transitionend',
+                'WebkitTransition': 'webkitTransitionEnd'
+            };
+
+        for (transition in transitions) {
+            if (elementStyle[transition] !== undefined && transitions.hasOwnProperty(transition)) {
+                return transitions[transition];
+            }
+        }
+    };
 
     /**
      * Modal Window Widget
@@ -44,6 +66,7 @@ define([
             buttons: [{
                 text: $.mage.__('Ok'),
                 class: '',
+
                 /**
                  * Default action on button click
                  */
@@ -52,11 +75,12 @@ define([
                 }
             }]
         },
+
         /**
          * Creates modal widget.
          */
         _create: function () {
-            this.options.transitionEvent = this.whichTransitionEvent();
+            this.options.transitionEvent = whichTransitionEvent();
             this._createWrapper();
             this._renderModal();
             this._createButtons();
@@ -66,6 +90,7 @@ define([
             this.element.on('openModal', _.bind(this.openModal, this));
             this.element.on('closeModal', _.bind(this.closeModal, this));
         },
+
         /**
          * Returns element from modal node.
          * @return {Object} - element.
@@ -73,6 +98,7 @@ define([
         _getElem: function (elem) {
             return this.modal.find(elem);
         },
+
         /**
          * Gets visible modal count.
          * * @return {Number} - visible modal count.
@@ -82,6 +108,7 @@ define([
 
             return modals.filter('.' + this.options.modalVisibleClass).length;
         },
+
         /**
          * Gets count of visible modal by slide type.
          * * @return {Number} - visible modal count.
@@ -91,6 +118,7 @@ define([
 
             return elems.filter('.' + this.options.modalVisibleClass).length;
         },
+
         /**
          * Toggle modal.
          * * @return {Element} - current element.
@@ -102,27 +130,25 @@ define([
                 this.openModal();
             }
         },
+
         /**
          * Open modal.
          * * @return {Element} - current element.
          */
         openModal: function () {
-            var that = this;
-
             this.options.isOpen = true;
             this._createOverlay();
             this._setActive();
-            this.modal.one(this.options.transitionEvent, function () {
-                that._trigger('opened');
-            });
+            this.modal.one(this.options.transitionEvent, _.bind(this._trigger, this, 'opened'));
             this.modal.addClass(this.options.modalVisibleClass);
 
             if (!this.options.transitionEvent) {
-                that._trigger('opened');
+                this._trigger('opened');
             }
 
             return this.element;
         },
+
         /**
          * Close modal.
          * * @return {Element} - current element.
@@ -142,6 +168,7 @@ define([
 
             return this.element;
         },
+
         /**
          * Helper for closeModal function.
          */
@@ -152,6 +179,7 @@ define([
             this._unsetActive();
             _.defer(trigger, this);
         },
+
         /**
          * Set z-index and margin for modal and overlay.
          */
@@ -166,6 +194,7 @@ define([
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
             }
         },
+
         /**
          * Unset styles for modal and set z-index for previous modal.
          */
@@ -176,6 +205,7 @@ define([
                 this.overlay.zIndex(this.prevOverlayIndex);
             }
         },
+
         /**
          * Creates wrapper to hold all modals.
          */
@@ -188,6 +218,7 @@ define([
                     .appendTo(this.options.appendTo);
             }
         },
+
         /**
          * Compile template and append to wrapper.
          */
@@ -200,6 +231,7 @@ define([
             this.modal = this.modalWrapper.find(this.options.modalBlock).last();
             this.element.show().appendTo(this._getElem(this.options.modalContent));
         },
+
         /**
          * Creates buttons pane.
          */
@@ -213,6 +245,7 @@ define([
                 $(button).on('click', _.bind(btn.click, that));
             });
         },
+
         /**
          * Creates overlay, append it to wrapper, set previous click event on overlay.
          */
@@ -237,36 +270,17 @@ define([
                 that.closeModal();
             });
         },
+
         /**
          * Destroy overlay.
          */
         _destroyOverlay: function () {
-            if (!this._getVisibleCount()) {
+            if (this._getVisibleCount()) {
+                this.overlay.unbind().on('click', this.prevOverlayHandler);
+            } else {
                 $(this.options.appendTo).removeClass(this.options.parentModalClass);
                 this.overlay.remove();
                 this.overlay = null;
-
-            } else {
-                this.overlay.unbind().on('click', this.prevOverlayHandler);
-            }
-        },
-        /**
-         * Detects browser transition event.
-         */
-        whichTransitionEvent: function () {
-            var transition,
-                el = document.createElement('element'),
-                transitions = {
-                    'transition': 'transitionend',
-                    'OTransition': 'oTransitionEnd',
-                    'MozTransition': 'transitionend',
-                    'WebkitTransition': 'webkitTransitionEnd'
-                };
-
-            for (transition in transitions) {
-                if (el.style[transition] !== undefined && transitions.hasOwnProperty(transition)) {
-                    return transitions[transition];
-                }
             }
         }
     });
