@@ -19,9 +19,34 @@
 
 <h2 class="page-title">{{$state.current.header}}</h2>
 
+<div ng-show="maintenanceCalled && maintenanceStatus">
+    <span class="readiness-check-icon icon-success-round"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Store in maintenance mode</h3>
+        <p>
+            Your store will stay in maintenance mode until you complete the process. Then, it will be lifted automatically.
+        </p>
+    </div>
+</div>
+
+<div ng-show="maintenanceCalled && !maintenanceStatus">
+    <span class="readiness-check-icon icon-failed-round"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Check store maintenance availability</h3>
+        <p>
+            Cannot put your store in maintenance mode. Please fix that, and try again.
+        </p>
+        <p>
+            Error received from server:
+            <br> {{errorMsg}}
+        </p>
+    </div>
+</div>
+
 <form
     novalidate
     name="component-update"
+    ng-show="maintenanceCalled == maintenanceStatus"
     >
     <div ng-repeat="package in packages">
         <div>{{package.name}} version {{package.version}} is ready to be installed</div>

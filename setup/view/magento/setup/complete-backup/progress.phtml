@@ -31,17 +31,19 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <span class="message-text">Creating Backup...</span>
+        <span class="message-text">Checking and creating Backup...</span>
     </div>
 
 </div>
 
 <div id="backup-check" class="rediness-check-item" ng-show="check.visible">
-
-    <h3 class="readiness-check-title" ng-hide="check.processed">
-        Checking available space in disk for taking backups...
-    </h3>
-
+    <div ng-hide="check.processed">
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <strong>&emsp;&nbsp;Checking available space in disk for taking backups....</strong>
+    </div>
     <div ng-show="check.processed" ng-switch="check.responseType">
 
         <div ng-switch-when="success" ng-init="updateOnSuccess(check)">
@@ -64,8 +66,12 @@
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Check disk space availability</h3>
                 <p>
-                    Check available space in your disk for taking backups, and try again.
-                    Error received from server: {{check.error}}
+                    Check available disk space for backup and try again.
+                </p>
+                <p>
+                    Error received from server:
+                    <br>
+                    {{check.error}}
                 </p>
             </div>
         </div>
@@ -75,11 +81,13 @@
 </div>
 
 <div id="store-maintenance" class="rediness-check-item" ng-show="maintenance.visible && !hasErrors">
-
-    <h3 class="readiness-check-title" ng-hide="maintenance.processed">
-        Putting store in maintenance mode...
-    </h3>
-
+    <div ng-hide="maintenance.processed">
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <strong>&emsp;&nbsp;Putting store in maintenance mode...</strong>
+    </div>
     <div ng-show="maintenance.processed" ng-switch="maintenance.responseType">
 
         <div ng-switch-when="success" ng-init="updateOnSuccess(maintenance)">
@@ -103,7 +111,10 @@
                 <h3 class="readiness-check-title">Check store maintenance availability</h3>
                 <p>
                     Cannot put your store in maintenance mode. Please fix that, and try again.
-                    Error received from server: {{maintenance.error}}
+                </p>
+                <p>
+                    Error received from server:
+                    <br> {{maintenance.error}}
                 </p>
             </div>
         </div>
@@ -113,10 +124,13 @@
 </div>
 
 <div id="backup-create" class="rediness-check-item" ng-show="create.visible && !hasErrors">
-
-    <h3 class="readiness-check-title" ng-hide="create.processed">
-        Creating Backup...
-    </h3>
+    <div ng-hide="create.processed">
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <strong>&emsp;&nbsp;Creating Backup...</strong>
+    </div>
     <div ng-show="create.processed" ng-switch="create.responseType">
 
         <div ng-switch-when="success" ng-init="updateOnSuccess(create)">
@@ -129,10 +143,6 @@
                 <p>The backup files are located in:</p>
                 <p> {{files}} </p>
             </div>
-            <div class="readiness-check-content" ng-show="!backupInfoPassed.options.code && !backupInfoPassed.options.media && !backupInfoPassed.options.db">
-                <h3 class="readiness-check-title">No Backup created</h3>
-                    <p> You didn't take any backup. It is suggested to take backup, so that in case of failure we can roll back to the latest stable state.</p>
-            </div>
         </div>
         <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(create)">
 
@@ -141,7 +151,8 @@
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Backup failed</h3>
                 <p>
-                    Error received from server: {{create.error}}
+                    Error received from server:
+                    <br> {{create.error}}
                 </p>
             </div>
         </div>
