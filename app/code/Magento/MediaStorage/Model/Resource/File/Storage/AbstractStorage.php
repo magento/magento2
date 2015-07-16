@@ -36,7 +36,7 @@ abstract class AbstractStorage extends \Magento\Framework\Model\Resource\Db\Abst
      */
     protected function _getReadAdapter()
     {
-        return $this->_getConnection();
+        return $this->getConnection();
     }
 
     /**
@@ -46,7 +46,7 @@ abstract class AbstractStorage extends \Magento\Framework\Model\Resource\Db\Abst
      */
     protected function _getWriteAdapter()
     {
-        return $this->_getConnection();
+        return $this->getConnection();
     }
 
     /**
@@ -55,8 +55,14 @@ abstract class AbstractStorage extends \Magento\Framework\Model\Resource\Db\Abst
      * @param string $resourceName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected function _getConnection()
+    protected function _getConnection($resourceName)
     {
-        return $this->_resources->getConnection($this->_resourcePrefix);
+        if (isset($this->_connections[$resourceName])) {
+            return $this->_connections[$resourceName];
+        }
+
+        $this->_connections[$resourceName] = $this->_resources->getConnection($resourceName);
+
+        return $this->_connections[$resourceName];
     }
 }
