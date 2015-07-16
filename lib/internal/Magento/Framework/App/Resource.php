@@ -110,8 +110,8 @@ class Resource
             if ($connectionConfig) {
                 $connection = $this->_connectionFactory->create($connectionConfig);
             }
-            if (empty($connection) && \Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION !== $connectionName) {
-                return $this->getConnectionByName(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
+            if (empty($connection) && Resource\Config::DEFAULT_SETUP_CONNECTION !== $connectionName) {
+                return $this->getConnectionByName(Resource\Config::DEFAULT_SETUP_CONNECTION);
             }
 
             $this->_connections[$connectionName] = $connection;
