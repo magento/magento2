@@ -79,14 +79,14 @@ class TransportBuilder
 
     /**
      * @param FactoryInterface $templateFactory
-     * @param Message $message
+     * @param MessageInterface $message
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
      */
     public function __construct(
         FactoryInterface $templateFactory,
-        Message $message,
+        MessageInterface $message,
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
         TransportInterfaceFactory $mailTransportFactory
