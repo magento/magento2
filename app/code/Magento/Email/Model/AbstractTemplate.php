@@ -247,19 +247,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $this->loadDefault($templateId);
         }
 
-        // Templates loaded via the {{template config_path=""}} syntax don't support the subject/vars/styles
-        // comment blocks, so strip them out
-        $templateText = preg_replace('/<!--@(\w+)\s*(.*?)\s*@-->/us', '', $this->getTemplateText());
-        // trim copyright message
-        if (preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches)
-            && strpos($matches[0], 'Copyright') > 0
-        ) {
-            $templateText = str_replace($matches[0], '', $templateText);
-        }
-        // Remove comment lines and extra spaces
-        $templateText = trim(preg_replace('#\{\*.*\*\}#suU', '', $templateText));
-
-        $this->setTemplateText($templateText);
         return $this;
     }
 
@@ -283,9 +270,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         /**
          * trim copyright message
          */
-        if (preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches)
-            && strpos($matches[0], 'Copyright') > 0
-        ) {
+        if (preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches) && strpos($matches[0], 'Copyright') > 0) {
             $templateText = str_replace($matches[0], '', $templateText);
         }
 
