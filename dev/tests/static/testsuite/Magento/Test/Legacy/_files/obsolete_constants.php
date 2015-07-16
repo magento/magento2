@@ -738,5 +738,5 @@ return [
         'CONFIG_PATH_DEFINITION_FORMAT',
         'Magento\Framework\Config\ConfigOptionsListConstants',
         'Magento\Framework\App\ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT'
-    ]
+    ],
 ];
