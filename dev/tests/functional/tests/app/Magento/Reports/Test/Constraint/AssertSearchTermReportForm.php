@@ -12,12 +12,12 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertSearchTermReportForm
- * Assert that Search Term Report form data equals to passed from dataSet
+ * Assert that Search Term Report form data equals to passed from dataset
  */
 class AssertSearchTermReportForm extends AbstractAssertForm
 {
     /**
-     * Assert that Search Term Report form data equals to passed from dataSet
+     * Assert that Search Term Report form data equals to passed from dataset
      *
      * @param CatalogSearchEdit $catalogSearchEdit
      * @param SearchIndex $searchIndex
@@ -53,6 +53,6 @@ class AssertSearchTermReportForm extends AbstractAssertForm
      */
     public function toString()
     {
-        return 'Search Term Report form data equals to passed from dataSet.';
+        return 'Search Term Report form data equals to passed from dataset.';
     }
 }
