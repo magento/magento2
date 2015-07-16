@@ -47,6 +47,9 @@ define([], function() {
             getKey: function() {
                 return this.getType() + this.customerAddressId;
             },
+            getCacheKey: function() {
+                return this.getKey();
+            },
             isEditable: function() {
                 return false;
             },

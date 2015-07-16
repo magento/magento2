@@ -5,7 +5,7 @@
  */
 namespace Magento\GiftMessage\Block\Cart\Item\Renderer\Actions;
 
-use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 interface LayoutProcessorInterface
 {
@@ -13,8 +13,8 @@ interface LayoutProcessorInterface
      * Process JS layout of block
      *
      * @param array $jsLayout
-     * @param Item $item
+     * @param AbstractItem $item
      * @return array
      */
-    public function process($jsLayout, Item $item);
+    public function process($jsLayout, AbstractItem $item);
 }

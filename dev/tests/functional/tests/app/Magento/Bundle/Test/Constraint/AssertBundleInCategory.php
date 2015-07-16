@@ -27,7 +27,7 @@ class AssertBundleInCategory extends AssertProductInCategory
     protected function assertPrice(FixtureInterface $bundle, CatalogCategoryView $catalogCategoryView)
     {
         /** @var BundleProduct $bundle */
-        $priceData = $bundle->getDataFieldConfig('price')['source']->getPreset();
+        $priceData = $bundle->getDataFieldConfig('price')['source']->getPriceData();
         //Price from/to verification
         $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($bundle)->getPriceBlock();
 

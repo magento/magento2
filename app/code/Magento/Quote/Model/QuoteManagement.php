@@ -367,7 +367,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     protected function resolveItems(QuoteEntity $quote)
     {
-        $quoteItems = $quote->getAllItems();
+        $quoteItems = [];
+        foreach ($quote->getAllItems() as $quoteItem) {
+            /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+            $quoteItems[$quoteItem->getId()] = $quoteItem;
+        }
         $orderItems = [];
         foreach ($quoteItems as $quoteItem) {
             $parentItem = (isset($orderItems[$quoteItem->getParentItemId()])) ?
@@ -478,6 +482,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param Quote $quote
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareCustomerQuote($quote)
     {
@@ -514,6 +519,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             }
             $quote->addCustomerAddress($billingAddress);
             $billing->setCustomerAddressData($billingAddress);
+        }
+        if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
+            $shipping->setIsDefaultBilling(true);
         }
     }
 }

@@ -45,6 +45,11 @@ abstract class AbstractConfig implements ConfigInterface
     protected $_storeId;
 
     /**
+     * @var string
+     */
+    protected $pathPattern;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
@@ -139,6 +144,28 @@ abstract class AbstractConfig implements ConfigInterface
     }
 
     /**
+     * Sets method code
+     *
+     * @param string $methodCode
+     * @return void
+     */
+    public function setMethodCode($methodCode)
+    {
+        $this->_methodCode = $methodCode;
+    }
+
+    /**
+     * Sets path pattern
+     *
+     * @param string $pathPattern
+     * @return void
+     */
+    public function setPathPattern($pathPattern)
+    {
+        $this->pathPattern = $pathPattern;
+    }
+
+    /**
      * Map any supported payment method into a config path by specified field name
      *
      * @param string $fieldName
@@ -146,6 +173,10 @@ abstract class AbstractConfig implements ConfigInterface
      */
     protected function _getSpecificConfigPath($fieldName)
     {
+        if ($this->pathPattern) {
+            return sprintf($this->pathPattern, $this->_methodCode, $fieldName);
+        }
+
         return "payment/{$this->_methodCode}/{$fieldName}";
     }
 
