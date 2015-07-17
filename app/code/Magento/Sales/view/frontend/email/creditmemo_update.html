@@ -8,7 +8,7 @@
 <!--@vars {
 "var comment":"Credit Memo Comment",
 "var creditmemo.increment_id":"Credit Memo Id",
-"var store.getUrl('customer/account/')":"Customer Account URL",
+"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
 "var order.getCustomerName()":"Customer Name",
 "var order.increment_id":"Order Id",
 "var order.getStatusLabel()":"Order Status"
@@ -27,7 +27,7 @@
                     order_status=$order.getStatusLabel()
                 |raw}}
             </p>
-            <p>{{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/') |raw}}</p>
+            <p>{{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/') |raw}}</p>
             <p>
                 {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
                 {{depend store_hours}}
