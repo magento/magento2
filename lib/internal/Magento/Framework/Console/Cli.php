@@ -43,7 +43,6 @@ class Cli extends SymfonyApplication
     protected function getApplicationCommands()
     {
         $setupCommands   = [];
-        $toolsCommands   = [];
         $modulesCommands = [];
 
         $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
@@ -66,7 +65,6 @@ class Cli extends SymfonyApplication
 
         $commandsList = array_merge(
             $setupCommands,
-            $toolsCommands,
             $modulesCommands
         );
 
