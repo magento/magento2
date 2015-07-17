@@ -93,14 +93,14 @@ class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
 
         if ($requestedStoreCode) {
             $requestedStore = $this->storeRepository->get($requestedStoreCode);
-            if (!array_key_exists($requestedStore->getId(), $stores)) {
-                throw new NoSuchEntityException('Requested scope cannot be loaded');
+            if (!in_array($requestedStore->getId(), $stores)) {
+                throw new NoSuchEntityException(__('Requested scope cannot be loaded'));
             }
         } else {
             $requestedStore = $this->storeRepository->getById($defaultStoreId);
         }
         if (!$requestedStore->getIsActive()) {
-            throw new NoSuchEntityException('Requested store is inactive');
+            throw new NoSuchEntityException(__('Requested store is inactive'));
         }
         return $requestedStore->getId();
     }
