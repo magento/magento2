@@ -19,6 +19,11 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     private $directoryList;
 
     /**
+     * @var ComposerJsonFinder
+     */
+    private $composerJsonFinder;    
+    
+    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
@@ -26,6 +31,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
@@ -60,7 +66,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $composerInfo = $this->objectManager->create(
             'Magento\Framework\Composer\ComposerInformation',
             [
-                'applicationFactory' => new MagentoComposerApplicationFactory($this->directoryList)
+                'applicationFactory' => new MagentoComposerApplicationFactory($this->composerJsonFinder, $this->directoryList)
             ]
         );
 
@@ -81,7 +87,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $composerInfo = $this->objectManager->create(
             'Magento\Framework\Composer\ComposerInformation',
             [
-                'applicationFactory' => new MagentoComposerApplicationFactory($this->directoryList)
+                'applicationFactory' => new MagentoComposerApplicationFactory($this->composerJsonFinder, $this->directoryList)
             ]
         );
 
@@ -104,7 +110,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $composerInfo = $this->objectManager->create(
             'Magento\Framework\Composer\ComposerInformation',
             [
-                'applicationFactory' => new MagentoComposerApplicationFactory($this->directoryList)
+                'applicationFactory' => new MagentoComposerApplicationFactory($this->composerJsonFinder, $this->directoryList)
             ]
         );
 
@@ -161,7 +167,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Composer file not found:
+     * @expectedExceptionMessage Composer file not found
      */
     public function testNoLock()
     {
@@ -169,7 +175,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->create(
             'Magento\Framework\Composer\ComposerInformation',
             [
-                'applicationFactory' => new MagentoComposerApplicationFactory($this->directoryList)
+                'applicationFactory' => new MagentoComposerApplicationFactory($this->composerJsonFinder, $this->directoryList)
             ]
         );
     }

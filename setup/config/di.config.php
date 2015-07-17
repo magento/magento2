@@ -28,6 +28,8 @@ return [
             'Magento\Setup\Controller\ComponentGrid',
             'Magento\Setup\Controller\ComponentUpgrade',
             'Magento\Setup\Controller\ComponentUpgradeSuccess',
+            'Magento\Setup\Controller\BackupActionItems',
+            'Magento\Setup\Controller\Maintenance',
         ],
         'instance' => [
             'preference' => [
