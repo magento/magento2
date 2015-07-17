@@ -36,18 +36,20 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * Class constructor
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $resourcePrefix = null
     ) {
         $this->_scopeConfig = $scopeConfig;
-        parent::__construct($context, $eavConfig, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $eavConfig, $resourcePrefix);
     }
 
     /**
@@ -68,7 +70,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->_prepareIndexTable();
@@ -287,9 +289,6 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function getIdxTable($table = null)
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('cataloginventory_stock_status_idx');
-        }
-        return $this->getTable('cataloginventory_stock_status_tmp');
+        return $this->tableStrategy->getTableName('cataloginventory_stock_status');
     }
 }

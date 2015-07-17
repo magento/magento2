@@ -8,7 +8,7 @@ namespace Magento\Tax\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class RateTest extends \Magento\Backend\Utility\Controller
+class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @dataProvider ajaxSaveActionDataProvider

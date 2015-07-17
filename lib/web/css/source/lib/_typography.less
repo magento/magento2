@@ -27,7 +27,7 @@
 }
 
 //  Rem font size
-.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, rem)) {
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, @font-size-unit)) {
     font-size: @sizeValue;
 }
 
@@ -35,15 +35,15 @@
     font-size: @sizeValue;
 }
 
-.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and not (isunit(@sizeValue, em)) and not (isunit(@sizeValue, rem)) {
-    .to-rem(@sizeValue);
-    font-size: @valueRem;
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and not (isunit(@sizeValue, em)) and not (isunit(@sizeValue, @font-size-unit)) {
+    .font-size-value(@sizeValue);
+    font-size: @fontValue;
 }
 
 //  Rem line height
 .line-height(@heightValue) when not (@heightValue = false) and not (ispercentage(@heightValue)) {
-    .to-rem(@heightValue);
-    line-height: @valueRem;
+    .font-size-value(@heightValue);
+    line-height: @fontValue;
 }
 
 .line-height(@heightValue) when (ispercentage(@heightValue)) and not (@heightValue = false) {
@@ -152,12 +152,12 @@
         @@_font-style
     );
     & {
-        .to-rem(@@_margin-top);
-        margin-top: @valueRem;
+        .font-size-value(@@_margin-top);
+        margin-top: @fontValue;
     }
     & {
-        .to-rem(@@_margin-bottom);
-        margin-bottom: @valueRem;
+        .font-size-value(@@_margin-bottom);
+        margin-bottom: @fontValue;
     }
 }
 
@@ -178,12 +178,12 @@
 
     p {
         & {
-            .to-rem(@p__margin-top);
-            margin-top: @valueRem;
+            .font-size-value(@p__margin-top);
+            margin-top: @fontValue;
         }
         & {
-            .to-rem(@p__margin-bottom);
-            margin-bottom: @valueRem;
+            .font-size-value(@p__margin-bottom);
+            margin-bottom: @fontValue;
         }
     }
 
@@ -299,22 +299,22 @@
     ul,
     ol {
         & {
-            .to-rem(@list__margin-top);
-            margin-top: @valueRem;
+            .font-size-value(@list__margin-top);
+            margin-top: @fontValue;
         }
         & {
-            .to-rem(@list__margin-bottom);
-            margin-bottom: @valueRem;
+            .font-size-value(@list__margin-bottom);
+            margin-bottom: @fontValue;
         }
         //.typography(@list__font-size__base, @list__color__base);
         > li {
             & {
-                .to-rem(@list-item__margin-top);
-                margin-top: @valueRem;
+                .font-size-value(@list-item__margin-top);
+                margin-top: @fontValue;
             }
             & {
-                .to-rem(@list-item__margin-bottom);
-                margin-bottom: @valueRem;
+                .font-size-value(@list-item__margin-bottom);
+                margin-bottom: @fontValue;
             }
         }
         ul,

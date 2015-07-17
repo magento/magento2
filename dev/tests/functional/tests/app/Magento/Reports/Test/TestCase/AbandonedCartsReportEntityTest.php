@@ -13,7 +13,6 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Create simple product.
  * 2. Create customer.
@@ -36,7 +35,6 @@ class AbandonedCartsReportEntityTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'MX';
-    const STABLE = 'no';
     /* end tags */
 
     /**

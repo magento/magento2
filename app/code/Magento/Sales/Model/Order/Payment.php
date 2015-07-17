@@ -187,6 +187,40 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
+     * Sets transaction id for current payment
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->setData('transaction_id', $transactionId);
+        return $this;
+    }
+
+    /**
+     * Sets transaction close flag
+     *
+     * @param bool $isClosed
+     * @return $this
+     */
+    public function setIsTransactionClosed($isClosed)
+    {
+        $this->setData('is_transaction_closed', (bool)$isClosed);
+        return $this;
+    }
+
+    /**
+     * Returns transaction parent
+     *
+     * @return string
+     */
+    public function getParentTransactionId()
+    {
+        return $this->getData('parent_transaction_id');
+    }
+
+    /**
      * Check order payment capture action availability
      *
      * @return bool
@@ -240,6 +274,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function place()
     {
@@ -256,7 +291,7 @@ class Payment extends Info implements OrderPaymentInterface
 
         $orderState = Order::STATE_NEW;
         $orderStatus = $methodInstance->getConfigData('order_status');
-        $isCustomerNotified = false;
+        $isCustomerNotified = $order->getCustomerNoteNotify();
 
         // Do order payment validation on payment method level
         $methodInstance->validate();
@@ -267,20 +302,25 @@ class Payment extends Info implements OrderPaymentInterface
                 $stateObject = new \Magento\Framework\Object();
                 // For method initialization we have to use original config value for payment action
                 $methodInstance->initialize($methodInstance->getConfigData('payment_action'), $stateObject);
-                $orderState = $stateObject->getState() ?: $orderState;
-                $orderStatus = $stateObject->getStatus() ?: $orderStatus;
-                $isCustomerNotified = $stateObject->getIsNotified();
+                $orderState = $stateObject->getData('state') ?: $orderState;
+                $orderStatus = $stateObject->getData('status') ?: $orderStatus;
+                $isCustomerNotified = $stateObject->hasData('is_notified')
+                    ? $stateObject->getData('is_notified')
+                    : $isCustomerNotified;
             } else {
                 $orderState = Order::STATE_PROCESSING;
                 $this->processAction($action, $order);
                 $orderState = $order->getState() ? $order->getState() : $orderState;
                 $orderStatus = $order->getStatus() ? $order->getStatus() : $orderStatus;
             }
+        } else {
+            $order->setState($orderState)
+                ->setStatus($orderStatus);
         }
 
         $isCustomerNotified = $isCustomerNotified ?: $order->getCustomerNoteNotify();
 
-        if (!in_array($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
+        if (!array_key_exists($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
             $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
         }
 
@@ -368,11 +408,14 @@ class Payment extends Info implements OrderPaymentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
-    public function capture($invoice)
+    public function capture($invoice = null)
     {
         if (is_null($invoice)) {
             $invoice = $this->_invoice();
             $this->setCreatedInvoice($invoice);
+            if ($this->getIsFraudDetected()) {
+                $this->getOrder()->setStatus(Order::STATUS_FRAUD);
+            }
             return $this;
         }
         $amountToCapture = $this->_formatAmount($invoice->getBaseGrandTotal());
@@ -410,7 +453,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
         }
         $status = false;
-        if (!$invoice->getIsPaid() && !$this->getIsTransactionPending()) {
+        if (!$invoice->getIsPaid()) {
             // attempt to capture: this can trigger "is_transaction_pending"
             $method = $this->getMethodInstance();
             $method->setStore(
@@ -653,6 +696,30 @@ class Payment extends Info implements OrderPaymentInterface
             $this->setMessage(__('Registered a Void notification.'));
         }
         return $this->_void(false, $amount);
+    }
+
+    /**
+     * Sets creditmemo for current payment
+     *
+     * @param Creditmemo $creditmemo
+     * @return $this
+     */
+    public function setCreditmemo(Creditmemo $creditmemo)
+    {
+        $this->setData('creditmemo', $creditmemo);
+        return $this;
+    }
+
+    /**
+     * Returns Creditmemo assigned for this payment
+     *
+     * @return Creditmemo|null
+     */
+    public function getCreditmemo()
+    {
+        return $this->getData('creditmemo') instanceof Creditmemo
+            ? $this->getData('creditmemo')
+            : null;
     }
 
     /**
@@ -956,9 +1023,15 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
 
-        $result = $isOnline ?
-            $this->getMethodInstance()->setStore($this->getOrder()->getStoreId())->denyPayment($this) :
-            (bool)$this->getNotificationResult();
+        if ($isOnline) {
+            /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+            $method = $this->getMethodInstance();
+            $method->setStore($this->getOrder()->getStoreId());
+
+            $result = $method->denyPayment($this);
+        } else {
+            $result = (bool)$this->getNotificationResult();
+        }
 
         if ($result) {
             $invoice = $this->_getInvoiceForTransactionId($transactionId);
@@ -1183,7 +1256,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
         } else {
             if ($this->getIsFraudDetected()) {
-                $state = Order::STATE_PAYMENT_REVIEW;
+                $state = Order::STATE_PROCESSING;
                 $message = __(
                     'Order is suspended as its authorizing amount %1 is suspected to be fraudulent.',
                     $this->_formatPrice($amount, $this->getCurrencyCode())
@@ -1467,7 +1540,10 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $preparedMessage = $this->getPreparedMessage();
         if ($preparedMessage) {
-            if (is_string($preparedMessage)) {
+            if (
+                is_string($preparedMessage)
+                || $preparedMessage instanceof \Magento\Framework\Phrase
+            ) {
                 return $preparedMessage . ' ' . $messagePrependTo;
             } elseif (is_object(
                     $preparedMessage
@@ -2662,5 +2738,75 @@ class Payment extends Info implements OrderPaymentInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    /**
+     * Sets whether transaction is pending
+     *
+     * @param bool|int $flag
+     * @return $this
+     */
+    public function setIsTransactionPending($flag)
+    {
+        $this->setData('is_transaction_pending', (bool)$flag);
+        return $this;
+    }
+
+    /**
+     * Whether transaction is pending
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getIsTransactionPending()
+    {
+        return (bool)$this->getData('is_transaction_pending');
+    }
+
+    /**
+     * Sets whether fraud was detected
+     *
+     * @param bool|int $flag
+     * @return $this
+     */
+    public function setIsFraudDetected($flag)
+    {
+        $this->setData('is_fraud_detected', (bool)$flag);
+        return $this;
+    }
+
+    /**
+     * Whether fraud was detected
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getIsFraudDetected()
+    {
+        return (bool)$this->getData('is_fraud_detected');
+    }
+
+    /**
+     * Sets whether should close parent transaction
+     *
+     * @param int|bool $flag
+     * @return $this
+     */
+    public function setShouldCloseParentTransaction($flag)
+    {
+        $this->setData('should_close_parent_transaction', (bool)$flag);
+        return $this;
+    }
+
+    /**
+     * Whether should close parent transaction
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getShouldCloseParentTransaction()
+    {
+        return (bool)$this->getData('should_close_parent_transaction');
+    }
+
     //@codeCoverageIgnoreEnd
 }

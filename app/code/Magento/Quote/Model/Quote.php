@@ -28,7 +28,6 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
  *  sales_quote_delete_before
  *  sales_quote_delete_after
  *
- * @method Quote setStoreId(int $value)
  * @method int getIsMultiShipping()
  * @method Quote setIsMultiShipping(int $value)
  * @method float getStoreToBaseRate()
@@ -269,7 +268,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $criteriaBuilder;
+    protected $searchCriteriaBuilder;
 
     /**
      * Filter builder
@@ -422,7 +421,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->_quotePaymentCollectionFactory = $quotePaymentCollectionFactory;
         $this->_objectCopyService = $objectCopyService;
         $this->addressRepository = $addressRepository;
-        $this->criteriaBuilder = $criteriaBuilder;
+        $this->searchCriteriaBuilder = $criteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->stockRegistry = $stockRegistry;
         $this->itemProcessor = $itemProcessor;
@@ -687,16 +686,23 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     //@codeCoverageIgnoreEnd
 
     /**
-     * Get quote store identifier
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getStoreId()
     {
         if (!$this->hasStoreId()) {
             return $this->_storeManager->getStore()->getId();
         }
-        return $this->_getData('store_id');
+        return (int)$this->_getData(self::KEY_STORE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($storeId)
+    {
+        $this->setData(self::KEY_STORE_ID, (int)$storeId);
+        return $this;
     }
 
     /**
@@ -793,33 +799,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->setIsVirtual($this->getIsVirtual());
 
         parent::beforeSave();
-    }
-
-    /**
-     * Save related items
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        parent::afterSave();
-
-        if (null !== $this->_addresses) {
-            $this->getAddressesCollection()->save();
-        }
-
-        if (null !== $this->_items) {
-            $this->getItemsCollection()->save();
-        }
-
-        if (null !== $this->_payments) {
-            $this->getPaymentsCollection()->save();
-        }
-
-        if (null !== $this->_currentPayment) {
-            $this->getPayment()->save();
-        }
-        return $this;
     }
 
     /**
@@ -1349,7 +1328,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         foreach ($this->getItemsCollection() as $item) {
             /** @var \Magento\Quote\Model\Resource\Quote\Item $item */
             if (!$item->isDeleted()) {
-                $items[$item->getId()] = $item;
+                $items[] = $item;
             }
         }
         return $items;
@@ -2488,6 +2467,46 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->collectTotals()->save();
         }
         return parent::_afterLoad();
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function addressCollectionWasSet()
+    {
+        return null !== $this->_addresses;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function itemsCollectionWasSet()
+    {
+        return null !== $this->_items;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function paymentsCollectionWasSet()
+    {
+        return null !== $this->_payments;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function currentPaymentWasSet()
+    {
+        return null !== $this->_currentPayment;
     }
 
     /**

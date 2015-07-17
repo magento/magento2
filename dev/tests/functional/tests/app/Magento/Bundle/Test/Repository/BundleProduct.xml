@@ -17,7 +17,7 @@
             <field name="short_description" xsi:type="string" />
             <field name="description" xsi:type="string"/>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">taxable_goods</item>
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="sku_type" xsi:type="string">0</field>
             <field name="price_type" xsi:type="string">0</field>
@@ -41,7 +41,7 @@
             <field name="short_description" xsi:type="string" />
             <field name="description" xsi:type="string" />
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">taxable_goods</item>
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="sku_type" xsi:type="string">0</field>
             <field name="weight_type" xsi:type="string">0</field>
@@ -60,8 +60,7 @@
             <field name="sku_type" xsi:type="string">Dynamic</field>
             <field name="price_type" xsi:type="string">Dynamic</field>
             <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">-</item>
-                <item name="preset" xsi:type="string">default_dynamic</item>
+                <item name="dataset" xsi:type="string">default_dynamic</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">666</item>
@@ -70,7 +69,7 @@
             <field name="weight_type" xsi:type="string">Dynamic</field>
             <field name="shipment_type" xsi:type="string">Separately</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">taxable_goods</item>
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -84,11 +83,11 @@
             <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="bundle_selections" xsi:type="array">
-                <item name="preset" xsi:type="string">default_dynamic</item>
+                <item name="dataset" xsi:type="string">default_dynamic</item>
             </field>
             <field name="attribute_set_id" xsi:type="string">Default</field>
             <field name="checkout_data" xsi:type="array">
-                <item name="preset" xsi:type="string">default_dynamic</item>
+                <item name="dataset" xsi:type="string">bundle_default_dynamic</item>
             </field>
         </dataset>
 
@@ -99,10 +98,10 @@
             <field name="price_type" xsi:type="string">Fixed</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">750</item>
-                <item name="preset" xsi:type="string">default_fixed</item>
+                <item name="dataset" xsi:type="string">default_fixed</item>
             </field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">taxable_goods</item>
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">666</item>
@@ -124,11 +123,11 @@
             <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="bundle_selections" xsi:type="array">
-                <item name="preset" xsi:type="string">default_fixed</item>
+                <item name="dataset" xsi:type="string">default_fixed</item>
             </field>
             <field name="attribute_set_id" xsi:type="string">Default</field>
             <field name="checkout_data" xsi:type="array">
-                <item name="preset" xsi:type="string">default_fixed</item>
+                <item name="dataset" xsi:type="string">bundle_default_fixed</item>
             </field>
         </dataset>
 
@@ -142,7 +141,7 @@
                 <item name="value" xsi:type="string">100</item>
             </field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">taxable_goods</item>
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
             <field name="weight_type" xsi:type="string">Fixed</field>
@@ -150,10 +149,10 @@
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="category_ids" xsi:type="array">
-                <item name="presets" xsi:type="string">default_subcategory</item>
+                <item name="dataset" xsi:type="string">default_subcategory</item>
             </field>
             <field name="bundle_selections" xsi:type="array">
-                <item name="preset" xsi:type="string">two_options_with_fixed_and_percent_prices</item>
+                <item name="dataset" xsi:type="string">two_options_with_fixed_and_percent_prices</item>
             </field>
         </dataset>
 
@@ -164,17 +163,16 @@
             <field name="sku_type" xsi:type="string">Dynamic</field>
             <field name="price_type" xsi:type="string">Dynamic</field>
             <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">-</item>
-                <item name="preset" xsi:type="string">bundle_dynamic_with_category</item>
+                <item name="dataset" xsi:type="string">bundle_dynamic_with_category</item>
             </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="category_ids" xsi:type="array">
-                <item name="presets" xsi:type="string">default_subcategory</item>
+                <item name="dataset" xsi:type="string">default_subcategory</item>
             </field>
             <field name="bundle_selections" xsi:type="array">
-                <item name="preset" xsi:type="string">two_options_assigned_products_without_category</item>
+                <item name="dataset" xsi:type="string">two_options_assigned_products_without_category</item>
             </field>
         </dataset>
 
@@ -188,7 +186,7 @@
                 <item name="value" xsi:type="string">100</item>
             </field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">taxable_goods</item>
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
             <field name="weight_type" xsi:type="string">Fixed</field>
@@ -197,10 +195,10 @@
             </field>
             <field name="shipment_type" xsi:type="string">Separately</field>
             <field name="bundle_selections" xsi:type="array">
-                <item name="preset" xsi:type="string">required_two_fixed_options</item>
+                <item name="dataset" xsi:type="string">required_two_fixed_options</item>
             </field>
             <field name="checkout_data" xsi:type="array">
-                <item name="preset" xsi:type="string">required_two_fixed_options</item>
+                <item name="dataset" xsi:type="string">bundle_required_two_fixed_options</item>
             </field>
         </dataset>
         
@@ -211,10 +209,10 @@
             <field name="price_type" xsi:type="string">Fixed</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
-                <item name="preset" xsi:type="string">fixed_100_dollar</item>
+                <item name="dataset" xsi:type="string">fixed_100_dollar</item>
             </field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">taxable_goods</item>
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">666</item>
@@ -236,11 +234,11 @@
             <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="bundle_selections" xsi:type="array">
-                <item name="preset" xsi:type="string">fixed_100_dollar</item>
+                <item name="dataset" xsi:type="string">fixed_100_dollar</item>
             </field>
             <field name="attribute_set_id" xsi:type="string">Default</field>
             <field name="checkout_data" xsi:type="array">
-                <item name="preset" xsi:type="string">fixed_100_dollar</item>
+                <item name="dataset" xsi:type="string">bundle_fixed_100_dollar</item>
             </field>
         </dataset>
     </repository>

@@ -18,7 +18,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Framework\Object $item
      * @return array
      */
-    public function getChilds($item)
+    public function getChildren($item)
     {
         $itemsArray = [];
 

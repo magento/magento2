@@ -23,8 +23,5 @@
         </region_id>
         <postcode />
         <telephone />
-        <save_in_address_book>
-            <input>checkbox</input>
-        </save_in_address_book>
     </fields>
 </mapping>

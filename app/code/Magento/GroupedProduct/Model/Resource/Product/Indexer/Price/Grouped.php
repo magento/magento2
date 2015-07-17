@@ -17,7 +17,7 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->_prepareGroupedProductPriceData();

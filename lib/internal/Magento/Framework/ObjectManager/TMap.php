@@ -45,23 +45,15 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     private $configInterface;
 
     /**
-     * @var ClassReaderInterface
-     */
-    private $classReaderInterface;
-
-
-    /**
      * @param string $type
      * @param ObjectManagerInterface $objectManager
      * @param ConfigInterface $configInterface
-     * @param ClassReaderInterface $classReaderInterface
      * @param array $array
      */
     public function __construct(
         $type,
         ObjectManagerInterface $objectManager,
         ConfigInterface $configInterface,
-        ClassReaderInterface $classReaderInterface,
         array $array = []
     ) {
         if (!class_exists($this->type) && !interface_exists($type)) {
@@ -72,7 +64,6 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 
         $this->objectManager = $objectManager;
         $this->configInterface = $configInterface;
-        $this->classReaderInterface = $classReaderInterface;
 
         array_walk(
             $array,
@@ -99,7 +90,12 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
             $this->configInterface->getPreference($instanceName)
         );
 
-        if (!in_array($this->type, $this->classReaderInterface->getParents($realType), true)) {
+        if (
+        !in_array(
+            $this->type,
+            array_unique(array_merge(class_parents($realType), class_implements($realType))),
+            true
+        )) {
             $this->throwTypeException($realType, $index);
         }
     }

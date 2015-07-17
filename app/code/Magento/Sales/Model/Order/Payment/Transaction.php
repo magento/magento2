@@ -614,8 +614,12 @@ class Transaction extends AbstractModel implements TransactionInterface
     {
         $this->_verifyThisTransactionExists();
         if (null === $this->_paymentObject && $shouldLoad) {
+            /** @var \Magento\Sales\Model\Order\Payment $payment */
             $payment = $this->_paymentFactory->create()->load($this->getPaymentId());
             if ($payment->getId()) {
+                if (!$payment->getOrder()) {
+                    $payment->setOrder($this->getOrder());
+                }
                 $this->setOrderPaymentObject($payment);
             }
         }
@@ -892,7 +896,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     protected function _verifyTxnId($txnId)
     {
         if (null !== $txnId && 0 == strlen($txnId)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The Transaction ID field cannot be empty.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a Transaction ID.'));
         }
     }
 

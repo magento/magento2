@@ -122,8 +122,8 @@ abstract class AbstractCompareProductsTest extends Injectable
      */
     protected function loginCustomer()
     {
-        if (!$this->cmsIndex->getLinksBlock()->isLinkVisible('Log Out')) {
-            $this->cmsIndex->getLinksBlock()->openLink("Log In");
+        if (!$this->cmsIndex->getLinksBlock()->isLinkVisible('Sign Out')) {
+            $this->cmsIndex->getLinksBlock()->openLink("Sign In");
             $this->customerAccountLogin->getLoginBlock()->login($this->customer);
         }
     }
@@ -138,8 +138,8 @@ abstract class AbstractCompareProductsTest extends Injectable
     {
         $products = explode(',', $products);
         foreach ($products as $key => $product) {
-            list($fixture, $dataSet) = explode('::', $product);
-            $product = $this->fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
+            list($fixture, $dataset) = explode('::', $product);
+            $product = $this->fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
             $product->persist();
             $products[$key] = $product;
         }

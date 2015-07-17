@@ -65,13 +65,6 @@
     SecFilterScanPOST Off
 </IfModule>
 
-<IfModule mod_headers.c>
-############################################
-## prevent clickjacking
-
-    Header set X-Frame-Options SAMEORIGIN
-</IfModule>
-
 <IfModule mod_deflate.c>
 
 ############################################

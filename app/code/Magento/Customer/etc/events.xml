@@ -12,4 +12,7 @@
     <event name="customer_address_save_after">
         <observer name="customer_addres_after_save_viv_observer" instance="Magento\Customer\Model\Observer" method="afterAddressSave" />
     </event>
+    <event name="sales_quote_save_after">
+        <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindQuoteCreate" />
+    </event>
 </config>

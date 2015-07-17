@@ -186,7 +186,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             }
             $configurableAttribute->addData($option->getData());
             $configurableAttribute->setValues(
-                $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getPrices()
+                $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getOptions()
             );
 
             try {
@@ -228,14 +228,14 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
                 $product->setStoreId($this->storeManager->getStore(Store::ADMIN_CODE)->getId());
                 $product->save();
             } catch (\Exception $e) {
-                throw new CouldNotSaveException(__('An error occurred while saving option'));
+                throw new CouldNotSaveException(__('Something went wrong while saving option.'));
             }
 
             $configurableAttribute = $this->configurableAttributeFactory->create();
             $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
         }
         if (!$configurableAttribute->getId()) {
-            throw new CouldNotSaveException(__('An error occurred while saving option'));
+            throw new CouldNotSaveException(__('Something went wrong while saving option.'));
         }
         return $configurableAttribute->getId();
     }
@@ -299,12 +299,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             foreach ($option->getValues() as $optionValue) {
                 if (!$optionValue->getValueIndex()) {
                     $inputException->addError(__('Value index is not specified for an option.'));
-                }
-                if (null === $optionValue->getPricingValue()) {
-                    $inputException->addError(__('Price is not specified for an option.'));
-                }
-                if (null === $optionValue->getIsPercent()) {
-                    $inputException->addError(__('Percent/absolute is not specified for an option.'));
                 }
             }
         }

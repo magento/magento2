@@ -14,26 +14,14 @@ class Request
      *
      * @var string
      */
-    protected $_pathInfo;
+    private $pathInfo;
 
     /**
-     * Requested file path
-     *
-     * @var string
-     */
-    protected $_filePath;
-
-    /**
-     * @param string $workingDir
      * @param HttpRequest $request
      */
-    public function __construct($workingDir, HttpRequest $request = null)
+    public function __construct(HttpRequest $request)
     {
-        $request = $request ?: new HttpRequest(
-            new \Magento\Framework\Stdlib\Cookie\PhpCookieReader()
-        );
-        $this->_pathInfo = str_replace('..', '', ltrim($request->getPathInfo(), '/'));
-        $this->_filePath = $workingDir . '/' . $this->_pathInfo;
+        $this->pathInfo = str_replace('..', '', ltrim($request->getPathInfo(), '/'));
     }
 
     /**
@@ -43,16 +31,6 @@ class Request
      */
     public function getPathInfo()
     {
-        return $this->_pathInfo;
-    }
-
-    /**
-     * Retrieve file path
-     *
-     * @return string
-     */
-    public function getFilePath()
-    {
-        return $this->_filePath;
+        return $this->pathInfo;
     }
 }

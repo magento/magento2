@@ -6,10 +6,12 @@
  */
 namespace Magento\Wishlist\Model;
 
+use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\UrlInterface;
@@ -113,15 +115,14 @@ class ItemCarrier
         $isOwner = $wishlist->isOwner($this->customerSession->getCustomerId());
 
         $messages = [];
-        $addedItems = [];
+        $addedProducts = [];
         $notSalable = [];
-        $hasOptions = [];
 
         $cart = $this->cart;
         $collection = $wishlist->getItemCollection()->setVisibilityFilter();
 
         foreach ($collection as $item) {
-            /** @var \Magento\Wishlist\Model\Item */
+            /** @var $item \Magento\Wishlist\Model\Item */
             try {
                 $disableAddToCart = $item->getProduct()->getDisableAddToCart();
                 $item->unsProduct();
@@ -136,13 +137,11 @@ class ItemCarrier
                 $item->getProduct()->setDisableAddToCart($disableAddToCart);
                 // Add to cart
                 if ($item->addToCart($cart, $isOwner)) {
-                    $addedItems[] = $item->getProduct();
+                    $addedProducts[] = $item->getProduct();
                 }
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
+            } catch (LocalizedException $e) {
+                if ($e instanceof ProductException) {
                     $notSalable[] = $item;
-                } elseif ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS) {
-                    $hasOptions[] = $item;
                 } else {
                     $messages[] = __('%1 for "%2".', trim($e->getMessage(), '.'), $item->getProduct()->getName());
                 }
@@ -153,7 +152,7 @@ class ItemCarrier
                 }
             } catch (\Exception $e) {
                 $this->logger->critical($e);
-                $messages[] = __('We can\'t add this item to your cart right now.');
+                $messages[] = __('We can\'t add this item to your shopping cart right now.');
             }
         }
 
@@ -181,34 +180,14 @@ class ItemCarrier
             );
         }
 
-        if ($hasOptions) {
-            $products = [];
-            foreach ($hasOptions as $item) {
-                $products[] = '"' . $item->getProduct()->getName() . '"';
-            }
-            $messages[] = __(
-                'Product(s) %1 have required options. Each product can only be added individually.',
-                join(', ', $products)
-            );
-        }
-
         if ($messages) {
-            $isMessageSole = count($messages) == 1;
-            if ($isMessageSole && count($hasOptions) == 1) {
-                $item = $hasOptions[0];
-                if ($isOwner) {
-                    $item->delete();
-                }
-                $redirectUrl = $item->getProductUrl();
-            } else {
-                foreach ($messages as $message) {
-                    $this->messageManager->addError($message);
-                }
-                $redirectUrl = $indexUrl;
+            foreach ($messages as $message) {
+                $this->messageManager->addError($message);
             }
+            $redirectUrl = $indexUrl;
         }
 
-        if ($addedItems) {
+        if ($addedProducts) {
             // save wishlist model for setting date of last update
             try {
                 $wishlist->save();
@@ -218,12 +197,13 @@ class ItemCarrier
             }
 
             $products = [];
-            foreach ($addedItems as $product) {
+            foreach ($addedProducts as $product) {
+                /** @var $product \Magento\Catalog\Model\Product */
                 $products[] = '"' . $product->getName() . '"';
             }
 
             $this->messageManager->addSuccess(
-                __('%1 product(s) have been added to shopping cart: %2.', count($addedItems), join(', ', $products))
+                __('%1 product(s) have been added to shopping cart: %2.', count($addedProducts), join(', ', $products))
             );
 
             // save cart and collect totals
