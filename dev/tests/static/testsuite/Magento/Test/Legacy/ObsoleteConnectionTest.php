@@ -20,6 +20,11 @@ class ObsoleteConnectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
+    protected $obsoleteRegexp = [];
+
+    /**
+     * @var array
+     */
     protected $filesBlackList = [];
 
     /**
@@ -35,7 +40,19 @@ class ObsoleteConnectionTest extends \PHPUnit_Framework_TestCase
             '_getWriteConnection',
             '_getReadAdapter',
             '_getWriteAdapter',
+            'getReadConnection',
+            'getWriteConnection',
+            'getReadAdapter',
+            'getWriteAdapter',
+            'getAdapter',
         ];
+
+        $this->obsoleteRegexp = [
+            'getConnection\\(\'\\w*_*(read|write)',
+            '\\$_?(read|write)(Connection|Adapter)',
+//            '\\$write([A-Z]\\w*|\\s)',
+        ];
+
         $this->filesBlackList = $this->getBlackList();
     }
 
@@ -54,6 +71,14 @@ class ObsoleteConnectionTest extends \PHPUnit_Framework_TestCase
                         0,
                         preg_match('/(?<=[a-z\\d_:]|->|function\\s)' . $quotedMethod . '\\s*\\(/iS', $content),
                         "File: $file\nContains obsolete method: $method . "
+                    );
+                }
+
+                foreach ($this->obsoleteRegexp as $regexp) {
+                    $this->assertSame(
+                        0,
+                        preg_match('/' . $regexp . '/iS', $content),
+                        "File: $file\nContains obsolete regexp: $regexp. "
                     );
                 }
             },
