@@ -11,8 +11,8 @@
             <field name="title" xsi:type="string">block_%isolation%</field>
             <field name="identifier" xsi:type="string">identifier_%isolation%</field>
             <field name="stores" xsi:type="array">
-                <item name="dataSet" xsi:type="array">
-                    <item name="0" xsi:type="string">All Store Views</item>
+                <item name="dataset" xsi:type="array">
+                    <item name="0" xsi:type="string">all_store_views</item>
                 </item>
             </field>
             <field name="is_active" xsi:type="string">Enabled</field>

@@ -9,12 +9,12 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Paypal/etc/rules.xsd">
     <payment id="express_checkout_de">
         <events selector="[data-enable='payment']">
-            <event value="0" name="deactivate"/>
-            <event value="1" name="activate"/>
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule"/>
         </events>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate"/>
-            <rule type="simple/disable" event="deactivate"/>
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
         </relation>
     </payment>
 </rules>
