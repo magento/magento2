@@ -117,7 +117,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $items
      *
-     * @dataProvider dataProviderGetPageIdsWithSetSelectAll
+     * @dataProvider getPageIdsWithSetSelectAllDataProvider
      */
     public function testExecuteWithSetStatusAll(array $items)
     {
@@ -140,7 +140,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
             ->willReturn($items);
 
         $this->modelMock->expects($this->atLeastOnce())->method('load')->willReturnSelf();
-        $this->modelMock->expects($this->atLeastOnce())->method('setIsActive')->with($this->status);
+        $this->modelMock->expects($this->atLeastOnce())->method('setIsActive')->with($this->status)->willReturnSelf();
         $this->modelMock->expects($this->atLeastOnce())->method('save')->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->abstractMassStatusController->execute());
@@ -149,7 +149,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $items
      *
-     * @dataProvider dataProviderGetPageIdsWithSelectedSetStatus
+     * @dataProvider getPageIdsWithSelectedSetStatusDataProvider
      */
     public function testExecuteWithSelectedSetStatus(array $items)
     {
@@ -178,7 +178,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
             ->willReturn($items);
 
         $this->modelMock->expects($this->atLeastOnce())->method('load')->willReturnSelf();
-        $this->modelMock->expects($this->atLeastOnce())->method('setIsActive')->with($this->status);
+        $this->modelMock->expects($this->atLeastOnce())->method('setIsActive')->with($this->status)->willReturnSelf();
         $this->modelMock->expects($this->atLeastOnce())->method('save')->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->abstractMassStatusController->execute());
@@ -187,7 +187,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $items
      *
-     * @dataProvider dataProviderGetPageIdsWithExcludedSetStatus
+     * @dataProvider getPageIdsWithExcludedSetStatusDataProvider
      */
     public function testExecuteWithExcludedSetStatus(array $items)
     {
@@ -216,7 +216,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
             ->willReturn($items);
 
         $this->modelMock->expects($this->atLeastOnce())->method('load')->willReturnSelf();
-        $this->modelMock->expects($this->atLeastOnce())->method('setIsActive')->with($this->status);
+        $this->modelMock->expects($this->atLeastOnce())->method('setIsActive')->with($this->status)->willReturnSelf();
         $this->modelMock->expects($this->atLeastOnce())->method('save')->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->abstractMassStatusController->execute());
@@ -233,7 +233,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock->expects($this->atLeastOnce())->method('getParam')->willReturnMap($requestParams);
 
-        $this->messageManagerMock->expects($this->once())->method('addError')->with($phrase);
+        $this->messageManagerMock->expects($this->once())->method('addError')->with($phrase)->willReturnSelf();
 
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
@@ -265,7 +265,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function dataProviderGetPageIdsWithSetSelectAll()
+    public function getPageIdsWithSetSelectAllDataProvider()
     {
         return [
             [
@@ -277,7 +277,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function dataProviderGetPageIdsWithSelectedSetStatus()
+    public function getPageIdsWithSelectedSetStatusDataProvider()
     {
         return [
             [
@@ -289,7 +289,7 @@ class AbstractMassStatusTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function dataProviderGetPageIdsWithExcludedSetStatus()
+    public function getPageIdsWithExcludedSetStatusDataProvider()
     {
         return [
             [
