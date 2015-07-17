@@ -10,12 +10,31 @@ use \Magento\Setup\Controller\CompleteBackup;
 
 class CompleteBackupTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Controller
+     *
+     * @var \Magento\Setup\Controller\CompleteBackup
+     */
+    private $controller;
+
+    public function setUp()
+    {
+        $this->controller = new CompleteBackup();
+    }
+
     public function testIndexAction()
     {
-        /** @var $controller CompleteBackup */
-        $controller = new CompleteBackup();
-        $viewModel = $controller->indexAction();
+        $viewModel = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());
+        $this->assertSame('/magento/setup/complete-backup.phtml', $viewModel->getTemplate());
+    }
+
+    public function testProgressAction()
+    {
+        $viewModel = $this->controller->progressAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertTrue($viewModel->terminate());
+        $this->assertSame('/magento/setup/complete-backup/progress.phtml', $viewModel->getTemplate());
     }
 }

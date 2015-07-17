@@ -20,11 +20,17 @@ class LandingUpdater extends AbstractActionController
      */
     public function indexAction()
     {
+        $welcomeMsg = "Welcome to Magento Component Manager.<br>"
+            . "Click 'Agree and Update Magento' or read ";
+        $docRef = "http://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html";
+        $agreeButtonText = "Agree and Update Magento";
         $view = new ViewModel;
         $view->setTerminal(true);
-        $view->setVariable('languages', $this->serviceLocator->get('config')['languages']);
-        $view->setVariable('location', 'en_US');
+        $view->setTemplate('/magento/setup/landing.phtml');
         $view->setVariable('version', AppInterface::VERSION);
+        $view->setVariable('welcomeMsg', $welcomeMsg);
+        $view->setVariable('docRef', $docRef);
+        $view->setVariable('agreeButtonText', $agreeButtonText);
         return $view;
     }
 }

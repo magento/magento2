@@ -5,6 +5,20 @@
  */
 ?>
 
+<div class="nav-bar-outer-actions">
+    <div class="outer-actions-inner-wrap">
+        <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
+            <button
+                type="button"
+                class="btn"
+                ng-click="$state.go('root.create-backup')"
+                >Back</button>
+        </div>
+    </div>
+</div>
+
+<h2 class="page-title">{{$state.current.header}}</h2>
+
 <form
     novalidate
     name="component-upgrade"

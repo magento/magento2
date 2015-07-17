@@ -13,9 +13,7 @@
         <?php echo 'Version' . ' ' . $this->version; ?>
     </p>
     <p class="text-welcome">
-        Welcome to Magento Component Updater, your online store headquarters.
-        <br>
-        Click 'Agree and Update Magento' or read <a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html" target="_blank">Getting Started</a> to learn more.
+        <?php echo $this->welcomeMsg ?> <a href=<?php echo $this->docRef ?> target="_blank">Getting Started</a> to learn more.
     </p>
     <p class="text-terms">
         <a href="" ng-click="previousState()">Terms & Agreement</a>
@@ -24,5 +22,5 @@
         type="button"
         class="btn btn-large btn-prime btn-submit"
         ng-click="nextState()"
-        >Agree and Update Magento</button>
+        ><?php echo $this->agreeButtonText ?></button>
 </section>
