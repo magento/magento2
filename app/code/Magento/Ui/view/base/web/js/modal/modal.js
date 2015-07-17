@@ -19,7 +19,7 @@ define([
      * Detect browser transition end event.
      * @return {String|undefined} - transition event.
      */
-    var whichTransitionEvent =  function () {
+    var transitionEvent =  (function () {
         var transition,
             elementStyle = document.body.style,
             transitions = {
@@ -34,7 +34,7 @@ define([
                 return transitions[transition];
             }
         }
-    };
+    })();
 
     /**
      * Modal Window Widget
@@ -80,7 +80,7 @@ define([
          * Creates modal widget.
          */
         _create: function () {
-            this.options.transitionEvent = whichTransitionEvent();
+            this.options.transitionEvent = transitionEvent;
             this._createWrapper();
             this._renderModal();
             this._createButtons();
