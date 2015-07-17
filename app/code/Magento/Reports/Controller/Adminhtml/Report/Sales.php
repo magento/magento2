@@ -14,7 +14,7 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Sales extends AbstractReport
+abstract class Sales extends AbstractReport
 {
     /**
      * Add report/sales breadcrumbs
