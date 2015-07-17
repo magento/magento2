@@ -50,7 +50,7 @@ class ObsoleteConnectionTest extends \PHPUnit_Framework_TestCase
         $this->obsoleteRegexp = [
             'getConnection\\(\'\\w*_*(read|write)',
             '\\$_?(read|write)(Connection|Adapter)',
-//            '\\$write([A-Z]\\w*|\\s)',
+        //    '\\$write([A-Z]\\w*|\\s)',
         ];
 
         $this->filesBlackList = $this->getBlackList();
