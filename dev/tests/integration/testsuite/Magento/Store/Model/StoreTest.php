@@ -84,22 +84,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($storeCode, $_COOKIE[Store::COOKIE_NAME]);
     }
 
-    public function testGetStoreCodeFromCookie()
-    {
-        $storeCode = 'store code';
-        $_COOKIE[Store::COOKIE_NAME] = $storeCode;
-        $this->assertEquals($storeCode, $this->model->getStoreCodeFromCookie());
-    }
-
-    public function testDeleteCookie()
-    {
-        $storeCode = 'store code';
-        $_COOKIE[Store::COOKIE_NAME] = $storeCode;
-        $this->assertArrayHasKey(Store::COOKIE_NAME, $_COOKIE);
-        $this->model->deleteCookie();
-        $this->assertArrayNotHasKey(Store::COOKIE_NAME, $_COOKIE);
-    }
-
     /**
      * @dataProvider loadDataProvider
      */

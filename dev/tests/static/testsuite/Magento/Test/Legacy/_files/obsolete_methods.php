@@ -2344,4 +2344,7 @@ return [
         'Magento\Sales\Model\Order\Address\Validator',
         'Magento\Sales\Model\Order\Address\Validator::validateForCustomer'
     ],
+    ['getStoreCodeFromCookie', '\Magento\Store\Model\Store'],
+    ['deleteCookie', '\Magento\Store\Model\Store'],
+    ['setCookie', '\Magento\Store\Model\Store'],
 ];
