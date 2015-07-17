@@ -60,7 +60,8 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                 '_getWriteAdapter',
                 '_getReadAdapter',
                 '_construct',
-                'getIdFieldName'
+                'getIdFieldName',
+                'getConnection'
             ]
         );
 
