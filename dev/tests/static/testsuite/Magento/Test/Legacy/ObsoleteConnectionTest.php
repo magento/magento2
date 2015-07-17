@@ -57,6 +57,27 @@ class ObsoleteConnectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test verify that obsolete regexps do not appear in refactored folders
+     */
+    public function testObsoleteRegexp()
+    {
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker(
+            function ($file) {
+                $content = file_get_contents($file);
+                foreach ($this->obsoleteRegexp as $regexp) {
+                    $this->assertSame(
+                        0,
+                        preg_match('/' . $regexp . '/iS', $content),
+                        "File: $file\nContains obsolete regexp: $regexp. "
+                    );
+                }
+            },
+            $this->modulesFilesDataProvider()
+        );
+    }
+
+    /**
      * Test verify that obsolete methods do not appear in refactored folders
      */
     public function testObsoleteResponseMethods()
@@ -71,14 +92,6 @@ class ObsoleteConnectionTest extends \PHPUnit_Framework_TestCase
                         0,
                         preg_match('/(?<=[a-z\\d_:]|->|function\\s)' . $quotedMethod . '\\s*\\(/iS', $content),
                         "File: $file\nContains obsolete method: $method . "
-                    );
-                }
-
-                foreach ($this->obsoleteRegexp as $regexp) {
-                    $this->assertSame(
-                        0,
-                        preg_match('/' . $regexp . '/iS', $content),
-                        "File: $file\nContains obsolete regexp: $regexp. "
                     );
                 }
             },
