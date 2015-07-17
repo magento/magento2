@@ -27,7 +27,7 @@ class AttributeSetManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->repositoryMock = $this->getMock('Magento\Eav\Api\AttributeSetRepositoryInterface');
-        $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', ['getEntityType'], [], '', false);
 
         $this->model = new \Magento\Eav\Model\AttributeSetManagement(
             $this->eavConfigMock,
@@ -99,6 +99,39 @@ class AttributeSetManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->repositoryMock->expects($this->never())->method('save')->with($attributeSetMock);
+        $attributeSetMock->expects($this->never())->method('initFromSkeleton')->with($skeletonId);
+        $this->model->create($entityTypeCode, $attributeSetMock, $skeletonId);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Wrong attribute properties
+     */
+    public function testCreateThrowsExceptionIfAttributeSetNotValid()
+    {
+        $entityTypeId = 4;
+        $skeletonId = 5;
+        $entityTypeCode = 'catalog_product';
+        $attributeSetMock = $this->getMock(
+            'Magento\Eav\Model\Entity\Attribute\Set',
+            ['validate', 'getId', 'setEntityTypeId', 'initFromSkeleton'],
+            [],
+            '',
+            false
+        );
+
+        $entityTypeMock = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
+        $entityTypeMock->expects($this->any())->method('getId')->will($this->returnValue($entityTypeId));
+        $this->eavConfigMock->expects($this->once())
+            ->method('getEntityType')
+            ->with($entityTypeCode)
+            ->will($this->returnValue($entityTypeMock));
+        $attributeSetMock->expects($this->once())->method('setEntityTypeId')->with($entityTypeId);
+        $attributeSetMock->expects($this->once())
+            ->method('validate')
+            ->willThrowException(new \Exception('Wrong attribute properties'));
+
         $this->repositoryMock->expects($this->never())->method('save')->with($attributeSetMock);
         $attributeSetMock->expects($this->never())->method('initFromSkeleton')->with($skeletonId);
         $this->model->create($entityTypeCode, $attributeSetMock, $skeletonId);
