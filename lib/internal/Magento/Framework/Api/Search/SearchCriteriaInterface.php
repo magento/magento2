@@ -12,17 +12,6 @@ interface SearchCriteriaInterface extends BaseSearchCriteriaInterface
     /**
      * @return string
      */
-    public function getSearchTerm();
-
-    /**
-     * @param string $searchTerm
-     * @return $this
-     */
-    public function setSearchTerm($searchTerm);
-
-    /**
-     * @return string
-     */
     public function getRequestName();
 
     /**

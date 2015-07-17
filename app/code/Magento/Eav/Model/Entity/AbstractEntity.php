@@ -1413,7 +1413,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     protected function _processSaveData($saveData)
     {
-        extract($saveData);
+        extract($saveData, EXTR_SKIP);
         /**
          * Import variables into the current symbol table from save data array
          *
