@@ -80,6 +80,8 @@ class FraudHandler implements HandlerInterface
     private function getFraudRulesDictionary($rulesString)
     {
         libxml_use_internal_errors(true);
+        $rulesString = preg_replace('#<!DOCTYPE.*?]>\s*#s', '', $rulesString);
+        $loadEntities = libxml_disable_entity_loader(true);
         $rules = [];
         try {
             $rulesXml = new \SimpleXMLElement($rulesString);
@@ -90,6 +92,7 @@ class FraudHandler implements HandlerInterface
 
         } finally {
             libxml_use_internal_errors(false);
+            libxml_disable_entity_loader($loadEntities);
         }
 
         return $rules;

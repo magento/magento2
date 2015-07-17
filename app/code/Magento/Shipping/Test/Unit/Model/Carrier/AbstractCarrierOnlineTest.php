@@ -115,4 +115,36 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
         $customSimpleXmlElement = $this->carrier->parseXml($xmlString, 'Magento\Shipping\Model\Simplexml\Element');
         $this->assertInstanceOf('Magento\Shipping\Model\Simplexml\Element', $customSimpleXmlElement);
     }
+
+    /**
+     * @expectedException \PHPUnit_Framework_Error_Warning
+     * @expectedExceptionMessage Entity 'test' not defined
+     */
+    public function testXXEXml()
+    {
+        $xmlString = '<!DOCTYPE scan [
+            <!ENTITY test SYSTEM "php://filter/read=convert.base64-encode/resource='
+            . __DIR__ . '/AbstractCarrierOnline/xxe-xml.txt">]><scan>&test;</scan>';
+
+        $xmlElement = $this->carrier->parseXml($xmlString);
+
+        echo $xmlElement->asXML();
+    }
+
+    /**
+     * @expectedException \PHPUnit_Framework_Error_Warning
+     * @expectedExceptionMessage Entity 'value2' not defined
+     */
+    public function testXQBXml()
+    {
+        $xmlString = '<?xml version="1.0"?>
+            <!DOCTYPE test [
+              <!ENTITY value "value">
+              <!ENTITY value1 "&value;&value;&value;&value;&value;&value;&value;&value;&value;&value;">
+              <!ENTITY value2 "&value1;&value1;&value1;&value1;&value1;&value1;&value1;&value1;&value1;&value1;">
+            ]>
+            <test>&value2;</test>';
+
+        $this->carrier->parseXml($xmlString);
+    }
 }

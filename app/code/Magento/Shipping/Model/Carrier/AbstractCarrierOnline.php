@@ -626,6 +626,13 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
-        return simplexml_load_string($xmlContent, $customSimplexml);
+        $xmlContent = preg_replace('#<!DOCTYPE.*?]>\s*#s', '', $xmlContent);
+        $loadEntities = libxml_disable_entity_loader(true);
+
+        $xmlElement = simplexml_load_string($xmlContent, $customSimplexml);
+
+        libxml_disable_entity_loader($loadEntities);
+
+        return $xmlElement;
     }
 }
