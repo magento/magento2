@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Test\Unit\View\Design\FileResolution\Fallback\Resolver;
+namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback\Resolver;
 
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;

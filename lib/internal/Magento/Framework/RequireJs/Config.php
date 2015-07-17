@@ -34,6 +34,11 @@ class Config
     const STATIC_FILE_NAME = 'mage\requirejs\static.js';
 
     /**
+     * File name of minified files resolver
+     */
+    const MIN_RESOLVER_FILENAME = 'requirejs-min-resolver.js';
+
+    /**
      * File name of StaticJs
      */
     const BUNDLE_JS_DIR = 'js/bundle';
@@ -164,7 +169,7 @@ config;
      */
     public function getRequireJsFileRelativePath()
     {
-        return $this->staticContext->getConfigPath() . '/' .self::REQUIRE_JS_FILE_NAME;
+        return $this->staticContext->getConfigPath() . '/' . self::REQUIRE_JS_FILE_NAME;
     }
 
     /**
@@ -174,16 +179,25 @@ config;
      */
     public function getBaseConfig()
     {
-        $result = '';
         $config = [
             'baseUrl' => $this->staticContext->getBaseUrl() . $this->staticContext->getPath(),
         ];
         $config = json_encode($config, JSON_UNESCAPED_SLASHES);
-        if ($this->minification->isEnabled(('js'))) {
-            $result .= $this->getMinificationCode();
-        }
-        $result .= "require.config($config);";
+        $result = "require.config($config);";
         return $result;
+    }
+
+    /**
+     * Get path to '.min' files resolver relative to config files directory
+     *
+     * @return string
+     */
+    public function getMinResolverRelativePath()
+    {
+        return
+            $this->staticContext->getConfigPath() .
+            '/' .
+            $this->minification->addMinifiedSign(self::MIN_RESOLVER_FILENAME);
     }
 
     /**
@@ -197,7 +211,7 @@ config;
     /**
      * @return string
      */
-    protected function getMinificationCode()
+    public function getMinResolverCode()
     {
         $excludes = [];
         foreach ($this->minification->getExcludes('js') as $expression) {
@@ -205,7 +219,7 @@ config;
         }
         $excludesCode = empty($excludes) ? 'true' : implode('&&', $excludes);
 
-        return <<<code
+        $result = <<<code
     if (!require.s.contexts._.__load) {
         require.s.contexts._.__load = require.s.contexts._.load;
         require.s.contexts._.load = function(id, url) {
@@ -217,5 +231,10 @@ config;
     }
 
 code;
+
+        if ($this->minification->isEnabled('js')) {
+            $result = $this->minifyAdapter->minify($result);
+        }
+        return $result;
     }
 }

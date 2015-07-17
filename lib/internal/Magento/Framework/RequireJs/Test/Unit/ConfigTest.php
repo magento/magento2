@@ -77,10 +77,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->minificationMock
-            ->expects($this->any())
-            ->method('getExcludes')
-            ->willReturn([]);
 
         $this->minifyAdapterMock = $this->getMockBuilder('Magento\Framework\Code\Minifier\AdapterInterface')
             ->getMockForAbstractClass();
@@ -134,15 +130,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $expected = <<<expected
 (function(require){
-    if (!require.s.contexts._.__load) {
-        require.s.contexts._.__load = require.s.contexts._.load;
-        require.s.contexts._.load = function(id, url) {
-            if (true) {
-                url = url.replace(/(\.min)?\.js$/, '.min.js');
-            }
-            return require.s.contexts._.__load.apply(require.s.contexts._, [id, url]);
-        }
-    }
 require.config({"baseUrl":""});
 (function() {
 relative/file_one.js content
@@ -168,6 +155,38 @@ expected;
         $this->assertStringMatchesFormat($expected, $actual);
     }
 
+    public function testGetMinResolverCode()
+    {
+        $this->minificationMock
+            ->expects($this->once())
+            ->method('getExcludes')
+            ->with('js')
+            ->willReturn(['\.min\.']);
+        $this->minificationMock
+            ->expects($this->once())
+            ->method('isEnabled')
+            ->with('js')
+            ->willReturn(true);
+        $this->minifyAdapterMock
+            ->expects($this->once())
+            ->method('minify')
+            ->willReturnArgument(0);
+
+        $expected = <<<code
+    if (!require.s.contexts._.__load) {
+        require.s.contexts._.__load = require.s.contexts._.load;
+        require.s.contexts._.load = function(id, url) {
+            if (!url.match(/\.min\./)) {
+                url = url.replace(/(\.min)?\.js$/, '.min.js');
+            }
+            return require.s.contexts._.__load.apply(require.s.contexts._, [id, url]);
+        }
+    }
+
+code;
+        $this->assertEquals($expected, $this->object->getMinResolverCode());
+    }
+
     public function testGetConfigFileRelativePath()
     {
         $this->minificationMock
@@ -177,6 +196,17 @@ expected;
         $this->context->expects($this->once())->method('getConfigPath')->will($this->returnValue('path'));
         $actual = $this->object->getConfigFileRelativePath();
         $this->assertSame('_requirejs/path/requirejs-config.js', $actual);
+    }
+
+    public function testGetMinResolverRelativePath()
+    {
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('addMinifiedSign')
+            ->willReturnArgument(0);
+        $this->context->expects($this->once())->method('getConfigPath')->will($this->returnValue('path'));
+        $actual = $this->object->getMinResolverRelativePath();
+        $this->assertSame('path/requirejs-min-resolver.js', $actual);
     }
 
     public function testGetBaseConfig()
