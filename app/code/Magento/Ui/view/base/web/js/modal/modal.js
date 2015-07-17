@@ -85,10 +85,14 @@ define([
             this._renderModal();
             this._createButtons();
 
-            this.modal.find(this.options.modalCloseBtn).on('click', _.bind(this.closeModal, this));
             $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
-            this.element.on('openModal', _.bind(this.openModal, this));
-            this.element.on('closeModal', _.bind(this.closeModal, this));
+            this._on(this.modal.find(this.options.modalCloseBtn), {
+                'click': this.closeModal
+            });
+            this._on(this.element, {
+                'openModal': this.openModal,
+                'closeModal': this.closeModal
+            });
         },
 
         /**
