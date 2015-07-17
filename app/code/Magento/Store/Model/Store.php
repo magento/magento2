@@ -1215,48 +1215,6 @@ class Store extends AbstractModel implements
     }
 
     /**
-     * Set store cookie with this store's code for a year.
-     *
-     * @return $this
-     */
-    public function setCookie()
-    {
-        $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
-            ->setHttpOnly(true)
-            ->setDurationOneYear()
-            ->setPath($this->getStorePath());
-        $this->_cookieManager->setPublicCookie(
-            self::COOKIE_NAME,
-            $this->getCode(),
-            $cookieMetadata
-        );
-        return $this;
-    }
-
-    /**
-     * Get store code from store cookie.
-     *
-     * @return null|string
-     */
-    public function getStoreCodeFromCookie()
-    {
-        return $this->_cookieManager->getCookie(self::COOKIE_NAME);
-    }
-
-    /**
-     * Delete store cookie.
-     *
-     * @return $this
-     */
-    public function deleteCookie()
-    {
-        $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
-            ->setPath($this->getStorePath());
-        $this->_cookieManager->deleteCookie(self::COOKIE_NAME, $cookieMetadata);
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getStorePath()
