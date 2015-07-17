@@ -10,7 +10,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 
-class Add extends Action
+abstract class Add extends Action
 {
     /**
      * @var \Magento\Customer\Model\Session
