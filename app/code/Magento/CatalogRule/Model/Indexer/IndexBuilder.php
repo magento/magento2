@@ -613,6 +613,17 @@ class IndexBuilder
         }
 
         /**
+         * Join group price to result
+         */
+        $groupPriceAttr = $this->eavConfig->getAttribute(Product::ENTITY, 'group_price');
+        $select->joinLeft(
+            ['gp' => $groupPriceAttr->getBackend()->getResource()->getMainTable()],
+            'gp.entity_id=rp.product_id AND gp.customer_group_id=rp.customer_group_id AND '
+            . $this->getReadAdapter()->getCheckSql('gp.website_id=0', 'TRUE', 'gp.website_id=rp.website_id'),
+            'value'
+        );
+
+        /**
          * Join default price and websites prices to result
          */
         $priceAttr = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
@@ -653,7 +664,10 @@ class IndexBuilder
             []
         );
         $select->columns([
-            'default_price' => $this->getReadAdapter()->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
+            'default_price' => $this->getReadAdapter()->getIfNullSql(
+                'gp.value',
+                $this->getReadAdapter()->getIfNullSql($tableAlias . '.value', 'pp_default.value')
+            ),
         ]);
 
         return $read->query($select);

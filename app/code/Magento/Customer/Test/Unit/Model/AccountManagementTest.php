@@ -49,9 +49,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerRegistry;
 
-    /** @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject */
-    protected $url;
-
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $logger;
 
@@ -127,7 +124,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->addressRepository = $this->getMock('Magento\Customer\Api\AddressRepositoryInterface');
         $this->customerMetadata = $this->getMock('Magento\Customer\Api\CustomerMetadataInterface');
         $this->customerRegistry = $this->getMock('Magento\Customer\Model\CustomerRegistry', [], [], '', false);
-        $this->url = $this->getMock('Magento\Framework\Url', [], [], '', false);
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->encryptor = $this->getMock('Magento\Framework\Encryption\EncryptorInterface');
         $this->share = $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false);
@@ -178,7 +174,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'addressRepository' => $this->addressRepository,
                 'customerMetadataService' => $this->customerMetadata,
                 'customerRegistry' => $this->customerRegistry,
-                'url' => $this->url,
                 'logger' => $this->logger,
                 'encryptor' => $this->encryptor,
                 'configShare' => $this->share,
@@ -616,9 +611,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $customerStoreId = 2;
         $customerEmail = 'email@email.com';
-        $passwordToken = 'token';
-        $isFrontendSecure = true;
-        $resetUrl = 'reset url';
         $customerData = ['key' => 'value'];
         $customerName = 'Customer Name';
         $templateIdentifier = 'Template Identifier';
@@ -636,25 +628,18 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getEmail')
             ->willReturn($customerEmail);
 
-        $this->storeManager->expects($this->any())
+        $this->store->expects($this->any())
+            ->method('getId')
+            ->willReturn($customerStoreId);
+        
+        $this->storeManager->expects($this->at(0))
+            ->method('getStore')
+            ->willReturn($this->store);
+
+        $this->storeManager->expects($this->at(1))
             ->method('getStore')
             ->with($customerStoreId)
             ->willReturn($this->store);
-
-        $this->store->expects($this->any())
-            ->method('isFrontUrlSecure')
-            ->willReturn($isFrontendSecure);
-
-        $this->url->expects($this->once())
-            ->method('getUrl')
-            ->with(
-                'customer/account/createPassword',
-                [
-                    '_query' => ['id' => $customerId, 'token' => $passwordToken],
-                    '_store' => $customerStoreId,
-                    '_secure' => $isFrontendSecure,
-                ]
-            )->willReturn($resetUrl);
 
         $this->customerRegistry->expects($this->once())
             ->method('retrieveSecureData')
@@ -679,9 +664,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with('name', $customerName)
             ->willReturnSelf();
-        $this->customerSecure->expects($this->any())
-            ->method('setResetPasswordUrl')
-            ->with($resetUrl);
 
         $this->scopeConfig->expects($this->at(0))
             ->method('getValue')
@@ -722,10 +704,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->once())
             ->method('sendMessage');
 
-        $this->assertEquals(
-            $this->accountManagement,
-            $this->accountManagement->sendPasswordReminderEmail($customer, $passwordToken)
-        );
+        $this->assertEquals($this->accountManagement, $this->accountManagement->sendPasswordReminderEmail($customer));
     }
 
     /**
@@ -866,32 +845,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $sender = 'Sender';
 
         $storeId = 1;
-        $isFrontendSecure = true;
-
-        $resetUrl = 'reset url';
 
         mt_srand(mt_rand() + (100000000 * microtime()) % PHP_INT_MAX);
         $hash = md5(uniqid(microtime() . mt_rand(0, mt_getrandmax()), true));
-
-        $this->store->expects($this->once())
-            ->method('isFrontUrlSecure')
-            ->willReturn($isFrontendSecure);
-
-        $this->url->expects($this->once())
-            ->method('setScope')
-            ->with($storeId)
-            ->willReturnSelf();
-        $this->url->expects($this->once())
-            ->method('getUrl')
-            ->with(
-                'customer/account/createPassword',
-                [
-                    '_query' => ['id' => $customerId, 'token' => $hash],
-                    '_store' => $storeId,
-                    '_secure' => $isFrontendSecure,
-                ]
-            )
-            ->willReturn($resetUrl);
 
         $this->scopeConfig->expects($this->at(0))
             ->method('getValue')
@@ -901,11 +857,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(AccountManagement::XML_PATH_FORGOT_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $storeId)
             ->willReturn($sender);
-
-        $this->customerSecure->expects($this->any())
-            ->method('setResetPasswordUrl')
-            ->with($resetUrl)
-            ->willReturnSelf();
 
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
 
