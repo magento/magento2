@@ -108,9 +108,10 @@
     transition: border-color @appearing__transition-duration @apperaing__transition-timing-function;
     vertical-align: baseline;
     z-index: 2;
-    &:hover {
-        color: @action-dropdown__hover__color;
+    &:hover,
+    &:focus {
         background-color: @action-dropdown__background-color;
+        color: @action-dropdown__hover__color;
         text-decoration: none;
     }
     //  Triangle

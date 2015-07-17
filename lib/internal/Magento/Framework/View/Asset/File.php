@@ -143,7 +143,11 @@ class File implements MergeableInterface
      */
     public function getContent()
     {
-        return (string)$this->source->getContent($this);
+        $content = $this->source->getContent($this);
+        if (false === $content) {
+            throw new File\NotFoundException("Unable to get content for '{$this->getPath()}'");
+        }
+        return $content;
     }
 
     /**

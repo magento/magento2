@@ -35,10 +35,6 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  */
 class Item extends AbstractModel implements ItemInterface
 {
-    const EXCEPTION_CODE_NOT_SALABLE = 901;
-
-    const EXCEPTION_CODE_HAS_REQUIRED_OPTIONS = 902;
-
     /**
      * Custom path to download attached file
      * @var string

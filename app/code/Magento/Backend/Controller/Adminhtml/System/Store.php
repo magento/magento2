@@ -17,7 +17,7 @@ use Magento\Framework\Filesystem;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Store extends Action
+abstract class Store extends Action
 {
     /**
      * Core registry
@@ -113,7 +113,7 @@ class Store extends Action
         } catch (\Exception $e) {
             $this->messageManager->addException(
                 $e,
-                __('We couldn\'t create a backup right now. Please try again later.')
+                __('We can\'t create a backup right now. Please try again later.')
             );
             return false;
         }

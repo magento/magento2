@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Supe
 
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Template;
-use Magento\Backend\Test\Block\Widget\Form;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
@@ -114,6 +114,35 @@ class Matrix extends Form
             }
 
             ++$count;
+        }
+    }
+
+    /**
+     * Fill form data.
+     *
+     * @param array $fields
+     * @param SimpleElement|null $element
+     * @return void
+     * @throws \Exception
+     */
+    protected function _fill(array $fields, SimpleElement $element = null)
+    {
+        $context = ($element === null) ? $this->_rootElement : $element;
+        foreach ($fields as $name => $field) {
+            if (!isset($field['value'])) {
+                $this->_fill($field, $context);
+            } else {
+                $element = $this->getElement($context, $field);
+                if (!$element->isVisible()) {
+                    continue;
+                }
+
+                if (!$element->isDisabled()) {
+                    $element->setValue($field['value']);
+                } else {
+                    throw new \Exception("Unable to set value to field '$name' as it's disabled.");
+                }
+            }
         }
     }
 

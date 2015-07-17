@@ -133,7 +133,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     'denyPayment',
                     'fetchTransactionInfo',
                     'canCapture',
-                    'canRefund'
+                    'canRefund',
+                    'canOrder',
+                    'order',
+                    'isInitializeNeeded',
+                    'initialize',
                 ]
             )
             ->getMock();
@@ -151,7 +155,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     'getBaseGrandTotal',
                     'getShippingAmount',
                     'getBaseShippingAmount',
-                    'getBaseTotalRefunded'
+                    'getBaseTotalRefunded',
+                    'getItemsCollection',
+                    'getOrder',
+                    'register',
+                    'capture',
                 ]
             )
             ->getMock();
@@ -174,8 +182,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     'getInvoiceCollection',
                     'addRelatedObject',
                     'getState',
+                    'getStatus',
                     'addStatusHistoryComment',
                     'registerCancellation',
+                    'getCustomerNote',
+                    'prepareInvoice',
+                    'getPaymentsCollection',
                 ]
             )
             ->getMock();
@@ -254,8 +266,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('getMethodInstance')
             ->will($this->returnValue($this->paymentMethodMock));
 
-        $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
+        $this->paymentMethodMock->expects($this->any())
+            ->method('getConfigData')
+            ->with('order_status', null)
+            ->willReturn($newOrderStatus);
 
+        $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
         $this->assertOrderUpdated(Order::STATE_NEW, $newOrderStatus);
 
         $this->paymentMethodMock->expects($this->once())
@@ -271,6 +287,223 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with('sales_order_payment_place_end', ['payment' => $this->payment]);
 
         $this->assertEquals($this->payment, $this->payment->place());
+    }
+
+    public function testPlaceActionOrder()
+    {
+        $newOrderStatus = 'new_status';
+        $customerNote = 'blabla';
+        $sum = 10;
+        $this->orderMock->expects($this->any())->method('getTotalDue')->willReturn($sum);
+        $this->orderMock->expects($this->any())->method('getBaseTotalDue')->willReturn($sum);
+        $this->helperMock->expects($this->once())
+            ->method('getMethodInstance')
+            ->will($this->returnValue($this->paymentMethodMock));
+        $this->paymentMethodMock->expects($this->once())
+            ->method('getConfigPaymentAction')
+            ->willReturn(\Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER);
+        $this->paymentMethodMock->expects($this->any())
+            ->method('getConfigData')
+            ->with('order_status', null)
+            ->willReturn($newOrderStatus);
+        $this->mockGetDefaultStatus(Order::STATE_PROCESSING, $newOrderStatus, ['first', 'second']);
+        $this->orderMock->expects($this->any())
+            ->method('setState')
+            ->with(Order::STATE_PROCESSING)
+            ->willReturnSelf();
+        $this->orderMock->expects($this->any())
+            ->method('setStatus')
+            ->with($newOrderStatus)
+            ->willReturnSelf();
+        $this->paymentMethodMock->expects($this->once())
+            ->method('getConfigPaymentAction')
+            ->willReturn(null);
+        $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
+        $this->currencyMock->method('formatTxt')->willReturn($sum);
+        $this->paymentMethodMock->expects($this->once())
+            ->method('order')
+            ->with($this->payment, $sum)
+            ->willReturnSelf();
+        $this->eventManagerMock->expects($this->at(0))
+            ->method('dispatch')
+            ->with('sales_order_payment_place_start', ['payment' => $this->payment]);
+        $this->eventManagerMock->expects($this->at(1))
+            ->method('dispatch')
+            ->with('sales_order_payment_place_end', ['payment' => $this->payment]);
+        $statusHistory = $this->getMockForAbstractClass(
+            'Magento\Sales\Api\Data\OrderStatusHistoryInterface'
+        );
+        $this->orderMock->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
+        $this->orderMock->expects($this->any())
+            ->method('addStatusHistoryComment')
+            ->withConsecutive(
+                [__('Ordered amount of %1', $sum)],
+                [$customerNote]
+            )
+            ->willReturn($statusHistory);
+        $this->orderMock->expects($this->any())
+            ->method('setIsCustomerNotified')
+            ->with(true)
+            ->willReturn($statusHistory);
+        $this->assertEquals($this->payment, $this->payment->place());
+    }
+
+    public function testPlaceActionAuthorizeInitializeNeeded()
+    {
+        $newOrderStatus = 'new_status';
+        $customerNote = 'blabla';
+        $sum = 10;
+        $this->orderMock->expects($this->any())->method('getBaseGrandTotal')->willReturn($sum);
+        $this->orderMock->expects($this->any())->method('getTotalDue')->willReturn($sum);
+        $this->orderMock->expects($this->any())->method('getBaseTotalDue')->willReturn($sum);
+        $this->helperMock->expects($this->once())
+            ->method('getMethodInstance')
+            ->will($this->returnValue($this->paymentMethodMock));
+        $this->paymentMethodMock->expects($this->once())
+            ->method('getConfigPaymentAction')
+            ->willReturn(\Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE);
+        $this->paymentMethodMock->expects($this->any())
+            ->method('getConfigData')
+            ->withConsecutive(
+                ['order_status'],
+                ['payment_action']
+            )->willReturn($newOrderStatus);
+        $this->paymentMethodMock->expects($this->once())->method('isInitializeNeeded')->willReturn(true);
+        $this->paymentMethodMock->expects($this->once())->method('initialize');
+        $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
+        $this->orderMock->expects($this->any())
+            ->method('setState')
+            ->with(Order::STATE_NEW)
+            ->willReturnSelf();
+        $this->orderMock->expects($this->any())
+            ->method('setStatus')
+            ->with($newOrderStatus)
+            ->willReturnSelf();
+        $this->paymentMethodMock->expects($this->once())
+            ->method('getConfigPaymentAction')
+            ->willReturn(null);
+        $this->eventManagerMock->expects($this->at(0))
+            ->method('dispatch')
+            ->with('sales_order_payment_place_start', ['payment' => $this->payment]);
+        $this->eventManagerMock->expects($this->at(1))
+            ->method('dispatch')
+            ->with('sales_order_payment_place_end', ['payment' => $this->payment]);
+        $statusHistory = $this->getMockForAbstractClass(
+            'Magento\Sales\Api\Data\OrderStatusHistoryInterface'
+        );
+        $this->orderMock->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
+        $this->orderMock->expects($this->any())
+            ->method('addStatusHistoryComment')
+            ->withConsecutive(
+                [$customerNote],
+                [__('Authorized amount of %1', $sum)]
+            )
+            ->willReturn($statusHistory);
+        $this->orderMock->expects($this->any())
+            ->method('setIsCustomerNotified')
+            ->with(true)
+            ->willReturn($statusHistory);
+        $this->assertEquals($this->payment, $this->payment->place());
+    }
+
+    public function testPlaceActionAuthorizeFraud()
+    {
+        $newOrderStatus = 'new_status';
+        $customerNote = 'blabla';
+        $sum = 10;
+        $this->orderMock->expects($this->any())->method('getTotalDue')->willReturn($sum);
+        $this->orderMock->expects($this->any())->method('getBaseTotalDue')->willReturn($sum);
+        $this->helperMock->expects($this->once())
+            ->method('getMethodInstance')
+            ->will($this->returnValue($this->paymentMethodMock));
+        $this->paymentMethodMock->expects($this->once())
+            ->method('getConfigPaymentAction')
+            ->willReturn(\Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE);
+        $this->paymentMethodMock->expects($this->any())
+            ->method('getConfigData')
+            ->with('order_status', null)
+            ->willReturn($newOrderStatus);
+        $statusHistory = $this->getMockForAbstractClass(
+            'Magento\Sales\Api\Data\OrderStatusHistoryInterface'
+        );
+        $this->orderMock->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
+        $this->orderMock->expects($this->any())
+            ->method('addStatusHistoryComment')
+            ->withConsecutive(
+                [__('Order is suspended as its authorizing amount %1 is suspected to be fraudulent.', $sum)]
+            )
+            ->willReturn($statusHistory);
+        $this->mockGetDefaultStatus(Order::STATE_PROCESSING, Order::STATUS_FRAUD, ['first', 'second']);
+        $this->orderMock->expects($this->any())
+            ->method('setState')
+            ->with(Order::STATE_PROCESSING)
+            ->willReturnSelf();
+        $this->orderMock->expects($this->any())
+            ->method('setStatus')
+            ->withConsecutive(
+                [Order::STATUS_FRAUD]
+            )->willReturnSelf();
+        $this->orderMock->expects($this->atLeastOnce())
+            ->method('getStatus')
+            ->willReturn(Order::STATUS_FRAUD);
+        $this->paymentMethodMock->expects($this->once())
+            ->method('getConfigPaymentAction')
+            ->willReturn(null);
+        $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
+        $this->currencyMock->method('formatTxt')->willReturn($sum);
+        $this->assertEquals($this->payment, $this->payment->place());
+        //maybe we don't need write authorised sum when fraud was detected
+        $this->assertEquals($sum, $this->payment->getAmountAuthorized());
+    }
+
+    public function testPlaceActionAuthorizeCapture()
+    {
+        $newOrderStatus = 'new_status';
+        $customerNote = 'blabla';
+        $sum = 10;
+        $this->orderMock->expects($this->any())->method('getTotalDue')->willReturn($sum);
+        $this->orderMock->expects($this->any())->method('getBaseTotalDue')->willReturn($sum);
+        $this->helperMock->expects($this->once())
+            ->method('getMethodInstance')
+            ->will($this->returnValue($this->paymentMethodMock));
+        $this->paymentMethodMock->expects($this->once())
+            ->method('getConfigPaymentAction')
+            ->willReturn(\Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE);
+        $this->paymentMethodMock->expects($this->any())
+            ->method('getConfigData')
+            ->with('order_status', null)
+            ->willReturn($newOrderStatus);
+        $statusHistory = $this->getMockForAbstractClass(
+            'Magento\Sales\Api\Data\OrderStatusHistoryInterface'
+        );
+        $this->invoiceMock->expects($this->once())->method('register')->willReturnSelf();
+        $this->invoiceMock->expects($this->once())->method('capture')->willReturnSelf();
+        $this->paymentMethodMock->expects($this->once())->method('canCapture')->willReturn(true);
+        $this->orderMock->expects($this->any())->method('prepareInvoice')->willReturn($this->invoiceMock);
+        $this->orderMock->expects($this->once())->method('addRelatedObject')->with($this->invoiceMock);
+        $this->orderMock->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
+        $this->orderMock->expects($this->any())
+            ->method('addStatusHistoryComment')
+            ->with($customerNote)
+            ->willReturn($statusHistory);
+        $this->mockGetDefaultStatus(Order::STATE_PROCESSING, $newOrderStatus, ['first', 'second']);
+        $this->orderMock->expects($this->any())
+            ->method('setState')
+            ->with(Order::STATE_PROCESSING)
+            ->willReturnSelf();
+        $this->orderMock->expects($this->any())
+            ->method('setStatus')
+            ->with($newOrderStatus)
+            ->willReturnSelf();
+        $this->paymentMethodMock->expects($this->once())
+            ->method('getConfigPaymentAction')
+            ->willReturn(null);
+
+        $this->assertEquals($this->payment, $this->payment->place());
+
+        $this->assertEquals($this->invoiceMock, $this->payment->getCreatedInvoice());
+        $this->assertEquals($sum, $this->payment->getAmountAuthorized());
+        $this->assertEquals($sum, $this->payment->getBaseAmountAuthorized());
     }
 
     public function testAuthorize()
@@ -365,7 +598,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseCurrency')
             ->willReturn($baseCurrencyMock);
 
-        $this->assertOrderUpdated(Order::STATE_PAYMENT_REVIEW, Order::STATUS_FRAUD, $message);
+        $this->assertOrderUpdated(Order::STATE_PROCESSING, Order::STATUS_FRAUD, $message);
 
         $this->paymentMethodMock->expects($this->once())
             ->method('authorize')
@@ -1105,6 +1338,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->payment->canCapture());
     }
 
+    public function testCannotCapture()
+    {
+        $this->paymentMethodMock->expects($this->once())->method('canCapture')->willReturn(false);
+        $this->assertFalse($this->payment->canCapture());
+    }
+
     public function testPay()
     {
         $expects = [
@@ -1451,7 +1690,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         if (!empty($allStatuses)) {
             $orderConfigMock->expects($this->any())
                 ->method('getStateStatuses')
-                ->with(Order::STATE_NEW)
+                ->with($state)
                 ->will($this->returnValue($allStatuses));
         }
 

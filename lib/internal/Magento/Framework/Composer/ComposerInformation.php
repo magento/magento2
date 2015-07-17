@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Composer;
 
+use Composer\Factory as ComposerFactory;
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;
 use Composer\Package\Version\VersionParser;
@@ -68,17 +69,19 @@ class ComposerInformation
      *
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param BufferIoFactory $bufferIoFactory
      * @throws \Exception
      */
     public function __construct(
         MagentoComposerApplicationFactory $applicationFactory,
         \Magento\Framework\Filesystem $filesystem,
+        BufferIoFactory $bufferIoFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
 
         // Create Composer
         $this->application = $applicationFactory->create();
-        $this->composer = $this->application->createComposer();
+        $this->composer = ComposerFactory::create($bufferIoFactory->create(), $composerJson);
         $this->locker = $this->composer->getLocker();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->dateTime = $dateTime;

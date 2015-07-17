@@ -76,17 +76,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Verify that the customer has a single item in his cart.
-     *
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/quote.php
-     */
-    public function testGetCollection()
-    {
-        $this->assertEquals(1, $this->block->getCollection()->getSize());
-    }
-
-    /**
      * Verify the basic content of an empty cart.
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -94,7 +83,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlEmptyCart()
     {
         $this->assertEquals(0, $this->block->getCollection()->getSize());
-        $this->assertContains("There are no items in customer's shopping cart at the moment", $this->block->toHtml());
+        $this->assertContains('There are no items in customer\'s shopping cart.', $this->block->toHtml());
     }
 
     /**
@@ -110,5 +99,16 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('simple', $html);
         $this->assertContains('$10.00', $html);
         $this->assertContains('catalog/product/edit/id/1', $html);
+    }
+
+    /**
+     * Verify that the customer has a single item in his cart.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/quote.php
+     */
+    public function testGetCollection()
+    {
+        $this->assertEquals(1, $this->block->getCollection()->getSize());
     }
 }

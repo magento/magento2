@@ -87,7 +87,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
     <?php endif; ?>
         <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
             <div class="control qty">
-                <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $block->getQty() ?>" type="number" size="4" title="<?php echo __('Qty') ?>" class="input-text qty" maxlength="12" data-validate="{'required-number':true,'validate-greater-than-zero':true}" data-role="cart-item-qty"/>
+                <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $block->getQty() ?>" type="number" size="4" title="<?php echo __('Qty') ?>" class="input-text qty" data-cart-item-id="<?php echo $block->escapeHtml(__($_item->getSku())) ?>" maxlength="12" data-validate="{'required-number':true,'validate-greater-than-zero':true}" data-role="cart-item-qty"/>
             </div>
             <?php $cols++; ?>
         </td>
@@ -104,22 +104,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
     <tr class="item-actions">
         <td colspan="<?php echo $cols;?>">
             <div class="actions-toolbar">
-                <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllowInCart()) : ?>
-                    <?php if ($isVisibleProduct): ?>
-                        <a href="#" data-post='<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getMoveFromCartParams($_item->getId()); ?>' class="use-ajax action towishlist">
-                            <span><?php echo __('Move to Wish List'); ?></span>
-                        </a>
-                    <?php endif ?>
-                <?php endif ?>
-                <?php if ($isVisibleProduct): ?>
-                    <a class="action edit" href="<?php echo $block->getConfigureUrl() ?>" title="<?php echo __('Edit item parameters') ?>"><span><?php echo __('Edit') ?></span></a>
-                <?php endif ?>
-                <button title="<?php echo __('Remove item') ?>"
-                        type="button"
-                        class="action delete"
-                        data-post='<?php echo $this->helper('Magento\Checkout\Helper\Cart')->getDeletePostJson($_item); ?>'>
-                    <span><?php echo __('Remove item')?></span>
-                </button>
+                <?php echo $block->getActions($_item) ?>
             </div>
         </td>
     </tr>

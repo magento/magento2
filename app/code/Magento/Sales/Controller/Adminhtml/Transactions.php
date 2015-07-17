@@ -15,7 +15,7 @@ use Magento\Framework\View\Result\LayoutFactory;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-class Transactions extends \Magento\Backend\App\Action
+abstract class Transactions extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
@@ -86,13 +86,6 @@ class Transactions extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'fetch':
-                return $this->_authorization->isAllowed('Magento_Sales::transactions_fetch');
-                break;
-            default:
-                return $this->_authorization->isAllowed('Magento_Sales::transactions');
-                break;
-        }
+        return $this->_authorization->isAllowed('Magento_Sales::transactions');
     }
 }

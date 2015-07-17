@@ -23,6 +23,13 @@ angular.module('readiness-check', [])
         $rootScope.checkingInProgress = function() {
             return $scope.progressCounter > 0;
         };
+        $scope.requestFailedHandler = function(obj) {
+            obj.processed = true;
+            obj.isRequestError = true;
+            $scope.hasErrors = true;
+            $rootScope.hasErrors = true;
+            $scope.stopProgress();
+        };
 
         $scope.requestFailedHandler = function(obj) {
             obj.processed = true;
@@ -232,6 +239,7 @@ angular.module('readiness-check', [])
 
         $scope.isCompleted = function() {
             return $scope.version.processed
+                && $scope.settings.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed
                 && (($scope.cronScript.processed && $scope.componentDependency.processed && $scope.updater.processed)

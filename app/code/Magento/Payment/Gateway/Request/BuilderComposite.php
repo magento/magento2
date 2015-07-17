@@ -6,21 +6,29 @@
 namespace Magento\Payment\Gateway\Request;
 
 use Magento\Framework\ObjectManager\TMap;
+use Magento\Framework\ObjectManager\TMapFactory;
 
 class BuilderComposite implements BuilderInterface
 {
     /**
-     * @var BuilderInterface[]
+     * @var BuilderInterface[] | TMap
      */
     private $builders;
 
     /**
-     * @param TMap $builders
+     * @param array $builders
+     * @param TMapFactory $tmapFactory
      */
     public function __construct(
-        TMap $builders
+        array $builders,
+        TMapFactory $tmapFactory
     ) {
-        $this->builders = $builders;
+        $this->builders = $tmapFactory->create(
+            [
+                'array' => $builders,
+                'type' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+            ]
+        );
     }
 
     /**

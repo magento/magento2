@@ -58,7 +58,6 @@ class Data
                 $options['images'][$productAttributeId][$attributeValue][$productId] = $imageUrl;
             }
         }
-        $options['baseImage'] = $baseImageUrl;
 
         return $options;
     }

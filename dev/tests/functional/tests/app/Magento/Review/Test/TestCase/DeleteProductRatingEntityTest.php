@@ -56,7 +56,7 @@ class DeleteProductRatingEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $product = $fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => 'default']);
+        $product = $fixtureFactory->createByCode('catalogProductSimple', ['dataset' => 'default']);
         $product->persist();
 
         return ['product' => $product];

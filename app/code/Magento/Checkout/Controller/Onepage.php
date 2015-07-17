@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Onepage extends Action
+abstract class Onepage extends Action
 {
     /**
      * @var array
@@ -180,14 +180,14 @@ class Onepage extends Action
     {
         $quote = $this->getOnepage()->getQuote();
         if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
-            return false;
+            return true;
         }
         $action = $this->getRequest()->getActionName();
         if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getCartWasUpdated(true)
             &&
             !in_array($action, ['index', 'progress'])
         ) {
-            return false;
+            return true;
         }
 
         return false;

@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Paypal/etc/rules.xsd">
+    <!-- Website Payments Standard -->
+    <payment id="wps_other">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="wpp_ca">wpp_ca</argument>
+                    <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
+                    <argument name="payflow_link_ca">payflow_link_ca</argument>
+                    <argument name="express_checkout_other">express_checkout_other</argument>
+                </predicate>
+            </event>
+        </events>
+        <relation target="wpp_ca">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="paypal_payflowpro_ca">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="payflow_link_ca">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="express_checkout_other">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target=":self">
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="conflict" event=":load">
+                <argument name="wpp_ca">wpp_ca</argument>
+                <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+                <argument name="express_checkout_other">express_checkout_other</argument>
+            </rule>
+        </relation>
+    </payment>
+    <!-- Website Payments Pro -->
+    <payment id="wpp_ca">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="wps_other">wps_other</argument>
+                    <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
+                    <argument name="payflow_link_ca">payflow_link_ca</argument>
+                </predicate>
+            </event>
+        </events>
+        <relation target="wps_other">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="paypal_payflowpro_ca">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="payflow_link_ca">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target=":self">
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="conflict" event=":load">
+                <argument name="wps_other">wps_other</argument>
+                <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
+        </relation>
+    </payment>
+    <!-- Payflow Pro -->
+    <payment id="paypal_payflowpro_ca">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="wps_other">wps_other</argument>
+                    <argument name="wpp_ca">wpp_ca</argument>
+                    <argument name="payflow_link_ca">payflow_link_ca</argument>
+                </predicate>
+            </event>
+        </events>
+        <relation target="wps_other">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="wpp_ca">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="payflow_link_ca">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target=":self">
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="conflict" event=":load">
+                <argument name="wps_other">wps_other</argument>
+                <argument name="wpp_ca">wpp_ca</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
+        </relation>
+    </payment>
+    <!-- Payflow Link (Includes Express Checkout) -->
+    <payment id="payflow_link_ca">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="wps_other">wps_other</argument>
+                    <argument name="wpp_ca">wpp_ca</argument>
+                    <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
+                </predicate>
+            </event>
+        </events>
+        <relation target="wps_other">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="wpp_ca">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="paypal_payflowpro_ca">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target="express_checkout_other">
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="paypal/express/disable" event="activate-rule"/>
+            <rule type="paypal/express/lock-configuration" event="activate-rule"/>
+            <rule type="paypal/express/mark-disable" event="deactivate-rule">
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
+            <rule type="paypal/express/unlock-configuration" event="deactivate-rule">
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
+        </relation>
+        <relation target=":self">
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="payflow/express/enable" event="activate-rule"/>
+            <rule type="payflow/express/disable" event="deactivate-rule"/>
+            <rule type="payflow/express/lock-conditional" event=":load"/>
+            <rule type="conflict" event=":load">
+                <argument name="wps_other">wps_other</argument>
+                <argument name="wpp_ca">wpp_ca</argument>
+                <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
+                <argument name="express_checkout_other">express_checkout_other</argument>
+            </rule>
+        </relation>
+    </payment>
+    <!-- Express Checkout -->
+    <payment id="express_checkout_other">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
+                <predicate name="confirm"
+                           message="There is already another PayPal solution enabled. Enable this solution instead?"
+                           event="deactivate-rule"
+                        >
+                    <argument name="wps_other">wps_other</argument>
+                </predicate>
+            </event>
+        </events>
+        <relation target="wps_other">
+            <rule type="disable" event="activate-rule"/>
+        </relation>
+        <relation target=":self">
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="paypal/express/mark-disable" event="deactivate-rule">
+                <argument name="wps_other">wps_other</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
+            <rule type="conflict" event=":load">
+                <argument name="wps_other">wps_other</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
+            <rule type="paypal/express/lock-configuration-conditional" event=":load">
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
+        </relation>
+    </payment>
+</rules>

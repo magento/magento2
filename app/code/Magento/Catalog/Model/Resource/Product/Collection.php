@@ -256,6 +256,13 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     protected $_groupManagement;
 
     /**
+     * Need to add websites to result flag
+     *
+     * @var bool
+     */
+    protected $needToAddWebsiteNamesToResult;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -705,6 +712,33 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * @return $this
      */
     public function addWebsiteNamesToResult()
+    {
+        $this->needToAddWebsiteNamesToResult = true;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function load($printQuery = false, $logQuery = false)
+    {
+        if ($this->isLoaded()) {
+            return $this;
+        }
+        parent::load($printQuery, $logQuery);
+
+        if ($this->needToAddWebsiteNamesToResult) {
+            $this->doAddWebsiteNamesToResult();
+        }
+        return $this;
+    }
+
+    /**
+     * Processs adding product website names to result collection
+     *
+     * @return $this
+     */
+    protected function doAddWebsiteNamesToResult()
     {
         $productWebsites = [];
         foreach ($this as $product) {

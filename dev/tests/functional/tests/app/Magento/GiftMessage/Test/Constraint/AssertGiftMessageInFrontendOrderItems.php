@@ -15,12 +15,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertGiftMessageInFrontendOrderItems
- * Assert that message from dataSet is displayed for each items on order(s) view page on frontend
+ * Assert that message from dataset is displayed for each items on order(s) view page on frontend
  */
 class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
 {
     /**
-     * Assert that message from dataSet is displayed for each items on order(s) view page on frontend
+     * Assert that message from dataset is displayed for each items on order(s) view page on frontend
      *
      * @param GiftMessage $giftMessage
      * @param Customer $customer
@@ -53,15 +53,19 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
         $orderHistory->open();
         $orderHistory->getOrderHistoryBlock()->openOrderById($orderId);
 
-        foreach ($products as $key => $product) {
+        foreach ($giftMessage->getItems() as $key => $itemGiftMessage) {
+            $product = $products[$key];
             if ($giftMessage->hasData('items')) {
-                $itemGiftMessage = $giftMessage->getItems()[$key];
                 $expectedData = [
                     'sender' => $itemGiftMessage->getSender(),
                     'recipient' => $itemGiftMessage->getRecipient(),
                     'message' => $itemGiftMessage->getMessage(),
                 ];
             }
+            if ($product->getIsVirtual() == 'Yes') {
+                $expectedData = [];
+            }
+
             \PHPUnit_Framework_Assert::assertEquals(
                 $expectedData,
                 $customerOrderView->getGiftMessageForItemBlock()->getGiftMessage($product->getName()),
