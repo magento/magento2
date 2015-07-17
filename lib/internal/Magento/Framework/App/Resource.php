@@ -99,7 +99,7 @@ class Resource
      * @param string $connectionName
      * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
      */
-    private function getConnectionByName($connectionName)
+    public function getConnectionByName($connectionName)
     {
         if (isset($this->_connections[$connectionName])) {
             return $this->_connections[$connectionName];
