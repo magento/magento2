@@ -90,7 +90,7 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     public function aggregateProductsByTypes($orderId, $productTypeIds = [], $isProductTypeIn = false)
     {
-        $adapter = $this->getReadConnection();
+        $adapter = $this->getConnection();
         $select = $adapter->select()
             ->from(
                 ['o' => $this->getTable('sales_order_item')],

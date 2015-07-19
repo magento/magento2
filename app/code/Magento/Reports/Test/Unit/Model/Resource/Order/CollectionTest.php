@@ -164,7 +164,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resourceMock
             ->expects($this->once())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->willReturn($this->dbMock);
 
         $this->collection = new Collection(

@@ -158,7 +158,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $this->_universalFactory = $universalFactory;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
         $this->_construct();
-        $this->setConnection($this->getEntity()->getReadConnection());
+        $this->setConnection($this->getEntity()->getConnection());
         $this->_prepareStaticFields();
         $this->_initSelect();
     }

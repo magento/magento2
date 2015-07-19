@@ -96,8 +96,8 @@ class Bestsellers extends AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        $adapter = $this->_getWriteAdapter();
-        //$this->_getWriteAdapter()->beginTransaction();
+        $adapter = $this->getConnection();
+        //$this->getConnection()->beginTransaction();
 
         try {
             if ($from !== null || $to !== null) {

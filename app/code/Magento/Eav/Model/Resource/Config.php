@@ -43,7 +43,7 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _loadTypes()
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         if (!$adapter) {
             return $this;
         }
@@ -68,7 +68,7 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _loadTypeAttributes($typeId)
     {
         if (!isset(self::$_attributes[$typeId])) {
-            $adapter = $this->_getReadAdapter();
+            $adapter = $this->getConnection();
             $bind = ['entity_type_id' => $typeId];
             $select = $adapter->select()->from(
                 $this->getTable('eav_attribute')

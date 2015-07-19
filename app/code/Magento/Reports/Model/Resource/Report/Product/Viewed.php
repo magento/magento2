@@ -100,7 +100,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     public function aggregate($from = null, $to = null)
     {
         $mainTable = $this->getMainTable();
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect(

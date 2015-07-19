@@ -55,7 +55,7 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $whereCond = [
             $adapter->quoteInto('website_id IN(?)', $websiteIds),
             $adapter->quoteInto('product_id IN(?)', $productIds),
@@ -88,7 +88,7 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $this->_getWriteAdapter()->beginTransaction();
+        $this->getConnection()->beginTransaction();
 
         // Before adding of products we should remove it old rows with same ids
         $this->removeProducts($websiteIds, $productIds);
@@ -98,15 +98,15 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     if (!$productId) {
                         continue;
                     }
-                    $this->_getWriteAdapter()->insert(
+                    $this->getConnection()->insert(
                         $this->getMainTable(),
                         ['product_id' => (int)$productId, 'website_id' => (int)$websiteId]
                     );
                 }
             }
-            $this->_getWriteAdapter()->commit();
+            $this->getConnection()->commit();
         } catch (\Exception $e) {
-            $this->_getWriteAdapter()->rollBack();
+            $this->getConnection()->rollBack();
             throw $e;
         }
         return $this;
@@ -120,14 +120,14 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getWebsites($productIds)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             ['product_id', 'website_id']
         )->where(
             'product_id IN (?)',
             $productIds
         );
-        $rowset = $this->_getReadAdapter()->fetchAll($select);
+        $rowset = $this->getConnection()->fetchAll($select);
 
         $result = [];
         foreach ($rowset as $row) {

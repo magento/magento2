@@ -49,7 +49,7 @@ class Shipping extends AbstractReport
     {
         $table = $this->getTable('sales_shipping_aggregated_order');
         $sourceTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->beginTransaction();
 
         try {
@@ -143,7 +143,7 @@ class Shipping extends AbstractReport
         $table = $this->getTable('sales_shipping_aggregated');
         $sourceTable = $this->getTable('sales_invoice');
         $orderTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->beginTransaction();
 
         try {

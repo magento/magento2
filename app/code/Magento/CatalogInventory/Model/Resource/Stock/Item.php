@@ -63,7 +63,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function loadByProductId(\Magento\CatalogInventory\Api\Data\StockItemInterface $item, $productId, $websiteId)
     {
         $select = $this->_getLoadSelect('product_id', $productId, $item)->where('website_id = :website_id');
-        $data = $this->_getReadAdapter()->fetchRow($select, [':website_id' => $websiteId]);
+        $data = $this->getConnection()->fetchRow($select, [':website_id' => $websiteId]);
         if ($data) {
             $item->setData($data);
         } else {
@@ -99,7 +99,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _prepareDataForTable(\Magento\Framework\Object $object, $table)
     {
         $data = parent::_prepareDataForTable($object, $table);
-        $ifNullSql = $this->_getWriteAdapter()->getIfNullSql('qty');
+        $ifNullSql = $this->getConnection()->getIfNullSql('qty');
         if (!$object->isObjectNew() && $object->getQtyCorrection()) {
             if ($object->getQty() === null) {
                 $data['qty'] = null;

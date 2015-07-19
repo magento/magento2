@@ -154,12 +154,10 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             $pdoMock->expects($this->at(1))->method('fetch')->will($this->returnValue([$tableColumns]));
 
             $this->model->newIndexAdapter();
-            $this->_resourceMock->expects($this->at(0))->method('getConnection')->with('core_write')->will(
+            $this->_resourceMock->expects($this->any())->method('getConnection')->will(
                 $this->returnValue($connectionMock)
             );
-            $this->_resourceMock->expects($this->at(1))->method('getConnection')->with('core_new_write')->will(
-                $this->returnValue($connectionCustomMock)
-            );
+
         } else {
             $selectMock->expects($this->once())->method('insertFromSelect')->with(
                 $destTable,
@@ -167,7 +165,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             )->will($this->returnSelf());
 
             $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
-            $this->_resourceMock->expects($this->any())->method('getConnection')->with('core_write')->will(
+            $this->_resourceMock->expects($this->any())->method('getConnection')->will(
                 $this->returnValue($connectionMock)
             );
         }

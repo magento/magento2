@@ -32,7 +32,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function addOptionValueToCollection($collection, $attribute, $valueExpr)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $attributeCode = $attribute->getAttributeCode();
         $optionTable1 = $attributeCode . '_option_value_t1';
         $optionTable2 = $attributeCode . '_option_value_t2';
@@ -73,7 +73,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $store,
         $hasValueField = true
     ) {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $attributeTable = $attribute->getBackend()->getTable();
         $attributeCode = $attribute->getAttributeCode();
 

@@ -46,7 +46,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             \Magento\Sales\Model\Order\Payment\Transaction::TYPE_PAYMENT === $transaction->getTxnType() &&
             ($id = $transaction->getId())
         ) {
-            $adapter = $this->_getWriteAdapter();
+            $adapter = $this->getConnection();
 
             // verify such transaction exists, determine payment and order id
             $verificationRow = $adapter->fetchRow(
@@ -91,7 +91,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
         $txnId
     ) {
         $select = $this->_getLoadByUniqueKeySelect($orderId, $paymentId, $txnId);
-        $data = $this->_getWriteAdapter()->fetchRow($select);
+        $data = $this->getConnection()->fetchRow($select);
         if (!$data) {
             return $transaction;
         }
@@ -110,7 +110,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      */
     public function getOrderWebsiteId($orderId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = [':entity_id' => $orderId];
         $select = $adapter->select()->from(
             ['so' => $this->getTable('sales_order')],
@@ -181,9 +181,9 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             $select->where('txn_type = ?', $txnType);
         }
         if ($isRow) {
-            return $this->_getWriteAdapter()->fetchRow($select);
+            return $this->getConnection()->fetchRow($select);
         }
-        return $this->_getWriteAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -197,7 +197,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      */
     private function _getLoadByUniqueKeySelect($orderId, $paymentId, $txnId, $columns = '*')
     {
-        return $this->_getWriteAdapter()->select()->from(
+        return $this->getConnection()->select()->from(
             $this->getMainTable(),
             $columns
         )->where(

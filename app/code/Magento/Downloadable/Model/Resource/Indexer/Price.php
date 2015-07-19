@@ -78,7 +78,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _prepareDownloadableLinkPriceTable()
     {
-        $this->_getWriteAdapter()->delete($this->_getDownloadableLinkPriceTable());
+        $this->getConnection()->delete($this->_getDownloadableLinkPriceTable());
         return $this;
     }
 
@@ -89,16 +89,16 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _applyDownloadableLink()
     {
-        $write = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $table = $this->_getDownloadableLinkPriceTable();
 
         $this->_prepareDownloadableLinkPriceTable();
 
         $dlType = $this->_getAttribute('links_purchased_separately');
 
-        $ifPrice = $write->getIfNullSql('dlpw.price_id', 'dlpd.price');
+        $ifPrice = $adapter->getIfNullSql('dlpw.price_id', 'dlpd.price');
 
-        $select = $write->select()->from(
+        $select = $adapter->select()->from(
             ['i' => $this->_getDefaultFinalPriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
@@ -130,12 +130,12 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         );
 
         $query = $select->insertFromSelect($table);
-        $write->query($query);
+        $adapter->query($query);
 
-        $ifTierPrice = $write->getCheckSql('i.tier_price IS NOT NULL', '(i.tier_price + id.min_price)', 'NULL');
-        $ifGroupPrice = $write->getCheckSql('i.group_price IS NOT NULL', '(i.group_price + id.min_price)', 'NULL');
+        $ifTierPrice = $adapter->getCheckSql('i.tier_price IS NOT NULL', '(i.tier_price + id.min_price)', 'NULL');
+        $ifGroupPrice = $adapter->getCheckSql('i.group_price IS NOT NULL', '(i.group_price + id.min_price)', 'NULL');
 
-        $select = $write->select()->join(
+        $select = $adapter->select()->join(
             ['id' => $table],
             'i.entity_id = id.entity_id AND i.customer_group_id = id.customer_group_id' .
             ' AND i.website_id = id.website_id',
@@ -150,9 +150,9 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         );
 
         $query = $select->crossUpdateFromSelect(['i' => $this->_getDefaultFinalPriceTable()]);
-        $write->query($query);
+        $adapter->query($query);
 
-        $write->delete($table);
+        $adapter->delete($table);
 
         return $this;
     }

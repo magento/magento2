@@ -230,21 +230,11 @@ class Full
     }
 
     /**
-     * Retrieve connection for read data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function getReadAdapter()
-    {
-        return $this->resource->getConnection('read');
-    }
-
-    /**
      * Retrieve connection for write data
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected function getWriteAdapter()
+    protected function getConnection()
     {
         return $this->resource->getConnection('write');
     }
@@ -278,7 +268,7 @@ class Full
      */
     protected function getProductIdsFromParents(array $entityIds)
     {
-        return $this->getWriteAdapter()
+        return $this->getConnection()
             ->select()
             ->from($this->getTable('catalog_product_relation'), 'parent_id')
             ->distinct(true)
@@ -409,9 +399,9 @@ class Full
         $limit = 100
     ) {
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        $writeAdapter = $this->getWriteAdapter();
+        $adapter = $this->getConnection();
 
-        $select = $writeAdapter->select()
+        $select = $adapter->select()
             ->useStraightJoin(true)
             ->from(
                 ['e' => $this->getTable('catalog_product_entity')],
@@ -419,7 +409,7 @@ class Full
             )
             ->join(
                 ['website' => $this->getTable('catalog_product_website')],
-                $writeAdapter->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
+                $adapter->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
                 []
             );
 
@@ -429,7 +419,7 @@ class Full
 
         $select->where('e.entity_id > ?', $lastProductId)->limit($limit)->order('e.entity_id');
 
-        $result = $writeAdapter->fetchAll($select);
+        $result = $adapter->fetchAll($select);
 
         return $result;
     }
@@ -548,7 +538,7 @@ class Full
     protected function unifyField($field, $backendType = 'varchar')
     {
         if ($backendType == 'datetime') {
-            $expr = $this->getReadAdapter()->getDateFormatSql($field, '%Y-%m-%d %H:%i:%s');
+            $expr = $this->getConnection()->getDateFormatSql($field, '%Y-%m-%d %H:%i:%s');
         } else {
             $expr = $field;
         }
@@ -567,7 +557,7 @@ class Full
     {
         $result = [];
         $selects = [];
-        $adapter = $this->getWriteAdapter();
+        $adapter = $this->getConnection();
         $ifStoreValue = $adapter->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
@@ -639,7 +629,7 @@ class Full
         ) ? $typeInstance->getRelationInfo() : false;
 
         if ($relation && $relation->getTable() && $relation->getParentFieldName() && $relation->getChildFieldName()) {
-            $select = $this->getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 ['main' => $this->getTable($relation->getTable())],
                 [$relation->getChildFieldName()]
             )->where(
@@ -649,7 +639,7 @@ class Full
             if ($relation->getWhere() !== null) {
                 $select->where($relation->getWhere());
             }
-            return $this->getReadAdapter()->fetchCol($select);
+            return $this->getConnection()->fetchCol($select);
         }
 
         return null;

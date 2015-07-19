@@ -65,7 +65,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock
             ->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($this->connectionMock));
 
         $this->selectMock = $this->getMock(

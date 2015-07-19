@@ -84,7 +84,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select->columns(['range' => $rangeExpr, 'count' => $countExpr]);
         $select->group($rangeExpr)->order("({$rangeExpr}) ASC");
 
-        return $this->_getReadAdapter()->fetchPairs($select);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**
@@ -165,7 +165,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($conditionString === null) {
             return null;
         }
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $oldAlias = [
             \Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS . '.',
             $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS) . '.',
@@ -246,7 +246,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($lowerPrice !== null) {
             $select->where("{$priceExpression} >= " . $this->_getComparingValue($lowerPrice));
         }
-        $offset = $this->_getReadAdapter()->fetchOne($select);
+        $offset = $this->getConnection()->fetchOne($select);
         if (!$offset) {
             return false;
         }
@@ -276,7 +276,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $select->order("{$priceExpression} ASC")->limit($limit, $offset);
 
-        return $this->_getReadAdapter()->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
@@ -302,7 +302,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($upperPrice !== null) {
             $select->where("{$priceExpression} < " . $this->_getComparingValue($upperPrice));
         }
-        $offset = $this->_getReadAdapter()->fetchOne($select);
+        $offset = $this->getConnection()->fetchOne($select);
         if (!$offset) {
             return false;
         }
@@ -317,7 +317,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $pricesSelect->order("{$priceExpression} DESC")->limit($rightIndex - $offset + 1, $offset - 1);
 
-        return array_reverse($this->_getReadAdapter()->fetchCol($pricesSelect));
+        return array_reverse($this->getConnection()->fetchCol($pricesSelect));
     }
 
     /**

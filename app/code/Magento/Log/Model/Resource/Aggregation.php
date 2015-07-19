@@ -29,7 +29,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getLastRecordDate()
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getTable('log_summary'),
             [$adapter->quoteIdentifier('date') => 'MAX(add_date)']
@@ -48,7 +48,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCounts($from, $to, $store)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $result = ['customers' => 0, 'visitors' => 0];
         $select = $adapter->select()->from(
             $this->getTable('log_customer'),
@@ -100,7 +100,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveLog($data, $id = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         if ($id === null) {
             $adapter->insert($this->getTable('log_summary'), $data);
         } else {
@@ -117,7 +117,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function removeEmpty($date)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $condition = ['add_date < ?' => $date, 'customer_count = 0', 'visitor_count = 0'];
         $adapter->delete($this->getTable('log_summary'), $condition);
     }
@@ -131,7 +131,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getLogId($from, $to)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getTable('log_summary'),
             'summary_id'

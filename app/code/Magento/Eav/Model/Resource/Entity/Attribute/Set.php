@@ -120,7 +120,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function validate($object, $attributeSetName)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = ['attribute_set_name' => trim($attributeSetName), 'entity_type_id' => $object->getEntityTypeId()];
         $select = $adapter->select()->from(
             $this->getMainTable()
@@ -192,7 +192,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getDefaultGroupId($setId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = ['attribute_set_id' => (int)$setId];
         $select = $adapter->select()->from(
             $this->getTable('eav_attribute_group'),
@@ -215,7 +215,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function fetchAttributeSetData($setId = null)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             ['entity' => $this->getTable('eav_entity_attribute')],
             ['attribute_id', 'attribute_set_id', 'attribute_group_id', 'sort_order']

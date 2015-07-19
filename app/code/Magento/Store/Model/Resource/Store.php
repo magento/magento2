@@ -30,7 +30,7 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function countAll($countAdmin = false)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from($this->getMainTable(), 'COUNT(*)');
         if (!$countAdmin) {
             $select->where(sprintf('%s <> %s', $adapter->quoteIdentifier('code'), $adapter->quote('admin')));
@@ -77,7 +77,7 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'scope_id = ?' => $model->getStoreId(),
         ];
 
-        $this->_getWriteAdapter()->delete($this->getTable('core_config_data'), $where);
+        $this->getConnection()->delete($this->getTable('core_config_data'), $where);
         return $this;
     }
 
@@ -90,7 +90,7 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _updateGroupDefaultStore($groupId, $storeId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $bindValues = ['group_id' => (int)$groupId];
         $select = $adapter->select()->from(
@@ -119,7 +119,7 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _changeGroup(\Magento\Framework\Model\AbstractModel $model)
     {
         if ($model->getOriginalGroupId() && $model->getGroupId() != $model->getOriginalGroupId()) {
-            $adapter = $this->_getReadAdapter();
+            $adapter = $this->getConnection();
             $select = $adapter->select()->from(
                 $this->getTable('store_group'),
                 'default_store_id'
@@ -131,7 +131,7 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
             if ($storeId == $model->getId()) {
                 $bind = ['default_store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID];
                 $where = ['group_id = ?' => $model->getOriginalGroupId()];
-                $this->_getWriteAdapter()->update($this->getTable('store_group'), $bind, $where);
+                $this->getConnection()->update($this->getTable('store_group'), $bind, $where);
             }
         }
         return $this;

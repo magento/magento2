@@ -20,7 +20,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     protected function _getAlertRow(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         if ($object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()) {
             $select = $adapter->select()->from(
                 $this->getMainTable()
@@ -67,7 +67,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function deleteCustomer(\Magento\Framework\Model\AbstractModel $object, $customerId, $websiteId = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $where = [];
         $where[] = $adapter->quoteInto('customer_id=?', $customerId);
         if ($websiteId) {

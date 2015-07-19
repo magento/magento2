@@ -66,7 +66,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
             throw new \Magento\Framework\Exception\LocalizedException(__('You selected an invalid queue.'));
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select();
         $select->from(
@@ -107,7 +107,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function removeSubscribersFromQueue(ModelQueue $queue)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         try {
             $adapter->beginTransaction();
             $adapter->delete(
@@ -130,7 +130,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function setStores(ModelQueue $queue)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->delete($this->getTable('newsletter_queue_store_link'), ['queue_id = ?' => $queue->getId()]);
 
         $stores = $queue->getStores();
@@ -176,7 +176,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getStores(ModelQueue $queue)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getTable('newsletter_queue_store_link'),
             'store_id'

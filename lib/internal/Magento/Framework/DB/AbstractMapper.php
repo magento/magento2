@@ -227,7 +227,7 @@ abstract class AbstractMapper implements MapperInterface
     protected function initResource($resourceInterface)
     {
         $this->setResourceModelName($resourceInterface);
-        $this->setConnection($this->getResource()->getReadConnection());
+        $this->setConnection($this->getResource()->getConnection());
         if (!$this->select) {
             $this->select = $this->getConnection()->select();
             $this->initSelect();

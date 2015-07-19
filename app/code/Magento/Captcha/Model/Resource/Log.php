@@ -70,7 +70,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function logAttempt($login)
     {
         if ($login != null) {
-            $this->_getWriteAdapter()->insertOnDuplicate(
+            $this->getConnection()->insertOnDuplicate(
                 $this->getMainTable(),
                 [
                     'type' => self::TYPE_LOGIN,
@@ -83,7 +83,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $ip = $this->_remoteAddress->getRemoteAddress();
         if ($ip != null) {
-            $this->_getWriteAdapter()->insertOnDuplicate(
+            $this->getConnection()->insertOnDuplicate(
                 $this->getMainTable(),
                 [
                     'type' => self::TYPE_REMOTE_ADDRESS,
@@ -106,14 +106,14 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function deleteUserAttempts($login)
     {
         if ($login != null) {
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->getMainTable(),
                 ['type = ?' => self::TYPE_LOGIN, 'value = ?' => $login]
             );
         }
         $ip = $this->_remoteAddress->getRemoteAddress();
         if ($ip != null) {
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->getMainTable(),
                 ['type = ?' => self::TYPE_REMOTE_ADDRESS, 'value = ?' => $ip]
             );
@@ -133,8 +133,8 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$ip) {
             return 0;
         }
-        $read = $this->_getReadAdapter();
-        $select = $read->select()->from(
+        $adapter = $this->getConnection();
+        $select = $adapter->select()->from(
             $this->getMainTable(),
             'count'
         )->where(
@@ -144,7 +144,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'value = ?',
             $ip
         );
-        return $read->fetchOne($select);
+        return $adapter->fetchOne($select);
     }
 
     /**
@@ -158,8 +158,8 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$login) {
             return 0;
         }
-        $read = $this->_getReadAdapter();
-        $select = $read->select()->from(
+        $adapter = $this->getConnection();
+        $select = $adapter->select()->from(
             $this->getMainTable(),
             'count'
         )->where(
@@ -169,7 +169,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'value = ?',
             $login
         );
-        return $read->fetchOne($select);
+        return $adapter->fetchOne($select);
     }
 
     /**
@@ -179,7 +179,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteOldAttempts()
     {
-        $this->_getWriteAdapter()->delete(
+        $this->getConnection()->delete(
             $this->getMainTable(),
             ['updated_at < ?' => $this->_coreDate->gmtDate(null, time() - 60 * 30)]
         );

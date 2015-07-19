@@ -65,8 +65,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Model\Resource\Db\AbstractDb',
             [
                 '_construct',
-                '_getReadAdapter',
-                '_getWriteAdapter',
+                'getConnection',
                 '__wakeup',
                 'commit',
                 'delete',
@@ -92,11 +91,9 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceMock->expects($this->any())
-            ->method('_getWriteAdapter')
+            ->method('getConnection')
             ->will($this->returnValue($this->adapterMock));
-        $this->resourceMock->expects($this->any())
-            ->method('_getReadAdapter')
-            ->will($this->returnValue($this->adapterMock));
+
     }
 
     public function testDelete()

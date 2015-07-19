@@ -28,7 +28,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getTaxItemsByOrderId($orderId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             ['item' => $this->getTable('sales_order_tax_item')],
             [

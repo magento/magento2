@@ -80,7 +80,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function saveRel(\Magento\Authorization\Model\Rules $rule)
     {
         try {
-            $adapter = $this->_getWriteAdapter();
+            $adapter = $this->getConnection();
             $adapter->beginTransaction();
             $roleId = $rule->getRoleId();
 

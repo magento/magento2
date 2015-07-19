@@ -51,7 +51,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
     {
         $table = $this->getMainTable();
         $sourceTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $salesAdapter = $this->_resources->getConnection('sales_read');
         $adapter->beginTransaction();
 

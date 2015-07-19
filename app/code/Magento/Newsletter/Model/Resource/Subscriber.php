@@ -81,8 +81,8 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $this->_init('newsletter_subscriber', 'subscriber_id');
         $this->_subscriberLinkTable = $this->getTable('newsletter_queue_link');
-        $this->_read = $this->_getReadAdapter();
-        $this->_write = $this->_getWriteAdapter();
+        $this->_read = $this->getConnection();
+        $this->_write = $this->getConnection();
     }
 
     /**

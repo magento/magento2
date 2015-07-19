@@ -84,10 +84,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
             ->disableOriginalConstructor()
-            ->setMethods(['getReadConnection', 'getCurrentStoreIds', '_construct', 'getMainTable', 'getTable'])
+            ->setMethods(['getConnection', 'getCurrentStoreIds', '_construct', 'getMainTable', 'getTable'])
             ->getMock();
         $this->resourceMock->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->willReturn($this->dbMock);
 
         $this->collection = new Collection(

@@ -57,7 +57,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getReadConnection', '__wakeup', 'getMainTable', 'getTable']
+            ['getConnection', '__wakeup', 'getMainTable', 'getTable']
         );
 
         $this->select->expects($this->any())
@@ -70,7 +70,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
             ->method('quoteIdentifier')
             ->will($this->returnArgument(0));
         $this->resource->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($this->adapter));
         $this->resource->expects($this->any())
             ->method('getMainTable')
