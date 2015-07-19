@@ -36,25 +36,13 @@ abstract class AbstractHelper
     /**
      * Retrieves connection to the resource
      *
-     * @param string $name
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function _getConnection($name)
-    {
-        $connection = sprintf('%s_%s', $this->_modulePrefix, $name);
-
-        return $this->_resource->getConnection($connection);
-    }
-
-    /**
-     * Retrieves connection
-     *
-     * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function getConnection()
     {
-        return $this->_getConnection('write');
+        return $this->_resource->getConnection($this->_modulePrefix);
     }
+
 
     /**
      * Escapes value, that participates in LIKE, with '\' symbol.
