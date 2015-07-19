@@ -20,6 +20,8 @@ class Resource
 
     const AUTO_UPDATE_ALWAYS = 1;
 
+    const DEFAULT_CONNECTION = 'default';
+
     const DEFAULT_READ_RESOURCE = 'core_read';
 
     const DEFAULT_WRITE_RESOURCE = 'core_write';
