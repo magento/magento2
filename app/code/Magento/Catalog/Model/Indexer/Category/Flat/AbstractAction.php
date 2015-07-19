@@ -8,6 +8,8 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
+use Magento\Framework\App\Resource;
+
 class AbstractAction
 {
     /**
@@ -23,7 +25,7 @@ class AbstractAction
     protected $attributeCodes;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
@@ -47,12 +49,12 @@ class AbstractAction
     protected $columns = [];
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper
     ) {
@@ -99,6 +101,16 @@ class AbstractAction
         $table = $this->getConnection()->getTableName($this->getTableName('catalog_category_flat_' . $suffix));
 
         return $table;
+    }
+
+    /**
+     * Retrieve connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected function getConnection()
+    {
+        return $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
     }
 
     /**

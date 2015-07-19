@@ -429,7 +429,9 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 ) . ' * bs.selection_qty',
                 'NULL'
             );
-            $priceExpr = new \Zend_Db_Expr($adapter->getCheckSql("{$groupExpr} < {$priceExpr}", $groupExpr, $priceExpr));
+            $priceExpr = new \Zend_Db_Expr(
+                $adapter->getCheckSql("{$groupExpr} < {$priceExpr}", $groupExpr, $priceExpr)
+            );
         } else {
             $priceExpr = new \Zend_Db_Expr(
                 $adapter->getCheckSql(
