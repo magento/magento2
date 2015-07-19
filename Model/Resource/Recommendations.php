@@ -57,7 +57,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveRelatedQueries($queryId, $relatedQueries = [])
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $whereOr = [];
         if (count($relatedQueries) > 0) {
             $whereOr[] = implode(
@@ -100,7 +100,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getRelatedQueries($queryId, $limit = false, $order = false)
     {
         $collection = $this->_searchQueryModel->getResourceCollection();
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $queryIdCond = $adapter->quoteInto('main_table.query_id IN (?)', $queryId);
 
@@ -143,7 +143,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $relatedQueriesIds = $this->loadByQuery($query, $searchRecommendationsCount);
         $relatedQueries = [];
         if (count($relatedQueriesIds)) {
-            $adapter = $this->_getReadAdapter();
+            $adapter = $this->getConnection();
             $mainTable = $this->_searchQueryModel->getResourceCollection()->getMainTable();
             $select = $adapter->select()->from(
                 ['main_table' => $mainTable],
@@ -169,7 +169,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function loadByQuery($query, $searchRecommendationsCount)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $queryId = $this->_searchQueryModel->getId();
         $relatedQueries = $this->getRelatedQueries($queryId, $searchRecommendationsCount, 'num_results DESC');
         if ($searchRecommendationsCount - count($relatedQueries) < 1) {
