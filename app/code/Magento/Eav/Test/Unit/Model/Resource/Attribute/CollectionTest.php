@@ -102,7 +102,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['__wakeup', 'getReadConnection', 'getMainTable', 'getTable']
+            ['__wakeup', 'getConnection', 'getMainTable', 'getTable']
         );
 
         $this->connectionMock->expects($this->any())
@@ -147,7 +147,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnArgument(0));
 
         $this->resourceMock->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($this->connectionMock));
         $this->resourceMock->expects($this->any())
             ->method('getMainTable')

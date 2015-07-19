@@ -89,7 +89,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _saveUrlInfo($visitor)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $data = new \Magento\Framework\Object(
             [
                 'url' => $this->string->substr($visitor->getUrl(), 0, 250),
@@ -152,7 +152,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         parent::_afterLoad($object);
         // Add information about quote to visitor
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getTable('log_quote'),
             'quote_id'
@@ -203,7 +203,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $bind = $this->_prepareDataForTable($data, $this->getTable('log_visitor_info'));
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->insert($this->getTable('log_visitor_info'), $bind);
 
         return $this;
@@ -226,7 +226,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
         $bind = $this->_prepareDataForTable($data, $this->getTable('log_url'));
 
-        $this->_getWriteAdapter()->insert($this->getTable('log_url'), $bind);
+        $this->getConnection()->insert($this->getTable('log_url'), $bind);
         return $this;
     }
 
@@ -238,7 +238,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _saveCustomerInfo($visitor)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         if ($visitor->getDoCustomerLogin()) {
             $data = new \Magento\Framework\Object(
@@ -286,7 +286,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _saveQuoteInfo($visitor)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         if ($visitor->getDoQuoteCreate()) {
             $data = new \Magento\Framework\Object(
                 [

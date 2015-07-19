@@ -137,7 +137,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $storeIds[] = $storeId;
         }
 
-        $select = $this->_getReadAdapter()
+        $select = $this->getConnection()
             ->select()
             ->from(['attr_table' => $table], [])
             ->where("attr_table.{$this->getEntityIdField()} = ?", $object->getId())
@@ -146,7 +146,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         if ($setId) {
             $select->join(
                 ['set_table' => $this->getTable('eav_entity_attribute')],
-                $this->_getReadAdapter()->quoteInto(
+                $this->getConnection()->quoteInto(
                     'attr_table.attribute_id = set_table.attribute_id' . ' AND set_table.attribute_set_id = ?',
                     $setId
                 ),
@@ -218,7 +218,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _saveAttributeValue($object, $attribute, $value)
     {
-        $write = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $storeId = (int) $this->_storeManager->getStore($object->getStoreId())->getId();
         $table = $attribute->getBackend()->getTable();
 
@@ -229,7 +229,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          */
         if ($this->_storeManager->hasSingleStore()) {
             $storeId = $this->getDefaultStoreId();
-            $write->delete(
+            $adapter->delete(
                 $table,
                 [
                     'attribute_id = ?' => $attribute->getAttributeId(),
@@ -292,12 +292,12 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             if ($attribute->getIsRequired() || $attribute->getIsRequiredInAdminStore()) {
                 $table = $attribute->getBackend()->getTable();
 
-                $select = $this->_getReadAdapter()->select()
+                $select = $this->getConnection()->select()
                     ->from($table)
                     ->where('attribute_id = ?', $attribute->getAttributeId())
                     ->where('store_id = ?', $this->getDefaultStoreId())
                     ->where('entity_id = ?', $object->getEntityId());
-                $row = $this->_getReadAdapter()->fetchOne($select);
+                $row = $this->getConnection()->fetchOne($select);
 
                 if (!$row) {
                     $data = new \Magento\Framework\Object(
@@ -309,7 +309,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                         ]
                     );
                     $bind = $this->_prepareDataForTable($data, $table);
-                    $this->_getWriteAdapter()->insertOnDuplicate($table, $bind, ['value']);
+                    $this->getConnection()->insertOnDuplicate($table, $bind, ['value']);
                 }
             }
         }
@@ -343,7 +343,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _updateAttributeForStore($object, $attribute, $value, $storeId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $table = $attribute->getBackend()->getTable();
         $entityIdField = $attribute->getBackend()->getEntityIdField();
         $select = $adapter->select()
@@ -389,7 +389,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _deleteAttributes($object, $table, $info)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $entityIdField = $this->getEntityIdField();
         $globalValues = [];
         $websiteAttributes = [];
@@ -528,7 +528,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $staticAttributes = [];
         $typedAttributes = [];
         $staticTable = null;
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         foreach ($attribute as $item) {
             /* @var $attribute \Magento\Catalog\Model\Entity\Attribute */

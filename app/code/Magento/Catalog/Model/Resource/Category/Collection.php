@@ -367,10 +367,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         if (!is_array($paths)) {
             $paths = [$paths];
         }
-        $write = $this->getResource()->getWriteConnection();
+        $adapter = $this->getResource()->getConnection();
         $cond = [];
         foreach ($paths as $path) {
-            $cond[] = $write->quoteInto('e.path LIKE ?', "{$path}%");
+            $cond[] = $adapter->quoteInto('e.path LIKE ?', "{$path}%");
         }
         if ($cond) {
             $this->getSelect()->where(join(' OR ', $cond));

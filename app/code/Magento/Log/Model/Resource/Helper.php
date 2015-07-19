@@ -21,7 +21,7 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getTableInfo($table)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $tableName = $adapter->getTableName($table);
 
         $query = $adapter->quoteInto('SHOW TABLE STATUS LIKE ?', $tableName);

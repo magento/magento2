@@ -58,13 +58,13 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $readAdapter = $this->_getReadAdapter();
-        $writeAdapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
+        $adapter = $this->getConnection();
 
-        $writeAdapter->beginTransaction();
+        $adapter->beginTransaction();
 
         try {
-            $writeAdapter->delete($this->getMainTable());
+            $adapter->delete($this->getMainTable());
 
             $visitors = [];
             $lastUrls = [];
@@ -73,15 +73,15 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $lastDate = $this->_date->gmtTimestamp() - $object->getOnlineInterval() * 60;
 
-            $select = $readAdapter->select()->from(
+            $select = $adapter->select()->from(
                 $this->getTable('log_visitor'),
                 ['visitor_id', 'first_visit_at', 'last_visit_at', 'last_url_id']
             )->where(
                 'last_visit_at >= ?',
-                $readAdapter->formatDate($lastDate)
+                $adapter->formatDate($lastDate)
             );
 
-            $query = $readAdapter->query($select);
+            $query = $adapter->query($select);
             while ($row = $query->fetch()) {
                 $visitors[$row['visitor_id']] = $row;
                 $lastUrls[$row['last_url_id']] = $row['visitor_id'];
@@ -95,7 +95,7 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
 
             // retrieve visitor remote addr
-            $select = $readAdapter->select()->from(
+            $select = $adapter->select()->from(
                 $this->getTable('log_visitor_info'),
                 ['visitor_id', 'remote_addr']
             )->where(
@@ -103,13 +103,13 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 array_keys($visitors)
             );
 
-            $query = $readAdapter->query($select);
+            $query = $adapter->query($select);
             while ($row = $query->fetch()) {
                 $visitors[$row['visitor_id']]['remote_addr'] = $row['remote_addr'];
             }
 
             // retrieve visitor last URLs
-            $select = $readAdapter->select()->from(
+            $select = $adapter->select()->from(
                 $this->getTable('log_url_info'),
                 ['url_id', 'url']
             )->where(
@@ -117,14 +117,14 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 array_keys($lastUrls)
             );
 
-            $query = $readAdapter->query($select);
+            $query = $adapter->query($select);
             while ($row = $query->fetch()) {
                 $visitorId = $lastUrls[$row['url_id']];
                 $visitors[$visitorId]['last_url'] = $row['url'];
             }
 
             // retrieve customers
-            $select = $readAdapter->select()->from(
+            $select = $adapter->select()->from(
                 $this->getTable('log_customer'),
                 ['visitor_id', 'customer_id']
             )->where(
@@ -132,7 +132,7 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 array_keys($visitors)
             );
 
-            $query = $readAdapter->query($select);
+            $query = $adapter->query($select);
             while ($row = $query->fetch()) {
                 $visitors[$row['visitor_id']]['visitor_type'] = \Magento\Customer\Model\Visitor::VISITOR_TYPE_CUSTOMER;
                 $visitors[$row['visitor_id']]['customer_id'] = $row['customer_id'];
@@ -141,12 +141,12 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
             foreach ($visitors as $visitorData) {
                 unset($visitorData['last_url_id']);
 
-                $writeAdapter->insertForce($this->getMainTable(), $visitorData);
+                $adapter->insertForce($this->getMainTable(), $visitorData);
             }
 
-            $writeAdapter->commit();
+            $adapter->commit();
         } catch (\Exception $e) {
-            $writeAdapter->rollBack();
+            $adapter->rollBack();
             throw $e;
         }
 

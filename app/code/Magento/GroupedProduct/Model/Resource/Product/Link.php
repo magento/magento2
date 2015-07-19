@@ -19,7 +19,7 @@ class Link extends \Magento\Catalog\Model\Resource\Product\Link
      */
     public function saveGroupedLinks($product, $data)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         // check for change relations
         $bind = ['product_id' => (int)$product->getId(), 'link_type_id' => self::LINK_TYPE_GROUPED];
         $select = $adapter->select()->from(
@@ -58,7 +58,7 @@ class Link extends \Magento\Catalog\Model\Resource\Product\Link
      */
     public function getChildrenIds($parentId, $typeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $childrenIds = [];
         $bind = [':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId];
         $select = $adapter->select()->from(

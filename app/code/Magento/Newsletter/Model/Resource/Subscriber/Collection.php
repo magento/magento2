@@ -91,7 +91,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $this->_queueLinkTable = $this->getTable('newsletter_queue_link');
         $this->_storeTable = $this->getTable('store');
 
-        $this->_map['fields']['type'] = $this->getResource()->getReadConnection()->getCheckSql(
+        $this->_map['fields']['type'] = $this->getResource()->getConnection()->getCheckSql(
             'main_table.customer_id = 0',
             1,
             2

@@ -182,7 +182,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _joinAttribute($storeId, $attributeCode)
     {
-        $adapter = $this->getReadConnection();
+        $adapter = $this->getConnection();
         $attribute = $this->_getAttribute($attributeCode);
         $this->_select->joinLeft(
             ['t1_' . $attributeCode => $attribute['table']],
@@ -199,7 +199,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$attribute['is_global']) {
             $this->_select->joinLeft(
                 ['t2_' . $attributeCode => $attribute['table']],
-                $this->_getWriteAdapter()->quoteInto(
+                $this->getConnection()->quoteInto(
                     't1_' .
                     $attributeCode .
                     '.entity_id = t2_' .
@@ -257,7 +257,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return false;
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $this->_select = $adapter->select()->from(
             ['e' => $this->getMainTable()],
@@ -285,14 +285,14 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_NONE != $imageIncludePolicy) {
             $this->_joinAttribute($store->getId(), 'name');
             $this->_select->columns(
-                ['name' => $this->getReadConnection()->getIfNullSql('t2_name.value', 't1_name.value')]
+                ['name' => $this->getConnection()->getIfNullSql('t2_name.value', 't1_name.value')]
             );
 
             if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
                 $this->_joinAttribute($store->getId(), 'thumbnail');
                 $this->_select->columns(
                     [
-                        'thumbnail' => $this->getReadConnection()->getIfNullSql(
+                        'thumbnail' => $this->getConnection()->getIfNullSql(
                             't2_thumbnail.value',
                             't1_thumbnail.value'
                         ),
@@ -301,7 +301,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
             } elseif (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_BASE == $imageIncludePolicy) {
                 $this->_joinAttribute($store->getId(), 'image');
                 $this->_select->columns(
-                    ['image' => $this->getReadConnection()->getIfNullSql('t2_image.value', 't1_image.value')]
+                    ['image' => $this->getConnection()->getIfNullSql('t2_image.value', 't1_image.value')]
                 );
             }
         }

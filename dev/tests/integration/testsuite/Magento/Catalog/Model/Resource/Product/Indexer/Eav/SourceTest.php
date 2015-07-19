@@ -63,7 +63,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $options->setAttributeFilter($attr->getId())->load();
         $optionIds = $options->getAllIds();
 
-        $adapter = $this->productResource->getReadConnection();
+        $adapter = $this->productResource->getConnection();
         $select = $adapter->select()->from($this->productResource->getTable('catalog_product_index_eav'))
             ->where('entity_id = ?', 1)
             ->where('attribute_id = ?', $attr->getId())

@@ -9,5 +9,4 @@
  */
 return [
    // example '/app/code/Magento/Catalog',
-    '/app/code/Magento/Ups',
 ];

@@ -43,7 +43,7 @@ class Rule extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function fetchRuleCodes($rateId, $customerTaxClassIds, $productTaxClassIds)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()
             ->from(['main' => $this->getTable('tax_calculation')], null)
             ->joinLeft(

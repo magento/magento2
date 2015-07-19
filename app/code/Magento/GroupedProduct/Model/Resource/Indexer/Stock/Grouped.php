@@ -24,7 +24,7 @@ class Grouped extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Def
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
         $select = $adapter->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],

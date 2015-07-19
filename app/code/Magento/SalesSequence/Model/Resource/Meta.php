@@ -72,7 +72,7 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function loadByEntityTypeAndStore($entityType, $storeId)
     {
         $meta = $this->metaFactory->create();
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = ['entity_type' => $entityType, 'store_id' => $storeId];
         $select = $adapter->select()->from(
             $this->getMainTable(),

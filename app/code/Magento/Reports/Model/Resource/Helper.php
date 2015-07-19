@@ -32,7 +32,7 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
      */
     public function mergeVisitorProductIndex($mainTable, $data, $matchFields)
     {
-        $result = $this->_getWriteAdapter()->insertOnDuplicate($mainTable, $data, array_keys($data));
+        $result = $this->getConnection()->insertOnDuplicate($mainTable, $data, array_keys($data));
         return $result;
     }
 

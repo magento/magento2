@@ -39,7 +39,7 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getMaxDataSize()
     {
-        $maxPacketData = $this->_getReadAdapter()->fetchRow('SHOW VARIABLES LIKE "max_allowed_packet"');
+        $maxPacketData = $this->getConnection()->fetchRow('SHOW VARIABLES LIKE "max_allowed_packet"');
         $maxPacket = empty($maxPacketData['Value']) ? self::DB_MAX_PACKET_SIZE : $maxPacketData['Value'];
         return floor($maxPacket * self::DB_MAX_PACKET_COEFFICIENT);
     }
@@ -52,7 +52,7 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getNextAutoincrement($tableName)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $entityStatus = $adapter->showTableStatus($tableName);
 
         if (empty($entityStatus['Auto_increment'])) {

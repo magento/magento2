@@ -50,7 +50,7 @@ class Refunded extends AbstractReport
     {
         $table = $this->getTable('sales_refunded_aggregated_order');
         $sourceTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->beginTransaction();
 
         try {
@@ -139,7 +139,7 @@ class Refunded extends AbstractReport
         $table = $this->getTable('sales_refunded_aggregated');
         $sourceTable = $this->getTable('sales_creditmemo');
         $orderTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->beginTransaction();
 
         try {

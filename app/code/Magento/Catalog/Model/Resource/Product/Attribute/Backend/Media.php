@@ -38,7 +38,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadGallery($product, $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $positionCheckSql = $adapter->getCheckSql(
             'value.position IS NULL',
@@ -112,7 +112,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function insertGallery($data)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $data = $this->_prepareDataForTable(new \Magento\Framework\Object($data), $this->getMainTable());
         $adapter->insert($this->getMainTable(), $data);
 
@@ -128,14 +128,14 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function deleteGallery($valueId)
     {
         if (is_array($valueId) && count($valueId) > 0) {
-            $condition = $this->_getWriteAdapter()->quoteInto('value_id IN(?) ', $valueId);
+            $condition = $this->getConnection()->quoteInto('value_id IN(?) ', $valueId);
         } elseif (!is_array($valueId)) {
-            $condition = $this->_getWriteAdapter()->quoteInto('value_id = ? ', $valueId);
+            $condition = $this->getConnection()->quoteInto('value_id = ? ', $valueId);
         } else {
             return $this;
         }
 
-        $this->_getWriteAdapter()->delete($this->getMainTable(), $condition);
+        $this->getConnection()->delete($this->getMainTable(), $condition);
         return $this;
     }
 
@@ -148,7 +148,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function insertGalleryValueInStore($data)
     {
         $data = $this->_prepareDataForTable(new \Magento\Framework\Object($data), $this->getTable(self::GALLERY_VALUE_TABLE));
-        $this->_getWriteAdapter()->insert($this->getTable(self::GALLERY_VALUE_TABLE), $data);
+        $this->getConnection()->insert($this->getTable(self::GALLERY_VALUE_TABLE), $data);
 
         return $this;
     }
@@ -162,7 +162,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteGalleryValueInStore($valueId, $storeId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $conditions = implode(
             ' AND ',
@@ -188,7 +188,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function duplicate($object, $newFiles, $originalProductId, $newProductId)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             ['value_id', 'value']
         )->where(
@@ -201,7 +201,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $valueIdMap = [];
         // Duplicate main entries of gallery
-        foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
             $data = [
                 'attribute_id' => $object->getAttribute()->getId(),
                 'entity_id' => $newProductId,
@@ -216,14 +216,14 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         // Duplicate per store gallery values
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable(self::GALLERY_VALUE_TABLE)
         )->where(
             'value_id IN(?)',
             array_keys($valueIdMap)
         );
 
-        foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
             $row['value_id'] = $valueIdMap[$row['value_id']];
             $this->insertGalleryValueInStore($row);
         }

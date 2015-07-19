@@ -35,7 +35,6 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
         $this->resourceMock->expects($this->once())
             ->method('getConnection')
-            ->with('core_write')
             ->willReturn($this->adapterMock);
 
         $this->resourceMock->expects($this->once())

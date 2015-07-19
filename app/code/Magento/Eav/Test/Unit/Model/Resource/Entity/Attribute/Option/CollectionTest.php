@@ -97,7 +97,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['__wakeup', 'getReadConnection', 'getMainTable', 'getTable']
+            ['__wakeup', 'getConnection', 'getMainTable', 'getTable']
         );
         $this->selectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
 
@@ -124,7 +124,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects(
             $this->any()
         )->method(
-            'getReadConnection'
+            'getConnection'
         )->will(
             $this->returnValue($this->connectionMock)
         );

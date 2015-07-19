@@ -175,7 +175,7 @@ class Builder
         \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection,
         Combine $combine
     ) {
-        $this->_connection = $collection->getResource()->getReadConnection();
+        $this->_connection = $collection->getResource()->getConnection();
         $this->_joinTablesToCollection($collection, $combine);
         $whereExpression = (string)$this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {

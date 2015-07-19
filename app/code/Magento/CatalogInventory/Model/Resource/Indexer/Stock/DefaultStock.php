@@ -166,7 +166,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $qtyExpr = $adapter->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
         $select = $adapter->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -221,7 +221,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _prepareIndexTable($entityIds = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds);
         $query = $select->insertFromSelect($this->getIdxTable());
         $adapter->query($query);
@@ -237,7 +237,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _updateIndex($entityIds)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
         $query = $adapter->query($select);
 
@@ -274,7 +274,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             return $this;
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->insertOnDuplicate($this->getMainTable(), $data, ['qty', 'stock_status']);
 
         return $this;

@@ -27,9 +27,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getReadConnection', 'getMainTable', 'getTable', '__wakeup']
+            ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $resource->expects($this->any())->method('getReadConnection')->will($this->returnValue($connection));
+        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
 
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);

@@ -56,15 +56,15 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'store_id = ? OR store_id = 0' => $object->getStoreId()
         ];
 
-        $write = $this->_getWriteAdapter();
-        $write->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
+        $adapter = $this->getConnection();
+        $adapter->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
 
         $data = new \Magento\Framework\Object();
         $data->setOptionId($object->getId())
             ->setStoreId($object->getStoreId())
             ->setTitle($object->getTitle());
 
-        $write->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+        $adapter->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
 
         /**
          * also saving default value if this store view scope
@@ -73,7 +73,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($object->getStoreId()) {
             $data->setStoreId(0);
             $data->setTitle($object->getDefaultTitle());
-            $write->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+            $adapter->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
         }
 
         return $this;
@@ -89,7 +89,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         parent::_afterDelete($object);
 
-        $this->_getWriteAdapter()
+        $this->getConnection()
             ->delete(
                 $this->getTable('catalog_product_bundle_option_value'),
                 ['option_id = ?' => $object->getId()]
@@ -107,7 +107,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSearchableData($productId, $storeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $title = $adapter->getCheckSql(
             'option_title_store.title IS NOT NULL',

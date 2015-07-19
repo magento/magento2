@@ -50,7 +50,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function fetchOne($select)
     {
-        return $this->_getReadAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -62,7 +62,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function isWeeeInLocation($countryId, $regionId, $websiteId)
     {
         // Check if there is a weee_tax for the country and region
-        $attributeSelect = $this->getReadConnection()->select();
+        $attributeSelect = $this->getConnection()->select();
         $attributeSelect->from(
             $this->getTable('weee_tax'),
             'value'
@@ -79,7 +79,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
             1
         );
 
-        $value = $this->getReadConnection()->fetchOne($attributeSelect);
+        $value = $this->getConnection()->fetchOne($attributeSelect);
         if ($value) {
             return true;
         }

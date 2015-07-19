@@ -43,7 +43,7 @@ class Fieldset extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $new = $object->getLabels();
             $old = $this->getLabels($object);
 
-            $adapter = $this->_getWriteAdapter();
+            $adapter = $this->getConnection();
 
             $insert = array_diff(array_keys($new), array_keys($old));
             $delete = array_diff(array_keys($old), array_keys($new));
@@ -104,7 +104,7 @@ class Fieldset extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$objectId) {
             return [];
         }
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = [':fieldset_id' => $objectId];
         $select = $adapter->select()->from(
             $this->getTable('eav_form_fieldset_label'),

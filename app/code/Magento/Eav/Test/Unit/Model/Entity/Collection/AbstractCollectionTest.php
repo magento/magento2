@@ -133,7 +133,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($connectionMock)
         );
         $entityMock = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
-        $entityMock->expects($this->any())->method('getReadConnection')->will($this->returnValue($connectionMock));
+        $entityMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $entityMock->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
 
         $this->validatorFactoryMock->expects(

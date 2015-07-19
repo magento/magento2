@@ -126,10 +126,10 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      */
     protected function _truncateTable($table)
     {
-        if ($this->_getWriteAdapter()->getTransactionLevel() > 0) {
-            $this->_getWriteAdapter()->delete($table);
+        if ($this->getConnection()->getTransactionLevel() > 0) {
+            $this->getConnection()->delete($table);
         } else {
-            $this->_getWriteAdapter()->truncateTable($table);
+            $this->getConnection()->truncateTable($table);
         }
         return $this;
     }
@@ -165,15 +165,15 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         } else {
             $condition = [];
             if ($from !== null) {
-                $condition[] = $this->_getWriteAdapter()->quoteInto('period >= ?', $from);
+                $condition[] = $this->getConnection()->quoteInto('period >= ?', $from);
             }
 
             if ($to !== null) {
-                $condition[] = $this->_getWriteAdapter()->quoteInto('period <= ?', $to);
+                $condition[] = $this->getConnection()->quoteInto('period <= ?', $to);
             }
             $deleteCondition = implode(' AND ', $condition);
         }
-        $this->_getWriteAdapter()->delete($table, $deleteCondition);
+        $this->getConnection()->delete($table, $deleteCondition);
         return $this;
     }
 
@@ -198,7 +198,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         $additionalWhere = [],
         $alias = 'date_range_table'
     ) {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             [$alias => $table],
             $adapter->getDatePartSql(
@@ -243,7 +243,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
     protected function _makeConditionFromDateRangeSelect($select, $periodColumn, $adapter = null)
     {
         if (!$adapter) {
-            $adapter = $this->_getReadAdapter();
+            $adapter = $this->getConnection();
         }
 
         static $selectResultCache = [];
@@ -310,7 +310,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         $alias = 'date_range_table',
         $relatedAlias = 'related_date_range_table'
     ) {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $joinConditionSql = [];
 
         foreach ($joinCondition as $fkField => $pkField) {
@@ -376,7 +376,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         $adapter = null
     ) {
         if (!$adapter) {
-            $adapter = $this->_getWriteAdapter();
+            $adapter = $this->getConnection();
         }
 
         $column = $adapter->quoteIdentifier($column);
@@ -439,7 +439,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
             $to = $to instanceof \DateTime
                 ? $to
                 : new \DateTime($to);
-            $nextPeriod = $this->_getWriteAdapter()->formatDate(
+            $nextPeriod = $this->getConnection()->formatDate(
                 $to->format('Y-m-d H:i:s')
             );
             $to = $to->getTimestamp();
@@ -455,7 +455,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
                     continue;
                 }
 
-                $tr['time'] = $this->_getWriteAdapter()->formatDate(
+                $tr['time'] = $this->getConnection()->formatDate(
                     (new \DateTime($tr['time']))->format('Y-m-d H:i:s')
                 );
                 $tzTransitions[$tr['offset']][] = ['from' => $tr['time'], 'to' => $nextPeriod];

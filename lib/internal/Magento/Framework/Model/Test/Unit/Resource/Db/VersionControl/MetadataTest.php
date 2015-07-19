@@ -52,7 +52,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
             false,
             false,
             true,
-            ['getReadConnection', 'getMainTable']
+            ['getConnection', 'getMainTable']
         );
         $this->connection = $this->getMockForAbstractClass(
             'Magento\Framework\DB\Adapter\AdapterInterface',
@@ -62,7 +62,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->model->expects($this->any())->method('getResource')->willReturn($this->resource);
-        $this->resource->expects($this->any())->method('getReadConnection')->willReturn($this->connection);
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->entityMetadata = $objectManager->getObject(
             'Magento\Framework\Model\Resource\Db\VersionControl\Metadata'
         );

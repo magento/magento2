@@ -176,7 +176,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterSave(AbstractModel $object)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         /**
          * save detail
          */
@@ -232,7 +232,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterLoad(AbstractModel $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->_reviewStoreTable,
             ['store_id']
@@ -291,7 +291,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getTotalReviews($entityPkValue, $approvedOnly = false, $storeId = 0)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->_reviewTable,
             ['review_count' => new \Zend_Db_Expr('COUNT(*)')]
@@ -343,7 +343,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function aggregateReviewSummary($object, $ratingSummaryObject)
     {
-        $readAdapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         if ($ratingSummaryObject->getCount()) {
             $ratingSummary = round($ratingSummaryObject->getSum() / $ratingSummaryObject->getCount());
@@ -356,7 +356,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
             true,
             $ratingSummaryObject->getStoreId()
         );
-        $select = $readAdapter->select()->from($this->_aggregateTable)
+        $select = $adapter->select()->from($this->_aggregateTable)
             ->where('entity_pk_value = :pk_value')
             ->where('entity_type = :entity_type')
             ->where('store_id = :store_id');
@@ -365,7 +365,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ':entity_type' => $object->getEntityId(),
             ':store_id' => $ratingSummaryObject->getStoreId(),
         ];
-        $oldData = $readAdapter->fetchRow($select, $bind);
+        $oldData = $adapter->fetchRow($select, $bind);
         $data = new \Magento\Framework\Object();
 
         $data->setReviewsCount($reviewsCount)
@@ -386,18 +386,18 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function writeReviewSummary($oldData, \Magento\Framework\Object $data)
     {
-        $writeAdapter = $this->_getWriteAdapter();
-        $writeAdapter->beginTransaction();
+        $adapter = $this->getConnection();
+        $adapter->beginTransaction();
         try {
             if (isset($oldData['primary_id']) && $oldData['primary_id'] > 0) {
                 $condition = ["{$this->_aggregateTable}.primary_id = ?" => $oldData['primary_id']];
-                $writeAdapter->update($this->_aggregateTable, $data->getData(), $condition);
+                $adapter->update($this->_aggregateTable, $data->getData(), $condition);
             } else {
-                $writeAdapter->insert($this->_aggregateTable, $data->getData());
+                $adapter->insert($this->_aggregateTable, $data->getData());
             }
-            $writeAdapter->commit();
+            $adapter->commit();
         } catch (\Exception $e) {
-            $writeAdapter->rollBack();
+            $adapter->rollBack();
         }
     }
 
@@ -409,7 +409,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _loadVotedRatingIds($reviewId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         if (empty($reviewId)) {
             return [];
         }
@@ -460,7 +460,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getEntityIdByCode($entityCode)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from($this->_reviewEntityTable, ['entity_id'])
             ->where('entity_code = :entity_code');
         return $adapter->fetchOne($select, [':entity_code' => $entityCode]);
@@ -475,14 +475,14 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteReviewsByProductId($productId)
     {
-        $this->_getWriteAdapter()->delete(
+        $this->getConnection()->delete(
             $this->_reviewTable,
             [
                 'entity_pk_value=?' => $productId,
                 'entity_id=?' => $this->getEntityIdByCode(\Magento\Review\Model\Review::ENTITY_PRODUCT_CODE)
             ]
         );
-        $this->_getWriteAdapter()->delete(
+        $this->getConnection()->delete(
             $this->getTable('review_entity_summary'),
             [
                 'entity_pk_value=?' => $productId,

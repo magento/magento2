@@ -92,7 +92,7 @@ class Session extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteByCustomerId($customerId)
     {
-        $this->_getWriteAdapter()->delete($this->getMainTable(), ['customer_id = ?' => $customerId]);
+        $this->getConnection()->delete($this->getMainTable(), ['customer_id = ?' => $customerId]);
         return $this;
     }
 
@@ -118,7 +118,7 @@ class Session extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteExpired($websiteId, $expiredBefore)
     {
-        $this->_getWriteAdapter()->delete(
+        $this->getConnection()->delete(
             $this->getMainTable(),
             ['website_id = ?' => $websiteId, 'updated_at < ?' => $expiredBefore]
         );

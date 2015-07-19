@@ -53,7 +53,7 @@ class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$exceptToken->getId() || !$exceptToken->getAuthorized()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid token to except'));
         }
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $where = $adapter->quoteInto(
             'authorized = 1 AND consumer_id = ?',
             $exceptToken->getConsumerId(),
@@ -80,7 +80,7 @@ class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function deleteOldEntries($minutes)
     {
         if ($minutes > 0) {
-            $adapter = $this->_getWriteAdapter();
+            $adapter = $this->getConnection();
 
             return $adapter->delete(
                 $this->getMainTable(),
@@ -103,7 +103,7 @@ class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function selectTokenByType($consumerId, $type)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()
             ->from($this->getMainTable())
             ->where('consumer_id = ?', $consumerId)
@@ -120,7 +120,7 @@ class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function selectTokenByConsumerIdAndUserType($consumerId, $userType)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()
             ->from($this->getMainTable())
             ->where('consumer_id = ?', (int)$consumerId)
@@ -136,7 +136,7 @@ class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function selectTokenByAdminId($adminId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()
             ->from($this->getMainTable())
             ->where('admin_id = ?', $adminId)
@@ -152,7 +152,7 @@ class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function selectTokenByCustomerId($customerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()
             ->from($this->getMainTable())
             ->where('customer_id = ?', $customerId)

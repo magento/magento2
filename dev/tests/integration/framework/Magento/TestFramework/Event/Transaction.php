@@ -119,11 +119,11 @@ class Transaction
     /**
      * Retrieve database adapter instance
      *
-     * @param string $connectionName 'read' or 'write'
+     * @param string $connectionName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|\Magento\TestFramework\Db\Adapter\TransactionInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getAdapter($connectionName = 'core_write')
+    protected function _getAdapter($connectionName = 'default')
     {
         /** @var $resource \Magento\Framework\App\Resource */
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');

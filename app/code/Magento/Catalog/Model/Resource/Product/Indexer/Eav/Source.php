@@ -61,7 +61,7 @@ class Source extends AbstractEav
      */
     protected function _getIndexableAttributes($multiSelect)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['ca' => $this->getTable('catalog_eav_attribute')],
             'attribute_id'
         )->join(
@@ -78,7 +78,7 @@ class Source extends AbstractEav
             $select->where('ea.backend_type = ?', 'int')->where('ea.frontend_input = ?', 'select');
         }
 
-        return $this->_getReadAdapter()->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
@@ -105,7 +105,7 @@ class Source extends AbstractEav
      */
     protected function _prepareSelectIndex($entityIds = null, $attributeId = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $idxTable = $this->getIdxTable();
         // prepare select attributes
         if ($attributeId === null) {
@@ -203,7 +203,7 @@ class Source extends AbstractEav
      */
     protected function _prepareMultiselectIndex($entityIds = null, $attributeId = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         // prepare multiselect attributes
         if ($attributeId === null) {
@@ -309,7 +309,7 @@ class Source extends AbstractEav
         if (!$data) {
             return $this;
         }
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->insertArray($this->getIdxTable(), ['entity_id', 'attribute_id', 'store_id', 'value'], $data);
         return $this;
     }

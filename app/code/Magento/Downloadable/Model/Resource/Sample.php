@@ -30,27 +30,27 @@ class Sample extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveItemTitle($sampleObject)
     {
-        $writeAdapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $sampleTitleTable = $this->getTable('downloadable_sample_title');
         $bind = [':sample_id' => $sampleObject->getId(), ':store_id' => (int)$sampleObject->getStoreId()];
-        $select = $writeAdapter->select()->from(
+        $select = $adapter->select()->from(
             $sampleTitleTable
         )->where(
             'sample_id=:sample_id AND store_id=:store_id'
         );
-        if ($writeAdapter->fetchOne($select, $bind)) {
+        if ($adapter->fetchOne($select, $bind)) {
             $where = [
                 'sample_id = ?' => $sampleObject->getId(),
                 'store_id = ?' => (int)$sampleObject->getStoreId(),
             ];
             if ($sampleObject->getUseDefaultTitle()) {
-                $writeAdapter->delete($sampleTitleTable, $where);
+                $adapter->delete($sampleTitleTable, $where);
             } else {
-                $writeAdapter->update($sampleTitleTable, ['title' => $sampleObject->getTitle()], $where);
+                $adapter->update($sampleTitleTable, ['title' => $sampleObject->getTitle()], $where);
             }
         } else {
             if (!$sampleObject->getUseDefaultTitle()) {
-                $writeAdapter->insert(
+                $adapter->insert(
                     $sampleTitleTable,
                     [
                         'sample_id' => $sampleObject->getId(),
@@ -71,7 +71,7 @@ class Sample extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteItems($items)
     {
-        $writeAdapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $where = '';
         if ($items instanceof \Magento\Downloadable\Model\Sample) {
             $where = ['sample_id = ?' => $items->getId()];
@@ -79,8 +79,8 @@ class Sample extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $where = ['sample_id in (?)' => $items];
         }
         if ($where) {
-            $writeAdapter->delete($this->getMainTable(), $where);
-            $writeAdapter->delete($this->getTable('downloadable_sample_title'), $where);
+            $adapter->delete($this->getMainTable(), $where);
+            $adapter->delete($this->getTable('downloadable_sample_title'), $where);
         }
         return $this;
     }
@@ -94,7 +94,7 @@ class Sample extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSearchableData($productId, $storeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $ifNullDefaultTitle = $adapter->getIfNullSql('st.title', 'd.title');
         $select = $adapter->select()->from(
             ['m' => $this->getMainTable()],

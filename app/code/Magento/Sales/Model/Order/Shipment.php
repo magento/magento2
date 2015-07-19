@@ -514,7 +514,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     {
         $label = $this->getData('shipping_label');
         if ($label) {
-            return $this->getResource()->getReadConnection()->decodeVarbinary($label);
+            return $this->getResource()->getConnection()->decodeVarbinary($label);
         }
         return $label;
     }

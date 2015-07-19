@@ -30,7 +30,7 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadLatestNotice(\Magento\AdminNotification\Model\Inbox $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getMainTable()
         )->order(
@@ -62,7 +62,7 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getNoticeStatus(\Magento\AdminNotification\Model\Inbox $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getMainTable(),
             [
@@ -92,7 +92,7 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function parse(\Magento\AdminNotification\Model\Inbox $object, array $data)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         foreach ($data as $item) {
             $select = $adapter->select()->from($this->getMainTable())->where('title = ?', $item['title']);
 

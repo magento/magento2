@@ -20,7 +20,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readConnectionMock;
+    protected $adapterMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -57,18 +57,18 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->willReturnSelf();
 
-        $this->readConnectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $this->adapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->readConnectionMock->expects($this->any())
+        $this->adapterMock->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
         $this->resourceMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock->expects($this->any())
-            ->method('getReadConnection')
-            ->willReturn($this->readConnectionMock);
+            ->method('getConnection')
+            ->willReturn($this->adapterMock);
         $this->resourceMock->expects($this->any())
             ->method('getMainTable')
             ->willReturn('test_table');
@@ -117,7 +117,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $selectMock->expects($this->any())
             ->method('getAdapter')
-            ->willReturn($this->readConnectionMock);
+            ->willReturn($this->adapterMock);
         $selectMock->expects($this->once())
             ->method('from')
             ->with(['customer' => $customerTableName], ['email'])
@@ -131,30 +131,30 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with('customer.entity_id IN (?)')
             ->willReturnSelf();
 
-        $this->readConnectionMock->expects($this->once())
+        $this->adapterMock->expects($this->once())
             ->method('getConcatSql')
             ->with(['firstname', 'lastname'], ' ')
             ->willReturn($customerName);
 
-        $readConnectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $adapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
             ->disableOriginalConstructor()
             ->getMock();
-        $readConnectionMock->expects($this->any())
+        $adapterMock->expects($this->any())
             ->method('select')
             ->willReturn($selectMock);
 
         $this->customerResourceMock->expects($this->once())
-            ->method('getReadConnection')
-            ->willReturn($readConnectionMock);
+            ->method('getConnection')
+            ->willReturn($adapterMock);
         $this->customerResourceMock->expects($this->once())
             ->method('getTable')
             ->with('customer_entity')
             ->willReturn($customerTableName);
 
-        $this->readConnectionMock->expects($this->any())
+        $this->adapterMock->expects($this->any())
             ->method('select')
             ->willReturn($selectMock);
-        $this->readConnectionMock->expects($this->once())
+        $this->adapterMock->expects($this->once())
             ->method('fetchAll')
             ->with($selectMock)
             ->willReturn($customersData);

@@ -29,7 +29,7 @@ class Integration extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function selectActiveIntegrationByConsumerId($consumerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()
             ->from($this->getMainTable())
             ->where('consumer_id = ?', $consumerId)

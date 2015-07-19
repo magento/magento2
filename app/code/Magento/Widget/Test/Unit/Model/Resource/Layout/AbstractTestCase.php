@@ -66,9 +66,9 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getReadConnection', 'getMainTable', 'getTable', '__wakeup']
+            ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $resource->expects($this->any())->method('getReadConnection')->will($this->returnValue($connection));
+        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
 
         return $resource;
@@ -89,7 +89,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         $collection = $this->_getCollection($select);
 
         /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
-        $connection = $collection->getResource()->getReadConnection();
+        $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()
         )->method(
