@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Onepage extends Action
+abstract class Onepage extends Action
 {
     /**
      * @var array
