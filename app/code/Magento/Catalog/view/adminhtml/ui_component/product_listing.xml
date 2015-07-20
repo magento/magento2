@@ -444,6 +444,7 @@
                     <item name="data_type" xsi:type="string">actions</item>
                     <item name="filterable" xsi:type="boolean">false</item>
                     <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="draggable" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
