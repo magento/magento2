@@ -62,6 +62,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $filterFactory;
 
     /**
+     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlModel;
+
+    /**
      * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     private $emailConfig;
@@ -103,6 +108,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->urlModel = $this->getMockBuilder('Magento\Framework\Url')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->filterFactory = $this->getMockBuilder('Magento\Email\Model\Template\FilterFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -131,6 +139,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->scopeConfig,
                     $this->emailConfig,
                     $this->templateFactory,
+                    $this->urlModel,
                     $this->filterFactory
                 ]
             )
@@ -160,7 +169,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetTemplateFilterWithEmptyValue()
     {
         $filterTemplate = $this->getMockBuilder('Magento\Framework\Filter\Template')
-            ->setMethods(['setUseAbsoluteLinks', 'setStoreId'])
+            ->setMethods(['setUseAbsoluteLinks', 'setStoreId', 'setUrlModel'])
             ->disableOriginalConstructor()
             ->getMock();
         $filterTemplate->expects($this->once())
@@ -737,6 +746,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $emailConfig,
                 $this->getMock('Magento\Email\Model\TemplateFactory', [], [], '', false),
+                $this->getMock('Magento\Framework\Url', [], [], '', false),
                 $this->getMock('Magento\Email\Model\Template\FilterFactory', [], [], '', false),
                 ['template_id' => 10],
             ]
