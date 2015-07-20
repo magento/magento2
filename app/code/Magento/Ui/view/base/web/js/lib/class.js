@@ -6,10 +6,22 @@ define([
     'underscore',
     'mageUtils',
     'mage/utils/super'
-], function (_, utils, superWrapper) {
+], function (_, utils, wrapper) {
     'use strict';
 
     var Class;
+
+    /**
+     * Returns property of an object if
+     * it's his own property.
+     *
+     * @param {Object} obj - Object whose property should be retrieved.
+     * @param {String} prop - Name of the property.
+     * @returns {*} Value of the property or false.
+     */
+    function getOwn(obj, prop) {
+        return obj.hasOwnProperty(prop) && obj[prop];
+    }
 
     /**
      * Creates constructor function which allows
@@ -18,56 +30,30 @@ define([
      * @param {Object} protoProps - Prototypal propeties of a new consturctor.
      * @returns {Function} Created consturctor.
      */
-    function createConstructor(protoProps) {
-        /**
-         * Constructor function.
-         */
-        var constr = function () {
-            var obj = this;
+    function createConstructor(protoProps, consturctor) {
+        var constr = consturctor;
 
-            if (!obj || !Object.getPrototypeOf(obj) === constr.prototype) {
-                obj = Object.create(constr.prototype);
-            }
+        if (!constr) {
+            /**
+             * Default constructor function.
+             */
+            constr = function () {
+                var obj = this;
 
-            obj.initialize.apply(obj, arguments);
+                if (!obj || !Object.getPrototypeOf(obj) === constr.prototype) {
+                    obj = Object.create(constr.prototype);
+                }
 
-            return obj;
-        };
+                obj.initialize.apply(obj, arguments);
+
+                return obj;
+            };
+        }
 
         constr.prototype = protoProps;
         constr.prototype.constructor = constr;
 
         return constr;
-    }
-
-    /**
-     * Creates new constructor based on a current prototype properties,
-     * extending them with properties specified in 'exender' object.
-     *
-     * @param {Object} [extender={}]
-     * @returns {Function} New constructor.
-     */
-    function extend(extender) {
-        var parent      = this,
-            parentProto = parent.prototype,
-            childProto  = Object.create(parentProto),
-            child       = createConstructor(childProto),
-            defaults    = extender.defaults || {};
-
-        defaults = defaults || {};
-        extender = extender || {};
-
-        delete extender.defaults;
-
-        _.each(extender, function (method, name) {
-            childProto[name] = superWrapper.create(method, parentProto, name);
-        });
-
-        return _.extend(child, {
-            __super__:  parentProto,
-            extend:     parent.extend,
-            defaults:   utils.extend({}, parent.defaults, defaults)
-        });
     }
 
     Class = createConstructor({
@@ -107,13 +93,44 @@ define([
         }
     });
 
-    Class.defaults = {
-        ignoreTmpls: {
-            templates: true
-        }
-    };
+    _.extend(Class, {
+        defaults: {
+            ignoreTmpls: {
+                templates: true
+            }
+        },
 
-    Class.extend = extend;
+        /**
+         * Creates new constructor based on a current prototype properties,
+         * extending them with properties specified in 'exender' object.
+         *
+         * @param {Object} [extender={}]
+         * @returns {Function} New constructor.
+         */
+        extend: function (extender) {
+            var parent      = this,
+                parentProto = parent.prototype,
+                childProto  = Object.create(parentProto),
+                child       = createConstructor(childProto, getOwn(extender, 'constructor')),
+                defaults    = extender.defaults || {};
+
+            defaults = defaults || {};
+            extender = extender || {};
+
+            delete extender.defaults;
+
+            _.each(extender, function (method, name) {
+                childProto[name] = wrapper.wrapSuper(parentProto[name], method);
+            });
+
+            return _.extend(child, {
+                __super__:  parentProto,
+                extend:     parent.extend,
+                defaults:   utils.extend({}, parent.defaults, defaults)
+            });
+
+        }
+    });
 
     return Class;
 });
