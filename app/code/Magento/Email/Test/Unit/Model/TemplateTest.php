@@ -66,7 +66,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $filterFactory;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager
+     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterManager;
 
