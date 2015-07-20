@@ -5,22 +5,20 @@
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Framework\App\ObjectManagerFactory;
-
-class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
+abstract class AbstractIndexerCommandCommonTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerFactory
      */
     protected $indexerFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CollectionFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerFactory
      */
     protected $collectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManagerFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManagerFactory
      */
     protected $objectManagerFactory;
 
@@ -34,9 +32,11 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
         $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
 
-        //TODO: temporary fix unit
         $stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $stateMock->expects($this->once())->method('setAreaCode')->with('adminmhtml')->willReturnSelf();
+        $stateMock->expects($this->once())
+            ->method('setAreaCode')
+            ->with(\Magento\Framework\App\Area::AREA_ADMIN)
+            ->willReturnSelf();
 
         $this->objectManager->expects($this->once())
             ->method('get')

@@ -9,55 +9,39 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheCleanCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheCleanCommandTest extends \PHPUnit_Framework_TestCase
+class CacheCleanCommandTest extends AbstractCacheManageCommandTest
 {
-    /**
-     * @var \Magento\Framework\App\Cache\Manager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $cacheManager;
-
-    /**
-     * @var CacheCleanCommand
-     */
-    private $command;
-
     public function setUp()
     {
-        $this->cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
+        parent::setUp();
         $this->command = new CacheCleanCommand($this->cacheManager);
     }
 
-    public function testExecute()
+    /**
+     * @param array $param
+     * @param array $types
+     * @param string $output
+     * @dataProvider testExecuteDataProvider
+     */
+    public function testExecute($param, $types, $output)
     {
         $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $this->cacheManager->expects($this->once())->method('clean')->with(['A', 'B']);
-        $param = ['types' => ['A', 'B']];
+        $this->cacheManager->expects($this->once())->method('clean')->with($types);
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
-        $expect = 'Cleaned cache types:' . PHP_EOL . 'A' . PHP_EOL . 'B' . PHP_EOL;
-        $this->assertEquals($expect, $commandTester->getDisplay());
+
+        $this->assertEquals($output, $commandTester->getDisplay());
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The following requested cache types are not supported:
+     * Get expected output based on set of types operated on
+     *
+     * @param array $types
+     * @return string
      */
-    public function testExecuteInvalidCacheType()
+    public function getExpectedExecutionOutput(array $types)
     {
-        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $param = ['types' => ['A', 'D']];
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute($param);
-    }
-
-    public function testExecuteAllCacheType()
-    {
-        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $this->cacheManager->expects($this->once())->method('clean')->with(['A', 'B', 'C']);
-        $param = ['--all' => true];
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute($param);
-        $expect = 'Cleaned cache types:' . PHP_EOL . 'A' . PHP_EOL . 'B' . PHP_EOL . 'C' . PHP_EOL;
-        $this->assertEquals($expect, $commandTester->getDisplay());
+        return 'Cleaned cache types:' . PHP_EOL . implode(PHP_EOL, $types) . PHP_EOL;
     }
 }

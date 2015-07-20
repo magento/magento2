@@ -35,11 +35,7 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption(self::INPUT_KEY_ALL)) {
-            $types = $this->cacheManager->getAvailableTypes();
-        } else {
-            $types = $this->getRequestedTypes($input);
-        }
+        $types = $this->getRequestedTypes($input);
         $this->performAction($types);
         $output->writeln($this->getDisplayMessage());
         $output->writeln(join(PHP_EOL, $types));
