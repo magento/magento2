@@ -2357,4 +2357,5 @@ return [
         'Magento\Sales\Model\Order\Address\Validator',
         'Magento\Sales\Model\Order\Address\Validator::validateForCustomer'
     ],
+    ['mergeBookmarkConfig', 'Magento\Ui\Model\Manager'],
 ];
