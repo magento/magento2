@@ -13,7 +13,7 @@ use Magento\Backend\App\Action;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Order extends \Magento\Backend\App\Action
+abstract class Order extends \Magento\Backend\App\Action
 {
     /**
      * Array of actions which can be processed without secret key validation

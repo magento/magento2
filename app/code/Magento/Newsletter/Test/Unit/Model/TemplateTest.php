@@ -66,6 +66,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $templateFactory;
 
     /**
+     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlModel;
+
+    /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $request;
@@ -122,6 +127,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->urlModel = $this->getMockBuilder('Magento\Framework\Url')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -152,6 +160,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->scopeConfig,
                     $this->emailConfig,
                     $this->templateFactory,
+                    $this->urlModel,
                     $this->request,
                     $this->filterFactory,
                 ]
