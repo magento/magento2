@@ -7,7 +7,9 @@ namespace Magento\Email\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Object;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -52,7 +54,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Configuration of design package for template
      *
-     * @var \Magento\Framework\Object
+     * @var Object
      */
     private $designConfig;
 
@@ -73,7 +75,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Configuration of emulated design package.
      *
-     * @var \Magento\Framework\Object|boolean
+     * @var Object|boolean
      */
     private $emulatedDesignConfig = false;
 
@@ -572,7 +574,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Get design configuration data
      *
-     * @return \Magento\Framework\Object
+     * @return Object
      */
     public function getDesignConfig()
     {
@@ -583,9 +585,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             if ($this->store === null) {
                 $this->store = $this->storeManager->getStore()->getId();
             }
-            $this->designConfig = new \Magento\Framework\Object(
-                ['area' => $this->area, 'store' => $this->store]
-            );
+            $this->designConfig = new Object(['area' => $this->area, 'store' => $this->store]);
         }
         return $this->designConfig;
     }
@@ -595,12 +595,12 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param array $config
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function setDesignConfig(array $config)
     {
         if (!isset($config['area']) || !isset($config['store'])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Design config must have area and store.'));
+            throw new LocalizedException(__('Design config must have area and store.'));
         }
         $this->getDesignConfig()->setData($config);
         return $this;
