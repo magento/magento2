@@ -238,6 +238,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $this->setUpThemeFallback($area);
         }
 
+        $this->model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
         $this->model->setTemplateText($templateText);
 
         // Allows for testing of templates overridden in backend

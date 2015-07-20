@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Object;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Template model class
@@ -184,8 +185,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        Template\Config $emailConfig,
-        TemplateFactory $templateFactory,
+        \Magento\Email\Model\Template\Config $emailConfig,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         array $data = []
@@ -376,7 +377,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Return logo URL for emails. Take logo from theme if custom logo is undefined
      *
-     * @param  \Magento\Store\Model\Store|int|string $store
+     * @param  Store|int|string $store
      * @return string
      */
     protected function getLogoUrl($store)
@@ -402,7 +403,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Return logo alt for emails
      *
-     * @param  \Magento\Store\Model\Store|int|string $store
+     * @param  Store|int|string $store
      * @return string
      */
     protected function getLogoAlt($store)
@@ -423,7 +424,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Add variables that are used by transactional and newsletter emails
      *
      * @param array $variables
-     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
+     * @param null|string|bool|int|Store $storeId
      * @return mixed
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -457,14 +458,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         }
         if (!isset($variables['store_phone'])) {
             $variables['store_phone'] = $this->scopeConfig->getValue(
-                \Magento\Store\Model\Store::XML_PATH_STORE_STORE_PHONE,
+                Store::XML_PATH_STORE_STORE_PHONE,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
         if (!isset($variables['store_hours'])) {
             $variables['store_hours'] = $this->scopeConfig->getValue(
-                \Magento\Store\Model\Store::XML_PATH_STORE_STORE_HOURS,
+                Store::XML_PATH_STORE_STORE_HOURS,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
@@ -722,12 +723,12 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Generate URL for the specified store.
      *
-     * @param \Magento\Store\Model\Store $store
+     * @param Store $store
      * @param string $route
      * @param array $params
      * @return string
      */
-    public function getUrl(\Magento\Store\Model\Store $store, $route = '', $params = [])
+    public function getUrl(Store $store, $route = '', $params = [])
     {
         $url = $this->urlModel->setScope($store);
         if ($this->storeManager->getStore()->getId() != $store->getId()) {
