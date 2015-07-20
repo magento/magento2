@@ -43,7 +43,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getConnection'
         )->with(
-            'catalog_write'
+            'catalog'
         )->will(
             $this->returnValue($connection)
         );

@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Helper\Product\Flat;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Catalog Product Flat Indexer Helper
  *
@@ -323,7 +325,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAttributeCodes()
     {
         if ($this->_attributeCodes === null) {
-            $adapter = $this->_resource->getConnection('read');
+            $adapter = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
             $this->_attributeCodes = [];
 
             foreach ($this->_flatAttributeGroups as $attributeGroupName) {
@@ -492,7 +494,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function deleteAbandonedStoreFlatTables()
     {
-        $connection = $this->_resource->getConnection('write');
+        $connection = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
         $existentTables = $connection->getTables($connection->getTableName('catalog_product_flat_%'));
         $this->_changelog->setViewId('catalog_product_flat');
         foreach ($existentTables as $key => $tableName) {
