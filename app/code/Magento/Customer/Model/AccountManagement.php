@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -779,7 +777,7 @@ class AccountManagement implements AccountManagementInterface
      * @param int $customerId
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isReadonly($customerId)
     {
@@ -796,7 +794,7 @@ class AccountManagement implements AccountManagementInterface
      * @param string $storeId
      * @param string $sendemailStoreId
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function sendNewAccountEmail(
         $customer,
@@ -808,9 +806,7 @@ class AccountManagement implements AccountManagementInterface
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please correct the transactional account email type.')
-            );
+            throw new LocalizedException(__('Please correct the transactional account email type.'));
         }
 
         if (!$storeId) {
