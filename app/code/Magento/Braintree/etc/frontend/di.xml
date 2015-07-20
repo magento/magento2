@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <virtualType name="BraintreeCcConfigProvider" type="Magento\Payment\Model\CcGenericConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="braintree" xsi:type="const">Magento\Braintree\Model\PaymentMethod::METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="braintree_config_provider" xsi:type="object">Magento\Braintree\Model\ConfigProvider</item>
+                <item name="braintree_cc_config_provider" xsi:type="object">BraintreeCcConfigProvider</item>
+                <item name="braintree_paypal_config_provider" xsi:type="object">Magento\Braintree\Model\ConfigProvider\PayPal</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

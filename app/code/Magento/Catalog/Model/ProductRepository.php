@@ -96,11 +96,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $metadataService;
 
     /**
-     * @var \Magento\Eav\Model\Config
-     */
-    protected $eavConfig;
-
-    /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
      */
     protected $extensibleDataObjectConverter;
@@ -141,25 +136,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @var \Magento\Framework\Search\Request\Builder
-     */
-    private $requestBuilder;
-
-    /**
-     * @var \Magento\Framework\Search\SearchEngineInterface
-     */
-    private $searchEngine;
-
-    /**
-     * @var SearchResponseBuilder
-     */
-    private $searchResponseBuilder;
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -181,10 +157,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\Framework\Search\Request\Builder $requestBuilder
-     * @param \Magento\Framework\Search\SearchEngineInterface $searchEngine
-     * @param SearchResponseBuilder $searchResponseBuilder
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -206,13 +178,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ImageContentValidatorInterface $contentValidator,
         ImageContentInterfaceFactory $contentFactory,
         MimeTypeExtensionMap $mimeTypeExtensionMap,
-        \Magento\Eav\Model\Config $eavConfig,
         ImageProcessorInterface $imageProcessor,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Search\Request\Builder $requestBuilder,
-        \Magento\Framework\Search\SearchEngineInterface $searchEngine,
-        SearchResponseBuilder $searchResponseBuilder,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -232,13 +199,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->contentValidator = $contentValidator;
         $this->contentFactory = $contentFactory;
         $this->mimeTypeExtensionMap = $mimeTypeExtensionMap;
-        $this->eavConfig = $eavConfig;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->requestBuilder = $requestBuilder;
-        $this->searchEngine = $searchEngine;
-        $this->searchResponseBuilder = $searchResponseBuilder;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -680,19 +642,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
-        $defaultAttributeSetId = $this->eavConfig
-            ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
-            ->getDefaultAttributeSetId();
-        $extendedSearchCriteria = $this->searchCriteriaBuilder->addFilters(
-            [
-                $this->filterBuilder
-                    ->setField('attribute_set_id')
-                    ->setValue($defaultAttributeSetId)
-                    ->create(),
-            ]
-        );
 
-        foreach ($this->metadataService->getList($extendedSearchCriteria->create())->getItems() as $metadata) {
+        foreach ($this->metadataService->getList($this->searchCriteriaBuilder->create())->getItems() as $metadata) {
             $collection->addAttributeToSelect($metadata->getAttributeCode());
         }
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
@@ -722,45 +673,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * @param \Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\Search\SearchResultInterface
-     */
-    public function search(\Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria)
-    {
-        $this->requestBuilder->setRequestName($searchCriteria->getRequestName());
-
-        $searchTerm = $searchCriteria->getSearchTerm();
-        if (!empty($searchTerm)) {
-            $this->requestBuilder->bind('search_term', $searchTerm);
-        }
-
-        $storeId = $this->storeManager->getStore(true)->getId();
-        $this->requestBuilder->bindDimension('scope', $storeId);
-
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $this->addFieldToFilter($filter->getField(), $filter->getValue());
-            }
-        }
-
-        $priceRangeCalculation = $this->scopeConfig->getValue(
-            \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if ($priceRangeCalculation) {
-            $this->requestBuilder->bind('price_dynamic_algorithm', $priceRangeCalculation);
-        }
-
-        $this->requestBuilder->setFrom($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
-        $this->requestBuilder->setSize($searchCriteria->getPageSize());
-        $request = $this->requestBuilder->create();
-        $searchResponse = $this->searchEngine->search($request);
-
-        return $this->searchResponseBuilder->build($searchResponse)
-            ->setSearchCriteria($searchCriteria);
-    }
-
-    /**
      * Helper function that adds a FilterGroup to the collection.
      *
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
@@ -779,27 +691,5 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }
-    }
-
-    /**
-     * Apply attribute filter to facet collection
-     *
-     * @param string $field
-     * @param null $condition
-     * @return $this
-     */
-    private function addFieldToFilter($field, $condition = null)
-    {
-        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
-            $this->requestBuilder->bind($field, $condition);
-        } else {
-            if (!empty($condition['from'])) {
-                $this->requestBuilder->bind("{$field}.from", $condition['from']);
-            }
-            if (!empty($condition['to'])) {
-                $this->requestBuilder->bind("{$field}.to", $condition['to']);
-            }
-        }
-        return $this;
     }
 }

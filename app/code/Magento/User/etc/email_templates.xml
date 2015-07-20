@@ -6,6 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Email/etc/email_templates.xsd">
-    <template id="admin_emails_forgot_email_template" label="Forgot Admin Password" file="password_reset_confirmation.html" type="html" module="Magento_User"/>
-    <template id="admin_emails_reset_password_template" label="Reset Password" file="password_reset.html" type="html" module="Magento_User"/>
+    <template id="admin_emails_forgot_email_template" label="Forgot Admin Password" file="password_reset_confirmation.html" type="text" module="Magento_User" area="adminhtml"/>
+    <template id="admin_emails_reset_password_template" label="Reset Password" file="password_reset.html" type="text" module="Magento_User" area="adminhtml"/>
 </config>

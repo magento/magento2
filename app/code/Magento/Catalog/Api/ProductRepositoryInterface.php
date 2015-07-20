@@ -29,7 +29,7 @@ interface ProductRepositoryInterface
      *
      * @param string $sku
      * @param bool $editMode
-     * @param null|int $storeId
+     * @param int|null $storeId
      * @param bool $forceReload
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -72,10 +72,4 @@ interface ProductRepositoryInterface
      * @return \Magento\Catalog\Api\Data\ProductSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
-
-    /**
-     * @param \Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\Search\SearchResultInterface
-     */
-    public function search(\Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria);
 }

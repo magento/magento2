@@ -330,6 +330,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $post = [
             'customer' => ['entity_id' => $customerId],
+            'subscription' => 'false'
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
@@ -795,6 +796,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $subscriberFactory->create()->subscribeCustomerById(2);
         $this->getRequest()->setParam('customer', [1, 2]);
 
+        // Ensure secret key is disabled (subscription status notification emails turn it off)
+        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
+
         // Test
         $this->dispatch('backend/customer/index/massUnsubscribe');
 
@@ -855,6 +859,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $subscriberFactory->create()->subscribeCustomerById(1);
         $subscriberFactory->create()->subscribeCustomerById(2);
         $this->getRequest()->setParam('customer', [1, 4200, 2]);
+
+        // Ensure secret key is disabled (subscription status notification emails turn it off)
+        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
 
         // Test
         $this->dispatch('backend/customer/index/massUnsubscribe');

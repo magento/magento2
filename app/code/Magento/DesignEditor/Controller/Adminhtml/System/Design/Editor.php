@@ -14,7 +14,7 @@ use Magento\Store\Model\Store;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Editor extends \Magento\Backend\App\Action
+abstract class Editor extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Theme\Model\Config

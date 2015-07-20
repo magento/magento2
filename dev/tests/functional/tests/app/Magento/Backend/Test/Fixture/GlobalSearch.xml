@@ -6,10 +6,9 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="globalSearch" module="Magento_Backend" class="Magento\Backend\Test\Fixture\GlobalSearch">
-    <dataset name="default">
-        <field name="query" xsi:type="string">catalogProductSimple::default::name</field>
-    </dataset>
-    <field name="query"  source="Magento\Backend\Test\Fixture\GlobalSearch\Query"/>
-  </fixture>
+    <fixture name="globalSearch"
+             module="Magento_Backend"
+             class="Magento\Backend\Test\Fixture\GlobalSearch">
+        <field name="query" source="Magento\Backend\Test\Fixture\GlobalSearch\Query" />
+    </fixture>
 </config>

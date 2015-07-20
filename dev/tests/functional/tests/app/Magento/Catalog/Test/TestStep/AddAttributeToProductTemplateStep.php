@@ -84,7 +84,7 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
         $product = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => 'product_with_category_with_anchor',
+                'dataset' => 'product_with_category_with_anchor',
                 'data' => [
                     'attribute_set_id' => ['attribute_set' => $this->productTemplate],
                 ],
