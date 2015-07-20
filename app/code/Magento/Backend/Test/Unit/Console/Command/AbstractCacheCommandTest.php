@@ -31,6 +31,6 @@ abstract class AbstractCacheCommandTest extends \PHPUnit_Framework_TestCase
      * @param array $types
      * @return string
      */
-    abstract function getExpectedExecutionOutput(array $types);
+    public abstract function getExpectedExecutionOutput(array $types);
 
 }
