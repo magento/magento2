@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action\Rows;
 
+use Magento\Framework\App\Resource;
+
 class TableDataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,7 +25,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
@@ -71,7 +73,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getConnection'
         )->with(
-            'write'
+            Resource::DEFAULT_CONNECTION
         )->will(
             $this->returnValue($this->_connectionMock)
         );
@@ -168,7 +170,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getConnection'
         )->with(
-            'write'
+            Resource::DEFAULT_CONNECTION
         )->will(
             $this->returnValue($this->_connectionMock)
         );

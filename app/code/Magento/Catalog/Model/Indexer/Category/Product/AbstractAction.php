@@ -8,6 +8,8 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
+use Magento\Framework\App\Resource;
+
 abstract class AbstractAction
 {
     /**
@@ -158,7 +160,7 @@ abstract class AbstractAction
      */
     protected function getConnection()
     {
-        return $this->resource->getConnection('write');
+        return $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
     }
 
     /**

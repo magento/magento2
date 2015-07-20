@@ -112,7 +112,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         $this->_storeManager = $storeManager;
         $this->_coreResource = $resource;
         parent::__construct(
-            $resource->getConnection('catalog_write'),
+            $resource->getConnection('catalog'),
             $resource->getTableName('catalog_category_entity'),
             [
                 \Magento\Framework\Data\Tree\Dbp::ID_FIELD => 'entity_id',

@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Framework\App\Resource;
+
 class Observer
 {
     /**
@@ -13,7 +15,7 @@ class Observer
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $_resource;
 
@@ -44,7 +46,7 @@ class Observer
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -52,7 +54,7 @@ class Observer
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,
@@ -74,7 +76,7 @@ class Observer
     protected function _getConnection()
     {
         if (null === $this->_connection) {
-            $this->_connection = $this->_resource->getConnection('write');
+            $this->_connection = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
         }
         return $this->_connection;
     }
