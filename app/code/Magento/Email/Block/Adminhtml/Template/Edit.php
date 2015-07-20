@@ -5,13 +5,17 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template;
 
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\ContainerInterface;
+use Magento\Framework\App\TemplateTypesInterface;
+
 /**
  * Adminhtml system template edit block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @method array getTemplateOptions()
  */
-class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\ContainerInterface
+class Edit extends Widget implements ContainerInterface
 {
     /**
      * @var \Magento\Framework\Registry
@@ -334,6 +338,19 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     public function isTextType()
     {
         return $this->getEmailTemplate()->isPlain();
+    }
+
+    /**
+     * Return template type from template object or TYPE_HTML by default
+     *
+     * @return int
+     */
+    public function getTemplateType()
+    {
+        if ($this->getEmailTemplate()->getTemplateType()) {
+            return $this->getEmailTemplate()->getTemplateType();
+        }
+        return TemplateTypesInterface::TYPE_HTML;
     }
 
     /**
