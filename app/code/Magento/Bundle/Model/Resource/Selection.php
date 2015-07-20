@@ -36,7 +36,7 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $childrenIds = [];
         $notRequired = [];
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             ['tbl_selection' => $this->getMainTable()],
             ['product_id', 'parent_product_id', 'option_id']
@@ -85,7 +85,7 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getParentIdsByChild($childId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->distinct(
             true
         )->from(
@@ -107,9 +107,9 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveSelectionPrice($item)
     {
-        $write = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         if ($item->getDefaultPriceScope()) {
-            $write->delete(
+            $adapter->delete(
                 $this->getTable('catalog_product_bundle_selection_price'),
                 ['selection_id = ?' => $item->getSelectionId(), 'website_id = ?' => $item->getWebsiteId()]
             );
@@ -120,7 +120,7 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'selection_price_type' => $item->getSelectionPriceType(),
                 'selection_price_value' => $item->getSelectionPriceValue(),
             ];
-            $write->insertOnDuplicate(
+            $adapter->insertOnDuplicate(
                 $this->getTable('catalog_product_bundle_selection_price'),
                 $values,
                 ['selection_price_type', 'selection_price_value']

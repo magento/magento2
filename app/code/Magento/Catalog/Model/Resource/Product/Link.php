@@ -67,7 +67,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $attributes = $this->getAttributesByType($typeId);
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $bind = [':product_id' => (int)$product->getId(), ':link_type_id' => (int)$typeId];
         $select = $adapter->select()->from(
@@ -158,7 +158,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getAttributesByType($typeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->_attributesTable,
             ['id' => 'product_link_attribute_id', 'code' => 'product_link_attribute_code', 'type' => 'data_type']
@@ -192,7 +192,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getChildrenIds($parentId, $typeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $childrenIds = [];
         $bind = [':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId];
         $select = $adapter->select()->from(
@@ -223,7 +223,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getParentIdsByChild($childId, $typeId)
     {
         $parentIds = [];
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getMainTable(),
             ['product_id', 'linked_product_id']

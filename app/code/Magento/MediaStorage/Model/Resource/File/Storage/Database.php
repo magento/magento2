@@ -46,7 +46,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function createDatabaseScheme()
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $table = $this->getMainTable();
         if ($adapter->isTableExists($table)) {
             return $this;
@@ -126,7 +126,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     protected function _decodeFileContent($row)
     {
-        $row['content'] = $this->_getReadAdapter()->decodeVarbinary($row['content']);
+        $row['content'] = $this->getConnection()->decodeVarbinary($row['content']);
         return $row;
     }
 
@@ -154,7 +154,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function loadByFilename(\Magento\MediaStorage\Model\File\Storage\Database $object, $filename, $path)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             ['e' => $this->getMainTable()]
@@ -182,7 +182,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function clearFiles()
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->delete($this->getMainTable());
 
         return $this;
@@ -197,7 +197,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function getFiles($offset = 0, $count = 100)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             ['e' => $this->getMainTable()],
@@ -221,7 +221,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function saveFile($file)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $contentParam = new \Magento\Framework\DB\Statement\Parameter($file['content']);
         $contentParam->setIsBlob(true);
@@ -249,7 +249,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function renameFile($oldFilename, $oldPath, $newFilename, $newPath)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $dataUpdate = ['filename' => $newFilename, 'directory' => $newPath];
 
         $dataWhere = ['filename = ?' => $oldFilename];
@@ -271,7 +271,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function copyFile($oldFilename, $oldPath, $newFilename, $newPath)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             ['e' => $this->getMainTable()]
@@ -292,8 +292,8 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             $data['filename'] = $newFilename;
             $data['directory'] = $newPath;
 
-            $writeAdapter = $this->_getWriteAdapter();
-            $writeAdapter->insertOnDuplicate($this->getMainTable(), $data, ['content', 'upload_time']);
+            $adapter = $this->getConnection();
+            $adapter->insertOnDuplicate($this->getMainTable(), $data, ['content', 'upload_time']);
         }
 
         return $this;
@@ -308,7 +308,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function fileExists($filename, $path)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             ['e' => $this->getMainTable()]
@@ -339,7 +339,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
         }
 
         $likeExpression = $this->_resourceHelper->addLikeEscape($folderName . '/', ['position' => 'start']);
-        $this->_getWriteAdapter()->delete(
+        $this->getConnection()->delete(
             $this->getMainTable(),
             new \Zend_Db_Expr('filename LIKE ' . $likeExpression)
         );
@@ -354,7 +354,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function deleteFile($filename, $directory)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $where = ['filename = ?' => $filename];
         $where[] = new \Zend_Db_Expr($adapter->prepareSqlCondition('directory', ['seq' => $directory]));
@@ -371,7 +371,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
     public function getDirectoryFiles($directory)
     {
         $directory = trim($directory, '/');
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             ['e' => $this->getMainTable()],

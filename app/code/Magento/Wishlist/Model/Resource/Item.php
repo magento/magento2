@@ -34,7 +34,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByProductWishlist($object, $wishlistId, $productId, $sharedStores)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $storeWhere = $adapter->quoteInto('store_id IN (?)', $sharedStores);
         $select = $adapter->select()->from(
             $this->getMainTable()

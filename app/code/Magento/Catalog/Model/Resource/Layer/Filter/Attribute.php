@@ -34,7 +34,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $collection = $filter->getLayer()->getProductCollection();
         $attribute = $filter->getAttributeModel();
-        $connection = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $tableAlias = $attribute->getAttributeCode() . '_idx';
         $conditions = [
             "{$tableAlias}.entity_id = e.entity_id",
@@ -69,7 +69,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select->reset(\Zend_Db_Select::LIMIT_COUNT);
         $select->reset(\Zend_Db_Select::LIMIT_OFFSET);
 
-        $connection = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $attribute = $filter->getAttributeModel();
         $tableAlias = sprintf('%s_idx', $attribute->getAttributeCode());
         $conditions = [

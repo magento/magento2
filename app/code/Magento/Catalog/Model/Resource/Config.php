@@ -114,7 +114,7 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getAttributesUsedInListing()
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $storeLabelExpr = $adapter->getCheckSql('al.value IS NOT NULL', 'al.value', 'main_table.frontend_label');
 
         $select = $adapter->select()->from(
@@ -143,7 +143,7 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getAttributesUsedForSortBy()
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $storeLabelExpr = $adapter->getCheckSql('al.value IS NULL', 'main_table.frontend_label', 'al.value');
         $select = $adapter->select()->from(
             ['main_table' => $this->getTable('eav_attribute')]

@@ -113,7 +113,7 @@ class IndexBuilder implements IndexBuilderInterface
             $select->joinLeft(
                 ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
                 'search_index.entity_id = stock_index.product_id'
-                . $this->getReadConnection()->quoteInto(
+                . $this->getConnection()->quoteInto(
                     ' AND stock_index.website_id = ?',
                     $this->storeManager->getWebsite()->getId()
                 ),
@@ -170,7 +170,7 @@ class IndexBuilder implements IndexBuilderInterface
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    private function getReadConnection()
+    private function getConnection()
     {
         return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
     }
@@ -182,7 +182,7 @@ class IndexBuilder implements IndexBuilderInterface
      */
     private function getSelect()
     {
-        return $this->getReadConnection()->select();
+        return $this->getConnection()->select();
     }
 
     /**

@@ -84,13 +84,13 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _cleanVisitors($time)
     {
-        $readAdapter = $this->_getReadAdapter();
-        $writeAdapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
+        $adapter = $this->getConnection();
 
         $timeLimit = $this->dateTime->formatDate($this->_date->gmtTimestamp() - $time);
 
         while (true) {
-            $select = $readAdapter->select()->from(
+            $select = $adapter->select()->from(
                 ['visitor_table' => $this->getTable('log_visitor')],
                 ['visitor_id' => 'visitor_table.visitor_id']
             )->joinLeft(
@@ -104,7 +104,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 100
             );
 
-            $visitorIds = $readAdapter->fetchCol($select);
+            $visitorIds = $adapter->fetchCol($select);
 
             if (!$visitorIds) {
                 break;
@@ -113,16 +113,16 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $condition = ['visitor_id IN (?)' => $visitorIds];
 
             // remove visitors from log/quote
-            $writeAdapter->delete($this->getTable('log_quote'), $condition);
+            $adapter->delete($this->getTable('log_quote'), $condition);
 
             // remove visitors from log/url
-            $writeAdapter->delete($this->getTable('log_url'), $condition);
+            $adapter->delete($this->getTable('log_url'), $condition);
 
             // remove visitors from log/visitor_info
-            $writeAdapter->delete($this->getTable('log_visitor_info'), $condition);
+            $adapter->delete($this->getTable('log_visitor_info'), $condition);
 
             // remove visitors from log/visitor
-            $writeAdapter->delete($this->getTable('log_visitor'), $condition);
+            $adapter->delete($this->getTable('log_visitor'), $condition);
         }
 
         return $this;
@@ -137,14 +137,14 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _cleanCustomers($time)
     {
-        $readAdapter = $this->_getReadAdapter();
-        $writeAdapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
+        $adapter = $this->getConnection();
 
         $timeLimit = $this->dateTime->formatDate($this->_date->gmtTimestamp() - $time);
 
         // retrieve last active customer log id
-        $lastLogId = $readAdapter->fetchOne(
-            $readAdapter->select()->from(
+        $lastLogId = $adapter->fetchOne(
+            $adapter->select()->from(
                 $this->getTable('log_customer'),
                 'log_id'
             )->where(
@@ -162,7 +162,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         // Order by desc log_id before grouping (within-group aggregates query pattern)
-        $select = $readAdapter->select()->from(
+        $select = $adapter->select()->from(
             ['log_customer_main' => $this->getTable('log_customer')],
             ['log_id']
         )->joinLeft(
@@ -178,7 +178,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         $needLogIds = [];
-        $query = $readAdapter->query($select);
+        $query = $adapter->query($select);
         while ($row = $query->fetch()) {
             $needLogIds[$row['log_id']] = 1;
         }
@@ -186,7 +186,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $customerLogId = 0;
         while (true) {
             $visitorIds = [];
-            $select = $readAdapter->select()->from(
+            $select = $adapter->select()->from(
                 $this->getTable('log_customer'),
                 ['log_id', 'visitor_id']
             )->where(
@@ -201,7 +201,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 100
             );
 
-            $query = $readAdapter->query($select);
+            $query = $adapter->query($select);
             $count = 0;
             while ($row = $query->fetch()) {
                 $count++;
@@ -219,19 +219,19 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $condition = ['visitor_id IN (?)' => $visitorIds];
 
                 // remove visitors from log/quote
-                $writeAdapter->delete($this->getTable('log_quote'), $condition);
+                $adapter->delete($this->getTable('log_quote'), $condition);
 
                 // remove visitors from log/url
-                $writeAdapter->delete($this->getTable('log_url'), $condition);
+                $adapter->delete($this->getTable('log_url'), $condition);
 
                 // remove visitors from log/visitor_info
-                $writeAdapter->delete($this->getTable('log_visitor_info'), $condition);
+                $adapter->delete($this->getTable('log_visitor_info'), $condition);
 
                 // remove visitors from log/visitor
-                $writeAdapter->delete($this->getTable('log_visitor'), $condition);
+                $adapter->delete($this->getTable('log_visitor'), $condition);
 
                 // remove customers from log/customer
-                $writeAdapter->delete($this->getTable('log_customer'), $condition);
+                $adapter->delete($this->getTable('log_customer'), $condition);
             }
 
             if ($customerLogId == $lastLogId) {
@@ -249,11 +249,11 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _cleanUrls()
     {
-        $readAdapter = $this->_getReadAdapter();
-        $writeAdapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
+        $adapter = $this->getConnection();
 
         while (true) {
-            $select = $readAdapter->select()->from(
+            $select = $adapter->select()->from(
                 ['url_info_table' => $this->getTable('log_url_info')],
                 ['url_id']
             )->joinLeft(
@@ -266,13 +266,13 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 100
             );
 
-            $urlIds = $readAdapter->fetchCol($select);
+            $urlIds = $adapter->fetchCol($select);
 
             if (!$urlIds) {
                 break;
             }
 
-            $writeAdapter->delete($this->getTable('log_url_info'), ['url_id IN (?)' => $urlIds]);
+            $adapter->delete($this->getTable('log_url_info'), ['url_id IN (?)' => $urlIds]);
         }
 
         return $this;

@@ -30,7 +30,7 @@ class Entity extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getIdByCode($entityCode)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             $this->getTable('rating_entity'),

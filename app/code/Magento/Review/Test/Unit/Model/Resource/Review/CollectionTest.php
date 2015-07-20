@@ -46,7 +46,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this));
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
             ->disableOriginalConstructor()
-            ->setMethods(['getReadConnection', 'getMainTable', 'getTable'])
+            ->setMethods(['getConnection', 'getMainTable', 'getTable'])
             ->getMockForAbstractClass();
         $this->readerAdapterMock = $this->getMockBuilder('\Zend_Db_Adapter_Abstract')
             ->disableOriginalConstructor()
@@ -59,7 +59,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($this->selectMock);
         $this->resourceMock->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->willReturn($this->readerAdapterMock);
         $this->resourceMock->expects($this->any())
             ->method('getMainTable')

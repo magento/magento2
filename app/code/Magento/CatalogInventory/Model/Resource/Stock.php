@@ -125,12 +125,12 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $itemTable = $this->getTable('cataloginventory_stock_item');
         $productTable = $this->getTable('catalog_product_entity');
-        $select = $this->_getWriteAdapter()->select()->from(['si' => $itemTable])
+        $select = $this->getConnection()->select()->from(['si' => $itemTable])
             ->join(['p' => $productTable], 'p.entity_id=si.product_id', ['type_id'])
             ->where('website_id=?', $websiteId)
             ->where('product_id IN(?)', $productIds)
             ->forUpdate(true);
-        return $this->_getWriteAdapter()->fetchAll($select);
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**
@@ -147,7 +147,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $conditions = [];
         foreach ($items as $productId => $qty) {
             $case = $adapter->quoteInto('?', $productId);
@@ -202,7 +202,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $values = ['is_in_stock' => 0, 'stock_status_changed_auto' => 1];
 
         $select = $adapter->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
@@ -236,7 +236,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $values = ['is_in_stock' => 1];
 
         $select = $adapter->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
@@ -269,7 +269,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $condition = $adapter->quoteInto(
             '(use_config_notify_stock_qty = 1 AND qty < ?)',
             $this->_configNotifyStockQty

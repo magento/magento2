@@ -46,7 +46,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
     {
         $this->_cleanBundleOptionStockData();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             ['bo' => $this->getTable('catalog_product_bundle_option')],
             ['parent_id']
@@ -111,7 +111,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
     {
         $this->_prepareBundleOptionStockData($entityIds, $usePrimaryTable);
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
@@ -216,7 +216,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
      */
     protected function _cleanBundleOptionStockData()
     {
-        $this->_getWriteAdapter()->delete($this->_getBundleOptionTable());
+        $this->getConnection()->delete($this->_getBundleOptionTable());
         return $this;
     }
 }

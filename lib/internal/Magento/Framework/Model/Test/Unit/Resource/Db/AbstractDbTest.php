@@ -255,25 +255,6 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->_model->getValidationRulesBeforeSave());
     }
 
-    public function testGetReadConnection()
-    {
-        $adapterInterfaceMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $this->_resourcesMock->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($adapterInterfaceMock)
-        );
-        $this->assertInstanceOf('\Magento\Framework\DB\Adapter\AdapterInterface', $this->_model->getReadConnection());
-    }
-
-    public function testGetReadAdapter()
-    {
-        $adapterInterfaceMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $adapterInterfaceMock->expects($this->once())->method('getTransactionLevel')->will($this->returnValue(1));
-        $this->_resourcesMock->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($adapterInterfaceMock)
-        );
-        $this->assertInstanceOf('\Magento\Framework\DB\Adapter\AdapterInterface', $this->_model->getReadConnection());
-    }
-
     public function testLoad()
     {
         $contextMock = $this->getMock('\Magento\Framework\Model\Context', [], [], '', false);
@@ -439,8 +420,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Model\Resource\Db\AbstractDb',
             [
                 '_construct',
-                '_getReadAdapter',
-                '_getWriteAdapter',
+                'getConnection',
                 '__wakeup',
                 'getIdFieldName'
             ],
@@ -450,7 +430,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         );
         $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
         $resourceMock->expects($this->any())
-            ->method('_getWriteAdapter')
+            ->method('getConnection')
             ->will($this->returnValue($adapterMock));
         $resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->disableOriginalConstructor()
@@ -467,9 +447,6 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $this->_resourcesMock->expects($this->any())->method('getTableName')->with($data)->will(
             $this->returnValue('tableName')
         );
-        $this->_resourcesMock->expects($this->any())
-            ->method('_getWriteAdapter')
-            ->will($this->returnValue($adapterInterfaceMock));
         $mainTableReflection = new \ReflectionProperty(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
             '_mainTable'

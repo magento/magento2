@@ -315,45 +315,10 @@ abstract class AbstractDb extends AbstractResource
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
      */
-    protected function getConnection()
+    public function getConnection()
     {
-        $fullResourceName = ($this->_resourcePrefix ? $this->_resourcePrefix . '_' : '') . 'write';
+        $fullResourceName = ($this->_resourcePrefix ? $this->_resourcePrefix . '_write' : 'default');
         return $this->_resources->getConnection($fullResourceName);
-    }
-
-    /**
-     * Retrieve connection for read data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
-     */
-    protected function _getReadAdapter()
-    {
-        $writeAdapter = $this->_getWriteAdapter();
-        if ($writeAdapter && $writeAdapter->getTransactionLevel() > 0) {
-            // if transaction is started we should use write connection for reading
-            return $writeAdapter;
-        }
-        return $this->_getConnection('read');
-    }
-
-    /**
-     * Retrieve connection for write data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
-     */
-    protected function _getWriteAdapter()
-    {
-        return $this->_getConnection('write');
-    }
-
-    /**
-     * Temporary resolving collection compatibility
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
-     */
-    public function getReadConnection()
-    {
-        return $this->_getReadAdapter();
     }
 
     /**
@@ -370,10 +335,10 @@ abstract class AbstractDb extends AbstractResource
             $field = $this->getIdFieldName();
         }
 
-        $read = $this->_getReadAdapter();
-        if ($read && $value !== null) {
+        $adapter = $this->getConnection();
+        if ($adapter && $value !== null) {
             $select = $this->_getLoadSelect($field, $value, $object);
-            $data = $read->fetchRow($select);
+            $data = $adapter->fetchRow($select);
 
             if ($data) {
                 $object->setData($data);
@@ -397,8 +362,8 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function _getLoadSelect($field, $value, $object)
     {
-        $field = $this->_getReadAdapter()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), $field));
-        $select = $this->_getReadAdapter()->select()->from($this->getMainTable())->where($field . '=?', $value);
+        $field = $this->getConnection()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), $field));
+        $select = $this->getConnection()->select()->from($this->getMainTable())->where($field . '=?', $value);
         return $select;
     }
 
@@ -460,7 +425,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function delete(\Magento\Framework\Model\AbstractModel $object)
     {
-        $connection = $this->transactionManager->start($this->_getWriteAdapter());
+        $connection = $this->transactionManager->start($this->getConnection());
         try {
             $object->beforeDelete();
             $this->_beforeDelete($object);
@@ -468,7 +433,7 @@ abstract class AbstractDb extends AbstractResource
                 $this->transactionManager,
                 $connection,
                 $this->getMainTable(),
-                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId()),
+                $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId()),
                 $object->getData()
             );
             $this->_afterDelete($object);
@@ -574,7 +539,7 @@ abstract class AbstractDb extends AbstractResource
             return true;
         }
 
-        $fields = $this->_getWriteAdapter()->describeTable($this->getMainTable());
+        $fields = $this->getConnection()->describeTable($this->getMainTable());
         foreach (array_keys($fields) as $field) {
             if ($object->getOrigData($field) != $object->getData($field)) {
                 return true;
@@ -615,7 +580,7 @@ abstract class AbstractDb extends AbstractResource
             }
 
             $data = new \Magento\Framework\Object($this->_prepareDataForSave($object));
-            $select = $this->_getWriteAdapter()->select()->from($this->getMainTable());
+            $select = $this->getConnection()->select()->from($this->getMainTable());
 
             foreach ($fields as $unique) {
                 $select->reset(\Zend_Db_Select::WHERE);
@@ -632,7 +597,7 @@ abstract class AbstractDb extends AbstractResource
                     $select->where($this->getIdFieldName() . '!=?', $object->getId());
                 }
 
-                $test = $this->_getWriteAdapter()->fetchRow($select);
+                $test = $this->getConnection()->fetchRow($select);
                 if ($test) {
                     $existent[] = $unique['title'];
                 }
@@ -744,10 +709,10 @@ abstract class AbstractDb extends AbstractResource
      */
     public function getChecksum($table)
     {
-        if (!$this->_getReadAdapter()) {
+        if (!$this->getConnection()) {
             return false;
         }
-        $checksum = $this->_getReadAdapter()->getTablesChecksum($table);
+        $checksum = $this->getConnection()->getTablesChecksum($table);
         if (count($checksum) == 1) {
             return $checksum[$table];
         }
@@ -801,9 +766,9 @@ abstract class AbstractDb extends AbstractResource
         if ($this->_isPkAutoIncrement) {
             unset($bind[$this->getIdFieldName()]);
         }
-        $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
+        $this->getConnection()->insert($this->getMainTable(), $bind);
 
-        $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
+        $object->setId($this->getConnection()->lastInsertId($this->getMainTable()));
 
         if ($this->_useIsObjectNew) {
             $object->isObjectNew(false);
@@ -819,29 +784,29 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
         /**
          * Not auto increment primary key support
          */
         if ($this->_isPkAutoIncrement) {
             $data = $this->prepareDataForUpdate($object);
             if (!empty($data)) {
-                $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                $this->getConnection()->update($this->getMainTable(), $data, $condition);
             }
         } else {
-            $select = $this->_getWriteAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $this->getMainTable(),
                 [$this->getIdFieldName()]
             )->where(
                 $condition
             );
-            if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
+            if ($this->getConnection()->fetchOne($select) !== false) {
                 $data = $this->prepareDataForUpdate($object);
                 if (!empty($data)) {
-                    $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                    $this->getConnection()->update($this->getMainTable(), $data, $condition);
                 }
             } else {
-                $this->_getWriteAdapter()->insert(
+                $this->getConnection()->insert(
                     $this->getMainTable(),
                     $this->_prepareDataForSave($object)
                 );

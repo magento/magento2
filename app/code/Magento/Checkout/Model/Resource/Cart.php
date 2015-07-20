@@ -30,15 +30,15 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function fetchItemsSummary($quoteId)
     {
-        $read = $this->_getReadAdapter();
-        $select = $read->select()->from(
+        $adapter = $this->getConnection();
+        $select = $adapter->select()->from(
             ['q' => $this->getTable('quote')],
             ['items_qty', 'items_count']
         )->where(
             'q.entity_id = :quote_id'
         );
 
-        $result = $read->fetchRow($select, [':quote_id' => $quoteId]);
+        $result = $adapter->fetchRow($select, [':quote_id' => $quoteId]);
         return $result ? $result : ['items_qty' => 0, 'items_count' => 0];
     }
 
@@ -50,15 +50,15 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function fetchItems($quoteId)
     {
-        $read = $this->_getReadAdapter();
-        $select = $read->select()->from(
+        $adapter = $this->getConnection();
+        $select = $adapter->select()->from(
             ['qi' => $this->getTable('quote_item')],
             ['id' => 'item_id', 'product_id', 'super_product_id', 'qty', 'created_at']
         )->where(
             'qi.quote_id = :quote_id'
         );
 
-        return $read->fetchAll($select, [':quote_id' => $quoteId]);
+        return $adapter->fetchAll($select, [':quote_id' => $quoteId]);
     }
 
     /**
@@ -70,7 +70,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function addExcludeProductFilter($collection, $quoteId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $exclusionSelect = $adapter->select()->from(
             $this->getTable('quote_item'),
             ['product_id']

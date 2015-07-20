@@ -171,7 +171,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getRate(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = [
             ':website_id' => (int)$request->getWebsiteId(),
             ':country_id' => $request->getDestCountryId(),
@@ -282,7 +282,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $this->_importConditionName = $conditionName;
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->beginTransaction();
 
         try {
@@ -521,7 +521,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'condition_value',
                 'price',
             ];
-            $this->_getWriteAdapter()->insertArray($this->getMainTable(), $columns, $data);
+            $this->getConnection()->insertArray($this->getMainTable(), $columns, $data);
             $this->_importedRows += count($data);
         }
 

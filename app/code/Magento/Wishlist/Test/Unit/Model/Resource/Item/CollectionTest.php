@@ -54,7 +54,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $resource = $this->getMock(
             'Magento\Wishlist\Model\Resource\Item',
-            ['getReadConnection', 'getMainTable', 'getTableName', 'getTable'],
+            ['getConnection', 'getMainTable', 'getTableName', 'getTable'],
             [],
             '',
             false
@@ -62,7 +62,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $resource
             ->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($connection));
         $resource
             ->expects($this->any())

@@ -104,7 +104,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             throw new ValidatorException(__('Please enter a customer email.'));
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $bind = ['email' => $customer->getEmail()];
 
         $select = $adapter->select()->from(
@@ -203,7 +203,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     public function loadByEmail(\Magento\Customer\Model\Customer $customer, $email)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = ['customer_email' => $email];
         $select = $adapter->select()->from(
             $this->getEntityTable(),
@@ -252,7 +252,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     public function findEmailDuplicates()
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getTable('customer_entity'),
             ['email', 'cnt' => 'COUNT(*)']
@@ -278,7 +278,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     public function checkCustomerId($customerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = ['entity_id' => (int)$customerId];
         $select = $adapter->select()->from(
             $this->getTable('customer_entity'),
@@ -304,7 +304,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     public function getWebsiteId($customerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = ['entity_id' => (int)$customerId];
         $select = $adapter->select()->from(
             $this->getTable('customer_entity'),

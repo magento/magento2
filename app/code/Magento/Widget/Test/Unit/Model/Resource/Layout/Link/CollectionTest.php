@@ -50,7 +50,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
         $collection = $this->_getCollection($select);
 
         /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
-        $connection = $collection->getResource()->getReadConnection();
+        $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()
         )->method(

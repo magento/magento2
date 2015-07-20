@@ -66,7 +66,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
         $attribute = $this->_getAttribute($attrCode);
         $attributeId = $attribute->getAttributeId();
         $attributeTable = $attribute->getBackend()->getTable();
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $joinType = $condition !== null || $required ? 'join' : 'joinLeft';
 
         if ($attribute->isScopeGlobal()) {
@@ -172,8 +172,8 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
      */
     public function getRelationsByChild($childIds)
     {
-        $write = $this->_getWriteAdapter();
-        $select = $write->select()->from(
+        $adapter = $this->getConnection();
+        $select = $adapter->select()->from(
             $this->getTable('catalog_product_relation'),
             'parent_id'
         )->where(
@@ -181,7 +181,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
             $childIds
         );
 
-        return $write->fetchCol($select);
+        return $adapter->fetchCol($select);
     }
 
     /**
@@ -198,15 +198,15 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
 
         $result = [];
         if (!empty($parentIds)) {
-            $write = $this->_getWriteAdapter();
-            $select = $write->select()->from(
+            $adapter = $this->getConnection();
+            $select = $adapter->select()->from(
                 $this->getTable('catalog_product_relation'),
                 'child_id'
             )->where(
                 'parent_id IN(?)',
                 $parentIds
             );
-            $result = $write->fetchCol($select);
+            $result = $adapter->fetchCol($select);
         }
 
         return $result;

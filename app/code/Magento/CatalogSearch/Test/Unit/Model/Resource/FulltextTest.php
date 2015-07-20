@@ -48,7 +48,6 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->with('core_write')
             ->willReturn($this->adapter);
 
         $objectManager = new ObjectManager($this);

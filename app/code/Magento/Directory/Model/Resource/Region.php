@@ -61,7 +61,7 @@ class Region extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $locale = $this->_localeResolver->getLocale();
         $systemLocale = \Magento\Framework\AppInterface::DISTRO_LOCALE_CODE;
@@ -101,7 +101,7 @@ class Region extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _loadByCountry($object, $countryId, $value, $field)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $locale = $this->_localeResolver->getLocale();
         $joinCondition = $adapter->quoteInto('rname.region_id = region.region_id AND rname.locale = ?', $locale);
         $select = $adapter->select()->from(

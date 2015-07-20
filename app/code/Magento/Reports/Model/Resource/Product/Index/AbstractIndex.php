@@ -58,7 +58,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
         if (!$object->getCustomerId() || !$object->getVisitorId()) {
             return $this;
         }
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()
             ->from($this->getMainTable())
             ->where('visitor_id = ?', $object->getVisitorId());
@@ -123,7 +123,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
 
         $bind = ['visitor_id' => null];
         $where = ['customer_id = ?' => (int)$object->getCustomerId()];
-        $this->_getWriteAdapter()->update($this->getMainTable(), $bind, $where);
+        $this->getConnection()->update($this->getMainTable(), $bind, $where);
 
         return $this;
     }
@@ -165,7 +165,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
     public function clean()
     {
         while (true) {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 ['main_table' => $this->getMainTable()],
                 [$this->getIdFieldName()]
             )->joinLeft(
@@ -180,15 +180,15 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
             )->limit(
                 100
             );
-            $indexIds = $this->_getReadAdapter()->fetchCol($select);
+            $indexIds = $this->getConnection()->fetchCol($select);
 
             if (!$indexIds) {
                 break;
             }
 
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->getMainTable(),
-                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . ' IN(?)', $indexIds)
+                $this->getConnection()->quoteInto($this->getIdFieldName() . ' IN(?)', $indexIds)
             );
         }
         return $this;

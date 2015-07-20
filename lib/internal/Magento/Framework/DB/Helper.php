@@ -28,11 +28,11 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
         foreach ($selectOrders as $term) {
             if (is_array($term)) {
                 if (!is_numeric($term[0])) {
-                    $orders[] = sprintf('%s %s', $this->_getReadAdapter()->quoteIdentifier($term[0], true), $term[1]);
+                    $orders[] = sprintf('%s %s', $this->getConnection()->quoteIdentifier($term[0], true), $term[1]);
                 }
             } else {
                 if (!is_numeric($term)) {
-                    $orders[] = $this->_getReadAdapter()->quoteIdentifier($term, true);
+                    $orders[] = $this->getConnection()->quoteIdentifier($term, true);
                 }
             }
         }
@@ -86,7 +86,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
 
         $groups = [];
         foreach ($selectGroups as $term) {
-            $groups[] = $this->_getReadAdapter()->quoteIdentifier($term, true);
+            $groups[] = $this->getConnection()->quoteIdentifier($term, true);
         }
 
         if ($autoReset) {
@@ -213,7 +213,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
                             "Can't prepare expression when tableName is instance of \Zend_Db_Expr"
                         );
                     }
-                    $tableColumns = $this->_getReadAdapter()->describeTable($tables[$correlationName]['tableName']);
+                    $tableColumns = $this->getConnection()->describeTable($tables[$correlationName]['tableName']);
                     foreach (array_keys($tableColumns) as $col) {
                         $preparedColumns[strtoupper($col)] = [$correlationName, $col, null];
                     }
@@ -247,12 +247,12 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
         $additionalWhere = ''
     ) {
         if (is_array($fields)) {
-            $fieldExpr = $this->_getReadAdapter()->getConcatSql($fields, $fieldsDelimiter);
+            $fieldExpr = $this->getConnection()->getConcatSql($fields, $fieldsDelimiter);
         } else {
             $fieldExpr = $fields;
         }
         if ($additionalWhere) {
-            $fieldExpr = $this->_getReadAdapter()->getCheckSql($additionalWhere, $fieldExpr, "''");
+            $fieldExpr = $this->getConnection()->getCheckSql($additionalWhere, $fieldExpr, "''");
         }
         $separator = '';
         if ($groupConcatDelimiter) {
@@ -289,6 +289,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     public function addLikeEscape($value, $options = [])
     {
         $value = $this->escapeLikeValue($value, $options);
-        return new \Zend_Db_Expr($this->_getReadAdapter()->quote($value));
+        return new \Zend_Db_Expr($this->getConnection()->quote($value));
     }
 }

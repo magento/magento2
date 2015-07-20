@@ -106,7 +106,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     protected function _getLastSimilarAttributeValueIncrement($attribute, $object)
     {
-        $adapter = $this->getAttribute()->getEntity()->getReadConnection();
+        $adapter = $this->getAttribute()->getEntity()->getConnection();
         $select = $adapter->select();
         $value = $object->getData($attribute->getAttributeCode());
         $bind = ['attribute_code' => trim($value) . '-%'];

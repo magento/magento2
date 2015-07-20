@@ -63,7 +63,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
         $select = parent::_getLoadSelect($field, $value, $object);
         $websiteId = (int)$object->getWebsite()->getId();
         if ($websiteId) {
-            $adapter = $this->_getReadAdapter();
+            $adapter = $this->getConnection();
             $columns = [];
             $scopeTable = $this->_getEavWebsiteTable();
             $describe = $adapter->describeTable($scopeTable);
@@ -91,7 +91,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     protected function _afterSave(AbstractModel $object)
     {
         $forms = $object->getData('used_in_forms');
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         if (is_array($forms)) {
             $where = ['attribute_id=?' => $object->getId()];
             $adapter->delete($this->_getFormAttributeTable(), $where);
@@ -117,7 +117,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
         $websiteId = (int)$object->getWebsite()->getId();
         if ($websiteId) {
             $table = $this->_getEavWebsiteTable();
-            $describe = $this->_getReadAdapter()->describeTable($table);
+            $describe = $this->getConnection()->describeTable($table);
             $data = [];
             if (!$object->getScopeWebsiteId() || $object->getScopeWebsiteId() != $websiteId) {
                 $data = $this->getScopeValues($object);
@@ -148,7 +148,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      */
     public function getScopeValues(\Magento\Eav\Model\Attribute $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = ['attribute_id' => (int)$object->getId(), 'website_id' => (int)$object->getWebsite()->getId()];
         $select = $adapter->select()->from(
             $this->_getEavWebsiteTable()
@@ -176,7 +176,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      */
     public function getUsedInForms(AbstractModel $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = ['attribute_id' => (int)$object->getId()];
         $select = $adapter->select()->from(
             $this->_getFormAttributeTable(),

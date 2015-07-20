@@ -71,7 +71,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->selectMock));
 
         $this->resourceMock = $this->getMock('Magento\Framework\Model\Resource\Db\AbstractDb', [], [], '', false);
-        $this->resourceMock->expects($this->any())->method('getReadConnection')->will(
+        $this->resourceMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($this->connectionMock)
         );
 

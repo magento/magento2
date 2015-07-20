@@ -57,7 +57,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function getIterator()
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from($this->getMainTable(), ['data'])->order('id ASC');
         $stmt = $adapter->query($select);
 
@@ -80,7 +80,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function cleanBunches()
     {
-        return $this->_getWriteAdapter()->delete($this->getMainTable());
+        return $this->getConnection()->delete($this->getMainTable());
     }
 
     /**
@@ -112,7 +112,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function getUniqueColumnData($code)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $values = array_unique($adapter->fetchCol($adapter->select()->from($this->getMainTable(), [$code])));
 
         if (count($values) != 1) {
@@ -155,7 +155,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function saveBunch($entity, $behavior, array $data)
     {
-        return $this->_getWriteAdapter()->insert(
+        return $this->getConnection()->insert(
             $this->getMainTable(),
             ['behavior' => $behavior, 'entity' => $entity, 'data' => $this->jsonHelper->jsonEncode($data)]
         );

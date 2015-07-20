@@ -47,7 +47,7 @@ class Summary extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function reAggregate($summary)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getMainTable(),
             ['primary_id' => new \Zend_Db_Expr('MAX(primary_id)'), 'store_id', 'entity_pk_value']

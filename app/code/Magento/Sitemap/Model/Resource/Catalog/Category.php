@@ -80,7 +80,7 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return false;
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $this->_select = $adapter->select()->from(
             $this->getMainTable()
@@ -198,7 +198,7 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 );
                 $this->_select->joinLeft(
                     ['t2_' . $attributeCode => $attribute['table']],
-                    $this->_getWriteAdapter()->quoteInto(
+                    $this->getConnection()->quoteInto(
                         't1_' .
                         $attributeCode .
                         '.entity_id = t2_' .

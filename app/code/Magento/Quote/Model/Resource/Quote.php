@@ -84,7 +84,7 @@ class Quote extends AbstractDb
      */
     public function loadByCustomerId($quote, $customerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $this->_getLoadSelect(
             'customer_id',
             $customerId,
@@ -118,7 +118,7 @@ class Quote extends AbstractDb
      */
     public function loadActive($quote, $quoteId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $this->_getLoadSelect('entity_id', $quoteId, $quote)->where('is_active = ?', 1);
 
         $data = $adapter->fetchRow($select);
@@ -140,11 +140,11 @@ class Quote extends AbstractDb
      */
     public function loadByIdWithoutStore($quote, $quoteId)
     {
-        $read = $this->_getReadAdapter();
-        if ($read) {
+        $adapter = $this->getConnection();
+        if ($adapter) {
             $select = parent::_getLoadSelect('entity_id', $quoteId, $quote);
 
-            $data = $read->fetchRow($select);
+            $data = $adapter->fetchRow($select);
 
             if ($data) {
                 $quote->setData($data);
@@ -178,7 +178,7 @@ class Quote extends AbstractDb
     public function markQuotesRecollectOnCatalogRules()
     {
         $tableQuote = $this->getTable('quote');
-        $subSelect = $this->_getReadAdapter()->select()->from(
+        $subSelect = $this->getConnection()->select()->from(
             ['t2' => $this->getTable('quote_item')],
             ['entity_id' => 'quote_id']
         )->from(
@@ -190,7 +190,7 @@ class Quote extends AbstractDb
             'quote_id'
         );
 
-        $select = $this->_getReadAdapter()->select()->join(
+        $select = $this->getConnection()->select()->join(
             ['t2' => $subSelect],
             't1.entity_id = t2.entity_id',
             ['trigger_recollect' => new \Zend_Db_Expr('1')]
@@ -198,7 +198,7 @@ class Quote extends AbstractDb
 
         $updateQuery = $select->crossUpdateFromSelect(['t1' => $tableQuote]);
 
-        $this->_getWriteAdapter()->query($updateQuery);
+        $this->getConnection()->query($updateQuery);
 
         return $this;
     }
@@ -215,7 +215,7 @@ class Quote extends AbstractDb
         if (!$productId) {
             return $this;
         }
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $subSelect = $adapter->select();
 
         $subSelect->from(
@@ -256,7 +256,7 @@ class Quote extends AbstractDb
     {
         $tableQuote = $this->getTable('quote');
         $tableItem = $this->getTable('quote_item');
-        $subSelect = $this->_getReadAdapter()->select()->from(
+        $subSelect = $this->getConnection()->select()->from(
             $tableItem,
             ['entity_id' => 'quote_id']
         )->where(
@@ -266,13 +266,13 @@ class Quote extends AbstractDb
             'quote_id'
         );
 
-        $select = $this->_getReadAdapter()->select()->join(
+        $select = $this->getConnection()->select()->join(
             ['t2' => $subSelect],
             't1.entity_id = t2.entity_id',
             ['trigger_recollect' => new \Zend_Db_Expr('1')]
         );
         $updateQuery = $select->crossUpdateFromSelect(['t1' => $tableQuote]);
-        $this->_getWriteAdapter()->query($updateQuery);
+        $this->getConnection()->query($updateQuery);
 
         return $this;
     }

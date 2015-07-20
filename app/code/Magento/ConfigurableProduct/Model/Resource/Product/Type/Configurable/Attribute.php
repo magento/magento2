@@ -78,7 +78,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveLabel($attribute)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             $this->_labelTable,
@@ -121,7 +121,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getUsedAttributes($setId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->distinct(
             true
         )->from(
@@ -157,7 +157,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getIdByProductIdAndAttributeId($attribute, $productId, $attributeId)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             $this->getIdFieldName()
         )->where(
@@ -167,7 +167,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'attribute_id = ?',
             $attributeId
         );
-        return $this->_getReadAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -178,14 +178,14 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteAttributesByProductId($productId)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             $this->getIdFieldName()
         )->where(
             'product_id = ?',
             $productId
         );
-        $this->_getWriteAdapter()->query($this->_getReadAdapter()->deleteFromSelect($select, $this->getMainTable()));
+        $this->getConnection()->query($this->getConnection()->deleteFromSelect($select, $this->getMainTable()));
     }
 
     /**
@@ -208,7 +208,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function loadLabel(ConfigurableAttribute $object)
     {
         $storeId = (int)$this->_storeManager->getStore()->getId();
-        $connection = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $useDefaultCheck = $connection
             ->getCheckSql('store.use_default IS NULL', 'def.use_default', 'store.use_default');
         $labelCheck = $connection->getCheckSql('store.value IS NULL', 'def.value', 'store.value');

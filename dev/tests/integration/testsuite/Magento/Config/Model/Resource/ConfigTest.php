@@ -21,7 +21,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveDeleteConfig()
     {
-        $connection = $this->_model->getReadConnection();
+        $connection = $this->_model->getConnection();
         $select = $connection->select()->from($this->_model->getMainTable())->where('path=?', 'test/config');
         $this->_model->saveConfig('test/config', 'test', 'default', 0);
         $this->assertNotEmpty($connection->fetchRow($select));

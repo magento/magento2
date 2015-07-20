@@ -50,7 +50,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadProductData($product, $attribute)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             ['website_id', 'country', 'state', 'value']
         )->where(
@@ -71,7 +71,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 );
             }
         }
-        return $this->_getReadAdapter()->fetchAll($select);
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**
@@ -85,7 +85,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $where = ['entity_id = ?' => (int)$product->getId(), 'attribute_id = ?' => (int)$attribute->getId()];
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         if (!$attribute->isScopeGlobal()) {
             $storeId = $product->getStoreId();
             if ($storeId) {
@@ -106,7 +106,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function insertProductData($product, $data)
     {
         $data['entity_id'] = (int)$product->getId();
-        $this->_getWriteAdapter()->insert($this->getMainTable(), $data);
+        $this->getConnection()->insert($this->getMainTable(), $data);
         return $this;
     }
 }

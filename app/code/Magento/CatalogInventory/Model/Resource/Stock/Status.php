@@ -79,7 +79,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $websiteId,
         $stockId = Stock::DEFAULT_STOCK_ID
     ) {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from($this->getMainTable())
             ->where('product_id = :product_id')
             ->where('website_id = :website_id')
@@ -122,12 +122,12 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $productIds = [$productIds];
         }
 
-        $select = $this->_getReadAdapter()->select()
+        $select = $this->getConnection()->select()
             ->from($this->getMainTable(), ['product_id', 'stock_status'])
             ->where('product_id IN(?)', $productIds)
             ->where('stock_id=?', (int) $stockId)
             ->where('website_id=?', (int) $websiteId);
-        return $this->_getReadAdapter()->fetchPairs($select);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**
@@ -140,7 +140,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         /** @var \Magento\Store\Model\Website $website */
         $website = $this->_websiteFactory->create();
-        return $this->_getReadAdapter()->fetchPairs($website->getDefaultStoresSelect(false));
+        return $this->getConnection()->fetchPairs($website->getDefaultStoresSelect(false));
     }
 
     /**
@@ -155,14 +155,14 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $productIds = [$productIds];
         }
 
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id', 'type_id']
         )->where(
             'entity_id IN(?)',
             $productIds
         );
-        return $this->_getReadAdapter()->fetchPairs($select);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**
@@ -175,14 +175,14 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getProductCollection($lastEntityId = 0, $limit = 1000)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id', 'type_id']
         )
             ->order('entity_id ASC')
             ->where('entity_id > :entity_id')
             ->limit($limit);
-        return $this->_getReadAdapter()->fetchPairs($select, [':entity_id' => $lastEntityId]);
+        return $this->getConnection()->fetchPairs($select, [':entity_id' => $lastEntityId]);
     }
 
     /**
@@ -213,12 +213,12 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function addIsInStockFilterToCollection($collection)
     {
         $websiteId = $this->_storeManager->getStore($collection->getStoreId())->getWebsiteId();
-        $joinCondition = $this->_getReadAdapter()->quoteInto(
+        $joinCondition = $this->getConnection()->quoteInto(
             'e.entity_id = stock_status_index.product_id' . ' AND stock_status_index.website_id = ?',
             $websiteId
         );
 
-        $joinCondition .= $this->_getReadAdapter()->quoteInto(
+        $joinCondition .= $this->getConnection()->quoteInto(
             ' AND stock_status_index.stock_id = ?',
             Stock::DEFAULT_STOCK_ID
         );
@@ -251,7 +251,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status');
         $attributeTable = $attribute->getBackend()->getTable();
 
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         if ($storeId === null || $storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
             $select = $adapter->select()->from($attributeTable, ['entity_id', 'value'])

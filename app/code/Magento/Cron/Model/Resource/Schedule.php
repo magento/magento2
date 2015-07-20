@@ -34,8 +34,8 @@ class Schedule extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function trySetJobStatusAtomic($scheduleId, $newStatus, $currentStatus)
     {
-        $write = $this->_getWriteAdapter();
-        $result = $write->update(
+        $adapter = $this->getConnection();
+        $result = $adapter->update(
             $this->getTable('cron_schedule'),
             ['status' => $newStatus],
             ['schedule_id = ?' => $scheduleId, 'status = ?' => $currentStatus]

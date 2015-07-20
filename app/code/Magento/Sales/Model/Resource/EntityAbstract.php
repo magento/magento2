@@ -140,7 +140,7 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $columns = $adapter->describeTable($this->getMainTable());
 
         if (isset($columns['created_at'], $columns['updated_at'])) {
@@ -164,10 +164,10 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
         $data = $this->_prepareDataForSave($object);
         unset($data[$this->getIdFieldName()]);
-        $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+        $this->getConnection()->update($this->getMainTable(), $data, $condition);
     }
 
     /**
@@ -177,8 +177,8 @@ abstract class EntityAbstract extends AbstractDb
     {
         $bind = $this->_prepareDataForSave($object);
         unset($bind[$this->getIdFieldName()]);
-        $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
-        $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
+        $this->getConnection()->insert($this->getMainTable(), $bind);
+        $object->setId($this->getConnection()->lastInsertId($this->getMainTable()));
         if ($this->_useIsObjectNew) {
             $object->isObjectNew(false);
         }

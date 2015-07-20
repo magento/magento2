@@ -22,7 +22,7 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
      */
     public function loadPriceData($productId, $websiteId = null)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $columns = [
             'price_id' => $this->getIdFieldName(),
@@ -81,7 +81,7 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
      */
     public function deletePriceData($productId, $websiteId = null, $priceId = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $conds = [$adapter->quoteInto('entity_id = ?', $productId)];
 
@@ -106,7 +106,7 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
      */
     public function savePriceData(\Magento\Framework\Object $priceObject)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $data = $this->_prepareDataForTable($priceObject, $this->getMainTable());
 
         if (!empty($data[$this->getIdFieldName()])) {

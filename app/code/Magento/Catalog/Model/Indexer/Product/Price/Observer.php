@@ -71,7 +71,7 @@ class Observer
      *
      * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected function _getWriteConnection()
+    protected function _getConnection()
     {
         if (null === $this->_connection) {
             $this->_connection = $this->_resource->getConnection('write');
@@ -86,7 +86,7 @@ class Observer
      */
     public function refreshSpecialPrices()
     {
-        $connection = $this->_getWriteConnection();
+        $connection = $this->_getConnection();
 
         foreach ($this->_storeManager->getStores(true) as $store) {
             $timestamp = $this->_localeDate->scopeTimeStamp($store);
@@ -129,7 +129,7 @@ class Observer
         $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attrCode);
         $attributeId = $attribute->getAttributeId();
 
-        $connection = $this->_getWriteConnection();
+        $connection = $this->_getConnection();
 
         $select = $connection->select()->from(
             $this->_resource->getTableName(['catalog_product_entity', 'datetime']),

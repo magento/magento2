@@ -86,7 +86,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      */
     public function addCustomerData($filter = null)
     {
-        $customersSelect = $this->customerResource->getReadConnection()->select();
+        $customersSelect = $this->customerResource->getConnection()->select();
         $customersSelect->from(
             ['customer' => $this->customerResource->getTable('customer_entity')],
             'entity_id'
@@ -99,7 +99,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         if (isset($filter['email'])) {
             $customersSelect->where('customer.email LIKE ?', '%' . $filter['email'] . '%');
         }
-        $filteredCustomers = $this->customerResource->getReadConnection()->fetchCol($customersSelect);
+        $filteredCustomers = $this->customerResource->getConnection()->fetchCol($customersSelect);
         $this->getSelect()->where('main_table.customer_id IN (?)', $filteredCustomers);
         return $this;
     }
@@ -151,7 +151,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      */
     public function resolveCustomerNames()
     {
-        $select = $this->customerResource->getReadConnection()->select();
+        $select = $this->customerResource->getConnection()->select();
         $customerName = $select->getAdapter()->getConcatSql(['firstname', 'lastname'], ' ');
 
         $select->from(

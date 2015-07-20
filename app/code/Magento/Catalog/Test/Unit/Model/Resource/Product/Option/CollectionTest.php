@@ -83,7 +83,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
         $this->resourceMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Option',
-            ['getReadConnection', '__wakeup', 'getMainTable', 'getTable'],
+            ['getConnection', '__wakeup', 'getMainTable', 'getTable'],
             [],
             '',
             false
@@ -95,7 +95,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->selectMock));
         $this->resourceMock->expects($this->once())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($this->adapterMock));
         $this->resourceMock->expects($this->once())
             ->method('getMainTable')

@@ -150,7 +150,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getCategoryAttribute($attributeCode, $categoryIds, $storeId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         if (!isset($this->_categoryAttributes[$attributeCode])) {
             $attribute = $this->_catalogCategory->getResource()->getAttribute($attributeCode);
 
@@ -242,7 +242,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function _getProductAttribute($attributeCode, $productIds, $storeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         if (!isset($this->_productAttributes[$attributeCode])) {
             $attribute = $this->productResource->getAttribute($attributeCode);
 
@@ -372,7 +372,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $isActiveAttribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Category::ENTITY, 'is_active');
         $categories = [];
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         if (!is_array($categoryIds)) {
             $categoryIds = [$categoryIds];
@@ -506,7 +506,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $products = [];
         $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         if ($productIds !== null) {
             if (!is_array($productIds)) {
                 $productIds = [$productIds];
@@ -623,7 +623,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (empty($products)) {
             return $result;
         }
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             ['i' => $this->getTable('catalog_category_product_index')],
