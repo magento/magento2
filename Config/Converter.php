@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Amqp\Config;
 
+/**
+ * Converts publishers from \DOMDocument to array
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
@@ -13,7 +16,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
-     * @throws \InvalidArgumentException
      */
     public function convert($source)
     {
@@ -21,11 +23,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
         /** @var $publisherNode \DOMNode */
         foreach ($source->getElementsByTagName('publisher') as $publisherNode) {
-            $publisherName = $this->_getAttributeValue($publisherNode, 'name');
+            $publisherName = $publisherNode->attributes->getNamedItem('name')->nodeValue;
             $data = [];
             $data['name'] = $publisherName;
-            $data['connection'] = $this->_getAttributeValue($publisherNode, 'connection');
-            $data['exchange'] = $this->_getAttributeValue($publisherNode, 'exchange');
+            $data['connection'] = $publisherNode->attributes->getNamedItem('connection')->nodeValue;
+            $data['exchange'] = $publisherNode->attributes->getNamedItem('exchange')->nodeValue;
             $output[$publisherName] = $data;
         }
         return $output;

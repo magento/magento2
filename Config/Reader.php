@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Amqp\Config;
 
+/**
+ * AMQP configuration filesystem loader. Loads all publisher configuration from XML file
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

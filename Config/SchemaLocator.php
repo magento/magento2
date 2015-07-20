@@ -7,7 +7,7 @@
 namespace Magento\Framework\Amqp\Config;
 
 /**
- * Cron locator
+ * Schema locator for Publishers
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -16,21 +16,21 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @var string
      */
-    protected $_schema;
+    protected $schema;
 
     /**
      * Path to corresponding XSD file with validation rules for separate config files
      *
      * @var string
      */
-    protected $_perFileSchema;
+    protected $perFileSchema;
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      */
-    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
+    public function __construct()
     {
-        $this->_schema = realpath(__DIR__ . '/../etc/queue.xsd');
+        $this->schema = realpath(__DIR__ . '/../etc/queue.xsd');
     }
 
     /**
@@ -40,7 +40,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return $this->_schema;
+        return $this->schema;
     }
 
     /**
@@ -50,6 +50,6 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return $this->_perFileSchema;
+        return $this->getSchema();
     }
 }
