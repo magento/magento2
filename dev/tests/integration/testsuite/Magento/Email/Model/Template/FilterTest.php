@@ -145,22 +145,22 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'area parameter - omitted' => [
                 'adminhtml',
                 'handle="email_template_test_handle"',
-                'Email content for frontend/Magento/default theme',
+                '<b>Email content for frontend/Magento/default theme</b>',
             ],
             'area parameter - frontend' => [
                 'adminhtml',
                 'handle="email_template_test_handle" area="frontend"',
-                'Email content for frontend/Magento/default theme',
+                '<b>Email content for frontend/Magento/default theme</b>',
             ],
             'area parameter - backend' => [
                 'frontend',
                 'handle="email_template_test_handle" area="adminhtml"',
-                'Email content for adminhtml/Magento/default theme',
+                '<b>Email content for adminhtml/Magento/default theme</b>',
             ],
             'custom parameter' => [
                 'frontend',
                 'handle="email_template_test_handle" template="Magento_Email::sample_email_content_custom.phtml"',
-                'Custom Email content for frontend/Magento/default theme',
+                '<b>Custom Email content for frontend/Magento/default theme<b>',
             ],
         ];
         return $result;
