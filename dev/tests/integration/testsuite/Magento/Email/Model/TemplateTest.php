@@ -217,16 +217,20 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @dataProvider templateDirectiveDataProvider
      *
-     * @param $area
-     * @param $templateText
-     * @param $expectedOutput
-     * @param $storeConfigPath
-     * @param $mockAdminTheme
+     * @param string $area
+     * @param int $templateType
+     * @param string $templateText
+     * @param string $assertContains
+     * @param string $assertNotContains
+     * @param string $storeConfigPath
+     * @param bool $mockAdminTheme
      */
     public function testTemplateDirective(
         $area,
+        $templateType,
         $templateText,
-        $expectedOutput,
+        $assertContains,
+        $assertNotContains = null,
         $storeConfigPath = null,
         $mockAdminTheme = false
     ) {
@@ -238,7 +242,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $this->setUpThemeFallback($area);
         }
 
-        $this->model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
+        $this->model->setTemplateType($templateType);
         $this->model->setTemplateText($templateText);
 
         // Allows for testing of templates overridden in backend
@@ -246,8 +250,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $template = $this->objectManager->create('Magento\Email\Model\Template');
             $templateData = [
                 'template_code' => 'some_unique_code',
-                'template_type' => TemplateTypesInterface::TYPE_HTML,
-                'template_text' => $expectedOutput,
+                'template_type' => $templateType,
+                'template_text' => $assertContains,
             ];
             $template->setData($templateData);
             $template->save();
@@ -257,7 +261,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 ->setValue($storeConfigPath, $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
         }
 
-        $this->assertContains($expectedOutput, $this->model->getProcessedTemplate());
+        $this->assertContains($assertContains, $this->model->getProcessedTemplate());
+        if ($assertNotContains) {
+            $this->assertNotContains($assertNotContains, $this->model->getProcessedTemplate());
+        }
     }
 
     /**
@@ -268,45 +275,63 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         return [
             'Template from module folder - adminhtml' => [
                 BackendFrontNameResolver::AREA_CODE,
+                TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="design/email/footer_template"}}',
-                '<!-- End wrapper table -->',
+                "</table>\n<!-- End wrapper table -->",
             ],
             'Template from module folder - frontend' => [
                 Area::AREA_FRONTEND,
+                TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="design/email/footer_template"}}',
-                '<!-- End wrapper table -->',
+                "</table>\n<!-- End wrapper table -->",
+            ],
+            'Template from module folder - plaintext' => [
+                Area::AREA_FRONTEND,
+                TemplateTypesInterface::TYPE_TEXT,
+                '{{template config_path="design/email/footer_template"}}',
+                'Thank you',
+                "</table>\n<!-- End wrapper table -->",
             ],
             'Template overridden in backend - adminhtml' => [
                 BackendFrontNameResolver::AREA_CODE,
+                TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="design/email/footer_template"}}',
-                'Footer configured in backend - email loaded via adminhtml',
+                '<b>Footer configured in backend - email loaded via adminhtml</b>',
+                null,
                 'design/email/footer_template',
             ],
             'Template overridden in backend - frontend' => [
                 Area::AREA_FRONTEND,
+                TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="design/email/footer_template"}}',
-                'Footer configured in backend - email loaded via frontend',
+                '<b>Footer configured in backend - email loaded via frontend</b>',
+                null,
                 'design/email/footer_template',
             ],
             'Template from theme - frontend' => [
                 Area::AREA_FRONTEND,
+                TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_template"}}',
-                'customer_create_account_email_template template from Vendor/custom_theme',
+                '<b>customer_create_account_email_template template from Vendor/custom_theme</b>',
             ],
             'Template from parent theme - frontend' => [
                 Area::AREA_FRONTEND,
+                TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_confirmation_template"}}',
-                'customer_create_account_email_confirmation_template template from Vendor/default',
+                '<b>customer_create_account_email_confirmation_template template from Vendor/default</b>',
             ],
             'Template from grandparent theme - frontend' => [
                 Area::AREA_FRONTEND,
+                TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_confirmed_template"}}',
-                'customer_create_account_email_confirmed_template template from Magento/default',
+                '<b>customer_create_account_email_confirmed_template template from Magento/default</b>',
             ],
             'Template from grandparent theme - adminhtml' => [
                 BackendFrontNameResolver::AREA_CODE,
+                TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="catalog/productalert_cron/error_email_template"}}',
-                'catalog_productalert_cron_error_email_template template from Magento/default',
+                '<b>catalog_productalert_cron_error_email_template template from Magento/default</b>',
+                null,
                 null,
                 true,
             ],
