@@ -20,10 +20,10 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      * Gets list of indexers
      *
      * @param InputInterface $input
-     * @param OutputInterface $output
      * @return IndexerInterface[]
+     * @throws \InvalidArgumentException
      */
-    protected function getIndexers(InputInterface $input, OutputInterface $output)
+    protected function getIndexers(InputInterface $input)
     {
         $requestedTypes = [];
         if ($input->getArgument(self::INPUT_KEY_INDEXERS)) {

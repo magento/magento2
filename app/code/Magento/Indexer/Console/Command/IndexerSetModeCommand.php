@@ -46,7 +46,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
             throw new \InvalidArgumentException(implode("\n", $errors));
         }
 
-        $indexers = $this->getIndexers($input, $output);
+        $indexers = $this->getIndexers($input);
 
         foreach ($indexers as $indexer) {
             try {
