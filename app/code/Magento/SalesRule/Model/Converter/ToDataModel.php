@@ -118,9 +118,9 @@ class ToDataModel
         if ($dataModel->getStoreLabels() !== null) {
             $storeLabels = [];
             foreach ($dataModel->getStoreLabels() as $storeId => $storeLabel) {
-                $storeLabelObj = $this->ruleLabelFactory->create()
-                    ->setStoreId($storeId)
-                    ->setStoreLabel($storeLabel);
+                $storeLabelObj = $this->ruleLabelFactory->create();
+                $storeLabelObj->setStoreId($storeId);
+                $storeLabelObj->setStoreLabel($storeLabel);
                 $storeLabels[] = $storeLabelObj;
             }
             $dataModel->setStoreLabels($storeLabels);
