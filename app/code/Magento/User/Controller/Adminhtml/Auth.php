@@ -8,7 +8,7 @@ namespace Magento\User\Controller\Adminhtml;
 /**
  * \Magento\User Auth controller
  */
-class Auth extends \Magento\Backend\App\AbstractAction
+abstract class Auth extends \Magento\Backend\App\AbstractAction
 {
     /**
      * User model factory

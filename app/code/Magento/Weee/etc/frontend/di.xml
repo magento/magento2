@@ -17,4 +17,7 @@
         <plugin name="weee-app-action-dispatchController-context-plugin"
                 type="Magento\Weee\Model\App\Action\ContextPlugin"/>
     </type>
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="cart_private_data_tax" type="Magento\Weee\Plugin\Checkout\CustomerData\Cart"/>
+    </type>
 </config>

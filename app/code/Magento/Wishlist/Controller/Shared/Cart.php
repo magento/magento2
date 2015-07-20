@@ -5,6 +5,7 @@
  */
 namespace Magento\Wishlist\Controller\Shared;
 
+use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Framework\App\Action\Context as ActionContext;
@@ -108,13 +109,11 @@ class Cart extends \Magento\Framework\App\Action\Action
             if ($this->cartHelper->getShouldRedirectToCart()) {
                 $redirectUrl = $this->cartHelper->getCartUrl();
             }
+        } catch (ProductException $e) {
+            $this->messageManager->addError(__('This product(s) is out of stock.'));
         } catch (LocalizedException $e) {
-            if ($e->getCode() == Item::EXCEPTION_CODE_NOT_SALABLE) {
-                $this->messageManager->addError(__('This product(s) is out of stock.'));
-            } else {
-                $this->messageManager->addNotice($e->getMessage());
-                $redirectUrl = $item->getProductUrl();
-            }
+            $this->messageManager->addNotice($e->getMessage());
+            $redirectUrl = $item->getProductUrl();
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t add the item to the cart right now.'));
         }

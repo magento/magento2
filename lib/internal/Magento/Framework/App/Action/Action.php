@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Action;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NotFoundException;
 
 /**
@@ -15,7 +16,7 @@ use Magento\Framework\Exception\NotFoundException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Action extends AbstractAction
+abstract class Action extends AbstractAction
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -118,6 +119,11 @@ class Action extends AbstractAction
         \Magento\Framework\Profiler::stop($profilerKey);
         return $result ?: $this->_response;
     }
+
+    /**
+     * @return ResultInterface
+     */
+    abstract protected function execute();
 
     /**
      * Throw control to different action (control and module if was specified).

@@ -9,8 +9,8 @@
     <testCase name="Magento\Reports\Test\TestCase\SalesTaxReportEntityTest">
         <variation name="SalesTaxReportEntityTestVariation1">
             <data name="orderSteps" xsi:type="string">-</data>
-            <data name="taxRule/dataSet" xsi:type="string">custom_rule</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
+            <data name="taxRule/dataset" xsi:type="string">custom_rule</data>
+            <data name="order/dataset" xsi:type="string">default</data>
             <data name="orderStatus" xsi:type="string">Pending</data>
             <data name="report/report_type" xsi:type="string">Order Created</data>
             <data name="report/period_type" xsi:type="string">Day</data>
@@ -23,8 +23,8 @@
         </variation>
         <variation name="SalesTaxReportEntityTestVariation2">
             <data name="orderSteps" xsi:type="string">invoice</data>
-            <data name="taxRule/dataSet" xsi:type="string">custom_rule</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
+            <data name="taxRule/dataset" xsi:type="string">custom_rule</data>
+            <data name="order/dataset" xsi:type="string">default</data>
             <data name="orderStatus" xsi:type="string">Processing</data>
             <data name="report/report_type" xsi:type="string">Order Created</data>
             <data name="report/period_type" xsi:type="string">Month</data>
@@ -38,8 +38,8 @@
         </variation>
         <variation name="SalesTaxReportEntityTestVariation3">
             <data name="orderSteps" xsi:type="string">invoice,shipment</data>
-            <data name="taxRule/dataSet" xsi:type="string">custom_rule</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
+            <data name="taxRule/dataset" xsi:type="string">custom_rule</data>
+            <data name="order/dataset" xsi:type="string">default</data>
             <data name="orderStatus" xsi:type="string">Complete</data>
             <data name="report/report_type" xsi:type="string">Order Updated</data>
             <data name="report/period_type" xsi:type="string">Year</data>

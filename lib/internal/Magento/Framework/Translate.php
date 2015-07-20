@@ -387,6 +387,8 @@ class Translate implements \Magento\Framework\TranslateInterface
     public function setLocale($locale)
     {
         $this->_localeCode = $locale;
+        $this->_config['locale'] = $locale;
+        $this->getCacheId(true);
         return $this;
     }
 
