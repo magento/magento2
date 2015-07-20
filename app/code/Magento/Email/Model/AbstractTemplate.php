@@ -255,8 +255,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function loadByConfigPath($configPath)
     {
-        $storeId = $this->getDesignConfig()->getStore();
-        $templateId = $this->scopeConfig->getValue($configPath, ScopeInterface::SCOPE_STORE, $storeId);
+        $store = $this->getDesignConfig()->getStore();
+        $templateId = $this->scopeConfig->getValue($configPath, ScopeInterface::SCOPE_STORE, $store);
 
         if (is_numeric($templateId)) {
             $this->load($templateId);
