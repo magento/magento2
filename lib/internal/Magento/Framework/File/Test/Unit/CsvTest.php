@@ -11,6 +11,8 @@
  */
 namespace Magento\Framework\File\Test\Unit;
 
+use Magento\Framework\Filesystem\Driver\File;
+
 class CsvTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,7 +24,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Framework\File\Csv();
+        $this->_model = new \Magento\Framework\File\Csv(new File());
     }
 
     protected function tearDown()

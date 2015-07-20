@@ -651,7 +651,6 @@ class File implements DriverInterface
          * @var $value string|\Magento\Framework\Phrase
          */
         foreach ($data as $key => $value) {
-
             if (!is_string($value)) {
                 $value = (string)$value;
             }
