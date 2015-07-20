@@ -70,6 +70,7 @@ class ComposerInformation
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param BufferIoFactory $bufferIoFactory
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @throws \Exception
      */
     public function __construct(
@@ -78,6 +79,18 @@ class ComposerInformation
         BufferIoFactory $bufferIoFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
+        // composer.json is in same directory as vendor
+        $vendorPath = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
+        $vendorDir = require "{$vendorPath}";
+        $composerJson = $filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath()
+            . "/{$vendorDir}/../composer.json";
+
+        $composerJsonRealPath = realpath($composerJson);
+        if ($composerJsonRealPath === false) {
+            throw new \Exception('Composer file not found: ' . $composerJson);
+        }
+
+        putenv('COMPOSER_HOME=' . $filesystem->getDirectoryRead(DirectoryList::COMPOSER_HOME)->getAbsolutePath());
 
         // Create Composer
         $this->application = $applicationFactory->create();
