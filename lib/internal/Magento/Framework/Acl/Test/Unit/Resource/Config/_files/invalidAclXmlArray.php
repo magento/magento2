@@ -49,7 +49,7 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'test_Value::show_toolbar' is " .
-            "not accepted by the pattern '[A-Z]+[a-zA-Z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "not accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'resource', attribute 'id': 'test_Value::show_toolbar' is not a valid value of the atomic type " .
             "'typeId'.",
             "Element 'resource', attribute 'id': Warning: No precomputed value available, " .
@@ -62,7 +62,7 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Test_value::show_toolbar' is not " .
-            "accepted by the pattern '[A-Z]+[a-zA-Z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'resource', attribute 'id': 'Test_value::show_toolbar' is not a valid value of the atomic type " .
             "'typeId'.",
             "Element 'resource', attribute 'id': Warning: No precomputed value available, " .
@@ -75,7 +75,7 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'M@#$%^*_Value::show_toolbar' is not " .
-            "accepted by the pattern '[A-Z]+[a-zA-Z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'resource', attribute 'id': 'M@#$%^*_Value::show_toolbar' " .
             "is not a valid value of the atomic type " .
             "'typeId'.",
@@ -89,7 +89,7 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value '_Value::show_toolbar' is not " .
-            "accepted by the pattern '[A-Z]+[a-zA-Z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'resource', attribute 'id': '_Value::show_toolbar' " .
             "is not a valid value of the atomic type 'typeId'.",
             "Element 'resource', attribute 'id': " .
@@ -102,7 +102,7 @@ return [
         '</acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Value_::show_toolbar' is not " .
-            "accepted by the pattern '[A-Z]+[a-zA-Z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'resource', attribute 'id': 'Value_::show_toolbar' " .
             "is not a valid value of the atomic type 'typeId'.",
             "Element 'resource', attribute 'id': " .
@@ -115,7 +115,7 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Test_value:show_toolbar' is not " .
-            "accepted by the pattern '[A-Z]+[a-zA-Z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'resource', attribute 'id': 'Test_value:show_toolbar' is not a valid value of the atomic " .
             "type 'typeId'.",
             "Element 'resource', attribute 'id': " .
@@ -127,7 +127,7 @@ return [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::"/></resources>' . '</acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Test_Value::' is not accepted by " .
-            "the pattern '[A-Z]+[a-zA-Z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'resource', attribute 'id': 'Test_Value::' is not a valid value of the atomic type 'typeId'.",
             "Element 'resource', attribute 'id': " .
             "Warning: No precomputed value available, the value was either invalid " .

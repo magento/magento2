@@ -13,7 +13,7 @@ use Magento\Framework\Exception\InputException;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Tax extends \Magento\Backend\App\Action
+abstract class Tax extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface
