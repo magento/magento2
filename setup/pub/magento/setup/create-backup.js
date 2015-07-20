@@ -18,11 +18,15 @@ angular.module('create-backup', ['ngStorage'])
             $scope.backupInfo = $localStorage.backupInfo;
         }
 
-        $scope.nextStep = function () {
-            if ($scope.backupInfo.options.code || $scope.backupInfo.options.media || $scope.backupInfo.options.db) {
-                $scope.nextState();
+        $scope.nextButtonStatus = false;
+
+        $scope.optionsSelected = function () {
+            if (!$scope.backupInfo.options.code && !$scope.backupInfo.options.media && !$scope.backupInfo.options.db) {
+                $scope.nextButtonStatus = true;
+                return true;
             } else {
-                $state.go('root.component-update')
+                $scope.nextButtonStatus = false;
+                return false;
             }
         };
 
