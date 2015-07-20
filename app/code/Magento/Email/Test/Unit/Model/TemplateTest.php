@@ -350,11 +350,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * numeric.
      *
      * @param bool $loadFromDatabase
-     * @param string $templateContent
-     * @param string $expectedOutput
      * @dataProvider loadByConfigPathDataProvider
      */
-    public function testLoadByConfigPath($loadFromDatabase, $templateContent, $expectedOutput)
+    public function testLoadByConfigPath($loadFromDatabase)
     {
         $configPath = 'design/email/header_template';
         $model = $this->getModelMock([
