@@ -15,6 +15,12 @@ interface CollectorInterface
     /**
      * Retrieve instances of view files
      *
+     * File path supports the following glob patterns which are translated into regular expressions:
+     *   1. ? -> [^\]
+     *   2. * -> [^\]*
+     *   3. [...], [!...] -> [...], [^...]
+     *   4. {..,..,...} -> (?:..|..|...)
+     *
      * @param ThemeInterface $theme Theme that defines the design context
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
