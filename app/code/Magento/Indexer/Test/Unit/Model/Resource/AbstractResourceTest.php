@@ -147,13 +147,12 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             $connectionCustomMock->expects($this->any())->method('describeTable')->will(
                 $this->returnValue($tableColumns)
             );
-            $connectionCustomMock->expects($this->exactly(1))->method('insertArray')->with(
+            $connectionCustomMock->expects($this->any())->method('insertArray')->with(
                 $destTable,
                 $resultColumns
             )->will($this->returnValue(1));
             $connectionMock->expects($this->any())->method('query')->will($this->returnValue($pdoMock));
-            $pdoMock->expects($this->at(0))->method('fetch')->will($this->returnValue([$tableColumns]));
-            $pdoMock->expects($this->at(1))->method('fetch')->will($this->returnValue([$tableColumns]));
+            $pdoMock->expects($this->any())->method('fetch')->will($this->returnValue([$tableColumns]));
 
             $this->model->newIndexAdapter();
             $this->_resourceMock->expects($this->any())->method('getConnection')->will(
