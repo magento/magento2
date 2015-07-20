@@ -611,6 +611,9 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->save($this->customer);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetList()
     {
         $sortOrder = $this->getMock('Magento\Framework\Api\SortOrder', [], [], '', false);
