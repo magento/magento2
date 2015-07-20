@@ -281,8 +281,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Getter for id of current store (the only one in single-store mode and current in multi-stores mode)
      *
-     * @return boolean
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @return int
      */
     protected function getStoreId()
     {
