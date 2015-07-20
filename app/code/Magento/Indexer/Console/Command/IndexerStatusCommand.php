@@ -21,6 +21,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
         $this->setName('indexer:status')
             ->setDescription('Shows status of Indexer')
             ->setDefinition($this->getInputList());
+
         parent::configure();
     }
 

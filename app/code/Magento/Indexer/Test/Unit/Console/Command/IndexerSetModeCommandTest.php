@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Command for updating installed application after the code base has changed
  */
-class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
+class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonTest
 {
     /**
      * Command being tested
@@ -24,10 +24,9 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
     {
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(3, sizeof($optionsList));
+        $this->assertSame(2, sizeof($optionsList));
         $this->assertSame('mode', $optionsList[0]->getName());
-        $this->assertSame('all', $optionsList[1]->getName());
-        $this->assertSame('index', $optionsList[2]->getName());
+        $this->assertSame('index', $optionsList[1]->getName());
     }
 
     /**
