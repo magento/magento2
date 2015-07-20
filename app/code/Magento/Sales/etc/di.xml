@@ -49,7 +49,7 @@
     <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Api\Data\OrderAddress\Repository"/>
     <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Api\Data\OrderItem\Repository"/>
     <preference for="Magento\Sales\Api\OrderPaymentRepositoryInterface" type="Magento\Sales\Api\Data\OrderPayment\Repository"/>
-    <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Api\Data\Order\Repository"/>
+    <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
     <preference for="Magento\Sales\Api\OrderManagementInterface" type="Magento\Sales\Model\Service\OrderService"/>
     <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Api\Data\OrderStatusHistory\Repository"/>
     <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentComment\Repository"/>
@@ -565,6 +565,17 @@
     <type name="Magento\Sales\Model\Order\Config">
         <arguments>
             <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+        </arguments>
+    </type>
+    <virtualType name="orderMetadata" type="Magento\Sales\Model\Resource\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\OrderRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">orderMetadata</argument>
         </arguments>
     </type>
 </config>
