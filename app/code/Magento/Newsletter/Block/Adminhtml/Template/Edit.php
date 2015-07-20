@@ -13,7 +13,10 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
-class Edit extends \Magento\Backend\Block\Widget
+use Magento\Backend\Block\Widget;
+use Magento\Framework\App\TemplateTypesInterface;
+
+class Edit extends Widget
 {
     /**
      * Core registry
@@ -246,6 +249,19 @@ class Edit extends \Magento\Backend\Block\Widget
     public function isTextType()
     {
         return $this->getModel()->isPlain();
+    }
+
+    /**
+     * Return template type from template object or TYPE_HTML by default
+     *
+     * @return int
+     */
+    public function getTemplateType()
+    {
+        if ($this->getModel()->getTemplateType()) {
+            return $this->getModel()->getTemplateType();
+        }
+        return TemplateTypesInterface::TYPE_HTML;
     }
 
     /**
