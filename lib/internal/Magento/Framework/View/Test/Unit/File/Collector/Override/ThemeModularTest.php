@@ -15,12 +15,12 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
      */
     private $directory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fileFactory;
 

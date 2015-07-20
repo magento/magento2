@@ -20,7 +20,7 @@ class ThemeModular extends AbstractCollector
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param string $filePath
-     * @return array|\Magento\Framework\View\File[]
+     * @return \Magento\Framework\View\File[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getFiles(ThemeInterface $theme, $filePath)
