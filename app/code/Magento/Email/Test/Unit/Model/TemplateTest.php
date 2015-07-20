@@ -397,15 +397,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->with($configPath, ScopeInterface::SCOPE_STORE, $storeId)
             ->will($this->returnValue($templateId));
 
-        $model->expects($this->once())
-            ->method('getTemplateText')
-            ->will($this->returnValue($templateContent));
-
-        $model->expects($this->once())
-            ->method('setTemplateText')
-            ->with($expectedOutput)
-            ->will($this->returnSelf());
-
         $model->loadByConfigPath($configPath);
     }
 
@@ -420,29 +411,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'Test template content',
                 'Test template content',
             ],
-            'Load from database - @subject comment' => [
+            'Load from database' => [
                 true,
-                'Test template content<!--@subject Test subject @-->',
                 'Test template content',
-            ],
-            'Load from database - @vars comment' => [
-                true,
-                'Test template content<!--@vars Test vars @-->',
-                'Test template content',
-            ],
-            'Load from database - @styles comment' => [
-                true,
-                'Test template content<!--@styles Test styles @-->',
-                'Test template content',
-            ],
-            'Load from database - copyright comment' => [
-                true,
-                "Test template content\n<!--
-                /**
-                 * Copyright © 2015 Magento. All rights reserved.
-                 * See COPYING.txt for license details.
-                */
-                -->",
                 'Test template content',
             ],
         ];
@@ -719,7 +690,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubject()
     {
-        $variables = [ 'key' => 'value' ];
+        $variables = ['key' => 'value'];
         $model = $this->getModelMock(['getProcessedTemplateSubject']);
         $model->setVars($variables);
         $expectedResult = 'result';
