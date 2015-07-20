@@ -7,7 +7,9 @@ namespace Magento\Email\Test\Unit\Model;
 
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Filter\Template as FilterTemplate;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Covers \Magento\Email\Model\Template
@@ -257,9 +259,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->loadDefault($templateId);
 
         if ($templateType === 'html') {
-            $this->assertEquals(\Magento\Email\Model\Template::TYPE_HTML, $model->getTemplateType());
+            $this->assertEquals(TemplateTypesInterface::TYPE_HTML, $model->getTemplateType());
         } else {
-            $this->assertEquals(\Magento\Email\Model\Template::TYPE_TEXT, $model->getTemplateType());
+            $this->assertEquals(TemplateTypesInterface::TYPE_TEXT, $model->getTemplateType());
         }
         $this->assertEquals($templateId, $model->getId());
         $this->assertEquals($parsedTemplateText, $model->getTemplateText());
@@ -370,7 +372,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with($configPath, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            ->with($configPath, ScopeInterface::SCOPE_STORE, $storeId)
             ->will($this->returnValue($templateId));
 
         $model->expects($this->once())
@@ -443,7 +445,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
-            ->with('system/smtp/disable', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('system/smtp/disable', ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($isSMTPDisabled));
         $model = $this->getModelMock(['getSenderName', 'getSenderEmail', 'getTemplateSubject']);
         $model->expects($this->any())
