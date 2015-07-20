@@ -117,7 +117,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
         $this->paypalConfigMock = $this->getMock(
             'Magento\Paypal\Model\Config',
-            ['isMethodAvailable'],
+            [],
             [],
             '',
             false

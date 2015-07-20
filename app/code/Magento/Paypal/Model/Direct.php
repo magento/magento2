@@ -287,6 +287,9 @@ class Direct extends \Magento\Payment\Model\Method\Cc
             case 'cctypes':
                 $value = $this->getAllowedCcTypes();
                 break;
+            case 'order_place_redirect_url':
+                $value = $this->getOrderPlaceRedirectUrl();
+                break;
             default:
                 $value = $this->_pro->getConfig()->getValue($field);
         }

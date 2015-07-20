@@ -6,31 +6,20 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="catalogAttributeSet" module="Magento_Catalog" type="flat" entity_type="eav_attribute_set" collection="Magento\Catalog\Model\Resource\Product\Link\Product\Collection" repository_class="Magento\Catalog\Test\Repository\CatalogAttributeSet" handler_interface="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface" class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
-    <dataset name="default">
-        <field name="attribute_set_name" xsi:type="string">Default_attribute_set_%isolation%</field>
-        <field name="skeleton_set" xsi:type="array">
-            <item name="dataSet" xsi:type="string">default</item>
-        </field>
-    </dataset>
-    <field name="attribute_set_id" is_required="1">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="entity_type_id" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="attribute_set_name" is_required="">
-      <default_value xsi:type="string">Default_attribute_set_%isolation%</default_value>
-    </field>
-    <field name="sort_order" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="skeleton_set" is_required="" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\SkeletonSet">
-      <default_value xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
-            </default_value>
-    </field>
-    <field name="assigned_attributes" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\AssignedAttributes"/>
-    <field name="group"/>
-  </fixture>
+    <fixture name="catalogAttributeSet"
+             module="Magento_Catalog"
+             type="flat"
+             entity_type="eav_attribute_set"
+             collection="Magento\Catalog\Model\Resource\Product\Link\Product\Collection"
+             repository_class="Magento\Catalog\Test\Repository\CatalogAttributeSet"
+             handler_interface="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface"
+             class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
+        <field name="attribute_set_id" is_required="1" />
+        <field name="entity_type_id" is_required="" />
+        <field name="attribute_set_name" is_required="" />
+        <field name="sort_order" is_required="" />
+        <field name="skeleton_set" is_required="" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\SkeletonSet" />
+        <field name="assigned_attributes" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\AssignedAttributes" />
+        <field name="group" />
+    </fixture>
 </config>

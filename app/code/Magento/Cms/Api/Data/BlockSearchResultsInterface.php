@@ -26,5 +26,5 @@ interface BlockSearchResultsInterface extends SearchResultsInterface
      * @param \Magento\Cms\Api\Data\BlockInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

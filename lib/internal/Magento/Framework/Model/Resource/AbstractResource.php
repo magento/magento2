@@ -58,6 +58,13 @@ abstract class AbstractResource
     abstract protected function _getWriteAdapter();
 
     /**
+     * Get connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    abstract protected function getConnection();
+
+    /**
      * Start resource transaction
      *
      * @return $this
@@ -100,8 +107,13 @@ abstract class AbstractResource
             if (isset(self::$_commitCallbacks[$adapterKey])) {
                 $callbacks = self::$_commitCallbacks[$adapterKey];
                 self::$_commitCallbacks[$adapterKey] = [];
-                foreach ($callbacks as $callback) {
-                    call_user_func($callback);
+                try {
+                    foreach ($callbacks as $callback) {
+                        call_user_func($callback);
+                    }
+                } catch (\Exception $e) {
+                    echo $e;
+                    throw $e;
                 }
             }
         }
@@ -117,6 +129,8 @@ abstract class AbstractResource
     public function rollBack()
     {
         $this->_getWriteAdapter()->rollBack();
+        $adapterKey = spl_object_hash($this->_getWriteAdapter());
+        self::$_commitCallbacks[$adapterKey] = [];
         return $this;
     }
 

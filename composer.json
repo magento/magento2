@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "0.74.0-beta16",
+    "version": "1.0.0-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -37,6 +37,7 @@
         "pelago/emogrifier": "0.1.1",
         "tubalmartin/cssmin": "2.4.8-p4",
         "magento/magento-composer-installer": "*",
+        "braintree/braintree_php": "2.39.0",
         "symfony/console": "~2.3 <2.7"
     },
     "require-dev": {
@@ -65,8 +66,10 @@
         "magento/module-admin-notification": "self.version",
         "magento/module-advanced-pricing-import-export": "self.version",
         "magento/module-authorization": "self.version",
+        "magento/module-authorizenet": "self.version",
         "magento/module-backend": "self.version",
         "magento/module-backup": "self.version",
+        "magento/module-braintree": "self.version",
         "magento/module-bundle": "self.version",
         "magento/module-bundle-import-export": "self.version",
         "magento/module-cache-invalidate": "self.version",
@@ -103,7 +106,6 @@
         "magento/module-google-adwords": "self.version",
         "magento/module-google-analytics": "self.version",
         "magento/module-google-optimizer": "self.version",
-        "magento/module-google-shopping": "self.version",
         "magento/module-grouped-import-export": "self.version",
         "magento/module-grouped-product": "self.version",
         "magento/module-import-export": "self.version",
@@ -163,8 +165,8 @@
         "magento/language-zh_cn": "self.version",
         "magento/framework": "self.version",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
-        "colinmollenhour/cache-backend-redis": "dev-master#193d377b7fb2e88595578b282fa01a62d1185abc",
-        "colinmollenhour/credis": "dev-master#f07bbfd4117294f462f0fb19c49221d350bf396f",
+        "colinmollenhour/cache-backend-redis": "1.8",
+        "colinmollenhour/credis": "1.5",
         "linkorb/jsmin-php": "1.1.2",
         "phpseclib/phpseclib": "0.2.1",
         "components/jquery": "1.11.0",
@@ -183,13 +185,11 @@
             "components/jquery": [
                 "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",
-                "lib/web/jquery/jquery-migrate.js",
-                "lib/web/jquery/jquery-migrate.min.js"
+                "lib/web/jquery/jquery-migrate.js"
             ],
             "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
             "components/jqueryui": [
-                "lib/web/jquery/jquery-ui.js",
-                "lib/web/jquery/jquery-ui.min.js"
+                "lib/web/jquery/jquery-ui.js"
             ],
             "twbs/bootstrap": [
                 "lib/web/jquery/jquery.tabs.js"

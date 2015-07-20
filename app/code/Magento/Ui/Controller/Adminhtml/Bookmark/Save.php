@@ -7,14 +7,18 @@ namespace Magento\Ui\Controller\Adminhtml\Bookmark;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Json\DecoderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Ui\Api\Data\BookmarkInterface;
+use Magento\Ui\Api\Data\BookmarkInterfaceFactory;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
 
 /**
  * Class Save action
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends AbstractAction
 {
@@ -38,7 +42,7 @@ class Save extends AbstractAction
     protected $bookmarkManagement;
 
     /**
-     * @var \Magento\Ui\Api\Data\BookmarkInterfaceFactory
+     * @var BookmarkInterfaceFactory
      */
     protected $bookmarkFactory;
 
@@ -48,26 +52,34 @@ class Save extends AbstractAction
     protected $userContext;
 
     /**
+     * @var DecoderInterface
+     */
+    protected $jsonDecoder;
+
+    /**
      * @param Context $context
      * @param UiComponentFactory $factory
      * @param BookmarkRepositoryInterface $bookmarkRepository
      * @param BookmarkManagementInterface $bookmarkManagement
-     * @param \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory
+     * @param BookmarkInterfaceFactory $bookmarkFactory
      * @param UserContextInterface $userContext
+     * @param DecoderInterface $jsonDecoder
      */
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
         BookmarkRepositoryInterface $bookmarkRepository,
         BookmarkManagementInterface $bookmarkManagement,
-        \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,
-        UserContextInterface $userContext
+        BookmarkInterfaceFactory $bookmarkFactory,
+        UserContextInterface $userContext,
+        DecoderInterface $jsonDecoder
     ) {
         parent::__construct($context, $factory);
         $this->bookmarkRepository = $bookmarkRepository;
         $this->bookmarkManagement = $bookmarkManagement;
         $this->bookmarkFactory = $bookmarkFactory;
         $this->userContext = $userContext;
+        $this->jsonDecoder = $jsonDecoder;
     }
 
     /**
@@ -75,10 +87,11 @@ class Save extends AbstractAction
      *
      * @return void
      */
-    public function execute()
+    protected function execute()
     {
         $bookmark = $this->bookmarkFactory->create();
-        $data = $this->_request->getParam('data');
+        $jsonData = $this->_request->getParam('data');
+        $data = $this->jsonDecoder->decode($jsonData);
         $action = key($data);
         switch($action) {
             case self::ACTIVE_IDENTIFIER:
@@ -90,7 +103,7 @@ class Save extends AbstractAction
                     $bookmark,
                     $action,
                     $bookmark->getTitle(),
-                    $data[$action]
+                    $jsonData
                 );
 
                 break;
@@ -101,7 +114,7 @@ class Save extends AbstractAction
                         $bookmark,
                         $identifier,
                         isset($data['label']) ? $data['label'] : '',
-                        $data
+                        $jsonData
                     );
                     $this->updateCurrentBookmark($identifier);
                 }
@@ -119,13 +132,11 @@ class Save extends AbstractAction
      * @param BookmarkInterface $bookmark
      * @param string $identifier
      * @param string $title
-     * @param array $config
+     * @param string $config
      * @return void
      */
-    protected function updateBookmark(BookmarkInterface $bookmark, $identifier, $title, array $config = [])
+    protected function updateBookmark(BookmarkInterface $bookmark, $identifier, $title, $config)
     {
-        $this->filterVars($config);
-
         $updateBookmark = $this->checkBookmark($identifier);
         if ($updateBookmark !== false) {
             $bookmark = $updateBookmark;
@@ -178,28 +189,5 @@ class Save extends AbstractAction
         }
 
         return $result;
-    }
-
-    /**
-     * Filter boolean vars
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function filterVars(array & $data = [])
-    {
-        foreach ($data as & $value) {
-            if (is_array($value)) {
-                $this->filterVars($value);
-            } else {
-                if ($value == 'true') {
-                    $value = true;
-                } elseif ($value == 'false') {
-                    $value = false;
-                } elseif (is_numeric($value)) {
-                    $value = (int) $value;
-                }
-            }
-        }
     }
 }

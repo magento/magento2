@@ -6,8 +6,10 @@
 
 namespace Magento\Framework\Model\Resource\Db;
 
+use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Resource\AbstractResource;
 
 /**
  * Abstract resource model class
@@ -15,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractResource
+abstract class AbstractDb extends AbstractResource
 {
     /**
      * Cached resources singleton
@@ -306,6 +308,17 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             $this->_connections[$resourceName] = $connectionInstance;
         }
         return $connectionInstance;
+    }
+
+    /**
+     * Get connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     */
+    protected function getConnection()
+    {
+        $fullResourceName = ($this->_resourcePrefix ? $this->_resourcePrefix . '_' : '') . 'write';
+        return $this->_resources->getConnection($fullResourceName);
     }
 
     /**

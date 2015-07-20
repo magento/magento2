@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Component\Filters\Type\DateRange;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
@@ -92,7 +92,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             ->with(DateRange::NAME, ['extends' => DateRange::NAME]);
         $this->contextMock->expects($this->any())
             ->method('getRequestParam')
-            ->with(AbstractFilter::FILTER_VAR)
+            ->with(UiContext::FILTER_VAR)
             ->willReturn($filterData);
 
         if ($expectedCondition !== null) {
@@ -105,7 +105,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             );
             $dataProvider->expects($this->any())
                 ->method('addFilter')
-                ->with($name, $expectedCondition);
+                ->with($expectedCondition, $name);
 
             $this->contextMock->expects($this->any())
                 ->method('getDataProvider')
