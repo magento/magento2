@@ -5,6 +5,8 @@
  */
 namespace Magento\Authorization\Model\Acl\Loader;
 
+use Magento\Framework\App\Resource;
+
 class Rule implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
@@ -37,7 +39,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
     {
         $ruleTable = $this->_resource->getTableName("authorization_rule");
 
-        $adapter = $this->_resource->getConnection('core_read');
+        $adapter = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
 
         $select = $adapter->select()->from(['r' => $ruleTable]);
 

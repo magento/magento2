@@ -8,5 +8,10 @@
  * Modules that were refactored
  */
 return [
+    '/app/code/Magento/AdminNotification',
+    '/app/code/Magento/AdvancedPricingImportExport',
+    '/app/code/Magento/Authorization',
+    '/app/code/Magento/Authorizenet',
+    '/app/code/Magento/Backend',
    // example '/app/code/Magento/Catalog',
 ];
