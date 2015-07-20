@@ -84,7 +84,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
             return $this->couponGenerator->getGeneratedCodes();
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Error occured when generating coupons: %1', $e->getMessage())
+                __('Error occurred when generating coupons: %1', $e->getMessage())
             );
         }
     }
@@ -164,7 +164,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
             return true;
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Error occured when deleting coupons: %1.', $e->getMessage())
+                __('Error occurred when deleting coupons: %1.', $e->getMessage())
             );
         }
     }
