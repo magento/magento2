@@ -25,6 +25,7 @@
         ->appendFile('pub/magento/setup/app.js')
         ->appendFile('pub/magento/setup/main.js')
         ->appendFile('pub/magento/setup/landing.js')
+        ->appendFile('pub/magento/setup/component-grid.js')
         ->appendFile('pub/magento/setup/readiness-check.js')
         ->appendFile('pub/magento/setup/add-database.js')
         ->appendFile('pub/magento/setup/web-configuration.js')
@@ -60,8 +61,6 @@
     <?php echo $this->inlineScript() ?>
 </head>
 <body>
-<main class="container">
-    <?php echo $this->content; ?>
-</main>
+<?php echo $this->content; ?>
 </body>
 </html>

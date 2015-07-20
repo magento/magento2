@@ -17,54 +17,6 @@
     <?php $showNavMenuExpressions[] = '$state.is(\'' . $item['id'] . '\')'; ?>
 <?php endforeach; ?>
 
-<header
-    class="header ng-cloak"
-    ng-class="{'show' : <?php echo implode( '&&', $expressions ); ?>}"
-    >
-    <img class="logo" src="<?php echo $this->basePath() ?>/pub/images/magento-icon.svg" alt="Magento"/>
-    <h1 class="header-title"><?php echo $this->headerTitle?></h1>
-</header>
-
-<nav
-    class="admin__menu"
-    ng-if="<?php echo implode( '&&', $expressions ); ?>"
-    role="navigation">
-    <div class="menu-wrapper">
-    <a
-        class="logo"
-        href="/"
-        data-edition="Community Edition">
-        <img class="logo-img"
-             src="./pub/images/logo.svg"
-             alt="Magento Admin Panel">
-    </a>
-        <ul id="nav" role="menubar">
-            <li class="item-home level-0">
-                <a href="#">
-                    <span>Home</span>
-                </a>
-            </li>
-            <li class="item-component level-0 _active">
-                <a
-                    class="_active"
-                    href="#">
-                    <span>Component Manager</span>
-                </a>
-            </li>
-            <li class="item-upgrade level-0">
-                <a href="#">
-                    <span>System Upgrade</span>
-                </a>
-            </li>
-            <li class="item-system-config level-0">
-                <a href="#">
-                    <span>System Config</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
 <nav
     ng-controller="navigationController"
     ng-class="{'show' :

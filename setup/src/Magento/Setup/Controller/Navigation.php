@@ -62,4 +62,34 @@ class Navigation extends AbstractActionController
         $view->setVariable('main', $this->navigation->getMainItems());
         return $view;
     }
+
+    /**
+     * @return array|ViewModel
+     */
+    public function sideMenuAction()
+    {
+        $view = new ViewModel;
+        $view->setTemplate('/magento/setup/navigation/side-menu.phtml');
+        $view->setTerminal(true);
+        return $view;
+    }
+
+    /**
+     * @return array|ViewModel
+     */
+    public function headerBarAction()
+    {
+        $view = new ViewModel;
+        if ($this->navigation->getType() === NavModel::NAV_INSTALLER) {
+            $view->setVariable('headerTitle', 'Magento Installation');
+        } else {
+            if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
+                $view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
+            }
+            $view->setVariable('headerTitle', 'Magento Component Manager');
+        }
+        $view->setTemplate('/magento/setup/navigation/header-bar.phtml');
+        $view->setTerminal(true);
+        return $view;
+    }
 }
