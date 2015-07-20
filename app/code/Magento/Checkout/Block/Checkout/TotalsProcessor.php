@@ -31,7 +31,8 @@ class TotalsProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     public function process($jsLayout)
     {
         $configData = $this->scopeConfig->getValue('sales/totals_sort');
-        $totals = $jsLayout['components']['checkout']['children']['summary']['children']['totals']['children'];
+        $totals =  $jsLayout['components']['checkout']['children']['sidebar']['children']['summary']
+                ['children']['totals']['children'];
         foreach ($totals as $code => &$total) {
             //convert JS naming style to config naming style
             $code = str_replace('-', '_', $code);
@@ -39,8 +40,9 @@ class TotalsProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 $total['sortOrder'] = $configData[$code];
             }
         }
-        $jsLayout['components']['checkout']['children']['summary']['children']['totals']['children'] = $totals;
+        $jsLayout['components']['checkout']['children']['sidebar']['children']['summary']
+                ['children']['totals']['children'] = $totals;
 
-        return array_merge_recursive($jsLayout, $totals);
+        return $jsLayout;
     }
 }

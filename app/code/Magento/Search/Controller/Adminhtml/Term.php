@@ -8,7 +8,7 @@ namespace Magento\Search\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
-class Term extends Action
+abstract class Term extends Action
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page

@@ -50,7 +50,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         ];
         $context = $this->objectManager->create('Magento\Framework\App\Action\Context', $arguments);
         $this->_controller = $this->objectManager->create(
-            'Magento\Catalog\Controller\Product',
+            'Magento\Catalog\Helper\Product\Stub\ProductControllerStub',
             ['context' => $context]
         );
         $resultPageFactory = $this->objectManager->get('Magento\Framework\View\Result\PageFactory');
@@ -126,7 +126,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testPrepareAndRenderWrongController()
     {
         $objectManager = $this->objectManager;
-        $controller = $objectManager->create('Magento\Catalog\Controller\Product');
+        $controller = $objectManager->create('Magento\Catalog\Helper\Product\Stub\ProductControllerStub');
         $this->_helper->prepareAndRender($this->page, 10, $controller);
     }
 

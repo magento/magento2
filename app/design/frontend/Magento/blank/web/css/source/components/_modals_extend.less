@@ -91,11 +91,52 @@
         right: 0;
         top: 0;
     }
+
+    body {
+        &._has-modal-custom {
+            .modal-custom-overlay {
+                height: 100vh;
+                left: 0;
+                position: fixed;
+                top: 0;
+                width: 100vw;
+                z-index: @overlay__z-index;
+            }
+        }
+    }
 }
 
 //
 //  Mobile
 //  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .custom-slide {
+        .abs-modal();
+        .abs-modal-slide();
+        &._show {
+            -webkit-overflow-scrolling: touch;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .modal-inner-wrap {
+            .css(background-color, @modal-slide-mobile__background-color);
+            box-sizing: border-box;
+            height: auto;
+            min-height: 100%;
+        }
+    }
+    body {
+        &._has-modal-custom {
+            height: 100vh;
+            overflow: hidden;
+            width: 100vw;
+            .modal-custom-overlay {
+                .css(background-color, @modal-overlay__background-color);
+            }
+        }
+    }
+}
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @modal-popup-breakpoint-screen__m) {
     .modal-popup {
@@ -117,35 +158,6 @@
         .modal-title {
             .css(font-size, @modal-popup-title-mobile__font-size);
             .css(font-weight, @font-weight__bold);
-        }
-    }
-    .custom-slide {
-        .abs-modal();
-        .abs-modal-slide();
-        &._show {
-            -webkit-overflow-scrolling: touch;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        .modal-inner-wrap {
-            .css(background-color, @modal-slide-mobile__background-color);
-            box-sizing: border-box;
-            height: auto;
-            min-height: 100%;
-        }
-    }
-    body._has-modal-custom {
-        height: 100vh;
-        overflow: hidden;
-        width: 100vw;
-        .modal-custom-overlay {
-            .css(background-color, @modal-overlay__background-color);
-            height: 100vh;
-            left: 0;
-            position: fixed;
-            top: 0;
-            width: 100vw;
-            z-index: @overlay__z-index;
         }
     }
 }

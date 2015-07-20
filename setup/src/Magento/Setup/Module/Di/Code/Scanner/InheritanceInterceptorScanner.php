@@ -30,9 +30,28 @@ class InheritanceInterceptorScanner implements ScannerInterface
                 }
             }
         }
-        $output = array_merge($interceptedEntities, $output);
+        $output = array_merge($this->filterOutAbstractClasses($interceptedEntities), $output);
         $output = array_unique($output);
         return $output;
+    }
+
+    /**
+     * Filter out Interceptors defined for abstract classes
+     *
+     * @param string[] $interceptedEntities
+     * @return string[]
+     */
+    private function filterOutAbstractClasses($interceptedEntities)
+    {
+        $interceptedEntitiesFiltered = [];
+        foreach ($interceptedEntities as $interceptorClass) {
+            $interceptedEntity = substr($interceptorClass, 0, -12);
+            $reflectionInterceptedEntity = new \ReflectionClass($interceptedEntity);
+            if (!$reflectionInterceptedEntity->isAbstract() && !$reflectionInterceptedEntity->isFinal()) {
+                $interceptedEntitiesFiltered[] = $interceptorClass;
+            }
+        }
+        return $interceptedEntitiesFiltered;
     }
 
     /**

@@ -4,22 +4,13 @@
 //  */
 
 //
-//  Variables
+//  Default Grid
 //  _____________________________________________
-
-//
-//  Grid
-//  ---------------------------------------------
 
 //  Number of columns in the grid.
 
 @grid-columns: 12;
 @grid-gutter-width: 0;
-
-//
-//  Grid system
-//  _____________________________________________
-
 //
 //  Row
 //  ---------------------------------------------
@@ -68,5 +59,33 @@
     > [class*='col-'] {
         padding-left: @content__indent / 2;
         padding-right: @content__indent / 2;
+    }
+}
+
+
+//
+//  Form Fields Grid Sketch
+//  _____________________________________________
+
+@temp_gutter: 30px;
+@temp_columns: 12;
+
+#mix-grid() {
+    .row() {
+        .clearer();
+        margin-left: ~'-@{temp_gutter}';
+    }
+    .return_length(@_columns-min, @_total: @temp_columns, @mathSymbol: '-') {
+        @_part: @_columns-min/@_total;
+        @_length: ~'calc( (100%) * @{_part} @{mathSymbol} @{temp_gutter} )';
+    }
+    .width(@_columns-min, @_total: @temp_columns) {
+        #mix-grid .return_length(@_columns-min, @_total);
+        width: @_length;
+    }
+    .column(@_columns-min, @_total: @temp_columns) {
+        #mix-grid .width(@_columns-min, @_total);
+        float: left;
+        margin-left: @temp_gutter;
     }
 }

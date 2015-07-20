@@ -49,10 +49,12 @@ define(
             emailHasChanged: function () {
                 var self = this;
                 clearTimeout(this.emailCheckTimeout);
+                if (self.validateEmail()) {
+                    quote.guestEmail = self.email();
+                }
                 this.emailCheckTimeout = setTimeout(function () {
                     if (self.validateEmail()) {
                         self.checkEmailAvailability();
-                        quote.guestEmail = self.email();
                     } else {
                         self.isPasswordVisible(false);
                     }
