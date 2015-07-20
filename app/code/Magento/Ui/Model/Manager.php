@@ -191,11 +191,8 @@ class Manager implements ManagerInterface
                     = $this->argumentInterpreter->evaluate($argument);
             }
             $component['children'] = $this->evaluateComponentArguments($component['children']);
-            $this->mergeBookmarkConfig(
-                $component['attributes']['name'],
-                $component[ManagerInterface::COMPONENT_ARGUMENTS_KEY]['data']['config']
-            );
         }
+
         return $components;
     }
 
@@ -306,30 +303,6 @@ class Manager implements ManagerInterface
         }
 
         return $createdComponents;
-    }
-
-    /**
-     * Merged bookmark config with main config
-     *
-     * @param string $parentName
-     * @param array|null $configuration
-     * @return void
-     */
-    protected function mergeBookmarkConfig($parentName, &$configuration)
-    {
-        $data = [];//$this->bookmark->getCurrentBookmarkByIdentifier('cms_page_listing')->getConfig();
-
-        if (isset($data[$parentName])) {
-            foreach ($data[$parentName] as $name => $fields) {
-                if ($configuration['attributes']['name'] == $name && is_array($fields)) {
-                    $configuration['arguments']['data']['config'] = array_replace_recursive(
-                        $configuration['arguments']['data']['config'],
-                        $fields
-                    );
-                }
-            }
-        }
-
     }
 
     /**
