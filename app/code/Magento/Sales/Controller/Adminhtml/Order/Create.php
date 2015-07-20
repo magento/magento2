@@ -15,7 +15,7 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Create extends \Magento\Backend\App\Action
+abstract class Create extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Escaper
