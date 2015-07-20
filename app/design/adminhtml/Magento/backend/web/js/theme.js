@@ -95,7 +95,6 @@ define('globalNavigationScroll', [
                 }
             }
 
-
         } else { // static menu cases
             checkRemoveClass(menu, fixedClassName);
         }
