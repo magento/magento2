@@ -56,7 +56,7 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->delete($this->getTable('oauth_nonce'), ['consumer_id' => $object->getId()]);
         $adapter->delete($this->getTable('oauth_token'), ['consumer_id' => $object->getId()]);
         return parent::_afterDelete($object);
@@ -70,7 +70,7 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getTimeInSecondsSinceCreation($consumerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()
             ->from($this->getMainTable())
             ->reset(\Zend_Db_Select::COLUMNS)

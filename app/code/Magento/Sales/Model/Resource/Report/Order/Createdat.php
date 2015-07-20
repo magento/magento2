@@ -47,7 +47,7 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
      */
     protected function _aggregateByField($aggregationField, $from, $to)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $adapter->beginTransaction();
         try {

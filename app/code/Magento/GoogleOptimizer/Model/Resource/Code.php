@@ -30,7 +30,7 @@ class Code extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByEntityType($object, $entityId, $entityType, $storeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             ['t_def' => $this->getMainTable()],

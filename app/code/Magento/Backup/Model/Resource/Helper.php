@@ -47,7 +47,7 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getTableDropSql($tableName)
     {
-        $quotedTableName = $this->_getReadAdapter()->quoteIdentifier($tableName);
+        $quotedTableName = $this->getConnection()->quoteIdentifier($tableName);
         return sprintf('DROP TABLE IF EXISTS %s;', $quotedTableName);
     }
 
@@ -89,7 +89,7 @@ class Helper extends \Magento\Framework\DB\Helper
 
         return sprintf(
             "ALTER TABLE %s\n  %s;\n",
-            $this->_getReadAdapter()->quoteIdentifier($tableName),
+            $this->getConnection()->quoteIdentifier($tableName),
             join(",\n  ", $foreignKeys)
         );
     }
@@ -104,14 +104,14 @@ class Helper extends \Magento\Framework\DB\Helper
     public function getTableCreateScript($tableName, $addDropIfExists = false)
     {
         $script = '';
-        $quotedTableName = $this->_getReadAdapter()->quoteIdentifier($tableName);
+        $quotedTableName = $this->getConnection()->quoteIdentifier($tableName);
 
         if ($addDropIfExists) {
             $script .= 'DROP TABLE IF EXISTS ' . $quotedTableName . ";\n";
         }
         //TODO fix me
         $sql = 'SHOW CREATE TABLE ' . $quotedTableName;
-        $data = $this->_getReadAdapter()->fetchRow($sql);
+        $data = $this->getConnection()->fetchRow($sql);
         $script .= isset($data['Create Table']) ? $data['Create Table'] . ";\n" : '';
 
         return $script;
@@ -127,7 +127,7 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getTableCreateSql($tableName, $withForeignKeys = false)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $quotedTableName = $adapter->quoteIdentifier($tableName);
         $query = 'SHOW CREATE TABLE ' . $quotedTableName;
         $row = $adapter->fetchRow($query);
@@ -173,9 +173,9 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getHeader()
     {
-        $dbConfig = $this->_getReadAdapter()->getConfig();
+        $dbConfig = $this->getConnection()->getConfig();
 
-        $versionRow = $this->_getReadAdapter()->fetchRow('SHOW VARIABLES LIKE \'version\'');
+        $versionRow = $this->getConnection()->fetchRow('SHOW VARIABLES LIKE \'version\'');
         $hostName = !empty($dbConfig['unix_socket']) ? $dbConfig['unix_socket'] : (!empty($dbConfig['host']) ? $dbConfig['host'] : 'localhost');
 
         $header = "-- Magento DB backup\n" .
@@ -224,7 +224,7 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getTableDataBeforeSql($tableName)
     {
-        $quotedTableName = $this->_getReadAdapter()->quoteIdentifier($tableName);
+        $quotedTableName = $this->getConnection()->quoteIdentifier($tableName);
         return "\n--\n" .
             "-- Dumping data for table {$quotedTableName}\n" .
             "--\n\n" .
@@ -240,7 +240,7 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getTableDataAfterSql($tableName)
     {
-        $quotedTableName = $this->_getReadAdapter()->quoteIdentifier($tableName);
+        $quotedTableName = $this->getConnection()->quoteIdentifier($tableName);
         return "/*!40000 ALTER TABLE {$quotedTableName} ENABLE KEYS */;\n" . "UNLOCK TABLES;\n";
     }
 
@@ -255,7 +255,7 @@ class Helper extends \Magento\Framework\DB\Helper
     public function getPartInsertSql($tableName, $count = null, $offset = null)
     {
         $sql = null;
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from($tableName)->limit($count, $offset);
         $query = $adapter->query($select);
 
@@ -296,7 +296,7 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     protected function _quoteRow($tableName, array $row)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $describe = $adapter->describeTable($tableName);
         $dataTypes = ['bigint', 'mediumint', 'smallint', 'tinyint'];
         $rowData = [];
@@ -321,7 +321,7 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function prepareTransactionIsolationLevel()
     {
-        $this->_getWriteAdapter()->query('SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        $this->getConnection()->query('SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE');
     }
 
     /**
@@ -331,6 +331,6 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function restoreTransactionIsolationLevel()
     {
-        $this->_getWriteAdapter()->query('SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+        $this->getConnection()->query('SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ');
     }
 }

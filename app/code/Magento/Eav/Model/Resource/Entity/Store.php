@@ -35,7 +35,7 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByEntityStore(AbstractModel $object, $entityTypeId, $storeId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $bind = [':entity_type_id' => $entityTypeId, ':store_id' => $storeId];
         $select = $adapter->select()->from(
             $this->getMainTable()

@@ -31,7 +31,7 @@ class Decimal extends AbstractEav
      */
     protected function _prepareIndex($entityIds = null, $attributeId = null)
     {
-        $write = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $idxTable = $this->getIdxTable();
         // prepare select attributes
         if ($attributeId === null) {
@@ -44,8 +44,8 @@ class Decimal extends AbstractEav
             return $this;
         }
 
-        $productValueExpression = $write->getCheckSql('pds.value_id > 0', 'pds.value', 'pdd.value');
-        $select = $write->select()->from(
+        $productValueExpression = $adapter->getCheckSql('pds.value_id > 0', 'pds.value', 'pdd.value');
+        $select = $adapter->select()->from(
             ['pdd' => $this->getTable('catalog_product_entity_decimal')],
             ['entity_id', 'attribute_id']
         )->join(
@@ -69,7 +69,7 @@ class Decimal extends AbstractEav
             "{$productValueExpression} IS NOT NULL"
         );
 
-        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $statusCond = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'pdd.entity_id', 'cs.store_id', $statusCond);
 
         if ($entityIds !== null) {
@@ -90,7 +90,7 @@ class Decimal extends AbstractEav
         );
 
         $query = $select->insertFromSelect($idxTable);
-        $write->query($query);
+        $adapter->query($query);
 
         return $this;
     }
@@ -102,7 +102,7 @@ class Decimal extends AbstractEav
      */
     protected function _getIndexableAttributes()
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             ['ca' => $this->getTable('catalog_eav_attribute')],
             'attribute_id'

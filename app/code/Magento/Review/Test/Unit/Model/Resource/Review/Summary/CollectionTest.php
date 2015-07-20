@@ -63,7 +63,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
-            ->setMethods(['getReadConnection', 'getMainTable', 'getTable'])
+            ->setMethods(['getConnection', 'getMainTable', 'getTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->adapterMock = $this->getMock(
@@ -82,7 +82,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->selectMock));
         $this->resourceMock->expects($this->once())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($this->adapterMock));
         $this->resourceMock->expects($this->once())
             ->method('getMainTable')

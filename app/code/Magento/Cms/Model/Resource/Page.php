@@ -79,7 +79,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $condition = ['page_id = ?' => (int)$object->getId()];
 
-        $this->_getWriteAdapter()->delete($this->getTable('cms_page_store'), $condition);
+        $this->getConnection()->delete($this->getTable('cms_page_store'), $condition);
 
         return parent::_beforeDelete($object);
     }
@@ -145,7 +145,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($delete) {
             $where = ['page_id = ?' => (int)$object->getId(), 'store_id IN (?)' => $delete];
 
-            $this->_getWriteAdapter()->delete($table, $where);
+            $this->getConnection()->delete($table, $where);
         }
 
         if ($insert) {
@@ -155,7 +155,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $data[] = ['page_id' => (int)$object->getId(), 'store_id' => (int)$storeId];
             }
 
-            $this->_getWriteAdapter()->insertMultiple($table, $data);
+            $this->getConnection()->insertMultiple($table, $data);
         }
 
         return parent::_afterSave($object);
@@ -239,7 +239,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getLoadByIdentifierSelect($identifier, $store, $isActive = null)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['cp' => $this->getMainTable()]
         )->join(
             ['cps' => $this->getTable('cms_page_store')],
@@ -296,7 +296,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores, 1);
         $select->reset(\Zend_Db_Select::COLUMNS)->columns('cp.page_id')->order('cps.store_id DESC')->limit(1);
 
-        return $this->_getReadAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -315,7 +315,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores);
         $select->reset(\Zend_Db_Select::COLUMNS)->columns('cp.title')->order('cps.store_id DESC')->limit(1);
 
-        return $this->_getReadAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -326,7 +326,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCmsPageTitleById($id)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from($this->getMainTable(), 'title')->where('page_id = :page_id');
 
@@ -343,7 +343,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCmsPageIdentifierById($id)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from($this->getMainTable(), 'identifier')->where('page_id = :page_id');
 
@@ -360,7 +360,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function lookupStoreIds($pageId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             $this->getTable('cms_page_store'),

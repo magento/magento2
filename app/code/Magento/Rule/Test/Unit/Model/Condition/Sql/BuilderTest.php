@@ -44,7 +44,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $combine = $this->getMock('\Magento\Rule\Model\Condition\Combine', ['getConditions'], [], '', false);
-        $resource = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['getReadConnection'], [], '', false);
+        $resource = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['getConnection'], [], '', false);
         $select = $this->getMock('\Magento\Framework\DB\Select', ['where'], [], '', false);
         $select->expects($this->never())
             ->method('where');
@@ -60,7 +60,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($select));
 
         $resource->expects($this->once())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($connection));
 
         $combine->expects($this->any())

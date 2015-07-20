@@ -27,7 +27,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function createDatabaseScheme()
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $table = $this->getMainTable();
         if ($adapter->isTableExists($table)) {
             return $this;
@@ -99,7 +99,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function loadByPath(\Magento\MediaStorage\Model\File\Storage\Directory\Database $object, $path)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $name = basename($path);
         $path = dirname($path);
@@ -133,7 +133,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function getParentId($path)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $name = basename($path);
         $path = dirname($path);
@@ -161,7 +161,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function clearDirectories()
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->delete($this->getMainTable());
 
         return $this;
@@ -176,7 +176,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function exportDirectories($offset, $count = 100)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             ['e' => $this->getMainTable()],
@@ -200,7 +200,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
     public function getSubdirectories($directory)
     {
         $directory = trim($directory, '/');
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
 
         $select = $adapter->select()->from(
             ['e' => $this->getMainTable()],
@@ -223,7 +223,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function deleteDirectory($name, $path)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $where = ['name = ?' => $name];
         $where[] = new \Zend_Db_Expr($adapter->prepareSqlCondition('path', ['seq' => $path]));

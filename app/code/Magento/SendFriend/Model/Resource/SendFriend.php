@@ -34,7 +34,7 @@ class SendFriend extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSendCount($object, $ip, $startTime, $websiteId = null)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getMainTable(),
             ['count' => new \Zend_Db_Expr('count(*)')]
@@ -59,7 +59,7 @@ class SendFriend extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function addSendItem($ip, $startTime, $websiteId)
     {
-        $this->_getWriteAdapter()->insert(
+        $this->getConnection()->insert(
             $this->getMainTable(),
             ['ip' => $ip, 'time' => $startTime, 'website_id' => $websiteId]
         );
@@ -74,8 +74,8 @@ class SendFriend extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteLogsBefore($time)
     {
-        $cond = $this->_getWriteAdapter()->quoteInto('time<?', $time);
-        $this->_getWriteAdapter()->delete($this->getMainTable(), $cond);
+        $cond = $this->getConnection()->quoteInto('time<?', $time);
+        $this->getConnection()->delete($this->getMainTable(), $cond);
 
         return $this;
     }

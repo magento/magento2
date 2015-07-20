@@ -286,9 +286,12 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
             ->setConstructorArgs($arguments)
-            ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback'])
+            ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
         $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
+        $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getAdapterMock()));
+
+
         $eavConfig->expects($this->any())->method('getAttribute')->will(
             $this->returnCallback(
                 function ($entityType, $attributeCode) use ($attributes) {
@@ -296,7 +299,6 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
                 }
             )
         );
-        $model->setConnection($this->_getAdapterMock());
         $model->isPartialSave(true);
         $model->save($object);
     }

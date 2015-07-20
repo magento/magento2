@@ -42,14 +42,14 @@ class Product extends AbstractDb
      */
     public function saveMultiple(array $insertData)
     {
-        $write = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         if (sizeof($insertData) <= self::CHUNK_SIZE) {
-            return $write->insertMultiple($this->getTable(self::TABLE_NAME), $insertData);
+            return $adapter->insertMultiple($this->getTable(self::TABLE_NAME), $insertData);
         }
         $data = array_chunk($insertData, self::CHUNK_SIZE);
         $totalCount = 0;
         foreach ($data as $insertData) {
-            $totalCount += $write->insertMultiple($this->getTable(self::TABLE_NAME), $insertData);
+            $totalCount += $adapter->insertMultiple($this->getTable(self::TABLE_NAME), $insertData);
         }
         return $totalCount;
     }
@@ -60,7 +60,7 @@ class Product extends AbstractDb
      */
     public function removeMultiple(array $removeData)
     {
-        $write = $this->_getWriteAdapter();
-        return $write->delete($this->getTable(self::TABLE_NAME), ['url_rewrite_id in (?)' => $removeData]);
+        $adapter = $this->getConnection();
+        return $adapter->delete($this->getTable(self::TABLE_NAME), ['url_rewrite_id in (?)' => $removeData]);
     }
 }

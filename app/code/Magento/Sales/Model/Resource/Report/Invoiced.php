@@ -52,7 +52,7 @@ class Invoiced extends AbstractReport
         $table = $this->getTable('sales_invoiced_aggregated');
         $sourceTable = $this->getTable('sales_invoice');
         $orderTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $adapter->beginTransaction();
 
@@ -174,7 +174,7 @@ class Invoiced extends AbstractReport
     {
         $table = $this->getTable('sales_invoiced_aggregated_order');
         $sourceTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect($sourceTable, 'created_at', 'updated_at', $from, $to);

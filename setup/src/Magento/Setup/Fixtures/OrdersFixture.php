@@ -28,7 +28,7 @@ class OrdersFixture extends Fixture
         }
         $this->fixtureModel->resetObjectManager();
 
-        $writeAdapter = $this->getConnection('write');
+        $adapter = $this->getConnection('write');
 
         $quoteTableName = $this->getTableName(
             'quote',
@@ -268,7 +268,7 @@ class OrdersFixture extends Fixture
 
             // @codingStandardsIgnoreEnd
             foreach ($queries as $query) {
-                $writeAdapter->query($query);
+                $adapter->query($query);
             }
 
             $entityId++;

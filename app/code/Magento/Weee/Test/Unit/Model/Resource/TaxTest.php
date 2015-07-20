@@ -41,22 +41,17 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->selectMock);
 
         $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
-        $this->resourceMock->expects($this->at(0))
+        $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->with('core_write')
             ->willReturn($this->adapterMock);
 
-        $this->resourceMock->expects($this->at(1))
-            ->method('getConnection')
-            ->with('core_read')
-            ->willReturn($this->adapterMock);
 
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->willReturn('table_name');
 
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
-        $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
+        $contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceMock);
 
         $this->model = $this->objectManager->getObject(
             'Magento\Weee\Model\Resource\Tax',

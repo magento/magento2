@@ -113,7 +113,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _checkIntersection($storeId, $dateFrom, $dateTo, $currentId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             ['main_table' => $this->getTable('design_change')]
         )->where(
@@ -183,7 +183,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadChange($storeId, $date)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['main_table' => $this->getTable('design_change')]
         )->where(
             'store_id = :store_id'
@@ -195,6 +195,6 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $bind = ['store_id' => (int)$storeId, 'required_date' => $date];
 
-        return $this->_getReadAdapter()->fetchRow($select, $bind);
+        return $this->getConnection()->fetchRow($select, $bind);
     }
 }

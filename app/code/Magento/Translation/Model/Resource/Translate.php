@@ -58,7 +58,7 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
             $storeId = $this->getStoreId();
         }
 
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         if (!$adapter) {
             return [];
         }
@@ -87,7 +87,7 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
             $storeId = $this->getStoreId();
         }
 
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         if (!$adapter) {
             return [];
         }

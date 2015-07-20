@@ -36,8 +36,8 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb implements 
      */
     public function saveConfig($path, $value, $scope, $scopeId)
     {
-        $writeAdapter = $this->_getWriteAdapter();
-        $select = $writeAdapter->select()->from(
+        $adapter = $this->getConnection();
+        $select = $adapter->select()->from(
             $this->getMainTable()
         )->where(
             'path = ?',
@@ -49,15 +49,15 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb implements 
             'scope_id = ?',
             $scopeId
         );
-        $row = $writeAdapter->fetchRow($select);
+        $row = $adapter->fetchRow($select);
 
         $newData = ['scope' => $scope, 'scope_id' => $scopeId, 'path' => $path, 'value' => $value];
 
         if ($row) {
             $whereCondition = [$this->getIdFieldName() . '=?' => $row[$this->getIdFieldName()]];
-            $writeAdapter->update($this->getMainTable(), $newData, $whereCondition);
+            $adapter->update($this->getMainTable(), $newData, $whereCondition);
         } else {
-            $writeAdapter->insert($this->getMainTable(), $newData);
+            $adapter->insert($this->getMainTable(), $newData);
         }
         return $this;
     }
@@ -72,7 +72,7 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb implements 
      */
     public function deleteConfig($path, $scope, $scopeId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $adapter->delete(
             $this->getMainTable(),
             [

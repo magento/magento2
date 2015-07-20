@@ -90,7 +90,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
      */
     public function getUniqRulesNamesList()
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $tableName = $this->getTable('salesrule_coupon_aggregated');
         $select = $adapter->select()->from(
             $tableName,

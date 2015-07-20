@@ -50,7 +50,7 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getVariableByCode($code, $withValue = false, $storeId = 0)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable()
         )->where(
             $this->getMainTable() . '.code = ?',
@@ -59,7 +59,7 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($withValue) {
             $this->_addValueToSelect($select, $storeId);
         }
-        return $this->_getReadAdapter()->fetchRow($select);
+        return $this->getConnection()->fetchRow($select);
     }
 
     /**
@@ -75,7 +75,7 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
             /*
              * remove store value
              */
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->getTable('variable_value'),
                 ['variable_id = ?' => $object->getId(), 'store_id = ?' => $object->getStoreId()]
             );
@@ -87,7 +87,7 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'html_value' => $object->getHtmlValue(),
             ];
             $data = $this->_prepareDataForTable(new \Magento\Framework\Object($data), $this->getTable('variable_value'));
-            $this->_getWriteAdapter()->insertOnDuplicate(
+            $this->getConnection()->insertOnDuplicate(
                 $this->getTable('variable_value'),
                 $data,
                 ['plain_value', 'html_value']
@@ -122,7 +122,7 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Zend_Db_Select $select,
         $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
     ) {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $ifNullPlainValue = $adapter->getCheckSql('store.plain_value IS NULL', 'def.plain_value', 'store.plain_value');
         $ifNullHtmlValue = $adapter->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
 

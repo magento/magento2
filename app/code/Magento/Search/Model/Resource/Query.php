@@ -56,7 +56,7 @@ class Query extends AbstractDb
      */
     public function loadByQueryText(AbstractModel $object, $value)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable()
         )->where(
             'query_text = ?',
@@ -67,7 +67,7 @@ class Query extends AbstractDb
         )->limit(
             1
         );
-        $data = $this->_getReadAdapter()->fetchRow($select);
+        $data = $this->getConnection()->fetchRow($select);
         if ($data) {
             $object->setData($data);
             $this->_afterLoad($object);
@@ -102,8 +102,8 @@ class Query extends AbstractDb
      */
     public function loadByQuery(AbstractModel $object, $value)
     {
-        $readAdapter = $this->_getReadAdapter();
-        $select = $readAdapter->select();
+        $adapter = $this->getConnection();
+        $select = $adapter->select();
 
         $synonymSelect = $this->getQuerySelect($object, 'query_text', $value);
         $querySelect = $this->getQuerySelect($object, 'synonym_for', $value);
@@ -111,7 +111,7 @@ class Query extends AbstractDb
         $select->union(["($synonymSelect)", "($querySelect)"], Select::SQL_UNION_ALL)
             ->limit(1);
 
-        $data = $this->_getReadAdapter()->fetchRow($select);
+        $data = $this->getConnection()->fetchRow($select);
         if ($data) {
             $object->setData($data);
             $this->_afterLoad($object);
@@ -128,7 +128,7 @@ class Query extends AbstractDb
      */
     private function getQuerySelect(AbstractModel $object, $field, $value)
     {
-        $select = $this->_getReadAdapter()->select();
+        $select = $this->getConnection()->select();
         $select->from($this->getMainTable())
             ->where($field . ' = ?', $value)
             ->where('store_id = ?', $object->getStoreId())

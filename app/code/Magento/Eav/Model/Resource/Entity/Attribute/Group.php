@@ -37,7 +37,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function itemExists($object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = [
             'attribute_set_id' => $object->getAttributeSetId(),
             'attribute_group_name' => $object->getAttributeGroupName(),
@@ -93,7 +93,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getMaxSortOrder($object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = [':attribute_set_id' => $object->getAttributeSetId()];
         $select = $adapter->select()->from(
             $this->getMainTable(),
@@ -113,7 +113,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function updateDefaultGroup($attributeSetId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $bind = [':attribute_set_id' => $attributeSetId];
         $select = $adapter->select()->from(
             $this->getMainTable(),

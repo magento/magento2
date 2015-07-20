@@ -28,11 +28,12 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
      * @param string $mainTable
      * @param array $data
      * @param mixed $matchFields
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return string
      */
     public function mergeVisitorProductIndex($mainTable, $data, $matchFields)
     {
-        $result = $this->_getWriteAdapter()->insertOnDuplicate($mainTable, $data, array_keys($data));
+        $result = $this->getConnection()->insertOnDuplicate($mainTable, $data, array_keys($data));
         return $result;
     }
 

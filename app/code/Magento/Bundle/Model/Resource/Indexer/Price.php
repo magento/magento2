@@ -84,7 +84,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _prepareBundlePriceTable()
     {
-        $this->_getWriteAdapter()->delete($this->_getBundlePriceTable());
+        $this->getConnection()->delete($this->_getBundlePriceTable());
         return $this;
     }
 
@@ -95,7 +95,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _prepareBundleSelectionTable()
     {
-        $this->_getWriteAdapter()->delete($this->_getBundleSelectionTable());
+        $this->getConnection()->delete($this->_getBundleSelectionTable());
         return $this;
     }
 
@@ -106,7 +106,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _prepareBundleOptionTable()
     {
-        $this->_getWriteAdapter()->delete($this->_getBundleOptionTable());
+        $this->getConnection()->delete($this->_getBundleOptionTable());
         return $this;
     }
 
@@ -120,10 +120,10 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _prepareBundlePriceByType($priceType, $entityIds = null)
     {
-        $write = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $table = $this->_getBundlePriceTable();
 
-        $select = $write->select()->from(
+        $select = $adapter->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
         )->join(
@@ -156,7 +156,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         );
 
         // add enable products limitation
-        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $statusCond = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $statusCond, true);
         if ($this->moduleManager->isEnabled('Magento_Tax')) {
             $taxClassId = $this->_addAttributeToSelect($select, 'tax_class_id', 'e.entity_id', 'cs.store_id');
@@ -168,11 +168,11 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
             $select->columns(['tax_class_id' => new \Zend_Db_Expr('0')]);
         } else {
             $select->columns(
-                ['tax_class_id' => $write->getCheckSql($taxClassId . ' IS NOT NULL', $taxClassId, 0)]
+                ['tax_class_id' => $adapter->getCheckSql($taxClassId . ' IS NOT NULL', $taxClassId, 0)]
             );
         }
 
-        $priceTypeCond = $write->quoteInto('=?', $priceType);
+        $priceTypeCond = $adapter->quoteInto('=?', $priceType);
         $this->_addAttributeToSelect($select, 'price_type', 'e.entity_id', 'cs.store_id', $priceTypeCond);
 
         $price = $this->_addAttributeToSelect($select, 'price', 'e.entity_id', 'cs.store_id');
@@ -181,21 +181,21 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         $specialTo = $this->_addAttributeToSelect($select, 'special_to_date', 'e.entity_id', 'cs.store_id');
         $curentDate = new \Zend_Db_Expr('cwd.website_date');
 
-        $specialExpr = $write->getCheckSql(
-            $write->getCheckSql(
+        $specialExpr = $adapter->getCheckSql(
+            $adapter->getCheckSql(
                 $specialFrom . ' IS NULL',
                 '1',
-                $write->getCheckSql($specialFrom . ' <= ' . $curentDate, '1', '0')
-            ) . " > 0 AND " . $write->getCheckSql(
+                $adapter->getCheckSql($specialFrom . ' <= ' . $curentDate, '1', '0')
+            ) . " > 0 AND " . $adapter->getCheckSql(
                 $specialTo . ' IS NULL',
                 '1',
-                $write->getCheckSql($specialTo . ' >= ' . $curentDate, '1', '0')
+                $adapter->getCheckSql($specialTo . ' >= ' . $curentDate, '1', '0')
             ) . " > 0 AND {$specialPrice} > 0 AND {$specialPrice} < 100 ",
             $specialPrice,
             '0'
         );
 
-        $groupPriceExpr = $write->getCheckSql(
+        $groupPriceExpr = $adapter->getCheckSql(
             'gp.price IS NOT NULL AND gp.price > 0 AND gp.price < 100',
             'gp.price',
             '0'
@@ -204,30 +204,30 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         $tierExpr = new \Zend_Db_Expr("tp.min_price");
 
         if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
-            $finalPrice = $write->getCheckSql(
+            $finalPrice = $adapter->getCheckSql(
                 $specialExpr . ' > 0',
                 'ROUND(' . $price . ' * (' . $specialExpr . '  / 100), 4)',
                 $price
             );
-            $tierPrice = $write->getCheckSql(
+            $tierPrice = $adapter->getCheckSql(
                 $tierExpr . ' IS NOT NULL',
                 'ROUND(' . $price . ' - ' . '(' . $price . ' * (' . $tierExpr . ' / 100)), 4)',
                 'NULL'
             );
-            $groupPrice = $write->getCheckSql(
+            $groupPrice = $adapter->getCheckSql(
                 $groupPriceExpr . ' > 0',
                 'ROUND(' . $price . ' - ' . '(' . $price . ' * (' . $groupPriceExpr . ' / 100)), 4)',
                 'NULL'
             );
-            $finalPrice = $write->getCheckSql(
+            $finalPrice = $adapter->getCheckSql(
                 "{$groupPrice} IS NOT NULL AND {$groupPrice} < {$finalPrice}",
                 $groupPrice,
                 $finalPrice
             );
         } else {
             $finalPrice = new \Zend_Db_Expr("0");
-            $tierPrice = $write->getCheckSql($tierExpr . ' IS NOT NULL', '0', 'NULL');
-            $groupPrice = $write->getCheckSql($groupPriceExpr . ' > 0', $groupPriceExpr, 'NULL');
+            $tierPrice = $adapter->getCheckSql($tierExpr . ' IS NOT NULL', '0', 'NULL');
+            $groupPrice = $adapter->getCheckSql($groupPriceExpr . ' > 0', $groupPriceExpr, 'NULL');
         }
 
         $select->columns(
@@ -235,7 +235,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'price_type' => new \Zend_Db_Expr($priceType),
                 'special_price' => $specialExpr,
                 'tier_percent' => $tierExpr,
-                'orig_price' => $write->getCheckSql($price . ' IS NULL', '0', $price),
+                'orig_price' => $adapter->getCheckSql($price . ' IS NULL', '0', $price),
                 'price' => $finalPrice,
                 'min_price' => $finalPrice,
                 'max_price' => $finalPrice,
@@ -265,7 +265,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         );
 
         $query = $select->insertFromSelect($table);
-        $write->query($query);
+        $adapter->query($query);
 
         return $this;
     }
@@ -277,7 +277,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _calculateBundleOptionPrice()
     {
-        $write = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         $this->_prepareBundleSelectionTable();
         $this->_calculateBundleSelectionPrice(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED);
@@ -285,44 +285,44 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
 
         $this->_prepareBundleOptionTable();
 
-        $select = $write->select()->from(
+        $select = $adapter->select()->from(
             ['i' => $this->_getBundleSelectionTable()],
             ['entity_id', 'customer_group_id', 'website_id', 'option_id']
         )->group(
             ['entity_id', 'customer_group_id', 'website_id', 'option_id', 'is_required', 'group_type']
         )->columns(
             [
-                'min_price' => $write->getCheckSql('i.is_required = 1', 'MIN(i.price)', '0'),
-                'alt_price' => $write->getCheckSql('i.is_required = 0', 'MIN(i.price)', '0'),
-                'max_price' => $write->getCheckSql('i.group_type = 1', 'SUM(i.price)', 'MAX(i.price)'),
-                'tier_price' => $write->getCheckSql('i.is_required = 1', 'MIN(i.tier_price)', '0'),
-                'alt_tier_price' => $write->getCheckSql('i.is_required = 0', 'MIN(i.tier_price)', '0'),
-                'group_price' => $write->getCheckSql('i.is_required = 1', 'MIN(i.group_price)', '0'),
-                'alt_group_price' => $write->getCheckSql('i.is_required = 0', 'MIN(i.group_price)', '0'),
+                'min_price' => $adapter->getCheckSql('i.is_required = 1', 'MIN(i.price)', '0'),
+                'alt_price' => $adapter->getCheckSql('i.is_required = 0', 'MIN(i.price)', '0'),
+                'max_price' => $adapter->getCheckSql('i.group_type = 1', 'SUM(i.price)', 'MAX(i.price)'),
+                'tier_price' => $adapter->getCheckSql('i.is_required = 1', 'MIN(i.tier_price)', '0'),
+                'alt_tier_price' => $adapter->getCheckSql('i.is_required = 0', 'MIN(i.tier_price)', '0'),
+                'group_price' => $adapter->getCheckSql('i.is_required = 1', 'MIN(i.group_price)', '0'),
+                'alt_group_price' => $adapter->getCheckSql('i.is_required = 0', 'MIN(i.group_price)', '0'),
             ]
         );
 
         $query = $select->insertFromSelect($this->_getBundleOptionTable());
-        $write->query($query);
+        $adapter->query($query);
 
         $this->_prepareDefaultFinalPriceTable();
 
         $minPrice = new \Zend_Db_Expr(
-            $write->getCheckSql('SUM(io.min_price) = 0', 'MIN(io.alt_price)', 'SUM(io.min_price)') . ' + i.price'
+            $adapter->getCheckSql('SUM(io.min_price) = 0', 'MIN(io.alt_price)', 'SUM(io.min_price)') . ' + i.price'
         );
         $maxPrice = new \Zend_Db_Expr("SUM(io.max_price) + i.price");
-        $tierPrice = $write->getCheckSql(
+        $tierPrice = $adapter->getCheckSql(
             'MIN(i.tier_percent) IS NOT NULL',
-            $write->getCheckSql(
+            $adapter->getCheckSql(
                 'SUM(io.tier_price) = 0',
                 'SUM(io.alt_tier_price)',
                 'SUM(io.tier_price)'
             ) . ' + MIN(i.tier_price)',
             'NULL'
         );
-        $groupPrice = $write->getCheckSql(
+        $groupPrice = $adapter->getCheckSql(
             'MIN(i.group_price_percent) IS NOT NULL',
-            $write->getCheckSql(
+            $adapter->getCheckSql(
                 'SUM(io.group_price) = 0',
                 'SUM(io.alt_group_price)',
                 'SUM(io.group_price)'
@@ -330,7 +330,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
             'NULL'
         );
 
-        $select = $write->select()->from(
+        $select = $adapter->select()->from(
             ['io' => $this->_getBundleOptionTable()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
@@ -355,7 +355,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         );
 
         $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable());
-        $write->query($query);
+        $adapter->query($query);
 
         return $this;
     }
@@ -369,24 +369,24 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _calculateBundleSelectionPrice($priceType)
     {
-        $write = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
-            $selectionPriceValue = $write->getCheckSql(
+            $selectionPriceValue = $adapter->getCheckSql(
                 'bsp.selection_price_value IS NULL',
                 'bs.selection_price_value',
                 'bsp.selection_price_value'
             );
-            $selectionPriceType = $write->getCheckSql(
+            $selectionPriceType = $adapter->getCheckSql(
                 'bsp.selection_price_type IS NULL',
                 'bs.selection_price_type',
                 'bsp.selection_price_type'
             );
             $priceExpr = new \Zend_Db_Expr(
-                $write->getCheckSql(
+                $adapter->getCheckSql(
                     $selectionPriceType . ' = 1',
                     'ROUND(i.price * (' . $selectionPriceValue . ' / 100),4)',
-                    $write->getCheckSql(
+                    $adapter->getCheckSql(
                         'i.special_price > 0 AND i.special_price < 100',
                         'ROUND(' . $selectionPriceValue . ' * (i.special_price / 100),4)',
                         $selectionPriceValue
@@ -394,12 +394,12 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 ) . '* bs.selection_qty'
             );
 
-            $tierExpr = $write->getCheckSql(
+            $tierExpr = $adapter->getCheckSql(
                 'i.base_tier IS NOT NULL',
-                $write->getCheckSql(
+                $adapter->getCheckSql(
                     $selectionPriceType . ' = 1',
                     'ROUND(i.base_tier - (i.base_tier * (' . $selectionPriceValue . ' / 100)),4)',
-                    $write->getCheckSql(
+                    $adapter->getCheckSql(
                         'i.tier_percent > 0',
                         'ROUND(' .
                         $selectionPriceValue .
@@ -412,12 +412,12 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'NULL'
             );
 
-            $groupExpr = $write->getCheckSql(
+            $groupExpr = $adapter->getCheckSql(
                 'i.base_group_price IS NOT NULL',
-                $write->getCheckSql(
+                $adapter->getCheckSql(
                     $selectionPriceType . ' = 1',
                     $priceExpr,
-                    $write->getCheckSql(
+                    $adapter->getCheckSql(
                         'i.group_price_percent > 0',
                         'ROUND(' .
                         $selectionPriceValue .
@@ -429,38 +429,40 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 ) . ' * bs.selection_qty',
                 'NULL'
             );
-            $priceExpr = new \Zend_Db_Expr($write->getCheckSql("{$groupExpr} < {$priceExpr}", $groupExpr, $priceExpr));
+            $priceExpr = new \Zend_Db_Expr(
+                $adapter->getCheckSql("{$groupExpr} < {$priceExpr}", $groupExpr, $priceExpr)
+            );
         } else {
             $priceExpr = new \Zend_Db_Expr(
-                $write->getCheckSql(
+                $adapter->getCheckSql(
                     'i.special_price > 0 AND i.special_price < 100',
                     'ROUND(idx.min_price * (i.special_price / 100), 4)',
                     'idx.min_price'
                 ) . ' * bs.selection_qty'
             );
-            $tierExpr = $write->getCheckSql(
+            $tierExpr = $adapter->getCheckSql(
                 'i.base_tier IS NOT NULL',
                 'ROUND(idx.min_price * (i.base_tier / 100), 4)* bs.selection_qty',
                 'NULL'
             );
-            $groupExpr = $write->getCheckSql(
+            $groupExpr = $adapter->getCheckSql(
                 'i.base_group_price IS NOT NULL',
                 'ROUND(idx.min_price * (i.base_group_price / 100), 4)* bs.selection_qty',
                 'NULL'
             );
             $groupPriceExpr = new \Zend_Db_Expr(
-                $write->getCheckSql(
+                $adapter->getCheckSql(
                     'i.base_group_price IS NOT NULL AND i.base_group_price > 0 AND i.base_group_price < 100',
                     'ROUND(idx.min_price - idx.min_price * (i.base_group_price / 100), 4)',
                     'idx.min_price'
                 ) . ' * bs.selection_qty'
             );
             $priceExpr = new \Zend_Db_Expr(
-                $write->getCheckSql("{$groupPriceExpr} < {$priceExpr}", $groupPriceExpr, $priceExpr)
+                $adapter->getCheckSql("{$groupPriceExpr} < {$priceExpr}", $groupPriceExpr, $priceExpr)
             );
         }
 
-        $select = $write->select()->from(
+        $select = $adapter->select()->from(
             ['i' => $this->_getBundlePriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
@@ -489,7 +491,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
             $priceType
         )->columns(
             [
-                'group_type' => $write->getCheckSql("bo.type = 'select' OR bo.type = 'radio'", '0', '1'),
+                'group_type' => $adapter->getCheckSql("bo.type = 'select' OR bo.type = 'radio'", '0', '1'),
                 'is_required' => 'bo.required',
                 'price' => $priceExpr,
                 'tier_price' => $tierExpr,
@@ -498,7 +500,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         );
 
         $query = $select->insertFromSelect($this->_getBundleSelectionTable());
-        $write->query($query);
+        $adapter->query($query);
 
         return $this;
     }
@@ -536,7 +538,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _prepareTierPriceIndex($entityIds = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         // remove index by bundle products
         $select = $adapter->select()->from(
@@ -597,7 +599,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _prepareGroupPriceIndex($entityIds = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         // remove index by bundle products
         $select = $adapter->select()->from(

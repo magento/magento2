@@ -73,11 +73,11 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function clean(\Magento\Customer\Model\Visitor $object)
     {
         $cleanTime = $object->getCleanTime();
-        $readAdapter = $this->_getReadAdapter();
-        $writeAdapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
+        $adapter = $this->getConnection();
         $timeLimit = $this->dateTime->formatDate($this->date->gmtTimestamp() - $cleanTime);
         while (true) {
-            $select = $readAdapter->select()->from(
+            $select = $adapter->select()->from(
                 ['visitor_table' => $this->getTable('customer_visitor')],
                 ['visitor_id' => 'visitor_table.visitor_id']
             )->where(
@@ -86,12 +86,12 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
             )->limit(
                 100
             );
-            $visitorIds = $readAdapter->fetchCol($select);
+            $visitorIds = $adapter->fetchCol($select);
             if (!$visitorIds) {
                 break;
             }
             $condition = ['visitor_id IN (?)' => $visitorIds];
-            $writeAdapter->delete($this->getTable('customer_visitor'), $condition);
+            $adapter->delete($this->getTable('customer_visitor'), $condition);
         }
 
         return $this;

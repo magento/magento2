@@ -58,9 +58,9 @@ class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if (!isset(self::$_rateCache[$currencyFrom][$currencyTo])) {
-            $read = $this->_getReadAdapter();
+            $adapter = $this->getConnection();
             $bind = [':currency_from' => strtoupper($currencyFrom), ':currency_to' => strtoupper($currencyTo)];
-            $select = $read->select()->from(
+            $select = $adapter->select()->from(
                 $this->_currencyRateTable,
                 'rate'
             )->where(
@@ -69,7 +69,7 @@ class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'currency_to = :currency_to'
             );
 
-            self::$_rateCache[$currencyFrom][$currencyTo] = $read->fetchOne($select, $bind);
+            self::$_rateCache[$currencyFrom][$currencyTo] = $adapter->fetchOne($select, $bind);
         }
 
         return self::$_rateCache[$currencyFrom][$currencyTo];
@@ -97,7 +97,7 @@ class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if (!isset(self::$_rateCache[$currencyFrom][$currencyTo])) {
-            $adapter = $this->_getReadAdapter();
+            $adapter = $this->getConnection();
             $bind = [':currency_from' => strtoupper($currencyFrom), ':currency_to' => strtoupper($currencyTo)];
             $select = $adapter->select()->from(
                 $this->_currencyRateTable,
@@ -136,7 +136,7 @@ class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function saveRates($rates)
     {
         if (is_array($rates) && sizeof($rates) > 0) {
-            $adapter = $this->_getWriteAdapter();
+            $adapter = $this->getConnection();
             $data = [];
             foreach ($rates as $currencyCode => $rate) {
                 foreach ($rate as $currencyTo => $value) {
@@ -165,7 +165,7 @@ class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getConfigCurrencies($model, $path)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = [':config_path' => $path];
         $select = $adapter->select()->from($this->getTable('core_config_data'))->where('path = :config_path');
         $result = [];
@@ -208,7 +208,7 @@ class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getRatesByCode($code, $toCurrencies = null)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = [':currency_from' => $code];
         $select = $adapter->select()->from(
             $this->getTable('directory_currency_rate'),

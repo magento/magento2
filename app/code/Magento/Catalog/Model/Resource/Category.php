@@ -183,7 +183,7 @@ class Category extends AbstractResource
             // +1 is itself
             $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
             $where = ['entity_id IN(?)' => $parentIds];
-            $this->_getWriteAdapter()->update($this->getEntityTable(), $data, $where);
+            $this->getConnection()->update($this->getEntityTable(), $data, $where);
         }
         $this->deleteChildren($object);
         return $this;
@@ -197,7 +197,7 @@ class Category extends AbstractResource
      */
     public function deleteChildren(\Magento\Framework\Object $object)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $pathField = $adapter->quoteIdentifier('path');
 
         $select = $adapter->select()->from(
@@ -259,7 +259,7 @@ class Category extends AbstractResource
                 $object->setPath($object->getPath() . '/');
             }
 
-            $this->_getWriteAdapter()->update(
+            $this->getConnection()->update(
                 $this->getEntityTable(),
                 ['children_count' => new \Zend_Db_Expr('children_count+1')],
                 ['entity_id IN(?)' => $toUpdateChild]
@@ -298,7 +298,7 @@ class Category extends AbstractResource
     protected function _savePath($object)
     {
         if ($object->getId()) {
-            $this->_getWriteAdapter()->update(
+            $this->getConnection()->update(
                 $this->getEntityTable(),
                 ['path' => $object->getPath()],
                 ['entity_id = ?' => $object->getId()]
@@ -316,7 +316,7 @@ class Category extends AbstractResource
      */
     protected function _getMaxPosition($path)
     {
-        $adapter = $this->getReadConnection();
+        $adapter = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
         $level = count(explode('/', $path));
         $bind = ['c_level' => $level, 'c_path' => $path . '/%'];
@@ -375,7 +375,7 @@ class Category extends AbstractResource
         $update = array_intersect_key($products, $oldProducts);
         $update = array_diff_assoc($update, $oldProducts);
 
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
 
         /**
          * Delete products from category
@@ -439,7 +439,7 @@ class Category extends AbstractResource
      */
     public function getProductsPosition($category)
     {
-        $select = $this->_getWriteAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getCategoryProductTable(),
             ['product_id', 'position']
         )->where(
@@ -447,7 +447,7 @@ class Category extends AbstractResource
         );
         $bind = ['category_id' => (int)$category->getId()];
 
-        return $this->_getWriteAdapter()->fetchPairs($select, $bind);
+        return $this->getConnection()->fetchPairs($select, $bind);
     }
 
     /**
@@ -458,7 +458,7 @@ class Category extends AbstractResource
      */
     public function getChildrenCount($categoryId)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getEntityTable(),
             'children_count'
         )->where(
@@ -466,7 +466,7 @@ class Category extends AbstractResource
         );
         $bind = ['entity_id' => $categoryId];
 
-        return $this->_getReadAdapter()->fetchOne($select, $bind);
+        return $this->getConnection()->fetchOne($select, $bind);
     }
 
     /**
@@ -477,7 +477,7 @@ class Category extends AbstractResource
      */
     public function checkId($entityId)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getEntityTable(),
             'entity_id'
         )->where(
@@ -485,7 +485,7 @@ class Category extends AbstractResource
         );
         $bind = ['entity_id' => $entityId];
 
-        return $this->_getReadAdapter()->fetchOne($select, $bind);
+        return $this->getConnection()->fetchOne($select, $bind);
     }
 
     /**
@@ -500,7 +500,7 @@ class Category extends AbstractResource
             return [];
         }
 
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getEntityTable(),
             'entity_id'
         )->where(
@@ -508,7 +508,7 @@ class Category extends AbstractResource
             $ids
         );
 
-        return $this->_getReadAdapter()->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
@@ -523,7 +523,7 @@ class Category extends AbstractResource
         $storeId = $this->_storeManager->getStore()->getId();
         $attributeId = $this->getIsActiveAttributeId();
         $table = $this->getTable([$this->getEntityTablePrefix(), 'int']);
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $checkSql = $adapter->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
 
         $bind = [
@@ -549,7 +549,7 @@ class Category extends AbstractResource
             $checkSql . ' = :active_flag'
         );
 
-        return $this->_getReadAdapter()->fetchOne($select, $bind);
+        return $this->getConnection()->fetchOne($select, $bind);
     }
 
     /**
@@ -578,7 +578,7 @@ class Category extends AbstractResource
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
         $bind = ['attribute_id' => $attribute->getId(), 'value' => $expectedValue];
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $attribute->getBackend()->getTable(),
             ['entity_id']
         )->where(
@@ -590,7 +590,7 @@ class Category extends AbstractResource
             $entityIdsFilter
         );
 
-        return $this->_getReadAdapter()->fetchCol($select, $bind);
+        return $this->getConnection()->fetchCol($select, $bind);
     }
 
     /**
@@ -603,7 +603,7 @@ class Category extends AbstractResource
     {
         $productTable = $this->_resource->getTableName('catalog_category_product');
 
-        $select = $this->getReadConnection()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['main_table' => $productTable],
             [new \Zend_Db_Expr('COUNT(main_table.product_id)')]
         )->where(
@@ -611,7 +611,7 @@ class Category extends AbstractResource
         );
 
         $bind = ['category_id' => (int)$category->getId()];
-        $counts = $this->getReadConnection()->fetchOne($select, $bind);
+        $counts = $this->getConnection()->fetchOne($select, $bind);
 
         return intval($counts);
     }
@@ -748,7 +748,7 @@ class Category extends AbstractResource
     {
         $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $checkSql = $adapter->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
         $bind = [
             'attribute_id' => $attributeId,
@@ -756,7 +756,7 @@ class Category extends AbstractResource
             'scope' => 1,
             'c_path' => $category->getPath() . '/%',
         ];
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['m' => $this->getEntityTable()],
             'entity_id'
         )->joinLeft(
@@ -817,13 +817,13 @@ class Category extends AbstractResource
      */
     public function isForbiddenToDelete($categoryId)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable('store_group'),
             ['group_id']
         )->where(
             'root_category_id = :root_category_id'
         );
-        $result = $this->_getReadAdapter()->fetchOne($select, ['root_category_id' => $categoryId]);
+        $result = $this->getConnection()->fetchOne($select, ['root_category_id' => $categoryId]);
 
         if ($result) {
             return true;
@@ -839,7 +839,7 @@ class Category extends AbstractResource
      */
     public function getCategoryPathById($categoryId)
     {
-        $select = $this->getReadConnection()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getEntityTable(),
             ['path']
         )->where(
@@ -847,7 +847,7 @@ class Category extends AbstractResource
         );
         $bind = ['entity_id' => (int)$categoryId];
 
-        return $this->getReadConnection()->fetchOne($select, $bind);
+        return $this->getConnection()->fetchOne($select, $bind);
     }
 
     /**
@@ -865,7 +865,7 @@ class Category extends AbstractResource
     ) {
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table = $this->getEntityTable();
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $levelFiled = $adapter->quoteIdentifier('level');
         $pathField = $adapter->quoteIdentifier('path');
 
@@ -940,7 +940,7 @@ class Category extends AbstractResource
     protected function _processPositions($category, $newParent, $afterCategoryId)
     {
         $table = $this->getEntityTable();
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
 
         $bind = ['position' => new \Zend_Db_Expr($positionField . ' - 1')];
@@ -975,7 +975,7 @@ class Category extends AbstractResource
      */
     public function countVisible()
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select();
         $select->from($this->getEntityTable(), 'COUNT(*)')->where('parent_id != ?', 0);
         return (int)$adapter->fetchOne($select);

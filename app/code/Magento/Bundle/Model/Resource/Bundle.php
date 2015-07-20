@@ -59,7 +59,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getSelect($productId, $columns = [])
     {
-        return $this->_getReadAdapter()->select()->from(
+        return $this->getConnection()->select()->from(
             ["bundle_option" => $this->getTable('catalog_product_bundle_option')],
             ['type', 'option_id']
         )->where(
@@ -82,7 +82,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSelectionsData($productId)
     {
-        return $this->_getReadAdapter()->fetchAll($this->_getSelect($productId, ["*"]));
+        return $this->getConnection()->fetchAll($this->_getSelect($productId, ["*"]));
     }
 
     /**
@@ -93,7 +93,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function dropAllQuoteChildItems($productId)
     {
-        $select = $this->quoteResource->getReadConnection()->select();
+        $select = $this->quoteResource->getConnection()->select();
         $adapter = $select->getAdapter();
         $quoteItemIds = $adapter->fetchCol(
             $select->from(
@@ -126,7 +126,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!empty($ids)) {
             $where['selection_id NOT IN (?) '] = $ids;
         }
-        $this->_getWriteAdapter()->delete($this->getTable('catalog_product_bundle_selection'), $where);
+        $this->getConnection()->delete($this->getTable('catalog_product_bundle_selection'), $where);
     }
 
     /**

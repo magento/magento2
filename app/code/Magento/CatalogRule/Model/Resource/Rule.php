@@ -191,16 +191,16 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $rule)
     {
-        $write = $this->_getWriteAdapter();
-        $write->delete(
+        $adapter = $this->getConnection();
+        $adapter->delete(
             $this->getTable('catalogrule_product'),
             ['rule_id=?' => $rule->getId()]
         );
-        $write->delete(
+        $adapter->delete(
             $this->getTable('catalogrule_customer_group'),
             ['rule_id=?' => $rule->getId()]
         );
-        $write->delete(
+        $adapter->delete(
             $this->getTable('catalogrule_group_website'),
             ['rule_id=?' => $rule->getId()]
         );
@@ -239,7 +239,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     public function getRulePrices(\DateTime $date, $websiteId, $customerGroupId, $productIds)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getTable('catalogrule_product_price'),
             ['product_id', 'rule_price']
@@ -270,7 +270,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     public function getRulesFromProduct($date, $websiteId, $customerGroupId, $productId)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         if (is_string($date)) {
             $date = strtotime($date);
         }

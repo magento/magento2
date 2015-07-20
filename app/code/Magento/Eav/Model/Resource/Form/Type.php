@@ -56,7 +56,7 @@ class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$objectId) {
             return [];
         }
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $bind = [':type_id' => $objectId];
         $select = $adapter->select()->from(
             $this->getTable('eav_form_type_entity'),
@@ -85,7 +85,7 @@ class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $insert = array_diff($new, $old);
             $delete = array_diff($old, $new);
 
-            $adapter = $this->_getWriteAdapter();
+            $adapter = $this->getConnection();
 
             if (!empty($insert)) {
                 $data = [];
@@ -124,12 +124,12 @@ class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return [];
         }
         $bind = [':attribute_id' => $attribute];
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable('eav_form_element')
         )->where(
             'attribute_id = :attribute_id'
         );
 
-        return $this->_getReadAdapter()->fetchAll($select, $bind);
+        return $this->getConnection()->fetchAll($select, $bind);
     }
 }

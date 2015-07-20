@@ -120,7 +120,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
         $this->_construct();
         $this->_resource = $resource;
-        $this->setConnection($this->getResource()->getReadConnection());
+        $this->setConnection($this->getResource()->getConnection());
         $this->_initSelect();
     }
 

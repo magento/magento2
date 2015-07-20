@@ -71,7 +71,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getReadConnection', 'getMainTable', 'getTable', '__wakeup']
+            ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
         $this->entitySnapshotMock = $this->getMock(
             'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
@@ -85,7 +85,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
 
-        $this->resourceMock->expects($this->any())->method('getReadConnection')->will(
+        $this->resourceMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($this->connectionMock)
         );
         $this->resourceMock->expects($this->any())->method('getTable')->will($this->returnArgument(0));
@@ -134,7 +134,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($orderId));
 
-        $this->connectionMock = $this->collection->getResource()->getReadConnection();
+        $this->connectionMock = $this->collection->getResource()->getConnection();
         $this->connectionMock->expects($this->exactly(3))
             ->method('prepareSqlCondition')
             ->will(

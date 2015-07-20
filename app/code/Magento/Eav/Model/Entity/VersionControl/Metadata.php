@@ -20,7 +20,7 @@ class Metadata extends \Magento\Framework\Model\Resource\Db\VersionControl\Metad
     {
         $entityClass = get_class($entity);
         if (!isset($this->metadataInfo[$entityClass])) {
-            $fields = $entity->getResource()->getReadConnection()->describeTable(
+            $fields = $entity->getResource()->getConnection()->describeTable(
                 $entity->getResource()->getEntityTable()
             );
 

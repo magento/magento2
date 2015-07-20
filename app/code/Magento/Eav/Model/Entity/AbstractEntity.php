@@ -229,6 +229,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     /**
      * Set connections for entity operations
      *
+     * @deprecated
      * @param \Zend_Db_Adapter_Abstract|string $read
      * @param \Zend_Db_Adapter_Abstract|string|null $write
      * @return $this
@@ -251,59 +252,13 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     }
 
     /**
-     * Retrieve connection for read data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function _getReadAdapter()
-    {
-        if (is_string($this->_read)) {
-            $this->_read = $this->_resource->getConnection($this->_read);
-        }
-        return $this->_read;
-    }
-
-    /**
-     * Retrieve connection for write data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function _getWriteAdapter()
-    {
-        if (is_string($this->_write)) {
-            $this->_write = $this->_resource->getConnection($this->_write);
-        }
-        return $this->_write;
-    }
-
-    /**
      * Get connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected function getConnection()
+    public function getConnection()
     {
-        $this->_resource->getConnection(Config::DEFAULT_SETUP_CONNECTION);
-    }
-
-    /**
-     * Retrieve read DB connection
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    public function getReadConnection()
-    {
-        return $this->_getReadAdapter();
-    }
-
-    /**
-     * Retrieve write DB connection
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    public function getWriteConnection()
-    {
-        return $this->_getWriteAdapter();
+        return $this->_resource->getConnection(Config::DEFAULT_SETUP_CONNECTION);
     }
 
     /**
@@ -951,7 +906,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     public function checkAttributeUniqueValue(AbstractAttribute $attribute, $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select();
         if ($attribute->getBackend()->getType() === 'static') {
             $value = $object->getData($attribute->getAttributeCode());
@@ -1024,7 +979,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
          * Load object base row data
          */
         $select = $this->_getLoadRowSelect($object, $entityId);
-        $row = $this->_getReadAdapter()->fetchRow($select);
+        $row = $this->getConnection()->fetchRow($select);
 
         if (is_array($row)) {
             $object->addData($row);
@@ -1078,7 +1033,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         foreach ($selectGroups as $selects) {
             if (!empty($selects)) {
                 $select = $this->_prepareLoadSelect($selects);
-                $values = $this->_getReadAdapter()->fetchAll($select);
+                $values = $this->getConnection()->fetchAll($select);
                 foreach ($values as $valueRow) {
                     $this->_setAttributeValue($object, $valueRow);
                 }
@@ -1098,7 +1053,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     protected function _prepareLoadSelect(array $selects)
     {
-        return $this->_getReadAdapter()->select()->union($selects, \Zend_Db_Select::SQL_UNION_ALL);
+        return $this->getConnection()->select()->union($selects, \Zend_Db_Select::SQL_UNION_ALL);
     }
 
     /**
@@ -1111,7 +1066,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     protected function _getLoadRowSelect($object, $rowId)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getEntityTable()
         )->where(
             $this->getEntityIdField() . ' =?',
@@ -1130,7 +1085,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     protected function _getLoadAttributesSelect($object, $table)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $table,
             []
         )->where(
@@ -1298,7 +1253,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
             $origData = [];
         }
 
-        $staticFields = $this->_getWriteAdapter()->describeTable($this->getEntityTable());
+        $staticFields = $this->getConnection()->describeTable($this->getEntityTable());
         $staticFields = array_keys($staticFields);
         $attributeCodes = array_keys($this->_attributesByCode);
 
@@ -1380,7 +1335,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     protected function _getStaticFieldProperties($field)
     {
         if (empty($this->_describeTable[$this->getEntityTable()])) {
-            $this->_describeTable[$this->getEntityTable()] = $this->_getWriteAdapter()->describeTable(
+            $this->_describeTable[$this->getEntityTable()] = $this->getConnection()->describeTable(
                 $this->getEntityTable()
             );
         }
@@ -1436,7 +1391,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
          * @var array $update
          * @var array $delete
          */
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $insertEntity = true;
         $entityTable = $this->getEntityTable();
         $entityIdField = $this->getEntityIdField();
@@ -1578,7 +1533,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     protected function _processAttributeValues()
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         foreach ($this->_attributeValuesToSave as $table => $data) {
             $adapter->insertOnDuplicate($table, $data, ['value']);
         }
@@ -1611,10 +1566,10 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         }
         $backendTable = $attribute->getBackendTable();
         if (!isset(self::$_attributeBackendTables[$backendTable])) {
-            self::$_attributeBackendTables[$backendTable] = $this->_getReadAdapter()->describeTable($backendTable);
+            self::$_attributeBackendTables[$backendTable] = $this->getConnection()->describeTable($backendTable);
         }
         $describe = self::$_attributeBackendTables[$backendTable];
-        return $this->_getReadAdapter()->prepareColumnValue($describe['value'], $value);
+        return $this->getConnection()->prepareColumnValue($describe['value'], $value);
     }
 
     /**
@@ -1661,7 +1616,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         $backend = $attribute->getBackend();
         $table = $backend->getTable();
         $entity = $attribute->getEntity();
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $row = $this->getAttributeRow($entity, $object, $attribute);
 
         $newValue = $object->getData($attributeCode);
@@ -1731,7 +1686,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     public function delete($object)
     {
         try {
-            $connection = $this->transactionManager->start($this->_getWriteAdapter());
+            $connection = $this->transactionManager->start($this->getConnection());
             if (is_numeric($object)) {
                 $id = (int) $object;
             } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
@@ -1745,13 +1700,13 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                     $this->transactionManager,
                     $connection,
                     $this->getEntityTable(),
-                    $this->_getWriteAdapter()->quoteInto($this->getEntityIdField() . '=?', $id),
+                    $this->getConnection()->quoteInto($this->getEntityIdField() . '=?', $id),
                     [$this->getEntityIdField() => $id]
                 );
 
                 $this->loadAllAttributes($object);
                 foreach ($this->getAttributesByTable() as $table => $attributes) {
-                    $this->_getWriteAdapter()->delete($table, $where);
+                    $this->getConnection()->delete($table, $where);
                 }
             } catch (\Exception $e) {
                 throw $e;

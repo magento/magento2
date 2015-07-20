@@ -60,7 +60,7 @@ class Settlement extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $rows = $object->getRows();
         if (is_array($rows)) {
-            $adapter = $this->_getWriteAdapter();
+            $adapter = $this->getConnection();
             $reportId = (int)$object->getId();
             try {
                 $adapter->beginTransaction();
@@ -107,7 +107,7 @@ class Settlement extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByAccountAndDate(\Magento\Paypal\Model\Report\Settlement $report, $accountId, $reportDate)
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->getMainTable()
         )->where(

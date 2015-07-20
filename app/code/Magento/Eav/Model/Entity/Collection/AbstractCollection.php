@@ -158,7 +158,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $this->_universalFactory = $universalFactory;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
         $this->_construct();
-        $this->setConnection($this->getEntity()->getReadConnection());
+        $this->setConnection($this->getEntity()->getConnection());
         $this->_prepareStaticFields();
         $this->_initSelect();
     }
@@ -1583,6 +1583,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $field
      * @param string $alias
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
