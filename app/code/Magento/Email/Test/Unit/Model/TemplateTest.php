@@ -725,7 +725,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $emailConfig->expects($this->once())->method('getTemplateType')->will($this->returnValue($templateType));
 
-        /** @var $model \Magento\Email\Model\Template */
+        /** @var \Magento\Email\Model\Template $model */
         $model = $this->getMockBuilder('Magento\Email\Model\Template')
             ->setMethods(['_init'])
             ->setConstructorArgs([
