@@ -42,9 +42,11 @@ class Security
      */
     public function scan($xmlContent)
     {
-        // If running with PHP-FPM we perform an heuristic scan
-        // We cannot use libxml_disable_entity_loader because of this bug
-        // @see https://bugs.php.net/bug.php?id=64938
+        /**
+         * If running with PHP-FPM we perform an heuristic scan
+         * We cannot use libxml_disable_entity_loader because of this bug
+         * @see https://bugs.php.net/bug.php?id=64938
+         */
         if ($this->isPhpFpm()) {
             return $this->heuristicScan($xmlContent);
         }
@@ -57,15 +59,19 @@ class Security
         /**
          * Load XML with network access disabled (LIBXML_NONET)
          * error disabled with @ for PHP-FPM scenario
-         *
+         */
+        set_error_handler(
+        /**
          * @SuppressWarnings(PHPMD.UnusedLocalVariable)
          */
-        set_error_handler(function ($errno, $errstr) {
-            if (substr_count($errstr, 'DOMDocument::loadXML()') > 0) {
-                return true;
-            }
-            return false;
-        }, E_WARNING);
+            function ($errno, $errstr) {
+                if (substr_count($errstr, 'DOMDocument::loadXML()') > 0) {
+                    return true;
+                }
+                return false;
+            },
+            E_WARNING
+        );
 
         $result = (bool)$document->loadXml($xmlContent, LIBXML_NONET);
         restore_error_handler();
