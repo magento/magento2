@@ -24,6 +24,7 @@ define(
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Ui/js/modal/modal',
         'Magento_Checkout/js/model/checkout-data-resolver',
+        'Magento_Checkout/js/checkout-data',
         'mage/translate'
     ],
     function(
@@ -46,6 +47,7 @@ define(
         stepNavigator,
         modal,
         checkoutDataResolver,
+        checkoutData,
         $t
     ) {
         'use strict';
@@ -154,7 +156,9 @@ define(
                     addressData.save_in_address_book = this.saveInAddressBook;
 
                     // New address must be selected as a shipping address
-                    selectShippingAddress(createShippingAddress(addressData));
+                    var newShippingAddress = createShippingAddress(addressData);
+                    selectShippingAddress(newShippingAddress);
+                    checkoutData.setSelectedShippingAddress(newShippingAddress.getKey());
                     this.getPopUp().closeModal();
                     this.isNewAddressAdded(true);
                 }

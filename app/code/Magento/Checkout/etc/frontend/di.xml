@@ -29,6 +29,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Block\SectionConfig">
+        <arguments>
+            <argument name="clientSideSections" xsi:type="array">
+                <item name="checkoutData" xsi:type="string">checkoutData</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="Magento\Checkout\CustomerData\ItemPoolInterface"
                 type="Magento\Checkout\CustomerData\ItemPool"/>
     <type name="Magento\Checkout\CustomerData\ItemPoolInterface">

@@ -5,7 +5,7 @@
 define(['underscore'], function (_) {
     'use strict';
 
-    var baseUrls, sections;
+    var baseUrls, sections, clientSideSections;
 
     var canonize = function(url){
         var route = url;
@@ -32,9 +32,18 @@ define(['underscore'], function (_) {
 
             return _.union(_.toArray(actions), _.toArray(sections['*']));
         },
+
+        filterClientSideSections: function (sections) {
+            if (_.isArray(sections)) {
+                return _.difference(sections, clientSideSections);
+            }
+            return sections;
+        },
+
         'Magento_Customer/js/section-config': function(options) {
             baseUrls = options.baseUrls;
             sections = options.sections;
+            clientSideSections = options.clientSideSections;
         }
     };
 });

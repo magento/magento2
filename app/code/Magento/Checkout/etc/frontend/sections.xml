@@ -42,8 +42,10 @@
     </action>
     <action name="rest/*/V1/carts/*/payment-information">
         <section name="cart"/>
+        <section name="checkoutData"/>
     </action>
     <action name="rest/*/V1/guest-carts/*/payment-information">
         <section name="cart"/>
+        <section name="checkoutData"/>
     </action>
 </config>
