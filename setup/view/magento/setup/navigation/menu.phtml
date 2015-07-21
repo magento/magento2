@@ -14,7 +14,7 @@
     <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')'; ?>
 <?php endforeach; ?>
 <?php $showNavMenuExpressions = []; foreach ( $this->menu as $item ): ?>
-    <?php $showNavMenuExpressions[] = '$state.is(\'' . $item['id'] . '\')'; ?>
+    <?php $showNavMenuExpressions[] = '$state.includes(\'' . $item['id'] . '\')'; ?>
 <?php endforeach; ?>
 
 <nav
