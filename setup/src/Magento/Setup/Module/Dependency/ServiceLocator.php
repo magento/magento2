@@ -165,7 +165,7 @@ class ServiceLocator
     private static function getCsvWriter()
     {
         if (null === self::$csvWriter) {
-            self::$csvWriter = new Csv(new File());
+            self::$csvWriter = new Csv();
         }
         return self::$csvWriter;
     }
