@@ -16,13 +16,19 @@ class ProcessingError
     const ERROR_LEVEL_WARNING = 'warning';
     const ERROR_LEVEL_NOTICE = 'notice';
 
-    /** @var  string */
+    /**
+     * @var string
+     */
     protected $errorCode;
 
-    /** @var  string */
+    /**
+     * @var string
+     */
     protected $errorMessage;
 
-    /** @var  integer */
+    /**
+     * @var string
+     */
     protected $rowNumber;
 
     /**
@@ -30,13 +36,15 @@ class ProcessingError
      */
     protected $columnName;
 
-    /** @var  string */
+    /**
+     * @var string
+     */
     protected $errorLevel;
 
     /**
      * @param string $errorMessage
      * @param string|null $errorCode
-     * @param integer|null $rowNumber
+     * @param int|null $rowNumber
      * @param string|null $columnName
      * @param string|null $errorLevel
      */
