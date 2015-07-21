@@ -9,6 +9,7 @@ namespace Magento\CatalogRule\Model\Indexer;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Resource\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
+use Magento\Framework\App\Resource;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -304,7 +305,7 @@ class IndexBuilder
      */
     protected function getConnection()
     {
-        return $this->resource->getConnection('write');
+        return $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
     }
 
     /**
