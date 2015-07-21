@@ -88,6 +88,15 @@ define(
 
                 checkoutDataResolver.resolveShippingAddress();
 
+                var hasNewAddress = addressList.some(function (address) {
+                    if (address.getType() == 'new-customer-address') {
+                        return true;
+                    }
+                    return false;
+                });
+
+                this.isNewAddressAdded(hasNewAddress);
+
                 if (rates.length == 1) {
                     selectShippingMethodAction(rates[0])
                 }
@@ -160,6 +169,7 @@ define(
                     var newShippingAddress = createShippingAddress(addressData);
                     selectShippingAddress(newShippingAddress);
                     checkoutData.setSelectedShippingAddress(newShippingAddress.getKey());
+                    checkoutData.setShippingAddressData(newShippingAddress);
                     this.getPopUp().closeModal();
                     this.isNewAddressAdded(true);
                 }
