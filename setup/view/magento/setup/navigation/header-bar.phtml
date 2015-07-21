@@ -7,7 +7,15 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<header class="page-header row">
+<?php $expressions = []; foreach ( $this->main as $item ): ?>
+    <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')';
+    ?>
+<?php endforeach; ?>
+<?php  $expressions[] = '!$state.is(\'\')'; ?>
+
+<header class="page-header row"
+        ng-show="<?php echo implode( '&&', $expressions); ?>"
+    >
     <div class="page-header-hgroup col-l-8 col-m-6">
         <div class="page-title-wrapper">
             <h1 class="page-title"><?php echo $this->headerTitle?></h1>

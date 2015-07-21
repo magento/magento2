@@ -24,6 +24,11 @@ class Navigation extends AbstractActionController
     protected $status;
 
     /**
+     * @var ViewModel
+     */
+    protected $view;
+
+    /**
      * @param NavModel $navigation
      * @param Status $status
      */
@@ -31,6 +36,9 @@ class Navigation extends AbstractActionController
     {
         $this->navigation = $navigation;
         $this->status = $status;
+        $this->view = new ViewModel;
+        $this->view->setVariable('menu', $this->navigation->getMenuItems());
+        $this->view->setVariable('main', $this->navigation->getMainItems());
     }
 
     /**
@@ -47,20 +55,9 @@ class Navigation extends AbstractActionController
      */
     public function menuAction()
     {
-        $view = new ViewModel;
-        if ($this->navigation->getType() === NavModel::NAV_INSTALLER) {
-            $view->setVariable('headerTitle', 'Magento Installation');
-        } else {
-            if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
-                $view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
-            }
-            $view->setVariable('headerTitle', 'Magento Component Manager');
-        }
-        $view->setTemplate('/magento/setup/navigation/menu.phtml');
-        $view->setTerminal(true);
-        $view->setVariable('menu', $this->navigation->getMenuItems());
-        $view->setVariable('main', $this->navigation->getMainItems());
-        return $view;
+        $this->view->setTemplate('/magento/setup/navigation/menu.phtml');
+        $this->view->setTerminal(true);
+        return $this->view;
     }
 
     /**
@@ -68,10 +65,9 @@ class Navigation extends AbstractActionController
      */
     public function sideMenuAction()
     {
-        $view = new ViewModel;
-        $view->setTemplate('/magento/setup/navigation/side-menu.phtml');
-        $view->setTerminal(true);
-        return $view;
+        $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
+        $this->view->setTerminal(true);
+        return $this->view;
     }
 
     /**
@@ -79,17 +75,16 @@ class Navigation extends AbstractActionController
      */
     public function headerBarAction()
     {
-        $view = new ViewModel;
         if ($this->navigation->getType() === NavModel::NAV_INSTALLER) {
-            $view->setVariable('headerTitle', 'Magento Installation');
+            $this->view->setVariable('headerTitle', 'Magento Installation');
         } else {
             if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
-                $view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
+                $this->view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
             }
-            $view->setVariable('headerTitle', 'Magento Component Manager');
+            $this->view->setVariable('headerTitle', 'Magento Component Manager');
         }
-        $view->setTemplate('/magento/setup/navigation/header-bar.phtml');
-        $view->setTerminal(true);
-        return $view;
+        $this->view->setTemplate('/magento/setup/navigation/header-bar.phtml');
+        $this->view->setTerminal(true);
+        return $this->view;
     }
 }

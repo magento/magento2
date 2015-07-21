@@ -1,7 +1,22 @@
-<nav
-    class="admin__menu"
-    role="navigation">
-    <div class="menu-wrapper">
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php $expressions = []; foreach ( $this->main as $item ): ?>
+    <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')';
+    ?>
+<?php endforeach; ?>
+<?php  $expressions[] = '!$state.is(\'\')'; ?>
+
+<div class="menu-wrapper"
+    ng-show="<?php echo implode( '&&', $expressions); ?>"
+    >
+<nav class="admin__menu" role="navigation">
     <a
         class="logo"
         href="/"
@@ -10,30 +25,29 @@
              src="./pub/images/logo.svg"
              alt="Magento Admin Panel">
     </a>
-        <ul id="nav" role="menubar">
-            <li class="item-home level-0">
-                <a href="#">
-                    <span>Home</span>
-                </a>
-            </li>
-            <li class="item-component level-0 _active">
-                <a
-                    class="_active"
-                    href="#">
-                    <span>Component Manager</span>
-                </a>
-            </li>
-            <li class="item-upgrade level-0">
-                <a href="#">
-                    <span>System Upgrade</span>
-                </a>
-            </li>
-            <li class="item-system-config level-0">
-                <a href="#">
-                    <span>System Config</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <ul id="nav" role="menubar">
+        <li class="item-home level-0">
+            <a href="#">
+                <span>Home</span>
+            </a>
+        </li>
+        <li class="item-component level-0 _active">
+            <a
+                class="_active"
+                href="#">
+                <span>Component Manager</span>
+            </a>
+        </li>
+        <li class="item-upgrade level-0">
+            <a href="#">
+                <span>System Upgrade</span>
+            </a>
+        </li>
+        <li class="item-system-config level-0">
+            <a href="#">
+                <span>System Config</span>
+            </a>
+        </li>
+    </ul>
 </nav>
-
+</div>
