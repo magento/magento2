@@ -112,6 +112,11 @@ define([
         get: function (sectionName) {
             return buffer.get(sectionName);
         },
+        set: function (sectionName, sectionData) {
+            var data = {};
+            data[sectionName] = sectionData;
+            buffer.update(data);
+        },
         reload: function (sectionNames) {
             return dataProvider.getFromServer(sectionNames).done(function (sections) {
                 buffer.update(sections);
