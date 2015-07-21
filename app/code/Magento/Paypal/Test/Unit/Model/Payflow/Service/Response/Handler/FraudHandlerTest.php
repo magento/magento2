@@ -44,7 +44,10 @@ class FraudHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fraudHandler = new FraudHandler($this->paypalInfoManagerMock);
+        $this->fraudHandler = new FraudHandler(
+            $this->paypalInfoManagerMock,
+            new \Magento\Framework\Xml\Security()
+        );
     }
 
     public function testHandleApprovedTransaction()

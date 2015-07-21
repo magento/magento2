@@ -52,7 +52,10 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
         $carrierArgs = $objectManagerHelper->getConstructArguments(
             'Magento\Shipping\Model\Carrier\AbstractCarrierOnline',
-            ['stockRegistry' => $this->stockRegistry]
+            [
+                'stockRegistry' => $this->stockRegistry,
+                'xmlSecurity' => new \Magento\Framework\Xml\Security(),
+            ]
         );
         $this->carrier = $this->getMockBuilder('Magento\Shipping\Model\Carrier\AbstractCarrierOnline')
             ->setConstructorArgs($carrierArgs)
@@ -117,10 +120,10 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage Entity 'test' not defined
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Detected use of ENTITY in XML, disabled to prevent XXE/XEE attacks
      */
-    public function testXXEXml()
+    public function testParseXmlXXEXml()
     {
         $xmlString = '<!DOCTYPE scan [
             <!ENTITY test SYSTEM "php://filter/read=convert.base64-encode/resource='
@@ -132,10 +135,10 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage Entity 'value2' not defined
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Detected use of ENTITY in XML, disabled to prevent XXE/XEE attacks
      */
-    public function testXQBXml()
+    public function testParseXmlXQBXml()
     {
         $xmlString = '<?xml version="1.0"?>
             <!DOCTYPE test [
