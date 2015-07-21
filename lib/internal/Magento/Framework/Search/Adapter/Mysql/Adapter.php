@@ -5,9 +5,10 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
-use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder as AggregationBuilder;
 use Magento\Framework\App\Resource;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder as AggregationBuilder;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
 
@@ -16,6 +17,8 @@ use Magento\Framework\Search\RequestInterface;
  */
 class Adapter implements AdapterInterface
 {
+    const TEMPORARY_TABLE_NAME = 'search_tmp';
+
     /**
      * Mapper instance
      *
@@ -63,11 +66,12 @@ class Adapter implements AdapterInterface
      */
     public function query(RequestInterface $request)
     {
-        /** @var Select $query */
         $query = $this->mapper->buildQuery($request);
-        $documents = $this->executeQuery($query);
+        $table = $this->storeDocuments($query);
 
-        $aggregations = $this->aggregationBuilder->build($request, $documents);
+        $documents = $this->getDocuments($table);
+
+        $aggregations = $this->aggregationBuilder->build($request, $table);
         $response = [
             'documents' => $documents,
             'aggregations' => $aggregations,
@@ -76,13 +80,61 @@ class Adapter implements AdapterInterface
     }
 
     /**
+     * @param Select $select
+     * @return Table
+     */
+    private function storeDocuments(Select $select)
+    {
+        $table = $this->createTemporaryTable();
+        $this->getConnection()->query($this->getConnection()->insertFromSelect($select, $table->getName()));
+        return $table;
+    }
+
+    /**
+     * @return Table
+     * @throws \Zend_Db_Exception
+     */
+    private function createTemporaryTable()
+    {
+        $connection = $this->getConnection();
+        $table = $connection->newTable($this->resource->getTableName(self::TEMPORARY_TABLE_NAME));
+        $table->addColumn(
+            'entity_id',
+            Table::TYPE_INTEGER,
+            10,
+            ['unsigned' => true, 'nullable' => false],
+            'Entity ID'
+        );
+        $table->addColumn(
+            'relevance',
+            Table::TYPE_FLOAT,
+            10,
+            ['unsigned' => true, 'nullable' => false],
+            'Relevance'
+        );
+        $connection->createTemporaryTable($table);
+        return $table;
+    }
+
+    /**
      * Executes query and return raw response
      *
-     * @param Select $select
+     * @param Table $table
      * @return array
+     * @throws \Zend_Db_Exception
      */
-    private function executeQuery(Select $select)
+    private function getDocuments(Table $table)
     {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->fetchAssoc($select);
+        $select = $this->getConnection()->select();
+        $select->from($table->getName(), ['entity_id', 'relevance']);
+        return $this->getConnection()->fetchAssoc($select);
+    }
+
+    /**
+     * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private function getConnection()
+    {
+        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
     }
 }
