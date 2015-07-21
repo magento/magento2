@@ -176,6 +176,7 @@ define(
 
             selectShippingMethod: function(shippingMethod) {
                 selectShippingMethodAction(shippingMethod);
+                checkoutData.setSelectedShippingRate(shippingMethod);
                 return true;
             },
 
