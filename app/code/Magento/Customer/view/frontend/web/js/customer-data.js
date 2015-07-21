@@ -43,6 +43,7 @@ define([
             return result;
         },
         getFromServer: function (sectionNames) {
+            sectionNames = sectionConfig.filterClientSideSections(sectionNames);
             var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
                 throw new Error(jqXHR);
