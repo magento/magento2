@@ -5,6 +5,7 @@
  */
 namespace Magento\Reports\Test\Unit\Model\Resource\Report\Quote;
 
+use Magento\Framework\App\Resource;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use \Magento\Reports\Model\Resource\Quote\Collection as Collection;
 
@@ -130,7 +131,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $productResourceMock->expects($this->once())
             ->method('getConnection')
-            ->with('read')
+            ->with(Resource::DEFAULT_CONNECTION)
             ->willReturn($adapterMock);
         $productResourceMock->expects($this->any())
             ->method('getAttribute')

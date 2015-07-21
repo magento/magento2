@@ -6,6 +6,8 @@
 
 namespace Magento\Reports\Model\Resource\Quote\Item;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Collection of Magento\Quote\Model\Quote\Item
  *
@@ -169,7 +171,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function getProductData(array $productIds)
     {
-        $productConnection = $this->productResource->getConnection('read');
+        $productConnection = $this->productResource->getConnection(Resource::DEFAULT_CONNECTION);
         $productAttrName = $this->productResource->getAttribute('name');
         $productAttrNameId = (int)$productAttrName->getAttributeId();
         $productAttrPrice = $this->productResource->getAttribute('price');

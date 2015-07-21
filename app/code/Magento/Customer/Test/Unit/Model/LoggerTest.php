@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Customer log data logger test.
  */
@@ -81,7 +83,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->with('write')
+            ->with(Resource::DEFAULT_CONNECTION)
             ->willReturn($this->adapter);
         $this->resource->expects($this->once())
             ->method('getTableName')
@@ -134,7 +136,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->with('read')
+            ->with(Resource::DEFAULT_CONNECTION)
             ->willReturn($this->adapter);
         $this->adapter->expects($this->any())
             ->method('fetchRow')

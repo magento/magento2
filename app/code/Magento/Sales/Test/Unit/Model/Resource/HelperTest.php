@@ -91,7 +91,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         );
         $this->appResource->expects($this->once())
             ->method('getConnection')
-            ->with('sales_write')
+            ->with('sales')
             ->willReturn($this->adapterMock);
         $this->helper->getBestsellersReportUpdateRatingPos(
             $aggregation,
