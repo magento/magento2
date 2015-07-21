@@ -13,7 +13,7 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
      * Cancel selected orders
      *
      * @param AbstractCollection $collection
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return void
      */
     protected function massAction(AbstractCollection $collection)
     {
