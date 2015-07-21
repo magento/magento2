@@ -67,6 +67,7 @@ define(
 
         selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
         shippingService.setShippingRates(rates);
+        checkoutDataResolver.resolveShippingRates();
 
         return Component.extend({
             defaults: {
@@ -176,6 +177,7 @@ define(
 
             selectShippingMethod: function(shippingMethod) {
                 selectShippingMethodAction(shippingMethod);
+                checkoutData.setSelectedShippingRate(shippingMethod);
                 return true;
             },
 
