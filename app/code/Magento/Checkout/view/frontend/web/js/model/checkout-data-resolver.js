@@ -13,12 +13,25 @@ define([
     'Magento_Checkout/js/action/select-shipping-address',
     'Magento_Checkout/js/checkout-data',
     'Magento_Checkout/js/model/shipping-service',
-    'Magento_Checkout/js/action/select-shipping-method'
-], function (addressList, quote, selectShippingAddress, checkoutData, shippingService, selectShippingMethodAction) {
+    'Magento_Checkout/js/action/select-shipping-method',
+    'Magento_Checkout/js/action/create-shipping-address'
+], function (
+    addressList,
+    quote,
+    selectShippingAddress,
+    checkoutData,
+    shippingService,
+    selectShippingMethodAction,
+    createShippingAddress
+) {
     'use strict';
 
     return {
         resolveShippingAddress: function () {
+            var shippingAddressData = checkoutData.getShippingAddressData();
+            if (shippingAddressData) {
+                createShippingAddress(shippingAddressData);
+            }
             var shippingAddress = quote.shippingAddress();
             if (!shippingAddress) {
                 var isShippingAddressInitialized = addressList.some(function (address) {

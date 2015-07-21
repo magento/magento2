@@ -51,6 +51,10 @@ define([
             saveData(obj);
         },
 
+        getShippingAddressData: function () {
+            return getData().shippingAddressData;
+        },
+
         setSelectedShippingRate: function (data) {
             var obj = getData();
             obj.selectedShippingRate = data;
