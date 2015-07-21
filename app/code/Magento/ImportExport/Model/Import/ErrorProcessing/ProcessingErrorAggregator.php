@@ -17,7 +17,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     protected $validationStrategy = self::VALIDATION_STRATEGY_STOP_ON_ERROR;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $allowedErrorsCount = 0;
 
@@ -27,12 +27,12 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     protected $items = [];
 
     /**
-     * @var integer[]
+     * @var int[]
      */
     protected $invalidRows = [];
 
     /**
-     * @var integer[]
+     * @var int[]
      */
     protected $errorStatistics = [];
 
@@ -57,7 +57,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
     /**
      * @param string $errorCode
-     * @param integer|null $rowNumber
+     * @param int|null $rowNumber
      * @param string|null $columnName
      * @param string|null $errorMessage
      * @param string|null $errorLevel
@@ -144,7 +144,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
-     * @param integer $rowNumber
+     * @param int $rowNumber
      * @return bool
      */
     public function isRowInvalid($rowNumber)
@@ -261,6 +261,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     {
         $this->items = [];
         $this->errorStatistics = [];
+        $this->invalidRows = [];
 
         return $this;
     }

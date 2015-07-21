@@ -16,7 +16,7 @@ interface ProcessingErrorAggregatorInterface
 
     /**
      * @param string $errorCode
-     * @param integer|null $rowNumber
+     * @param int|null $rowNumber
      * @param string|null $columnName
      * @param string|null $errorMessage
      * @param string|null $errorLevel
@@ -31,14 +31,14 @@ interface ProcessingErrorAggregatorInterface
     );
 
     /**
-     * @param $code
-     * @param $template
+     * @param string $code
+     * @param string|object $template
      * @return $this
      */
     public function addErrorMessageTemplate($code, $template);
 
     /**
-     * @param integer $rowNumber
+     * @param int $rowNumber
      * @return bool
      */
     public function isRowInvalid($rowNumber);
