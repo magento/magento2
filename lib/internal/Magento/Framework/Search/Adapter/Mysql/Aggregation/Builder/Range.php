@@ -48,14 +48,9 @@ class Range implements BucketInterface
         Table $entityIdsTable
     ) {
         /** @var RangeBucket $bucket */
-        $select = $dataProvider->getDataSet($bucket, $dimensions);
+        $select = $dataProvider->getDataSet($bucket, $dimensions, $entityIdsTable);
         $metrics = $this->metricsBuilder->build($bucket);
 
-        $select->joinInner(
-            ['entities' => $entityIdsTable->getName()],
-            'main_table.entity_id  = entities.entity_id',
-            []
-        );
         /** @var Select $fullQuery */
         $fullQuery = $this->getConnection()
             ->select();
