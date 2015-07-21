@@ -28,9 +28,9 @@ define([
 
     return {
         resolveShippingAddress: function () {
-            var shippingAddressData = checkoutData.getShippingAddressData();
-            if (shippingAddressData) {
-                createShippingAddress(shippingAddressData);
+            var newCustomerShippingAddress = checkoutData.getNewCustomerShippingAddress();
+            if (newCustomerShippingAddress) {
+                createShippingAddress(newCustomerShippingAddress);
             }
             var shippingAddress = quote.shippingAddress();
             if (!shippingAddress) {

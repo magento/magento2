@@ -26,7 +26,8 @@ define([
     if ($.isEmptyObject(getData())) {
         var checkoutData = {
             'selectedShippingAddress': null,
-            'shippingAddressData' : null,
+            'shippingAddressFromData' : null,
+            'newCustomerShippingAddress' : null,
             'selectedShippingRate' : null,
             'selectedPaymentMethod' : null,
             'billingAddressData' : null
@@ -45,14 +46,24 @@ define([
             return getData().selectedShippingAddress;
         },
 
-        setShippingAddressData: function (data) {
+        setShippingAddressFromData: function (data) {
             var obj = getData();
-            obj.shippingAddressData = data;
+            obj.shippingAddressFromData = data;
             saveData(obj);
         },
 
-        getShippingAddressData: function () {
-            return getData().shippingAddressData;
+        getShippingAddressFromData: function () {
+            return getData().shippingAddressFromData;
+        },
+
+        setNewCustomerShippingAddress: function (data) {
+            var obj = getData();
+            obj.newCustomerShippingAddress = data;
+            saveData(obj);
+        },
+
+        getNewCustomerShippingAddress: function () {
+            return getData().newCustomerShippingAddress;
         },
 
         setSelectedShippingRate: function (data) {
