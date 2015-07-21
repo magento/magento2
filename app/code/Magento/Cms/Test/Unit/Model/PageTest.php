@@ -67,7 +67,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                                 '_getWriteAdapter',
                             ]
                         )
-                        ->getMock(),
+                        ->getMockForAbstractClass(),
                     $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
                         ->disableOriginalConstructor()
                         ->getMockForAbstractClass(),
