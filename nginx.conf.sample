@@ -59,7 +59,7 @@ location / {
 }
 
 location /pub {
-    location ~ ^/pub/media/(downloadable|customer|theme_customization/.*\.xml) {
+    location ~ ^/pub/media/(downloadable|customer|import|theme_customization/.*\.xml) {
         deny all;
     }
     location /pub/errors {
@@ -117,6 +117,10 @@ location /media/customer/ {
 }
 
 location /media/downloadable/ {
+    deny all;
+}
+
+location /media/import/ {
     deny all;
 }
 
