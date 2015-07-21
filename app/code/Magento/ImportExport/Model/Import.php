@@ -10,6 +10,8 @@ namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator;
 
 /**
  * Import model
@@ -255,20 +257,20 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Return operation result messages
      *
-     * @param bool $validationResult
+     * @param ProcessingErrorAggregator $validationResult
      * @return string[]
      */
-    public function getOperationResultMessages($validationResult)
+    public function getOperationResultMessages(ProcessingErrorAggregator $validationResult)
     {
         $messages = [];
         if ($this->getProcessedRowsCount()) {
-            if (!$validationResult) {
-                if ($this->getProcessedRowsCount() == $this->getInvalidRowsCount()) {
+            if ($validationResult->getErrorsCount()) {
+                if ($this->getProcessedRowsCount() == $validationResult->getInvalidRowsCount()) {
                     $messages[] = __('This file is invalid. Please fix errors and re-upload the file.');
-                } elseif ($this->getErrorsCount() >= $this->getErrorsLimit()) {
+                } elseif ($validationResult->hasFatalExceptions()) {
                     $messages[] = __(
                         'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
-                        $this->getErrorsLimit()
+                        $validationResult->getAllowedErrorsCount()
                     );
                 } else {
                     if ($this->isImportAllowed()) {
@@ -278,8 +280,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     }
                 }
                 // errors info
-                foreach ($this->getErrors() as $errorCode => $rows) {
-                    $error = $errorCode . ' ' . __('in rows') . ': ' . implode(', ', $rows);
+                foreach ($validationResult->getRowsGroupedByMessage() as $errorMessage => $rows) {
+                    $error = $errorMessage . ' ' . __('in rows') . ': ' . implode(', ', $rows);
                     $messages[] = $error;
                 }
             } else {
@@ -289,16 +291,17 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     $messages[] = __('The file is valid, but we can\'t import it for some reason.');
                 }
             }
-            $notices = $this->getNotices();
-            if (is_array($notices)) {
-                $messages = array_merge($messages, $notices);
-            }
             $messages[] = __(
                 'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
                 $this->getProcessedRowsCount(),
                 $this->getProcessedEntitiesCount(),
-                $this->getInvalidRowsCount(),
-                $this->getErrorsCount()
+                $validationResult->getInvalidRowsCount(),
+                $validationResult->getErrorsCount(
+                    [
+                        ProcessingError::ERROR_LEVEL_CRITICAL,
+                        ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                    ]
+                )
             );
         } else {
             $messages[] = __('This file does not contain any data.');
@@ -356,56 +359,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             throw new \Magento\Framework\Exception\LocalizedException(__('Entity is unknown'));
         }
         return $this->_data['entity'];
-    }
-
-    /**
-     * Get entity adapter errors.
-     *
-     * @return array
-     */
-    public function getErrors()
-    {
-        return $this->_getEntityAdapter()->getErrorMessages();
-    }
-
-    /**
-     * Returns error counter.
-     *
-     * @return int
-     */
-    public function getErrorsCount()
-    {
-        return $this->_getEntityAdapter()->getErrorsCount();
-    }
-
-    /**
-     * Returns error limit value.
-     *
-     * @return int
-     */
-    public function getErrorsLimit()
-    {
-        return $this->_getEntityAdapter()->getErrorsLimit();
-    }
-
-    /**
-     * Returns invalid rows count.
-     *
-     * @return int
-     */
-    public function getInvalidRowsCount()
-    {
-        return $this->_getEntityAdapter()->getInvalidRowsCount();
-    }
-
-    /**
-     * Returns entity model noticees.
-     *
-     * @return string[]
-     */
-    public function getNotices()
-    {
-        return $this->_getEntityAdapter()->getNotices();
     }
 
     /**
@@ -487,6 +440,15 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function isImportAllowed()
     {
         return $this->_getEntityAdapter()->isImportAllowed();
+    }
+
+    /**
+     * @return ProcessingErrorAggregator
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getErrorAggregator()
+    {
+        return $this->_getEntityAdapter()->getErrorAggregator();
     }
 
     /**
@@ -578,10 +540,12 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     {
         $this->addLogComment(__('Begin data validation'));
         $adapter = $this->_getEntityAdapter()->setSource($source);
-        $result = $adapter->isDataValid();
+        $errorAggregator = $adapter->validateData();
 
-        $messages = $this->getOperationResultMessages($result);
+        $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
+
+        $result = !$errorAggregator->hasFatalExceptions();
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }
