@@ -169,7 +169,7 @@ define(
                     var newShippingAddress = createShippingAddress(addressData);
                     selectShippingAddress(newShippingAddress);
                     checkoutData.setSelectedShippingAddress(newShippingAddress.getKey());
-                    checkoutData.setNewCustomerShippingAddress(newShippingAddress);
+                    checkoutData.setNewCustomerShippingAddress(addressData);
                     this.getPopUp().closeModal();
                     this.isNewAddressAdded(true);
                 }
