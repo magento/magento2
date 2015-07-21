@@ -13,9 +13,17 @@ define([
 ], function ($, storage) {
     'use strict';
 
-    var checkoutDataValue = storage.get('checkout-data')();
-    var isObjEmpty = $.isEmptyObject(checkoutDataValue);
-    if (isObjEmpty) {
+    var cacheKey = 'checkoutData';
+
+    var getData = function () {
+        return storage.get(cacheKey)();
+    };
+
+    var saveData = function (checkoutData) {
+        storage.set(cacheKey, checkoutData);
+    };
+
+    if ($.isEmptyObject(getData())) {
         var checkoutData = {
             'selectedShippingAddress': null,
             'shippingAddressData' : null,
@@ -23,42 +31,38 @@ define([
             'selectedPaymentMethod' : null,
             'billingAddressData' : null
         };
-        storage.set('checkout-data', checkoutData);
+        saveData(checkoutData);
     }
 
     return {
-        getData: function() {
-            return storage.get('checkout-data')();
-        },
-
         setSelectedShippingAddress: function (data) {
-            var obj = this.getData();
+            var obj = getData();
             obj.selectedShippingAddress = data;
-            storage.set('checkout-data', checkoutData);
+            saveData(obj);
         },
 
         setShippingAddressData: function (data) {
-            var obj = this.getData();
+            var obj = getData();
             obj.shippingAddressData = data;
-            storage.set('checkout-data', checkoutData);
+            saveData(obj);
         },
 
         setSelectedShippingRate: function (data) {
-            var obj = this.getData();
+            var obj = getData();
             obj.selectedShippingRate = data;
-            storage.set('checkout-data', checkoutData);
+            saveData(obj);
         },
 
         setSelectedPaymentMethod: function (data) {
-            var obj = this.getData();
+            var obj = getData();
             obj.selectedPaymentMethod = data;
-            storage.set('checkout-data', checkoutData);
+            saveData(obj);
         },
 
         setBillingAddressData: function (data) {
-            var obj = this.getData();
+            var obj = getData();
             obj.billingAddressData = data;
-            storage.set('checkout-data', checkoutData);
+            saveData(obj);
         }
     }
 });
