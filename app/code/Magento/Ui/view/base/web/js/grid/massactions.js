@@ -124,7 +124,9 @@ define([
             var callback = action.callback,
                 args     = [action, selections];
 
-            if (utils.isObject(callback)) {
+            if (typeof callback === 'string') {
+                callback = registry.get(callback);
+            } else if (utils.isObject(callback)) {
                 args.unshift(callback.target);
 
                 callback = registry.async(callback.provider);
