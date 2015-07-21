@@ -57,6 +57,10 @@ define([
             saveData(obj);
         },
 
+        getSelectedShippingRate: function() {
+            return getData().selectedShippingRate;
+        },
+
         setSelectedPaymentMethod: function (data) {
             var obj = getData();
             obj.selectedPaymentMethod = data;

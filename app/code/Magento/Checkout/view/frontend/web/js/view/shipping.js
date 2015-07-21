@@ -67,6 +67,7 @@ define(
 
         selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
         shippingService.setShippingRates(rates);
+        checkoutDataResolver.resolveShippingRates();
 
         return Component.extend({
             defaults: {
