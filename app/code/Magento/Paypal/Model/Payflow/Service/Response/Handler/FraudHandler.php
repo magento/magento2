@@ -10,7 +10,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Xml\Security as XmlSecurity;
+use Magento\Framework\Xml\Security;
 
 /**
  * Class FraudHandler
@@ -35,7 +35,7 @@ class FraudHandler implements HandlerInterface
     /**
      * The security scanner XML document
      *
-     * @var XmlSecurity
+     * @var Security
      */
     private $xmlSecurity;
 
@@ -43,9 +43,9 @@ class FraudHandler implements HandlerInterface
      * Constructor
      *
      * @param Info $paypalInfoManager
-     * @param XmlSecurity $xmlSecurity
+     * @param Security $xmlSecurity
      */
-    public function __construct(Info $paypalInfoManager, XmlSecurity $xmlSecurity)
+    public function __construct(Info $paypalInfoManager, Security $xmlSecurity)
     {
         $this->paypalInfoManager = $paypalInfoManager;
         $this->xmlSecurity = $xmlSecurity;

@@ -9,7 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
-use Magento\Framework\Xml\Security as XmlSecurity;
+use Magento\Framework\Xml\Security;
 
 /**
  * Abstract online shipping carrier model
@@ -106,7 +106,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * The security scanner XML document
      *
-     * @var XmlSecurity
+     * @var Security
      */
     protected $xmlSecurity;
 
@@ -114,7 +114,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
-     * @param XmlSecurity $xmlSecurity
+     * @param Security $xmlSecurity
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
@@ -134,7 +134,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
-        XmlSecurity $xmlSecurity,
+        Security $xmlSecurity,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
