@@ -23,8 +23,7 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
         $this->setType(
             \Magento\Catalog\Model\Product::ENTITY
         )->setConnection(
-            $resource->getConnection('catalog_read'),
-            $resource->getConnection('catalog_write')
+            $resource->getConnection('catalog')
         );
     }
 

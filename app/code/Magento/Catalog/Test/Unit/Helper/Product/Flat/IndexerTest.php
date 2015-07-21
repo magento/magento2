@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Helper\Product\Flat;
 
+use Magento\Framework\App\Resource;
+
 class IndexerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,7 +25,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     protected $_storeManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
@@ -153,7 +155,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getConnection'
         )->with(
-            'write'
+            Resource::DEFAULT_CONNECTION
         )->will(
             $this->returnValue($this->_connectionMock)
         );
@@ -201,7 +203,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getConnection'
         )->with(
-            'write'
+            Resource::DEFAULT_CONNECTION
         )->will(
             $this->returnValue($this->_connectionMock)
         );
@@ -241,7 +243,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getConnection'
         )->with(
-            'write'
+            Resource::DEFAULT_CONNECTION
         )->will(
             $this->returnValue($this->_connectionMock)
         );
