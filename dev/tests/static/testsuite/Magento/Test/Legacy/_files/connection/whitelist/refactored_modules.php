@@ -13,5 +13,9 @@ return [
     '/app/code/Magento/Authorization',
     '/app/code/Magento/Authorizenet',
     '/app/code/Magento/Backend',
+    '/app/code/Magento/Captcha',
+    '/app/code/Magento/Catalog',
+    '/app/code/Magento/CatalogImportExport',
+    '/app/code/Magento/CatalogInventory',
    // example '/app/code/Magento/Catalog',
 ];

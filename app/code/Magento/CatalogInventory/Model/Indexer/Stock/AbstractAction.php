@@ -9,6 +9,7 @@
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
 
 use Magento\Catalog\Model\Category;
+use Magento\Framework\App\Resource;
 
 /**
  * Abstract action reindex class
@@ -20,7 +21,7 @@ abstract class AbstractAction
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $_resource;
 
@@ -66,14 +67,14 @@ abstract class AbstractAction
 
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Indexer\Model\CacheContext $cacheContext
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Indexer\Model\CacheContext $cacheContext,
@@ -103,7 +104,7 @@ abstract class AbstractAction
     protected function _getConnection()
     {
         if (null === $this->_connection) {
-            $this->_connection = $this->_resource->getConnection('write');
+            $this->_connection = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
         }
         return $this->_connection;
     }
