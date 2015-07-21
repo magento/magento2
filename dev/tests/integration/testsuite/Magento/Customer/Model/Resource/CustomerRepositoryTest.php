@@ -8,7 +8,7 @@ namespace Magento\Customer\Model\Resource;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -343,7 +343,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $sortOrderBuilder = $objectManager->create('Magento\Framework\Api\SortOrderBuilder');
         $sortOrder = $sortOrderBuilder
             ->setField('lastname')
-            ->setDirection(SearchCriteriaInterface::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         $searchBuilder->addSortOrder($sortOrder);
         $searchResults = $this->customerRepository->getList($searchBuilder->create());
@@ -355,7 +355,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         // Search descending order
         $sortOrder = $sortOrderBuilder
             ->setField('lastname')
-            ->setDirection(SearchCriteriaInterface::SORT_DESC)
+            ->setDirection(SortOrder::SORT_DESC)
             ->create();
         $searchBuilder->addSortOrder($sortOrder);
         $searchResults = $this->customerRepository->getList($searchBuilder->create());

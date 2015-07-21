@@ -7,7 +7,7 @@
 namespace Magento\Customer\Model\Resource;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -375,8 +375,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                 [$filterBuilder->setField('firstname')->setValue('John')->create()],
                 null,
                 [
-                    $orderBuilder->setField('firstname')->setDirection(SearchCriteriaInterface::SORT_DESC)->create(),
-                    $orderBuilder->setField('city')->setDirection(SearchCriteriaInterface::SORT_ASC)->create(),
+                    $orderBuilder->setField('firstname')->setDirection(SortOrder::SORT_DESC)->create(),
+                    $orderBuilder->setField('city')->setDirection(SortOrder::SORT_ASC)->create(),
                 ],
                 [
                     ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
@@ -390,7 +390,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                     $filterBuilder->setField('postcode')->setValue('47676')->create(),
                 ],
                 [
-                    $orderBuilder->setField('city')->setDirection(SearchCriteriaInterface::SORT_DESC)->create(),
+                    $orderBuilder->setField('city')->setDirection(SortOrder::SORT_DESC)->create(),
                 ],
                 [
                     ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
@@ -401,8 +401,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                 [$filterBuilder->setField('postcode')->setValue('0')->setConditionType('gt')->create()],
                 null,
                 [
-                    $orderBuilder->setField('firstname')->setDirection(SearchCriteriaInterface::SORT_ASC)->create(),
-                    $orderBuilder->setField('postcode')->setDirection(SearchCriteriaInterface::SORT_ASC)->create(),
+                    $orderBuilder->setField('firstname')->setDirection(SortOrder::SORT_ASC)->create(),
+                    $orderBuilder->setField('postcode')->setDirection(SortOrder::SORT_ASC)->create(),
                 ],
                 [
                     ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],

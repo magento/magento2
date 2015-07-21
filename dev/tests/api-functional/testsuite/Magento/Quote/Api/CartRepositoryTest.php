@@ -6,7 +6,6 @@
 namespace Magento\Quote\Api;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Api\SortOrder;
@@ -178,10 +177,9 @@ class CartRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder->addFilters([$minCreatedAtFilter]);
         $this->searchCriteriaBuilder->addFilters([$maxCreatedAtFilter]);
         /** @var SortOrder $sortOrder */
-        $sortOrder = $this->sortOrderBuilder->setField('subtotal')->setDirection(SearchCriteria::SORT_ASC)->create();
+        $sortOrder = $this->sortOrderBuilder->setField('subtotal')->setDirection(SortOrder::SORT_ASC)->create();
         $this->searchCriteriaBuilder->setSortOrders([$sortOrder]);
         $searchCriteria = $this->searchCriteriaBuilder->create()->__toArray();
-
         $requestData = ['searchCriteria' => $searchCriteria];
         $serviceInfo = [
             'rest' => [
