@@ -31,7 +31,7 @@ angular.module('create-backup', ['ngStorage'])
         };
 
         $scope.$on('nextState', function () {
-            $localStorage.config = $scope.backupInfo;
+            $localStorage.backupInfo = $scope.backupInfo;
         });
 
         $scope.$watch('backupInfo.options.code', function() {

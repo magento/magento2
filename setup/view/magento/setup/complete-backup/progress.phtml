@@ -31,18 +31,18 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <span class="message-text">Checking and creating Backup...</span>
+        <span class="message-text">Checking and Creating Backup...</span>
     </div>
 
 </div>
 
 <div id="backup-check" class="rediness-check-item" ng-show="check.visible">
     <div ng-hide="check.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Checking available space in disk for taking backups....</strong>
+        <h3 class="readiness-check-title">Checking available space in disk for taking backups...</h3>
     </div>
     <div ng-show="check.processed" ng-switch="check.responseType">
 
@@ -82,11 +82,11 @@
 
 <div id="store-maintenance" class="rediness-check-item" ng-show="maintenance.visible && !hasErrors">
     <div ng-hide="maintenance.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Putting store in maintenance mode...</strong>
+        <h3 class="readiness-check-title">Putting store in maintenance mode...</h3>
     </div>
     <div ng-show="maintenance.processed" ng-switch="maintenance.responseType">
 
@@ -126,11 +126,11 @@
 
 <div id="backup-create" class="rediness-check-item" ng-show="create.visible && !hasErrors">
     <div ng-hide="create.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Creating Backup...</strong>
+        <h3 class="readiness-check-title">Creating Backup...</h3>
     </div>
     <div ng-show="create.processed" ng-switch="create.responseType">
 
