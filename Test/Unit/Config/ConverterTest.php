@@ -26,11 +26,35 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvert()
     {
         $expected = [
-            'test-queue' => [
-                'name' => 'test-queue',
-                'connection' => 'rabbitmq',
-                'exchange' => 'magento'
-            ]
+            'publishers' => [
+                'test-queue' => [
+                    'name' => 'test-queue',
+                    'connection' => 'rabbitmq',
+                    'exchange' => 'magento',
+                ],
+                'test-queue-2' => [
+                    'name' => 'test-queue-2',
+                    'connection' => 'db',
+                    'exchange' => 'magento',
+                ],
+            ],
+            'topics' => [
+                'customer.created' => [
+                    'name' => 'customer.created',
+                    'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
+                    'publisher' => 'test-queue',
+                ],
+                'customer.updated' => [
+                    'name' => 'customer.updated',
+                    'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
+                    'publisher' => 'test-queue-2',
+                ],
+                'customer.deleted' => [
+                    'name' => 'customer.deleted',
+                    'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
+                    'publisher' => 'test-queue-2',
+                ],
+            ],
         ];
 
         $xmlFile = __DIR__ . '/../_files/queue_valid.xml';

@@ -7,10 +7,20 @@
 namespace Magento\Framework\Amqp\Config;
 
 /**
- * Converts publishers from \DOMDocument to array
+ * Converts AMQP config from \DOMDocument to array
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
+    const PUBLISHERS = 'publishers';
+    const PUBLISHER_NAME = 'name';
+    const PUBLISHER_CONNECTION = 'connection';
+    const PUBLISHER_EXCHANGE = 'exchange';
+
+    const TOPICS = 'topics';
+    const TOPIC_NAME = 'name';
+    const TOPIC_PUBLISHER = 'publisher';
+    const TOPIC_SCHEMA = 'schema';
+
     /**
      * Convert dom node tree to array
      *
@@ -19,16 +29,50 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $output = [];
+        return [
+            self::PUBLISHERS => $this->extractPublishers($source),
+            self::TOPICS => $this->extractTopics($source)
+        ];
+    }
 
+    /**
+     * Extract topics configuration.
+     *
+     * @param \DOMDocument $config
+     * @return array
+     */
+    protected function extractTopics($config)
+    {
+        $output = [];
+        /** @var $topicNode \DOMNode */
+        foreach ($config->getElementsByTagName('topic') as $topicNode) {
+            $topicName = $topicNode->attributes->getNamedItem('name')->nodeValue;
+            $output[$topicName] = [
+                self::TOPIC_NAME => $topicName,
+                self::TOPIC_SCHEMA => $topicNode->attributes->getNamedItem('schema')->nodeValue,
+                self::TOPIC_PUBLISHER => $topicNode->attributes->getNamedItem('publisher')->nodeValue
+            ];
+        }
+        return $output;
+    }
+
+    /**
+     * Extract publishers configuration.
+     *
+     * @param \DOMDocument $config
+     * @return array
+     */
+    protected function extractPublishers($config)
+    {
+        $output = [];
         /** @var $publisherNode \DOMNode */
-        foreach ($source->getElementsByTagName('publisher') as $publisherNode) {
+        foreach ($config->getElementsByTagName('publisher') as $publisherNode) {
             $publisherName = $publisherNode->attributes->getNamedItem('name')->nodeValue;
-            $data = [];
-            $data['name'] = $publisherName;
-            $data['connection'] = $publisherNode->attributes->getNamedItem('connection')->nodeValue;
-            $data['exchange'] = $publisherNode->attributes->getNamedItem('exchange')->nodeValue;
-            $output[$publisherName] = $data;
+            $output[$publisherName] = [
+                self::PUBLISHER_NAME => $publisherName,
+                self::PUBLISHER_CONNECTION => $publisherNode->attributes->getNamedItem('connection')->nodeValue,
+                self::PUBLISHER_EXCHANGE => $publisherNode->attributes->getNamedItem('exchange')->nodeValue
+            ];
         }
         return $output;
     }

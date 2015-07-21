@@ -7,4 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../etc/queue.xsd">
     <publisher name="test-queue" connection="rabbitmq" exchange="magento"/>
+    <publisher name="test-queue-2" connection="db" exchange="magento"/>
+    <topic name="customer.created" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-queue"/>
+    <topic name="customer.updated" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-queue-2"/>
+    <topic name="customer.deleted" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-queue-2"/>
 </config>

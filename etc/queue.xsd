@@ -9,7 +9,8 @@
     <xs:element name="config">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="publisher" type="publisherType" />
+                <xs:element name="publisher" type="publisherType" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element type="topicType" name="topic" maxOccurs="unbounded" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -17,5 +18,10 @@
         <xs:attribute type="xs:string" name="name" use="required"/>
         <xs:attribute type="xs:string" name="connection" use="required"/>
         <xs:attribute type="xs:string" name="exchange" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="topicType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="schema" use="required"/>
+        <xs:attribute type="xs:string" name="publisher" use="required"/>
     </xs:complexType>
 </xs:schema>

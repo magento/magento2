@@ -26,7 +26,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     protected $perFileSchema;
 
     /**
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * Initialize dependencies.
      */
     public function __construct()
     {
