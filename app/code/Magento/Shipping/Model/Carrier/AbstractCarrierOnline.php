@@ -639,7 +639,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
         if (!$this->xmlSecurity->scan($xmlContent)) {
-            throw new LocalizedException(__('Detected use of ENTITY in XML, disabled to prevent XXE/XEE attacks'));
+            throw new LocalizedException(__('Security validation of XML document has been failed.'));
         }
 
         $xmlElement = simplexml_load_string($xmlContent, $customSimplexml);
