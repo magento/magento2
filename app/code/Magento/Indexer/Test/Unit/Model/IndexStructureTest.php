@@ -6,6 +6,7 @@
 
 namespace Magento\Indexer\Test\Unit\Model;
 
+use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -51,7 +52,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resource->expects($this->atLeastOnce())
             ->method('getConnection')
-            ->with('write')
+            ->with(Resource::DEFAULT_CONNECTION)
             ->willReturn($this->adapter);
         $this->indexScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
             ->setMethods(['resolve'])

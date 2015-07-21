@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
+use Magento\Framework\App\Resource;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 
 /**
@@ -148,20 +149,20 @@ abstract class AbstractEntity
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_localeDate = $localeDate;
         $this->_storeManager = $storeManager;
         $entityCode = $this->getEntityTypeCode();
         $this->_entityTypeId = $config->getEntityType($entityCode)->getEntityTypeId();
-        $this->_connection = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
     }
 
     /**
