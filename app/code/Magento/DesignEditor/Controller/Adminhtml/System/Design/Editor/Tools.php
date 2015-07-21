@@ -10,7 +10,7 @@ namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Tools extends \Magento\Backend\App\Action
+abstract class Tools extends \Magento\Backend\App\Action
 {
     /**
      * Initialize theme context model

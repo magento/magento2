@@ -16,7 +16,7 @@ use Magento\Mtf\TestStep\TestStepInterface;
 class CreateProductStep implements TestStepInterface
 {
     /**
-     * Product fixture from dataSet.
+     * Product fixture from dataset.
      *
      * @var string
      */
@@ -49,9 +49,9 @@ class CreateProductStep implements TestStepInterface
      */
     public function run()
     {
-        list($fixtureClass, $dataSet) = explode('::', $this->product);
+        list($fixtureClass, $dataset) = explode('::', $this->product);
         /** @var FixtureInterface $product */
-        $product = $this->fixtureFactory->createByCode(trim($fixtureClass), ['dataSet' => trim($dataSet)]);
+        $product = $this->fixtureFactory->createByCode(trim($fixtureClass), ['dataset' => trim($dataset)]);
         if ($product->hasData('id') === false) {
             $product->persist();
         }

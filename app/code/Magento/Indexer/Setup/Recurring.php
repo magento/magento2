@@ -78,35 +78,33 @@ class Recurring implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '2.0.1') >= 0) {
-            /** @var State[] $stateIndexers */
-            $stateIndexers = [];
-            $states = $this->statesFactory->create();
-            foreach ($states->getItems() as $state) {
-                /** @var State $state */
-                $stateIndexers[$state->getIndexerId()] = $state;
-            }
+        /** @var State[] $stateIndexers */
+        $stateIndexers = [];
+        $states = $this->statesFactory->create();
+        foreach ($states->getItems() as $state) {
+            /** @var State $state */
+            $stateIndexers[$state->getIndexerId()] = $state;
+        }
 
-            foreach ($this->config->getIndexers() as $indexerId => $indexerConfig) {
-                $expectedHashConfig = $this->encryptor->hash(
-                    $this->encoder->encode($indexerConfig),
-                    Encryptor::HASH_VERSION_MD5
-                );
+        foreach ($this->config->getIndexers() as $indexerId => $indexerConfig) {
+            $expectedHashConfig = $this->encryptor->hash(
+                $this->encoder->encode($indexerConfig),
+                Encryptor::HASH_VERSION_MD5
+            );
 
-                if (isset($stateIndexers[$indexerId])) {
-                    if ($stateIndexers[$indexerId]->getHashConfig() != $expectedHashConfig) {
-                        $stateIndexers[$indexerId]->setStatus(State::STATUS_INVALID);
-                        $stateIndexers[$indexerId]->setHashConfig($expectedHashConfig);
-                        $stateIndexers[$indexerId]->save();
-                    }
-                } else {
-                    /** @var State $state */
-                    $state = $this->stateFactory->create();
-                    $state->loadByIndexer($indexerId);
-                    $state->setHashConfig($expectedHashConfig);
-                    $state->setStatus(State::STATUS_INVALID);
-                    $state->save();
+            if (isset($stateIndexers[$indexerId])) {
+                if ($stateIndexers[$indexerId]->getHashConfig() != $expectedHashConfig) {
+                    $stateIndexers[$indexerId]->setStatus(State::STATUS_INVALID);
+                    $stateIndexers[$indexerId]->setHashConfig($expectedHashConfig);
+                    $stateIndexers[$indexerId]->save();
                 }
+            } else {
+                /** @var State $state */
+                $state = $this->stateFactory->create();
+                $state->loadByIndexer($indexerId);
+                $state->setHashConfig($expectedHashConfig);
+                $state->setStatus(State::STATUS_INVALID);
+                $state->save();
             }
         }
     }

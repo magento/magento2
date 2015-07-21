@@ -102,7 +102,10 @@ class InstallData implements InstallDataInterface
                 'default' => '',
                 'apply_to' => '',
                 'input_renderer' => 'Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form\Config',
-                'visible_on_front' => false
+                'visible_on_front' => false,
+                'is_used_in_grid' => true,
+                'is_visible_in_grid' => false,
+                'is_filterable_in_grid' => false,
             ]
         );
 

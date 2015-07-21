@@ -79,7 +79,7 @@ class ScoreBuilder
     public function addCondition($score)
     {
         $this->addPlus();
-        $this->scoreCondition .= "{$score} * " . self::WEIGHT_FIELD;
+        $this->scoreCondition .= "{$score} * POW(2, " . self::WEIGHT_FIELD . ')';
     }
 
     /**
