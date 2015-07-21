@@ -1,12 +1,14 @@
 <?php
 /**
- * @author Vadim Zubovich <vadim_zubovich@epam.com>
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\ImportExport\Model\Import\ErrorProcessing;
 
-
-
+/**
+ * Interface for Processing errors Aggregator
+ */
 interface ProcessingErrorAggregatorInterface
 {
     const VALIDATION_STRATEGY_SKIP_ERRORS = 'validation-skip-errors';
