@@ -15,8 +15,6 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create simple product.
  * 2. Create custom rating type.
