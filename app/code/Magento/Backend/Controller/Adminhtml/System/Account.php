@@ -12,7 +12,7 @@ use Magento\Backend\App\Action;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Account extends Action
+abstract class Account extends Action
 {
     /**
      * @return bool

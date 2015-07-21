@@ -12,7 +12,4 @@
     <event name="customer_logout">
         <observer name="unsetAll" instance="Magento\Checkout\Model\Observer" method="unsetAll" />
     </event>
-    <event name="sales_quote_save_after">
-        <observer name="set_checkout_quote_id" instance="Magento\Checkout\Model\Observer" method="salesQuoteSaveAfter" />
-    </event>
 </config>

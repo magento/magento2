@@ -9,8 +9,8 @@
   <testCase name="Magento\UrlRewrite\Test\TestCase\UpdateCategoryUrlRewriteEntityTest">
     <variation name="UpdateCategoryUrlRewriteEntityTestVariation1">
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
-      <data name="category/dataSet" xsi:type="string">default_subcategory</data>
-      <data name="categoryRewrite/dataSet" xsi:type="string">default</data>
+      <data name="category/dataset" xsi:type="string">default_subcategory</data>
+      <data name="categoryRewrite/dataset" xsi:type="string">default</data>
       <data name="urlRewrite/data/store_id" xsi:type="string">-</data>
       <data name="urlRewrite/data/request_path" xsi:type="string">test_request%isolation%</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">No</data>
@@ -21,8 +21,8 @@
     </variation>
     <variation name="UpdateCategoryUrlRewriteEntityTestVariation2">
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
-      <data name="category/dataSet" xsi:type="string">default_subcategory</data>
-      <data name="categoryRewrite/dataSet" xsi:type="string">default</data>
+      <data name="category/dataset" xsi:type="string">default_subcategory</data>
+      <data name="categoryRewrite/dataset" xsi:type="string">default</data>
       <data name="urlRewrite/data/store_id" xsi:type="string">-</data>
       <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.html</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
@@ -33,8 +33,8 @@
     </variation>
     <variation name="UpdateCategoryUrlRewriteEntityTestVariation3">
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
-      <data name="category/dataSet" xsi:type="string">default_subcategory</data>
-      <data name="categoryRewrite/dataSet" xsi:type="string">default</data>
+      <data name="category/dataset" xsi:type="string">default_subcategory</data>
+      <data name="categoryRewrite/dataset" xsi:type="string">default</data>
       <data name="urlRewrite/data/store_id" xsi:type="string">-</data>
       <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.htm</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
@@ -45,8 +45,8 @@
     </variation>
     <variation name="UpdateCategoryUrlRewriteEntityTestVariation4">
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
-      <data name="category/dataSet" xsi:type="string">default_subcategory</data>
-      <data name="categoryRewrite/dataSet" xsi:type="string">default</data>
+      <data name="category/dataset" xsi:type="string">default_subcategory</data>
+      <data name="categoryRewrite/dataset" xsi:type="string">default</data>
       <data name="urlRewrite/data/store_id" xsi:type="string">-</data>
       <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.aspx</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>

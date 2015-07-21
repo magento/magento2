@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento object manager. Responsible for instantiating objects taking itno account:
+ * Magento object manager. Responsible for instantiating objects taking into account:
  * - constructor arguments (using configured, and provided parameters)
  * - class instances life style (singleton, transient)
  * - interface preferences

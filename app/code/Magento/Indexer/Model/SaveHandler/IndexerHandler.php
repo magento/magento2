@@ -11,8 +11,8 @@ use Magento\Framework\IndexerInterface;
 use Magento\Indexer\Model\IndexStructure;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Search\Model\ScopeResolver\FlatScopeResolver;
-use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Indexer\Model\ScopeResolver\FlatScopeResolver;
+use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -60,8 +60,8 @@ class IndexerHandler implements IndexerInterface
      * @param IndexStructure $indexStructure
      * @param Resource $resource
      * @param Batch $batch
-     * @param IndexScopeResolver $indexScopeResolver
-     * @param FlatScopeResolver $flatScopeResolver
+     * @param \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @param \Magento\Indexer\Model\ScopeResolver\FlatScopeResolver $flatScopeResolver
      * @param array $data
      * @param int $batchSize
      */
