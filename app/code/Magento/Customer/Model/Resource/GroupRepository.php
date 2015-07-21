@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Model\Resource\Group\Collection;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Tax\Api\Data\TaxClassInterface;
@@ -184,13 +185,13 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
             $this->addFilterGroupToCollection($group, $collection);
         }
         $sortOrders = $searchCriteria->getSortOrders();
-        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+        /** @var SortOrder $sortOrder */
         if ($sortOrders) {
             foreach ($searchCriteria->getSortOrders() as $sortOrder) {
                 $field = $this->translateField($sortOrder->getField());
                 $collection->addOrder(
                     $field,
-                    ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         } else {

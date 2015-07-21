@@ -6,6 +6,7 @@
 namespace Magento\Ui\Model\Resource;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Ui\Api\Data\BookmarkInterface;
@@ -107,11 +108,12 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         if ($sortOrders) {
+            /** @var SortOrder $sortOrder */
             foreach ($sortOrders as $sortOrder) {
                 $field = $sortOrder->getField();
                 $collection->addOrder(
                     $field,
-                    ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         }
