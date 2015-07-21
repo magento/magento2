@@ -7,9 +7,15 @@
 <th
     class="data-grid-th"
     data-bind="
-        afterRender: draggable && $parent.dndConfig.enabled ?
-            (function (elem) { $parent.dnd('addColumn', elem); }) :
-            false,
+        afterRender: function (elem, viewModel) {
+            if (draggable && $parent.dndConfig.enabled) {
+                $parent.dnd('addColumn', elem);
+            }
+
+            if ($parent.resizeConfig.enabled) {
+                $parent.resize('setColumn', elem, viewModel);
+            }
+        },
         css: {
             '_sortable': sortable,
             '_draggable': draggable,

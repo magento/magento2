@@ -6,11 +6,17 @@
 -->
 <div class="admin__data-grid-wrap">
     <table
-        class="data-grid"
-        data-bind="
-            afterRender: dndConfig.enabled ?
-                function (elem) { dnd('setTable', elem); } :
-                false,
+            class="data-grid"
+            data-bind="
+            afterRender: function(elem, viewModel) {
+                    if (dndConfig.enabled) {
+                        dnd('setTable', elem);
+                    }
+
+                    if (resizeConfig.enabled) {
+                        resize('setTable', elem, viewModel);
+                    }
+                },
             css: {
                 'data-grid-draggable': dndConfig.enabled
             }">
