@@ -7,6 +7,7 @@ namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Search\Adapter\Mysql\Adapter;
 use Magento\Framework\Search\Response\Aggregation\Value;
 use Magento\Framework\Search\Response\QueryResponse;
 
@@ -189,23 +190,19 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $queryRequest = $this->requestBuilder->create();
 
         $this->queryResponse = $this->searchEngine->search($queryRequest);
-        $ids = [0];
-        /** @var \Magento\Framework\Search\Document $document */
-        foreach ($this->queryResponse as $document) {
-            $ids[] = $document->getId();
-        }
-        parent::addFieldToFilter('entity_id', ['in' => $ids]);
-        $this->_totalRecords = count($ids) - 1;
+
+        $this->getSelect()->joinInner(
+            [
+                'search_result' => $this->_resource->getTableName(Adapter::TEMPORARY_TABLE_NAME),
+            ],
+            'e.entity_id = search_result.entity_id',
+            []
+        );
+
+        $this->_totalRecords = $this->queryResponse->count();
 
         if ($this->order && $this->order['field'] == 'relevance') {
-            $this->getSelect()->order(
-                new \Zend_Db_Expr(
-                    $this->_conn->quoteInto(
-                        'FIELD(e.entity_id, ?) ' . $this->order['dir'],
-                        $ids
-                    )
-                )
-            );
+            $this->getSelect()->order('search_result.relevance ' . $this->order['dir']);
         }
         return parent::_renderFiltersBefore();
     }
