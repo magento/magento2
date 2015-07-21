@@ -11,7 +11,10 @@
     <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')';
     ?>
 <?php endforeach; ?>
-<?php  $expressions[] = '!$state.is(\'\')'; ?>
+<?php
+    $expressions[] = '!$state.is(\'\')';
+    $expressions[] = !$this->isInstaller ? 'true' : 'false';
+?>
 
 <div class="menu-wrapper"
     ng-show="<?php echo implode( '&&', $expressions); ?>"
