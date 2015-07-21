@@ -17,5 +17,9 @@ return [
     '/app/code/Magento/Catalog',
     '/app/code/Magento/CatalogImportExport',
     '/app/code/Magento/CatalogInventory',
+    '/app/code/Magento/CatalogRule',
+    '/app/code/Magento/CatalogSearch',
+    '/app/code/Magento/CatalogUrlRewrite',
+    '/app/code/Magento/CatalogWidget',
    // example '/app/code/Magento/Catalog',
 ];

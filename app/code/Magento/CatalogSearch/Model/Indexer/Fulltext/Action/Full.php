@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Framework\App\Resource;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -126,7 +127,7 @@ class Full
     protected $localeDate;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
@@ -146,7 +147,7 @@ class Full
     private $dimensionFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Search\Request\Config $searchRequestConfig
@@ -166,7 +167,7 @@ class Full
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Search\Request\Config $searchRequestConfig,
@@ -236,7 +237,7 @@ class Full
      */
     protected function getConnection()
     {
-        return $this->resource->getConnection('write');
+        return $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
     }
 
     /**
