@@ -6,18 +6,19 @@
 namespace Magento\ConfigurableProduct\Model\Attribute;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Framework\App\Resource;
 
 class LockValidator implements LockValidatorInterface
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(Resource $resource)
     {
         $this->resource = $resource;
     }
@@ -32,7 +33,7 @@ class LockValidator implements LockValidatorInterface
      */
     public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {
-        $adapter = $this->resource->getConnection('read');
+        $adapter = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
         $attrTable = $this->resource->getTableName('catalog_product_super_attribute');
         $productTable = $this->resource->getTableName('catalog_product_entity');
 

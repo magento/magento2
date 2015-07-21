@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\Resource;
+
 class Changelog implements ChangelogInterface
 {
     /**
@@ -41,7 +43,7 @@ class Changelog implements ChangelogInterface
      */
     public function __construct(\Magento\Framework\App\Resource $resource)
     {
-        $this->write = $resource->getConnection('core_write');
+        $this->write = $resource->getConnection(Resource::DEFAULT_CONNECTION);
         $this->resource = $resource;
         $this->checkConnection();
     }

@@ -34,7 +34,7 @@ class AbstractResourceStub extends \Magento\Indexer\Model\Resource\AbstractResou
         if (!$this->_newIndexAdapter) {
             return parent::_getIndexAdapter();
         } else {
-            return $this->_getConnection('new_write');
+            return $this->_getConnection('new');
         }
     }
 
