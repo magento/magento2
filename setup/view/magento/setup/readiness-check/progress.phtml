@@ -37,11 +37,11 @@
 
 <div id="updater-application" class="rediness-check-item" ng-show="updater.visible">
     <div ng-hide="updater.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Checking Updater Application Availability...</strong>
+        <h3 class="readiness-check-title">Checking Updater Application Availability...</h3>
     </div>
 
     <div ng-show="updater.processed" ng-switch="updater.responseType">
@@ -86,11 +86,11 @@
 
 <div id="cron-script" class="rediness-check-item" ng-show="cronScript.visible">
     <div ng-hide="cronScript.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Checking Cron Scripts...</strong>
+        <h3 class="readiness-check-title">Checking Cron Scripts...</h3>
     </div>
 
     <div ng-show="cronScript.processed" ng-switch="cronScript.responseType">
@@ -131,11 +131,11 @@
 
 <div id="component-dependency" class="rediness-check-item" ng-show="componentDependency.visible">
     <div ng-hide="componentDependency.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Checking Component Dependency...</strong>
+        <h3 class="readiness-check-title">Checking Component Dependency...</h3>
     </div>
 
     <div ng-show="componentDependency.processed" ng-switch="componentDependency.responseType">
@@ -170,11 +170,11 @@
 
 <div id="php-version" class="rediness-check-item" ng-show="version.visible">
     <div ng-hide="version.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Checking PHP Version...</strong>
+        <h3 class="readiness-check-title">Checking PHP Version...</h3>
     </div>
 
     <div ng-show="version.processed" ng-switch="version.responseType">
@@ -224,11 +224,11 @@
 
 <div id="php-settings" class="rediness-check-item" ng-show="settings.visible">
     <div ng-hide="settings.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Checking PHP Settings....</strong>
+        <h3 class="readiness-check-title">Checking PHP Settings....</h3>
     </div>
 
     <div ng-show="settings.processed" ng-switch="settings.responseType">
@@ -270,11 +270,11 @@
 
 <div id="php-extensions" class="rediness-check-item" ng-show="extensions.visible">
     <div ng-hide="extensions.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Checking PHP Extensions...</strong>
+        <h3 class="readiness-check-title">Checking PHP Extensions...</h3>
     </div>
 
     <div ng-show="extensions.processed" ng-switch="extensions.responseType">
@@ -358,11 +358,11 @@
 
 <div class="rediness-check-item" id="php-permissions" ng-show="permissions.visible">
     <div ng-hide="permissions.processed">
-        <span class="spinner">
+        <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <strong>&emsp;&nbsp;Checking File Permissions...</strong>
+        <h3 class="readiness-check-title">Checking File Permissions...</h3>
     </div>
 
     <div ng-show="permissions.processed" ng-switch="permissions.responseType">
