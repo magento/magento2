@@ -30,6 +30,7 @@
         "zendframework/zend-serializer": "2.4.0",
         "zendframework/zend-log": "2.4.0",
         "zendframework/zend-http": "2.4.0",
+        "zendframework/zendxml": "1.*",
         "magento/zendframework1": "1.12.13",
         "composer/composer": "1.0.0-alpha10",
         "monolog/monolog": "1.11.0",
