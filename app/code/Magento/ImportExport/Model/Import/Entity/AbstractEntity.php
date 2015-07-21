@@ -7,6 +7,8 @@ namespace Magento\ImportExport\Model\Import\Entity;
 
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import entity abstract model
@@ -62,20 +64,6 @@ abstract class AbstractEntity
     protected $_errors = [];
 
     /**
-     * Error counter.
-     *
-     * @var int
-     */
-    protected $_errorsCount = 0;
-
-    /**
-     * Limit of errors after which pre-processing will exit.
-     *
-     * @var int
-     */
-    protected $_errorsLimit = 100;
-
-    /**
      * Flag to disable import.
      *
      * @var bool
@@ -88,27 +76,6 @@ abstract class AbstractEntity
      * @var array
      */
     protected $_indexValueAttributes = [];
-
-    /**
-     * Array of invalid rows numbers.
-     *
-     * @var array
-     */
-    protected $_invalidRows = [];
-
-    /**
-     * Validation failure message template definitions.
-     *
-     * @var array
-     */
-    protected $_messageTemplates = [];
-
-    /**
-     * Notice messages.
-     *
-     * @var string[]
-     */
-    protected $_notices = [];
 
     /**
      * Entity model parameters.
@@ -232,6 +199,11 @@ abstract class AbstractEntity
     protected $logInHistory = false;
 
     /**
+     * @var ProcessingErrorAggregatorInterface
+     */
+    protected $errorAggregator;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
@@ -239,6 +211,8 @@ abstract class AbstractEntity
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\String $string
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -247,12 +221,14 @@ abstract class AbstractEntity
         \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\Resource $resource,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\String $string
+        \Magento\Framework\Stdlib\String $string,
+        ProcessingErrorAggregatorInterface $errorAggregator
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
         $this->string = $string;
+        $this->errorAggregator = $errorAggregator;
 
         $entityType = $config->getEntityType($this->getEntityTypeCode());
 
@@ -345,10 +321,6 @@ abstract class AbstractEntity
                 $nextRowBackup = [];
             }
             if ($source->valid()) {
-                if ($this->_errorsCount >= $this->_errorsLimit) {
-                    // errors limit check
-                    return;
-                }
                 $rowData = $source->current();
 
                 $this->_processedRowsCount++;
@@ -380,15 +352,25 @@ abstract class AbstractEntity
      * @param string $errorCode Error code or simply column name
      * @param int $errorRowNum Row number.
      * @param string $colName OPTIONAL Column name.
+     * @param string $errorMessage OPTIONAL Column name.
+     * @param string $errorLevel
      * @return $this
      */
-    public function addRowError($errorCode, $errorRowNum, $colName = null)
-    {
+    public function addRowError(
+        $errorCode,
+        $errorRowNum,
+        $colName = null,
+        $errorMessage = null,
+        $errorLevel = ProcessingError::ERROR_LEVEL_CRITICAL
+    ) {
         $errorCode = (string)$errorCode;
-        $this->_errors[$errorCode][] = [$errorRowNum + 1, $colName];
-        // one added for human readability
-        $this->_invalidRows[$errorRowNum] = true;
-        $this->_errorsCount++;
+        $this->errorAggregator->addError(
+            $errorCode,
+            $errorRowNum,
+            $colName,
+            $errorMessage,
+            $errorLevel
+        );
 
         return $this;
     }
@@ -402,7 +384,7 @@ abstract class AbstractEntity
      */
     public function addMessageTemplate($errorCode, $message)
     {
-        $this->_messageTemplates[$errorCode] = $message;
+        $this->errorAggregator->addErrorMessageTemplate($errorCode, $message);
 
         return $this;
     }
@@ -482,66 +464,6 @@ abstract class AbstractEntity
     public function getEntityTypeId()
     {
         return $this->_entityTypeId;
-    }
-
-    /**
-     * Returns error information grouped by error types and translated (if possible).
-     *
-     * @return array
-     */
-    public function getErrorMessages()
-    {
-        $messages = [];
-        foreach ($this->_errors as $errorCode => $errorRows) {
-            if (isset($this->_messageTemplates[$errorCode])) {
-                $errorCode = (string)__($this->_messageTemplates[$errorCode]);
-            }
-            foreach ($errorRows as $errorRowData) {
-                $key = $errorRowData[1] ? sprintf($errorCode, $errorRowData[1]) : $errorCode;
-                $messages[$key][] = $errorRowData[0];
-            }
-        }
-        return $messages;
-    }
-
-    /**
-     * Returns error counter value.
-     *
-     * @return int
-     */
-    public function getErrorsCount()
-    {
-        return $this->_errorsCount;
-    }
-
-    /**
-     * Returns error limit value.
-     *
-     * @return int
-     */
-    public function getErrorsLimit()
-    {
-        return $this->_errorsLimit;
-    }
-
-    /**
-     * Returns invalid rows count.
-     *
-     * @return int
-     */
-    public function getInvalidRowsCount()
-    {
-        return count($this->_invalidRows);
-    }
-
-    /**
-     * Returns model notices.
-     *
-     * @return string[]
-     */
-    public function getNotices()
-    {
-        return $this->_notices;
     }
 
     /**
@@ -660,8 +582,9 @@ abstract class AbstractEntity
      */
     public function isDataValid()
     {
-        $this->validateData();
-        return 0 == $this->_errorsCount;
+        /** @var ImportExport\ErrorProcessing\ProcessingErrorAggregatorInterface $errorAggregator */
+        $errorAggregator = $this->validateData();
+        return $errorAggregator->hasFatalExceptions();
     }
 
     /**
@@ -734,7 +657,7 @@ abstract class AbstractEntity
     /**
      * Validate data.
      *
-     * @return $this
+     * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -777,12 +700,19 @@ abstract class AbstractEntity
             }
 
             // initialize validation related attributes
-            $this->_errors = [];
-            $this->_invalidRows = [];
+            $this->errorAggregator->clear();
             $this->_saveValidatedBunches();
             $this->_dataValidated = true;
         }
-        return $this;
+        return $this->errorAggregator;
+    }
+
+    /**
+     * @return ProcessingErrorAggregatorInterface
+     */
+    public function getErrorAggregator()
+    {
+        return $this->errorAggregator;
     }
 
     /**

@@ -13,6 +13,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import entity product model
@@ -576,17 +577,21 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param UploaderFactory $uploaderFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param DateTime\TimezoneInterface $localeDate
      * @param DateTime $dateTime
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param Product\StoreResolver $storeResolver
      * @param Product\SkuProcessor $skuProcessor
      * @param Product\CategoryProcessor $categoryProcessor
-     * @param Product\TaxClassProcessor $taxClassProcessor
      * @param Product\Validator $validator
+     * @param ObjectRelationProcessor $objectRelationProcessor
+     * @param TransactionManagerInterface $transactionManager
+     * @param Product\TaxClassProcessor $taxClassProcessor
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -623,6 +628,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ObjectRelationProcessor $objectRelationProcessor,
         TransactionManagerInterface $transactionManager,
         Product\TaxClassProcessor $taxClassProcessor,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -650,7 +656,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->objectRelationProcessor = $objectRelationProcessor;
         $this->transactionManager = $transactionManager;
         $this->taxClassProcessor = $taxClassProcessor;
-        parent::__construct($jsonHelper, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
+        parent::__construct(
+            $jsonHelper,
+            $importExportData,
+            $importData,
+            $config,
+            $resource,
+            $resourceHelper,
+            $string,
+            $errorAggregator
+        );
         $this->_optionEntity = isset(
             $data['option_entity']
         ) ? $data['option_entity'] : $optionFactory->create(
@@ -2083,11 +2098,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function validateRow(array $rowData, $rowNum)
     {
-        // SKU is remembered through all product rows
-        static $sku = null;
         if (isset($this->_validatedRows[$rowNum])) {
             // check that row is already validated
-            return !isset($this->_invalidRows[$rowNum]);
+            return !$this->errorAggregator->isRowInvalid($rowNum);
         }
         $this->_validatedRows[$rowNum] = true;
 
@@ -2104,7 +2117,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         if (!$this->validator->isValid($rowData)) {
             foreach ($this->validator->getMessages() as $message) {
-                $this->addRowError($message, $rowNum);
+                $this->addRowError($message, $rowNum, 'Tier Price', 'Wrong price option for column "%s"');
             }
         }
 
@@ -2164,13 +2177,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ]
                 );
             }
-            if (isset($this->_invalidRows[$rowNum])) {
+            if ($this->errorAggregator->isRowInvalid($rowNum)) {
                 // mark SCOPE_DEFAULT row as invalid for future child rows if product not in DB already
                 $sku = false;
             }
         }
 
-        if (!isset($this->_invalidRows[$rowNum])) {
+        if (!$this->errorAggregator->isRowInvalid($rowNum)) {
             $newSku = $this->skuProcessor->getNewSku($sku);
             // set attribute set code into row data for followed attribute validation in type model
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
@@ -2188,7 +2201,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // validate custom options
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
 
-        return !isset($this->_invalidRows[$rowNum]);
+        return !$this->errorAggregator->isRowInvalid($rowNum);
     }
 
     /**
@@ -2271,10 +2284,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $source = $this->_getSource();
         $source->rewind();
         while ($source->valid()) {
-            if ($this->_errorsCount >= $this->_errorsLimit) {
-                // errors limit check
-                return $this;
-            }
             $rowData = $source->current();
 
             $rowData = $this->_customFieldsMapping($rowData);

@@ -25,13 +25,14 @@ class Validate extends ImportController
         Import $import,
         ImportResultBlock $resultBlock
     ) {
-        if ($import->getProcessedRowsCount() == $import->getInvalidRowsCount()) {
+        $errorAggregator = $import->getErrorAggregator();
+        if ($import->getProcessedRowsCount() == $errorAggregator->getInvalidRowsCount()) {
             $resultBlock->addNotice(__('This file is invalid. Please fix errors and re-upload the file.'));
-        } elseif ($import->getErrorsCount() >= $import->getErrorsLimit()) {
+        } elseif ($errorAggregator->hasFatalExceptions()) {
             $resultBlock->addNotice(
                 __(
                     'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
-                    $import->getErrorsLimit()
+                    $errorAggregator->getAllowedErrorsCount()
                 )
             );
         } else {
@@ -50,7 +51,7 @@ class Validate extends ImportController
             }
         }
         // errors info
-        foreach ($import->getErrors() as $errorCode => $rows) {
+        foreach ($errorAggregator->getRowsGroupedByMessage() as $errorCode => $rows) {
             $error = $errorCode . ' ' . __('in rows:') . ' ' . implode(', ', $rows);
             $resultBlock->addError($error);
         }
@@ -104,14 +105,14 @@ class Validate extends ImportController
                             );
                         }
                     }
-                    $resultBlock->addNotice($import->getNotices());
+                    $errorAggregator = $import->getErrorAggregator();
                     $resultBlock->addNotice(
                         __(
                             'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
                             $import->getProcessedRowsCount(),
                             $import->getProcessedEntitiesCount(),
-                            $import->getInvalidRowsCount(),
-                            $import->getErrorsCount()
+                            $errorAggregator->getInvalidRowsCount(),
+                            $errorAggregator->getErrorsCount()
                         )
                     );
                 }
