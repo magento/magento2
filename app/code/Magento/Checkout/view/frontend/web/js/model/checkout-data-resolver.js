@@ -11,8 +11,10 @@ define([
     'Magento_Customer/js/model/address-list',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/action/select-shipping-address',
-    'Magento_Checkout/js/checkout-data'
-], function (addressList, quote, selectShippingAddress, checkoutData) {
+    'Magento_Checkout/js/checkout-data',
+    'Magento_Checkout/js/model/shipping-service',
+    'Magento_Checkout/js/action/select-shipping-method'
+], function (addressList, quote, selectShippingAddress, checkoutData, shippingService, selectShippingMethodAction) {
     'use strict';
 
     return {
@@ -28,6 +30,24 @@ define([
                 });
                 if (!isShippingAddressInitialized && addressList().length == 1) {
                     selectShippingAddress(addressList()[0]);
+                }
+            }
+        },
+
+        resolveShippingRates: function () {
+            var ratesData = shippingService.getSippingRates();
+            var selectedShippingRate = checkoutData.getSelectedShippingRate();
+            if (selectedShippingRate) {
+                var rateIsAvailable = ratesData.some(function (rate) {
+                    if (rate.carrier_code == selectedShippingRate.carrier_code
+                        && rate.method_code == selectedShippingRate.method_code) {
+                        return true;
+                    }
+                    return false;
+
+                });
+                if (rateIsAvailable) {
+                    selectShippingMethodAction(selectedShippingRate);
                 }
             }
         }
