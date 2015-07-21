@@ -5,6 +5,8 @@
  */
 namespace Magento\Review\Model\Resource\Review;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Class ReviewTest
  */
@@ -42,7 +44,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
-        $this->adapter = $this->resource->getConnection('core_read');
+        $this->adapter = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
         $this->reviewCollection = $this->objectManager->create('Magento\Review\Model\Resource\Review\Collection');
         $this->reviewResource =  $this->objectManager->create('Magento\Review\Model\Resource\Review');
     }
