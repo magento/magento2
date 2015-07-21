@@ -12,7 +12,6 @@
 namespace Magento\Downloadable\Block\Checkout;
 
 use Magento\Framework\View\Element\Template;
-use Magento\Sales\Api\OrderRepositoryInterface;
 
 class Success extends \Magento\Checkout\Block\Onepage\Success
 {
@@ -32,10 +31,8 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Framework\App\Http\Context $httpContext,
-        OrderRepositoryInterface $orderRepository,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = []
     ) {
@@ -44,7 +41,6 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
             $checkoutSession,
             $orderConfig,
             $httpContext,
-            $orderRepository,
             $data
         );
         $this->currentCustomer = $currentCustomer;

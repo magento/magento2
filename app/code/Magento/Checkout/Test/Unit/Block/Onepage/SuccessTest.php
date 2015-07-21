@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Onepage;
+
 use Magento\Sales\Model\Order;
 
 /**
