@@ -11,9 +11,20 @@ define(
         'Magento_Checkout/js/action/select-payment-method',
         'Magento_Checkout/js/model/quote',
         'Magento_Customer/js/model/customer',
-        'Magento_Checkout/js/model/payment-service'
+        'Magento_Checkout/js/model/payment-service',
+        'Magento_Checkout/js/checkout-data'
     ],
-    function (ko, $, Component, placeOrderAction, selectPaymentMethodAction, quote, customer, paymentService) {
+    function (
+        ko,
+        $,
+        Component,
+        placeOrderAction,
+        selectPaymentMethodAction,
+        quote,
+        customer,
+        paymentService,
+        checkoutData
+    ) {
         'use strict';
         return Component.extend({
             redirectAfterPlaceOrder: true,
@@ -71,6 +82,7 @@ define(
 
             selectPaymentMethod: function() {
                 selectPaymentMethodAction(this.getData());
+                checkoutData.setSelectedPaymentMethod(this.getData());
                 return true;
             },
 
