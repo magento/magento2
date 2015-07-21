@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Search\Dynamic\Algorithm;
 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\BucketInterface;
 
 interface AlgorithmInterface
@@ -12,8 +13,8 @@ interface AlgorithmInterface
     /**
      * @param BucketInterface $bucket
      * @param array $dimensions
-     * @param int[] $entityIds
+     * @param Table $entityIdsTable
      * @return array
      */
-    public function getItems(BucketInterface $bucket, array $dimensions, array $entityIds);
+    public function getItems(BucketInterface $bucket, array $dimensions, Table $entityIdsTable);
 }

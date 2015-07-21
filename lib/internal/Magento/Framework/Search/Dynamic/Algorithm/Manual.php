@@ -34,14 +34,17 @@ class Manual implements AlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function getItems(BucketInterface $bucket, array $dimensions, array $entityIds)
-    {
+    public function getItems(
+        BucketInterface $bucket,
+        array $dimensions,
+        \Magento\Framework\DB\Ddl\Table $entityIdsTable
+    ) {
         $range = $this->dataProvider->getRange();
         $options = $this->options->get();
         if (!$range) {
             $range = $options['range_step'];
         }
-        $dbRanges = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityIds);
+        $dbRanges = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityIdsTable);
         $dbRanges = $this->processRange($dbRanges, $options['max_intervals_number']);
         $data = $this->dataProvider->prepareData($range, $dbRanges);
 

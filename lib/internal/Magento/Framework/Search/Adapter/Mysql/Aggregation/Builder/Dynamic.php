@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\Algorithm\Repository;
 use Magento\Framework\Search\Request\Aggregation\DynamicBucket;
@@ -32,11 +33,11 @@ class Dynamic implements BucketInterface
         DataProviderInterface $dataProvider,
         array $dimensions,
         RequestBucketInterface $bucket,
-        array $entityIds
+        Table $entityIdsTable
     ) {
         /** @var DynamicBucket $bucket */
         $algorithm = $this->algorithmRepository->get($bucket->getMethod());
-        $data = $algorithm->getItems($bucket, $dimensions, $entityIds);
+        $data = $algorithm->getItems($bucket, $dimensions, $entityIdsTable);
 
         $resultData = $this->prepareData($data);
 
