@@ -5,6 +5,9 @@
  */
 namespace Magento\Store\Test\Unit\Model\Config\Reader;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Object;
+
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,9 +47,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $storeFactoryMock = $this->getMock('Magento\Store\Model\StoreFactory', ['create'], [], '', false);
         $this->_storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $storeFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_storeMock));
+        $this->_defaultStoreMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+
+        $storeFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->_storeMock));
 
         $placeholderProcessor = $this->getMock(
             'Magento\Store\Model\Config\Processor\Placeholder',
@@ -75,68 +83,59 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $websiteCode = 'default';
         $storeId = 1;
+        $defaultStoreCode = 'foostore';
+        $defaultStoreId = 2;
+
         $websiteMock = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
         $websiteMock->expects($this->any())->method('getCode')->will($this->returnValue($websiteCode));
+
         $this->_storeMock->expects($this->any())->method('getWebsite')->will($this->returnValue($websiteMock));
         $this->_storeMock->expects($this->any())->method('load')->with($storeCode);
         $this->_storeMock->expects($this->any())->method('getId')->will($this->returnValue($storeId));
         $this->_storeMock->expects($this->any())->method('getCode')->will($this->returnValue($websiteCode));
 
+        $this->_defaultStoreMock->expects($this->any())->method('getWebsite')->will($this->returnValue($websiteMock));
+        $this->_defaultStoreMock->expects($this->any())->method('load')->with($defaultStoreCode);
+        $this->_defaultStoreMock->expects($this->any())->method('getId')->will($this->returnValue($defaultStoreId));
+        $this->_defaultStoreMock->expects($this->any())->method('getCode')->will($this->returnValue($defaultStoreCode));
+
         $dataMock = $this->getMock('Magento\Framework\App\Config\Data', [], [], '', false);
-        $dataMock->expects(
-            $this->any()
-        )->method(
-            'getValue'
-        )->will(
-            $this->returnValue(['config' => ['key0' => 'website_value0', 'key1' => 'website_value1']])
-        );
+        $dataMock->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue(['config' => ['key0' => 'website_value0', 'key1' => 'website_value1']]));
 
-        $dataMock->expects(
-            $this->once()
-        )->method(
-            'getSource'
-        )->will(
-            $this->returnValue(['config' => ['key0' => 'website_value0', 'key1' => 'website_value1']])
-        );
-        $this->_scopePullMock->expects(
-            $this->once()
-        )->method(
-            'getScope'
-        )->with(
-            'website',
-            $websiteCode
-        )->will(
-            $this->returnValue($dataMock)
-        );
+        $dataMock->expects($this->once())
+            ->method('getSource')
+            ->will($this->returnValue(['config' => ['key0' => 'website_value0', 'key1' => 'website_value1']]));
 
-        $this->_initialConfigMock->expects(
-            $this->once()
-        )->method(
-            'getData'
-        )->with(
-            "stores|{$storeCode}"
-        )->will(
-            $this->returnValue(['config' => ['key1' => 'store_value1', 'key2' => 'store_value2']])
-        );
-        $this->_collectionFactory->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            ['scope' => 'stores', 'scopeId' => $storeId]
-        )->will(
-            $this->returnValue(
+        $this->_scopePullMock->expects($this->once())
+            ->method('getScope')
+            ->with('website', $websiteCode)
+            ->will($this->returnValue($dataMock));
+
+        $this->_initialConfigMock->expects($this->once())
+            ->method('getData')
+            ->with("stores|{$storeCode}")
+            ->will($this->returnValue(['config' => ['key1' => 'store_value1', 'key2' => 'store_value2']]));
+
+        $this->_collectionFactory->expects($this->once())
+            ->method('create')
+            ->with(['scope' => 'stores', 'scopeId' => $storeId])
+            ->will($this->returnValue(
                 [
-                    new \Magento\Framework\Object(['path' => 'config/key1', 'value' => 'store_db_value1']),
-                    new \Magento\Framework\Object(['path' => 'config/key3', 'value' => 'store_db_value3']),
+                    new Object(['path' => 'config/key1', 'value' => 'store_db_value1']),
+                    new Object(['path' => 'config/key3', 'value' => 'store_db_value3']),
                 ]
-            )
-        );
+            ));
 
-        $this->_storeManagerMock
-            ->expects($this->any())
+        $this->_storeManagerMock->expects($this->any())
+            ->method('getDefaultStoreView')
+            ->will($this->returnValue($this->_defaultStoreMock));
+
+        $this->_storeManagerMock->expects($this->any())
             ->method($storeMethod)
             ->will($this->returnValue($this->_storeMock));
+
         $expectedData = [
             'config' => [
                 'key0' => 'website_value0',
@@ -151,9 +150,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function readDataProvider()
     {
         return [
-            ['default', 'getDefaultStoreView'],
             [null, 'getStore'],
-            ['code', '']
+            ['code', ''],
+            [ScopeConfigInterface::SCOPE_TYPE_DEFAULT, ''],
         ];
     }
 }

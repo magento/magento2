@@ -15,7 +15,7 @@ use Magento\Review\Model\Review;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Product extends \Magento\Framework\App\Action\Action
+abstract class Product extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
