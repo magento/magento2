@@ -10,7 +10,7 @@ use Magento\Backend\App\Action;
 /**
  * Export controller
  */
-class Export extends Action
+abstract class Export extends Action
 {
     /**
      * Check access (in the ACL) for current user

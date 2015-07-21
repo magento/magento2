@@ -139,7 +139,7 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @return array
      */
-    public function getAttributes()
+    protected function getAttributes()
     {
         if (!$this->hasData('attributes')) {
             $attributes = (array)$this->_configurableType->getConfigurableAttributesAsArray($this->getProduct());

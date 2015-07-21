@@ -98,14 +98,40 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->object->getSourceFile();
     }
 
-    public function testGetContent()
+    /**
+     * @param string $content
+     *
+     * @dataProvider getContentDataProvider
+     */
+    public function testGetContent($content)
     {
         $this->source->expects($this->exactly(2))
             ->method('getContent')
             ->with($this->object)
-            ->will($this->returnValue('content'));
-        $this->assertEquals('content', $this->object->getContent());
-        $this->assertEquals('content', $this->object->getContent()); // no in-memory caching for content
+            ->will($this->returnValue($content));
+        $this->assertEquals($content, $this->object->getContent());
+        $this->assertEquals($content, $this->object->getContent()); // no in-memory caching for content
+    }
+
+    public function getContentDataProvider()
+    {
+        return [
+            'normal content' => ['content'],
+            'empty content'  => [''],
+        ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\View\Asset\File\NotFoundException
+     * @expectedExceptionMessage Unable to get content for 'Magento_Module/dir/file.css'
+     */
+    public function testGetContentNotFound()
+    {
+        $this->source->expects($this->once())
+            ->method('getContent')
+            ->with($this->object)
+            ->will($this->returnValue(false));
+        $this->object->getContent();
     }
 
     public function testSimpleGetters()
