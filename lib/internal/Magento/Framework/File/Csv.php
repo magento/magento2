@@ -33,6 +33,21 @@ class Csv
     protected $_enclosure = '"';
 
     /**
+     * @var File
+     */
+    protected $file;
+
+    /**
+     * Constructor
+     *
+     * @param File $file File Driver
+     */
+    public function __construct(File $file)
+    {
+        $this->file = $file;
+    }
+
+    /**
      * Set max file line length
      *
      * @param   int $length
@@ -119,10 +134,9 @@ class Csv
      */
     public function saveData($file, $data)
     {
-        $driver = new File();
         $fh = fopen($file, 'w');
         foreach ($data as $dataRow) {
-            $driver->filePutCsv($fh, $dataRow, $this->_delimiter, $this->_enclosure);
+            $this->file->filePutCsv($fh, $dataRow, $this->_delimiter, $this->_enclosure);
         }
         fclose($fh);
         return $this;
