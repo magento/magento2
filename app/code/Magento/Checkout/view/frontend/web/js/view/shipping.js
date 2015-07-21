@@ -23,6 +23,7 @@ define(
         'Magento_Checkout/js/model/new-customer-address',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Ui/js/modal/modal',
+        'Magento_Checkout/js/model/checkout-data-resolver',
         'mage/translate'
     ],
     function(
@@ -44,6 +45,7 @@ define(
         newAddress,
         stepNavigator,
         modal,
+        checkoutDataResolver,
         $t
     ) {
         'use strict';
@@ -80,19 +82,9 @@ define(
             initialize: function () {
                 var self = this;
                 this._super();
-                var shippingAddress = quote.shippingAddress();
-                if (!shippingAddress) {
-                    var isShippingAddressInitialized = addressList.some(function (address) {
-                        if (address.isDefaultShipping()) {
-                            selectShippingAddress(address);
-                            return true;
-                        }
-                        return false;
-                    });
-                    if (!isShippingAddressInitialized && addressList().length == 1) {
-                        selectShippingAddress(addressList()[0]);
-                    }
-                }
+
+                checkoutDataResolver.resolveShippingAddress();
+
                 if (rates.length == 1) {
                     selectShippingMethodAction(rates[0])
                 }

@@ -41,6 +41,10 @@ define([
             saveData(obj);
         },
 
+        getSelectedShippingAddress: function () {
+            return getData().selectedShippingAddress;
+        },
+
         setShippingAddressData: function (data) {
             var obj = getData();
             obj.shippingAddressData = data;
