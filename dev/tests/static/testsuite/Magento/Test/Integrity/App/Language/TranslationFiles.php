@@ -15,7 +15,6 @@ class TranslationFiles extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->csvParser = new \Magento\Framework\File\Csv(new \Magento\Framework\Filesystem\Driver\File());
-        $this->csvParser->setDelimiter(',');
     }
 
     /**
