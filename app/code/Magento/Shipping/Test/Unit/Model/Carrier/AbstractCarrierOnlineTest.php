@@ -121,7 +121,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Detected use of ENTITY in XML, disabled to prevent XXE/XEE attacks
+     * @expectedExceptionMessage Security validation of XML document has been failed.
      */
     public function testParseXmlXXEXml()
     {
@@ -136,7 +136,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Detected use of ENTITY in XML, disabled to prevent XXE/XEE attacks
+     * @expectedExceptionMessage Security validation of XML document has been failed.
      */
     public function testParseXmlXQBXml()
     {
