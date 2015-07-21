@@ -65,7 +65,7 @@ class DataProvider
         if ($bucket->getField() == 'category_ids') {
             $currentScope = $dimensions['scope']->getValue();
             $currentScopeId = $this->scopeResolver->getScope($currentScope)->getId();
-            $currenCategory = $this->layer->getCurrentCategory();
+            $currentCategory = $this->layer->getCurrentCategory();
 
             $derivedTable = $this->getSelect();
             $derivedTable->from(
@@ -76,13 +76,13 @@ class DataProvider
                 ]
             )->where('main_table.store_id = ?', $currentScopeId);
 
-            if (!empty($currenCategory)) {
+            if (!empty($currentCategory)) {
                 $derivedTable->join(
                     ['category' => $this->resource->getTableName('catalog_category_entity')],
                     'main_table.category_id = category.entity_id',
                     []
-                )->where('`category`.`path` LIKE ?', $currenCategory->getPath() . '%')
-                ->where('`category`.`level` > ?', $currenCategory->getLevel());
+                )->where('`category`.`path` LIKE ?', $currentCategory->getPath() . '%')
+                ->where('`category`.`level` > ?', $currentCategory->getLevel());
             }
             $select = $this->getSelect();
             $select->from(['main_table' => $derivedTable]);
