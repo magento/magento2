@@ -55,28 +55,7 @@ class ServiceOutputProcessor
     {
         /** @var string $dataType */
         $dataType = $this->methodsMapProcessor->getMethodReturnType($serviceClassName, $serviceMethodName);
-        if (is_array($data)) {
-            $result = [];
-            $arrayElementType = substr($dataType, 0, -2);
-            foreach ($data as $datum) {
-                if (is_object($datum)) {
-                    $datum = $this->processDataObject(
-                        $this->dataObjectProcessor->buildOutputDataArray($datum, $arrayElementType)
-                    );
-                }
-                $result[] = $datum;
-            }
-            return $result;
-        } elseif (is_object($data)) {
-            return $this->processDataObject(
-                $this->dataObjectProcessor->buildOutputDataArray($data, $dataType)
-            );
-        } elseif ($data === null) {
-            return [];
-        } else {
-            /** No processing is required for scalar types */
-            return $data;
-        }
+        return $this->convertValue($data, $dataType);
     }
 
     /**
@@ -99,5 +78,38 @@ class ServiceOutputProcessor
             }
         }
         return $dataObjectArray;
+    }
+
+    /**
+     * Convert associative array into proper data object.
+     *
+     * @param array $data
+     * @param string $dataType
+     * @return array|object
+     */
+    public function convertValue($data, $dataType)
+    {
+        if (is_array($data)) {
+            $result = [];
+            $arrayElementType = substr($dataType, 0, -2);
+            foreach ($data as $datum) {
+                if (is_object($datum)) {
+                    $datum = $this->processDataObject(
+                        $this->dataObjectProcessor->buildOutputDataArray($datum, $arrayElementType)
+                    );
+                }
+                $result[] = $datum;
+            }
+            return $result;
+        } elseif (is_object($data)) {
+            return $this->processDataObject(
+                $this->dataObjectProcessor->buildOutputDataArray($data, $dataType)
+            );
+        } elseif ($data === null) {
+            return [];
+        } else {
+            /** No processing is required for scalar types */
+            return $data;
+        }
     }
 }
