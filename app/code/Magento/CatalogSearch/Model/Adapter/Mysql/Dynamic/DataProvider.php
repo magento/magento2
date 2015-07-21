@@ -110,12 +110,7 @@ class DataProvider implements DataProviderInterface
         array $dimensions,
         Table $entityIdsTable
     ) {
-        $select = $this->dataProvider->getDataSet($bucket, $dimensions);
-        $select->joinInner(
-            ['entities' => $entityIdsTable->getName()],
-            'main_table.entity_id  = entities.entity_id',
-            []
-        );
+        $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityIdsTable);
 
         return $this->intervalFactory->create(['select' => $select]);
     }
@@ -129,7 +124,7 @@ class DataProvider implements DataProviderInterface
         $range,
         Table $entityIdsTable
     ) {
-        $select = $this->dataProvider->getDataSet($bucket, $dimensions);
+        $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityIdsTable);
         $column = $select->getPart(Select::COLUMNS)[0];
         $select->reset(Select::COLUMNS);
         $rangeExpr = new \Zend_Db_Expr(
@@ -137,11 +132,6 @@ class DataProvider implements DataProviderInterface
                 ->quoteInto('(FLOOR(' . $column[1] . ' / ? ) + 1)', $range)
         );
 
-        $select->joinInner(
-            ['entities' => $entityIdsTable->getName()],
-            'main_table.entity_id  = entities.entity_id',
-            []
-        );
         $select
             ->columns(['range' => $rangeExpr])
             ->columns(['metrix' => 'COUNT(*)'])

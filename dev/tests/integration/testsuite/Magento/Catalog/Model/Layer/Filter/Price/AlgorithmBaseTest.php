@@ -38,7 +38,7 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @dataProvider pricesSegmentationDataProvider
-     * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
+     * @covers       \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
     public function testPricesSegmentation($categoryId, array $entityIds, array $intervalItems)
     {
@@ -59,7 +59,7 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $dataProvider */
         $dataProvider = $objectManager->create('Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider');
-        $select = $dataProvider->getDataSet($termBucket, $dimensions);
+        $select = $dataProvider->getDataSet($termBucket, $dimensions, null);
         $select->where('main_table.entity_id IN (?)', $entityIds);
 
         /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory $intervalFactory */
