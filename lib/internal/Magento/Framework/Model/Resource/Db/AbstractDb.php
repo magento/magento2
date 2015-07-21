@@ -311,6 +311,17 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
+     * Get connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     */
+    protected function getConnection()
+    {
+        $fullResourceName = ($this->_resourcePrefix ? $this->_resourcePrefix . '_' : '') . 'write';
+        return $this->_resources->getConnection($fullResourceName);
+    }
+
+    /**
      * Retrieve connection for read data
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
