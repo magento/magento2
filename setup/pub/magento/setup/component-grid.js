@@ -5,7 +5,7 @@
 
 'use strict';
 angular.module('component-grid', ['ngStorage'])
-    .controller('componentGridController', ['$scope', '$http', function ($scope, $http) {
+    .controller('componentGridController', ['$scope', '$http', '$localStorage', function ($scope, $http, $localStorage) {
 
       $http.get('index.php/componentGrid/components').success(function(data) {
           $scope.components = data.components;
@@ -63,6 +63,16 @@ angular.module('component-grid', ['ngStorage'])
               return indicators.info[type];
           }
           return indicators.on[type];
+      };
+
+      $scope.update = function(component) {
+          $localStorage.packages = [
+              {
+                  name: component.name,
+                  version: $scope.availableUpdatePackages[component.name]['latestVersion']
+              }
+          ];
+          $scope.nextState();
       };
 
       $scope.convertDate = function(date) {

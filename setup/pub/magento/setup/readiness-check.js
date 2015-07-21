@@ -37,7 +37,7 @@ angular.module('readiness-check', [])
             $scope.hasErrors = true;
             $rootScope.hasErrors = true;
             $scope.stopProgress();
-        }
+        };
 
         $scope.completed = false;
         $scope.hasErrors = false;
@@ -81,7 +81,7 @@ angular.module('readiness-check', [])
             setupErrorMessage: '',
             updaterErrorMessage: '',
             setupNoticeMessage: '',
-            updaterNoticeMessage: '',
+            updaterNoticeMessage: ''
         };
         $scope.componentDependency = {
             visible: false,
@@ -91,10 +91,6 @@ angular.module('readiness-check', [])
             errorMessage: '',
             packages: null
         };
-        // TODO: hardcode it right now
-        $localStorage.packages = [
-            {name: 'symfony/console', version: '2.5'}
-        ];
         if ($localStorage.packages) {
             $scope.componentDependency.packages = $localStorage.packages;
         }
