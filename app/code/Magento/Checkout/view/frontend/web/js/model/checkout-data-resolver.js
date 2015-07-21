@@ -20,12 +20,22 @@ define([
             var shippingAddress = quote.shippingAddress();
             if (!shippingAddress) {
                 var isShippingAddressInitialized = addressList.some(function (address) {
-                    if (checkoutData.getSelectedShippingAddress() == address.getKey() || address.isDefaultShipping()) {
+                    if (checkoutData.getSelectedShippingAddress() == address.getKey()) {
                         selectShippingAddress(address);
                         return true;
                     }
                     return false;
                 });
+
+                if (!isShippingAddressInitialized) {
+                    isShippingAddressInitialized = addressList.some(function (address) {
+                        if (address.isDefaultShipping()) {
+                            selectShippingAddress(address);
+                            return true;
+                        }
+                        return false;
+                    });
+                }
                 if (!isShippingAddressInitialized && addressList().length == 1) {
                     selectShippingAddress(addressList()[0]);
                 }
