@@ -40,7 +40,7 @@ class Csv
     /**
      * Constructor
      *
-     * @param File $file File Driver
+     * @param File $file File Driver used for writing CSV
      */
     public function __construct(File $file)
     {
