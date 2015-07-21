@@ -49,7 +49,7 @@ class Sequence implements SequenceInterface
         $pattern = self::DEFAULT_PATTERN
     ) {
         $this->meta = $meta;
-        $this->adapter = $resource->getConnection('sales_write');
+        $this->adapter = $resource->getConnection('sales');
         $this->pattern = $pattern;
     }
 

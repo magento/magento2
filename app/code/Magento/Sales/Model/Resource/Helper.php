@@ -44,7 +44,7 @@ class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
         $mainTable,
         $aggregationTable
     ) {
-        $adapter = $this->_resource->getConnection('sales_write');
+        $adapter = $this->_resource->getConnection('sales');
         if ($aggregation == $aggregationAliases['monthly']) {
             $this->_reportsResourceHelper->updateReportRatingPos(
                 $adapter,

@@ -5,6 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Attribute;
 
+use Magento\Framework\App\Resource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class LockValidatorTest extends \PHPUnit_Framework_TestCase
@@ -83,7 +84,7 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $object->expects($this->once())->method('getAttributeId')->will($this->returnValue($attributeId));
 
-        $this->resource->expects($this->once())->method('getConnection')->with($this->equalTo('read'))
+        $this->resource->expects($this->once())->method('getConnection')->with(Resource::DEFAULT_CONNECTION)
             ->will($this->returnValue($this->adapter));
         $this->resource->expects($this->at(1))->method('getTableName')
             ->with($this->equalTo('catalog_product_super_attribute'))

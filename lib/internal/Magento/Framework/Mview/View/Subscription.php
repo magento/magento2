@@ -73,7 +73,7 @@ class Subscription implements SubscriptionInterface
         $tableName,
         $columnName
     ) {
-        $this->write = $resource->getConnection('core_write');
+        $this->write = $resource->getConnection(Resource::DEFAULT_CONNECTION);
         $this->triggerFactory = $triggerFactory;
         $this->viewCollection = $viewCollection;
         $this->view = $view;

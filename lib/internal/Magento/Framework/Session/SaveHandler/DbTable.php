@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Session\SaveHandler;
 
+use Magento\Framework\App\Resource;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
 
@@ -35,7 +36,7 @@ class DbTable extends \SessionHandler
     public function __construct(\Magento\Framework\App\Resource $resource)
     {
         $this->_sessionTable = $resource->getTableName('session');
-        $this->_write = $resource->getConnection('core_write');
+        $this->_write = $resource->getConnection(Resource::DEFAULT_CONNECTION);
         $this->checkConnection();
     }
 

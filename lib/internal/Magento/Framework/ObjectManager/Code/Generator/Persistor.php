@@ -221,7 +221,8 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getGetConnectionMethod()
     {
         $body = "if (!\$this->connection) {\n"
-        . "    \$this->connection = \$this->resource->getConnection('write');\n"
+        . "    \$this->connection = \$this->resource->getConnection("
+        . "\\Magento\\Framework\\App\\Resource::DEFAULT_CONNECTION);\n"
         . "}\n"
         . "return \$this->connection;";
 

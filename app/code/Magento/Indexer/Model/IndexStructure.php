@@ -166,7 +166,7 @@ class IndexStructure
      */
     private function getAdapter()
     {
-        $adapter = $this->resource->getConnection('write');
+        $adapter = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
         return $adapter;
     }
 

@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Model;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Customer log data logger.
  *
@@ -15,7 +17,7 @@ class Logger
     /**
      * Resource instance.
      *
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
@@ -25,11 +27,11 @@ class Logger
     protected $logFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\Customer\Model\LogFactory $logFactory
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\Customer\Model\LogFactory $logFactory
     ) {
         $this->resource = $resource;
@@ -53,7 +55,7 @@ class Logger
         }
 
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
-        $adapter = $this->resource->getConnection('write');
+        $adapter = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
 
         $adapter->insertOnDuplicate(
             $this->resource->getTableName('customer_log'),
@@ -93,7 +95,7 @@ class Logger
     protected function loadLogData($customerId)
     {
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
-        $adapter = $this->resource->getConnection('read');
+        $adapter = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
 
         $select = $adapter->select()
             ->from(
