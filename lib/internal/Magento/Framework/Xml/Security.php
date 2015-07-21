@@ -54,8 +54,12 @@ class Security
         $loadEntities = libxml_disable_entity_loader(true);
         $useInternalXmlErrors = libxml_use_internal_errors(true);
 
-        // Load XML with network access disabled (LIBXML_NONET)
-        // error disabled with @ for PHP-FPM scenario
+        /**
+         * Load XML with network access disabled (LIBXML_NONET)
+         * error disabled with @ for PHP-FPM scenario
+         *
+         * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+         */
         set_error_handler(function ($errno, $errstr) {
             if (substr_count($errstr, 'DOMDocument::loadXML()') > 0) {
                 return true;
