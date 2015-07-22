@@ -14,6 +14,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class ContextPluginTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
