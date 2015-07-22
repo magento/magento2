@@ -103,11 +103,6 @@ class Store extends AbstractModel implements
     const CACHE_TAG = 'store';
 
     /**
-     * Cookie name
-     */
-    const COOKIE_NAME = 'store';
-
-    /**
      * Script name, which returns all the images
      */
     const MEDIA_REWRITE_SCRIPT = 'get.php/';
@@ -285,16 +280,6 @@ class Store extends AbstractModel implements
     protected $_currencyInstalled;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    protected $_cookieMetadataFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
-     */
-    protected $_cookieManager;
-
-    /**
      * @var \Magento\Framework\App\Http\Context
      */
     protected $_httpContext;
@@ -317,8 +302,6 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -341,8 +324,6 @@ class Store extends AbstractModel implements
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -361,8 +342,6 @@ class Store extends AbstractModel implements
         $this->filesystem = $filesystem;
         $this->_storeManager = $storeManager;
         $this->_sidResolver = $sidResolver;
-        $this->_cookieMetadataFactory = $cookieMetadataFactory;
-        $this->_cookieManager = $cookieManager;
         $this->_httpContext = $httpContext;
         $this->_session = $session;
         $this->currencyFactory = $currencyFactory;

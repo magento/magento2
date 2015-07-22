@@ -35,16 +35,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\CookieManagerInterface
-     */
-    protected $cookieManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    protected $cookieMetadataFactoryMock;
-
-    /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystemMock;
@@ -60,19 +50,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'setActionName',
             'getParam',
             'getQueryValue',
-            'getCookie',
             'getDistroBaseUrl',
             'isSecure',
             'getServer',
         ], [], '', false);
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
-        $this->cookieMetadataFactoryMock = $this->getMock(
-            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
-            ['createPublicCookieMetadata'],
-            [],
-            '',
-            false
-        );
         $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
