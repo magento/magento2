@@ -289,7 +289,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'imageData' => $this->imageProvider->getImages($quoteId),
             'countryData' => $this->getCountryData(),
             'totalsData' => $this->getTotalsData(),
-            'shippingRates' => $this->getDefaultShippingRates(),
             'shippingPolicy' => [
                 'isEnabled' => $this->scopeConfig->isSetFlag(
                     'shipping/shipping_policy/enable_shipping_policy',
@@ -306,48 +305,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'originCountryCode' => $this->getOriginCountryCode(),
             'paymentMethods' => $this->getPaymentMethods()
         ];
-    }
-
-    /**
-     * Get default shipping rates
-     *
-     * @return array
-     */
-    private function getDefaultShippingRates()
-    {
-        $output = [];
-        $addressKey = null;
-        if ($this->checkoutSession->getQuote()->getId()) {
-            $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
-            /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
-            $estimatedAddress = $this->estimatedAddressFactory->create();
-
-            $address = $quote->getShippingAddress();
-            if ($address &&
-                ($address->getCountryId()
-                    || $address->getPostcode()
-                    || $address->getRegion()
-                    || $address->getRegionId()
-                )
-            ) {
-                $estimatedAddress->setCountryId($address->getCountryId());
-                $estimatedAddress->setPostcode($address->getPostcode());
-                $estimatedAddress->setRegion($address->getRegion());
-                $estimatedAddress->setRegionId($address->getRegionId());
-            } else {
-                $estimatedAddress->setCountryId($this->directoryHelper->getDefaultCountry());
-            }
-            $rates = $this->shippingMethodManager->estimateByAddress($quote->getId(), $estimatedAddress);
-            foreach ($rates as $rate) {
-                $output[] = $rate->__toArray();
-            }
-
-            if ($address->getCustomerAddressId()) {
-                $addressKey = 'customer-address' . $address->getCustomerAddressId();
-            }
-        };
-        return ['key' => $addressKey, 'data' => $output];
-
     }
 
     /**

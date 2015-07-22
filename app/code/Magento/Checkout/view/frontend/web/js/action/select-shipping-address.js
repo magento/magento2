@@ -5,7 +5,7 @@
 /*global define*/
 define(
     [
-        '../model/quote',
+        'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/shipping-rate-service',
         'Magento_Checkout/js/action/select-billing-address'
     ],
