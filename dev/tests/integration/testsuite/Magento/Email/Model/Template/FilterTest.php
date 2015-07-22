@@ -77,6 +77,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertStringMatchesFormat('http://example.com/%stranslation/ajax/index/', $url);
 
         $this->_model->setStoreId(0);
+        $backendUrlModel = $this->_objectManager->create('Magento\Backend\Model\Url');
+        $this->_model->setUrlModel($backendUrlModel);
         $url = $this->_model->storeDirective(
             ['{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"']
         );
