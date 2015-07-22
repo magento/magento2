@@ -46,7 +46,7 @@ class Bestsellers extends AbstractReport
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Sales\Model\Resource\Helper $salesResourceHelper
      * @param array $ignoredProductTypes
-     * @param string|null $resourcePrefix
+     * @param string|null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -58,7 +58,7 @@ class Bestsellers extends AbstractReport
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Sales\Model\Resource\Helper $salesResourceHelper,
-        $resourcePrefix = null,
+        $connectionName = null,
         array $ignoredProductTypes = []
     ) {
         parent::__construct(
@@ -68,7 +68,7 @@ class Bestsellers extends AbstractReport
             $reportsFlagFactory,
             $dateTime,
             $timezoneValidator,
-            $resourcePrefix
+            $connectionName
         );
         $this->_productResource = $productResource;
         $this->_salesResourceHelper = $salesResourceHelper;

@@ -88,7 +88,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param string|null $resourcePrefix
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -98,14 +98,14 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_storeManager = $storeManager;
         $this->_catalogConfig = $catalogConfig;
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $tableStrategy, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $connectionName);
     }
 
     /**
