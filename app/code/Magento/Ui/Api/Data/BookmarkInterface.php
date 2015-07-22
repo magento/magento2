@@ -6,7 +6,7 @@
 namespace Magento\Ui\Api\Data;
 
 /**
- * Bookmark page interface.
+ * Bookmark interface.
  * @api
  */
 interface BookmarkInterface extends BookmarkExtensionInterface
@@ -176,5 +176,4 @@ interface BookmarkInterface extends BookmarkExtensionInterface
     public function setExtensionAttributes(
         \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
     );
-
 }
