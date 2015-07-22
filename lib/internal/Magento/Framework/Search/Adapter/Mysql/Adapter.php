@@ -17,8 +17,6 @@ use Magento\Framework\Search\RequestInterface;
  */
 class Adapter implements AdapterInterface
 {
-    const TEMPORARY_TABLE_NAME = 'search_tmp';
-
     /**
      * Mapper instance
      *
@@ -44,21 +42,29 @@ class Adapter implements AdapterInterface
     private $aggregationBuilder;
 
     /**
+     * @var TemporaryStorageFactory
+     */
+    private $temporaryStorageFactory;
+
+    /**
      * @param Mapper $mapper
      * @param ResponseFactory $responseFactory
-     * @param Resource $resource
+     * @param Resource|Resource $resource
      * @param AggregationBuilder $aggregationBuilder
+     * @param TemporaryStorageFactory $temporaryStorageFactory
      */
     public function __construct(
         Mapper $mapper,
         ResponseFactory $responseFactory,
         Resource $resource,
-        AggregationBuilder $aggregationBuilder
+        AggregationBuilder $aggregationBuilder,
+        TemporaryStorageFactory $temporaryStorageFactory
     ) {
         $this->mapper = $mapper;
         $this->responseFactory = $responseFactory;
         $this->resource = $resource;
         $this->aggregationBuilder = $aggregationBuilder;
+        $this->temporaryStorageFactory = $temporaryStorageFactory;
     }
 
     /**
@@ -67,7 +73,8 @@ class Adapter implements AdapterInterface
     public function query(RequestInterface $request)
     {
         $query = $this->mapper->buildQuery($request);
-        $table = $this->storeDocuments($query);
+        $temporaryStorage = $this->temporaryStorageFactory->create();
+        $table = $temporaryStorage->storeDocumentsFromSelect($query);
 
         $documents = $this->getDocuments($table);
 
@@ -77,44 +84,6 @@ class Adapter implements AdapterInterface
             'aggregations' => $aggregations,
         ];
         return $this->responseFactory->create($response);
-    }
-
-    /**
-     * @param Select $select
-     * @return Table
-     */
-    private function storeDocuments(Select $select)
-    {
-        $table = $this->createTemporaryTable();
-        $this->getConnection()->query($this->getConnection()->insertFromSelect($select, $table->getName()));
-        return $table;
-    }
-
-    /**
-     * @return Table
-     * @throws \Zend_Db_Exception
-     */
-    private function createTemporaryTable()
-    {
-        $connection = $this->getConnection();
-        $table = $connection->newTable($this->resource->getTableName(self::TEMPORARY_TABLE_NAME));
-        $table->addColumn(
-            'entity_id',
-            Table::TYPE_INTEGER,
-            10,
-            ['unsigned' => true, 'nullable' => false, 'primary' => true],
-            'Entity ID'
-        );
-        $table->addColumn(
-            'relevance',
-            Table::TYPE_FLOAT,
-            10,
-            ['unsigned' => true, 'nullable' => false],
-            'Relevance'
-        );
-        $table->setOption('type', 'memory');
-        $connection->createTemporaryTable($table);
-        return $table;
     }
 
     /**
