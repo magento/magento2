@@ -88,7 +88,7 @@ define(
                 this.isNewAddressAdded(hasNewAddress);
 
                 if (!quote.isVirtual()) {
-                    stepNavigator.registerStep('shipping', 'Shipping', this.visible, 10);
+                    stepNavigator.registerStep('shipping', 'Shipping', this.visible, this.navigate, 10);
                 }
 
                 this.isFormPopUpVisible.subscribe(function (value) {
@@ -115,6 +115,11 @@ define(
                 });
 
                 return this;
+            },
+
+            navigate: function () {
+                window.location.href = window.checkoutConfig.checkoutUrl + "#shipping";
+                $('html, body').animate({scrollTop: $('#shipping').offset().top}, 0);
             },
 
             initElement: function(element) {

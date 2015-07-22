@@ -15,11 +15,12 @@ define(
         return {
             steps: steps,
             stepCodes: [],
-            registerStep: function(code, title, isVisible, sortOrder) {
+            registerStep: function(code, title, isVisible, navigate, sortOrder) {
                 steps.push({
                     code: code,
                     title : title,
                     isVisible: isVisible,
+                    navigate: navigate,
                     sortOrder: sortOrder
                 });
                 this.stepCodes.push(code);
@@ -62,6 +63,7 @@ define(
                 sortedItems.forEach(function(element) {
                     if (element.code == step.code) {
                         element.isVisible(true);
+                        element.navigate();
                     } else {
                         element.isVisible(false);
                     }
@@ -79,6 +81,7 @@ define(
                 });
                 if (steps().length > activeIndex + 1) {
                     steps()[activeIndex + 1].isVisible(true);
+                    steps()[activeIndex + 1].navigate();
                 }
             },
 
@@ -92,6 +95,7 @@ define(
                 });
                 if (steps()[activeIndex - 1]) {
                     steps()[activeIndex - 1].isVisible(true);
+                    steps()[activeIndex - 1].navigate();
                 }
             }
         };

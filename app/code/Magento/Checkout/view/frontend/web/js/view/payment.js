@@ -6,6 +6,7 @@
 /*global alert*/
 define(
     [
+        'jquery',
         'uiComponent',
         'ko',
         'Magento_Checkout/js/model/quote',
@@ -13,7 +14,7 @@ define(
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/model/payment/method-converter'
     ],
-    function (Component, ko, quote, stepNavigator, paymentService, methodConverter) {
+    function ($, Component, ko, quote, stepNavigator, paymentService, methodConverter) {
         'use strict';
 
         /** Set payment methods to collection */
@@ -32,8 +33,13 @@ define(
 
             initialize: function () {
                 this._super();
-                stepNavigator.registerStep('billing', 'Review & Payments', this.isVisible, 20);
+                stepNavigator.registerStep('billing', 'Review & Payments', this.isVisible, this.navigate, 20);
                 return this;
+            },
+
+            navigate: function () {
+                window.location = window.checkoutConfig.checkoutUrl + "#payment";
+                $('html, body').animate({scrollTop: $('#payment').offset().top}, 0);
             },
 
             getFormKey: function() {
