@@ -191,10 +191,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->_cachedOptions[$entityId][$option['name']]['selections'] = [];
                 }
                 $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
-                $this->_cachedOptionSelectQuery[] =
-                    $this->connection->select()
-                    ->getAdapter()
-                    ->quoteInto('(parent_id = '.(int)$entityId.' AND title = ?)', $option['name']);
+                $this->_cachedOptionSelectQuery[] = $this->connection->quoteInto(
+                        '(parent_id = '.(int)$entityId.' AND title = ?)', $option['name']
+                    );
             }
         }
         return $selections;

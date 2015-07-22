@@ -56,7 +56,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 
         $this->selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
-            ['reset', 'columns', 'getAdapter'],
+            ['reset', 'columns', 'getConnection'],
             [],
             '',
             false
@@ -128,7 +128,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             ->method('getIdFieldName')
             ->will($this->returnValue('return-value'));
         $this->selectMock->expects($this->once())
-            ->method('getAdapter')
+            ->method('getConnection')
             ->will($this->returnValue($adapterMock));
         $adapterMock->expects($this->once())
             ->method('fetchCol')
@@ -158,7 +158,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             ->method('columns')
             ->with('COUNT(*)');
         $this->selectMock->expects($this->once())
-            ->method('getAdapter')
+            ->method('getConnection')
             ->will($this->returnValue($adapterMock));
         $adapterMock->expects($this->once())
             ->method('fetchOne')
@@ -198,7 +198,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             ['query']
         );
         $this->selectMock->expects($this->once())
-            ->method('getAdapter')
+            ->method('getConnection')
             ->will($this->returnValue($adapterMock));
         $adapterMock->expects($this->once())
             ->method('query')

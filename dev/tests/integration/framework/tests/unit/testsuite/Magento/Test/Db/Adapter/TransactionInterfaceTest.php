@@ -21,7 +21,7 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeginTransparentTransaction($class)
     {
-        $adapter = $this->_getAdapterMock($class);
+        $adapter = $this->_getConnectionMock($class);
         $uniqid = uniqid();
         $adapter->expects($this->once())->method('beginTransaction')->will($this->returnValue($uniqid));
         $this->assertSame(0, $adapter->getTransactionLevel());
@@ -35,7 +35,7 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testRollbackTransparentTransaction($class)
     {
-        $adapter = $this->_getAdapterMock($class);
+        $adapter = $this->_getConnectionMock($class);
         $uniqid = uniqid();
         $adapter->expects($this->once())->method('rollback')->will($this->returnValue($uniqid));
         $adapter->beginTransparentTransaction();
@@ -49,7 +49,7 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCommitTransparentTransaction($class)
     {
-        $adapter = $this->_getAdapterMock($class);
+        $adapter = $this->_getConnectionMock($class);
         $uniqid = uniqid();
         $adapter->expects($this->once())->method('commit')->will($this->returnValue($uniqid));
         $adapter->beginTransparentTransaction();
@@ -79,10 +79,10 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      * @param string $class
      * @return \Magento\TestFramework\Db\Adapter\TransactionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getAdapterMock($class)
+    protected function _getConnectionMock($class)
     {
-        $adapter = $this->getMock($class, ['beginTransaction', 'rollback', 'commit'], [], '', false);
-        $this->assertInstanceOf('Magento\TestFramework\Db\Adapter\TransactionInterface', $adapter);
-        return $adapter;
+        $connection = $this->getMock($class, ['beginTransaction', 'rollback', 'commit'], [], '', false);
+        $this->assertInstanceOf('Magento\TestFramework\Db\Adapter\TransactionInterface', $connection);
+        return $connection;
     }
 }

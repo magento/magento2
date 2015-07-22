@@ -733,7 +733,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         // validate bind
         list($pKey, $fKey) = explode('=', $bind);
-        $pKey = $this->getSelect()->getAdapter()->quoteColumnAs(trim($pKey), null);
+        $pKey = $this->getSelect()->getConnection()->quoteColumnAs(trim($pKey), null);
         $bindCond = $tableAlias . '.' . trim($pKey) . '=' . $this->_getAttributeFieldName(trim($fKey));
 
         // process join type
