@@ -190,7 +190,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     protected function _joinLinks()
     {
         $select = $this->getSelect();
-        $adapter = $select->getAdapter();
+        $adapter = $select->getConnection();
 
         $joinCondition = [
             'links.linked_product_id = e.entity_id',
@@ -269,7 +269,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
             $joinCondiotion = [
                 "{$alias}.link_id = links.link_id",
-                $this->getSelect()->getAdapter()->quoteInto("{$alias}.product_link_attribute_id = ?", $attribute['id']),
+                $this->getSelect()->getConnection()
+                    ->quoteInto("{$alias}.product_link_attribute_id = ?", $attribute['id']),
             ];
             $this->getSelect()->joinLeft(
                 [$alias => $table],

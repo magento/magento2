@@ -218,7 +218,7 @@ class Query implements QueryInterface
      */
     public function getConnection()
     {
-        return $this->getSelect()->getAdapter();
+        return $this->getSelect()->getConnection();
     }
 
     /**
@@ -271,6 +271,7 @@ class Query implements QueryInterface
         return $this->countSqlSkipParts;
     }
 
+    /**
     /**
      * Get \Magento\Framework\DB\Select object instance
      *

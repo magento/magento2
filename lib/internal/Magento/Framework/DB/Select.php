@@ -101,7 +101,7 @@ class Select extends \Zend_Db_Select
             $type = null;
         }
         if (is_array($value)) {
-            $cond = $this->getAdapter()->quoteInto($cond, $value);
+            $cond = $this->getConnection()->quoteInto($cond, $value);
             $value = null;
         }
         return parent::where($cond, $value, $type);
@@ -315,7 +315,7 @@ class Select extends \Zend_Db_Select
      */
     public function crossUpdateFromSelect($table)
     {
-        return $this->getAdapter()->updateFromSelect($this, $table);
+        return $this->getConnection()->updateFromSelect($this, $table);
     }
 
     /**
@@ -329,7 +329,7 @@ class Select extends \Zend_Db_Select
     public function insertFromSelect($tableName, $fields = [], $onDuplicate = true)
     {
         $mode = $onDuplicate ? AdapterInterface::INSERT_ON_DUPLICATE : false;
-        return $this->getAdapter()->insertFromSelect($this, $tableName, $fields, $mode);
+        return $this->getConnection()->insertFromSelect($this, $tableName, $fields, $mode);
     }
 
     /**
@@ -341,7 +341,7 @@ class Select extends \Zend_Db_Select
      */
     public function insertIgnoreFromSelect($tableName, $fields = [])
     {
-        return $this->getAdapter()->insertFromSelect($this, $tableName, $fields, AdapterInterface::INSERT_IGNORE);
+        return $this->getConnection()->insertFromSelect($this, $tableName, $fields, AdapterInterface::INSERT_IGNORE);
     }
 
     /**
@@ -352,7 +352,7 @@ class Select extends \Zend_Db_Select
      */
     public function deleteFromSelect($table)
     {
-        return $this->getAdapter()->deleteFromSelect($this, $table);
+        return $this->getConnection()->deleteFromSelect($this, $table);
     }
 
     /**
@@ -473,5 +473,15 @@ class Select extends \Zend_Db_Select
 
         $this->where($exists);
         return $this;
+    }
+
+    /**
+     * Get adapter
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getConnection()
+    {
+        return $this->_adapter;
     }
 }

@@ -1472,7 +1472,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
                     if ($column instanceof \Zend_Db_Expr) {
                         $field = $column;
                     } else {
-                        $adapter = $this->getSelect()->getAdapter();
+                        $adapter = $this->getSelect()->getConnection();
                         if (empty($correlationName)) {
                             $field = $adapter->quoteColumnAs($column, $alias, true);
                         } else {
