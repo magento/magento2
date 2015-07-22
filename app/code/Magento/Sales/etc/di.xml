@@ -567,48 +567,36 @@
     <virtualType name="Magento\Sales\Model\Resource\Order\Invoice\Grid\Collection" type="Magento\Sales\Model\Resource\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_invoice_grid</argument>
-            <argument name="eventPrefix" xsi:type="string">sales_order_invoice_grid_collection</argument>
-            <argument name="eventObject" xsi:type="string">order_invoice_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Invoice</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Sales\Model\Resource\Order\Shipment\Grid\Collection" type="Magento\Sales\Model\Resource\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_shipment_grid</argument>
-            <argument name="eventPrefix" xsi:type="string">sales_order_shipment_grid_collection</argument>
-            <argument name="eventObject" xsi:type="string">order_shipment_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Shipment</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Collection" type="Magento\Sales\Model\Resource\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_creditmemo_grid</argument>
-            <argument name="eventPrefix" xsi:type="string">sales_order_creditmemo_grid_collection</argument>
-            <argument name="eventObject" xsi:type="string">order_creditmemo_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Creditmemo</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Sales\Model\Resource\Order\Invoice\Orders\Grid\Collection" type="Magento\Sales\Model\Resource\Grid\Order\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_invoice_grid</argument>
-            <argument name="eventPrefix" xsi:type="string">sales_order_invoice_grid_collection</argument>
-            <argument name="eventObject" xsi:type="string">order_invoice_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Invoice</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Sales\Model\Resource\Order\Shipment\Order\Grid\Collection" type="Magento\Sales\Model\Resource\Grid\Order\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_shipment_grid</argument>
-            <argument name="eventPrefix" xsi:type="string">sales_order_shipment_grid_collection</argument>
-            <argument name="eventObject" xsi:type="string">order_shipment_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Shipment</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Sales\Model\Resource\Order\Creditmemo\Order\Grid\Collection" type="Magento\Sales\Model\Resource\Grid\Order\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_creditmemo_grid</argument>
-            <argument name="eventPrefix" xsi:type="string">sales_order_creditmemo_grid_collection</argument>
-            <argument name="eventObject" xsi:type="string">order_creditmemo_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\Resource\Order\Creditmemo</argument>
         </arguments>
     </virtualType>
