@@ -28,10 +28,11 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Ui\Component\MassAction\Filter $filter
     ) {
         $this->_fileFactory = $fileFactory;
-        parent::__construct($context);
+        parent::__construct($context, $filter);
     }
 
     /**

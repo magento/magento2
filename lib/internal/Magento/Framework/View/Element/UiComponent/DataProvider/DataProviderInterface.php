@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+
 /**
  * Interface DataProviderInterface
  */
@@ -138,4 +140,9 @@ interface DataProviderInterface
      * @return int
      */
     public function count();
+
+    /**
+     * @return AbstractCollection
+     */
+    public function getCollection();
 }
