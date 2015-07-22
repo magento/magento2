@@ -67,6 +67,18 @@ class FileManager
      *
      * @return \Magento\Framework\View\Asset\File
      */
+    public function createRequireJsMixinsAsset()
+    {
+        $relPath = $this->config->getMixinsFileRelativePath();
+        $this->ensureSourceFile($relPath);
+        return $this->assetRepo->createArbitrary($relPath, '');
+    }
+
+    /**
+     * Create a view asset representing the aggregated configuration file
+     *
+     * @return \Magento\Framework\View\Asset\File
+     */
     public function createRequireJsAsset()
     {
         return $this->assetRepo->createArbitrary($this->config->getRequireJsFileRelativePath(), '');
