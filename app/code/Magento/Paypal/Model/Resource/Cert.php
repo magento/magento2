@@ -68,8 +68,8 @@ class Cert extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByWebsite($object, $strictLoad = true)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(['main_table' => $this->getMainTable()]);
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(['main_table' => $this->getMainTable()]);
 
         if ($strictLoad) {
             $select->where('main_table.website_id =?', $object->getWebsiteId());
@@ -84,7 +84,7 @@ class Cert extends \Magento\Framework\Model\Resource\Db\AbstractDb
             );
         }
 
-        $data = $adapter->fetchRow($select);
+        $data = $connection->fetchRow($select);
         if ($data) {
             $object->setData($data);
         }

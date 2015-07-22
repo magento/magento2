@@ -81,8 +81,7 @@ class Mysql extends Db implements ConnectionAdapterInterface
     protected function _getDbAdapterInstance(LoggerInterface $logger)
     {
         $className = $this->_getDbAdapterClassName();
-        $adapter = new $className($this->string, $this->dateTime, $logger, $this->_connectionConfig);
-        return $adapter;
+        return new $className($this->string, $this->dateTime, $logger, $this->_connectionConfig);
     }
 
     /**

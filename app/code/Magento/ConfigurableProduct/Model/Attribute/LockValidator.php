@@ -33,12 +33,12 @@ class LockValidator implements LockValidatorInterface
      */
     public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {
-        $adapter = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
         $attrTable = $this->resource->getTableName('catalog_product_super_attribute');
         $productTable = $this->resource->getTableName('catalog_product_entity');
 
         $bind = ['attribute_id' => $object->getAttributeId()];
-        $select = clone $adapter->select();
+        $select = clone $connection->select();
         $select->reset()->from(
             ['main_table' => $attrTable],
             ['psa_count' => 'COUNT(product_super_attribute_id)']
@@ -58,7 +58,7 @@ class LockValidator implements LockValidatorInterface
             $select->where('entity.attribute_set_id = :attribute_set_id');
         }
 
-        if ($adapter->fetchOne($select, $bind)) {
+        if ($connection->fetchOne($select, $bind)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('This attribute is used in configurable products.')
             );

@@ -23,7 +23,7 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connectionMock;
 
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
@@ -38,7 +38,7 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select', 'fetchOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -85,7 +85,7 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
         $object->expects($this->once())->method('getAttributeId')->will($this->returnValue($attributeId));
 
         $this->resource->expects($this->once())->method('getConnection')->with(Resource::DEFAULT_CONNECTION)
-            ->will($this->returnValue($this->adapter));
+            ->will($this->returnValue($this->connectionMock));
         $this->resource->expects($this->at(1))->method('getTableName')
             ->with($this->equalTo('catalog_product_super_attribute'))
             ->will($this->returnValue($attrTable));
@@ -93,9 +93,9 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('catalog_product_entity'))
             ->will($this->returnValue($productTable));
 
-        $this->adapter->expects($this->once())->method('select')
+        $this->connectionMock->expects($this->once())->method('select')
             ->will($this->returnValue($this->select));
-        $this->adapter->expects($this->once())->method('fetchOne')
+        $this->connectionMock->expects($this->once())->method('fetchOne')
             ->with($this->equalTo($this->select), $this->equalTo($bind))
             ->will($this->returnValue($exception));
 

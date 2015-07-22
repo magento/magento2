@@ -326,13 +326,13 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCmsPageTitleById($id)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from($this->getMainTable(), 'title')->where('page_id = :page_id');
+        $select = $connection->select()->from($this->getMainTable(), 'title')->where('page_id = :page_id');
 
         $binds = ['page_id' => (int)$id];
 
-        return $adapter->fetchOne($select, $binds);
+        return $connection->fetchOne($select, $binds);
     }
 
     /**
@@ -343,13 +343,13 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCmsPageIdentifierById($id)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from($this->getMainTable(), 'identifier')->where('page_id = :page_id');
+        $select = $connection->select()->from($this->getMainTable(), 'identifier')->where('page_id = :page_id');
 
         $binds = ['page_id' => (int)$id];
 
-        return $adapter->fetchOne($select, $binds);
+        return $connection->fetchOne($select, $binds);
     }
 
     /**
@@ -360,9 +360,9 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function lookupStoreIds($pageId)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('cms_page_store'),
             'store_id'
         )->where(
@@ -370,7 +370,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
             (int)$pageId
         );
 
-        return $adapter->fetchCol($select);
+        return $connection->fetchCol($select);
     }
 
     /**

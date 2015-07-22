@@ -38,16 +38,16 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadGallery($product, $object)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $positionCheckSql = $adapter->getCheckSql(
+        $positionCheckSql = $connection->getCheckSql(
             'value.position IS NULL',
             'default_value.position',
             'value.position'
         );
 
         // Select gallery images for product
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['main' => $this->getMainTable()],
             [
                 'value_id',
@@ -55,7 +55,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ]
         )->joinLeft(
             ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
-            $adapter->quoteInto('main.value_id = value.value_id AND value.store_id = ?', (int)$product->getStoreId()),
+            $connection->quoteInto('main.value_id = value.value_id AND value.store_id = ?', (int)$product->getStoreId()),
             [
                 'label',
                 'position',
@@ -76,7 +76,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         ->where($positionCheckSql . ' IS NOT NULL')
         ->order($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
 
-        $result = $adapter->fetchAll($select);
+        $result = $connection->fetchAll($select);
         $this->_removeDuplicates($result);
         return $result;
     }
@@ -112,11 +112,11 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function insertGallery($data)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $data = $this->_prepareDataForTable(new \Magento\Framework\Object($data), $this->getMainTable());
-        $adapter->insert($this->getMainTable(), $data);
+        $connection->insert($this->getMainTable(), $data);
 
-        return $adapter->lastInsertId($this->getMainTable());
+        return $connection->lastInsertId($this->getMainTable());
     }
 
     /**
@@ -162,17 +162,17 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteGalleryValueInStore($valueId, $storeId)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $conditions = implode(
             ' AND ',
             [
-                $adapter->quoteInto('value_id = ?', (int)$valueId),
-                $adapter->quoteInto('store_id = ?', (int)$storeId)
+                $connection->quoteInto('value_id = ?', (int)$valueId),
+                $connection->quoteInto('store_id = ?', (int)$storeId)
             ]
         );
 
-        $adapter->delete($this->getTable(self::GALLERY_VALUE_TABLE), $conditions);
+        $connection->delete($this->getTable(self::GALLERY_VALUE_TABLE), $conditions);
 
         return $this;
     }

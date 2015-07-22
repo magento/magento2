@@ -78,9 +78,9 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveLabel($attribute)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->_labelTable,
             'value_id'
         )->where(
@@ -92,15 +92,15 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'product_super_attribute_id' => (int)$attribute->getId(),
             'store_id' => (int)$attribute->getStoreId(),
         ];
-        $valueId = $adapter->fetchOne($select, $bind);
+        $valueId = $connection->fetchOne($select, $bind);
         if ($valueId) {
-            $adapter->update(
+            $connection->update(
                 $this->_labelTable,
                 ['use_default' => (int)$attribute->getUseDefault(), 'value' => $attribute->getLabel()],
-                $adapter->quoteInto('value_id = ?', (int)$valueId)
+                $connection->quoteInto('value_id = ?', (int)$valueId)
             );
         } else {
-            $adapter->insert(
+            $connection->insert(
                 $this->_labelTable,
                 [
                     'product_super_attribute_id' => (int)$attribute->getId(),
@@ -121,8 +121,8 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getUsedAttributes($setId)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->distinct(
+        $connection = $this->getConnection();
+        $select = $connection->select()->distinct(
             true
         )->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -142,7 +142,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'type_id' => \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
         ];
 
-        return $adapter->fetchCol($select, $bind);
+        return $connection->fetchCol($select, $bind);
     }
 
     /**

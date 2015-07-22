@@ -171,14 +171,14 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getRate(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $bind = [
             ':website_id' => (int)$request->getWebsiteId(),
             ':country_id' => $request->getDestCountryId(),
             ':region_id' => (int)$request->getDestRegionId(),
             ':postcode' => $request->getDestPostcode(),
         ];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             'website_id = :website_id'
@@ -231,7 +231,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->where('condition_value <= :condition_value');
         }
 
-        $result = $adapter->fetchRow($select, $bind);
+        $result = $connection->fetchRow($select, $bind);
         // Normalize destination zip code
         if ($result && $result['dest_zip'] == '*') {
             $result['dest_zip'] = '';
@@ -282,8 +282,8 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $this->_importConditionName = $conditionName;
 
-        $adapter = $this->getConnection();
-        $adapter->beginTransaction();
+        $connection = $this->getConnection();
+        $connection->beginTransaction();
 
         try {
             $rowNumber = 1;
@@ -297,7 +297,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'website_id = ?' => $this->_importWebsiteId,
                 'condition_name = ?' => $this->_importConditionName,
             ];
-            $adapter->delete($this->getMainTable(), $condition);
+            $connection->delete($this->getMainTable(), $condition);
 
             while (false !== ($csvLine = $stream->readCsv())) {
                 $rowNumber++;
@@ -319,11 +319,11 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $this->_saveImportData($importData);
             $stream->close();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $adapter->rollback();
+            $connection->rollback();
             $stream->close();
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
         } catch (\Exception $e) {
-            $adapter->rollback();
+            $connection->rollback();
             $stream->close();
             $this->_logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -331,7 +331,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
             );
         }
 
-        $adapter->commit();
+        $connection->commit();
 
         if ($this->_importErrors) {
             $error = __(

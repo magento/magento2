@@ -84,9 +84,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnSelf());
 
-        $adapter = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', [], '', false);
+        $connection = $this->getMockForAbstractClass('\Magento\Framework\DB\Adapter\Pdo\Mysql', [], '', false);
 
-        $this->selectMock = $this->getMock('Zend_Db_Select', null, [$adapter]);
+        $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', null, [$connection]);
 
         $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',

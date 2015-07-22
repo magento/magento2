@@ -308,12 +308,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addHasOptionsFilter()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $orWhere = implode(
             ' OR ',
             [
-                $adapter->quoteInto('(main_table.frontend_input = ? AND ao.option_id > 0)', 'select'),
-                $adapter->quoteInto('(main_table.frontend_input <> ?)', 'select'),
+                $connection->quoteInto('(main_table.frontend_input = ? AND ao.option_id > 0)', 'select'),
+                $connection->quoteInto('(main_table.frontend_input <> ?)', 'select'),
                 '(main_table.is_user_defined = 0)'
             ]
         );
@@ -367,9 +367,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             }
             $attributeToSetInfo = [];
 
-            $adapter = $this->getConnection();
+            $connection = $this->getConnection();
             if (count($attributeIds) > 0) {
-                $select = $adapter->select()->from(
+                $select = $connection->select()->from(
                     ['entity' => $this->getTable('eav_entity_attribute')],
                     ['attribute_id', 'attribute_set_id', 'attribute_group_id', 'sort_order']
                 )->joinLeft(
@@ -380,7 +380,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                     'attribute_id IN (?)',
                     $attributeIds
                 );
-                $result = $adapter->fetchAll($select);
+                $result = $connection->fetchAll($select);
 
                 foreach ($result as $row) {
                     $data = [
@@ -445,15 +445,15 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addStoreLabel($storeId)
     {
-        $adapter = $this->getConnection();
-        $joinExpression = $adapter->quoteInto(
+        $connection = $this->getConnection();
+        $joinExpression = $connection->quoteInto(
             'al.attribute_id = main_table.attribute_id AND al.store_id = ?',
             (int)$storeId
         );
         $this->getSelect()->joinLeft(
             ['al' => $this->getTable('eav_attribute_label')],
             $joinExpression,
-            ['store_label' => $adapter->getIfNullSql('al.value', 'main_table.frontend_label')]
+            ['store_label' => $connection->getIfNullSql('al.value', 'main_table.frontend_label')]
         );
 
         return $this;

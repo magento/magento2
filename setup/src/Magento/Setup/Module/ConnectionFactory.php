@@ -35,12 +35,12 @@ class ConnectionFactory implements \Magento\Framework\Model\Resource\Type\Db\Con
             return null;
         }
 
-        $adapterInstance = new \Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql(
+        $resourceInstance = new \Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql(
             new \Magento\Framework\Stdlib\String(),
             new \Magento\Framework\Stdlib\DateTime(),
             $connectionConfig
         );
 
-        return $adapterInstance->getConnection($this->serviceLocator->get('Magento\Framework\DB\Logger\Null'));
+        return $resourceInstance->getConnection($this->serviceLocator->get('Magento\Framework\DB\Logger\Null'));
     }
 }

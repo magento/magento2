@@ -66,11 +66,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected $event;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $adapter;
-
-    /**
      * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $catalogProductFactory;
@@ -207,13 +202,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                 'getWebsite',
             ])
             ->getMockForAbstractClass();
-        $this->adapter = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            [],
-            [],
-            '',
-            false
-        );
         $this->event = $this->getMock('\Magento\Framework\Event', ['getAdapter', 'getBunch'], [], '', false);
         $this->event->expects($this->any())->method('getAdapter')->willReturn($this->importProduct);
         $this->event->expects($this->any())->method('getBunch')->willReturn($this->products);

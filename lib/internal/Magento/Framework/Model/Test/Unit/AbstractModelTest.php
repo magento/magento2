@@ -37,7 +37,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -83,7 +83,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Model\AbstractModel',
             [$this->contextMock, $this->registryMock, $this->resourceMock, $this->resourceCollectionMock]
         );
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             [],
@@ -92,7 +92,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
         );
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->adapterMock));
+            ->will($this->returnValue($this->connectionMock));
 
     }
 

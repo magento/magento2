@@ -29,9 +29,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->_collection->getByRoles($user->getRole()->getId());
 
         $where = $this->_collection->getSelect()->getPart(\Zend_Db_Select::WHERE);
-        /** @var \Zend_Db_Adapter_Abstract $adapter */
-        $adapter = $this->_collection->getConnection();
-        $quote = $adapter->getQuoteIdentifierSymbol();
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        $connection = $this->_collection->getConnection();
+        $quote = $connection->getQuoteIdentifierSymbol();
         $this->assertContains("({$quote}role_id{$quote} = '" . $user->getRole()->getId() . "')", $where);
     }
 

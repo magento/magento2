@@ -133,8 +133,8 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$ip) {
             return 0;
         }
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             'count'
         )->where(
@@ -144,7 +144,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'value = ?',
             $ip
         );
-        return $adapter->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 
     /**
@@ -158,8 +158,8 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$login) {
             return 0;
         }
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             'count'
         )->where(
@@ -169,7 +169,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'value = ?',
             $login
         );
-        return $adapter->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 
     /**

@@ -66,18 +66,18 @@ class Resource
 
     /**
      * @param ResourceConfigInterface $resourceConfig
-     * @param ConnectionFactoryInterface $adapterFactory
+     * @param ConnectionFactoryInterface $connectionFactory
      * @param DeploymentConfig $deploymentConfig
      * @param string $tablePrefix
      */
     public function __construct(
         ResourceConfigInterface $resourceConfig,
-        ConnectionFactoryInterface $adapterFactory,
+        ConnectionFactoryInterface $connectionFactory,
         DeploymentConfig $deploymentConfig,
         $tablePrefix = ''
     ) {
         $this->_config = $resourceConfig;
-        $this->_connectionFactory = $adapterFactory;
+        $this->_connectionFactory = $connectionFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->_tablePrefix = $tablePrefix ?: null;
     }

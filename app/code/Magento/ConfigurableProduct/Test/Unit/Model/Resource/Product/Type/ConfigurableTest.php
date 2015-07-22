@@ -32,10 +32,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
 
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($adapter));
+        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $this->relation = $this->getMock('Magento\Catalog\Model\Resource\Product\Relation', [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

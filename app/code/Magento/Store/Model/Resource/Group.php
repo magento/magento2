@@ -130,17 +130,17 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function countAll($countAdmin = false)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(['main' => $this->getMainTable()], 'COUNT(*)');
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(['main' => $this->getMainTable()], 'COUNT(*)');
         if (!$countAdmin) {
             $select->joinLeft(
                 ['store_website' => $this->getTable('store_website')],
                 'store_website.website_id = main.website_id',
                 null
             )->where(
-                sprintf('%s <> %s', $adapter->quoteIdentifier('code'), $adapter->quote('admin'))
+                sprintf('%s <> %s', $connection->quoteIdentifier('code'), $connection->quote('admin'))
             );
         }
-        return (int)$adapter->fetchOne($select);
+        return (int)$connection->fetchOne($select);
     }
 }

@@ -52,8 +52,8 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getNextAutoincrement($tableName)
     {
-        $adapter = $this->getConnection();
-        $entityStatus = $adapter->showTableStatus($tableName);
+        $connection = $this->getConnection();
+        $entityStatus = $connection->showTableStatus($tableName);
 
         if (empty($entityStatus['Auto_increment'])) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Cannot get autoincrement value'));

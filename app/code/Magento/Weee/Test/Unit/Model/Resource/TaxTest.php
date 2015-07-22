@@ -25,7 +25,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     protected function setUp()
     {
@@ -35,15 +35,15 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
 
-        $this->adapterMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($this->selectMock);
 
         $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->adapterMock);
+            ->willReturn($this->connectionMock);
 
 
         $this->resourceMock->expects($this->once())

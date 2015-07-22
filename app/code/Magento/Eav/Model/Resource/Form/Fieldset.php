@@ -43,7 +43,7 @@ class Fieldset extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $new = $object->getLabels();
             $old = $this->getLabels($object);
 
-            $adapter = $this->getConnection();
+            $connection = $this->getConnection();
 
             $insert = array_diff(array_keys($new), array_keys($old));
             $delete = array_diff(array_keys($old), array_keys($new));
@@ -71,20 +71,20 @@ class Fieldset extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     ];
                 }
                 if ($data) {
-                    $adapter->insertMultiple($this->getTable('eav_form_fieldset_label'), $data);
+                    $connection->insertMultiple($this->getTable('eav_form_fieldset_label'), $data);
                 }
             }
 
             if (!empty($delete)) {
                 $where = ['fieldset_id = ?' => $object->getId(), 'store_id IN(?)' => $delete];
-                $adapter->delete($this->getTable('eav_form_fieldset_label'), $where);
+                $connection->delete($this->getTable('eav_form_fieldset_label'), $where);
             }
 
             if (!empty($update)) {
                 foreach ($update as $storeId => $label) {
                     $bind = ['label' => $label];
                     $where = ['fieldset_id =?' => $object->getId(), 'store_id =?' => $storeId];
-                    $adapter->update($this->getTable('eav_form_fieldset_label'), $bind, $where);
+                    $connection->update($this->getTable('eav_form_fieldset_label'), $bind, $where);
                 }
             }
         }
@@ -104,16 +104,16 @@ class Fieldset extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$objectId) {
             return [];
         }
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $bind = [':fieldset_id' => $objectId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('eav_form_fieldset_label'),
             ['store_id', 'label']
         )->where(
             'fieldset_id = :fieldset_id'
         );
 
-        return $adapter->fetchPairs($select, $bind);
+        return $connection->fetchPairs($select, $bind);
     }
 
     /**

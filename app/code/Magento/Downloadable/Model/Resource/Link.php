@@ -76,28 +76,28 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveItemTitleAndPrice($linkObject)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $linkTitleTable = $this->getTable('downloadable_link_title');
         $linkPriceTable = $this->getTable('downloadable_link_price');
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('downloadable_link_title')
         )->where(
             'link_id=:link_id AND store_id=:store_id'
         );
         $bind = [':link_id' => $linkObject->getId(), ':store_id' => (int)$linkObject->getStoreId()];
 
-        if ($adapter->fetchOne($select, $bind)) {
+        if ($connection->fetchOne($select, $bind)) {
             $where = ['link_id = ?' => $linkObject->getId(), 'store_id = ?' => (int)$linkObject->getStoreId()];
             if ($linkObject->getUseDefaultTitle()) {
-                $adapter->delete($linkTitleTable, $where);
+                $connection->delete($linkTitleTable, $where);
             } else {
                 $insertData = ['title' => $linkObject->getTitle()];
-                $adapter->update($linkTitleTable, $insertData, $where);
+                $connection->update($linkTitleTable, $insertData, $where);
             }
         } else {
             if (!$linkObject->getUseDefaultTitle()) {
-                $adapter->insert(
+                $connection->insert(
                     $linkTitleTable,
                     [
                         'link_id' => $linkObject->getId(),
@@ -108,14 +108,14 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
         }
 
-        $select = $adapter->select()->from($linkPriceTable)->where('link_id=:link_id AND website_id=:website_id');
+        $select = $connection->select()->from($linkPriceTable)->where('link_id=:link_id AND website_id=:website_id');
         $bind = [':link_id' => $linkObject->getId(), ':website_id' => (int)$linkObject->getWebsiteId()];
-        if ($adapter->fetchOne($select, $bind)) {
+        if ($connection->fetchOne($select, $bind)) {
             $where = ['link_id = ?' => $linkObject->getId(), 'website_id = ?' => $linkObject->getWebsiteId()];
             if ($linkObject->getUseDefaultPrice()) {
-                $adapter->delete($linkPriceTable, $where);
+                $connection->delete($linkPriceTable, $where);
             } else {
-                $adapter->update($linkPriceTable, ['price' => $linkObject->getPrice()], $where);
+                $connection->update($linkPriceTable, ['price' => $linkObject->getPrice()], $where);
             }
         } else {
             if (!$linkObject->getUseDefaultPrice()) {
@@ -152,7 +152,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
                         ];
                     }
                 }
-                $adapter->insertMultiple($linkPriceTable, $dataToInsert);
+                $connection->insertMultiple($linkPriceTable, $dataToInsert);
             }
         }
         return $this;
@@ -166,8 +166,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteItems($items)
     {
-        $adapter = $this->getConnection();
-        $where = [];
+        $connection = $this->getConnection();
         if ($items instanceof \Magento\Downloadable\Model\Link) {
             $where = ['link_id = ?' => $items->getId()];
         } elseif (is_array($items)) {
@@ -175,11 +174,9 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
         } else {
             $where = ['sample_id = ?' => $items];
         }
-        if ($where) {
-            $adapter->delete($this->getMainTable(), $where);
-            $adapter->delete($this->getTable('downloadable_link_title'), $where);
-            $adapter->delete($this->getTable('downloadable_link_price'), $where);
-        }
+        $connection->delete($this->getMainTable(), $where);
+        $connection->delete($this->getTable('downloadable_link_title'), $where);
+        $connection->delete($this->getTable('downloadable_link_price'), $where);
         return $this;
     }
 
@@ -192,9 +189,9 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSearchableData($productId, $storeId)
     {
-        $adapter = $this->getConnection();
-        $ifNullDefaultTitle = $adapter->getIfNullSql('st.title', 's.title');
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $ifNullDefaultTitle = $connection->getIfNullSql('st.title', 's.title');
+        $select = $connection->select()->from(
             ['m' => $this->getMainTable()],
             null
         )->join(
@@ -210,7 +207,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
         $bind = [':store_id' => (int)$storeId, ':product_id' => $productId];
 
-        return $adapter->fetchCol($select, $bind);
+        return $connection->fetchCol($select, $bind);
     }
 
     /**

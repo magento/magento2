@@ -127,12 +127,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             return $this;
         }
         $attributes = $this->getLinkModel()->getAttributes();
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         foreach ($attributes as $attribute) {
             $table = $this->getLinkModel()->getAttributeTypeTable($attribute['type']);
             $alias = sprintf('link_attribute_%s_%s', $attribute['code'], $attribute['type']);
 
-            $aliasInCondition = $adapter->quoteColumnAs($alias, null);
+            $aliasInCondition = $connection->quoteColumnAs($alias, null);
             $this->getSelect()->joinLeft(
                 [$alias => $table],
                 $aliasInCondition .

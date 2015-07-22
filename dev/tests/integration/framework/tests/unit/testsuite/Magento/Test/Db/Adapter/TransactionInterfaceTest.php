@@ -21,12 +21,12 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeginTransparentTransaction($class)
     {
-        $adapter = $this->_getConnectionMock($class);
+        $connectionMock = $this->_getConnectionMock($class);
         $uniqid = uniqid();
-        $adapter->expects($this->once())->method('beginTransaction')->will($this->returnValue($uniqid));
-        $this->assertSame(0, $adapter->getTransactionLevel());
-        $this->assertEquals($uniqid, $adapter->beginTransparentTransaction());
-        $this->assertSame(-1, $adapter->getTransactionLevel());
+        $connectionMock->expects($this->once())->method('beginTransaction')->will($this->returnValue($uniqid));
+        $this->assertSame(0, $connectionMock->getTransactionLevel());
+        $this->assertEquals($uniqid, $connectionMock->beginTransparentTransaction());
+        $this->assertSame(-1, $connectionMock->getTransactionLevel());
     }
 
     /**
@@ -35,12 +35,12 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testRollbackTransparentTransaction($class)
     {
-        $adapter = $this->_getConnectionMock($class);
+        $connectionMock = $this->_getConnectionMock($class);
         $uniqid = uniqid();
-        $adapter->expects($this->once())->method('rollback')->will($this->returnValue($uniqid));
-        $adapter->beginTransparentTransaction();
-        $this->assertEquals($uniqid, $adapter->rollbackTransparentTransaction());
-        $this->assertSame(0, $adapter->getTransactionLevel());
+        $connectionMock->expects($this->once())->method('rollback')->will($this->returnValue($uniqid));
+        $connectionMock->beginTransparentTransaction();
+        $this->assertEquals($uniqid, $connectionMock->rollbackTransparentTransaction());
+        $this->assertSame(0, $connectionMock->getTransactionLevel());
     }
 
     /**
@@ -49,12 +49,12 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCommitTransparentTransaction($class)
     {
-        $adapter = $this->_getConnectionMock($class);
+        $connectionMock = $this->_getConnectionMock($class);
         $uniqid = uniqid();
-        $adapter->expects($this->once())->method('commit')->will($this->returnValue($uniqid));
-        $adapter->beginTransparentTransaction();
-        $this->assertEquals($uniqid, $adapter->commitTransparentTransaction());
-        $this->assertSame(0, $adapter->getTransactionLevel());
+        $connectionMock->expects($this->once())->method('commit')->will($this->returnValue($uniqid));
+        $connectionMock->beginTransparentTransaction();
+        $this->assertEquals($uniqid, $connectionMock->commitTransparentTransaction());
+        $this->assertSame(0, $connectionMock->getTransactionLevel());
     }
 
     /**

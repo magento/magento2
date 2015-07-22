@@ -518,15 +518,15 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddColumn($options, $expectedQuery)
     {
-        $adapter = $this->getMock(
+        $connectionMock = $this->getMock(
             '\Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'], [], '', false
         );
 
-        $adapter->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
-        $adapter->expects($this->any())->method('quote')->will($this->returnArgument(0));
-        $adapter->expects($this->once())->method('rawQuery')->with($expectedQuery);
-        $adapter->addColumn('tableName', 'columnName', $options);
+        $connectionMock->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
+        $connectionMock->expects($this->any())->method('quote')->will($this->returnArgument(0));
+        $connectionMock->expects($this->once())->method('rawQuery')->with($expectedQuery);
+        $connectionMock->addColumn('tableName', 'columnName', $options);
     }
 
     /**

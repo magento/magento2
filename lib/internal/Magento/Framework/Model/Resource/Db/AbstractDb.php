@@ -335,10 +335,10 @@ abstract class AbstractDb extends AbstractResource
             $field = $this->getIdFieldName();
         }
 
-        $adapter = $this->getConnection();
-        if ($adapter && $value !== null) {
+        $connection = $this->getConnection();
+        if ($connection && $value !== null) {
             $select = $this->_getLoadSelect($field, $value, $object);
-            $data = $adapter->fetchRow($select);
+            $data = $connection->fetchRow($select);
 
             if ($data) {
                 $object->setData($data);

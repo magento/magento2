@@ -80,13 +80,13 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function saveRel(\Magento\Authorization\Model\Rules $rule)
     {
         try {
-            $adapter = $this->getConnection();
-            $adapter->beginTransaction();
+            $connection = $this->getConnection();
+            $connection->beginTransaction();
             $roleId = $rule->getRoleId();
 
             $condition = ['role_id = ?' => (int)$roleId];
 
-            $adapter->delete($this->getMainTable(), $condition);
+            $connection->delete($this->getMainTable(), $condition);
 
             $postedResources = $rule->getResources();
             if ($postedResources) {
@@ -101,7 +101,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 if ($postedResources === [$this->_rootResource->getId()]) {
                     $insertData = $this->_prepareDataForTable(new \Magento\Framework\Object($row), $this->getMainTable());
 
-                    $adapter->insert($this->getMainTable(), $insertData);
+                    $connection->insert($this->getMainTable(), $insertData);
                 } else {
                     $acl = $this->_aclBuilder->getAcl();
                     /** @var $resource \Magento\Framework\Acl\Resource */
@@ -110,18 +110,18 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
                         $row['resource_id'] = $resourceId;
 
                         $insertData = $this->_prepareDataForTable(new \Magento\Framework\Object($row), $this->getMainTable());
-                        $adapter->insert($this->getMainTable(), $insertData);
+                        $connection->insert($this->getMainTable(), $insertData);
                     }
                 }
             }
 
-            $adapter->commit();
+            $connection->commit();
             $this->_aclCache->clean();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             $this->_logger->critical($e);
         }
     }

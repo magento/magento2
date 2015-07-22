@@ -33,14 +33,14 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterLoad(AbstractModel $object)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('widget_instance_page')
         )->where(
             'instance_id = ?',
             (int)$object->getId()
         );
-        $result = $adapter->fetchAll($select);
+        $result = $connection->fetchAll($select);
         $object->setData('page_groups', $result);
         return parent::_afterLoad($object);
     }
@@ -55,21 +55,20 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $pageTable = $this->getTable('widget_instance_page');
         $pageLayoutTable = $this->getTable('widget_instance_page_layout');
-        $adapter = $this->getConnection();
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from($pageTable, 'page_id')->where('instance_id = ?', (int)$object->getId());
-        $pageIds = $adapter->fetchCol($select);
+        $select = $connection->select()->from($pageTable, 'page_id')->where('instance_id = ?', (int)$object->getId());
+        $pageIds = $connection->fetchCol($select);
 
         $removePageIds = array_diff($pageIds, $object->getData('page_group_ids'));
 
         if (is_array($pageIds) && count($pageIds) > 0) {
-            $inCond = $adapter->prepareSqlCondition('page_id', ['in' => $pageIds]);
+            $inCond = $connection->prepareSqlCondition('page_id', ['in' => $pageIds]);
 
-            $select = $adapter->select()->from($pageLayoutTable, 'layout_update_id')->where($inCond);
-            $removeLayoutUpdateIds = $adapter->fetchCol($select);
+            $select = $connection->select()->from($pageLayoutTable, 'layout_update_id')->where($inCond);
+            $removeLayoutUpdateIds = $connection->fetchCol($select);
 
-            $adapter->delete($pageLayoutTable, $inCond);
+            $connection->delete($pageLayoutTable, $inCond);
             $this->_deleteLayoutUpdates($removeLayoutUpdateIds);
         }
 
@@ -87,13 +86,13 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ];
             $pageId = $pageGroup['page_id'];
             if (in_array($pageGroup['page_id'], $pageIds)) {
-                $adapter->update($pageTable, $data, ['page_id = ?' => (int)$pageId]);
+                $connection->update($pageTable, $data, ['page_id = ?' => (int)$pageId]);
             } else {
-                $adapter->insert($pageTable, array_merge(['instance_id' => $object->getId()], $data));
-                $pageId = $adapter->lastInsertId($pageTable);
+                $connection->insert($pageTable, array_merge(['instance_id' => $object->getId()], $data));
+                $pageId = $connection->lastInsertId($pageTable);
             }
             foreach ($pageLayoutUpdateIds as $layoutUpdateId) {
-                $adapter->insert(
+                $connection->insert(
                     $pageLayoutTable,
                     ['page_id' => $pageId, 'layout_update_id' => $layoutUpdateId]
                 );
@@ -112,7 +111,7 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _saveLayoutUpdates($widgetInstance, $pageGroupData)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $pageLayoutUpdateIds = [];
         $storeIds = $this->_prepareStoreIds($widgetInstance->getStoreIds());
         $layoutUpdateTable = $this->getTable('layout_update');
@@ -128,8 +127,8 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $insert['sort_order'] = $widgetInstance->getSortOrder();
             }
 
-            $adapter->insert($layoutUpdateTable, $insert);
-            $layoutUpdateId = $adapter->lastInsertId($layoutUpdateTable);
+            $connection->insert($layoutUpdateTable, $insert);
+            $layoutUpdateId = $connection->lastInsertId($layoutUpdateTable);
             $pageLayoutUpdateIds[] = $layoutUpdateId;
 
             $data = [];
@@ -140,7 +139,7 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     'layout_update_id' => $layoutUpdateId,
                 ];
             }
-            $adapter->insertMultiple($layoutUpdateLinkTable, $data);
+            $connection->insertMultiple($layoutUpdateLinkTable, $data);
         }
         return $pageLayoutUpdateIds;
     }
@@ -169,8 +168,8 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _beforeDelete(AbstractModel $object)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['main_table' => $this->getTable('widget_instance_page')],
             []
         )->joinInner(
@@ -181,7 +180,7 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'main_table.instance_id=?',
             $object->getId()
         );
-        $result = $adapter->fetchCol($select);
+        $result = $connection->fetchCol($select);
         $object->setLayoutUpdateIdsToDelete($result);
         return $this;
     }
@@ -207,10 +206,10 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _deleteWidgetInstancePages($pageIds)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if ($pageIds) {
-            $inCond = $adapter->prepareSqlCondition('page_id', ['in' => $pageIds]);
-            $adapter->delete($this->getTable('widget_instance_page'), $inCond);
+            $inCond = $connection->prepareSqlCondition('page_id', ['in' => $pageIds]);
+            $connection->delete($this->getTable('widget_instance_page'), $inCond);
         }
         return $this;
     }
@@ -223,10 +222,10 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _deleteLayoutUpdates($layoutUpdateIds)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if ($layoutUpdateIds) {
-            $inCond = $adapter->prepareSqlCondition('layout_update_id', ['in' => $layoutUpdateIds]);
-            $adapter->delete($this->getTable('layout_update'), $inCond);
+            $inCond = $connection->prepareSqlCondition('layout_update_id', ['in' => $layoutUpdateIds]);
+            $connection->delete($this->getTable('layout_update'), $inCond);
         }
         return $this;
     }
@@ -239,15 +238,15 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function lookupStoreIds($id)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             'store_ids'
         )->where(
             "{$this->getIdFieldName()} = ?",
             (int)$id
         );
-        $storeIds = $adapter->fetchOne($select);
+        $storeIds = $connection->fetchOne($select);
         return $storeIds ? explode(',', $storeIds) : [];
     }
 }

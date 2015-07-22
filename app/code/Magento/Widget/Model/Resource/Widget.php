@@ -31,14 +31,14 @@ class Widget extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadPreconfiguredWidget($widgetId)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             $this->getIdFieldName() . '=:' . $this->getIdFieldName()
         );
         $bind = [$this->getIdFieldName() => $widgetId];
-        $widget = $adapter->fetchRow($select, $bind);
+        $widget = $connection->fetchRow($select, $bind);
         if (is_array($widget)) {
             if ($widget['parameters']) {
                 $widget['parameters'] = unserialize($widget['parameters']);

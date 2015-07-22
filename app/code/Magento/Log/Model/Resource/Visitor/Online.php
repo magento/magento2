@@ -58,13 +58,12 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $adapter = $this->getConnection();
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $adapter->beginTransaction();
+        $connection->beginTransaction();
 
         try {
-            $adapter->delete($this->getMainTable());
+            $connection->delete($this->getMainTable());
 
             $visitors = [];
             $lastUrls = [];
@@ -73,15 +72,15 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $lastDate = $this->_date->gmtTimestamp() - $object->getOnlineInterval() * 60;
 
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->getTable('log_visitor'),
                 ['visitor_id', 'first_visit_at', 'last_visit_at', 'last_url_id']
             )->where(
                 'last_visit_at >= ?',
-                $adapter->formatDate($lastDate)
+                $connection->formatDate($lastDate)
             );
 
-            $query = $adapter->query($select);
+            $query = $connection->query($select);
             while ($row = $query->fetch()) {
                 $visitors[$row['visitor_id']] = $row;
                 $lastUrls[$row['last_url_id']] = $row['visitor_id'];
@@ -95,7 +94,7 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
 
             // retrieve visitor remote addr
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->getTable('log_visitor_info'),
                 ['visitor_id', 'remote_addr']
             )->where(
@@ -103,13 +102,13 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 array_keys($visitors)
             );
 
-            $query = $adapter->query($select);
+            $query = $connection->query($select);
             while ($row = $query->fetch()) {
                 $visitors[$row['visitor_id']]['remote_addr'] = $row['remote_addr'];
             }
 
             // retrieve visitor last URLs
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->getTable('log_url_info'),
                 ['url_id', 'url']
             )->where(
@@ -117,14 +116,14 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 array_keys($lastUrls)
             );
 
-            $query = $adapter->query($select);
+            $query = $connection->query($select);
             while ($row = $query->fetch()) {
                 $visitorId = $lastUrls[$row['url_id']];
                 $visitors[$visitorId]['last_url'] = $row['url'];
             }
 
             // retrieve customers
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->getTable('log_customer'),
                 ['visitor_id', 'customer_id']
             )->where(
@@ -132,7 +131,7 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 array_keys($visitors)
             );
 
-            $query = $adapter->query($select);
+            $query = $connection->query($select);
             while ($row = $query->fetch()) {
                 $visitors[$row['visitor_id']]['visitor_type'] = \Magento\Customer\Model\Visitor::VISITOR_TYPE_CUSTOMER;
                 $visitors[$row['visitor_id']]['customer_id'] = $row['customer_id'];
@@ -141,12 +140,12 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
             foreach ($visitors as $visitorData) {
                 unset($visitorData['last_url_id']);
 
-                $adapter->insertForce($this->getMainTable(), $visitorData);
+                $connection->insertForce($this->getMainTable(), $visitorData);
             }
 
-            $adapter->commit();
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
 

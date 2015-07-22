@@ -1472,11 +1472,11 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
                     if ($column instanceof \Zend_Db_Expr) {
                         $field = $column;
                     } else {
-                        $adapter = $this->getSelect()->getConnection();
+                        $connection = $this->getSelect()->getConnection();
                         if (empty($correlationName)) {
-                            $field = $adapter->quoteColumnAs($column, $alias, true);
+                            $field = $connection->quoteColumnAs($column, $alias, true);
                         } else {
-                            $field = $adapter->quoteColumnAs([$correlationName, $column], $alias, true);
+                            $field = $connection->quoteColumnAs([$correlationName, $column], $alias, true);
                         }
                     }
                     $this->getSelect()->where("{$field} = ?", $condition);
@@ -2054,7 +2054,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             }
         }
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $columns = [
             'price_id' => 'value_id',
             'website_id' => 'website_id',
@@ -2064,7 +2064,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             'price' => 'value',
             'product_id' => 'entity_id',
         ];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('catalog_product_entity_tier_price'),
             $columns
         )->where(
@@ -2080,7 +2080,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             $select->where('website_id IN(?)', ['0', $websiteId]);
         }
 
-        foreach ($adapter->fetchAll($select) as $row) {
+        foreach ($connection->fetchAll($select) as $row) {
             $tierPrices[$row['product_id']][] = [
                 'website_id' => $row['website_id'],
                 'cust_group' => $row['all_groups'] ? $this->_groupManagement->getAllCustomersGroup()->getId() : $row['cust_group'],

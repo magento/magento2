@@ -239,9 +239,9 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function lookupStoreIds($id)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('cms_block_store'),
             'store_id'
         )->where(
@@ -250,6 +250,6 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $binds = [':block_id' => (int)$id];
 
-        return $adapter->fetchCol($select, $binds);
+        return $connection->fetchCol($select, $binds);
     }
 }

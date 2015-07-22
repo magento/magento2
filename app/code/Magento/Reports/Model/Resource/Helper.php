@@ -40,18 +40,18 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
     /**
      * @inheritdoc
      */
-    public function updateReportRatingPos($adapter, $type, $column, $mainTable, $aggregationTable)
+    public function updateReportRatingPos($connection, $type, $column, $mainTable, $aggregationTable)
     {
-        $periodSubSelect = $adapter->select();
-        $ratingSubSelect = $adapter->select();
-        $ratingSelect = $adapter->select();
+        $periodSubSelect = $connection->select();
+        $ratingSubSelect = $connection->select();
+        $ratingSelect = $connection->select();
 
         switch ($type) {
             case 'year':
-                $periodCol = $adapter->getDateFormatSql('t.period', '%Y-01-01');
+                $periodCol = $connection->getDateFormatSql('t.period', '%Y-01-01');
                 break;
             case 'month':
-                $periodCol = $adapter->getDateFormatSql('t.period', '%Y-%m-01');
+                $periodCol = $connection->getDateFormatSql('t.period', '%Y-%m-01');
                 break;
             default:
                 $periodCol = 't.period';
@@ -97,8 +97,8 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
         $ratingSelect->from($ratingSubSelect, $cols);
 
         $sql = $ratingSelect->insertFromSelect($aggregationTable, array_keys($cols));
-        $adapter->query("SET @pos = 0, @prevStoreId = -1, @prevPeriod = '0000-00-00'");
-        $adapter->query($sql);
+        $connection->query("SET @pos = 0, @prevStoreId = -1, @prevPeriod = '0000-00-00'");
+        $connection->query($sql);
         return $this;
     }
 }

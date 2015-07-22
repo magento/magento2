@@ -30,12 +30,12 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function countAll($countAdmin = false)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from($this->getMainTable(), 'COUNT(*)');
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable(), 'COUNT(*)');
         if (!$countAdmin) {
-            $select->where(sprintf('%s <> %s', $adapter->quoteIdentifier('code'), $adapter->quote('admin')));
+            $select->where(sprintf('%s <> %s', $connection->quoteIdentifier('code'), $connection->quote('admin')));
         }
-        return (int)$adapter->fetchOne($select);
+        return (int)$connection->fetchOne($select);
     }
 
     /**
@@ -90,21 +90,21 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _updateGroupDefaultStore($groupId, $storeId)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $bindValues = ['group_id' => (int)$groupId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable(),
             ['count' => 'COUNT(*)']
         )->where(
             'group_id = :group_id'
         );
-        $count = $adapter->fetchOne($select, $bindValues);
+        $count = $connection->fetchOne($select, $bindValues);
 
         if ($count == 1) {
             $bind = ['default_store_id' => (int)$storeId];
             $where = ['group_id = ?' => (int)$groupId];
-            $adapter->update($this->getTable('store_group'), $bind, $where);
+            $connection->update($this->getTable('store_group'), $bind, $where);
         }
 
         return $this;
@@ -119,14 +119,14 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _changeGroup(\Magento\Framework\Model\AbstractModel $model)
     {
         if ($model->getOriginalGroupId() && $model->getGroupId() != $model->getOriginalGroupId()) {
-            $adapter = $this->getConnection();
-            $select = $adapter->select()->from(
+            $connection = $this->getConnection();
+            $select = $connection->select()->from(
                 $this->getTable('store_group'),
                 'default_store_id'
             )->where(
-                $adapter->quoteInto('group_id=?', $model->getOriginalGroupId())
+                $connection->quoteInto('group_id=?', $model->getOriginalGroupId())
             );
-            $storeId = $adapter->fetchOne($select, 'default_store_id');
+            $storeId = $connection->fetchOne($select, 'default_store_id');
 
             if ($storeId == $model->getId()) {
                 $bind = ['default_store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID];

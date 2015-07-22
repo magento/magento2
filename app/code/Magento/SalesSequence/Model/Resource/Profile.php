@@ -60,14 +60,14 @@ class Profile extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function loadActiveProfile($metadataId)
     {
         $profile = $this->profileFactory->create();
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $bind = ['meta_id' => $metadataId];
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from($this->getMainTable(), ['profile_id'])
             ->where('meta_id = :meta_id')
             ->where('is_active = 1');
 
-        $profileId = $adapter->fetchOne($select, $bind);
+        $profileId = $connection->fetchOne($select, $bind);
 
         if ($profileId) {
             $this->load($profile, $profileId);

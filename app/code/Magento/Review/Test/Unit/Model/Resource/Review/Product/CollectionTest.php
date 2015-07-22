@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapter;
+    protected $connectionMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -30,14 +30,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->dbSelect = $this->getMock('Magento\Framework\DB\Select', ['where', 'from', 'join'], [], '', false);
         $this->dbSelect->expects($this->any())->method('from')->will($this->returnSelf());
         $this->dbSelect->expects($this->any())->method('join')->will($this->returnSelf());
-        $this->adapter = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['prepareSqlCondition', 'select', 'quoteInto'],
             [],
             '',
             false
         );
-        $this->adapter->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
+        $this->connectionMock->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
         $entity = $this->getMock(
             'Magento\Catalog\Model\Resource\Product',
             ['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable', 'getEntityType', 'getType'],
@@ -45,7 +45,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $entity->expects($this->once())->method('getConnection')->will($this->returnValue($this->adapter));
+        $entity->expects($this->once())->method('getConnection')->will($this->returnValue($this->connectionMock));
         $entity->expects($this->any())->method('getTable')->will($this->returnValue('table'));
         $entity->expects($this->any())->method('getEntityTable')->will($this->returnValue('table'));
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([1 => 1]));
@@ -85,7 +85,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $conditionSqlQuery = 'sqlQuery';
         $condition = ['eq' => 'value'];
-        $this->adapter
+        $this->connectionMock
             ->expects($this->once())
             ->method('prepareSqlCondition')
             ->with($attribute, $condition)
@@ -117,7 +117,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddAttributeToFilterWithAttributeStore()
     {
         $storeId = 1;
-        $this->adapter
+        $this->connectionMock
             ->expects($this->at(0))
             ->method('quoteInto')
             ->with('rt.review_id=store.review_id AND store.store_id = ?', $storeId)
@@ -140,13 +140,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $doubleConditionSqlQuery
     ) {
         $conditionSqlQuery = 'sqlQuery';
-        $this->adapter
+        $this->connectionMock
             ->expects($this->at(0))
             ->method('prepareSqlCondition')
             ->with('rdt.customer_id', $sqlConditionWith)
             ->will($this->returnValue($conditionSqlQuery));
         if ($sqlConditionWithSec) {
-            $this->adapter
+            $this->connectionMock
                 ->expects($this->at(1))
                 ->method('prepareSqlCondition')
                 ->with('rdt.store_id', $sqlConditionWithSec)

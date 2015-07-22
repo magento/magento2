@@ -113,15 +113,15 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addRatingInfo($storeId = null)
     {
-        $adapter = $this->getConnection();
-        $ratingCodeCond = $adapter->getIfNullSql('title.value', 'rating.rating_code');
+        $connection = $this->getConnection();
+        $ratingCodeCond = $connection->getIfNullSql('title.value', 'rating.rating_code');
         $this->getSelect()->join(
             ['rating' => $this->getTable('rating')],
             'rating.rating_id = main_table.rating_id',
             ['rating_code']
         )->joinLeft(
             ['title' => $this->getTable('rating_title')],
-            $adapter->quoteInto(
+            $connection->quoteInto(
                 'main_table.rating_id=title.rating_id AND title.store_id = ?',
                 (int)$this->_storeManager->getStore()->getId()
             ),
@@ -133,9 +133,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             }
 
             if (is_array($storeId)) {
-                $condition = $adapter->prepareSqlCondition('store.store_id', ['in' => $storeId]);
+                $condition = $connection->prepareSqlCondition('store.store_id', ['in' => $storeId]);
             } else {
-                $condition = $adapter->quoteInto('store.store_id = ?', $storeId);
+                $condition = $connection->quoteInto('store.store_id = ?', $storeId);
             }
 
             $this->getSelect()->join(
@@ -143,7 +143,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 'main_table.rating_id = store.rating_id AND ' . $condition
             );
         }
-        $adapter->fetchAll($this->getSelect());
+        $connection->fetchAll($this->getSelect());
         return $this;
     }
 

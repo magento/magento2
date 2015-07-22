@@ -34,8 +34,8 @@ class SendFriend extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSendCount($object, $ip, $startTime, $websiteId = null)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             ['count' => new \Zend_Db_Expr('count(*)')]
         )->where(
@@ -45,7 +45,7 @@ class SendFriend extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
         $bind = ['ip' => $ip, 'time' => $startTime, 'website_id' => (int)$websiteId];
 
-        $row = $adapter->fetchRow($select, $bind);
+        $row = $connection->fetchRow($select, $bind);
         return $row['count'];
     }
 

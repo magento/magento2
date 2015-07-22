@@ -86,23 +86,23 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      */
     protected function _getSelectedColumns()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         if (!$this->_selectedColumns) {
             if ($this->isTotals()) {
                 $this->_selectedColumns = $this->getAggregatedColumns();
             } else {
                 $this->_selectedColumns = [
-                    'period' => sprintf('MAX(%s)', $adapter->getDateFormatSql('period', '%Y-%m-%d')),
+                    'period' => sprintf('MAX(%s)', $connection->getDateFormatSql('period', '%Y-%m-%d')),
                     $this->getOrderedField() => 'SUM(' . $this->getOrderedField() . ')',
                     'product_id' => 'product_id',
                     'product_name' => 'MAX(product_name)',
                     'product_price' => 'MAX(product_price)',
                 ];
                 if ('year' == $this->_period) {
-                    $this->_selectedColumns['period'] = $adapter->getDateFormatSql('period', '%Y');
+                    $this->_selectedColumns['period'] = $connection->getDateFormatSql('period', '%Y');
                 } elseif ('month' == $this->_period) {
-                    $this->_selectedColumns['period'] = $adapter->getDateFormatSql('period', '%Y-%m');
+                    $this->_selectedColumns['period'] = $connection->getDateFormatSql('period', '%Y-%m');
                 }
             }
         }
@@ -118,10 +118,10 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      */
     protected function _makeBoundarySelect($from, $to)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $cols = $this->_getSelectedColumns();
         $cols[$this->getOrderedField()] = 'SUM(' . $this->getOrderedField() . ')';
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getResource()->getMainTable(),
             $cols
         )->where(

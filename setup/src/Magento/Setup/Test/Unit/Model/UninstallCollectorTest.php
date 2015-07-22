@@ -16,18 +16,18 @@ class UninstallCollectorTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
         $setup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
-        $adapterInterface = $this->getMockForAbstractClass(
+        $connectionMock = $this->getMockForAbstractClass(
             'Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             '',
             false
         );
         $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [], '', false);
-        $adapterInterface->expects($this->once())->method('select')->willReturn($select);
-        $setup->expects($this->exactly(2))->method('getConnection')->willReturn($adapterInterface);
+        $connectionMock->expects($this->once())->method('select')->willReturn($select);
+        $setup->expects($this->exactly(2))->method('getConnection')->willReturn($connectionMock);
         $result = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects($this->once())->method('from')->willReturn($result);
-        $adapterInterface->expects($this->once())
+        $connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($result)
             ->willReturn([['module' => 'Magento_A'], ['module' => 'Magento_B'], ['module' => 'Magento_C']]);

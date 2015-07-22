@@ -89,16 +89,16 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _applyDownloadableLink()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $table = $this->_getDownloadableLinkPriceTable();
 
         $this->_prepareDownloadableLinkPriceTable();
 
         $dlType = $this->_getAttribute('links_purchased_separately');
 
-        $ifPrice = $adapter->getIfNullSql('dlpw.price_id', 'dlpd.price');
+        $ifPrice = $connection->getIfNullSql('dlpw.price_id', 'dlpd.price');
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['i' => $this->_getDefaultFinalPriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
@@ -130,12 +130,12 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         );
 
         $query = $select->insertFromSelect($table);
-        $adapter->query($query);
+        $connection->query($query);
 
-        $ifTierPrice = $adapter->getCheckSql('i.tier_price IS NOT NULL', '(i.tier_price + id.min_price)', 'NULL');
-        $ifGroupPrice = $adapter->getCheckSql('i.group_price IS NOT NULL', '(i.group_price + id.min_price)', 'NULL');
+        $ifTierPrice = $connection->getCheckSql('i.tier_price IS NOT NULL', '(i.tier_price + id.min_price)', 'NULL');
+        $ifGroupPrice = $connection->getCheckSql('i.group_price IS NOT NULL', '(i.group_price + id.min_price)', 'NULL');
 
-        $select = $adapter->select()->join(
+        $select = $connection->select()->join(
             ['id' => $table],
             'i.entity_id = id.entity_id AND i.customer_group_id = id.customer_group_id' .
             ' AND i.website_id = id.website_id',
@@ -150,9 +150,9 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         );
 
         $query = $select->crossUpdateFromSelect(['i' => $this->_getDefaultFinalPriceTable()]);
-        $adapter->query($query);
+        $connection->query($query);
 
-        $adapter->delete($table);
+        $connection->delete($table);
 
         return $this;
     }

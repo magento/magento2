@@ -85,14 +85,14 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $where = ['entity_id = ?' => (int)$product->getId(), 'attribute_id = ?' => (int)$attribute->getId()];
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if (!$attribute->isScopeGlobal()) {
             $storeId = $product->getStoreId();
             if ($storeId) {
                 $where['website_id IN(?)'] = [0, $this->_storeManager->getStore($storeId)->getWebsiteId()];
             }
         }
-        $adapter->delete($this->getMainTable(), $where);
+        $connection->delete($this->getMainTable(), $where);
         return $this;
     }
 

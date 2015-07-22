@@ -113,8 +113,8 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _checkIntersection($storeId, $dateFrom, $dateTo, $currentId)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['main_table' => $this->getTable('design_change')]
         )->where(
             'main_table.store_id = :store_id'
@@ -170,7 +170,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $bind['date_from'] = $dateFrom;
         }
 
-        $result = $adapter->fetchOne($select, $bind);
+        $result = $connection->fetchOne($select, $bind);
         return $result;
     }
 

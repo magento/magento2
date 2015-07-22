@@ -34,7 +34,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
     /**
      * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connectionInterface;
 
     /**
      * @var \Magento\Indexer\Model\IndexStructure
@@ -43,7 +43,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionInterface = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
@@ -53,7 +53,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         $this->resource->expects($this->atLeastOnce())
             ->method('getConnection')
             ->with(Resource::DEFAULT_CONNECTION)
-            ->willReturn($this->adapter);
+            ->willReturn($this->connectionInterface);
         $this->indexScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
             ->setMethods(['resolve'])
             ->disableOriginalConstructor()
@@ -185,12 +185,12 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
 
     private function mockDropTable($callNumber, $tableName, $isTableExist)
     {
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connectionInterface->expects($this->at($callNumber++))
             ->method('isTableExists')
             ->with($tableName)
             ->willReturn($isTableExist);
         if ($isTableExist) {
-            $this->adapter->expects($this->at($callNumber++))
+            $this->connectionInterface->expects($this->at($callNumber++))
                 ->method('dropTable')
                 ->with($tableName)
                 ->willReturn(true);
@@ -208,11 +208,11 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('addColumn')
             ->willReturnSelf();
 
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connectionInterface->expects($this->at($callNumber++))
             ->method('newTable')
             ->with($tableName)
             ->willReturn($table);
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connectionInterface->expects($this->at($callNumber++))
             ->method('createTable')
             ->with($table)
             ->willReturnSelf();
@@ -269,11 +269,11 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
                 ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
             )->willReturnSelf();
 
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connectionInterface->expects($this->at($callNumber++))
             ->method('newTable')
             ->with($tableName)
             ->willReturn($table);
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connectionInterface->expects($this->at($callNumber++))
             ->method('createTable')
             ->with($table)
             ->willReturnSelf();

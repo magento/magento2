@@ -105,7 +105,7 @@ class Source extends AbstractEav
      */
     protected function _prepareSelectIndex($entityIds = null, $attributeId = null)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $idxTable = $this->getIdxTable();
         // prepare select attributes
         if ($attributeId === null) {
@@ -119,7 +119,7 @@ class Source extends AbstractEav
         }
 
         /**@var $subSelect \Magento\Framework\DB\Select*/
-        $subSelect = $adapter->select()->from(
+        $subSelect = $connection->select()->from(
             ['s' => $this->getTable('store')],
             ['store_id', 'website_id']
         )->joinLeft(
@@ -148,9 +148,9 @@ class Source extends AbstractEav
             $subSelect->where('d.entity_id IN(?)', $entityIds);
         }
 
-        $ifNullSql = $adapter->getIfNullSql('pis.value', 'pid.value');
+        $ifNullSql = $connection->getIfNullSql('pis.value', 'pid.value');
         /**@var $select \Magento\Framework\DB\Select*/
-        $select = $adapter->select()->distinct(true)->from(
+        $select = $connection->select()->distinct(true)->from(
             ['pid' => new \Zend_Db_Expr(sprintf('(%s)', $subSelect->assemble()))],
             []
         )->joinLeft(
@@ -189,7 +189,7 @@ class Source extends AbstractEav
             ]
         );
         $query = $select->insertFromSelect($idxTable);
-        $adapter->query($query);
+        $connection->query($query);
 
         return $this;
     }
@@ -203,7 +203,7 @@ class Source extends AbstractEav
      */
     protected function _prepareMultiselectIndex($entityIds = null, $attributeId = null)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         // prepare multiselect attributes
         if ($attributeId === null) {
@@ -218,7 +218,7 @@ class Source extends AbstractEav
 
         // load attribute options
         $options = [];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('eav_attribute_option'),
             ['attribute_id', 'option_id']
         )->where(
@@ -231,8 +231,8 @@ class Source extends AbstractEav
         }
 
         // prepare get multiselect values query
-        $productValueExpression = $adapter->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
-        $select = $adapter->select()->from(
+        $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
+        $select = $connection->select()->from(
             ['pvd' => $this->getTable('catalog_product_entity_varchar')],
             ['entity_id', 'attribute_id']
         )->join(
@@ -245,7 +245,7 @@ class Source extends AbstractEav
             ['value' => $productValueExpression]
         )->where(
             'pvd.store_id=?',
-            $adapter->getIfNullSql('pvs.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+            $connection->getIfNullSql('pvs.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
         )->where(
             'cs.store_id!=?',
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
@@ -254,7 +254,7 @@ class Source extends AbstractEav
             $attrIds
         );
 
-        $statusCond = $adapter->quoteInto('=?', ProductStatus::STATUS_ENABLED);
+        $statusCond = $connection->quoteInto('=?', ProductStatus::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'pvd.entity_id', 'cs.store_id', $statusCond);
 
         if ($entityIds !== null) {
@@ -309,8 +309,8 @@ class Source extends AbstractEav
         if (!$data) {
             return $this;
         }
-        $adapter = $this->getConnection();
-        $adapter->insertArray($this->getIdxTable(), ['entity_id', 'attribute_id', 'store_id', 'value'], $data);
+        $connection = $this->getConnection();
+        $connection->insertArray($this->getIdxTable(), ['entity_id', 'attribute_id', 'store_id', 'value'], $data);
         return $this;
     }
 
