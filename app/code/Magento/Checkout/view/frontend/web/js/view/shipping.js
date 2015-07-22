@@ -51,23 +51,14 @@ define(
         $t
     ) {
         'use strict';
-        var rates = window.checkoutConfig.shippingRates.data,
-            rateKey = window.checkoutConfig.shippingRates.key;
+
         var popUp = null;
         if (addressList().length == 0) {
             var address = new newAddress({});
-            rateRegistry.set(address.getCacheKey(), rates);
-            shippingService.setShippingRates(rates);
             selectShippingAddress(address);
         }
 
-        if (rateKey) {
-            rateRegistry.set(rateKey, rates);
-        }
-
         selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
-        shippingService.setShippingRates(rates);
-        checkoutDataResolver.resolveShippingRates();
 
         return Component.extend({
             defaults: {
@@ -96,10 +87,6 @@ define(
                 });
 
                 this.isNewAddressAdded(hasNewAddress);
-
-                if (rates.length == 1) {
-                    selectShippingMethodAction(rates[0])
-                }
 
                 if (!quote.isVirtual()) {
                     stepNavigator.registerStep('shipping', 'Shipping', this.visible, 10);
@@ -187,7 +174,7 @@ define(
 
             selectShippingMethod: function(shippingMethod) {
                 selectShippingMethodAction(shippingMethod);
-                checkoutData.setSelectedShippingRate(shippingMethod);
+                checkoutData.setSelectedShippingRate(shippingMethod.carrier_code + '_' + shippingMethod.method_code);
                 return true;
             },
 

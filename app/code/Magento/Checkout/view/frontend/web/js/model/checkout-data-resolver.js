@@ -10,19 +10,17 @@
 define([
     'Magento_Customer/js/model/address-list',
     'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/action/select-shipping-address',
     'Magento_Checkout/js/checkout-data',
-    'Magento_Checkout/js/model/shipping-service',
-    'Magento_Checkout/js/action/select-shipping-method',
-    'Magento_Checkout/js/action/create-shipping-address'
+    'Magento_Checkout/js/action/create-shipping-address',
+    'Magento_Checkout/js/action/select-shipping-address',
+    'Magento_Checkout/js/action/select-shipping-method'
 ], function (
     addressList,
     quote,
-    selectShippingAddress,
     checkoutData,
-    shippingService,
-    selectShippingMethodAction,
-    createShippingAddress
+    createShippingAddress,
+    selectShippingAddress,
+    selectShippingMethodAction
 ) {
     'use strict';
 
@@ -57,21 +55,37 @@ define([
             }
         },
 
-        resolveShippingRates: function () {
-            var ratesData = shippingService.getSippingRates();
+        resolveShippingRates: function (ratesData) {
             var selectedShippingRate = checkoutData.getSelectedShippingRate();
-            if (selectedShippingRate) {
-                var rateIsAvailable = ratesData.some(function (rate) {
-                    if (rate.carrier_code == selectedShippingRate.carrier_code
-                        && rate.method_code == selectedShippingRate.method_code) {
+            var rateIsAvailable = false;
+
+            if (ratesData.length == 1) {
+                //set shipping rate if we have only one available shipping rate
+                selectShippingMethodAction(ratesData[0]);
+                return;
+            }
+
+            if(quote.shippingMethod()) {
+                rateIsAvailable = ratesData.some(function (rate) {
+                    return rate.carrier_code == quote.shippingMethod().carrier_code
+                        && rate.method_code == quote.shippingMethod().method_code;
+                });
+            }
+
+            if (!rateIsAvailable && selectedShippingRate) {
+                rateIsAvailable = ratesData.some(function (rate) {
+                    if (rate.carrier_code + "-" + rate.method_code == selectedShippingRate) {
+                        selectShippingMethodAction(rate);
                         return true;
                     }
                     return false;
 
                 });
-                if (rateIsAvailable) {
-                    selectShippingMethodAction(selectedShippingRate);
-                }
+            }
+
+            //Unset selected shipping shipping method if not available
+            if (!rateIsAvailable) {
+                selectShippingMethodAction(null);
             }
         }
     }
