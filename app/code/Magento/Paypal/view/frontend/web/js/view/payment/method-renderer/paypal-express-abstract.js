@@ -8,9 +8,10 @@ define(
     [
         'jquery',
         'Magento_Checkout/js/view/payment/default',
-        'Magento_Paypal/js/action/set-payment-method'
+        'Magento_Paypal/js/action/set-payment-method',
+        'Magento_Checkout/js/model/quote'
     ],
-    function ($, Component, setPaymentMethodAction) {
+    function ($, Component, setPaymentMethodAction, quote) {
         'use strict';
 
         return Component.extend({
@@ -19,11 +20,32 @@ define(
                 billingAgreement: ''
             },
 
+            /**
+             * Initialize view.
+             *
+             * @returns {Component} Chainable.
+             */
+            initialize: function () {
+                this._super().initChildren();
+                this.checkBillingAgreement();
+            },
+
             /** Init observable variables */
             initObservable: function () {
                 this._super()
                     .observe('billingAgreement');
                 return this;
+            },
+
+            /** Check/uncheck billing agreement check-box based on saved information  */
+            checkBillingAgreement: function () {
+                if (
+                    quote.paymentMethod()
+                    && quote.paymentMethod().method == this.item.method
+                    && quote.paymentMethod().additional_data[this.getBillingAgreementCode()]
+                ) {
+                    this.billingAgreement(quote.paymentMethod().additional_data[this.getBillingAgreementCode()]);
+                }
             },
 
             /** Open window with  */
@@ -69,8 +91,6 @@ define(
 
             /** Redirect to paypal */
             continueToPayPal: function () {
-                //update payment method information if additional data was changed
-                this.selectPaymentMethod();
                 setPaymentMethodAction();
                 return false;
             }
