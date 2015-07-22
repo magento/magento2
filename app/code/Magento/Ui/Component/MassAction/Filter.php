@@ -9,7 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Class Filter
@@ -43,7 +43,7 @@ class Filter
     }
 
     /**
-     * @return AbstractCollection
+     * @return AbstractDb
      * @throws LocalizedException
      */
     public function getCollection()
@@ -54,16 +54,17 @@ class Filter
 
         $dataProvider = $component->getContext()->getDataProvider();
 
-        $dataProvider->getData();
-        return $this->applySelection($dataProvider->getCollection());
+        $collection = $this->applySelection($dataProvider->getCollection());
+        $data = $dataProvider->getData();
+        return $collection;
     }
 
     /**
-     * @param AbstractCollection $collection
-     * @return AbstractCollection
+     * @param AbstractDb $collection
+     * @return AbstractDb
      * @throws LocalizedException
      */
-    protected function applySelection(AbstractCollection $collection)
+    protected function applySelection(AbstractDb $collection)
     {
         $selected = $this->request->getParam(static::SELECTED_PARAM);
         $excluded = $this->request->getParam(static::EXCLUDED_PARAM);

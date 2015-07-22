@@ -19,7 +19,9 @@ class MassUnhold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
     {
         $countUnHoldOrder = 0;
 
+        /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection->getItems() as $order) {
+            $order->load($order->getId());
             if (!$order->canUnhold()) {
                 continue;
             }

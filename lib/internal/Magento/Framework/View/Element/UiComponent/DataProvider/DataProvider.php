@@ -228,11 +228,6 @@ class DataProvider implements DataProviderInterface
         $this->collection->removeAllFieldsFromSelect();
     }
 
-    public function getFilters()
-    {
-        return $this->filterPool;
-    }
-
     /**
      * Get data
      *
