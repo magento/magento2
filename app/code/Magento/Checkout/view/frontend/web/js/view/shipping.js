@@ -25,6 +25,7 @@ define(
         'Magento_Ui/js/modal/modal',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Checkout/js/checkout-data',
+        'uiRegistry',
         'mage/translate'
     ],
     function(
@@ -48,6 +49,7 @@ define(
         modal,
         checkoutDataResolver,
         checkoutData,
+        registry,
         $t
     ) {
         'use strict';
@@ -113,6 +115,19 @@ define(
 
                 quote.shippingMethod.subscribe(function (value) {
                     self.errorValidationMessage(false);
+                });
+
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    var shippingAddressData = checkoutData.getShippingAddressFromData();
+                    if (shippingAddressData) {
+                        checkoutProvider.set(
+                            'shippingAddress',
+                            $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                        );
+                    }
+                    checkoutProvider.on('shippingAddress', function (shippingAddressData) {
+                        checkoutData.setShippingAddressFromData(shippingAddressData);
+                    });
                 });
 
                 return this;
