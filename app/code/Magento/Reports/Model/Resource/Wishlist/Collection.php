@@ -131,6 +131,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         )->group(
             'wt.wishlist_id'
         );
-        return $countSelect->getAdapter()->fetchOne($countSelect);
+        return $countSelect->getConnection()->fetchOne($countSelect);
     }
 }

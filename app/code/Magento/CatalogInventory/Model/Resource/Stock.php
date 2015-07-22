@@ -304,7 +304,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function addLowStockFilter(\Magento\Catalog\Model\Resource\Product\Collection $collection, $fields)
     {
         $this->_initConfig();
-        $adapter = $collection->getSelect()->getAdapter();
+        $adapter = $collection->getSelect()->getConnection();
         $qtyIf = $adapter->getCheckSql(
             'invtr.use_config_notify_stock_qty > 0',
             $this->_configNotifyStockQty,

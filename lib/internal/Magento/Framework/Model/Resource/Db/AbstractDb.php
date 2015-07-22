@@ -357,7 +357,7 @@ abstract class AbstractDb extends AbstractResource
      * @param string $field
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getLoadSelect($field, $value, $object)

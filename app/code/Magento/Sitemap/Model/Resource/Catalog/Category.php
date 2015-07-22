@@ -17,7 +17,7 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Collection Zend Db select
      *
-     * @var \Zend_Db_Select
+     * @var \Magento\Framework\DB\Select
      */
     protected $_select;
 
@@ -191,7 +191,7 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
             if ($attribute['is_global']) {
                 $this->_select->where('t1_' . $attributeCode . '.value' . $conditionRule, $value);
             } else {
-                $ifCase = $this->_select->getAdapter()->getCheckSql(
+                $ifCase = $this->getConnection()->getCheckSql(
                     't2_' . $attributeCode . '.value_id > 0',
                     't2_' . $attributeCode . '.value',
                     't1_' . $attributeCode . '.value'
