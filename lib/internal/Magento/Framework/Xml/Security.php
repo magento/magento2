@@ -39,6 +39,8 @@ class Security
      *
      * @param string $xmlContent
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function scan($xmlContent)
     {
@@ -61,9 +63,6 @@ class Security
          * error disabled with @ for PHP-FPM scenario
          */
         set_error_handler(
-        /**
-         * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-         */
             function ($errno, $errstr) {
                 if (substr_count($errstr, 'DOMDocument::loadXML()') > 0) {
                     return true;
@@ -75,11 +74,11 @@ class Security
 
         $result = (bool)$document->loadXml($xmlContent, LIBXML_NONET);
         restore_error_handler();
+        // Entity load to previous setting
         libxml_disable_entity_loader($loadEntities);
         libxml_use_internal_errors($useInternalXmlErrors);
 
         if (!$result) {
-            // Entity load to previous setting
             return false;
         }
 
