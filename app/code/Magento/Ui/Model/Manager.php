@@ -190,7 +190,9 @@ class Manager implements ManagerInterface
                 $component[ManagerInterface::COMPONENT_ARGUMENTS_KEY][$argumentName]
                     = $this->argumentInterpreter->evaluate($argument);
             }
-            $component['children'] = $this->evaluateComponentArguments($component['children']);
+            $component[ManagerInterface::CHILDREN_KEY] = $this->evaluateComponentArguments(
+                $component[ManagerInterface::CHILDREN_KEY]
+            );
         }
 
         return $components;
@@ -203,7 +205,7 @@ class Manager implements ManagerInterface
      * @param bool $evaluated
      * @return array
      */
-    public function createRawComponentData($component, $evaluated = false)
+    public function createRawComponentData($component, $evaluated = true)
     {
         $componentData = $this->componentConfigProvider->getComponentData($component);
         $componentData[Converter::DATA_ATTRIBUTES_KEY] = isset($componentData[Converter::DATA_ATTRIBUTES_KEY])
@@ -277,7 +279,7 @@ class Manager implements ManagerInterface
     protected function createDataForComponent($name, array $componentsPool)
     {
         $createdComponents = [];
-        $rootComponent = $this->createRawComponentData($name);
+        $rootComponent = $this->createRawComponentData($name, false);
         foreach ($componentsPool as $key => $component) {
             $resultConfiguration = [ManagerInterface::CHILDREN_KEY => []];
             $instanceName = $this->createName($component, $key, $name);
@@ -296,7 +298,7 @@ class Manager implements ManagerInterface
             foreach ($component as $subComponentName => $subComponent) {
                 $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge(
                     $resultConfiguration[ManagerInterface::CHILDREN_KEY],
-                    $this->createDataForComponent($subComponentName, $subComponent, $name)
+                    $this->createDataForComponent($subComponentName, $subComponent)
                 );
             }
             $createdComponents[$instanceName] = $resultConfiguration;

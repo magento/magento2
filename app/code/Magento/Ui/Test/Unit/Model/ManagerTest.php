@@ -16,6 +16,8 @@ use Magento\Ui\Model\Manager;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition as ComponentDefinition;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
+use Magento\Framework\View\Element\UiComponent\Config\Converter;
+
 /**
  * Class ManagerTest
  */
@@ -80,13 +82,13 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->aggregatedFileCollector = $this->getMockBuilder(
             'Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollector'
-            )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()->getMock();
         $this->aggregatedFileCollectorFactory = $this->getMockBuilder(
             'Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollectorFactory'
-            )->disableOriginalConstructor()->getMock();
-        $this->arrayObjectFactory = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ArrayObjectFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
+        $this->arrayObjectFactory = $this->getMockBuilder(
+            'Magento\Framework\View\Element\UiComponent\ArrayObjectFactory'
+        )->disableOriginalConstructor()->getMock();
         $this->arrayObjectFactory->expects($this->at(0))
             ->method('create')
             ->willReturn(new \ArrayObject([]));
@@ -134,37 +136,82 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getComponentData()
      */
-    public function testPrepareGetData($componentName, $componentData, $isCached)
+    public function testPrepareGetData($componentName, $componentData, $isCached, $readerData, $expectedResult)
     {
+        $this->readerFactory->expects($this->any())
+            ->method('create')
+            ->with(['fileCollector' => $this->aggregatedFileCollector, 'domMerger' => $this->domMerger])
+            ->willReturn($this->uiReader);
+        $this->aggregatedFileCollectorFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->aggregatedFileCollector);
         $this->argumentInterpreter->expects($this->any())
             ->method('evaluate')
-            ->willReturnCallback(function($argument) {
+            ->willReturnCallback(function ($argument) {
                 return ['argument' => $argument['value']];
             });
         $this->arrayObjectFactory->expects($this->any())
             ->method('create')
             ->willReturn($componentData);
-        $this->manager->prepareData($componentName)->getData($componentName);
+        $this->cacheConfig->expects($this->any())
+            ->method('load')
+            ->with(Manager::CACHE_ID . '_' . $componentName)
+            ->willReturn($isCached);
 
+        $this->uiReader->expects($this->any())
+            ->method('read')
+            ->willReturn($readerData);
+        $this->assertEquals(
+            $expectedResult,
+            $this->manager->prepareData($componentName)->getData($componentName)
+        );
     }
 
     public function getComponentData()
     {
+        $cachedData = new \ArrayObject(
+            ['test_component1' =>
+                [
+                    ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
+                        [
+                            'argument_name1' => ['value' => 'value1'],
+                        ],
+                    ManagerInterface::CHILDREN_KEY => [
+                        'custom' => [
+                            ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
+                                [
+                                    'custom_name1' => ['value' => 'custom_value1'],
+                                ],
+                            ManagerInterface::CHILDREN_KEY => [],
+                        ],
+                    ],
+                ]
+            ]
+        );
+
         return [
             [
                 'test_component1',
-                new \ArrayObject(
-                    ['test_component1' =>
-                        [
-                            ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                                [
-                                    'argument_name1' => ['value' => 'value1'],
-                                ],
-                            'children' => [],
+                new \ArrayObject(),
+                $cachedData->serialize(),
+                [],
+                [
+                    'test_component1' => [
+                        ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
+                            [
+                                'argument_name1' => ['argument' => 'value1'],
+                            ],
+                        ManagerInterface::CHILDREN_KEY => [
+                            'custom' => [
+                                ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
+                                    [
+                                        'custom_name1' => ['argument' => 'custom_value1'],
+                                    ],
+                                ManagerInterface::CHILDREN_KEY => [],
+                            ]
                         ]
-                    ]
-                ),
-                true
+                    ],
+                ],
             ],
             [
                 'test_component2',
@@ -175,17 +222,114 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                                 [
                                     'argument_name2' => ['value' => 'value2'],
                                 ],
-                            'children' => [
-                                ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                                    [
-                                        'argument_name21' => ['value' => 'value21'],
-                                    ],
-
+                            ManagerInterface::CHILDREN_KEY => [
+                                'test_component21' => [
+                                    ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
+                                        [
+                                            'argument_name21' => ['value' => 'value21'],
+                                        ],
+                                    ManagerInterface::CHILDREN_KEY => [],
+                                ],
                             ],
                         ]
                     ]
                 ),
-                false
+                false,
+                ['componentGroup' => [0 => [
+                    Converter::DATA_ARGUMENTS_KEY => [
+                        'argument_name2' => ['value' => 'value2'],
+                    ],
+                    Converter::DATA_ATTRIBUTES_KEY => ['name' => 'attribute_name2'],
+                    'test_component21' => [0 => [
+                            Converter::DATA_ARGUMENTS_KEY => [
+                                'argument_name21' => ['value' => 'value21'],
+                            ],
+                            Converter::DATA_ATTRIBUTES_KEY => ['name' => 'attribute_name21'],
+                        ]
+                    ],
+                ]]],
+                [
+                    'test_component2' => [
+                        ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
+                            [
+                                'argument_name2' => ['argument' => 'value2'],
+                            ],
+                        ManagerInterface::COMPONENT_ATTRIBUTES_KEY => ['name' => 'attribute_name2'],
+                        ManagerInterface::CHILDREN_KEY => [
+                            'attribute_name21' => [
+                                ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
+                                    [
+                                        'argument_name21' => ['argument' => 'value21'],
+                                    ],
+                                ManagerInterface::COMPONENT_ATTRIBUTES_KEY => ['name' => 'attribute_name21'],
+                                ManagerInterface::CHILDREN_KEY => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider getComponentDataProvider()
+     */
+    public function testCreateRawComponentData($componentName, $configData, $componentData, $needEvaluate)
+    {
+        $this->componentConfigProvider->expects($this->any())
+            ->method('getComponentData')
+            ->willReturn($configData);
+        if ($needEvaluate === true) {
+            $this->argumentInterpreter->expects($this->once())
+                ->method('evaluate')
+                ->willReturnCallback(function ($argument) {
+                    return ['argument' => $argument['value']];
+                });
+        } else {
+            $this->argumentInterpreter->expects($this->never())->method('evaluate');
+        }
+        $this->assertEquals($componentData, $this->manager->createRawComponentData($componentName, $needEvaluate));
+    }
+
+    public function getComponentDataProvider()
+    {
+        return [
+            [
+                'test_component1',
+                [
+                    Converter::DATA_ATTRIBUTES_KEY => ['name' => 'attribute_name1'],
+                ],
+                [
+                    ManagerInterface::COMPONENT_ATTRIBUTES_KEY => ['name' => 'attribute_name1'],
+                    ManagerInterface::COMPONENT_ARGUMENTS_KEY => [],
+
+                ],
+                false,
+            ],
+            [
+                'test_component2',
+                [
+                    Converter::DATA_ARGUMENTS_KEY => ['argument_name2' => ['value' => 'value2']],
+                ],
+                [
+                    ManagerInterface::COMPONENT_ATTRIBUTES_KEY => [],
+                    ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name2' => ['value' => 'value2']],
+
+                ],
+                false,
+            ],
+            [
+                'test_component3',
+                [
+                    Converter::DATA_ATTRIBUTES_KEY => ['name' => 'attribute_name3'],
+                    Converter::DATA_ARGUMENTS_KEY => ['argument_name3' => ['value' => 'value3']],
+                ],
+                [
+                    ManagerInterface::COMPONENT_ATTRIBUTES_KEY => ['name' => 'attribute_name3'],
+                    ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name3' => ['argument' => 'value3']],
+
+                ],
+                true,
             ],
         ];
     }
