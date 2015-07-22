@@ -19,7 +19,7 @@ class Data extends \Magento\Framework\Config\Data
     public function __construct(
         \Magento\Framework\Amqp\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = 'constraint_config_cache'
+        $cacheId = 'amqp_config_cache'
     ) {
         parent::__construct($reader, $cache, $cacheId);
     }
