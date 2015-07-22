@@ -105,7 +105,7 @@ class IndexerHandler implements IndexerInterface
         foreach ($this->dataTypes as $dataType) {
             foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
                 $documentsId = array_column($batchDocuments, 'id');
-                $this->getAdapter()->delete($this->getTableName($dataType, $dimensions), ['id' => $documentsId]);
+                $this->getConnection()->delete($this->getTableName($dataType, $dimensions), ['id' => $documentsId]);
             }
         }
     }
@@ -148,7 +148,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @return AdapterInterface
      */
-    private function getAdapter()
+    private function getConnection()
     {
         return $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
     }
@@ -160,7 +160,7 @@ class IndexerHandler implements IndexerInterface
      */
     private function insertDocumentsForSearchable(array $documents, array $dimensions)
     {
-        $this->getAdapter()->insertOnDuplicate(
+        $this->getConnection()->insertOnDuplicate(
             $this->getTableName($this->dataTypes[0], $dimensions),
             $this->prepareSearchableFields($documents),
             ['data_index']
@@ -181,7 +181,7 @@ class IndexerHandler implements IndexerInterface
             }
         }
 
-        $this->getAdapter()->insertOnDuplicate(
+        $this->getConnection()->insertOnDuplicate(
             $this->getTableName($this->dataTypes[1], $dimensions),
             $this->prepareFilterableFields($documents),
             $onDuplicate

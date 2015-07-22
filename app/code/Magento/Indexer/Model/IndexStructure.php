@@ -63,9 +63,8 @@ class IndexStructure
      */
     public function delete($index, array $dimensions = [])
     {
-        $adapter = $this->getAdapter();
-        $this->dropTable($adapter, $this->indexScopeResolver->resolve($index, $dimensions));
-        $this->dropTable($adapter, $this->flatScopeResolver->resolve($index, $dimensions));
+        $this->dropTable($this->getConnection(), $this->indexScopeResolver->resolve($index, $dimensions));
+        $this->dropTable($this->getConnection(), $this->flatScopeResolver->resolve($index, $dimensions));
     }
 
     /**
@@ -89,9 +88,8 @@ class IndexStructure
      */
     protected function createFulltextIndex($tableName)
     {
-        $adapter = $this->getAdapter();
-        $table = $this->configureFulltextTable($adapter->newTable($tableName));
-        $adapter->createTable($table);
+        $table = $this->configureFulltextTable($this->getConnection()->newTable($tableName));
+        $this->getConnection()->createTable($table);
     }
 
     /**
@@ -137,8 +135,7 @@ class IndexStructure
      */
     protected function createFlatIndex($tableName, array $fields)
     {
-        $adapter = $this->getAdapter();
-        $table = $adapter->newTable($tableName);
+        $table = $this->getConnection()->newTable($tableName);
         $table->addColumn(
             'entity_id',
             Table::TYPE_INTEGER,
@@ -158,16 +155,15 @@ class IndexStructure
             $size = $columnMap['size'];
             $table->addColumn($name, $type, $size);
         }
-        $adapter->createTable($table);
+        $this->getConnection()->createTable($table);
     }
 
     /**
      * @return false|AdapterInterface
      */
-    private function getAdapter()
+    private function getConnection()
     {
-        $adapter = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
-        return $adapter;
+        return $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
     }
 
     /**

@@ -92,7 +92,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
             'entity_id'
         );
         if (isset($filter['customer_name'])) {
-            $customerName = $customersSelect->getAdapter()
+            $customerName = $this->customerResource->getConnection()
                 ->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
             $customersSelect->where($customerName . ' LIKE ?', '%' . $filter['customer_name'] . '%');
         }
@@ -152,21 +152,23 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     public function resolveCustomerNames()
     {
         $select = $this->customerResource->getConnection()->select();
-        $customerName = $select->getAdapter()->getConcatSql(['firstname', 'lastname'], ' ');
+        $customerName = $this->customerResource->getConnection()->getConcatSql(['firstname', 'lastname'], ' ');
 
         $select->from(
             ['customer' => $this->customerResource->getTable('customer_entity')],
             ['email']
-        )->columns(
+        );
+        $select->columns(
             ['customer_name' => $customerName]
-        )->where(
+        );
+        $select->where(
             'customer.entity_id IN (?)',
             array_column(
                 $this->getData(),
                 'customer_id'
             )
         );
-        $customersData = $select->getAdapter()->fetchAll($select);
+        $customersData = $this->customerResource->getConnection()->fetchAll($select);
 
         foreach ($this->getItems() as $item) {
             $item->setData(array_merge($item->getData(), current($customersData)));

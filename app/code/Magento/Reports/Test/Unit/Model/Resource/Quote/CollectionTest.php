@@ -112,21 +112,18 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $customersData = [['item_1']];
         $itemData = ['test'];
 
-        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $selectMock->expects($this->any())
-            ->method('getAdapter')
+        $this->selectMock->expects($this->any())
+            ->method('getConnection')
             ->willReturn($this->adapterMock);
-        $selectMock->expects($this->once())
+        $this->selectMock->expects($this->once())
             ->method('from')
             ->with(['customer' => $customerTableName], ['email'])
             ->willReturnSelf();
-        $selectMock->expects($this->once())
+        $this->selectMock->expects($this->once())
             ->method('columns')
             ->with(['customer_name' => $customerName])
             ->willReturnSelf();
-        $selectMock->expects($this->once())
+        $this->selectMock->expects($this->once())
             ->method('where')
             ->with('customer.entity_id IN (?)')
             ->willReturnSelf();
@@ -136,16 +133,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with(['firstname', 'lastname'], ' ')
             ->willReturn($customerName);
 
-        $adapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $adapterMock->expects($this->any())
-            ->method('select')
-            ->willReturn($selectMock);
-
-        $this->customerResourceMock->expects($this->once())
+        $this->customerResourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($adapterMock);
+            ->willReturn($this->adapterMock);
         $this->customerResourceMock->expects($this->once())
             ->method('getTable')
             ->with('customer_entity')
@@ -153,10 +143,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->adapterMock->expects($this->any())
             ->method('select')
-            ->willReturn($selectMock);
+            ->willReturn($this->selectMock);
         $this->adapterMock->expects($this->once())
             ->method('fetchAll')
-            ->with($selectMock)
+            ->with($this->selectMock)
             ->willReturn($customersData);
 
         $this->fetchStrategyMock->expects($this->once())

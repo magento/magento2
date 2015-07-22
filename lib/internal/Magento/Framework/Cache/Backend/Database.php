@@ -53,7 +53,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     /**
      * @var \Zend_Db_Adapter_Abstract
      */
-    protected $_adapter = null;
+    protected $_connection = null;
 
     /**
      * Constructor
@@ -81,11 +81,11 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     /**
      * Get DB adapter
      *
-     * @return \Zend_Db_Adapter_Abstract
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected function _getAdapter()
+    protected function _getConnection()
     {
-        if (!$this->_adapter) {
+        if (!$this->_connection) {
             if (!empty($this->_options['adapter_callback'])) {
                 $adapter = call_user_func($this->_options['adapter_callback']);
             } else {
@@ -94,10 +94,10 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             if (!$adapter instanceof \Zend_Db_Adapter_Abstract) {
                 \Zend_Cache::throwException('DB Adapter should be declared and extend \Zend_Db_Adapter_Abstract');
             } else {
-                $this->_adapter = $adapter;
+                $this->_connection = $adapter;
             }
         }
-        return $this->_adapter;
+        return $this->_connection;
     }
 
     /**
@@ -144,12 +144,12 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     public function load($id, $doNotTestCacheValidity = false)
     {
         if ($this->_options['store_data']) {
-            $select = $this->_getAdapter()->select()->from($this->_getDataTable(), 'data')->where('id=:cache_id');
+            $select = $this->_getConnection()->select()->from($this->_getDataTable(), 'data')->where('id=:cache_id');
 
             if (!$doNotTestCacheValidity) {
                 $select->where('expire_time=0 OR expire_time>?', time());
             }
-            return $this->_getAdapter()->fetchOne($select, ['cache_id' => $id]);
+            return $this->_getConnection()->fetchOne($select, ['cache_id' => $id]);
         } else {
             return false;
         }
@@ -164,7 +164,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     public function test($id)
     {
         if ($this->_options['store_data']) {
-            $select = $this->_getAdapter()->select()->from(
+            $select = $this->_getConnection()->select()->from(
                 $this->_getDataTable(),
                 'update_time'
             )->where(
@@ -173,7 +173,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
                 'expire_time=0 OR expire_time>?',
                 time()
             );
-            return $this->_getAdapter()->fetchOne($select, ['cache_id' => $id]);
+            return $this->_getConnection()->fetchOne($select, ['cache_id' => $id]);
         } else {
             return false;
         }
@@ -194,7 +194,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
         if ($this->_options['store_data']) {
-            $adapter = $this->_getAdapter();
+            $adapter = $this->_getConnection();
             $dataTable = $this->_getDataTable();
 
             $lifetime = $this->getLifetime($specificLifetime);
@@ -229,7 +229,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     public function remove($id)
     {
         if ($this->_options['store_data']) {
-            $adapter = $this->_getAdapter();
+            $adapter = $this->_getConnection();
             $result = $adapter->delete($this->_getDataTable(), ['id=?' => $id]);
             return $result;
         } else {
@@ -256,7 +256,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
-        $adapter = $this->_getAdapter();
+        $adapter = $this->_getConnection();
         switch ($mode) {
             case \Zend_Cache::CLEANING_MODE_ALL:
                 if ($this->_options['store_data']) {
@@ -297,8 +297,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     public function getIds()
     {
         if ($this->_options['store_data']) {
-            $select = $this->_getAdapter()->select()->from($this->_getDataTable(), 'id');
-            return $this->_getAdapter()->fetchCol($select);
+            $select = $this->_getConnection()->select()->from($this->_getDataTable(), 'id');
+            return $this->_getConnection()->fetchCol($select);
         } else {
             return [];
         }
@@ -311,8 +311,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function getTags()
     {
-        $select = $this->_getAdapter()->select()->from($this->_getTagsTable(), 'tag')->distinct(true);
-        return $this->_getAdapter()->fetchCol($select);
+        $select = $this->_getConnection()->select()->from($this->_getTagsTable(), 'tag')->distinct(true);
+        return $this->_getConnection()->fetchCol($select);
     }
 
     /**
@@ -325,7 +325,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function getIdsMatchingTags($tags = [])
     {
-        $select = $this->_getAdapter()->select()->from(
+        $select = $this->_getConnection()->select()->from(
             $this->_getTagsTable(),
             'cache_id'
         )->distinct(
@@ -338,7 +338,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
         )->having(
             'COUNT(cache_id)=' . count($tags)
         );
-        return $this->_getAdapter()->fetchCol($select);
+        return $this->_getConnection()->fetchCol($select);
     }
 
     /**
@@ -364,7 +364,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
-        $select = $this->_getAdapter()->select()->from(
+        $select = $this->_getConnection()->select()->from(
             $this->_getTagsTable(),
             'cache_id'
         )->distinct(
@@ -373,7 +373,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             'tag IN(?)',
             $tags
         );
-        return $this->_getAdapter()->fetchCol($select);
+        return $this->_getConnection()->fetchCol($select);
     }
 
     /**
@@ -399,11 +399,11 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function getMetadatas($id)
     {
-        $select = $this->_getAdapter()->select()->from($this->_getTagsTable(), 'tag')->where('cache_id=?', $id);
-        $tags = $this->_getAdapter()->fetchCol($select);
+        $select = $this->_getConnection()->select()->from($this->_getTagsTable(), 'tag')->where('cache_id=?', $id);
+        $tags = $this->_getConnection()->fetchCol($select);
 
-        $select = $this->_getAdapter()->select()->from($this->_getDataTable())->where('id=?', $id);
-        $data = $this->_getAdapter()->fetchRow($select);
+        $select = $this->_getConnection()->select()->from($this->_getDataTable())->where('id=?', $id);
+        $data = $this->_getConnection()->fetchRow($select);
         $res = false;
         if ($data) {
             $res = ['expire' => $data['expire_time'], 'mtime' => $data['update_time'], 'tags' => $tags];
@@ -421,7 +421,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     public function touch($id, $extraLifetime)
     {
         if ($this->_options['store_data']) {
-            return $this->_getAdapter()->update(
+            return $this->_getConnection()->update(
                 $this->_getDataTable(),
                 ['expire_time' => new \Zend_Db_Expr('expire_time+' . $extraLifetime)],
                 ['id=?' => $id, 'expire_time = 0 OR expire_time>' => time()]
@@ -473,7 +473,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             return true;
         }
 
-        $adapter = $this->_getAdapter();
+        $adapter = $this->_getConnection();
         $tagsTable = $this->_getTagsTable();
         $select = $adapter->select()->from($tagsTable, 'tag')->where('cache_id=?', $id)->where('tag IN(?)', $tags);
 
@@ -506,7 +506,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     protected function _cleanByTags($mode, $tags)
     {
         if ($this->_options['store_data']) {
-            $adapter = $this->_getAdapter();
+            $adapter = $this->_getConnection();
             $select = $adapter->select()->from($this->_getTagsTable(), 'cache_id');
             switch ($mode) {
                 case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:

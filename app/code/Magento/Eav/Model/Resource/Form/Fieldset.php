@@ -128,7 +128,7 @@ class Fieldset extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $select = parent::_getLoadSelect($field, $value, $object);
 
-        $labelExpr = $select->getAdapter()->getIfNullSql('store_label.label', 'default_label.label');
+        $labelExpr = $select->getConnection()->getIfNullSql('store_label.label', 'default_label.label');
 
         $select->joinLeft(
             ['default_label' => $this->getTable('eav_form_fieldset_label')],
