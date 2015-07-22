@@ -90,8 +90,8 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     public function aggregateProductsByTypes($orderId, $productTypeIds = [], $isProductTypeIn = false)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $connection = $this->getConnection();
+        $select = $connection->select()
             ->from(
                 ['o' => $this->getTable('sales_order_item')],
                 ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
@@ -108,7 +108,7 @@ class Order extends SalesResource implements OrderResourceInterface
                 $productTypeIds
             );
         }
-        return $adapter->fetchPairs($select);
+        return $connection->fetchPairs($select);
     }
 
     /**

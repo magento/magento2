@@ -69,7 +69,7 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getMinMax(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter)
     {
         $select = $this->_getSelect($filter);
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $select->columns(
             [
@@ -78,7 +78,7 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ]
         );
 
-        $result = $adapter->fetchRow($select);
+        $result = $connection->fetchRow($select);
 
         return [$result['min_value'], $result['max_value']];
     }
@@ -131,7 +131,7 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getCount(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter, $range)
     {
         $select = $this->_getSelect($filter);
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $countExpr = new \Zend_Db_Expr("COUNT(*)");
         $rangeExpr = new \Zend_Db_Expr("FLOOR(decimal_index.value / {$range}) + 1");
@@ -139,6 +139,6 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select->columns(['decimal_range' => $rangeExpr, 'count' => $countExpr]);
         $select->group($rangeExpr);
 
-        return $adapter->fetchPairs($select);
+        return $connection->fetchPairs($select);
     }
 }

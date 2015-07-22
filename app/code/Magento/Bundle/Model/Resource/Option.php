@@ -56,15 +56,15 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'store_id = ? OR store_id = 0' => $object->getStoreId()
         ];
 
-        $adapter = $this->getConnection();
-        $adapter->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
+        $connection = $this->getConnection();
+        $connection->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
 
         $data = new \Magento\Framework\Object();
         $data->setOptionId($object->getId())
             ->setStoreId($object->getStoreId())
             ->setTitle($object->getTitle());
 
-        $adapter->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+        $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
 
         /**
          * also saving default value if this store view scope
@@ -73,7 +73,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($object->getStoreId()) {
             $data->setStoreId(0);
             $data->setTitle($object->getDefaultTitle());
-            $adapter->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+            $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
         }
 
         return $this;
@@ -107,15 +107,15 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSearchableData($productId, $storeId)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $title = $adapter->getCheckSql(
+        $title = $connection->getCheckSql(
             'option_title_store.title IS NOT NULL',
             'option_title_store.title',
             'option_title_default.title'
         );
         $bind = ['store_id' => $storeId, 'product_id' => $productId];
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from(
                 ['opt' => $this->getMainTable()],
                 []
@@ -133,7 +133,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->where(
                 'opt.parent_id=:product_id'
             );
-        if (!($searchData = $adapter->fetchCol($select, $bind))) {
+        if (!($searchData = $connection->fetchCol($select, $bind))) {
             $searchData = [];
         }
 

@@ -58,8 +58,8 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
         if (!$object->getCustomerId() || !$object->getVisitorId()) {
             return $this;
         }
-        $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $connection = $this->getConnection();
+        $select = $connection->select()
             ->from($this->getMainTable())
             ->where('visitor_id = ?', $object->getVisitorId());
 
@@ -69,7 +69,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                customer for current product.
                */
 
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->getMainTable()
             )->where(
                 'customer_id = ?',
@@ -78,14 +78,14 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                 'product_id = ?',
                 $row['product_id']
             );
-            $idx = $adapter->fetchRow($select);
+            $idx = $connection->fetchRow($select);
 
             if ($idx) {
                 /**
                  * If we are here it means that we have two rows: one with known customer and second with guest visitor
                  * One row should be updated with customer_id, second should be deleted
                  */
-                $adapter->delete($this->getMainTable(), ['index_id = ?' => $row['index_id']]);
+                $connection->delete($this->getMainTable(), ['index_id = ?' => $row['index_id']]);
                 $where = ['index_id = ?' => $idx['index_id']];
                 $data = [
                     'visitor_id' => $object->getVisitorId(),
@@ -101,7 +101,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                 ];
             }
 
-            $adapter->update($this->getMainTable(), $data, $where);
+            $connection->update($this->getMainTable(), $data, $where);
         }
         return $this;
     }

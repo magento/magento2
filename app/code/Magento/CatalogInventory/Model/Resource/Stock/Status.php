@@ -79,20 +79,20 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $websiteId,
         $stockId = Stock::DEFAULT_STOCK_ID
     ) {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from($this->getMainTable())
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable())
             ->where('product_id = :product_id')
             ->where('website_id = :website_id')
             ->where('stock_id = :stock_id');
         $bind = [':product_id' => $productId, ':website_id' => $websiteId, ':stock_id' => $stockId];
-        $row = $adapter->fetchRow($select, $bind);
+        $row = $connection->fetchRow($select, $bind);
         if ($row) {
             $bind = ['qty' => $qty, 'stock_status' => $status];
             $where = [
-                $adapter->quoteInto('product_id=?', (int)$row['product_id']),
-                $adapter->quoteInto('website_id=?', (int)$row['website_id']),
+                $connection->quoteInto('product_id=?', (int)$row['product_id']),
+                $connection->quoteInto('website_id=?', (int)$row['website_id']),
             ];
-            $adapter->update($this->getMainTable(), $bind, $where);
+            $connection->update($this->getMainTable(), $bind, $where);
         } else {
             $bind = [
                 'product_id' => $productId,
@@ -101,7 +101,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'qty' => $qty,
                 'stock_status' => $status,
             ];
-            $adapter->insert($this->getMainTable(), $bind);
+            $connection->insert($this->getMainTable(), $bind);
         }
 
         return $this;
@@ -251,19 +251,19 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status');
         $attributeTable = $attribute->getBackend()->getTable();
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         if ($storeId === null || $storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
-            $select = $adapter->select()->from($attributeTable, ['entity_id', 'value'])
+            $select = $connection->select()->from($attributeTable, ['entity_id', 'value'])
                 ->where('entity_id IN (?)', $productIds)
                 ->where('attribute_id = ?', $attribute->getAttributeId())
                 ->where('store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
 
-            $rows = $adapter->fetchPairs($select);
+            $rows = $connection->fetchPairs($select);
         } else {
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 ['t1' => $attributeTable],
-                ['entity_id' => 't1.entity_id', 'value' => $adapter->getIfNullSql('t2.value', 't1.value')]
+                ['entity_id' => 't1.entity_id', 'value' => $connection->getIfNullSql('t2.value', 't1.value')]
             )->joinLeft(
                 ['t2' => $attributeTable],
                 't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id AND t2.store_id = ' . (int)$storeId
@@ -278,7 +278,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $productIds
             );
 
-            $rows = $adapter->fetchPairs($select);
+            $rows = $connection->fetchPairs($select);
         }
 
         $statuses = [];

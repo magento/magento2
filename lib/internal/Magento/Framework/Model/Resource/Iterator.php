@@ -18,12 +18,12 @@ class Iterator extends \Magento\Framework\Object
      * @param \Zend_Db_Statement_Interface|Zend_Db_Select|string $query
      * @param array|string $callbacks
      * @param array $args
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $adapter
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return \Magento\Framework\Model\Resource\Iterator
      */
-    public function walk($query, array $callbacks, array $args = [], $adapter = null)
+    public function walk($query, array $callbacks, array $args = [], $connection = null)
     {
-        $stmt = $this->_getStatement($query, $adapter);
+        $stmt = $this->_getStatement($query, $connection);
         $args['idx'] = 0;
         while ($row = $stmt->fetch()) {
             $args['row'] = $row;

@@ -906,8 +906,8 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     public function checkAttributeUniqueValue(AbstractAttribute $attribute, $object)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
         if ($attribute->getBackend()->getType() === 'static') {
             $value = $object->getData($attribute->getAttributeCode());
             $bind = ['attribute_code' => trim($value)];
@@ -942,7 +942,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
             $select->where('entity_type_id = :entity_type_id');
         }
 
-        $data = $adapter->fetchCol($select, $bind);
+        $data = $connection->fetchCol($select, $bind);
 
         if ($object->getId()) {
             if (isset($data[0])) {
@@ -1391,7 +1391,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
          * @var array $update
          * @var array $delete
          */
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $insertEntity = true;
         $entityTable = $this->getEntityTable();
         $entityIdField = $this->getEntityIdField();
@@ -1400,8 +1400,8 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         unset($entityRow[$entityIdField]);
         if (!empty($entityId) && is_numeric($entityId)) {
             $bind = ['entity_id' => $entityId];
-            $select = $adapter->select()->from($entityTable, $entityIdField)->where("{$entityIdField} = :entity_id");
-            $result = $adapter->fetchOne($select, $bind);
+            $select = $connection->select()->from($entityTable, $entityIdField)->where("{$entityIdField} = :entity_id");
+            $result = $connection->fetchOne($select, $bind);
             if ($result) {
                 $insertEntity = false;
             }
@@ -1417,15 +1417,15 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         if ($insertEntity) {
             if (!empty($entityId)) {
                 $entityRow[$entityIdField] = $entityId;
-                $adapter->insertForce($entityTable, $entityRow);
+                $connection->insertForce($entityTable, $entityRow);
             } else {
-                $adapter->insert($entityTable, $entityRow);
-                $entityId = $adapter->lastInsertId($entityTable);
+                $connection->insert($entityTable, $entityRow);
+                $entityId = $connection->lastInsertId($entityTable);
             }
             $newObject->setId($entityId);
         } else {
-            $where = sprintf('%s=%d', $adapter->quoteIdentifier($entityIdField), $entityId);
-            $adapter->update($entityTable, $entityRow, $where);
+            $where = sprintf('%s=%d', $connection->quoteIdentifier($entityIdField), $entityId);
+            $connection->update($entityTable, $entityRow, $where);
         }
 
         /**
@@ -1533,13 +1533,13 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     protected function _processAttributeValues()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         foreach ($this->_attributeValuesToSave as $table => $data) {
-            $adapter->insertOnDuplicate($table, $data, ['value']);
+            $connection->insertOnDuplicate($table, $data, ['value']);
         }
 
         foreach ($this->_attributeValuesToDelete as $table => $valueIds) {
-            $adapter->delete($table, ['value_id IN (?)' => $valueIds]);
+            $connection->delete($table, ['value_id IN (?)' => $valueIds]);
         }
 
         // reset data arrays
@@ -1616,7 +1616,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         $backend = $attribute->getBackend();
         $table = $backend->getTable();
         $entity = $attribute->getEntity();
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $row = $this->getAttributeRow($entity, $object, $attribute);
 
         $newValue = $object->getData($attributeCode);
@@ -1626,27 +1626,27 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
 
         $whereArr = [];
         foreach ($row as $field => $value) {
-            $whereArr[] = $adapter->quoteInto($field . '=?', $value);
+            $whereArr[] = $connection->quoteInto($field . '=?', $value);
         }
         $where = implode(' AND ', $whereArr);
 
-        $adapter->beginTransaction();
+        $connection->beginTransaction();
 
         try {
-            $select = $adapter->select()->from($table, 'value_id')->where($where);
-            $origValueId = $adapter->fetchOne($select);
+            $select = $connection->select()->from($table, 'value_id')->where($where);
+            $origValueId = $connection->fetchOne($select);
 
             if ($origValueId === false && $newValue !== null) {
                 $this->_insertAttribute($object, $attribute, $newValue);
             } elseif ($origValueId !== false && $newValue !== null) {
                 $this->_updateAttribute($object, $attribute, $origValueId, $newValue);
             } elseif ($origValueId !== false && $newValue === null) {
-                $adapter->delete($table, $where);
+                $connection->delete($table, $where);
             }
             $this->_processAttributeValues();
-            $adapter->commit();
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollback();
+            $connection->rollback();
             throw $e;
         }
 

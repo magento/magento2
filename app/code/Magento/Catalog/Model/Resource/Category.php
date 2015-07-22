@@ -197,20 +197,20 @@ class Category extends AbstractResource
      */
     public function deleteChildren(\Magento\Framework\Object $object)
     {
-        $adapter = $this->getConnection();
-        $pathField = $adapter->quoteIdentifier('path');
+        $connection = $this->getConnection();
+        $pathField = $connection->quoteIdentifier('path');
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getEntityTable(),
             ['entity_id']
         )->where(
             $pathField . ' LIKE :c_path'
         );
 
-        $childrenIds = $adapter->fetchCol($select, ['c_path' => $object->getPath() . '/%']);
+        $childrenIds = $connection->fetchCol($select, ['c_path' => $object->getPath() . '/%']);
 
         if (!empty($childrenIds)) {
-            $adapter->delete($this->getEntityTable(), ['entity_id IN (?)' => $childrenIds]);
+            $connection->delete($this->getEntityTable(), ['entity_id IN (?)' => $childrenIds]);
         }
 
         /**
@@ -316,20 +316,20 @@ class Category extends AbstractResource
      */
     protected function _getMaxPosition($path)
     {
-        $adapter = $this->getConnection();
-        $positionField = $adapter->quoteIdentifier('position');
+        $connection = $this->getConnection();
+        $positionField = $connection->quoteIdentifier('position');
         $level = count(explode('/', $path));
         $bind = ['c_level' => $level, 'c_path' => $path . '/%'];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('catalog_category_entity'),
             'MAX(' . $positionField . ')'
         )->where(
-            $adapter->quoteIdentifier('path') . ' LIKE :c_path'
+            $connection->quoteIdentifier('path') . ' LIKE :c_path'
         )->where(
-            $adapter->quoteIdentifier('level') . ' = :c_level'
+            $connection->quoteIdentifier('level') . ' = :c_level'
         );
 
-        $position = $adapter->fetchOne($select, $bind);
+        $position = $connection->fetchOne($select, $bind);
         if (!$position) {
             $position = 0;
         }
@@ -375,14 +375,14 @@ class Category extends AbstractResource
         $update = array_intersect_key($products, $oldProducts);
         $update = array_diff_assoc($update, $oldProducts);
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         /**
          * Delete products from category
          */
         if (!empty($delete)) {
             $cond = ['product_id IN(?)' => array_keys($delete), 'category_id=?' => $id];
-            $adapter->delete($this->getCategoryProductTable(), $cond);
+            $connection->delete($this->getCategoryProductTable(), $cond);
         }
 
         /**
@@ -397,7 +397,7 @@ class Category extends AbstractResource
                     'position' => (int)$position,
                 ];
             }
-            $adapter->insertMultiple($this->getCategoryProductTable(), $data);
+            $connection->insertMultiple($this->getCategoryProductTable(), $data);
         }
 
         /**
@@ -407,7 +407,7 @@ class Category extends AbstractResource
             foreach ($update as $productId => $position) {
                 $where = ['category_id = ?' => (int)$id, 'product_id = ?' => (int)$productId];
                 $bind = ['position' => (int)$position];
-                $adapter->update($this->getCategoryProductTable(), $bind, $where);
+                $connection->update($this->getCategoryProductTable(), $bind, $where);
             }
         }
 
@@ -523,8 +523,8 @@ class Category extends AbstractResource
         $storeId = $this->_storeManager->getStore()->getId();
         $attributeId = $this->getIsActiveAttributeId();
         $table = $this->getTable([$this->getEntityTablePrefix(), 'int']);
-        $adapter = $this->getConnection();
-        $checkSql = $adapter->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
+        $connection = $this->getConnection();
+        $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
 
         $bind = [
             'attribute_id' => $attributeId,
@@ -532,7 +532,7 @@ class Category extends AbstractResource
             'active_flag' => $isActiveFlag,
             'c_path' => $category->getPath() . '/%',
         ];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['m' => $this->getEntityTable()],
             ['COUNT(m.entity_id)']
         )->joinLeft(
@@ -748,8 +748,8 @@ class Category extends AbstractResource
     {
         $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
-        $adapter = $this->getConnection();
-        $checkSql = $adapter->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
+        $connection = $this->getConnection();
+        $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $category->getStoreId(),
@@ -770,14 +770,14 @@ class Category extends AbstractResource
         )->where(
             $checkSql . ' = :scope'
         )->where(
-            $adapter->quoteIdentifier('path') . ' LIKE :c_path'
+            $connection->quoteIdentifier('path') . ' LIKE :c_path'
         );
         if (!$recursive) {
-            $select->where($adapter->quoteIdentifier('level') . ' <= :c_level');
+            $select->where($connection->quoteIdentifier('level') . ' <= :c_level');
             $bind['c_level'] = $category->getLevel() + 1;
         }
 
-        return $adapter->fetchCol($select, $bind);
+        return $connection->fetchCol($select, $bind);
     }
 
     /**
@@ -865,14 +865,14 @@ class Category extends AbstractResource
     ) {
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table = $this->getEntityTable();
-        $adapter = $this->getConnection();
-        $levelFiled = $adapter->quoteIdentifier('level');
-        $pathField = $adapter->quoteIdentifier('path');
+        $connection = $this->getConnection();
+        $levelFiled = $connection->quoteIdentifier('level');
+        $pathField = $connection->quoteIdentifier('path');
 
         /**
          * Decrease children count for all old category parent categories
          */
-        $adapter->update(
+        $connection->update(
             $table,
             ['children_count' => new \Zend_Db_Expr('children_count - ' . $childrenCount)],
             ['entity_id IN(?)' => $category->getParentIds()]
@@ -881,7 +881,7 @@ class Category extends AbstractResource
         /**
          * Increase children count for new category parents
          */
-        $adapter->update(
+        $connection->update(
             $table,
             ['children_count' => new \Zend_Db_Expr('children_count + ' . $childrenCount)],
             ['entity_id IN(?)' => $newParent->getPathIds()]
@@ -896,13 +896,13 @@ class Category extends AbstractResource
         /**
          * Update children nodes path
          */
-        $adapter->update(
+        $connection->update(
             $table,
             [
                 'path' => new \Zend_Db_Expr(
-                    'REPLACE(' . $pathField . ',' . $adapter->quote(
+                    'REPLACE(' . $pathField . ',' . $connection->quote(
                         $category->getPath() . '/'
-                    ) . ', ' . $adapter->quote(
+                    ) . ', ' . $connection->quote(
                         $newPath . '/'
                     ) . ')'
                 ),
@@ -919,7 +919,7 @@ class Category extends AbstractResource
             'position' => $position,
             'parent_id' => $newParent->getId(),
         ];
-        $adapter->update($table, $data, ['entity_id = ?' => $category->getId()]);
+        $connection->update($table, $data, ['entity_id = ?' => $category->getId()]);
 
         // Update category object to new data
         $category->addData($data);
@@ -940,22 +940,22 @@ class Category extends AbstractResource
     protected function _processPositions($category, $newParent, $afterCategoryId)
     {
         $table = $this->getEntityTable();
-        $adapter = $this->getConnection();
-        $positionField = $adapter->quoteIdentifier('position');
+        $connection = $this->getConnection();
+        $positionField = $connection->quoteIdentifier('position');
 
         $bind = ['position' => new \Zend_Db_Expr($positionField . ' - 1')];
         $where = [
             'parent_id = ?' => $category->getParentId(),
             $positionField . ' > ?' => $category->getPosition(),
         ];
-        $adapter->update($table, $bind, $where);
+        $connection->update($table, $bind, $where);
 
         /**
          * Prepare position value
          */
         if ($afterCategoryId) {
-            $select = $adapter->select()->from($table, 'position')->where('entity_id = :entity_id');
-            $position = $adapter->fetchOne($select, ['entity_id' => $afterCategoryId]);
+            $select = $connection->select()->from($table, 'position')->where('entity_id = :entity_id');
+            $position = $connection->fetchOne($select, ['entity_id' => $afterCategoryId]);
             $position += 1;
         } else {
             $position = 1;
@@ -963,7 +963,7 @@ class Category extends AbstractResource
 
         $bind = ['position' => new \Zend_Db_Expr($positionField . ' + 1')];
         $where = ['parent_id = ?' => $newParent->getId(), $positionField . ' >= ?' => $position];
-        $adapter->update($table, $bind, $where);
+        $connection->update($table, $bind, $where);
 
         return $position;
     }
@@ -975,9 +975,9 @@ class Category extends AbstractResource
      */
     public function countVisible()
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
         $select->from($this->getEntityTable(), 'COUNT(*)')->where('parent_id != ?', 0);
-        return (int)$adapter->fetchOne($select);
+        return (int)$connection->fetchOne($select);
     }
 }

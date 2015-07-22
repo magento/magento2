@@ -690,10 +690,10 @@ interface AdapterInterface
     /**
      * Set cache adapter
      *
-     * @param \Magento\Framework\Cache\FrontendInterface $adapter
+     * @param \Magento\Framework\Cache\FrontendInterface $cacheAdapter
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    public function setCacheAdapter(\Magento\Framework\Cache\FrontendInterface $adapter);
+    public function setCacheAdapter(\Magento\Framework\Cache\FrontendInterface $cacheAdapter);
 
     /**
      * Allow DDL caching

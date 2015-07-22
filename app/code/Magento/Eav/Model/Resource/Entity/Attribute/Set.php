@@ -120,9 +120,9 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function validate($object, $attributeSetName)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $bind = ['attribute_set_name' => trim($attributeSetName), 'entity_type_id' => $object->getEntityTypeId()];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             'attribute_set_name = :attribute_set_name'
@@ -135,7 +135,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->where('attribute_set_id != :attribute_set_id');
         }
 
-        return !$adapter->fetchOne($select, $bind) ? true : false;
+        return !$connection->fetchOne($select, $bind) ? true : false;
     }
 
     /**
@@ -192,9 +192,9 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getDefaultGroupId($setId)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $bind = ['attribute_set_id' => (int)$setId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('eav_attribute_group'),
             'attribute_group_id'
         )->where(
@@ -204,7 +204,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->limit(
             1
         );
-        return $adapter->fetchOne($select, $bind);
+        return $connection->fetchOne($select, $bind);
     }
 
     /**
@@ -215,8 +215,8 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function fetchAttributeSetData($setId = null)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['entity' => $this->getTable('eav_entity_attribute')],
             ['attribute_id', 'attribute_set_id', 'attribute_group_id', 'sort_order']
         )->joinLeft(
@@ -229,6 +229,6 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $bind[':attribute_set_id'] = $setId;
             $select->where('entity.attribute_set_id = :attribute_set_id');
         }
-        return $adapter->fetchAll($select, $bind);
+        return $connection->fetchAll($select, $bind);
     }
 }

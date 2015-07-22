@@ -284,8 +284,8 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function getOptionIdFromOptionTable($tableName, $optionId, $storeId)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $tableName,
             ['option_type_id']
         )->where(
@@ -295,7 +295,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'store_id = ?',
             (int)$storeId
         );
-        return $adapter->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 
     /**
@@ -349,10 +349,9 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function duplicate(\Magento\Catalog\Model\Product\Option\Value $object, $oldOptionId, $newOptionId)
     {
-        $adapter = $this->getConnection();
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from($this->getMainTable())->where('option_id = ?', $oldOptionId);
-        $valueData = $adapter->fetchAll($select);
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable())->where('option_id = ?', $oldOptionId);
+        $valueData = $connection->fetchAll($select);
 
         $valueCond = [];
 
@@ -361,8 +360,8 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             unset($data[$this->getIdFieldName()]);
             $data['option_id'] = $newOptionId;
 
-            $adapter->insert($this->getMainTable(), $data);
-            $valueCond[$optionTypeId] = $adapter->lastInsertId($this->getMainTable());
+            $connection->insert($this->getMainTable(), $data);
+            $valueCond[$optionTypeId] = $connection->lastInsertId($this->getMainTable());
         }
 
         unset($valueData);
@@ -372,7 +371,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $priceTable = $this->getTable('catalog_product_option_type_price');
             $columns = [new \Zend_Db_Expr($newTypeId), 'store_id', 'price', 'price_type'];
 
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $priceTable,
                 []
             )->where(
@@ -381,12 +380,12 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             )->columns(
                 $columns
             );
-            $insertSelect = $adapter->insertFromSelect(
+            $insertSelect = $connection->insertFromSelect(
                 $select,
                 $priceTable,
                 ['option_type_id', 'store_id', 'price', 'price_type']
             );
-            $adapter->query($insertSelect);
+            $connection->query($insertSelect);
 
             // title
             $titleTable = $this->getTable('catalog_product_option_type_title');
@@ -401,12 +400,12 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             )->columns(
                 $columns
             );
-            $insertSelect = $adapter->insertFromSelect(
+            $insertSelect = $connection->insertFromSelect(
                 $select,
                 $titleTable,
                 ['option_type_id', 'store_id', 'title']
             );
-            $adapter->query($insertSelect);
+            $connection->query($insertSelect);
         }
 
         return $object;

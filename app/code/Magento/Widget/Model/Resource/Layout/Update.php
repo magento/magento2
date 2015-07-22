@@ -57,10 +57,10 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
     ) {
         $bind = ['layout_update_handle' => $handle, 'theme_id' => $theme->getId(), 'store_id' => $store->getId()];
         $result = '';
-        $adapter = $this->getConnection();
-        if ($adapter) {
+        $connection = $this->getConnection();
+        if ($connection) {
             $select = $this->_getFetchUpdatesByHandleSelect();
-            $result = join('', $adapter->fetchCol($select, $bind));
+            $result = join('', $connection->fetchCol($select, $bind));
         }
         return $result;
     }

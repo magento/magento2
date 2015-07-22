@@ -234,17 +234,17 @@ class IndexBuilder
         $productId = $product->getId();
         $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $adapter->delete(
+        $connection->delete(
             $this->resource->getTableName('catalogrule_product'),
-            [$adapter->quoteInto('rule_id = ?', $ruleId), $adapter->quoteInto('product_id = ?', $productId)]
+            [$connection->quoteInto('rule_id = ?', $ruleId), $connection->quoteInto('product_id = ?', $productId)]
         );
 
         if (!$rule->getConditions()->validate($product)) {
-            $adapter->delete(
+            $connection->delete(
                 $this->resource->getTableName('catalogrule_product_price'),
-                [$adapter->quoteInto('product_id = ?', $productId)]
+                [$connection->quoteInto('product_id = ?', $productId)]
             );
             return $this;
         }
@@ -280,14 +280,14 @@ class IndexBuilder
                     ];
 
                     if (count($rows) == $this->batchCount) {
-                        $adapter->insertMultiple($this->getTable('catalogrule_product'), $rows);
+                        $connection->insertMultiple($this->getTable('catalogrule_product'), $rows);
                         $rows = [];
                     }
                 }
             }
 
             if (!empty($rows)) {
-                $adapter->insertMultiple($this->resource->getTableName('catalogrule_product'), $rows);
+                $connection->insertMultiple($this->resource->getTableName('catalogrule_product'), $rows);
             }
         } catch (\Exception $e) {
             throw $e;
@@ -326,14 +326,14 @@ class IndexBuilder
     protected function updateRuleProductData(Rule $rule)
     {
         $ruleId = $rule->getId();
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if ($rule->getProductsFilter()) {
-            $adapter->delete(
+            $connection->delete(
                 $this->getTable('catalogrule_product'),
                 ['rule_id=?' => $ruleId, 'product_id IN (?)' => $rule->getProductsFilter()]
             );
         } else {
-            $adapter->delete($this->getTable('catalogrule_product'), $adapter->quoteInto('rule_id=?', $ruleId));
+            $connection->delete($this->getTable('catalogrule_product'), $connection->quoteInto('rule_id=?', $ruleId));
         }
 
         if (!$rule->getIsActive()) {
@@ -387,14 +387,14 @@ class IndexBuilder
                     ];
 
                     if (count($rows) == $this->batchCount) {
-                        $adapter->insertMultiple($this->getTable('catalogrule_product'), $rows);
+                        $connection->insertMultiple($this->getTable('catalogrule_product'), $rows);
                         $rows = [];
                     }
                 }
             }
         }
         if (!empty($rows)) {
-            $adapter->insertMultiple($this->getTable('catalogrule_product'), $rows);
+            $connection->insertMultiple($this->getTable('catalogrule_product'), $rows);
         }
 
         return $this;
@@ -502,12 +502,12 @@ class IndexBuilder
      */
     protected function updateCatalogRuleGroupWebsiteData()
     {
-        $adapter = $this->getConnection();
-        $adapter->delete($this->getTable('catalogrule_group_website'), []);
+        $connection = $this->getConnection();
+        $connection->delete($this->getTable('catalogrule_group_website'), []);
 
         $timestamp = $this->dateTime->gmtTimestamp();
 
-        $select = $adapter->select()->distinct(
+        $select = $connection->select()->distinct(
             true
         )->from(
             $this->getTable('catalogrule_product'),
@@ -520,7 +520,7 @@ class IndexBuilder
             $this->_catalogRuleGroupWebsiteColumnsList
         );
 
-        $adapter->query($query);
+        $connection->query($query);
 
         return $this;
     }
@@ -577,7 +577,7 @@ class IndexBuilder
      */
     protected function getRuleProductsStmt($websiteId, $productId = null)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         /**
          * Sort order is important
          * It used for check stop price rule condition.
@@ -588,7 +588,7 @@ class IndexBuilder
          * if row with sort order 1 will have stop flag we should exclude
          * all next rows for same product id from price calculation
          */
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['rp' => $this->getTable('catalogrule_product')]
         )->order(
             ['rp.website_id', 'rp.customer_group_id', 'rp.product_id', 'rp.sort_order', 'rp.rule_id']
@@ -656,7 +656,7 @@ class IndexBuilder
             ),
         ]);
 
-        return $adapter->query($select);
+        return $connection->query($select);
     }
 
     /**
@@ -670,7 +670,7 @@ class IndexBuilder
             return $this;
         }
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $productIds = [];
 
         try {
@@ -680,7 +680,7 @@ class IndexBuilder
                 $arrData[$key]['latest_start_date'] = $this->dateFormat->formatDate($data['latest_start_date'], false);
                 $arrData[$key]['earliest_end_date'] = $this->dateFormat->formatDate($data['earliest_end_date'], false);
             }
-            $adapter->insertOnDuplicate($this->getTable('catalogrule_product_price'), $arrData);
+            $connection->insertOnDuplicate($this->getTable('catalogrule_product_price'), $arrData);
         } catch (\Exception $e) {
             throw $e;
         }

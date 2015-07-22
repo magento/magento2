@@ -140,14 +140,14 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->getConnection();
-        $columns = $adapter->describeTable($this->getMainTable());
+        $connection = $this->getConnection();
+        $columns = $connection->describeTable($this->getMainTable());
 
         if (isset($columns['created_at'], $columns['updated_at'])) {
-            $select = $adapter->select()
+            $select = $connection->select()
                 ->from($this->getMainTable(), ['created_at', 'updated_at'])
                 ->where($this->getIdFieldName() . ' = :entity_id');
-            $row = $adapter->fetchRow($select, [':entity_id' => $object->getId()]);
+            $row = $connection->fetchRow($select, [':entity_id' => $object->getId()]);
 
             if (is_array($row) && isset($row['created_at'], $row['updated_at'])) {
                 $object->setCreatedAt($row['created_at']);

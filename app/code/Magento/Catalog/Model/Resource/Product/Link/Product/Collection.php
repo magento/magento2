@@ -190,11 +190,11 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     protected function _joinLinks()
     {
         $select = $this->getSelect();
-        $adapter = $select->getConnection();
+        $connection = $select->getConnection();
 
         $joinCondition = [
             'links.linked_product_id = e.entity_id',
-            $adapter->quoteInto('links.link_type_id = ?', $this->_linkTypeId),
+            $connection->quoteInto('links.link_type_id = ?', $this->_linkTypeId),
         ];
         $joinType = 'join';
         if ($this->getProduct() && $this->getProduct()->getId()) {
@@ -203,7 +203,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                 $this->getSelect()->where('links.product_id = ?', (int)$productId);
             } else {
                 $joinType = 'joinLeft';
-                $joinCondition[] = $adapter->quoteInto('links.product_id = ?', $productId);
+                $joinCondition[] = $connection->quoteInto('links.product_id = ?', $productId);
             }
             $this->addFieldToFilter('entity_id', ['neq' => $productId]);
         } elseif ($this->_isStrongMode) {

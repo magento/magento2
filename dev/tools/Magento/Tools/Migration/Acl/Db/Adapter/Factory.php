@@ -29,21 +29,21 @@ class Factory
      */
     public function getConnection(array $config, $type = null)
     {
-        $dbAdapterClassName = 'Magento\Framework\DB\Adapter\Pdo\Mysql';
+        $connectionClassName = 'Magento\Framework\DB\Adapter\Pdo\Mysql';
 
         if (false == empty($type)) {
-            $dbAdapterClassName = $type;
+            $connectionClassName = $type;
         }
 
-        if (false == class_exists($dbAdapterClassName, true)) {
-            throw new \InvalidArgumentException('Specified adapter not exists: ' . $dbAdapterClassName);
+        if (false == class_exists($connectionClassName, true)) {
+            throw new \InvalidArgumentException('Specified adapter not exists: ' . $connectionClassName);
         }
 
-        $adapter = $this->_objectManager->create($dbAdapterClassName, ['config' => $config]);
-        if (false == $adapter instanceof \Zend_Db_Adapter_Abstract) {
-            unset($adapter);
+        $connection = $this->_objectManager->create($connectionClassName, ['config' => $config]);
+        if (false == $connection instanceof \Zend_Db_Adapter_Abstract) {
+            unset($connection);
             throw new \InvalidArgumentException('Specified adapter is not instance of \Zend_Db_Adapter_Abstract');
         }
-        return $adapter;
+        return $connection;
     }
 }

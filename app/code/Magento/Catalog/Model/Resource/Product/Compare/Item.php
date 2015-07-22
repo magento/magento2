@@ -31,13 +31,13 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByProduct(\Magento\Catalog\Model\Product\Compare\Item $object, $product)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if ($product instanceof \Magento\Catalog\Model\Product) {
             $productId = $product->getId();
         } else {
             $productId = $product;
         }
-        $select = $adapter->select()->from($this->getMainTable())->where('product_id = ?', (int)$productId);
+        $select = $connection->select()->from($this->getMainTable())->where('product_id = ?', (int)$productId);
 
         if ($object->getCustomerId()) {
             $select->where('customer_id = ?', (int)$object->getCustomerId());
@@ -45,7 +45,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->where('visitor_id = ?', (int)$object->getVisitorId());
         }
 
-        $data = $adapter->fetchRow($select);
+        $data = $connection->fetchRow($select);
 
         if (!$data) {
             return false;

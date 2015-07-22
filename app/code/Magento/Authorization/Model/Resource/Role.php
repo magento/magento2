@@ -126,11 +126,11 @@ class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $role)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $adapter->delete($this->getMainTable(), ['parent_id = ?' => (int)$role->getId()]);
+        $connection->delete($this->getMainTable(), ['parent_id = ?' => (int)$role->getId()]);
 
-        $adapter->delete($this->_ruleTable, ['role_id = ?' => (int)$role->getId()]);
+        $connection->delete($this->_ruleTable, ['role_id = ?' => (int)$role->getId()]);
 
         return $this;
     }
@@ -143,16 +143,16 @@ class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getRoleUsers(\Magento\Authorization\Model\Role $role)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $binds = ['role_id' => $role->getId(), 'role_type' => RoleUser::ROLE_TYPE];
 
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from($this->getMainTable(), ['user_id'])
             ->where('parent_id = :role_id')
             ->where('role_type = :role_type')
             ->where('user_id > 0');
 
-        return $adapter->fetchCol($select, $binds);
+        return $connection->fetchCol($select, $binds);
     }
 }

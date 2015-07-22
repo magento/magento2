@@ -34,11 +34,11 @@ class SaveHandler implements SaveHandlerInterface
     ) {
         $saveMethod = $deploymentConfig->get(\Magento\Framework\Session\Config::PARAM_SESSION_SAVE_METHOD);
         try {
-            $adapter = $saveHandlerFactory->create($saveMethod);
+            $connection = $saveHandlerFactory->create($saveMethod);
         } catch (SessionException $e) {
-            $adapter = $saveHandlerFactory->create($default);
+            $connection = $saveHandlerFactory->create($default);
         }
-        $this->saveHandlerAdapter = $adapter;
+        $this->saveHandlerAdapter = $connection;
     }
 
     /**

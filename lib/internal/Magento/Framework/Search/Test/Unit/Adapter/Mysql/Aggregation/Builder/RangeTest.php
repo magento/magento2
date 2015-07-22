@@ -24,7 +24,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connectionMock;
 
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
@@ -69,11 +69,11 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['fetchAssoc', 'select', 'getCaseSql'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('select')
             ->willReturn($this->select);
 
@@ -82,7 +82,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->adapter);
+            ->willReturn($this->connectionMock);
 
         $this->bucket = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
             ->setMethods(['getName', 'getRanges'])
@@ -138,7 +138,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
         $this->range->expects($this->at(5))
             ->method('getTo')
             ->willReturn('');
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('getCaseSql')
             ->withConsecutive(
                 [''],

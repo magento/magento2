@@ -5,6 +5,7 @@
  */
 namespace Magento\TestFramework\Db\Sequence;
 
+use Magento\Framework\App\Resource;
 use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\Resource\Meta as ResourceMetadata;
 use Magento\Framework\App\Resource as AppResource;
@@ -189,8 +190,8 @@ class Builder extends \Magento\SalesSequence\Model\Builder
             $this->data['entity_type'],
             $this->data['store_id']
         );
-        $adapter = $this->appResource->getConnection('write');
-        if ($metadata->getId() && !$adapter->isTableExists($this->getSequenceName())) {
+        $connection = $this->appResource->getConnection(Resource::DEFAULT_CONNECTION);
+        if ($metadata->getId() && !$connection->isTableExists($this->getSequenceName())) {
             throw new \Magento\Framework\Exception\AlreadyExistsException(
                 __('Sequence with this metadata already exists')
             );

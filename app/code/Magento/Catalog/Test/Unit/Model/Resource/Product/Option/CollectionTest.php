@@ -56,7 +56,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connection;
 
     /**
      * @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject
@@ -89,14 +89,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->selectMock = $this->getMock('Zend_Db_Select', ['from', 'reset'], [], '', false);
-        $this->adapterMock =
+        $this->connection =
             $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['select'], [], '', false);
-        $this->adapterMock->expects($this->once())
+        $this->connection->expects($this->once())
             ->method('select')
             ->will($this->returnValue($this->selectMock));
         $this->resourceMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->adapterMock));
+            ->will($this->returnValue($this->connection));
         $this->resourceMock->expects($this->once())
             ->method('getMainTable')
             ->will($this->returnValue('test_main_table'));

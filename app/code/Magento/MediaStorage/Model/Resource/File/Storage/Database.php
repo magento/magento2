@@ -46,16 +46,16 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function createDatabaseScheme()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $table = $this->getMainTable();
-        if ($adapter->isTableExists($table)) {
+        if ($connection->isTableExists($table)) {
             return $this;
         }
 
         $dirStorageTable = $this->getTable('media_storage_directory_storage');
         // For foreign key
 
-        $ddlTable = $adapter->newTable(
+        $ddlTable = $connection->newTable(
             $table
         )->addColumn(
             'file_id',
@@ -94,7 +94,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             ['default' => null],
             'Directory Path'
         )->addIndex(
-            $adapter->getIndexName(
+            $connection->getIndexName(
                 $table,
                 ['filename', 'directory_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -102,10 +102,10 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             ['filename', 'directory_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $adapter->getIndexName($table, ['directory_id']),
+            $connection->getIndexName($table, ['directory_id']),
             ['directory_id']
         )->addForeignKey(
-            $adapter->getForeignKeyName($table, 'directory_id', $dirStorageTable, 'directory_id'),
+            $connection->getForeignKeyName($table, 'directory_id', $dirStorageTable, 'directory_id'),
             'directory_id',
             $dirStorageTable,
             'directory_id',
@@ -114,7 +114,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             'File Storage'
         );
 
-        $adapter->createTable($ddlTable);
+        $connection->createTable($ddlTable);
         return $this;
     }
 
@@ -154,18 +154,18 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function loadByFilename(\Magento\MediaStorage\Model\File\Storage\Database $object, $filename, $path)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getMainTable()]
         )->where(
             'filename = ?',
             $filename
         )->where(
-            $adapter->prepareSqlCondition('directory', ['seq' => $path])
+            $connection->prepareSqlCondition('directory', ['seq' => $path])
         );
 
-        $row = $adapter->fetchRow($select);
+        $row = $connection->fetchRow($select);
         if ($row) {
             $row = $this->_decodeFileContent($row);
             $object->setData($row);
@@ -182,8 +182,8 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function clearFiles()
     {
-        $adapter = $this->getConnection();
-        $adapter->delete($this->getMainTable());
+        $connection = $this->getConnection();
+        $connection->delete($this->getMainTable());
 
         return $this;
     }
@@ -197,9 +197,9 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function getFiles($offset = 0, $count = 100)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getMainTable()],
             ['filename', 'content', 'directory']
         )->order(
@@ -209,7 +209,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             $offset
         );
 
-        $rows = $adapter->fetchAll($select);
+        $rows = $connection->fetchAll($select);
         return $this->_decodeAllFilesContent($rows);
     }
 
@@ -221,7 +221,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function saveFile($file)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $contentParam = new \Magento\Framework\DB\Statement\Parameter($file['content']);
         $contentParam->setIsBlob(true);
@@ -233,7 +233,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             'directory' => $file['directory'],
         ];
 
-        $adapter->insertOnDuplicate($this->getMainTable(), $data, ['content', 'upload_time']);
+        $connection->insertOnDuplicate($this->getMainTable(), $data, ['content', 'upload_time']);
 
         return $this;
     }
@@ -249,13 +249,13 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function renameFile($oldFilename, $oldPath, $newFilename, $newPath)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $dataUpdate = ['filename' => $newFilename, 'directory' => $newPath];
 
         $dataWhere = ['filename = ?' => $oldFilename];
-        $dataWhere[] = new \Zend_Db_Expr($adapter->prepareSqlCondition('directory', ['seq' => $oldPath]));
+        $dataWhere[] = new \Zend_Db_Expr($connection->prepareSqlCondition('directory', ['seq' => $oldPath]));
 
-        $adapter->update($this->getMainTable(), $dataUpdate, $dataWhere);
+        $connection->update($this->getMainTable(), $dataUpdate, $dataWhere);
 
         return $this;
     }
@@ -271,18 +271,18 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function copyFile($oldFilename, $oldPath, $newFilename, $newPath)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getMainTable()]
         )->where(
             'filename = ?',
             $oldFilename
         )->where(
-            $adapter->prepareSqlCondition('directory', ['seq' => $oldPath])
+            $connection->prepareSqlCondition('directory', ['seq' => $oldPath])
         );
 
-        $data = $adapter->fetchRow($select);
+        $data = $connection->fetchRow($select);
         if (!$data) {
             return $this;
         }
@@ -292,8 +292,8 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             $data['filename'] = $newFilename;
             $data['directory'] = $newPath;
 
-            $adapter = $this->getConnection();
-            $adapter->insertOnDuplicate($this->getMainTable(), $data, ['content', 'upload_time']);
+            $connection = $this->getConnection();
+            $connection->insertOnDuplicate($this->getMainTable(), $data, ['content', 'upload_time']);
         }
 
         return $this;
@@ -308,20 +308,20 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function fileExists($filename, $path)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getMainTable()]
         )->where(
             'filename = ?',
             $filename
         )->where(
-            $adapter->prepareSqlCondition('directory', ['seq' => $path])
+            $connection->prepareSqlCondition('directory', ['seq' => $path])
         )->limit(
             1
         );
 
-        $data = $adapter->fetchRow($select);
+        $data = $connection->fetchRow($select);
         return (bool)$data;
     }
 
@@ -354,12 +354,12 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function deleteFile($filename, $directory)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $where = ['filename = ?' => $filename];
-        $where[] = new \Zend_Db_Expr($adapter->prepareSqlCondition('directory', ['seq' => $directory]));
+        $where[] = new \Zend_Db_Expr($connection->prepareSqlCondition('directory', ['seq' => $directory]));
 
-        $adapter->delete($this->getMainTable(), $where);
+        $connection->delete($this->getMainTable(), $where);
     }
 
     /**
@@ -371,18 +371,18 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
     public function getDirectoryFiles($directory)
     {
         $directory = trim($directory, '/');
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getMainTable()],
             ['filename', 'directory', 'content']
         )->where(
-            $adapter->prepareSqlCondition('directory', ['seq' => $directory])
+            $connection->prepareSqlCondition('directory', ['seq' => $directory])
         )->order(
             'file_id'
         );
 
-        $rows = $adapter->fetchAll($select);
+        $rows = $connection->fetchAll($select);
         return $this->_decodeAllFilesContent($rows);
     }
 }

@@ -96,7 +96,7 @@ class Bestsellers extends AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         //$this->getConnection()->beginTransaction();
 
         try {
@@ -114,7 +114,7 @@ class Bestsellers extends AbstractReport
 
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
             // convert dates to current admin timezone
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $this->getTable('sales_order')],
                     'source_table.created_at',
@@ -122,7 +122,7 @@ class Bestsellers extends AbstractReport
                     $to
                 )
             );
-            $select = $adapter->select();
+            $select = $connection->select();
 
             $select->group([$periodExpr, 'source_table.store_id', 'order_item.product_id']);
 
@@ -159,7 +159,7 @@ class Bestsellers extends AbstractReport
             $select->useStraightJoin();
             // important!
             $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
 
             $columns = [
                 'period' => 'period',
@@ -185,7 +185,7 @@ class Bestsellers extends AbstractReport
 
             $select->group(['period', 'product_id']);
             $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
 
             // update rating
             $this->_updateRatingPos(self::AGGREGATION_DAILY);

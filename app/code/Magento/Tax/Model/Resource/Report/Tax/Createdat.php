@@ -46,10 +46,10 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $salesAdapter = $this->_resources->getConnection('sales');
 
-        $adapter->beginTransaction();
+        $connection->beginTransaction();
 
         try {
             if ($from !== null || $to !== null) {
@@ -66,7 +66,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
 
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect, false, $salesAdapter);
             // convert dates to current admin timezone
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['e' => $this->getTable('sales_order')],
                     'e.' . $aggregationField,
@@ -82,12 +82,12 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 'store_id' => 'e.store_id',
                 'code' => 'tax.code',
                 'order_status' => 'e.status',
-                'percent' => 'MAX(tax.' . $adapter->quoteIdentifier('percent') . ')',
+                'percent' => 'MAX(tax.' . $connection->quoteIdentifier('percent') . ')',
                 'orders_count' => 'COUNT(DISTINCT e.entity_id)',
                 'tax_base_amount_sum' => 'SUM(tax.base_amount * e.base_to_global_rate)',
             ];
 
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 ['tax' => $this->getTable('sales_order_tax')],
                 $columns
             )->joinInner(
@@ -108,7 +108,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $aggregatedData = $salesAdapter->fetchAll($select);
 
             if ($aggregatedData) {
-                $adapter->insertArray($this->getMainTable(), array_keys($columns), $aggregatedData);
+                $connection->insertArray($this->getMainTable(), array_keys($columns), $aggregatedData);
             }
 
             $columns = [
@@ -116,7 +116,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 'store_id' => new \Zend_Db_Expr(\Magento\Store\Model\Store::DEFAULT_STORE_ID),
                 'code' => 'code',
                 'order_status' => 'order_status',
-                'percent' => 'MAX(' . $adapter->quoteIdentifier('percent') . ')',
+                'percent' => 'MAX(' . $connection->quoteIdentifier('percent') . ')',
                 'orders_count' => 'SUM(orders_count)',
                 'tax_base_amount_sum' => 'SUM(tax_base_amount_sum)',
             ];
@@ -128,11 +128,11 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             }
 
             $select->group(['period', 'code', 'percent', 'order_status']);
-            $insertQuery = $adapter->insertFromSelect($select, $this->getMainTable(), array_keys($columns));
-            $adapter->query($insertQuery);
-            $adapter->commit();
+            $insertQuery = $connection->insertFromSelect($select, $this->getMainTable(), array_keys($columns));
+            $connection->query($insertQuery);
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
 

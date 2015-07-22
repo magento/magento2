@@ -28,7 +28,7 @@ class OrdersFixture extends Fixture
         }
         $this->fixtureModel->resetObjectManager();
 
-        $adapter = $this->getConnection('write');
+        $connection = $this->getConnection(\Magento\Framework\App\Resource::DEFAULT_CONNECTION);
 
         $quoteTableName = $this->getTableName(
             'quote',
@@ -268,7 +268,7 @@ class OrdersFixture extends Fixture
 
             // @codingStandardsIgnoreEnd
             foreach ($queries as $query) {
-                $adapter->query($query);
+                $connection->query($query);
             }
 
             $entityId++;

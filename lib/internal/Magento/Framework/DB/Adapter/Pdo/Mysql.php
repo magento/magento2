@@ -1910,12 +1910,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Set cache adapter
      *
-     * @param FrontendInterface $adapter
+     * @param FrontendInterface $cacheAdapter
      * @return $this
      */
-    public function setCacheAdapter(FrontendInterface $adapter)
+    public function setCacheAdapter(FrontendInterface $cacheAdapter)
     {
-        $this->_cacheAdapter = $adapter;
+        $this->_cacheAdapter = $cacheAdapter;
         return $this;
     }
 

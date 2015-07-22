@@ -31,8 +31,8 @@ class Usage extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function updateCustomerCouponTimesUsed($customerId, $couponId)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
         $select->from(
             $this->getMainTable(),
             ['times_used']
@@ -42,7 +42,7 @@ class Usage extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'customer_id = :customer_id'
         );
 
-        $timesUsed = $adapter->fetchOne($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
+        $timesUsed = $connection->fetchOne($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
 
         if ($timesUsed > 0) {
             $this->getConnection()->update(
@@ -68,16 +68,16 @@ class Usage extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByCustomerCoupon(\Magento\Framework\Object $object, $customerId, $couponId)
     {
-        $adapter = $this->getConnection();
-        if ($adapter && $couponId && $customerId) {
-            $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        if ($connection && $couponId && $customerId) {
+            $select = $connection->select()->from(
                 $this->getMainTable()
             )->where(
                 'customer_id =:customet_id'
             )->where(
                 'coupon_id = :coupon_id'
             );
-            $data = $adapter->fetchRow($select, [':coupon_id' => $couponId, ':customet_id' => $customerId]);
+            $data = $connection->fetchRow($select, [':coupon_id' => $couponId, ':customet_id' => $customerId]);
             if ($data) {
                 $object->setData($data);
             }

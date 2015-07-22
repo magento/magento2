@@ -225,8 +225,8 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     {
         $this->_prepareDefaultFinalPriceTable();
 
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
         )->join(
@@ -269,7 +269,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         );
 
         // add enable products limitation
-        $statusCond = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $statusCond = $connection->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $statusCond, true);
         if ($this->moduleManager->isEnabled('Magento_Tax')) {
             $taxClassId = $this->_addAttributeToSelect($select, 'tax_class_id', 'e.entity_id', 'cs.store_id');
@@ -282,22 +282,22 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         $specialPrice = $this->_addAttributeToSelect($select, 'special_price', 'e.entity_id', 'cs.store_id');
         $specialFrom = $this->_addAttributeToSelect($select, 'special_from_date', 'e.entity_id', 'cs.store_id');
         $specialTo = $this->_addAttributeToSelect($select, 'special_to_date', 'e.entity_id', 'cs.store_id');
-        $currentDate = $adapter->getDatePartSql('cwd.website_date');
-        $groupPrice = $adapter->getCheckSql('gp.price IS NULL', "{$price}", 'gp.price');
+        $currentDate = $connection->getDatePartSql('cwd.website_date');
+        $groupPrice = $connection->getCheckSql('gp.price IS NULL', "{$price}", 'gp.price');
 
-        $specialFromDate = $adapter->getDatePartSql($specialFrom);
-        $specialToDate = $adapter->getDatePartSql($specialTo);
+        $specialFromDate = $connection->getDatePartSql($specialFrom);
+        $specialToDate = $connection->getDatePartSql($specialTo);
 
-        $specialFromUse = $adapter->getCheckSql("{$specialFromDate} <= {$currentDate}", '1', '0');
-        $specialToUse = $adapter->getCheckSql("{$specialToDate} >= {$currentDate}", '1', '0');
-        $specialFromHas = $adapter->getCheckSql("{$specialFrom} IS NULL", '1', "{$specialFromUse}");
-        $specialToHas = $adapter->getCheckSql("{$specialTo} IS NULL", '1', "{$specialToUse}");
-        $finalPrice = $adapter->getCheckSql(
+        $specialFromUse = $connection->getCheckSql("{$specialFromDate} <= {$currentDate}", '1', '0');
+        $specialToUse = $connection->getCheckSql("{$specialToDate} >= {$currentDate}", '1', '0');
+        $specialFromHas = $connection->getCheckSql("{$specialFrom} IS NULL", '1', "{$specialFromUse}");
+        $specialToHas = $connection->getCheckSql("{$specialTo} IS NULL", '1', "{$specialToUse}");
+        $finalPrice = $connection->getCheckSql(
             "{$specialFromHas} > 0 AND {$specialToHas} > 0" . " AND {$specialPrice} < {$price}",
             $specialPrice,
             $price
         );
-        $finalPrice = $adapter->getCheckSql("{$groupPrice} < {$finalPrice}", $groupPrice, $finalPrice);
+        $finalPrice = $connection->getCheckSql("{$groupPrice} < {$finalPrice}", $groupPrice, $finalPrice);
 
         $select->columns(
             [
@@ -330,7 +330,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         );
 
         $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
-        $adapter->query($query);
+        $connection->query($query);
         return $this;
     }
 
@@ -384,14 +384,14 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _applyCustomOption()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $coaTable = $this->_getCustomOptionAggregateTable();
         $copTable = $this->_getCustomOptionPriceTable();
 
         $this->_prepareCustomOptionAggregateTable();
         $this->_prepareCustomOptionPriceTable();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['i' => $this->_getDefaultFinalPriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
@@ -426,28 +426,28 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             ['i.entity_id', 'i.customer_group_id', 'i.website_id', 'o.option_id']
         );
 
-        $optPriceType = $adapter->getCheckSql('otps.option_type_price_id > 0', 'otps.price_type', 'otpd.price_type');
-        $optPriceValue = $adapter->getCheckSql('otps.option_type_price_id > 0', 'otps.price', 'otpd.price');
+        $optPriceType = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price_type', 'otpd.price_type');
+        $optPriceValue = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price', 'otpd.price');
         $minPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
-        $minPriceExpr = $adapter->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
+        $minPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
         $minPriceMin = new \Zend_Db_Expr("MIN({$minPriceExpr})");
-        $minPrice = $adapter->getCheckSql("MIN(o.is_require) = 1", $minPriceMin, '0');
+        $minPrice = $connection->getCheckSql("MIN(o.is_require) = 1", $minPriceMin, '0');
 
         $tierPriceRound = new \Zend_Db_Expr("ROUND(i.base_tier * ({$optPriceValue} / 100), 4)");
-        $tierPriceExpr = $adapter->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
+        $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
         $tierPriceMin = new \Zend_Db_Expr("MIN({$tierPriceExpr})");
-        $tierPriceValue = $adapter->getCheckSql("MIN(o.is_require) > 0", $tierPriceMin, 0);
-        $tierPrice = $adapter->getCheckSql("MIN(i.base_tier) IS NOT NULL", $tierPriceValue, "NULL");
+        $tierPriceValue = $connection->getCheckSql("MIN(o.is_require) > 0", $tierPriceMin, 0);
+        $tierPrice = $connection->getCheckSql("MIN(i.base_tier) IS NOT NULL", $tierPriceValue, "NULL");
 
         $groupPriceRound = new \Zend_Db_Expr("ROUND(i.base_group_price * ({$optPriceValue} / 100), 4)");
-        $groupPriceExpr = $adapter->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $groupPriceRound);
+        $groupPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $groupPriceRound);
         $groupPriceMin = new \Zend_Db_Expr("MIN({$groupPriceExpr})");
-        $groupPriceValue = $adapter->getCheckSql("MIN(o.is_require) > 0", $groupPriceMin, 0);
-        $groupPrice = $adapter->getCheckSql("MIN(i.base_group_price) IS NOT NULL", $groupPriceValue, "NULL");
+        $groupPriceValue = $connection->getCheckSql("MIN(o.is_require) > 0", $groupPriceMin, 0);
+        $groupPrice = $connection->getCheckSql("MIN(i.base_group_price) IS NOT NULL", $groupPriceValue, "NULL");
 
         $maxPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
-        $maxPriceExpr = $adapter->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $maxPriceRound);
-        $maxPrice = $adapter->getCheckSql(
+        $maxPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $maxPriceRound);
+        $maxPrice = $connection->getCheckSql(
             "(MIN(o.type)='radio' OR MIN(o.type)='drop_down')",
             "MAX({$maxPriceExpr})",
             "SUM({$maxPriceExpr})"
@@ -463,9 +463,9 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         );
 
         $query = $select->insertFromSelect($coaTable);
-        $adapter->query($query);
+        $connection->query($query);
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['i' => $this->_getDefaultFinalPriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
@@ -494,24 +494,24 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             []
         );
 
-        $optPriceType = $adapter->getCheckSql('ops.option_price_id > 0', 'ops.price_type', 'opd.price_type');
-        $optPriceValue = $adapter->getCheckSql('ops.option_price_id > 0', 'ops.price', 'opd.price');
+        $optPriceType = $connection->getCheckSql('ops.option_price_id > 0', 'ops.price_type', 'opd.price_type');
+        $optPriceValue = $connection->getCheckSql('ops.option_price_id > 0', 'ops.price', 'opd.price');
 
         $minPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
-        $priceExpr = $adapter->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
-        $minPrice = $adapter->getCheckSql("{$priceExpr} > 0 AND o.is_require > 1", $priceExpr, 0);
+        $priceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
+        $minPrice = $connection->getCheckSql("{$priceExpr} > 0 AND o.is_require > 1", $priceExpr, 0);
 
         $maxPrice = $priceExpr;
 
         $tierPriceRound = new \Zend_Db_Expr("ROUND(i.base_tier * ({$optPriceValue} / 100), 4)");
-        $tierPriceExpr = $adapter->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
-        $tierPriceValue = $adapter->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require > 0", $tierPriceExpr, 0);
-        $tierPrice = $adapter->getCheckSql("i.base_tier IS NOT NULL", $tierPriceValue, "NULL");
+        $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
+        $tierPriceValue = $connection->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require > 0", $tierPriceExpr, 0);
+        $tierPrice = $connection->getCheckSql("i.base_tier IS NOT NULL", $tierPriceValue, "NULL");
 
         $groupPriceRound = new \Zend_Db_Expr("ROUND(i.base_group_price * ({$optPriceValue} / 100), 4)");
-        $groupPriceExpr = $adapter->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $groupPriceRound);
-        $groupPriceValue = $adapter->getCheckSql("{$groupPriceExpr} > 0 AND o.is_require > 0", $groupPriceExpr, 0);
-        $groupPrice = $adapter->getCheckSql("i.base_group_price IS NOT NULL", $groupPriceValue, "NULL");
+        $groupPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $groupPriceRound);
+        $groupPriceValue = $connection->getCheckSql("{$groupPriceExpr} > 0 AND o.is_require > 0", $groupPriceExpr, 0);
+        $groupPrice = $connection->getCheckSql("i.base_group_price IS NOT NULL", $groupPriceValue, "NULL");
 
         $select->columns(
             [
@@ -523,9 +523,9 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         );
 
         $query = $select->insertFromSelect($coaTable);
-        $adapter->query($query);
+        $connection->query($query);
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             [$coaTable],
             [
                 'entity_id',
@@ -540,10 +540,10 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             ['entity_id', 'customer_group_id', 'website_id']
         );
         $query = $select->insertFromSelect($copTable);
-        $adapter->query($query);
+        $connection->query($query);
 
         $table = ['i' => $this->_getDefaultFinalPriceTable()];
-        $select = $adapter->select()->join(
+        $select = $connection->select()->join(
             ['io' => $copTable],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
             ' AND i.website_id = io.website_id',
@@ -553,12 +553,12 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             [
                 'min_price' => new \Zend_Db_Expr('i.min_price + io.min_price'),
                 'max_price' => new \Zend_Db_Expr('i.max_price + io.max_price'),
-                'tier_price' => $adapter->getCheckSql(
+                'tier_price' => $connection->getCheckSql(
                     'i.tier_price IS NOT NULL',
                     'i.tier_price + io.tier_price',
                     'NULL'
                 ),
-                'group_price' => $adapter->getCheckSql(
+                'group_price' => $connection->getCheckSql(
                     'i.group_price IS NOT NULL',
                     'i.group_price + io.group_price',
                     'NULL'
@@ -566,10 +566,10 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             ]
         );
         $query = $select->crossUpdateFromSelect($table);
-        $adapter->query($query);
+        $connection->query($query);
 
-        $adapter->delete($coaTable);
-        $adapter->delete($copTable);
+        $connection->delete($coaTable);
+        $connection->delete($copTable);
 
         return $this;
     }
@@ -594,14 +594,14 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             'group_price' => 'group_price',
         ];
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $table = $this->_getDefaultFinalPriceTable();
-        $select = $adapter->select()->from($table, $columns);
+        $select = $connection->select()->from($table, $columns);
 
         $query = $select->insertFromSelect($this->getIdxTable(), [], false);
-        $adapter->query($query);
+        $connection->query($query);
 
-        $adapter->delete($table);
+        $connection->delete($table);
 
         return $this;
     }

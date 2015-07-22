@@ -127,10 +127,10 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     public function getTableCreateSql($tableName, $withForeignKeys = false)
     {
-        $adapter = $this->getConnection();
-        $quotedTableName = $adapter->quoteIdentifier($tableName);
+        $connection = $this->getConnection();
+        $quotedTableName = $connection->quoteIdentifier($tableName);
         $query = 'SHOW CREATE TABLE ' . $quotedTableName;
-        $row = $adapter->fetchRow($query);
+        $row = $connection->fetchRow($query);
 
         if (!$row || !isset($row['Table']) || !isset($row['Create Table'])) {
             return false;
@@ -147,10 +147,10 @@ class Helper extends \Magento\Framework\DB\Helper
             foreach ($matches as $match) {
                 $this->_foreignKeys[$tableName][] = sprintf(
                     'ADD CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s)%s%s',
-                    $adapter->quoteIdentifier($match[1]),
-                    $adapter->quoteIdentifier($match[2]),
-                    $adapter->quoteIdentifier($match[3]),
-                    $adapter->quoteIdentifier($match[4]),
+                    $connection->quoteIdentifier($match[1]),
+                    $connection->quoteIdentifier($match[2]),
+                    $connection->quoteIdentifier($match[3]),
+                    $connection->quoteIdentifier($match[4]),
                     isset($match[5]) ? $match[5] : '',
                     isset($match[7]) ? $match[7] : ''
                 );
@@ -255,13 +255,13 @@ class Helper extends \Magento\Framework\DB\Helper
     public function getPartInsertSql($tableName, $count = null, $offset = null)
     {
         $sql = null;
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from($tableName)->limit($count, $offset);
-        $query = $adapter->query($select);
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($tableName)->limit($count, $offset);
+        $query = $connection->query($select);
 
         while (true == ($row = $query->fetch())) {
             if ($sql === null) {
-                $sql = sprintf('INSERT INTO %s VALUES ', $adapter->quoteIdentifier($tableName));
+                $sql = sprintf('INSERT INTO %s VALUES ', $connection->quoteIdentifier($tableName));
             } else {
                 $sql .= ',';
             }
@@ -296,8 +296,8 @@ class Helper extends \Magento\Framework\DB\Helper
      */
     protected function _quoteRow($tableName, array $row)
     {
-        $adapter = $this->getConnection();
-        $describe = $adapter->describeTable($tableName);
+        $connection = $this->getConnection();
+        $describe = $connection->describeTable($tableName);
         $dataTypes = ['bigint', 'mediumint', 'smallint', 'tinyint'];
         $rowData = [];
         foreach ($row as $key => $data) {
@@ -306,7 +306,7 @@ class Helper extends \Magento\Framework\DB\Helper
             } elseif (in_array(strtolower($describe[$key]['DATA_TYPE']), $dataTypes)) {
                 $value = $data;
             } else {
-                $value = $adapter->quoteInto('?', $data);
+                $value = $connection->quoteInto('?', $data);
             }
             $rowData[] = $value;
         }

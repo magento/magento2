@@ -165,14 +165,14 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($conditionString === null) {
             return null;
         }
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $oldAlias = [
             \Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS . '.',
-            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS) . '.',
+            $connection->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS) . '.',
         ];
         $newAlias = [
             \Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS . '.',
-            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS) . '.',
+            $connection->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS) . '.',
         ];
         return str_replace($oldAlias, $newAlias, $conditionString);
     }

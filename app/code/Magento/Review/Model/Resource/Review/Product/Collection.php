@@ -218,7 +218,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected function _applyStoresFilterToSelect(\Zend_Db_Select $select = null)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $storesIds = $this->_storesIds;
         if (null === $select) {
             $select = $this->getSelect();
@@ -229,7 +229,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         }
 
         if (is_array($storesIds) && !empty($storesIds)) {
-            $inCond = $adapter->prepareSqlCondition('store.store_id', ['in' => $storesIds]);
+            $inCond = $connection->prepareSqlCondition('store.store_id', ['in' => $storesIds]);
             $select->join(
                 ['store' => $this->_reviewStoreTable],
                 'rt.review_id=store.review_id AND ' . $inCond,
@@ -240,7 +240,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         } else {
             $select->join(
                 ['store' => $this->_reviewStoreTable],
-                $adapter->quoteInto('rt.review_id=store.review_id AND store.store_id = ?', (int)$storesIds),
+                $connection->quoteInto('rt.review_id=store.review_id AND store.store_id = ?', (int)$storesIds),
                 []
             );
         }
@@ -534,21 +534,21 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected function _addStoreData()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         //$this->_getConditionSql('rdt.customer_id', array('null' => null));
         $reviewsIds = $this->getColumnValues('review_id');
         $storesToReviews = [];
         if (count($reviewsIds) > 0) {
             $reviewIdCondition = $this->_getConditionSql('review_id', ['in' => $reviewsIds]);
             $storeIdCondition = $this->_getConditionSql('store_id', ['gt' => 0]);
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->_reviewStoreTable
             )->where(
                 $reviewIdCondition
             )->where(
                 $storeIdCondition
             );
-            $result = $adapter->fetchAll($select);
+            $result = $connection->fetchAll($select);
             foreach ($result as $row) {
                 if (!isset($storesToReviews[$row['review_id']])) {
                     $storesToReviews[$row['review_id']] = [];

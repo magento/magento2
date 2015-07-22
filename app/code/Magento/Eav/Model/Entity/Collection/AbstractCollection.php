@@ -1312,7 +1312,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             return $this;
         }
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $attrTable = $this->_getAttributeTableAlias($attributeCode);
         if (isset($this->_joinAttributes[$attributeCode])) {
@@ -1350,13 +1350,13 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $attrFieldName = $attrTable . '.value';
         }
 
-        $fKey = $adapter->quoteColumnAs($fKey, null);
-        $pKey = $adapter->quoteColumnAs($pKey, null);
+        $fKey = $connection->quoteColumnAs($fKey, null);
+        $pKey = $connection->quoteColumnAs($pKey, null);
 
         $condArr = ["{$pKey} = {$fKey}"];
         if (!$attribute->getBackend()->isStatic()) {
             $condArr[] = $this->getConnection()->quoteInto(
-                $adapter->quoteColumnAs("{$attrTable}.attribute_id", null) . ' = ?',
+                $connection->quoteColumnAs("{$attrTable}.attribute_id", null) . ' = ?',
                 $attribute->getId()
             );
         }

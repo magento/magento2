@@ -76,14 +76,14 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
      */
     protected function _joinCustomers()
     {
-        /** @var $adapter \Magento\Framework\DB\Adapter\AdapterInterface */
-        $adapter = $this->getConnection();
+        /** @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
+        $connection = $this->getConnection();
         //Prepare fullname field result
-        $customerFullname = $adapter->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
+        $customerFullname = $connection->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
         $this->getSelect()->reset(
             \Zend_Db_Select::COLUMNS
         )->joinInner(
-            ['customer' => $adapter->getTableName('customer_entity')],
+            ['customer' => $connection->getTableName('customer_entity')],
             'customer.entity_id = detail.customer_id',
             []
         )->columns(

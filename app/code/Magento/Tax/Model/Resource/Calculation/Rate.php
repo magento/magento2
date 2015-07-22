@@ -53,14 +53,14 @@ class Rate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function isInRule($rateId)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('tax_calculation'),
             ['tax_calculation_rate_id']
         )->where(
             'tax_calculation_rate_id = ?',
             $rateId
         );
-        return $adapter->fetchCol($select);
+        return $connection->fetchCol($select);
     }
 }

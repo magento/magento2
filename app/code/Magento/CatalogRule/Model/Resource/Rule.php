@@ -191,16 +191,16 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $rule)
     {
-        $adapter = $this->getConnection();
-        $adapter->delete(
+        $connection = $this->getConnection();
+        $connection->delete(
             $this->getTable('catalogrule_product'),
             ['rule_id=?' => $rule->getId()]
         );
-        $adapter->delete(
+        $connection->delete(
             $this->getTable('catalogrule_customer_group'),
             ['rule_id=?' => $rule->getId()]
         );
-        $adapter->delete(
+        $connection->delete(
             $this->getTable('catalogrule_group_website'),
             ['rule_id=?' => $rule->getId()]
         );
@@ -239,8 +239,8 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     public function getRulePrices(\DateTime $date, $websiteId, $customerGroupId, $productIds)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('catalogrule_product_price'),
             ['product_id', 'rule_price']
         )->where(
@@ -256,7 +256,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
             'product_id IN(?)',
             $productIds
         );
-        return $adapter->fetchPairs($select);
+        return $connection->fetchPairs($select);
     }
 
     /**
@@ -270,11 +270,11 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     public function getRulesFromProduct($date, $websiteId, $customerGroupId, $productId)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if (is_string($date)) {
             $date = strtotime($date);
         }
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('catalogrule_product')
         )->where(
             'website_id = ?',
@@ -293,6 +293,6 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
             $date
         );
 
-        return $adapter->fetchAll($select);
+        return $connection->fetchAll($select);
     }
 }

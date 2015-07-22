@@ -67,7 +67,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             $mockObjects[] = [$mockObjectName, $mockObject];
         }
 
-        $adapterInterfaceMock = $this->getMockForAbstractClass(
+        $connectionInterfaceMock = $this->getMockForAbstractClass(
             '\Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             '',
@@ -76,14 +76,14 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $adapterInterfaceMock->expects($this->exactly(14))
+        $connectionInterfaceMock->expects($this->exactly(14))
             ->method('getTableName')
             ->willReturn('table_name');
 
         $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $resourceMock->expects($this->exactly(15))
             ->method('getConnection')
-            ->willReturn($adapterInterfaceMock);
+            ->willReturn($connectionInterfaceMock);
 
         $websiteMock = $this->getMock('\Magento\Store\Model\Website', ['getId', 'getName'], [], '', false);
         $websiteMock->expects($this->once())
@@ -212,7 +212,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $adapterInterfaceMock = $this->getMockForAbstractClass(
+        $connectionMock = $this->getMockForAbstractClass(
             '\Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             '',
@@ -221,14 +221,14 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $adapterInterfaceMock->expects($this->never())
+        $connectionMock->expects($this->never())
             ->method('query');
 
         $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $resourceMock->expects($this->never())
             ->method('getConnection')
             ->with($this->equalTo('write'))
-            ->willReturn($adapterInterfaceMock);
+            ->willReturn($connectionMock);
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->never())

@@ -102,8 +102,8 @@ class Query extends AbstractDb
      */
     public function loadByQuery(AbstractModel $object, $value)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
 
         $synonymSelect = $this->getQuerySelect($object, 'query_text', $value);
         $querySelect = $this->getQuerySelect($object, 'synonym_for', $value);

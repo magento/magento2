@@ -122,9 +122,9 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Zend_Db_Select $select,
         $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
     ) {
-        $adapter = $this->getConnection();
-        $ifNullPlainValue = $adapter->getCheckSql('store.plain_value IS NULL', 'def.plain_value', 'store.plain_value');
-        $ifNullHtmlValue = $adapter->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
+        $connection = $this->getConnection();
+        $ifNullPlainValue = $connection->getCheckSql('store.plain_value IS NULL', 'def.plain_value', 'store.plain_value');
+        $ifNullHtmlValue = $connection->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
 
         $select->joinLeft(
             ['def' => $this->getTable('variable_value')],
@@ -132,7 +132,7 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
             []
         )->joinLeft(
             ['store' => $this->getTable('variable_value')],
-            'store.variable_id = def.variable_id AND store.store_id = ' . $adapter->quote($storeId),
+            'store.variable_id = def.variable_id AND store.store_id = ' . $connection->quote($storeId),
             []
         )->columns(
             [

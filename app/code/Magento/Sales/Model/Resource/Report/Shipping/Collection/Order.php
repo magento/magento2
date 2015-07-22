@@ -53,16 +53,16 @@ class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractColl
      */
     protected function _getSelectedColumns()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if ('month' == $this->_period) {
-            $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m');
+            $this->_periodFormat = $connection->getDateFormatSql('period', '%Y-%m');
         } elseif ('year' == $this->_period) {
-            $this->_periodFormat = $adapter->getDateExtractSql(
+            $this->_periodFormat = $connection->getDateExtractSql(
                 'period',
                 \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_YEAR
             );
         } else {
-            $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m-%d');
+            $this->_periodFormat = $connection->getDateFormatSql('period', '%Y-%m-%d');
         }
 
         if (!$this->isTotals() && !$this->isSubTotals()) {

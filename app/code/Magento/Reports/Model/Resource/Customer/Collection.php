@@ -186,9 +186,9 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
         $customerIds = $this->getColumnValues($this->getResource()->getIdFieldName());
 
         if ($this->_addOrderStatistics && !empty($customerIds)) {
-            $adapter = $this->orderResource->getConnection();
-            $baseSubtotalRefunded = $adapter->getIfNullSql('orders.base_subtotal_refunded', 0);
-            $baseSubtotalCanceled = $adapter->getIfNullSql('orders.base_subtotal_canceled', 0);
+            $connection = $this->orderResource->getConnection();
+            $baseSubtotalRefunded = $connection->getIfNullSql('orders.base_subtotal_refunded', 0);
+            $baseSubtotalCanceled = $connection->getIfNullSql('orders.base_subtotal_canceled', 0);
 
             $totalExpr = $this->_addOrderStatFilter ?
                 "(orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded})*orders.base_to_global_rate" :

@@ -167,14 +167,14 @@ class IndexStructure
     }
 
     /**
-     * @param AdapterInterface $adapter
+     * @param AdapterInterface $connection
      * @param string $tableName
      * @return void
      */
-    private function dropTable(AdapterInterface $adapter, $tableName)
+    private function dropTable(AdapterInterface $connection, $tableName)
     {
-        if ($adapter->isTableExists($tableName)) {
-            $adapter->dropTable($tableName);
+        if ($connection->isTableExists($tableName)) {
+            $connection->dropTable($tableName);
         }
     }
 }

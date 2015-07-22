@@ -54,10 +54,10 @@ class Logger
             throw new \InvalidArgumentException("Log data is empty");
         }
 
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
-        $adapter = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        $connection = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
 
-        $adapter->insertOnDuplicate(
+        $connection->insertOnDuplicate(
             $this->resource->getTableName('customer_log'),
             array_merge(['customer_id' => $customerId], $data),
             array_keys($data)
@@ -94,10 +94,10 @@ class Logger
      */
     protected function loadLogData($customerId)
     {
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
-        $adapter = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        $connection = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
 
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from(
                 ['cl' => $this->resource->getTableName('customer_log')]
             )
@@ -115,6 +115,6 @@ class Logger
             )
             ->limit(1);
 
-        return $adapter->fetchRow($select);
+        return $connection->fetchRow($select);
     }
 }

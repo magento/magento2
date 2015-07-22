@@ -93,9 +93,9 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function dropAllQuoteChildItems($productId)
     {
-        $adapter = $this->quoteResource->getConnection();
-        $select = $adapter->select();
-        $quoteItemIds = $adapter->fetchCol(
+        $connection = $this->quoteResource->getConnection();
+        $select = $connection->select();
+        $quoteItemIds = $connection->fetchCol(
             $select->from(
                 $this->getTable('quote_item'),
                 ['item_id']
@@ -106,7 +106,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         if ($quoteItemIds) {
-            $adapter->delete(
+            $connection->delete(
                 $this->getTable('quote_item'),
                 ['parent_item_id IN(?)' => $quoteItemIds]
             );

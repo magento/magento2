@@ -54,10 +54,10 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
         if (!$this->hasEntity() && empty($entityIds)) {
             return $this;
         }
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $table = $this->getIdxTable();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             'entity_id'
         )->joinLeft(
@@ -72,8 +72,8 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
         );
         $this->_addWebsiteJoinToSelect($select, true);
         $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $minCheckSql = $adapter->getCheckSql('le.required_options = 0', 'i.min_price', 0);
-        $maxCheckSql = $adapter->getCheckSql('le.required_options = 0', 'i.max_price', 0);
+        $minCheckSql = $connection->getCheckSql('le.required_options = 0', 'i.min_price', 0);
+        $maxCheckSql = $connection->getCheckSql('le.required_options = 0', 'i.max_price', 0);
         $select->columns(
             'website_id',
             'cw'
@@ -123,7 +123,7 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
         );
 
         $query = $select->insertFromSelect($table);
-        $adapter->query($query);
+        $connection->query($query);
 
         return $this;
     }

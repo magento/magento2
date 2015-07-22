@@ -400,9 +400,9 @@ class Full
         $limit = 100
     ) {
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()
+        $select = $connection->select()
             ->useStraightJoin(true)
             ->from(
                 ['e' => $this->getTable('catalog_product_entity')],
@@ -410,7 +410,7 @@ class Full
             )
             ->join(
                 ['website' => $this->getTable('catalog_product_website')],
-                $adapter->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
+                $connection->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
                 []
             );
 
@@ -420,7 +420,7 @@ class Full
 
         $select->where('e.entity_id > ?', $lastProductId)->limit($limit)->order('e.entity_id');
 
-        $result = $adapter->fetchAll($select);
+        $result = $connection->fetchAll($select);
 
         return $result;
     }
@@ -558,17 +558,17 @@ class Full
     {
         $result = [];
         $selects = [];
-        $adapter = $this->getConnection();
-        $ifStoreValue = $adapter->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
+        $connection = $this->getConnection();
+        $ifStoreValue = $connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
-                $selects[] = $adapter->select()->from(
+                $selects[] = $connection->select()->from(
                     ['t_default' => $tableName],
                     ['entity_id', 'attribute_id']
                 )->joinLeft(
                     ['t_store' => $tableName],
-                    $adapter->quoteInto(
+                    $connection->quoteInto(
                         't_default.entity_id=t_store.entity_id' .
                         ' AND t_default.attribute_id=t_store.attribute_id' .
                         ' AND t_store.store_id = ?',
@@ -589,8 +589,8 @@ class Full
         }
 
         if ($selects) {
-            $select = $adapter->select()->union($selects, \Zend_Db_Select::SQL_UNION_ALL);
-            $query = $adapter->query($select);
+            $select = $connection->select()->union($selects, \Zend_Db_Select::SQL_UNION_ALL);
+            $query = $connection->query($select);
             while ($row = $query->fetch()) {
                 $result[$row['entity_id']][$row['attribute_id']] = $row['value'];
             }

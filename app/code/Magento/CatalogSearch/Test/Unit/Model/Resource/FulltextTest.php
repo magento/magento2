@@ -18,7 +18,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     /**
      * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connection;
     /**
      * @var Resource|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -43,12 +43,12 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('getResources')
             ->willReturn($this->resource);
-        $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->willReturn($this->adapter);
+            ->willReturn($this->connection);
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(
@@ -65,7 +65,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->with('search_query', 'core_read')
             ->willReturn('table_name_search_query');
-        $this->adapter->expects($this->once())
+        $this->connection->expects($this->once())
             ->method('update')
             ->with('table_name_search_query', ['is_processed' => 0], ['is_processed != 0'])
             ->willReturn(10);

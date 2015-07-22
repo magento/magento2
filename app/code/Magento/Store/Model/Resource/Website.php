@@ -126,11 +126,11 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function countAll($includeDefault = false)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from($this->getMainTable(), 'COUNT(*)');
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable(), 'COUNT(*)');
         if (!$includeDefault) {
             $select->where('website_id <> ?', 0);
         }
-        return (int)$adapter->fetchOne($select);
+        return (int)$connection->fetchOne($select);
     }
 }

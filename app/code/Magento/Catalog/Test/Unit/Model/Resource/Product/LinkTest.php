@@ -20,7 +20,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapter;
+    protected $connection;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -31,7 +31,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->adapter =
+        $this->connection =
             $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
 
         $this->model = $objectManager->getObject(
@@ -50,11 +50,11 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getConnection'
         )->will(
-            $this->returnValue($this->adapter)
+            $this->returnValue($this->connection)
         );
         
 
-        $this->adapter->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
     }
 
     public function testGetAttributesByType()
@@ -74,7 +74,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->dbSelect)
         );
-        $this->adapter->expects($this->once())->method('fetchAll')->will($this->returnValue($result));
+        $this->connection->expects($this->once())->method('fetchAll')->will($this->returnValue($result));
         $this->assertEquals($result, $this->model->getAttributesByType($typeId));
     }
 
@@ -110,7 +110,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->prepareAdapter();
         $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
         $this->dbSelect->expects($this->atLeastOnce())->method('where')->will($this->returnValue($this->dbSelect));
-        $this->adapter->expects(
+        $this->connection->expects(
             $this->once()
         )->method(
             'fetchAll'
@@ -136,7 +136,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
         $this->dbSelect->expects($this->any())->method('where')->will($this->returnValue($this->dbSelect));
 
-        $this->adapter->expects(
+        $this->connection->expects(
             $this->once()
         )->method(
             'fetchAll'

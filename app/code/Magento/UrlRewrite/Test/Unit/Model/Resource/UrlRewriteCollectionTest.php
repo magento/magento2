@@ -27,7 +27,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapter;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
@@ -43,7 +43,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->select = $this->getMock('Zend_Db_Select', ['from', 'where'], [], '', false);
-        $this->adapter = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'prepareSqlCondition', 'quoteIdentifier'],
             [],
@@ -63,15 +63,15 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->any())
             ->method('where')
             ->will($this->returnSelf());
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('select')
             ->will($this->returnValue($this->select));
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->will($this->returnArgument(0));
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->adapter));
+            ->will($this->returnValue($this->connectionMock));
         $this->resource->expects($this->any())
             ->method('getMainTable')
             ->will($this->returnValue('test_main_table'));
@@ -98,7 +98,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddStoreFilterIfStoreIsArray($storeId, $withAdmin, $condition)
     {
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('prepareSqlCondition')
             ->with('store_id', ['in' => $condition]);
 
@@ -129,7 +129,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
         $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
 
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('prepareSqlCondition')
             ->with('store_id', ['in' => $condition]);
 

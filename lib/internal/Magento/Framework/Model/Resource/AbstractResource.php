@@ -67,8 +67,8 @@ abstract class AbstractResource
      */
     public function addCommitCallback($callback)
     {
-        $adapterKey = spl_object_hash($this->getConnection());
-        self::$_commitCallbacks[$adapterKey][] = $callback;
+        $connectionKey = spl_object_hash($this->getConnection());
+        self::$_commitCallbacks[$connectionKey][] = $callback;
         return $this;
     }
 
@@ -85,10 +85,10 @@ abstract class AbstractResource
          * Process after commit callbacks
          */
         if ($this->getConnection()->getTransactionLevel() === 0) {
-            $adapterKey = spl_object_hash($this->getConnection());
-            if (isset(self::$_commitCallbacks[$adapterKey])) {
-                $callbacks = self::$_commitCallbacks[$adapterKey];
-                self::$_commitCallbacks[$adapterKey] = [];
+            $connectionKey = spl_object_hash($this->getConnection());
+            if (isset(self::$_commitCallbacks[$connectionKey])) {
+                $callbacks = self::$_commitCallbacks[$connectionKey];
+                self::$_commitCallbacks[$connectionKey] = [];
                 try {
                     foreach ($callbacks as $callback) {
                         call_user_func($callback);
@@ -111,8 +111,8 @@ abstract class AbstractResource
     public function rollBack()
     {
         $this->getConnection()->rollBack();
-        $adapterKey = spl_object_hash($this->getConnection());
-        self::$_commitCallbacks[$adapterKey] = [];
+        $connectionKey = spl_object_hash($this->getConnection());
+        self::$_commitCallbacks[$connectionKey] = [];
         return $this;
     }
 

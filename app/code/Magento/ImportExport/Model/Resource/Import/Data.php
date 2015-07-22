@@ -57,9 +57,9 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function getIterator()
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select()->from($this->getMainTable(), ['data'])->order('id ASC');
-        $stmt = $adapter->query($select);
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable(), ['data'])->order('id ASC');
+        $stmt = $connection->query($select);
 
         $stmt->setFetchMode(\Zend_Db::FETCH_NUM);
         if ($stmt instanceof \IteratorAggregate) {
@@ -112,8 +112,8 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function getUniqueColumnData($code)
     {
-        $adapter = $this->getConnection();
-        $values = array_unique($adapter->fetchCol($adapter->select()->from($this->getMainTable(), [$code])));
+        $connection = $this->getConnection();
+        $values = array_unique($connection->fetchCol($connection->select()->from($this->getMainTable(), [$code])));
 
         if (count($values) != 1) {
             throw new \Magento\Framework\Exception\LocalizedException(

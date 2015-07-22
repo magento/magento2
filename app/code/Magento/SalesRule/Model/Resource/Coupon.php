@@ -57,7 +57,7 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadPrimaryByRule(\Magento\SalesRule\Model\Coupon $object, $rule)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         if ($rule instanceof \Magento\SalesRule\Model\Rule) {
             $ruleId = $rule->getId();
@@ -65,7 +65,7 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $ruleId = (int)$rule;
         }
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             'rule_id = :rule_id'
@@ -73,7 +73,7 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'is_primary = :is_primary'
         );
 
-        $data = $adapter->fetchRow($select, [':rule_id' => $ruleId, ':is_primary' => 1]);
+        $data = $connection->fetchRow($select, [':rule_id' => $ruleId, ':is_primary' => 1]);
 
         if (!$data) {
             return false;
@@ -93,12 +93,12 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function exists($code)
     {
-        $adapter = $this->getConnection();
-        $select = $adapter->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
         $select->from($this->getMainTable(), 'code');
         $select->where('code = :code');
 
-        if ($adapter->fetchOne($select, ['code' => $code]) === false) {
+        if ($connection->fetchOne($select, ['code' => $code]) === false) {
             return false;
         }
         return true;

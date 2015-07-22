@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+
 class DatabaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -95,12 +97,12 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      */
     public function loadDataProvider()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select', 'fetchOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $selectMock = $this->getMock('Zend_Db_Select', ['where', 'from'], [], '', false);
+        $selectMock = $this->getMock('\Magento\Framework\DB\Select', ['where', 'from'], [], '', false);
 
         $selectMock->expects($this->any())
             ->method('where')
@@ -110,17 +112,17 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('from')
             ->will($this->returnSelf());
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('select')
             ->will($this->returnValue($selectMock));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('fetchOne')
             ->will($this->returnValue('loaded_value'));
 
         return [
             'with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($adapterMock),
+                'options' => $this->getOptionsWithStoreData($connectionMock),
                 'expected' => 'loaded_value',
 
             ],
@@ -132,10 +134,10 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Zend_Db_Adapter_Abstract|\PHPUnit_Framework_MockObject_MockObject $adapterMock
+     * @param AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connectionMock
      * @return array
      */
-    public function getOptionsWithStoreData($adapterMock)
+    public function getOptionsWithStoreData($connectionMock)
     {
         return [
             'adapter_callback' => '',
@@ -144,18 +146,18 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             'tags_table' => 'tags_table',
             'tags_table_callback' => 'tags_table_callback',
             'store_data' => 'store_data',
-            'adapter' => $adapterMock,
+            'adapter' => $connectionMock,
         ];
     }
 
     /**
-     * @param null|\Zend_Db_Adapter_Abstract|\PHPUnit_Framework_MockObject_MockObject $adapterMock
+     * @param null|AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connectionMock
      * @return array
      */
-    public function getOptionsWithoutStoreData($adapterMock = null)
+    public function getOptionsWithoutStoreData($connectionMock = null)
     {
-        if (null === $adapterMock) {
-            $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')->disableOriginalConstructor()
+        if (null === $connectionMock) {
+            $connectionMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')->disableOriginalConstructor()
                 ->getMockForAbstractClass();
         }
 
@@ -166,7 +168,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             'tags_table' => 'tags_table',
             'tags_table_callback' => 'tags_table_callback',
             'store_data' => '',
-            'adapter' => $adapterMock
+            'adapter' => $connectionMock
         ];
     }
 
@@ -228,11 +230,11 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $result
-     * @return \Zend_Db_Adapter_Abstract|\PHPUnit_Framework_MockObject_MockObject
+     * @return AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getSaveAdapterMock($result)
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['quoteIdentifier', 'query'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -246,15 +248,15 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('rowCount')
             ->will($this->returnValue($result));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->will($this->returnValue('data'));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('query')
             ->will($this->returnValue($dbStatementMock));
 
-        return $adapterMock;
+        return $connectionMock;
     }
 
     /**
@@ -279,18 +281,18 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      */
     public function removeDataProvider()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['delete'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('delete')
             ->will($this->returnValue(true));
 
         return [
             'with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($adapterMock),
+                'options' => $this->getOptionsWithStoreData($connectionMock),
                 'expected' => true,
 
             ],
@@ -324,54 +326,54 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      */
     public function cleanDataProvider()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['query', 'delete'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('query')
             ->will($this->returnValue(false));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('delete')
             ->will($this->returnValue(true));
 
         return [
             'mode_all_with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($adapterMock),
+                'options' => $this->getOptionsWithStoreData($connectionMock),
                 'mode' => \Zend_Cache::CLEANING_MODE_ALL,
                 'expected' => false,
 
             ],
             'mode_all_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($adapterMock),
+                'options' => $this->getOptionsWithoutStoreData($connectionMock),
                 'mode' => \Zend_Cache::CLEANING_MODE_ALL,
                 'expected' => false,
             ],
             'mode_old_with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($adapterMock),
+                'options' => $this->getOptionsWithStoreData($connectionMock),
                 'mode' => \Zend_Cache::CLEANING_MODE_OLD,
                 'expected' => true,
 
             ],
             'mode_old_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($adapterMock),
+                'options' => $this->getOptionsWithoutStoreData($connectionMock),
                 'mode' => \Zend_Cache::CLEANING_MODE_OLD,
                 'expected' => true,
             ],
             'mode_matching_tag_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($adapterMock),
+                'options' => $this->getOptionsWithoutStoreData($connectionMock),
                 'mode' => \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
                 'expected' => true,
             ],
             'mode_not_matching_tag_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($adapterMock),
+                'options' => $this->getOptionsWithoutStoreData($connectionMock),
                 'mode' => \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
                 'expected' => true,
             ],
             'mode_matching_any_tag_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($adapterMock),
+                'options' => $this->getOptionsWithoutStoreData($connectionMock),
                 'mode' => \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 'expected' => true,
             ],
@@ -414,7 +416,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      */
     public function getIdsDataProvider()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -425,17 +427,17 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('from')
             ->will($this->returnSelf());
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('select')
             ->will($this->returnValue($selectMock));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('fetchCol')
             ->will($this->returnValue(['value_one', 'value_two']));
 
         return [
             'with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($adapterMock),
+                'options' => $this->getOptionsWithStoreData($connectionMock),
                 'expected' => ['value_one', 'value_two'],
 
             ],
@@ -448,7 +450,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTags()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -463,18 +465,18 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('distinct')
             ->will($this->returnSelf());
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('select')
             ->will($this->returnValue($selectMock));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('fetchCol')
             ->will($this->returnValue(['value_one', 'value_two']));
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
             'Magento\Framework\Cache\Backend\Database',
-            ['options' => $this->getOptionsWithStoreData($adapterMock)]
+            ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
         $this->assertEquals(['value_one', 'value_two'], $database->getIds());
@@ -482,7 +484,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdsMatchingTags()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -509,18 +511,18 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('having')
             ->will($this->returnSelf());
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('select')
             ->will($this->returnValue($selectMock));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('fetchCol')
             ->will($this->returnValue(['value_one', 'value_two']));
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
             'Magento\Framework\Cache\Backend\Database',
-            ['options' => $this->getOptionsWithStoreData($adapterMock)]
+            ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
         $this->assertEquals(['value_one', 'value_two'], $database->getIdsMatchingTags());
@@ -528,7 +530,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdsNotMatchingTags()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -555,22 +557,22 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('having')
             ->will($this->returnSelf());
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('select')
             ->will($this->returnValue($selectMock));
 
-        $adapterMock->expects($this->at(1))
+        $connectionMock->expects($this->at(1))
             ->method('fetchCol')
             ->will($this->returnValue(['some_value_one']));
 
-        $adapterMock->expects($this->at(3))
+        $connectionMock->expects($this->at(3))
             ->method('fetchCol')
             ->will($this->returnValue(['some_value_two']));
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
             'Magento\Framework\Cache\Backend\Database',
-            ['options' => $this->getOptionsWithStoreData($adapterMock)]
+            ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
         $this->assertEquals(['some_value_one'], $database->getIdsNotMatchingTags());
@@ -578,7 +580,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdsMatchingAnyTags()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -593,18 +595,18 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('distinct')
             ->will($this->returnSelf());
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('select')
             ->will($this->returnValue($selectMock));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('fetchCol')
             ->will($this->returnValue(['some_value_one', 'some_value_two']));
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
             'Magento\Framework\Cache\Backend\Database',
-            ['options' => $this->getOptionsWithStoreData($adapterMock)]
+            ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
         $this->assertEquals(['some_value_one', 'some_value_two'], $database->getIds());
@@ -612,7 +614,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMetadatas()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select', 'fetchCol', 'fetchRow'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -627,22 +629,22 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->will($this->returnSelf());
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('select')
             ->will($this->returnValue($selectMock));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('fetchCol')
             ->will($this->returnValue(['some_value_one', 'some_value_two']));
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('fetchRow')
             ->will($this->returnValue(['expire_time' => '3', 'update_time' => 2]));
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
             'Magento\Framework\Cache\Backend\Database',
-            ['options' => $this->getOptionsWithStoreData($adapterMock)]
+            ['options' => $this->getOptionsWithStoreData($connectionMock)]
         );
 
         $this->assertEquals(
@@ -677,18 +679,18 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      */
     public function touchDataProvider()
     {
-        $adapterMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['update'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $adapterMock->expects($this->any())
+        $connectionMock->expects($this->any())
             ->method('update')
             ->will($this->returnValue(false));
 
         return [
             'with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($adapterMock),
+                'options' => $this->getOptionsWithStoreData($connectionMock),
                 'expected' => false,
 
             ],

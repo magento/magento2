@@ -55,19 +55,19 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $whereCond = [
-            $adapter->quoteInto('website_id IN(?)', $websiteIds),
-            $adapter->quoteInto('product_id IN(?)', $productIds),
+            $connection->quoteInto('website_id IN(?)', $websiteIds),
+            $connection->quoteInto('product_id IN(?)', $productIds),
         ];
         $whereCond = join(' AND ', $whereCond);
 
-        $adapter->beginTransaction();
+        $connection->beginTransaction();
         try {
-            $adapter->delete($this->getMainTable(), $whereCond);
-            $adapter->commit();
+            $connection->delete($this->getMainTable(), $whereCond);
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
 

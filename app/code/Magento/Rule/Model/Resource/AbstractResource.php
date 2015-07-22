@@ -156,7 +156,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function unbindRuleFromEntity($ruleIds, $entityIds, $entityType)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
 
         if (!is_array($entityIds)) {
@@ -168,13 +168,13 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
 
         $where = [];
         if (!empty($ruleIds)) {
-            $where[] = $adapter->quoteInto($entityInfo['rule_id_field'] . ' IN (?)', $ruleIds);
+            $where[] = $connection->quoteInto($entityInfo['rule_id_field'] . ' IN (?)', $ruleIds);
         }
         if (!empty($entityIds)) {
-            $where[] = $adapter->quoteInto($entityInfo['entity_id_field'] . ' IN (?)', $entityIds);
+            $where[] = $connection->quoteInto($entityInfo['entity_id_field'] . ' IN (?)', $entityIds);
         }
 
-        $adapter->delete($this->getTable($entityInfo['associations_table']), implode(' AND ', $where));
+        $connection->delete($this->getTable($entityInfo['associations_table']), implode(' AND ', $where));
 
         return $this;
     }

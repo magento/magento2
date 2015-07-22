@@ -149,12 +149,12 @@ abstract class AbstractAction
      */
     public function getRelationsByChild($childIds)
     {
-        $adapter = $this->_getConnection();
-        $select = $adapter->select()
+        $connection = $this->_getConnection();
+        $select = $connection->select()
             ->from($this->_getTable('catalog_product_relation'), 'parent_id')
             ->where('child_id IN(?)', $childIds);
 
-        return $adapter->fetchCol($select);
+        return $connection->fetchCol($select);
     }
 
     /**
@@ -223,7 +223,7 @@ abstract class AbstractAction
      */
     protected function _reindexRows($productIds = [])
     {
-        $adapter = $this->_getConnection();
+        $connection = $this->_getConnection();
         if (!is_array($productIds)) {
             $productIds = [$productIds];
         }
@@ -231,10 +231,10 @@ abstract class AbstractAction
         $processIds = $parentIds ? array_merge($parentIds, $productIds) : $productIds;
 
         // retrieve product types by processIds
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from($this->_getTable('catalog_product_entity'), ['entity_id', 'type_id'])
             ->where('entity_id IN(?)', $processIds);
-        $pairs = $adapter->fetchPairs($select);
+        $pairs = $connection->fetchPairs($select);
 
         $byType = [];
         foreach ($pairs as $productId => $typeId) {
@@ -248,12 +248,12 @@ abstract class AbstractAction
             }
         }
 
-        $select = $adapter->select()
+        $select = $connection->select()
             ->distinct(true)
             ->from($this->_getTable('catalog_category_product'), ['category_id'])
             ->where('product_id IN(?)', $processIds);
 
-        $affectedCategories = $adapter->fetchCol($select);
+        $affectedCategories = $connection->fetchCol($select);
         $this->cacheContext->registerEntities(Category::CACHE_TAG, $affectedCategories);
 
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
