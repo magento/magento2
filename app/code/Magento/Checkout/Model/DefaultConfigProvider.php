@@ -170,6 +170,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $paymentMethodManagement;
 
     /**
+     * @var UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -226,7 +231,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingMethodConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
+        \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
+        UrlInterface $urlBuilder
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -255,6 +261,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->shippingMethodConfig = $shippingMethodConfig;
         $this->storeManager = $storeManager;
         $this->paymentMethodManagement = $paymentMethodManagement;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -274,6 +281,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
             'isCustomerLoginRequired' => $this->isCustomerLoginRequired(),
             'registerUrl' => $this->getRegisterUrl(),
+            'checkoutUrl' => $this->getCheckoutUrl(),
             'customerAddressCount' => $this->getCustomerAddressCount(),
             'forgotPasswordUrl' => $this->getForgotPasswordUrl(),
             'staticBaseUrl' => $this->getStaticBaseUrl(),
@@ -441,6 +449,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
     public function getRegisterUrl()
     {
         return $this->customerUrlManager->getRegisterUrl();
+    }
+
+    /**
+     * Retrieve checkout URL
+     *
+     * @return string
+     */
+    public function getCheckoutUrl()
+    {
+        return $this->urlBuilder->getUrl('checkout');
     }
 
     /**
