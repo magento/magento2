@@ -145,8 +145,11 @@ angular.module('readiness-check', [])
                 fail: function() {
                     $scope.requestFailedHandler($scope.extensions);
                 }
-            },
-            'file-permissions': {
+            }
+        };
+
+        if ($scope.actionFrom === 'installer') {
+            $scope.items['file-permissions'] = {
                 url:'index.php/environment/file-permissions',
                 show: function() {
                     $scope.startProgress();
@@ -161,8 +164,8 @@ angular.module('readiness-check', [])
                 fail: function() {
                     $scope.requestFailedHandler($scope.permissions);
                 }
-            }
-        };
+            };
+        }
 
         if ($scope.actionFrom === 'updater') {
             $scope.items['updater-application'] = {
@@ -237,7 +240,7 @@ angular.module('readiness-check', [])
             return $scope.version.processed
                 && $scope.settings.processed
                 && $scope.extensions.processed
-                && $scope.permissions.processed
+                && ($scope.permissions.processed || ($scope.actionFrom === 'updater'))
                 && (($scope.cronScript.processed && $scope.componentDependency.processed && $scope.updater.processed)
                 || ($scope.actionFrom !== 'updater'));
         };

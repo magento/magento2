@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Upgrade job
+ * DB Rollback job
  */
 class JobDbRollback extends AbstractJob
 {
