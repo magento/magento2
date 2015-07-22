@@ -126,7 +126,7 @@ define('globalNavigationScroll', [
     });
 
     //  Add event to menuItems to check submenu overlap
-    menuItems.on('click', function (e) {
+    menuItems.on('click', function () {
 
         var submenu = $(this).children(subMenuClass);
 
