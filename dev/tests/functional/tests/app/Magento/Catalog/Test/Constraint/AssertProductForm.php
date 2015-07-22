@@ -58,7 +58,10 @@ class AssertProductForm extends AbstractAssertForm
         CatalogProductIndex $productGrid,
         CatalogProductEdit $productPage
     ) {
-        $filter = ['sku' => $product->getSku()];
+        $filter = [
+            'name' => $product->getName(),
+            'sku' => $product->getSku()
+        ];
         $productGrid->open();
         $productGrid->getProductGrid()->searchAndOpen($filter);
 
@@ -127,6 +130,11 @@ class AssertProductForm extends AbstractAssertForm
         foreach ($sortFields as $path) {
             $data = $this->sortDataByPath($data, $path);
         }
+
+        if (isset($data['price'])) {
+            $data['price'] = str_replace(',', '', $data['price']);
+        }
+
         return $data;
     }
 
