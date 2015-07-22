@@ -29,7 +29,8 @@
                         <xs:field xpath="@name"/>
                     </xs:unique>
                 </xs:element>
-                <xs:element name="exclude" minOccurs="0" maxOccurs="1" type="excludeType"/>
+                <xs:element name="images" minOccurs="0" type="imagesType"/>
+                <xs:element name="exclude" minOccurs="0" type="excludeType"/>
             </xs:choice>
         </xs:complexType>
         <xs:unique name="varsModuleIdentifier">
@@ -37,6 +38,30 @@
             <xs:field xpath="@module"/>
         </xs:unique>
     </xs:element>
+    <xs:complexType name="imagesType">
+        <xs:sequence>
+            <xs:element name="image" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="type">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="thumbnail"/>
+                                    <xs:enumeration value="small_image"/>
+                                    <xs:enumeration value="image"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="width" type="xs:positiveInteger" minOccurs="0"/>
+                        <xs:element name="height" type="xs:positiveInteger" minOccurs="0"/>
+                        <xs:element name="ratio" type="xs:decimal" minOccurs="0"/>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="module" type="xs:string" use="required"/>
+    </xs:complexType>
     <xs:complexType name="excludeType">
         <xs:sequence>
             <xs:element name="item" type="itemType" maxOccurs="unbounded"/>
