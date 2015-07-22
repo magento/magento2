@@ -82,14 +82,14 @@ define('globalNavigationScroll', [
                     nextTop < (menuScrollMax - scrollStep) ?
                         nextTop += scrollStep : nextTop = menuScrollMax;
 
-                    menu.css('top', -nextTop);
+                    menu.css('top', -nextTop * 2);
 
                 } else if (winTop < winTopLast) { // scroll up
 
                     nextTop > -scrollStep ?
                         nextTop += scrollStep : nextTop = 0;
 
-                    menu.css('top', -nextTop);
+                    menu.css('top', -nextTop * 2);
 
                 }
 
@@ -255,6 +255,7 @@ define('globalNavigation', [
                     .removeClass('_show');
 
             subMenu.attr('aria-expanded', 'true');
+            subMenu.css('height', 765);
 
             closeBtn.on('click', close);
 
