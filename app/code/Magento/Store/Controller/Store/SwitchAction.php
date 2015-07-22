@@ -11,8 +11,7 @@ use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreIsInactiveException;
@@ -21,14 +20,9 @@ use Magento\Store\Model\StoreResolver;
 class SwitchAction extends Action
 {
     /**
-     * @var CookieMetadataFactory
+     * @var StoreCookieManagerInterface
      */
-    protected $cookieMetadataFactory;
-
-    /**
-     * @var CookieManagerInterface
-     */
-    protected $cookie;
+    protected $storeCookieManager;
 
     /**
      * @var HttpContext
@@ -47,21 +41,18 @@ class SwitchAction extends Action
 
     /**
      * @param ActionContext $context
-     * @param CookieMetadataFactory $cookieMetadataFactory
-     * @param CookieManagerInterface $cookieManager
+     * @param StoreCookieManagerInterface $storeCookieManager
      * @param HttpContext $httpContext
      * @param StoreRepositoryInterface $storeRepository
      */
     public function __construct(
         ActionContext $context,
-        CookieMetadataFactory $cookieMetadataFactory,
-        CookieManagerInterface $cookieManager,
+        StoreCookieManagerInterface $storeCookieManager,
         HttpContext $httpContext,
         StoreRepositoryInterface $storeRepository
     ) {
         parent::__construct($context);
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
-        $this->cookie = $cookieManager;
+        $this->storeCookieManager = $storeCookieManager;
         $this->httpContext = $httpContext;
         $this->storeRepository = $storeRepository;
         $this->messageManager = $context->getMessageManager();
@@ -72,10 +63,7 @@ class SwitchAction extends Action
      */
     public function execute()
     {
-        $storeCode = $this->_request->getParam(
-            StoreResolver::PARAM_NAME,
-            $this->cookie->getCookie(StoreResolver::COOKIE_NAME)
-        );
+        $storeCode = $this->_request->getParam(StoreResolver::PARAM_NAME, $this->storeCookieManager->getStoreCookie());
 
         try {
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
@@ -92,15 +80,9 @@ class SwitchAction extends Action
         }
 
         if ($store->getWebsite()->getDefaultStore()->getId() == $store->getId()) {
-            $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
-                ->setPath($store->getStorePath());
-            $this->cookie->deleteCookie(StoreResolver::COOKIE_NAME, $cookieMetadata);
+            $this->storeCookieManager->deleteStoreCookie($store);
         } else {
-            $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
-                ->setHttpOnly(true)
-                ->setDurationOneYear()
-                ->setPath($store->getStorePath());
-            $this->cookie->setPublicCookie(StoreResolver::COOKIE_NAME, $store->getCode(), $cookieMetadata);
+            $this->storeCookieManager->setStoreCookie($store);
             $this->httpContext->setValue(Store::ENTITY, $store->getCode(), Store::DEFAULT_CODE);
         }
 

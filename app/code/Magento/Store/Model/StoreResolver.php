@@ -7,15 +7,10 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Store\Api\StoreCookieManagerInterface;
 
-class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
+class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
-    /**
-     * Cookie name
-     */
-    const COOKIE_NAME = 'store';
-
     /**
      * Param name
      */
@@ -30,6 +25,11 @@ class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
      * @var \Magento\Store\Api\StoreRepositoryInterface
      */
     protected $storeRepository;
+
+    /**
+     * @var StoreCookieManagerInterface
+     */
+    protected $storeCookieManager;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
@@ -53,6 +53,8 @@ class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
 
     /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
+     * @param StoreCookieManagerInterface $storeCookieManager
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param StoreResolver\ReaderList $readerList
      * @param string $runMode
@@ -60,12 +62,16 @@ class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
      */
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
+        StoreCookieManagerInterface $storeCookieManager,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Cache\FrontendInterface $cache,
         StoreResolver\ReaderList $readerList,
         $runMode = ScopeInterface::SCOPE_STORE,
         $scopeCode = null
     ) {
         $this->storeRepository = $storeRepository;
+        $this->storeCookieManager = $storeCookieManager;
+        $this->request = $request;
         $this->cache = $cache;
         $this->readerList = $readerList;
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
@@ -75,11 +81,11 @@ class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getCurrentStoreId(RequestInterface $request, CookieManagerInterface $cookie)
+    public function getCurrentStoreId()
     {
         list($stores, $defaultStoreId) = $this->getStoresData();
 
-        $storeCode = $request->getParam(self::PARAM_NAME, $cookie->getCookie(self::COOKIE_NAME));
+        $storeCode = $this->request->getParam(self::PARAM_NAME, $this->storeCookieManager->getStoreCookie());
         if ($storeCode) {
             $store = $this->getRequestedStoreByCode($storeCode);
 
@@ -138,8 +144,8 @@ class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
             $error = __('Requested store is not found');
         }
 
-        if (isset($error)) {
-            throw new NoSuchEntityException($error);
+        if (isset($error, $e)) {
+            throw new NoSuchEntityException($error, $e);
         }
         return $store;
     }
@@ -161,8 +167,8 @@ class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
             $error = __('Default store is not found');
         }
 
-        if (isset($error)) {
-            throw new NoSuchEntityException($error);
+        if (isset($error, $e)) {
+            throw new NoSuchEntityException($error, $e);
         }
         return $store;
     }

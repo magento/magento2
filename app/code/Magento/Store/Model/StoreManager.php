@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Store\Api\StoreResolverInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -48,6 +50,16 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     protected $scopeConfig;
 
     /**
+     * @var StoreResolverInterface
+     */
+    protected $storeResolver;
+
+    /**
+     * @var \Magento\Framework\Cache\FrontendInterface
+     */
+    protected $cache;
+
+    /**
      * Default store code
      *
      * @var string
@@ -69,18 +81,11 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     protected $isSingleStoreAllowed;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface
-     */
-    protected $cache;
-
-    /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param StoreResolverInterface $storeResolver
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookie
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param bool $isSingleStoreAllowed
      */
@@ -89,9 +94,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
         \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreResolverInterface $storeResolver,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookie,
+        StoreResolverInterface $storeResolver,
         \Magento\Framework\Cache\FrontendInterface $cache,
         $isSingleStoreAllowed = true
     ) {
@@ -99,8 +102,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
         $this->websiteRepository = $websiteRepository;
         $this->groupRepository = $groupRepository;
         $this->scopeConfig = $scopeConfig;
-        $this->cookie = $cookie;
-        $this->request = $request;
         $this->storeResolver = $storeResolver;
         $this->cache = $cache;
         $this->isSingleStoreAllowed = $isSingleStoreAllowed;
@@ -147,7 +148,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
         if (!isset($storeId) || '' === $storeId || $storeId === true) {
             if (!$this->currentStoreId) {
                 \Magento\Framework\Profiler::start('store.resolve');
-                $this->currentStoreId = $this->storeResolver->getCurrentStoreId($this->request, $this->cookie);
+                $this->currentStoreId = $this->storeResolver->getCurrentStoreId();
                 \Magento\Framework\Profiler::stop('store.resolve');
             }
             $storeId = $this->currentStoreId;

@@ -12,10 +12,11 @@
     <preference for="Magento\Store\Api\Data\StoreInterface" type="Magento\Store\Model\Store"/>
     <preference for="Magento\Store\Api\Data\GroupInterface" type="Magento\Store\Model\Group"/>
     <preference for="Magento\Store\Api\Data\WebsiteInterface" type="Magento\Store\Model\Website"/>
-    <preference for="Magento\Store\Model\StoreResolverInterface" type="Magento\Store\Model\StoreResolver"/>
+    <preference for="Magento\Store\Api\StoreResolverInterface" type="Magento\Store\Model\StoreResolver"/>
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
     <preference for="Magento\Framework\App\Response\RedirectInterface" type="Magento\Store\App\Response\Redirect" />
+    <preference for="Magento\Store\Api\StoreCookieManagerInterface" type="Magento\Store\Model\StoreCookieManager"/>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="xFrameOptionsHeader" type="Magento\Framework\App\Response\XFrameOptPlugin"/>
     </type>
