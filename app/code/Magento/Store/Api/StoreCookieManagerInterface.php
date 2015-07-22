@@ -18,7 +18,7 @@ interface StoreCookieManagerInterface
     /**
      * @return string
      */
-    public function getStoreCookie();
+    public function getStoreCodeFromCookie();
 
     /**
      * @param StoreInterface $store

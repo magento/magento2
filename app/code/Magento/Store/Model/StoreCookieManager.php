@@ -29,11 +29,8 @@ class StoreCookieManager implements StoreCookieManagerInterface
     protected $cookieManager;
 
     /**
-     * @param ActionContext $context
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param CookieManagerInterface $cookieManager
-     * @param HttpContext $httpContext
-     * @param StoreRepositoryInterface $storeRepository
      */
     public function __construct(
         CookieMetadataFactory $cookieMetadataFactory,
@@ -46,7 +43,7 @@ class StoreCookieManager implements StoreCookieManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function getStoreCookie()
+    public function getStoreCodeFromCookie()
     {
         return $this->cookieManager->getCookie(self::COOKIE_NAME);
     }
