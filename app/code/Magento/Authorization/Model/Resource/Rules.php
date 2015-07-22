@@ -43,7 +43,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\CacheInterface $aclCache
-     * @param string|null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

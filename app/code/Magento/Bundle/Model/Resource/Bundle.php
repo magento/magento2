@@ -26,7 +26,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\Resource\Product\Relation $productRelation
      * @param \Magento\Quote\Model\Resource\Quote $quoteResource
-     * @param null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

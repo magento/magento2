@@ -29,7 +29,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param string|null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

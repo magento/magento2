@@ -46,7 +46,7 @@ class Grid extends AbstractGrid
      * @param string $orderIdField
      * @param array $joins
      * @param array $columns
-     * @param string|null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         Context $context,

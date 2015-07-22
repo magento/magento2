@@ -133,7 +133,7 @@ abstract class AbstractDb extends AbstractResource
      * Class constructor
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param string|null $connectionName
+     * @param string $connectionName
      */
     public function __construct(\Magento\Framework\Model\Resource\Db\Context $context, $connectionName = null)
     {

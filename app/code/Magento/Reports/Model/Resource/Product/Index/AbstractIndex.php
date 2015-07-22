@@ -31,7 +31,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param string|null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

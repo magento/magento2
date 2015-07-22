@@ -18,7 +18,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param string|null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
