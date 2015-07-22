@@ -14,7 +14,7 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\Indexer\Model\ScopeResolver\FlatScopeResolver;
 use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
 
-class IndexStructure
+class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
@@ -70,15 +70,15 @@ class IndexStructure
 
     /**
      * @param string $index
-     * @param array $filterFields
+     * @param array $fields
      * @param Dimension[] $dimensions
      * @return void
      */
-    public function create($index, array $filterFields, array $dimensions = [])
+    public function create($index, array $fields, array $dimensions = [])
     {
         $this->createFulltextIndex($this->indexScopeResolver->resolve($index, $dimensions));
-        if ($filterFields) {
-            $this->createFlatIndex($this->flatScopeResolver->resolve($index, $dimensions), $filterFields);
+        if ($fields) {
+            $this->createFlatIndex($this->flatScopeResolver->resolve($index, $dimensions), $fields);
         }
     }
 

@@ -187,6 +187,9 @@
             <xs:enumeration value="varchar" />
             <xs:enumeration value="text" />
             <xs:enumeration value="mediumtext" />
+            <xs:enumeration value="timestamp" />
+            <xs:enumeration value="datetime" />
+            <xs:enumeration value="date" />
         </xs:restriction>
     </xs:simpleType>
 
