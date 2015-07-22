@@ -141,9 +141,12 @@ abstract class AbstractDataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter($condition, $field = null, $type = 'regular')
+    public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        $this->getCollection()->addFieldToFilter($field, $condition);
+        $this->getCollection()->addFieldToFilter(
+            $filter->getField(),
+            [$filter->getConditionType() => $filter->getValue()]
+        );
     }
 
     /**
