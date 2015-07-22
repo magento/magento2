@@ -13,7 +13,7 @@
 
         <fieldset name="customer" source="Magento\Customer\Model\Resource\Customer\Collection">
             <field name="name" xsi:type="searchable" dataType="text"/>
-            <field name="email" xsi:type="searchable" dataType="text"/>
+            <field name="email" xsi:type="searchable" dataType="varchar"/>
             <field name="group_id" xsi:type="filterable" dataType="int"/>
             <field name="created_at" xsi:type="filterable" dataType="timestamp"/>
             <field name="website_id" xsi:type="filterable" dataType="int"/>
@@ -21,7 +21,7 @@
             <field name="crated_in" xsi:type="filterable" dataType="text"/>
             <field name="dob" xsi:type="filterable" dataType="date"/>
             <field name="gender" xsi:type="filterable" dataType="int"/>
-            <field name="taxvat" xsi:type="searchable" dataType="text"/>
+            <field name="taxvat" xsi:type="searchable" dataType="varchar"/>
 
             <field name="billing_address_full" xsi:type="searchable" dataType="text"/>
             <field name="shipping_address_full" xsi:type="searchable" dataType="text"/>
@@ -29,16 +29,16 @@
 
         <fieldset name="billing_address" source="Magento\Customer\Model\Resource\Address\Collection">
             <reference fieldset="customer" from="entity_id" to="default_billing"/>
-            <field name="telephone" xsi:type="searchable" dataType="text"/>
-            <field name="postcode" xsi:type="searchable" dataType="text"/>
-            <field name="country_id" xsi:type="filterable" dataType="text"/>
-            <field name="region" xsi:type="searchable" dataType="text"/>
+            <field name="telephone" xsi:type="searchable" dataType="varchar"/>
+            <field name="postcode" xsi:type="searchable" dataType="varchar"/>
+            <field name="country_id" xsi:type="filterable" dataType="varchar"/>
+            <field name="region" xsi:type="searchable" dataType="varchar"/>
             <field name="region_id" xsi:type="filterable" dataType="int"/>
-            <field name="street" xsi:type="searchable" dataType="text"/>
-            <field name="city" xsi:type="searchable" dataType="text"/>
-            <field name="fax" xsi:type="searchable" dataType="text"/>
-            <field name="vat_id" xsi:type="searchable" dataType="text"/>
-            <field name="company" xsi:type="searchable" dataType="text"/>
+            <field name="street" xsi:type="searchable" dataType="varchar"/>
+            <field name="city" xsi:type="searchable" dataType="varchar"/>
+            <field name="fax" xsi:type="searchable" dataType="varchar"/>
+            <field name="vat_id" xsi:type="searchable" dataType="varchar"/>
+            <field name="company" xsi:type="searchable" dataType="varchar"/>
         </fieldset>
 
         <fieldset name="visitor" source="Magento\Customer\Model\Resource\Visitor\Collection">

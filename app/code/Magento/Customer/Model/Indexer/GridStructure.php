@@ -24,6 +24,19 @@ class GridStructure implements IndexStructureInterface
     private $flatScopeResolver;
 
     /**
+     * @var array
+     */
+    protected $columnTypesMap = [
+        'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
+        'mediumtext' => ['type' => Table::TYPE_TEXT, 'size' => 16777216],
+        'text'       => ['type' => Table::TYPE_TEXT, 'size' => 65536],
+        'int'        => ['type' => Table::TYPE_INTEGER, 'size' => null],
+        'date'       => ['type' => Table::TYPE_DATE, 'size' => null],
+        'datetime'   => ['type' => Table::TYPE_DATETIME, 'size' => null],
+        'timestamp'  => ['type' => Table::TYPE_TIMESTAMP, 'size' => null],
+    ];
+
+    /**
      * @param Resource|Resource $resource
      * @param \Magento\Indexer\Model\ScopeResolver\FlatScopeResolver $flatScopeResolver
      * @param array $columnTypesMap
@@ -82,18 +95,20 @@ class GridStructure implements IndexStructureInterface
         );
         $searchableFields = [];
         foreach ($fields as $field) {
-            if ($field['type'] !== 'searchable') {
+            if ($field['type'] === 'searchable') {
                 $searchableFields[] = $field['name'];
             }
             $columnMap = isset($field['dataType']) && isset($this->columnTypesMap[$field['dataType']])
                 ? $this->columnTypesMap[$field['dataType']]
-                : ['type' => $field['type'], 'size' => isset($field['size']) ? $field['size'] : null];
+                : ['type' => $field['dataType'], 'size' => isset($field['size']) ? $field['size'] : null];
             $name = $field['name'];
             $type = $columnMap['type'];
             $size = $columnMap['size'];
             $table->addColumn($name, $type, $size);
         }
-        $table->addIndex(
+        $adapter->createTable($table);
+        $adapter->addIndex(
+            $tableName,
             $this->resource->getIdxName(
                 $tableName,
                 $searchableFields,
@@ -102,7 +117,6 @@ class GridStructure implements IndexStructureInterface
             $searchableFields,
             AdapterInterface::INDEX_TYPE_FULLTEXT
         );
-        $adapter->createTable($table);
     }
 
     /**
