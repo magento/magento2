@@ -12,6 +12,7 @@ use Magento\Indexer\Model\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Store\Model\StoreManager;
 use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\App\Area;
 
 /**
  * An Abstract class for Indexer related commands.
@@ -51,7 +52,7 @@ abstract class AbstractIndexerCommand extends Command
 
         /** @var \Magento\Framework\App\State $appState */
         $appState = $objectManager->get('Magento\Framework\App\State');
-        $appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
+        $appState->setAreaCode(Area::AREA_ADMIN);
         $this->collectionFactory = $objectManager->create('Magento\Indexer\Model\Indexer\CollectionFactory');
         $this->indexerFactory = $objectManager->create('Magento\Indexer\Model\IndexerFactory');
         parent::__construct();

@@ -24,7 +24,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
         $this->addArgument(
             self::INPUT_KEY_TYPES,
             InputArgument::IS_ARRAY,
-            'List of cache types, space separated. If omitted, all caches will be affected'
+            'Space-separated list of cache types or omit to apply to all cache types.'
         );
         parent::configure();
     }

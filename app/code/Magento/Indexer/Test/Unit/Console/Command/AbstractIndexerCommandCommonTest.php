@@ -13,7 +13,7 @@ abstract class AbstractIndexerCommandCommonTest extends \PHPUnit_Framework_TestC
     protected $indexerFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\Indexer\CollectionFactory
      */
     protected $collectionFactory;
 

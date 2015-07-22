@@ -28,7 +28,7 @@ class CacheEnableCommandTest extends AbstractCacheSetCommandTest
     {
         $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
         $this->cacheManager->expects($this->once())->method('setEnabled')->with($enable, true)->willReturn($result);
-        $this->cacheManager->expects($result == [] ? $this->never() : $this->once())->method('clean')->with($enable);
+        $this->cacheManager->expects($result === [] ? $this->never() : $this->once())->method('clean')->with($enable);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
