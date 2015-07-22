@@ -6,62 +6,65 @@
  */
 namespace Magento\Store\Controller\Store;
 
-class SwitchAction extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context as ActionContext;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreIsInactiveException;
+use Magento\Store\Model\StoreResolver;
+
+class SwitchAction extends Action
 {
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @var CookieMetadataFactory
      */
     protected $cookieMetadataFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @var CookieManagerInterface
      */
     protected $cookie;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var HttpContext
      */
     protected $httpContext;
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface
+     * @var StoreRepositoryInterface
      */
     protected $storeRepository;
 
     /**
-     * @var \Magento\Store\Api\WebsiteRepositoryInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $websiteRepository;
+    protected $messageManager;
 
     /**
-     * @var \Magento\Store\Api\GroupRepositoryInterface
-     */
-    protected $groupRepository;
-
-    /**
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
-     * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
+     * @param ActionContext $context
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param CookieManagerInterface $cookieManager
+     * @param HttpContext $httpContext
+     * @param StoreRepositoryInterface $storeRepository
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
-        \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
-        \Magento\Store\Api\GroupRepositoryInterface $groupRepository
+        ActionContext $context,
+        CookieMetadataFactory $cookieMetadataFactory,
+        CookieManagerInterface $cookieManager,
+        HttpContext $httpContext,
+        StoreRepositoryInterface $storeRepository
     ) {
         parent::__construct($context);
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->cookie = $cookieManager;
         $this->httpContext = $httpContext;
         $this->storeRepository = $storeRepository;
-        $this->websiteRepository = $websiteRepository;
-        $this->groupRepository = $groupRepository;
+        $this->messageManager = $context->getMessageManager();
     }
 
     /**
@@ -69,52 +72,38 @@ class SwitchAction extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $storageStore = $storage->getStore();
-        if ($storageStore->getCode() == $storeCode) {
-            $store = $storage->getStore($storeCode);
-            if ($store->getWebsite()->getDefaultStore()->getId() == $store->getId()) {
-                $store->deleteCookie();
-            } else {
-                $storageStore->setCookie();
-                $this->_httpContext->setValue(
-                    Store::ENTITY,
-                    $storageStore->getCode(),
-                    \Magento\Store\Model\Store::DEFAULT_CODE
-                );
-            }
+        $storeCode = $this->_request->getParam(
+            StoreResolver::PARAM_NAME,
+            $this->cookie->getCookie(StoreResolver::COOKIE_NAME)
+        );
+
+        try {
+            $store = $this->storeRepository->getActiveStoreByCode($storeCode);
+        } catch (StoreIsInactiveException $e) {
+            $error = __('Requested store is inactive');
+        } catch (\InvalidArgumentException $e) { // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
+            $error = __('Requested store is not found');
         }
 
+        if (isset($error)) {
+            $this->messageManager->addError($error);
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+            return;
+        }
 
-
-
-
-        // $this->_cookieManager->getCookie(self::COOKIE_NAME);
-
-        $store = $this->storeRepository->get($this->_request->getParam(\Magento\Store\Model\StoreResolver::PARAM_NAME));
-        $website = $this->websiteRepository->get($store->getWebsiteId());
-        $group = $this->groupRepository->get($website->getDefaultGroupId());
-
-        if ((int)$group->getDefaultStoreId() === (int)$store->getId()) {
+        if ($store->getWebsite()->getDefaultStore()->getId() == $store->getId()) {
             $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
                 ->setPath($store->getStorePath());
-            $this->cookie->deleteCookie(\Magento\Store\Model\StoreResolver::COOKIE_NAME, $cookieMetadata);
+            $this->cookie->deleteCookie(StoreResolver::COOKIE_NAME, $cookieMetadata);
         } else {
             $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
                 ->setHttpOnly(true)
                 ->setDurationOneYear()
                 ->setPath($store->getStorePath());
-            $this->cookie->setPublicCookie(
-                \Magento\Store\Model\StoreResolver::COOKIE_NAME,
-                $store->getCode(),
-                $cookieMetadata
-            );
-
-            $this->httpContext->setValue(
-                \Magento\Store\Model\Store::ENTITY,
-                $store->getCode(),
-                \Magento\Store\Model\Store::DEFAULT_CODE
-            );
+            $this->cookie->setPublicCookie(StoreResolver::COOKIE_NAME, $store->getCode(), $cookieMetadata);
+            $this->httpContext->setValue(Store::ENTITY, $store->getCode(), Store::DEFAULT_CODE);
         }
-//        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 }

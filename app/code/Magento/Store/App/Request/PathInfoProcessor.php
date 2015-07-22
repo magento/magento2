@@ -34,8 +34,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
 
         try {
             $store = $this->_storeManager->getStore($storeCode);
-            // TODO: MAGETWO-39826
-        } catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) { // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
             return $pathInfo;
         }
 

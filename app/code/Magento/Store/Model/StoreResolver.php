@@ -5,7 +5,9 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
 {
@@ -73,35 +75,95 @@ class StoreResolver implements \Magento\Store\Model\StoreResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getCurrentStoreId(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookie
-    ) {
-        $requestedStoreCode = $request->getParam(self::PARAM_NAME, $cookie->getCookie(self::COOKIE_NAME));
+    public function getCurrentStoreId(RequestInterface $request, CookieManagerInterface $cookie)
+    {
+        list($stores, $defaultStoreId) = $this->getStoresData();
 
-        $cacheKey = 'resolved_stores_' . md5($this->runMode . $this->scopeCode);
-        $data = $this->cache->load($cacheKey);
-        if ($data) {
-            list($stores, $defaultStoreId) = unserialize($data);
-        } else {
-            $reader = $this->readerList->getReader($this->runMode);
-            $stores = $reader->getAllowedStoreIds($this->scopeCode);
-            $defaultStoreId = $reader->getDefaultStoreId($this->scopeCode);
-            $data = serialize([$stores, $defaultStoreId]);
-            $this->cache->save($data, $cacheKey, [self::CACHE_TAG]);
-        }
+        $storeCode = $request->getParam(self::PARAM_NAME, $cookie->getCookie(self::COOKIE_NAME));
+        if ($storeCode) {
+            $store = $this->getRequestedStoreByCode($storeCode);
 
-        if ($requestedStoreCode) {
-            $requestedStore = $this->storeRepository->get($requestedStoreCode);
-            if (!in_array($requestedStore->getId(), $stores)) {
+            if (!in_array($store->getId(), $stores)) {
                 throw new NoSuchEntityException(__('Requested scope cannot be loaded'));
             }
         } else {
-            $requestedStore = $this->storeRepository->getById($defaultStoreId);
+            $store = $this->getDefaultStoreById($defaultStoreId);
         }
-        if (!$requestedStore->getIsActive()) {
-            throw new NoSuchEntityException(__('Requested store is inactive'));
+        return $store->getId();
+    }
+
+    /**
+     * Get stores data
+     *
+     * @return array
+     */
+    protected function getStoresData()
+    {
+        $cacheKey = 'resolved_stores_' . md5($this->runMode . $this->scopeCode);
+        $cacheData = $this->cache->load($cacheKey);
+        if ($cacheData) {
+            $storesData = unserialize($cacheData);
+        } else {
+            $storesData = $this->readStoresData();
+            $this->cache->save(serialize($storesData), $cacheKey, [self::CACHE_TAG]);
         }
-        return $requestedStore->getId();
+        return $storesData;
+    }
+
+    /**
+     * Read stores data. First element is allowed store ids, second is default store id
+     *
+     * @return array
+     */
+    protected function readStoresData()
+    {
+        $reader = $this->readerList->getReader($this->runMode);
+        return [$reader->getAllowedStoreIds($this->scopeCode), $reader->getDefaultStoreId($this->scopeCode)];
+    }
+
+    /**
+     * Retrieve active store by code
+     *
+     * @param string $storeCode
+     * @return \Magento\Store\Api\Data\StoreInterface
+     * @throws NoSuchEntityException
+     */
+    protected function getRequestedStoreByCode($storeCode)
+    {
+        try {
+            $store = $this->storeRepository->getActiveStoreByCode($storeCode);
+        } catch (StoreIsInactiveException $e) {
+            $error = __('Requested store is inactive');
+        } catch (\InvalidArgumentException $e) { // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
+            $error = __('Requested store is not found');
+        }
+
+        if (isset($error)) {
+            throw new NoSuchEntityException($error);
+        }
+        return $store;
+    }
+
+    /**
+     * Retrieve active store by code
+     *
+     * @param int $id
+     * @return \Magento\Store\Api\Data\StoreInterface
+     * @throws NoSuchEntityException
+     */
+    protected function getDefaultStoreById($id)
+    {
+        try {
+            $store = $this->storeRepository->getActiveStoreById($id);
+        } catch (StoreIsInactiveException $e) {
+            $error = __('Default store is inactive');
+        } catch (\InvalidArgumentException $e) { // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
+            $error = __('Default store is not found');
+        }
+
+        if (isset($error)) {
+            throw new NoSuchEntityException($error);
+        }
+        return $store;
     }
 }
