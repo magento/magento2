@@ -28,7 +28,6 @@ class Website extends Column
         WebsiteFactory $websiteFactory,
         array $components = [],
         array $data = []
-
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->websiteFactory = $websiteFactory;
