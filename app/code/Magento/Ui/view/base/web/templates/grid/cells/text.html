@@ -12,5 +12,8 @@
             applyFieldAction.bind($data, $parentContext.$index()) :
             false"
     data-action="grid-row-edit">
+    <!-- ko if: $parents[1].resizeConfig.enabled -->
+        <div data-bind="attr: $parents[1].resizeConfig.divsAttrParams"></div>
+    <!-- /ko -->
     <div data-bind="text: getLabel(row[field.index])"></div>
 </td>
