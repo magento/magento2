@@ -11,6 +11,8 @@
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
+use Magento\Framework\App\Resource;
+
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -114,8 +116,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     {
         if (is_null($this->_dbAdapter)) {
             /** @var $coreResource \Magento\Framework\App\Resource */
-            $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
-            $this->_dbAdapter = $coreResource->getConnection('default_setup');
+            $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get('Magento\Framework\App\Resource');
+            $this->_dbAdapter = $coreResource->getConnection(Resource::DEFAULT_CONNECTION);
         }
         return $this->_dbAdapter;
     }
