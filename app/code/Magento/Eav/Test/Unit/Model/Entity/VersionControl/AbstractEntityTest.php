@@ -147,7 +147,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             ->getMock();
 
         $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
-        $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getAdapterMock()));
+        $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getConnectionMock()));
 
 
         $eavConfig->expects($this->any())->method('getAttribute')->will(
