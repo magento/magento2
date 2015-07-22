@@ -59,9 +59,6 @@ define(
             var address = new newAddress({});
             selectShippingAddress(address);
         }
-
-        selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
-
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping'

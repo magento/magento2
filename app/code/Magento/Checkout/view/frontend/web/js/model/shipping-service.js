@@ -5,9 +5,10 @@
 /*global define*/
 define(
     [
-        'ko'
+        'ko',
+        'Magento_Checkout/js/model/checkout-data-resolver'
     ],
-    function (ko) {
+    function (ko, checkoutDataResolver) {
         "use strict";
         var shippingRates = ko.observableArray([]);
         return {
@@ -20,6 +21,7 @@ define(
             setShippingRates: function(ratesData) {
                 shippingRates(ratesData);
                 shippingRates.valueHasMutated();
+                checkoutDataResolver.resolveShippingRates(ratesData);
             },
 
             /**
