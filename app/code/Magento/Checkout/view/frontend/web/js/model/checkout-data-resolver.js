@@ -13,14 +13,18 @@ define([
     'Magento_Checkout/js/checkout-data',
     'Magento_Checkout/js/action/create-shipping-address',
     'Magento_Checkout/js/action/select-shipping-address',
-    'Magento_Checkout/js/action/select-shipping-method'
+    'Magento_Checkout/js/action/select-shipping-method',
+    'Magento_Checkout/js/model/payment-service',
+    'Magento_Checkout/js/action/select-payment-method'
 ], function (
     addressList,
     quote,
     checkoutData,
     createShippingAddress,
     selectShippingAddress,
-    selectShippingMethodAction
+    selectShippingMethodAction,
+    paymentService,
+    selectPaymentMethodAction
 ) {
     'use strict';
 
@@ -86,6 +90,22 @@ define([
             //Unset selected shipping shipping method if not available
             if (!rateIsAvailable) {
                 selectShippingMethodAction(null);
+            }
+        },
+
+        resolvePaymentMethod: function () {
+            var availablePaymentMethods = paymentService.getAvailablePaymentMethods();
+            var selectedPaymentMethod = checkoutData.getSelectedPaymentMethod();
+            if (selectedPaymentMethod) {
+                var isMethodAvailable = availablePaymentMethods.some(function (method) {
+                    if (method.method == selectedPaymentMethod.method) {
+                        return true;
+                    }
+                    return false;
+                });
+                if (isMethodAvailable) {
+                    selectPaymentMethodAction(selectedPaymentMethod);
+                }
             }
         }
     }

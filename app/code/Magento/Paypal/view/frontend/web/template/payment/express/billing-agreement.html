@@ -9,7 +9,8 @@
     data-bind='
         attr: {id: getBillingAgreementCode(), name: "payment[" + getBillingAgreementCode() + "]"},
         checked: billingAgreement
-        enable: isActive($parent) && getBillingAgreementCode()'
+        enable: isActive($parent) && getBillingAgreementCode(),
+        click: selectPaymentMethod'
     value="1" class="checkbox">
 <label
     data-bind='

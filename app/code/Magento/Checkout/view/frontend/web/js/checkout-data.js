@@ -82,6 +82,10 @@ define([
             saveData(obj);
         },
 
+        getSelectedPaymentMethod: function() {
+            return getData().selectedPaymentMethod;
+        },
+
         setBillingAddressData: function (data) {
             var obj = getData();
             obj.billingAddressData = data;
