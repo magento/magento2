@@ -27,7 +27,7 @@ class Factory
      * @throws \InvalidArgumentException
      * @return \Zend_Db_Adapter_Abstract
      */
-    public function getAdapter(array $config, $type = null)
+    public function getConnection(array $config, $type = null)
     {
         $dbAdapterClassName = 'Magento\Framework\DB\Adapter\Pdo\Mysql';
 

@@ -90,7 +90,7 @@ class Transaction
     protected function _startTransaction(\PHPUnit_Framework_TestCase $test)
     {
         if (!$this->_isTransactionActive) {
-            $this->_getAdapter()->beginTransparentTransaction();
+            $this->_getConnection()->beginTransparentTransaction();
             $this->_isTransactionActive = true;
             try {
                 $this->_eventManager->fireEvent('startTransaction', [$test]);
@@ -110,7 +110,7 @@ class Transaction
     protected function _rollbackTransaction()
     {
         if ($this->_isTransactionActive) {
-            $this->_getAdapter()->rollbackTransparentTransaction();
+            $this->_getConnection()->rollbackTransparentTransaction();
             $this->_isTransactionActive = false;
             $this->_eventManager->fireEvent('rollbackTransaction');
         }
@@ -123,7 +123,7 @@ class Transaction
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|\Magento\TestFramework\Db\Adapter\TransactionInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getAdapter($connectionName = 'default')
+    protected function _getConnection($connectionName = \Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE)
     {
         /** @var $resource \Magento\Framework\App\Resource */
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');

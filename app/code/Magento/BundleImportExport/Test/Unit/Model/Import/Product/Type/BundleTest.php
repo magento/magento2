@@ -77,7 +77,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
         $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $select->expects($this->any())->method('getConnection')->willReturn($adapter);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
         $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
             '1' => '1', '2' => '2'
@@ -172,7 +172,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
 
         $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $select->expects($this->any())->method('getConnection')->willReturn($adapter);
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
         $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
