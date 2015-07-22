@@ -20,7 +20,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     /**
      * @var string
      */
-    protected $redirectUrl = 'sales/order/';
+    protected $redirectUrl = '*/*/';
 
     /**
      * @var \Magento\Ui\Component\MassAction\Filter
