@@ -25,7 +25,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $editLink = '[data-action="grid-row-edit"]';
+    protected $editLink = '.data-grid-actions-cell a';
 
     /**
      * Locator value for container of applied Filters.
@@ -114,7 +114,6 @@ class DataGrid extends Grid
      */
     public function searchAndOpen(array $filter)
     {
-        $this->waitLoader();
         $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->editLink)->click();

@@ -42,25 +42,22 @@ class Form extends \Magento\Mtf\Block\Form
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null, $isSearchByEmail = true)
     {
-        if ($fixture instanceof InjectableFixture) {
-            /** @var OrderInjectable $fixture */
-            /** @var Customer $customer */
-            $customer = $fixture->getDataFieldConfig('customer_id')['source']->getCustomer();
-            $data = [
-                'order_id' => $fixture->getId(),
-                'billing_last_name' => $customer->getLastname(),
-            ];
+        /** @var OrderInjectable $fixture */
+        /** @var Customer $customer */
+        $customer = $fixture->getDataFieldConfig('customer_id')['source']->getCustomer();
+        $data = [
+            'order_id' => $fixture->getId(),
+            'billing_last_name' => $customer->getLastname(),
+        ];
 
-            if ($isSearchByEmail) {
-                $data['find_order_by'] = 'Email';
-                $data['email_address'] = $customer->getEmail();
-            } else {
-                $data['find_order_by'] = 'ZIP Code';
-                $data['billing_zip_code'] = $fixture->getDataFieldConfig('billing_address_id')['source']->getPostcode();
-            }
+        if ($isSearchByEmail) {
+            $data['find_order_by'] = 'Email';
+            $data['email_address'] = $customer->getEmail();
         } else {
-            $data = $fixture->getData();
+            $data['find_order_by'] = 'ZIP Code';
+            $data['billing_zip_code'] = $fixture->getDataFieldConfig('billing_address_id')['source']->getPostcode();
         }
+
         $fields = isset($data['fields']) ? $data['fields'] : $data;
         $mapping = $this->dataMapping($fields);
 
