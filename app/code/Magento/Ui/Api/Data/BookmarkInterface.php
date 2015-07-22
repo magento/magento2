@@ -9,7 +9,7 @@ namespace Magento\Ui\Api\Data;
  * Bookmark page interface.
  * @api
  */
-interface BookmarkInterface
+interface BookmarkInterface extends BookmarkExtensionInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -159,4 +159,22 @@ interface BookmarkInterface
      * @return \Magento\Ui\Api\Data\BookmarkInterface
      */
     public function setCurrent($isCurrent);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Ui\Api\Data\BookmarkExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
+    );
+
 }

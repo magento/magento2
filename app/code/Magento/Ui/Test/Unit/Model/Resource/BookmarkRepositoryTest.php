@@ -60,10 +60,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         /** @var $searchResultsFactoryMock \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory */
         $searchResultsFactoryMock = $this->getMockBuilder(
             'Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory'
-            )
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $searchResultsFactoryMock->expects($this->any())->method('create')->willReturn($this->searchResultsMock);
 
         $this->bookmarkRepository = new BookmarkRepository(
