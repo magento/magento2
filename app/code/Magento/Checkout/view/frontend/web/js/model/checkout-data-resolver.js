@@ -78,13 +78,18 @@ define([
 
             if (!rateIsAvailable && selectedShippingRate) {
                 rateIsAvailable = ratesData.some(function (rate) {
-                    if (rate.carrier_code + "-" + rate.method_code == selectedShippingRate) {
+                    if (rate.carrier_code + "_" + rate.method_code == selectedShippingRate) {
                         selectShippingMethodAction(rate);
                         return true;
                     }
                     return false;
 
                 });
+            }
+
+            if (!rateIsAvailable && window.checkoutConfig.selectedShippingMethod) {
+                rateIsAvailable = true;
+                selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
             }
 
             //Unset selected shipping shipping method if not available
