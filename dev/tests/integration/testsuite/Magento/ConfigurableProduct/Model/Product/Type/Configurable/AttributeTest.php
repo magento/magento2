@@ -19,13 +19,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAddPrice()
-    {
-        $this->assertEmpty($this->_model->getPrices());
-        $this->_model->addPrice(100);
-        $this->assertEquals([100], $this->_model->getPrices());
-    }
-
     public function testGetLabel()
     {
         $this->assertEmpty($this->_model->getLabel());

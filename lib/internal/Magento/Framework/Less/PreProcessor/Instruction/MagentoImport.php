@@ -20,7 +20,8 @@ class MagentoImport implements PreProcessorInterface
     /**
      * PCRE pattern that matches @magento_import LESS instruction
      */
-    const REPLACE_PATTERN = '#//@magento_import\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
+    const REPLACE_PATTERN =
+        '#//@magento_import(?P<reference>\s+\(reference\))?\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
 
     /**
      * @var DesignInterface
@@ -92,14 +93,16 @@ class MagentoImport implements PreProcessorInterface
         $importsContent = '';
         try {
             $matchedFileId = $matchedContent['path'];
+            $isReference = !empty($matchedContent['reference']);
             $relatedAsset = $this->assetRepo->createRelated($matchedFileId, $asset);
             $resolvedPath = $relatedAsset->getFilePath();
             $importFiles = $this->fileSource->getFiles($this->getTheme($relatedAsset), $resolvedPath);
             /** @var $importFile \Magento\Framework\View\File */
             foreach ($importFiles as $importFile) {
+                $referenceString = $isReference ? '(reference) ' : '';
                 $importsContent .= $importFile->getModule()
-                    ? "@import '{$importFile->getModule()}::{$resolvedPath}';\n"
-                    : "@import '{$matchedFileId}';\n";
+                    ? "@import $referenceString'{$importFile->getModule()}::{$resolvedPath}';\n"
+                    : "@import $referenceString'{$matchedFileId}';\n";
             }
         } catch (\LogicException $e) {
             $this->errorHandler->processException($e);

@@ -11,6 +11,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Indexer\Model\IndexerInterfaceFactory;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 class InstallData implements InstallDataInterface
 {
@@ -21,19 +22,14 @@ class InstallData implements InstallDataInterface
 
     /**
      * @param IndexerInterfaceFactory $indexerFactory
+     * @param ProductAttributeRepositoryInterface $attributeRepository
      */
-    public function __construct(IndexerInterfaceFactory $indexerFactory)
-    {
+    public function __construct(
+        IndexerInterfaceFactory $indexerFactory,
+        ProductAttributeRepositoryInterface $attributeRepository
+    ) {
         $this->indexerFactory = $indexerFactory;
-    }
-
-    /**
-     * @param string $indexerId
-     * @return \Magento\Indexer\Model\IndexerInterface
-     */
-    private function getIndexer($indexerId)
-    {
-        return $this->indexerFactory->create()->load($indexerId);
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -46,6 +42,29 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
+        $this->setWeight('sku', 6);
+        $this->setWeight('name', 5);
         $this->getIndexer('catalogsearch_fulltext')->reindexAll();
+    }
+
+    /**
+     * @param string $indexerId
+     * @return \Magento\Indexer\Model\IndexerInterface
+     */
+    private function getIndexer($indexerId)
+    {
+        return $this->indexerFactory->create()->load($indexerId);
+    }
+
+    /**
+     * @param string $attributeCode
+     * @param int $weight
+     * @return void
+     */
+    private function setWeight($attributeCode, $weight)
+    {
+        $attribute = $this->attributeRepository->get($attributeCode);
+        $attribute->setSearchWeight($weight);
+        $this->attributeRepository->save($attribute);
     }
 }
