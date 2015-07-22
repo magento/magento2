@@ -70,7 +70,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
             new InputArgument(
                 self::INPUT_KEY_INDEXERS,
                 InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-                'List of index types, space separated. If omitted, all indexes will be affected'
+                'Space-separated list of index types or omit to apply to all indexes.'
             ),
         ];
     }
