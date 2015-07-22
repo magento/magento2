@@ -13,6 +13,11 @@ namespace Magento\Cms\Model\Resource\Page;
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'page_id';
+
+    /**
      * Load data for preview flag
      *
      * @var bool

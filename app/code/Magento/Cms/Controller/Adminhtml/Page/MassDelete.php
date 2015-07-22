@@ -5,29 +5,48 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Cms\Controller\Adminhtml\AbstractMassDelete;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassDelete
  */
-class MassDelete extends AbstractMassDelete
+class MassDelete extends \Magento\Backend\App\Action
 {
     /**
-     * Field id
+     * @var Filter
      */
-    const ID_FIELD = 'page_id';
+    protected $filter;
 
     /**
-     * Resource collection
-     *
-     * @var string
+     * @param Context $context
+     * @param Filter $filter
      */
-    protected $collection = 'Magento\Cms\Model\Resource\Page\Collection';
+    public function __construct(Context $context, Filter $filter)
+    {
+        $this->filter = $filter;
+        parent::__construct($context);
+    }
 
     /**
-     * Page model
+     * Execute action
      *
-     * @var string
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
-    protected $model = 'Magento\Cms\Model\Page';
+    public function execute()
+    {
+        $collection = $this->filter->getCollection();
+
+        foreach ($collection as $item) {
+            $item->delete();
+        }
+
+        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $collection->getSize()));
+
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('*/*/');
+    }
 }

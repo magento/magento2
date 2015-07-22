@@ -5,36 +5,49 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Cms\Controller\Adminhtml\AbstractMassStatus;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassDisable
  */
-class MassDisable extends AbstractMassStatus
+class MassDisable extends \Magento\Backend\App\Action
 {
     /**
-     * Field id
+     * @var Filter
      */
-    const ID_FIELD = 'page_id';
+    protected $filter;
 
     /**
-     * Resource collection
-     *
-     * @var string
+     * @param Context $context
+     * @param Filter $filter
      */
-    protected $collection = 'Magento\Cms\Model\Resource\Page\Collection';
+    public function __construct(Context $context, Filter $filter)
+    {
+        $this->filter = $filter;
+        parent::__construct($context);
+    }
 
     /**
-     * Page model
+     * Execute action
      *
-     * @var string
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
-    protected $model = 'Magento\Cms\Model\Page';
+    public function execute()
+    {
+        $collection = $this->filter->getCollection();
 
-    /**
-     * Page disable status
-     *
-     * @var boolean
-     */
-    protected $status = false;
+        foreach ($collection as $item) {
+            $item->setIsActive(false);
+            $item->save();
+        }
+
+        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $collection->getSize()));
+
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('*/*/');
+    }
 }
