@@ -4,80 +4,133 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Api\Search;
+namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Api\AbstractSimpleObject;
-use Magento\Framework\Api\SearchCriteriaInterface as BaseSearchCriteriaInterface;
-
+use Magento\Framework\Api;
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
+use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
+use Psr\Log\LoggerInterface as Logger;
 /**
- * Class SearchResult
+ * Class Collection
+ * Collection for order related documents to display grids on order view page
  */
-class SearchResult extends AbstractSimpleObject implements SearchResultInterface
+class SearchResult extends AbstractCollection implements Api\Search\SearchResultInterface
 {
     /**
-     * {@inheritdoc}
+     * @var Api\Search\AggregationInterface
+     */
+    protected $aggregations;
+
+    /**
+     * @var Api\Search\SearchCriteriaInterface
+     */
+    protected $searchCriteria;
+
+    /**
+     * @var int
+     */
+    protected $totalCount;
+
+    /**
+     * @param EntityFactory $entityFactory
+     * @param Logger $logger
+     * @param FetchStrategy $fetchStrategy
+     * @param EventManager $eventManager
+     * @param string $model
+     * @param $mainTable
+     * @param $resourceModel
+     */
+    public function __construct(
+        EntityFactory $entityFactory,
+        Logger $logger,
+        FetchStrategy $fetchStrategy,
+        EventManager $eventManager,
+        $mainTable,
+        $resourceModel
+    ) {
+        $this->_init('Magento\Framework\View\Element\UiComponent\DataProvider\Document', $resourceModel);
+        $this->setMainTable($mainTable);
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            null,
+            null
+        );
+    }
+
+    /**
+     * @return Api\Search\AggregationInterface
      */
     public function getAggregations()
     {
-        return $this->_get(self::AGGREGATIONS);
+        return $this->aggregations;
     }
+
     /**
-     * {@inheritdoc}
+     * @param Api\Search\AggregationInterface $aggregations
+     * @return $this
      */
     public function setAggregations($aggregations)
     {
-        return $this->setData(self::AGGREGATIONS, $aggregations);
+        $this->aggregations = $aggregations;
     }
+
     /**
-     * {@inheritdoc}
-     */
-    public function getItems()
-    {
-        return $this->_get(self::ITEMS);
-    }
-    /**
-     * {@inheritdoc}
-     */
-    public function setItems(array $items = null)
-    {
-        return $this->setData(self::ITEMS, $items);
-    }
-    /**
-     * Get search criteria.
-     *
-     * @return SearchCriteriaInterface
+     * @return Api\Search\SearchCriteriaInterface|null
      */
     public function getSearchCriteria()
     {
-        return $this->_get(self::SEARCH_CRITERIA);
+        return $this->searchCriteria;
     }
+
     /**
-     * Set search criteria.
-     *
-     * @param BaseSearchCriteriaInterface $searchCriteria
+     * @param Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      */
-    public function setSearchCriteria(BaseSearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(Api\SearchCriteriaInterface $searchCriteria)
     {
-        return $this->setData(self::SEARCH_CRITERIA, $searchCriteria);
+        return $this;
     }
+
     /**
-     * Get total count.
-     *
      * @return int
      */
     public function getTotalCount()
     {
-        return $this->_get(self::TOTAL_COUNT);
+        if (!$this->totalCount) {
+            $this->totalCount = $this->getSize();
+        }
+        return $this->totalCount;
     }
+
     /**
-     * Set total count.
-     *
      * @param int $totalCount
      * @return $this
      */
     public function setTotalCount($totalCount)
     {
-        return $this->setData(self::TOTAL_COUNT, $totalCount);
+        $this->totalCount = $totalCount;
+        return $this;
+    }
+
+    /**
+     * Set items list.
+     *
+     * @param Document[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null)
+    {
+        if ($items) {
+            foreach ($items as $item) {
+                $this->addItem($item);
+            }
+            unset($this->totalCount);
+        }
+        return $this;
     }
 }
