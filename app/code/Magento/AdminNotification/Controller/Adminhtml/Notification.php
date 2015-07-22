@@ -7,7 +7,7 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml;
 
-class Notification extends \Magento\Backend\App\AbstractAction
+abstract class Notification extends \Magento\Backend\App\AbstractAction
 {
     /**
      * @return bool

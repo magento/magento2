@@ -24,7 +24,7 @@ use Magento\Framework\Api\DataObjectHelper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Index extends \Magento\Backend\App\Action
+abstract class Index extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Validator
