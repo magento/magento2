@@ -46,7 +46,7 @@ class Grid extends AbstractGrid
      * @param string $orderIdField
      * @param array $joins
      * @param array $columns
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         Context $context,
@@ -55,14 +55,14 @@ class Grid extends AbstractGrid
         $orderIdField,
         array $joins = [],
         array $columns = [],
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->mainTableName = $mainTableName;
         $this->gridTableName = $gridTableName;
         $this->orderIdField = $orderIdField;
         $this->joins = $joins;
         $this->columns = $columns;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**

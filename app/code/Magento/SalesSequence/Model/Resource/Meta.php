@@ -38,17 +38,17 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param DatabaseContext $context
      * @param MetaFactory $metaFactory
      * @param ResourceProfile $resourceProfile
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         DatabaseContext $context,
         MetaFactory $metaFactory,
         ResourceProfile $resourceProfile,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->metaFactory = $metaFactory;
         $this->resourceProfile = $resourceProfile;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**

@@ -198,6 +198,9 @@ class Builder extends \Magento\SalesSequence\Model\Builder
         }
     }
 
+    /**
+     * @return string
+     */
     protected function getSequenceName()
     {
         return $this->appResource->getTableName(
