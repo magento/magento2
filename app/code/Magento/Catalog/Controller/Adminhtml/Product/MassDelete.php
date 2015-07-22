@@ -6,69 +6,45 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Catalog\Model\Resource\Product\Collection;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
 
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
-     * Field id
+     * @var Filter
      */
-    const ID_FIELD = 'entity_id';
+    protected $filter;
 
     /**
-     * Redirect url
+     * @param Context $context
+     * @param Filter $filter
      */
-    const REDIRECT_URL = 'catalog/*/index';
-
-    /**
-     * Resource collection
-     *
-     * @var string
-     */
-    protected $collection = 'Magento\Catalog\Model\Resource\Product\Collection';
+    public function __construct(
+        Builder $productBuilder,
+        Context $context,
+        Filter $filter
+    ) {
+        $this->filter = $filter;
+        parent::__construct($context, $productBuilder);
+    }
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
-        $selected = $this->getRequest()->getParam('selected');
-        $excluded = $this->getRequest()->getParam('excluded');
+        $collection = $this->filter->getCollection();
 
-        $collection = $this->_objectManager->create($this->collection);
-        try {
-            if (!empty($excluded)) {
-                $collection->addFieldToFilter(static::ID_FIELD, ['nin' => $excluded]);
-                $this->massAction($collection);
-            } elseif (!empty($selected)) {
-                $collection->addFieldToFilter(static::ID_FIELD, ['in' => $selected]);
-                $this->massAction($collection);
-            } else {
-                $this->messageManager->addError(__('Please select product(s).'));
-            }
-        } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        }
-
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath(static::REDIRECT_URL);
-    }
-
-    /**
-     * Cancel selected orders
-     *
-     * @param Collection $collection
-     * @return void
-     */
-    protected function massAction($collection)
-    {
-        $count = 0;
         foreach ($collection->getItems() as $product) {
             $product->delete();
-            ++$count;
         }
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $count));
+        $this->messageManager->addSuccess(
+            __('A total of %1 record(s) have been deleted.', $collection->getSize())
+        );
+
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('catalog/*/index');
     }
 }
