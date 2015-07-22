@@ -126,7 +126,7 @@ class Resource
      * Get resource table name, validated by db adapter
      *
      * @param   string|string[] $modelEntity
-     * @param   string $connectionName
+     * @param string $connectionName
      * @return  string
      * @api
      */

@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Model\Resource\Db;
 
-use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Resource\AbstractResource;
@@ -31,7 +30,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @var string
      */
-    protected $_resourcePrefix = 'core';
+    protected $connectionName = 'core';
 
     /**
      * Connections cache for this resource model
@@ -134,15 +133,15 @@ abstract class AbstractDb extends AbstractResource
      * Class constructor
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
-    public function __construct(\Magento\Framework\Model\Resource\Db\Context $context, $resourcePrefix = null)
+    public function __construct(\Magento\Framework\Model\Resource\Db\Context $context, $connectionName = null)
     {
         $this->transactionManager = $context->getTransactionManager();
         $this->_resources = $context->getResources();
         $this->objectRelationProcessor = $context->getObjectRelationProcessor();
-        if ($resourcePrefix !== null) {
-            $this->_resourcePrefix = $resourcePrefix;
+        if ($connectionName !== null) {
+            $this->connectionName = $connectionName;
         }
         parent::__construct();
     }
@@ -197,11 +196,11 @@ abstract class AbstractDb extends AbstractResource
                 $this->_connections[$key] = $this->_resources->getConnection($value);
             }
         } elseif (is_string($connections)) {
-            $this->_resourcePrefix = $connections;
+            $this->connectionName = $connections;
         }
 
         if ($tables === null && is_string($connections)) {
-            $this->_resourceModel = $this->_resourcePrefix;
+            $this->_resourceModel = $this->connectionName;
         } elseif (is_array($tables)) {
             foreach ($tables as $key => $value) {
                 $this->_tables[$key] = $this->_resources->getTableName($value);
@@ -284,7 +283,7 @@ abstract class AbstractDb extends AbstractResource
         }
 
         if (!isset($this->_tables[$cacheName])) {
-            $connectionName = $this->_resourcePrefix . '_read';
+            $connectionName = $this->connectionName . '_read';
             $this->_tables[$cacheName] = $this->_resources->getTableName($tableName, $connectionName);
         }
         return $this->_tables[$cacheName];
@@ -301,7 +300,7 @@ abstract class AbstractDb extends AbstractResource
         if (isset($this->_connections[$resourceName])) {
             return $this->_connections[$resourceName];
         }
-        $fullResourceName = ($this->_resourcePrefix ? $this->_resourcePrefix . '_' : '') . $resourceName;
+        $fullResourceName = ($this->connectionName ? $this->connectionName . '_' : '') . $resourceName;
         $connectionInstance = $this->_resources->getConnection($fullResourceName);
         // cache only active connections to detect inactive ones as soon as they become active
         if ($connectionInstance) {
@@ -317,7 +316,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function getConnection()
     {
-        $fullResourceName = ($this->_resourcePrefix ? $this->_resourcePrefix . '_write' : 'default');
+        $fullResourceName = ($this->connectionName ? $this->connectionName . '_write' : 'default');
         return $this->_resources->getConnection($fullResourceName);
     }
 

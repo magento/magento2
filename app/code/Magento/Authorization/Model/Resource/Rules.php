@@ -43,7 +43,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\CacheInterface $aclCache
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -51,10 +51,10 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\CacheInterface $aclCache,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_aclBuilder = $aclBuilder;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_rootResource = $rootResource;
         $this->_aclCache = $aclCache;
         $this->_logger = $logger;
