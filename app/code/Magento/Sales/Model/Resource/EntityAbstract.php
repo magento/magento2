@@ -60,7 +60,7 @@ abstract class EntityAbstract extends AbstractDb
      * @param RelationComposite $entityRelationComposite
      * @param Attribute $attribute
      * @param Manager $sequenceManager
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -68,14 +68,14 @@ abstract class EntityAbstract extends AbstractDb
         RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         Manager $sequenceManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->attribute = $attribute;
         $this->sequenceManager = $sequenceManager;
-        if ($resourcePrefix === null) {
-            $resourcePrefix = 'sales';
+        if ($connectionName === null) {
+            $connectionName = 'sales';
         }
-        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $resourcePrefix);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
     }
 
     /**

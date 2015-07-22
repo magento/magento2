@@ -26,15 +26,15 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\Resource\Product\Relation $productRelation
      * @param \Magento\Quote\Model\Resource\Quote $quoteResource
-     * @param null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\Resource\Product\Relation $productRelation,
         \Magento\Quote\Model\Resource\Quote $quoteResource,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_productRelation = $productRelation;
         $this->quoteResource = $quoteResource;
     }

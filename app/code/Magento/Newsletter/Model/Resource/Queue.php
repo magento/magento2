@@ -27,14 +27,14 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_subscriberCollection = $subscriberCollection;
     }
 

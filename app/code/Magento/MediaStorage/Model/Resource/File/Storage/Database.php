@@ -18,14 +18,14 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_resourceHelper = $resourceHelper;
     }
 
