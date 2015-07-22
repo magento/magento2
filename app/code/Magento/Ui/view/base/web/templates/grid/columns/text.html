@@ -26,5 +26,8 @@
         },
         click: sort,
         visible: visible">
+    <!-- ko if: $parent.resizeConfig.enabled-->
+        <div data-bind="attr: $parent.resizeConfig.divsAttrParams"></div>
+    <!-- /ko -->
     <span data-bind="text: label"></span>
 </th>

@@ -19,7 +19,7 @@ define([
         },
 
         initialize: function () {
-            _.bindAll(this, 'refreshResizeConfig');
+            _.bindAll(this, 'refreshResizeConfig', 'initResizeConfig');
             this._super();
             this.config = {
                 entryTable: {
@@ -28,8 +28,12 @@ define([
                 },
                 nameSpacing: {
                     cellsDataAttribute: 'data-cl-resize',
-                    cellsDataAttrPrefix: 'column-'
-                }
+                    cellsDataAttrPrefix: 'column-',
+                    divsResizableAttribute: 'data-cl-elem',
+                    divsResizableAttrName: 'shadow-div'
+                },
+                showLines: 4,
+                dragRange: 10
             };
         },
         /**
@@ -74,6 +78,48 @@ define([
 
             return {
                 /**
+                 * @see set height for rows
+                 * @params {Array} rows rows elements, {Number} rows length
+                 * @returns {Array} with max height for all rows
+                 */
+                rowsMaxHeight: function (rowsElements, rowsLength) {
+                    var re = rowsElements || cfg.rowsElements || this.rowsElements(),
+                        rl = rowsLength || cfg.rowsLength || this.rowsLength(),
+                        i = 0,
+                        curRow;
+
+                    cfg.rowsMaxHeight = [];
+
+                    for (i; i < rl; i++){
+                        curRow = $(re[i]).find('div');
+                        curRow.css('white-space', 'nowrap');
+                        cfg.rowsMaxHeight[i] = curRow.height();
+                        curRow.css('white-space', 'normal');
+                    }
+
+                    return cfg.rowsMaxHeight;
+                },
+                /**
+                 * @see add rows elements to current rows
+                 * @params {Array} rows collections, {Number} rows length
+                 * @returns {Array} Rows with rows elements inner
+                 */
+                rowsElements: function (rowsCollection, rowsLength) {
+                    var rc = rowsCollection || cfg.rowsCollection || this.rowsCollection(),
+                        rl = rowsLength || cfg.rowsLength || this.rowsLength(),
+                        curRow,
+                        i = 0;
+
+                    cfg.rowsElements = [];
+
+                    for (i; i < rl; i++) {
+                        curRow = $(rc[i]);
+                        cfg.rowsElements[i] = $.merge(curRow.find('th'), curRow.find('td'));
+                    }
+
+                    return cfg.rowsElements;
+                },
+                /**
                  * @see add cells elements to current column
                  * @params {Array} cells collection, {Number} columns length
                  * @returns {Array} Columns with cells element inner
@@ -96,8 +142,8 @@ define([
 
                         i <= j ? cfg.columnsElements[j] = [] : false;
                         cfg.columnsElements[j].push(cc[i]);
-
                     }
+
                     return cfg.columnsElements;
                 },
                 /**
@@ -208,6 +254,27 @@ define([
                     }
 
                     return cfg;
+                },
+                /**
+                 * @see add divs to cells for resize columns
+                 * @returns this
+                 */
+                divsResizable: function (columnsElements, columnsLength ,dragRange) {
+                    var ce = columnsElements || cfg.columnsElements || t._set().columnsElements(),
+                        cl = columnsLength || cfg.columnsLength || t._set().columnsLength(),
+                        drAttr = cfg.nameSpacing.divsResizableAttribute,
+                        drAttrName = cfg.nameSpacing.divsResizableAttrName,
+                        drRange = dragRange || cfg.dragRange || 10,
+                        i = 0,
+                        template = '<div '+drAttr+'="'+drAttrName+'" style="position:absolute; '                +
+                            'width:'+drRange+'px; height:100%; top:0; right:0; margin-right:-'+drRange+'px;'    +
+                            'cursor: e-resize;"></div>';
+
+                    for (i; i < cl; i++) {
+                        $(columnsElements[i][0])
+                            .css({position: 'relative'})
+                            .append(template);
+                    }
                 }
             };
         },
@@ -226,18 +293,21 @@ define([
         },
 
         initResizeConfig: function () {
-            console.log(this);
             var t = this,
                 set = t._set(),
                 add = t._add();
 
-            set.cellsCollection();
-            set.rowsCollection();
-            set.rowsLength();
-            set.columnsLength();
-            set.cellsInColumn();
-            set.columnsElements();
-            add.dataAttribute();
+            set.cellsCollection();  //{Array}   - set to this.config.cellsCollection
+            set.rowsCollection();   //{Array}   - set to this.config.rowsCollection
+            set.rowsLength();       //{Number}  - set to this.config.rowsLength
+            set.columnsLength();    //{Number}  - set to this.config.columnsLength
+            set.cellsInColumn();    //{Number}  - set to this.config.cellsInColumn
+            set.columnsElements();  //{Array}   - set to this.config.columnsElements
+            set.rowsElements();     //{Array}   - set to this.config.rowsElements
+            set.rowsMaxHeight();    //{Array}   - set to this.config.rowsMaxHeight
+            add.dataAttribute();    //{Object}  - add data attribute to table cells
+            add.divsResizable();     //{Object}  - add data attribute to table cells
+            //set.columnsResizable();
 
             return this;
         },
