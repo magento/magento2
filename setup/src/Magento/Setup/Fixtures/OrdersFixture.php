@@ -6,6 +6,8 @@
 
 namespace Magento\Setup\Fixtures;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Class OrdersFixture
  */
@@ -28,7 +30,7 @@ class OrdersFixture extends Fixture
         }
         $this->fixtureModel->resetObjectManager();
 
-        $writeAdapter = $this->getConnection('write');
+        $adapter = $this->getConnection(Resource::DEFAULT_CONNECTION);
 
         $quoteTableName = $this->getTableName(
             'quote',
@@ -268,7 +270,7 @@ class OrdersFixture extends Fixture
 
             // @codingStandardsIgnoreEnd
             foreach ($queries as $query) {
-                $writeAdapter->query($query);
+                $adapter->query($query);
             }
 
             $entityId++;
@@ -303,7 +305,7 @@ class OrdersFixture extends Fixture
     public function getTableName($tableName, $resourceName)
     {
         $resource = $this->fixtureModel->getObjectManager()->get($resourceName);
-        return $this->getConnection('write')->getTableName($resource->getTable($tableName));
+        return $this->getConnection(Resource::DEFAULT_CONNECTION)->getTableName($resource->getTable($tableName));
     }
 
     /**
