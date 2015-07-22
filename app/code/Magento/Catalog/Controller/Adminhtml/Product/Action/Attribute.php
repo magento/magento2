@@ -13,7 +13,7 @@ use Magento\Backend\App\Action;
 /**
  * Adminhtml catalog product action attribute update controller
  */
-class Attribute extends Action
+abstract class Attribute extends Action
 {
     /**
      *  @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute

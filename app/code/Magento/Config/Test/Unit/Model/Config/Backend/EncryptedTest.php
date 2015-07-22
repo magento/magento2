@@ -42,7 +42,8 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
                 'beginTransaction',
                 'save',
                 'commit',
-                'addCommitCallback'
+                'addCommitCallback',
+                'getConnection'
             ],
             [],
             '',

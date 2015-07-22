@@ -37,6 +37,6 @@ class AssertProductViewsReportTotalResult extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Products view total result is equals to data from dataSet.';
+        return 'Products view total result is equals to data from dataset.';
     }
 }

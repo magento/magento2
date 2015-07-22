@@ -28,26 +28,18 @@ class AroundProductRepositorySave
      */
     protected $typeConfigurableFactory;
 
-    /*
-     * @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data
-     */
-    protected $priceData;
-
     /**
      * @param \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data $priceData
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory
      */
     public function __construct(
         \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data $priceData,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory
     ) {
         $this->optionRepository = $optionRepository;
         $this->productFactory = $productFactory;
-        $this->priceData = $priceData;
         $this->typeConfigurableFactory = $typeConfigurableFactory;
     }
 
@@ -89,7 +81,6 @@ class AroundProductRepositorySave
         if ($configurableProductLinks !== null) {
             $this->saveConfigurableProductLinks($result, $configurableProductLinks);
         }
-        $this->priceData->setProductPrice($result->getId(), null);
         return $subject->get($result->getSku(), false, $result->getStoreId(), true);
     }
 

@@ -48,6 +48,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
                 'commit',
                 'addCommitCallback',
                 'rollBack',
+                'getConnection',
             ],
             [],
             '',

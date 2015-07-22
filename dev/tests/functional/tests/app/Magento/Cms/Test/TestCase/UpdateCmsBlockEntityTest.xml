@@ -10,7 +10,7 @@
         <variation name="UpdateCmsBlockEntityTestVariation1">
             <data name="cmsBlock/data/title" xsi:type="string">block_updated_%isolation%</data>
             <data name="cmsBlock/data/identifier" xsi:type="string">identifier_updated_%isolation%</data>
-            <data name="cmsBlock/data/stores/dataSet/option_0" xsi:type="string">All Store Views</data>
+            <data name="cmsBlock/data/stores/dataset/option_0" xsi:type="string">all_store_views</data>
             <data name="cmsBlock/data/is_active" xsi:type="string">Enabled</data>
             <data name="cmsBlock/data/content" xsi:type="string">description_updated_%isolation%</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockSuccessSaveMessage" />
@@ -20,7 +20,7 @@
         <variation name="UpdateCmsBlockEntityTestVariation2">
             <data name="cmsBlock/data/title" xsi:type="string">block_updated_%isolation%</data>
             <data name="cmsBlock/data/identifier" xsi:type="string">identifier_updated_%isolation%</data>
-            <data name="cmsBlock/data/stores/dataSet/option_0" xsi:type="string">default</data>
+            <data name="cmsBlock/data/stores/dataset/option_0" xsi:type="string">default</data>
             <data name="cmsBlock/data/is_active" xsi:type="string">Disabled</data>
             <data name="cmsBlock/data/content" xsi:type="string">description_updated_%isolation%</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockSuccessSaveMessage" />
