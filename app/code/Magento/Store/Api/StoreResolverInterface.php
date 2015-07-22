@@ -13,6 +13,11 @@ namespace Magento\Store\Api;
 interface StoreResolverInterface
 {
     /**
+     * Param name
+     */
+    const PARAM_NAME = '___store';
+
+    /**
      * Retrieve current store id
      *
      * @return string

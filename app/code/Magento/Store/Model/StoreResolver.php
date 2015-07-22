@@ -5,17 +5,11 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreCookieManagerInterface;
 
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
-    /**
-     * Param name
-     */
-    const PARAM_NAME = '___store';
-
     /**
      * Cache tag
      */
@@ -85,7 +79,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     {
         list($stores, $defaultStoreId) = $this->getStoresData();
 
-        $storeCode = $this->request->getParam(self::PARAM_NAME, $this->storeCookieManager->getStoreCookie());
+        $storeCode = $this->request->getParam(self::PARAM_NAME, $this->storeCookieManager->getStoreCodeFromCookie());
         if ($storeCode) {
             $store = $this->getRequestedStoreByCode($storeCode);
 

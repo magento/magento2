@@ -63,7 +63,10 @@ class SwitchAction extends Action
      */
     public function execute()
     {
-        $storeCode = $this->_request->getParam(StoreResolver::PARAM_NAME, $this->storeCookieManager->getStoreCookie());
+        $storeCode = $this->_request->getParam(
+            StoreResolver::PARAM_NAME,
+            $this->storeCookieManager->getStoreCodeFromCookie()
+        );
 
         try {
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
