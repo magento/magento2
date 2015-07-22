@@ -95,9 +95,10 @@ class Adapter implements AdapterInterface
      */
     private function getDocuments(Table $table)
     {
-        $select = $this->getConnection()->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
         $select->from($table->getName(), ['entity_id', 'relevance']);
-        return $this->getConnection()->fetchAssoc($select);
+        return $connection->fetchAssoc($select);
     }
 
     /**
