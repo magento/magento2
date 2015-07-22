@@ -26,17 +26,17 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
      * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param string|null $resourcePrefix
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $tableStrategy, $eavConfig, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
     }
 
     /**

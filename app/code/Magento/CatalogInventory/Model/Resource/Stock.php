@@ -84,7 +84,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param StockConfigurationInterface $stockConfiguration
      * @param StoreManagerInterface $storeManager
-     * @param string|null $resourcePrefix
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -92,9 +92,9 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\Stdlib\DateTime $dateTime,
         StockConfigurationInterface $stockConfiguration,
         StoreManagerInterface $storeManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->stockConfiguration = $stockConfiguration;

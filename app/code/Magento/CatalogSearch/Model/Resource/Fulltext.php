@@ -20,15 +20,15 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param string|null $resourcePrefix
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
