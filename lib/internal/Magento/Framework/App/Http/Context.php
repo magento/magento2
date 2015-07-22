@@ -53,7 +53,7 @@ class Context
     public function unsValue($name)
     {
         unset($this->data[$name]);
-        return;
+        return $this;
     }
 
     /**
@@ -83,5 +83,22 @@ class Context
             }
         }
         return $data;
+    }
+
+    /**
+     * Return vary string to be used as a part of page cache identifier
+     *
+     * @return string
+     */
+    public function getVaryString()
+    {
+        $data = [];
+        foreach (array_keys($this->data) as $name) {
+            $data[$name] = $this->getValue($name);
+        }
+        if (empty($data)) {
+            return null;
+        }
+        return sha1(serialize($data));
     }
 }

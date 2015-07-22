@@ -72,12 +72,9 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function sendVary()
     {
-        $data = $this->context->getData();
-        if (!empty($data)) {
-            ksort($data);
-            $cookieValue = sha1(serialize($data));
+        if ($varyString = $this->context->getVaryString()) {
             $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
-            $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $cookieValue, $sensitiveCookMetadata);
+            $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $varyString, $sensitiveCookMetadata);
         } else {
             $cookieMetadata = $this->cookieMetadataFactory->createCookieMetadata()->setPath('/');
             $this->cookieManager->deleteCookie(self::COOKIE_VARY_STRING, $cookieMetadata);
