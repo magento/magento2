@@ -82,14 +82,14 @@ define('globalNavigationScroll', [
                     nextTop < (menuScrollMax - scrollStep) ?
                         nextTop += scrollStep : nextTop = menuScrollMax;
 
-                    menu.css('top', -nextTop );
+                    menu.css('top', -nextTop);
 
                 } else if (winTop < winTopLast) { // scroll up
 
                     nextTop > -scrollStep ?
                         nextTop += scrollStep : nextTop = 0;
 
-                    menu.css('top', -nextTop );
+                    menu.css('top', -nextTop);
 
                 }
 
@@ -127,11 +127,12 @@ define('globalNavigationScroll', [
 
     //  Add event to menuItems to check submenu overlap
     menuItems.on('click', function (e) {
-        
+
         var submenu = $(this).children(subMenuClass);
+
         submenuHeight = submenu.height();
-
-
+        menu.css('height', submenuHeight);
+        menuHeight = submenuHeight;
 
         if (isMenuFixed() && (submenuHeight > winHeight)) {
             checkAddClass(submenu, overlapClassName);
@@ -163,7 +164,7 @@ define('globalNavigation', [
         _create: function () {
             var selectors = this.options.selectors;
 
-            this.menu      = this.element;
+            this.menu = this.element;
             this.menuLinks = $(selectors.topLevelHref, selectors.topLevelItem);
             this.closeActions = $(selectors.closeSubmenuBtn);
 
@@ -197,9 +198,9 @@ define('globalNavigation', [
          * Remove active class from current menu item
          * Turn back active class to current page menu item
          */
-        _blur: function(e){
+        _blur: function (e) {
             var selectors = this.options.selectors,
-                menuItem  = $(e.target).closest(selectors.topLevelItem),
+                menuItem = $(e.target).closest(selectors.topLevelItem),
                 currentItem = $(selectors.menu).find(selectors.currentItem);
 
             menuItem.removeClass('_active');
@@ -209,11 +210,11 @@ define('globalNavigation', [
         /**
          * Add focus to active menu item
          */
-        _keyboard: function(e) {
+        _keyboard: function (e) {
             var selectors = this.options.selectors,
-                menuItem  = $(e.target).closest(selectors.topLevelItem);
+                menuItem = $(e.target).closest(selectors.topLevelItem);
 
-            if(e.which === 13) {
+            if (e.which === 13) {
                 this._close(e);
                 $(selectors.topLevelHref, menuItem).focus();
             }
@@ -224,11 +225,11 @@ define('globalNavigation', [
          */
         _focus: function (e) {
             var selectors = this.options.selectors,
-                menuItem  = $(e.target).closest(selectors.topLevelItem);
+                menuItem = $(e.target).closest(selectors.topLevelItem);
 
             menuItem.addClass('_active')
-                    .siblings(selectors.topLevelItem)
-                    .removeClass('_active');
+                .siblings(selectors.topLevelItem)
+                .removeClass('_active');
         },
 
         _closeSubmenu: function (e) {
@@ -241,12 +242,12 @@ define('globalNavigation', [
         },
 
         _open: function (e) {
-            var selectors           = this.options.selectors,
-                menuItemSelector    = selectors.topLevelItem,
-                menuItem            = $(e.target).closest(menuItemSelector),
-                subMenu             = $(selectors.subMenu, menuItem),
-                close               = this._closeSubmenu.bind(this),
-                closeBtn            = subMenu.find(selectors.closeSubmenuBtn);
+            var selectors = this.options.selectors,
+                menuItemSelector = selectors.topLevelItem,
+                menuItem = $(e.target).closest(menuItemSelector),
+                subMenu = $(selectors.subMenu, menuItem),
+                close = this._closeSubmenu.bind(this),
+                closeBtn = subMenu.find(selectors.closeSubmenuBtn);
 
 
             if (subMenu.length) {
@@ -254,8 +255,8 @@ define('globalNavigation', [
             }
 
             menuItem.addClass('_show')
-                    .siblings(menuItemSelector)
-                    .removeClass('_show');
+                .siblings(menuItemSelector)
+                .removeClass('_show');
 
             subMenu.attr('aria-expanded', 'true');
 
@@ -268,11 +269,11 @@ define('globalNavigation', [
         },
 
         _close: function (e) {
-            var selectors   = this.options.selectors,
-                menuItem    = this.menu.find(selectors.topLevelItem + '._show'),
-                subMenu     = $(selectors.subMenu, menuItem),
-                closeBtn    = subMenu.find(selectors.closeSubmenuBtn),
-                blur        = this._blur.bind(this);
+            var selectors = this.options.selectors,
+                menuItem = this.menu.find(selectors.topLevelItem + '._show'),
+                subMenu = $(selectors.subMenu, menuItem),
+                closeBtn = subMenu.find(selectors.closeSubmenuBtn),
+                blur = this._blur.bind(this);
 
             e.preventDefault();
 
