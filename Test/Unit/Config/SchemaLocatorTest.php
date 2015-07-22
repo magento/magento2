@@ -6,11 +6,10 @@
 
 namespace Magento\Framework\Amqp\Test\Unit\Config;
 
-
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Config\SchemaLocator
+     * @var \Magento\Framework\Amqp\Config\SchemaLocator
      */
     protected $model;
 
@@ -28,8 +27,6 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPerFileSchema()
     {
-        $actual = str_replace('\\', '/', $this->model->getPerFileSchema());
-        $expected = str_replace('\\', '/', BP . '/lib/internal/Magento/Framework/Amqp/etc/events.xsd');
-        $this->assertEquals($expected, $actual);
+        $this->assertNull($this->model->getPerFileSchema());
     }
 }

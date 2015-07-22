@@ -7,7 +7,7 @@
 namespace Magento\Framework\Amqp\Config;
 
 /**
- * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * AMQP Helper
  */
 class Data extends \Magento\Framework\Config\Data
 {
