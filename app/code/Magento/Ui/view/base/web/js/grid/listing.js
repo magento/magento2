@@ -27,6 +27,9 @@ define([
                 name: '${ $.name }_resize',
                 component: 'Magento_Ui/js/grid/resize',
                 provider: '${ $.provider }',
+                divsAttrParams: {
+                    'data-cl-elem': 'shadow-div'
+                },
                 enabled: true
             },
             imports: {
