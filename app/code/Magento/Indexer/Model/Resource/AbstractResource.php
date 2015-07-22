@@ -28,15 +28,15 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
-     * @param null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->tableStrategy = $tableStrategy;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
