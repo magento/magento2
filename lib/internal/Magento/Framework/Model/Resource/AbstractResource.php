@@ -232,9 +232,9 @@ abstract class AbstractResource
     {
         $fieldsetColumns = $object->getFieldset();
         if (!empty($fieldsetColumns)) {
-            $readAdapter = $this->getConnection();
-            if ($readAdapter instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
-                $entityTableColumns = $readAdapter->describeTable($tableName);
+            $connection = $this->getConnection();
+            if ($connection instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
+                $entityTableColumns = $connection->describeTable($tableName);
                 $columns = array_intersect($fieldsetColumns, array_keys($entityTableColumns));
             }
         }
