@@ -82,14 +82,14 @@ define('globalNavigationScroll', [
                     nextTop < (menuScrollMax - scrollStep) ?
                         nextTop += scrollStep : nextTop = menuScrollMax;
 
-                    menu.css('top', -nextTop * 2);
+                    menu.css('top', -nextTop );
 
                 } else if (winTop < winTopLast) { // scroll up
 
                     nextTop > -scrollStep ?
                         nextTop += scrollStep : nextTop = 0;
 
-                    menu.css('top', -nextTop * 2);
+                    menu.css('top', -nextTop );
 
                 }
 
@@ -126,10 +126,12 @@ define('globalNavigationScroll', [
     });
 
     //  Add event to menuItems to check submenu overlap
-    menuItems.on('click', function () {
+    menuItems.on('click', function (e) {
         
         var submenu = $(this).children(subMenuClass);
         submenuHeight = submenu.height();
+
+
 
         if (isMenuFixed() && (submenuHeight > winHeight)) {
             checkAddClass(submenu, overlapClassName);
@@ -246,6 +248,7 @@ define('globalNavigation', [
                 close               = this._closeSubmenu.bind(this),
                 closeBtn            = subMenu.find(selectors.closeSubmenuBtn);
 
+
             if (subMenu.length) {
                 e.preventDefault();
             }
@@ -255,7 +258,8 @@ define('globalNavigation', [
                     .removeClass('_show');
 
             subMenu.attr('aria-expanded', 'true');
-            subMenu.css('height', 765);
+
+            //subMenu.css('height', subMenu.find('ul.menu')[0].height() + subMenu.find('strong.submenu-title').height());
 
             closeBtn.on('click', close);
 
