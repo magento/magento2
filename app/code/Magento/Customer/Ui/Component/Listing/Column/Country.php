@@ -28,7 +28,6 @@ class Country extends Column
         CountryFactory $countryFactory,
         array $components = [],
         array $data = []
-
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->countryFactory = $countryFactory;
