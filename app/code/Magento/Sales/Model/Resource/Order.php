@@ -58,7 +58,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param Snapshot $entitySnapshot
      * @param RelationComposite $entityRelationComposite
      * @param StateHandler $stateHandler
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -67,7 +67,7 @@ class Order extends SalesResource implements OrderResourceInterface
         Attribute $attribute,
         Manager $sequenceManager,
         StateHandler $stateHandler,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->stateHandler = $stateHandler;
         parent::__construct(
@@ -76,7 +76,7 @@ class Order extends SalesResource implements OrderResourceInterface
             $entityRelationComposite,
             $attribute,
             $sequenceManager,
-            $resourcePrefix
+            $connectionName
         );
     }
 
