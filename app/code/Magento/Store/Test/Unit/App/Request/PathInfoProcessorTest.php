@@ -112,7 +112,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->_storeManagerMock->expects($this->once())->method('getStore')->with('storeCode')
-            // TODO: MAGETWO-39826
+            // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
             ->willThrowException(new \InvalidArgumentException());
         $store->expects($this->never())->method('isUseStoreInUrl');
         $this->_requestMock->expects($this->never())->method('isDirectAccessFrontendName');

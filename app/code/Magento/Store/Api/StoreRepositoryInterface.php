@@ -24,6 +24,26 @@ interface StoreRepositoryInterface
     public function get($code);
 
     /**
+     * Retrieve active store by code
+     *
+     * @param string $code
+     * @return Data\StoreInterface
+     * @throws NoSuchEntityException
+     * @throws StoreIsInactiveException
+     */
+    public function getActiveStoreByCode($code);
+
+    /**
+     * Retrieve active store by id
+     *
+     * @param int $id
+     * @return Data\StoreInterface
+     * @throws NoSuchEntityException
+     * @throws StoreIsInactiveException
+     */
+    public function getActiveStoreById($id);
+
+    /**
      * Retrieve store by id
      *
      * @param int $id
