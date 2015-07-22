@@ -57,34 +57,34 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveRelatedQueries($queryId, $relatedQueries = [])
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $whereOr = [];
         if (count($relatedQueries) > 0) {
             $whereOr[] = implode(
                 ' AND ',
                 [
-                    $adapter->quoteInto('query_id=?', $queryId),
-                    $adapter->quoteInto('relation_id NOT IN(?)', $relatedQueries)
+                    $connection->quoteInto('query_id=?', $queryId),
+                    $connection->quoteInto('relation_id NOT IN(?)', $relatedQueries)
                 ]
             );
             $whereOr[] = implode(
                 ' AND ',
                 [
-                    $adapter->quoteInto('relation_id = ?', $queryId),
-                    $adapter->quoteInto('query_id NOT IN(?)', $relatedQueries)
+                    $connection->quoteInto('relation_id = ?', $queryId),
+                    $connection->quoteInto('query_id NOT IN(?)', $relatedQueries)
                 ]
             );
         } else {
-            $whereOr[] = $adapter->quoteInto('query_id = ?', $queryId);
-            $whereOr[] = $adapter->quoteInto('relation_id = ?', $queryId);
+            $whereOr[] = $connection->quoteInto('query_id = ?', $queryId);
+            $whereOr[] = $connection->quoteInto('relation_id = ?', $queryId);
         }
         $whereCond = '(' . implode(') OR (', $whereOr) . ')';
-        $adapter->delete($this->getMainTable(), $whereCond);
+        $connection->delete($this->getMainTable(), $whereCond);
 
         $existsRelatedQueries = $this->getRelatedQueries($queryId);
         $neededRelatedQueries = array_diff($relatedQueries, $existsRelatedQueries);
         foreach ($neededRelatedQueries as $relationId) {
-            $adapter->insert($this->getMainTable(), ["query_id" => $queryId, "relation_id" => $relationId]);
+            $connection->insert($this->getMainTable(), ["query_id" => $queryId, "relation_id" => $relationId]);
         }
         return $this;
     }
@@ -100,9 +100,9 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getRelatedQueries($queryId, $limit = false, $order = false)
     {
         $collection = $this->_searchQueryModel->getResourceCollection();
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $queryIdCond = $adapter->quoteInto('main_table.query_id IN (?)', $queryId);
+        $queryIdCond = $connection->quoteInto('main_table.query_id IN (?)', $queryId);
 
         $collection->getSelect()->join(
             ['sr' => $collection->getTable('catalogsearch_recommendations')],
@@ -111,7 +111,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
             \Zend_Db_Select::COLUMNS
         )->columns(
             [
-                'rel_id' => $adapter->getCheckSql('main_table.query_id=sr.query_id', 'sr.relation_id', 'sr.query_id'),
+                'rel_id' => $connection->getCheckSql('main_table.query_id=sr.query_id', 'sr.relation_id', 'sr.query_id'),
             ]
         );
         if (!empty($limit)) {
@@ -121,7 +121,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $collection->getSelect()->order($order);
         }
 
-        $queryIds = $adapter->fetchCol($collection->getSelect());
+        $queryIds = $connection->fetchCol($collection->getSelect());
         return $queryIds;
     }
 
@@ -143,9 +143,9 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $relatedQueriesIds = $this->loadByQuery($query, $searchRecommendationsCount);
         $relatedQueries = [];
         if (count($relatedQueriesIds)) {
-            $adapter = $this->getConnection();
+            $connection = $this->getConnection();
             $mainTable = $this->_searchQueryModel->getResourceCollection()->getMainTable();
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 ['main_table' => $mainTable],
                 ['query_text', 'num_results']
             )->where(
@@ -154,7 +154,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
             )->where(
                 'num_results > 0'
             );
-            $relatedQueries = $adapter->fetchAll($select);
+            $relatedQueries = $connection->fetchAll($select);
         }
 
         return $relatedQueries;
@@ -169,7 +169,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function loadByQuery($query, $searchRecommendationsCount)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $queryId = $this->_searchQueryModel->getId();
         $relatedQueries = $this->getRelatedQueries($queryId, $searchRecommendationsCount, 'num_results DESC');
         if ($searchRecommendationsCount - count($relatedQueries) < 1) {
@@ -189,11 +189,11 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $likeCondition = [];
         foreach ($queryWords as $word) {
-            $likeCondition[] = $adapter->quoteInto('query_text LIKE ?', $word . '%');
+            $likeCondition[] = $connection->quoteInto('query_text LIKE ?', $word . '%');
         }
         $likeCondition = implode(' OR ', $likeCondition);
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->_searchQueryModel->getResource()->getMainTable(),
             ['query_id']
         )->where(
@@ -206,7 +206,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->limit(
             $searchRecommendationsCount + 1
         );
-        $ids = $adapter->fetchCol($select);
+        $ids = $connection->fetchCol($select);
 
         if (!is_array($ids)) {
             $ids = [];
