@@ -104,7 +104,7 @@ class Shipment extends AbstractPdf
     /**
      * Return PDF document
      *
-     * @param  array $shipments
+     * @param \Magento\Sales\Model\Order\Shipment[] $shipments
      * @return \Zend_Pdf
      */
     public function getPdf($shipments = [])

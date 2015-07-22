@@ -6,6 +6,7 @@
 namespace Magento\Ui\DataProvider;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 
 abstract class AbstractDataProvider implements DataProviderInterface
 {
@@ -43,6 +44,11 @@ abstract class AbstractDataProvider implements DataProviderInterface
     protected $data = [];
 
     /**
+     * @var AbstractCollection
+     */
+    protected $collection;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -64,10 +70,12 @@ abstract class AbstractDataProvider implements DataProviderInterface
     }
 
     /**
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return AbstractCollection
      */
-    abstract protected function getCollection();
-
+    public function getCollection()
+    {
+        return $this->collection;
+    }
     /**
      * Get Data Provider name
      *

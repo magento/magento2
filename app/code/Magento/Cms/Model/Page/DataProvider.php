@@ -49,14 +49,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * @return \Magento\Cms\Model\Resource\Page\Collection
-     */
-    protected function getCollection()
-    {
-        return $this->collection;
-    }
-
-    /**
      * @inheritdoc
      */
     public function addFilter($condition, $field = null, $type = 'regular')

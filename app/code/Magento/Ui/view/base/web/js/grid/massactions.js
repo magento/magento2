@@ -55,7 +55,7 @@ define([
                 return this;
             }
 
-            action   = this.getAction(actionIndex),
+            action   = this.getAction(actionIndex);
             callback = this._getCallback(action, data);
 
             action.confirm ?
@@ -153,6 +153,8 @@ define([
             if (!selections[itemsType].length) {
                 selections[itemsType] = false;
             }
+
+            _.extend(selections, data.params || {});
 
             utils.submit({
                 url: action.url,

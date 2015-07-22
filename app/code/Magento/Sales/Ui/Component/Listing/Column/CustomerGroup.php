@@ -50,8 +50,12 @@ class CustomerGroup extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->groupRepository->getById($item[$this->getData('name')])
-                    ->getCode();
+                try {
+                    $item[$this->getData('name')] = $this->groupRepository->getById($item[$this->getData('name')])
+                        ->getCode();
+                } catch (\Exception $e) {
+
+                }
             }
         }
     }
