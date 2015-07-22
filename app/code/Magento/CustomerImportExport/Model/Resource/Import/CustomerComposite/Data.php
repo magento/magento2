@@ -28,7 +28,7 @@ class Data extends \Magento\ImportExport\Model\Resource\Import\Data
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $coreHelper
-     * @param string|null $connectionName
+     * @param string $connectionName
      * @param array $arguments
      */
     public function __construct(

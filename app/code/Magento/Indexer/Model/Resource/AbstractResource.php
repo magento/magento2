@@ -28,7 +28,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
-     * @param null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

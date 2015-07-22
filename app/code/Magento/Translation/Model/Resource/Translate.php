@@ -21,7 +21,7 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
-     * @param string|null $connectionName
+     * @param string $connectionName
      * @param null|string $scope
      */
     public function __construct(

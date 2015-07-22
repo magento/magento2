@@ -33,7 +33,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstract
      * @param RelationComposite $entityRelationComposite,
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param Customer\CollectionFactory $customersFactory
-     * @param string|null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

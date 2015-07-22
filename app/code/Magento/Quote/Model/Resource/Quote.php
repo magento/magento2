@@ -28,7 +28,7 @@ class Quote extends AbstractDb
      * @param Snapshot $entitySnapshot,
      * @param RelationComposite $entityRelationComposite,
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
-     * @param null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

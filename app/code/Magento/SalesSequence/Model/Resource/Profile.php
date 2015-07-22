@@ -39,7 +39,7 @@ class Profile extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param DatabaseContext $context
      * @param ProfileFactory $profileFactory
-     * @param null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         DatabaseContext $context,

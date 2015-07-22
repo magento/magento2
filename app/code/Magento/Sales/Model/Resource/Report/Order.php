@@ -29,7 +29,7 @@ class Order extends AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Sales\Model\Resource\Report\Order\CreatedatFactory $createDatFactory
      * @param \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
-     * @param string|null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
