@@ -20,6 +20,8 @@ use Magento\Framework\View\Element\UiComponent\Config\Converter;
 
 /**
  * Class ManagerTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -172,16 +174,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $cachedData = new \ArrayObject(
             ['test_component1' =>
                 [
-                    ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                        [
-                            'argument_name1' => ['value' => 'value1'],
-                        ],
+                    ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name1' => ['value' => 'value1']],
                     ManagerInterface::CHILDREN_KEY => [
                         'custom' => [
                             ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                                [
-                                    'custom_name1' => ['value' => 'custom_value1'],
-                                ],
+                                ['custom_name1' => ['value' => 'custom_value1']],
                             ManagerInterface::CHILDREN_KEY => [],
                         ],
                     ],
@@ -197,16 +194,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 [],
                 [
                     'test_component1' => [
-                        ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                            [
-                                'argument_name1' => ['argument' => 'value1'],
-                            ],
+                        ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name1' => ['argument' => 'value1']],
                         ManagerInterface::CHILDREN_KEY => [
                             'custom' => [
                                 ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                                    [
-                                        'custom_name1' => ['argument' => 'custom_value1'],
-                                    ],
+                                    ['custom_name1' => ['argument' => 'custom_value1']],
                                 ManagerInterface::CHILDREN_KEY => [],
                             ]
                         ]
@@ -218,16 +210,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 new \ArrayObject(
                     ['test_component2' =>
                         [
-                            ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                                [
-                                    'argument_name2' => ['value' => 'value2'],
-                                ],
+                            ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name2' => ['value' => 'value2']],
                             ManagerInterface::CHILDREN_KEY => [
                                 'test_component21' => [
                                     ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                                        [
-                                            'argument_name21' => ['value' => 'value21'],
-                                        ],
+                                        ['argument_name21' => ['value' => 'value21']],
                                     ManagerInterface::CHILDREN_KEY => [],
                                 ],
                             ],
@@ -236,31 +223,22 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 ),
                 false,
                 ['componentGroup' => [0 => [
-                    Converter::DATA_ARGUMENTS_KEY => [
-                        'argument_name2' => ['value' => 'value2'],
-                    ],
+                    Converter::DATA_ARGUMENTS_KEY => ['argument_name2' => ['value' => 'value2']],
                     Converter::DATA_ATTRIBUTES_KEY => ['name' => 'attribute_name2'],
                     'test_component21' => [0 => [
-                            Converter::DATA_ARGUMENTS_KEY => [
-                                'argument_name21' => ['value' => 'value21'],
-                            ],
+                            Converter::DATA_ARGUMENTS_KEY => ['argument_name21' => ['value' => 'value21']],
                             Converter::DATA_ATTRIBUTES_KEY => ['name' => 'attribute_name21'],
                         ]
                     ],
                 ]]],
                 [
                     'test_component2' => [
-                        ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                            [
-                                'argument_name2' => ['argument' => 'value2'],
-                            ],
+                        ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name2' => ['argument' => 'value2']],
                         ManagerInterface::COMPONENT_ATTRIBUTES_KEY => ['name' => 'attribute_name2'],
                         ManagerInterface::CHILDREN_KEY => [
                             'attribute_name21' => [
                                 ManagerInterface::COMPONENT_ARGUMENTS_KEY =>
-                                    [
-                                        'argument_name21' => ['argument' => 'value21'],
-                                    ],
+                                    ['argument_name21' => ['argument' => 'value21']],
                                 ManagerInterface::COMPONENT_ATTRIBUTES_KEY => ['name' => 'attribute_name21'],
                                 ManagerInterface::CHILDREN_KEY => [],
                             ],

@@ -246,4 +246,25 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
     {
         return $this->setData(self::UPDATED_AT, $updatedAt);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Ui\Api\Data\BookmarkExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }
