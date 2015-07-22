@@ -20,9 +20,9 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
     private $directoryList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Composer\MagentoComposerApplication
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Composer\RequireUpdateDryRunCommand
      */
-    private $composerApp;
+    private $reqUpdDryRunCommand;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Driver\File
@@ -40,7 +40,7 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->composerJsonFinder->expects($this->once())->method('findComposerJson')->willReturn('composer.json');
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->directoryList->expects($this->exactly(2))->method('getPath')->willReturn('var');
-        $this->composerApp = $this->getMock('Magento\Composer\MagentoComposerApplication', [], [], '', false);
+        $this->reqUpdDryRunCommand = $this->getMock('Magento\Composer\RequireUpdateDryRunCommand', [], [], '', false);
         $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $this->file->expects($this->once())->method('copy')->with('composer.json', 'var/composer.json');
         $composerAppFactory = $this->getMock(
@@ -50,7 +50,9 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $composerAppFactory->expects($this->once())->method('create')->willReturn($this->composerApp);
+        $composerAppFactory->expects($this->once())
+            ->method('createRequireUpdateDryRunCommand')
+            ->willReturn($this->reqUpdDryRunCommand);
         $this->dependencyReadinessCheck = new DependencyReadinessCheck(
             $this->composerJsonFinder,
             $this->directoryList,
@@ -61,8 +63,8 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testRunReadinessCheckFailed()
     {
-        $this->composerApp->expects($this->once())
-            ->method('runRequireUpdateDryRun')
+        $this->reqUpdDryRunCommand->expects($this->once())
+            ->method('run')
             ->with([], 'var')
             ->willThrowException(new \RuntimeException('Failed' . PHP_EOL . 'dependency readiness check'));
         $expected = ['success' => false, 'error' => 'Failed<br/>dependency readiness check'];
@@ -71,8 +73,8 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testRunReadinessCheck()
     {
-        $this->composerApp->expects($this->once())
-            ->method('runRequireUpdateDryRun')
+        $this->reqUpdDryRunCommand->expects($this->once())
+            ->method('run')
             ->with([], 'var')
             ->willReturn('Success');
         $expected = ['success' => true];

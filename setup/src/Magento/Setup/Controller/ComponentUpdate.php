@@ -15,7 +15,7 @@ use Zend\View\Model\ViewModel;
 /**
  * Controller for updater tasks
  */
-class ComponentUpgrade extends AbstractActionController
+class ComponentUpdate extends AbstractActionController
 {
     /**
      * @var ModelUpdater
