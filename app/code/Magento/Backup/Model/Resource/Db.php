@@ -43,7 +43,7 @@ class Db
         \Magento\Framework\App\Resource $resource
     ) {
         $this->_resourceHelper = $resHelperFactory->create();
-        $this->_write = $resource->getConnection('backup_write');
+        $this->_write = $resource->getConnection('backup');
     }
 
     /**

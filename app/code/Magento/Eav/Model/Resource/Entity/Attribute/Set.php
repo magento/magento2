@@ -31,15 +31,15 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory $attrGroupFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_attrGroupFactory = $attrGroupFactory;
         $this->eavConfig = $eavConfig;
     }
