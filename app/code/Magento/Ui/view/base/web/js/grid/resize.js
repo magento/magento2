@@ -62,7 +62,7 @@ define([
             };
         },
 
-        eventListener: function() {
+        eventListener: function () {
             var t = this;
 
             $(t.table).bind('mouseenter', t._handlers().entryInTable);
@@ -79,7 +79,7 @@ define([
             return {
                 /**
                  * @see set height for rows
-                 * @params {Array} rows rows elements, {Number} rows length
+                 * @param {Array} rows rows elements, {Number} rows length
                  * @returns {Array} with max height for all rows
                  */
                 rowsMaxHeight: function (rowsElements, rowsLength) {
@@ -90,7 +90,7 @@ define([
 
                     cfg.rowsMaxHeight = [];
 
-                    for (i; i < rl; i++){
+                    for (i; i < rl; i++) {
                         curRow = $(re[i]).find('div');
                         curRow.css('white-space', 'nowrap');
                         cfg.rowsMaxHeight[i] = curRow.height();
@@ -121,7 +121,7 @@ define([
                 },
                 /**
                  * @see add cells elements to current column
-                 * @params {Array} cells collection, {Number} columns length
+                 * @param {Array} cells collection, {Number} columns length
                  * @returns {Array} Columns with cells element inner
                  */
                 columnsElements: function (cellsCollection, columnsLength) {
@@ -148,7 +148,7 @@ define([
                 },
                 /**
                  * @see length cells in one column to config
-                 * @params {Array} cells collection, {Number} columns length
+                 * @param {Array} cells collection, {Number} columns length
                  * @returns {Number} length in column
                  */
                 cellsInColumn: function (cellsCollection, columnsLength) {
@@ -163,7 +163,7 @@ define([
                  * @see set cells collection property to config
                  * @returns {Array} cells collection
                  */
-                cellsCollection: function() {
+                cellsCollection: function () {
                     var table = $(t.table);
 
                     cfg.cellsCollection = $.merge(table.find('th'), table.find('td'));
@@ -174,14 +174,15 @@ define([
                  * @see set rows collection property to config
                  * @returns {Array} rows collection
                  */
-                rowsCollection: function ( rowsCollection ) {
+                rowsCollection: function (rowsCollection) {
                     cfg.rowsCollection = rowsCollection || $(t.table).find('tr');
 
                     return cfg.rowsCollection;
                 },
                 /**
                  * @see set columnsLength property to config
-                 * @params {Array} cells collection, {Array} rows collections
+                 * @param {Array} cellsCollection - cells collection
+                 * @param {Array} rowsCollection - rows collections
                  * @returns columns length property
                  */
                 columnsLength: function (cellsCollection, rowsCollection) {
@@ -259,15 +260,15 @@ define([
                  * @see add divs to cells for resize columns
                  * @returns this
                  */
-                divsResizable: function (columnsElements, columnsLength ,dragRange) {
+                divsResizable: function (columnsElements, columnsLength, dragRange) {
                     var ce = columnsElements || cfg.columnsElements || t._set().columnsElements(),
                         cl = columnsLength || cfg.columnsLength || t._set().columnsLength(),
                         drAttr = cfg.nameSpacing.divsResizableAttribute,
                         drAttrName = cfg.nameSpacing.divsResizableAttrName,
                         drRange = dragRange || cfg.dragRange || 10,
                         i = 0,
-                        template = '<div '+drAttr+'="'+drAttrName+'" style="position:absolute; '                +
-                            'width:'+drRange+'px; height:100%; top:0; right:0; margin-right:-'+drRange+'px;'    +
+                        template = '<div ' + drAttr + '="' + drAttrName + '" style="position:absolute; ' +
+                            'width:' + drRange + 'px; height:100%; top:0; right:0; margin-right:-' + drRange + 'px;' +
                             'cursor: e-resize;"></div>';
 
                     for (i; i < cl; i++) {
@@ -311,7 +312,7 @@ define([
 
             return this;
         },
-           
+
         refreshResizeConfig: function () {
             var cfg = this.config,
                 t = this;
