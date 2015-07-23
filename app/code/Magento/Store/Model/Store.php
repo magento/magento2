@@ -290,6 +290,16 @@ class Store extends AbstractModel implements
     protected $currencyFactory;
 
     /**
+     * @var \Magento\Store\Api\GroupRepositoryInterface
+     */
+    protected $groupRepository;
+
+    /**
+     * @var \Magento\Store\Api\WebsiteRepositoryInterface
+     */
+    protected $websiteRepository;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\Resource\Store $resource
@@ -306,6 +316,8 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param string $currencyInstalled
+     * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
+     * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data
@@ -328,6 +340,8 @@ class Store extends AbstractModel implements
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         $currencyInstalled,
+        \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
+        \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = []
@@ -346,6 +360,8 @@ class Store extends AbstractModel implements
         $this->_session = $session;
         $this->currencyFactory = $currencyFactory;
         $this->_currencyInstalled = $currencyInstalled;
+        $this->groupRepository = $groupRepository;
+        $this->websiteRepository = $websiteRepository;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -487,7 +503,7 @@ class Store extends AbstractModel implements
         if ($this->getWebsiteId() === null) {
             return false;
         }
-        return $this->_storeManager->getWebsite($this->getWebsiteId());
+        return $this->websiteRepository->getById($this->getWebsiteId());
     }
 
     /**
@@ -978,7 +994,7 @@ class Store extends AbstractModel implements
         if (null === $this->getGroupId()) {
             return false;
         }
-        return $this->_storeManager->getGroup($this->getGroupId());
+        return $this->groupRepository->get($this->getGroupId());
     }
 
     /**

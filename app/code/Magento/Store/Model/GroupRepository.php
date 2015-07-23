@@ -51,7 +51,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
         }
         $group = $this->groupFactory->create();
         $group->load($id);
-        if (!$group->getId()) {
+        if (null === $group->getId()) {
             throw new NoSuchEntityException();
         }
         $this->entities[$id] = $group;
