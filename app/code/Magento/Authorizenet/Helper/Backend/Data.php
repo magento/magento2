@@ -86,7 +86,7 @@ class Data extends FrontendDataHelper
      * @param null|int|string $storeId
      * @return string
      * 
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getRelayUrl($storeId = null)
     {
