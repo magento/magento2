@@ -186,20 +186,28 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @return bool
      */
-    public function hasFatalExceptions()
+    public function isErrorLimitExceeded()
     {
-        $hasExceptions = false;
+        $isExceeded = false;
         if ($this->validationStrategy == self::VALIDATION_STRATEGY_STOP_ON_ERROR
-            && $this->getErrorsCount() > 0
+            && $this->getErrorsCount(ProcessingError::ERROR_LEVEL_NOT_CRITICAL) > 0
         ) {
-            $hasExceptions = true;
+            $isExceeded = true;
         } elseif ($this->validationStrategy == self::VALIDATION_STRATEGY_SKIP_ERRORS
-            && $this->getErrorsCount() > $this->allowedErrorsCount
+            && $this->getErrorsCount(ProcessingError::ERROR_LEVEL_NOT_CRITICAL) > $this->allowedErrorsCount
         ) {
-            $hasExceptions = true;
+            $isExceeded = true;
         }
 
-        return $hasExceptions;
+        return $isExceeded;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFatalExceptions()
+    {
+        return (bool)$this->getErrorsCount(ProcessingError::ERROR_LEVEL_CRITICAL);
     }
 
     /**
@@ -245,8 +253,9 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param string[] $errorLevels
      * @return int
      */
-    public function getErrorsCount(array $errorLevels = [ProcessingError::ERROR_LEVEL_CRITICAL])
-    {
+    public function getErrorsCount(
+        array $errorLevels = [ProcessingError::ERROR_LEVEL_CRITICAL, ProcessingError::ERROR_LEVEL_NOT_CRITICAL]
+    ) {
         $result = 0;
         foreach ($errorLevels as $errorLevel) {
             $result += isset($this->errorStatistics[$errorLevel]) ? $this->errorStatistics[$errorLevel] : 0;

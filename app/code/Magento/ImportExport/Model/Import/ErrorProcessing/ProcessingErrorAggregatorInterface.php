@@ -59,6 +59,11 @@ interface ProcessingErrorAggregatorInterface
     /**
      * @return bool
      */
+    public function isErrorLimitExceeded();
+
+    /**
+     * @return bool
+     */
     public function hasFatalExceptions();
 
     /**
@@ -81,7 +86,9 @@ interface ProcessingErrorAggregatorInterface
      * @param string[] $errorLevels
      * @return int
      */
-    public function getErrorsCount(array $errorLevels = [ProcessingError::ERROR_LEVEL_CRITICAL]);
+    public function getErrorsCount(
+        array $errorLevels = [ProcessingError::ERROR_LEVEL_CRITICAL, ProcessingError::ERROR_LEVEL_NOT_CRITICAL]
+    );
 
     /**
      * @return $this
