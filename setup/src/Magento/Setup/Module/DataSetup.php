@@ -107,7 +107,9 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
         if (!$this->setupCache->has($table, $parentId, $rowId)) {
             $connection = $this->getConnection();
             $bind = ['id_field' => $rowId];
-            $select = $connection->select()->from($table)->where($connection->quoteIdentifier($idField) . '= :id_field');
+            $select = $connection->select()
+                ->from($table)
+                ->where($connection->quoteIdentifier($idField) . '= :id_field');
             if (null !== $parentField) {
                 $select->where($connection->quoteIdentifier($parentField) . '= :parent_id');
                 $bind['parent_id'] = $parentId;
@@ -133,7 +135,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
         $table = $this->getTable($table);
         $connection = $this->getConnection();
         $where = [$connection->quoteIdentifier($idField) . '=?' => $rowId];
-        if (!is_null($parentField)) {
+        if (null !== $parentField) {
             $where[$connection->quoteIdentifier($parentField) . '=?'] = $parentId;
         }
 

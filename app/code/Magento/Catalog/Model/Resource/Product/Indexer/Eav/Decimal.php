@@ -69,7 +69,10 @@ class Decimal extends AbstractEav
             "{$productValueExpression} IS NOT NULL"
         );
 
-        $statusCond = $connection->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $statusCond = $connection->quoteInto(
+            '=?',
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        );
         $this->_addAttributeToSelect($select, 'status', 'pdd.entity_id', 'cs.store_id', $statusCond);
 
         if ($entityIds !== null) {

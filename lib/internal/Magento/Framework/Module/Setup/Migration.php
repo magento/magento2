@@ -311,7 +311,11 @@ class Migration
                 foreach ($fieldReplacement['where_fields'] as $whereFieldName => $value) {
                     $where[$connection->quoteIdentifier($whereFieldName) . ' = ?'] = $value;
                 }
-                $connection->update($this->setup->getTable($tableName), [$fieldName => $fieldReplacement['to']], $where);
+                $connection->update(
+                    $this->setup->getTable($tableName),
+                    [$fieldName => $fieldReplacement['to']],
+                    $where
+                );
             }
         }
     }
@@ -606,7 +610,7 @@ class Migration
      */
     protected function _getAliasesMap()
     {
-        if (is_null($this->_aliasesMap)) {
+        if (null === $this->_aliasesMap) {
             $this->_aliasesMap = [];
 
             $map = $this->_loadMap($this->_pathToMapFile);

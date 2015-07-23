@@ -144,7 +144,10 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
         );
 
         // add limitation of status
-        $condition = $connection->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $condition = $connection->quoteInto(
+            '=?',
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        );
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
 
         if ($this->_isManageStock()) {

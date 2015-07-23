@@ -32,7 +32,14 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($eventManager));
         $registry = $this->getMock('Magento\Framework\Registry', [], [], '', false, false);
 
-        $connection = $this->getMock('Magento\Framework\DB\Adapter\Adapter', ['beginTransaction'], [], '', false, false);
+        $connection = $this->getMock(
+            'Magento\Framework\DB\Adapter\Adapter',
+            ['beginTransaction'],
+            [],
+            '',
+            false,
+            false
+        );
         $connection->expects($this->any())
             ->method('beginTransaction')
             ->will($this->returnSelf());
