@@ -6,6 +6,7 @@
 namespace Magento\Fedex\Test\Unit\Model;
 
 use Magento\Framework\Object;
+use Magento\Framework\Xml\Security;
 
 /**
  * Class CarrierTest
@@ -79,6 +80,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 'rateErrorFactory' =>
                     $this->getMock('Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory', [], [], '', false),
                 'logger' => $this->getMock('Psr\Log\LoggerInterface'),
+                'xmlSecurity' => new Security(),
                 'xmlElFactory' => $this->getMock('Magento\Shipping\Model\Simplexml\ElementFactory', [], [], '', false),
                 'rateFactory' => $rateFactory,
                 'rateMethodFactory' => $rateMethodFactory,
