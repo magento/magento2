@@ -5,10 +5,12 @@
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Magento\Indexer\Model\IndexerInterface;
-use Magento\Store\Model\StoreManager;
 use Magento\Framework\App\ObjectManagerFactory;
 
 /**
@@ -55,13 +57,13 @@ abstract class AbstractIndexerCommand extends Command
     protected function getObjectManager()
     {
         if (null == $this->objectManager) {
-            $params = $_SERVER;
-            $params[StoreManager::PARAM_RUN_CODE] = 'admin';
-            $params[StoreManager::PARAM_RUN_TYPE] = 'store';
-            $this->objectManager = $this->objectManagerFactory->create($params);
+            $area = FrontNameResolver::AREA_CODE;
+            $this->objectManager = $this->objectManagerFactory->create($_SERVER);
             /** @var \Magento\Framework\App\State $appState */
             $appState = $this->objectManager->get('Magento\Framework\App\State');
-            $appState->setAreaCode('adminmhtml');
+            $appState->setAreaCode($area);
+            $configLocator = $this->objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
+            $this->objectManager->configure($configLocator->load($area));
         }
         return $this->objectManager;
     }
