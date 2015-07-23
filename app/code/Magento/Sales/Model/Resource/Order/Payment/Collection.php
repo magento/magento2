@@ -42,7 +42,7 @@ class Collection extends AbstractCollection implements OrderPaymentSearchResultI
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(

@@ -113,7 +113,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     /**
      * Get adapter mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function _getConnectionMock()
     {

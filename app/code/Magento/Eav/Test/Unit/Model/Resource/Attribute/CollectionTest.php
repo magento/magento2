@@ -51,7 +51,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connectionMock;
 
@@ -61,7 +61,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $selectMock;
 
@@ -84,9 +84,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnSelf());
 
-        $adapter = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', [], '', false);
+        $adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+            ->setMethods(['_connect', 'quote'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapter->expects($this->any())->method('quote')->willReturnArgument(0);
 
-        $this->selectMock = $this->getMock('Zend_Db_Select', null, [$adapter]);
+        $this->selectMock = $this->getMock('Magento\Framework\DB\Select', null, [$adapter]);
 
         $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
@@ -190,10 +194,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         return [
             'main_table_expression' => [
                 'col2', '1',
-                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM "some_main_table" AS "main_table"' . "\n"
-                . ' INNER JOIN "some_extra_table" AS "additional_table"'
+                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM `some_main_table` AS `main_table`' . "\n"
+                . ' INNER JOIN `some_extra_table` AS `additional_table`'
                 . ' ON additional_table.attribute_id = main_table.attribute_id' . "\n"
-                . ' LEFT JOIN "some_extra_table" AS "scope_table"'
+                . ' LEFT JOIN `some_extra_table` AS `scope_table`'
                 . ' ON scope_table.attribute_id = main_table.attribute_id'
                 . ' AND scope_table.website_id = :scope_website_id'
                 . ' WHERE (main_table.entity_type_id = :mt_entity_type_id)'
@@ -201,10 +205,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ],
             'additional_table_expression' => [
                 'col3', '2',
-                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM "some_main_table" AS "main_table"' . "\n"
-                . ' INNER JOIN "some_extra_table" AS "additional_table"'
+                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM `some_main_table` AS `main_table`' . "\n"
+                . ' INNER JOIN `some_extra_table` AS `additional_table`'
                 . ' ON additional_table.attribute_id = main_table.attribute_id' . "\n"
-                . ' LEFT JOIN "some_extra_table" AS "scope_table"'
+                . ' LEFT JOIN `some_extra_table` AS `scope_table`'
                 . ' ON scope_table.attribute_id = main_table.attribute_id'
                 . ' AND scope_table.website_id = :scope_website_id'
                 . ' WHERE (main_table.entity_type_id = :mt_entity_type_id)'

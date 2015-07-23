@@ -582,7 +582,7 @@ abstract class AbstractDb extends AbstractResource
             $select = $this->getConnection()->select()->from($this->getMainTable());
 
             foreach ($fields as $unique) {
-                $select->reset(\Zend_Db_Select::WHERE);
+                $select->reset(\Magento\Framework\DB\Select::WHERE);
                 foreach ((array)$unique['field'] as $field) {
                     $value = $data->getData($field);
                     if ($value === null) {

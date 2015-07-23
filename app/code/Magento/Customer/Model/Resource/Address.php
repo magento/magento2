@@ -47,8 +47,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     protected function _construct()
     {
-        $this->_read = 'customer_read';
-        $this->_write = 'customer_write';
+        $this->connectionName = 'customer';
     }
 
     /**

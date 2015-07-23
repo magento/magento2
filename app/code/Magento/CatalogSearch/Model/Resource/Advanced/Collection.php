@@ -53,7 +53,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -78,7 +78,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;

@@ -41,7 +41,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $connection = $this->getMock(
-            'Zend_Db_Adapter_Pdo_Mysql',
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['quote'],
             [],
             '',

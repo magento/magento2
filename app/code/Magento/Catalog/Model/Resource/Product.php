@@ -91,8 +91,7 @@ class Product extends AbstractResource
             $modelFactory,
             $data
         );
-        $this->_read  = 'catalog_read';
-        $this->_write = 'catalog_write';
+        $this->connectionName  = 'catalog';
     }
 
     /**

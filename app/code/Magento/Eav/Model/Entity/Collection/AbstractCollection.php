@@ -148,7 +148,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_eavConfig = $eavConfig;
@@ -437,7 +437,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _prepareOrderExpression($field)
     {
-        foreach ($this->getSelect()->getPart(\Zend_Db_Select::COLUMNS) as $columnEntry) {
+        foreach ($this->getSelect()->getPart(\Magento\Framework\DB\Select::COLUMNS) as $columnEntry) {
             if ($columnEntry[2] != $field) {
                 continue;
             }
@@ -926,10 +926,10 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected function _getAllIdsSelect($limit = null, $offset = null)
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $idsSelect->columns('e.' . $this->getEntity()->getIdFieldName());
         $idsSelect->limit($limit, $offset);
 
@@ -956,11 +956,11 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function getAllIdsSql()
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
-        $idsSelect->reset(\Zend_Db_Select::GROUP);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $idsSelect->columns('e.' . $this->getEntity()->getIdFieldName());
 
         return $idsSelect;

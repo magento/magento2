@@ -22,7 +22,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $resourceMock = $this->getMock('Magento\Framework\Flag\Resource', [], [], '', false);
         $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $selectMock = $this->getMock(
-            'Zend_Db_Select',
+            'Magento\Framework\DB\Select',
             ['getPart', 'setPart', 'from', 'columns'],
             [$connectionMock]
         );

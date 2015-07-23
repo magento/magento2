@@ -93,8 +93,7 @@ class Category extends AbstractResource
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
 
-        $this->_read  = 'catalog_read';
-        $this->_write = 'catalog_write';
+        $this->connectionName  = 'catalog';
     }
 
     /**

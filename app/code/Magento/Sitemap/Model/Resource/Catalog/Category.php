@@ -143,11 +143,11 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $attributeCode
      * @param mixed $value
      * @param string $type
-     * @return \Zend_Db_Select|bool
+     * @return \Magento\Framework\DB\Select|bool
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
-        if (!$this->_select instanceof \Zend_Db_Select) {
+        if (!$this->_select instanceof \Magento\Framework\DB\Select) {
             return false;
         }
 

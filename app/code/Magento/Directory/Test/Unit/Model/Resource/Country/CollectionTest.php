@@ -18,7 +18,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
 
         $resource = $this->getMockForAbstractClass('Magento\Framework\Model\Resource\Db\AbstractDb',

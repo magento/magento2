@@ -142,7 +142,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      * @param string $table
      * @param null|string $from
      * @param null|string $to
-     * @param null|\Zend_Db_Select|string $subSelect
+     * @param null|\Magento\Framework\DB\Select|string $subSelect
      * @param bool $doNotUseTruncate
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $adapter
      * @return $this

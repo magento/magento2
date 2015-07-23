@@ -36,7 +36,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Zend_Db_Adapter_Pdo_Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $adapterMock;
 
@@ -67,7 +67,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->adapterMock = $this->getMock(
-            'Zend_Db_Adapter_Pdo_Mysql',
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'query'],
             [],
             '',
