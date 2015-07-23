@@ -69,10 +69,19 @@ class MessageEncoder
      * @param mixed $message
      * @param string $topic
      * @return string
+     * @throws LocalizedException
      */
     public function encode($message, $topic)
     {
         $messageDataType = $this->getTopicSchema($topic);
+        if (!($message instanceof $messageDataType)) {
+            throw new LocalizedException(
+                new Phrase(
+                    'Message with topic "%topic" must be an instance of "%class".',
+                    ['topic' => $topic, 'class' => $messageDataType]
+                )
+            );
+        }
         return $this->jsonEncoder->encode($this->encoder->convertValue($message, $messageDataType));
     }
 
@@ -82,11 +91,17 @@ class MessageEncoder
      * @param string $message
      * @param string $topic
      * @return mixed
+     * @throws LocalizedException
      */
     public function decode($message, $topic)
     {
         $messageDataType = $this->getTopicSchema($topic);
-        return $this->jsonDecoder->decode($this->decoder->convertValue($message, $messageDataType));
+        try {
+            $decodedJson = $this->jsonDecoder->decode($message);
+        } catch (\Exception $e) {
+            throw new LocalizedException(new Phrase("Error occurred during message decoding."));
+        }
+        return $this->decoder->convertValue($decodedJson, $messageDataType);
     }
 
     /**

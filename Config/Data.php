@@ -7,11 +7,13 @@
 namespace Magento\Framework\Amqp\Config;
 
 /**
- * AMQP Helper
+ * Class for access to AMQP configuration.
  */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Framework\Amqp\Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
