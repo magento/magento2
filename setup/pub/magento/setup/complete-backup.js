@@ -7,19 +7,9 @@
 angular.module('complete-backup', ['ngStorage'])
     .constant('BACKUPCOUNTER', 1)
     .controller('completeBackupController', ['$rootScope', '$scope', '$http', '$timeout', 'BACKUPCOUNTER', '$localStorage', '$q', function ($rootScope, $scope, $http, $timeout, BACKUPCOUNTER, $localStorage, $q) {
-        $scope.backupInfoPassed = {
-            options: {
-                code: false,
-                media: false,
-                db: false
-            }
-        };
-
         if ($localStorage.backupInfo) {
             $scope.backupInfoPassed = $localStorage.backupInfo;
         }
-
-
         $scope.progressCounter = BACKUPCOUNTER;
         $scope.startProgress = function() {
             ++$scope.progressCounter;

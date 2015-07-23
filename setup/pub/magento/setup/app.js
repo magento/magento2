@@ -21,10 +21,10 @@ var app = angular.module(
         'component-grid',        
         'create-backup',
         'complete-backup',
-        'component-upgrade',
+        'component-update',
         'home',
         'system-upgrade',
-        'component-upgrade-success'
+        'component-update-success'
     ]);
 
 app.config(function ($stateProvider) {
