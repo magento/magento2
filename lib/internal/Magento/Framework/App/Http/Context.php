@@ -92,13 +92,7 @@ class Context
      */
     public function getVaryString()
     {
-        $data = [];
-        foreach (array_keys($this->data) as $name) {
-            $data[$name] = $this->getValue($name);
-        }
-        if (empty($data)) {
-            return null;
-        }
-        return sha1(serialize($data));
+        $data = $this->getData();
+        return !empty($data) ? sha1(serialize($data)) : null;
     }
 }
