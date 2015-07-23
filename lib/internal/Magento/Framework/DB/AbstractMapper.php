@@ -167,7 +167,7 @@ abstract class AbstractMapper implements MapperInterface
                 $conditions[] = $this->translateCondition($value, isset($condition[$key]) ? $condition[$key] : null);
             }
 
-            $resultCondition = '(' . implode(') ' . \Zend_Db_Select::SQL_OR . ' (', $conditions) . ')';
+            $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR . ' (', $conditions) . ')';
         } else {
             $resultCondition = $this->translateCondition($field, $condition);
         }

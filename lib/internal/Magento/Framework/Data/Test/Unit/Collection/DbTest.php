@@ -52,12 +52,12 @@ class DbTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Zend_Db_Adapter_Abstract
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     public function testSetAddOrder()
     {
         $adapter = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract',
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [],
             '',
             false,
@@ -68,7 +68,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->setConnection($adapter);
 
         $select = $this->collection->getSelect();
-        $this->assertEmpty($select->getPart(\Zend_Db_Select::ORDER));
+        $this->assertEmpty($select->getPart(\Magento\Framework\DB\Select::ORDER));
 
         /* Direct access to select object is available and many places are using it for sort order declaration */
         $select->order('select_field', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
@@ -77,7 +77,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->addOrder('other_field', \Magento\Framework\Data\Collection::SORT_ORDER_DESC);
 
         $this->collection->load();
-        $selectOrders = $select->getPart(\Zend_Db_Select::ORDER);
+        $selectOrders = $select->getPart(\Magento\Framework\DB\Select::ORDER);
         $this->assertEquals(['select_field', 'ASC'], array_shift($selectOrders));
         $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
         $this->assertEquals('other_field DESC', (string)array_shift($selectOrders));
@@ -87,7 +87,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject|Zend_Db_Adapter_Abstract $adapter
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql $adapter
      * @depends testSetAddOrder
      */
     public function testUnshiftOrder($adapter)
@@ -97,7 +97,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->unshiftOrder('other_field', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
 
         $this->collection->load();
-        $selectOrders = $this->collection->getSelect()->getPart(\Zend_Db_Select::ORDER);
+        $selectOrders = $this->collection->getSelect()->getPart(\Magento\Framework\DB\Select::ORDER);
         $this->assertEquals('other_field ASC', (string)array_shift($selectOrders));
         $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));
@@ -108,7 +108,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFieldToFilter()
     {
-        $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', ['prepareSqlCondition'], [], '', false);
+        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['prepareSqlCondition'], [], '', false);
         $adapter->expects(
             $this->any()
         )->method(
@@ -132,7 +132,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFieldToFilterWithMultipleParams()
     {
-        $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', ['prepareSqlCondition'], [], '', false);
+        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['prepareSqlCondition'], [], '', false);
         $adapter->expects(
             $this->at(0)
         )->method(
@@ -190,7 +190,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testAddFieldToFilterValueContainsQuestionMark()
     {
         $adapter = $this->getMock(
-            'Zend_Db_Adapter_Pdo_Mysql',
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'prepareSqlCondition', 'supportStraightJoin'],
             [],
             '',
@@ -222,7 +222,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testAddFieldToFilterFieldIsQuoted()
     {
         $adapter = $this->getMock(
-            'Zend_Db_Adapter_Pdo_Mysql',
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['quoteIdentifier', 'prepareSqlCondition'],
             [],
             '',
@@ -262,13 +262,17 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testClone()
     {
-        $adapter = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', [], '', false);
+        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $adapter
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($this->getMock('Magento\Framework\DB\Select', [], [], '', false));
         $this->collection->setConnection($adapter);
-        $this->assertInstanceOf('Zend_Db_Select', $this->collection->getSelect());
+        $this->assertInstanceOf('Magento\Framework\DB\Select', $this->collection->getSelect());
 
         $clonedCollection = clone $this->collection;
 
-        $this->assertInstanceOf('Zend_Db_Select', $clonedCollection->getSelect());
+        $this->assertInstanceOf('Magento\Framework\DB\Select', $clonedCollection->getSelect());
         $this->assertNotSame(
             $clonedCollection->getSelect(),
             $this->collection->getSelect(),
@@ -323,16 +327,6 @@ class DbTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage dbModel read resource does not implement \Zend_Db_Adapter_Abstract
-     */
-    public function testSetConnectionException()
-    {
-        $adapter = new \stdClass();
-        $this->collection->setConnection($adapter);
-    }
-
     public function testFetchItem()
     {
         $data = [1 => 'test'];
@@ -344,7 +338,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
                 return ++$counter % 2 ? [] : $data;
             }));
 
-        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql',
+        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'query'], [], '', false);
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select', [], ['adapter' => $adapterMock]
@@ -376,7 +370,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $countSql = 500;
         $adapterMock = $this->getMock(
-            'Zend_Db_Adapter_Pdo_Mysql',
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne'],
             [],
             '',
@@ -436,7 +430,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSelectSql()
     {
-        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', ['select'], [], '', false);
+        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['select'], [], '', false);
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select', ['__toString'], ['adapter' => $adapterMock]
         );
@@ -457,7 +451,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testGetData()
     {
         $adapterMock = $this->getMock(
-            'Zend_Db_Adapter_Pdo_Mysql',
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne'],
             [],
             '',
@@ -494,7 +488,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testDistinct($flag, $expectedFlag)
     {
-        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', ['select'], [], '', false);
+        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['select'], [], '', false);
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['distinct'],
@@ -522,7 +516,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testToOptionHash()
     {
         $data = [10 => 'test'];
-        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql',
+        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'query'], [], '', false);
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select', [], ['adapter' => $adapterMock]

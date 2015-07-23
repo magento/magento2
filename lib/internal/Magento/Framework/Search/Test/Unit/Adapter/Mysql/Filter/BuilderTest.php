@@ -101,7 +101,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                                 $filter->getTo()
                             );
                         }
-                        $unionOperator = $isNegation ? \Zend_Db_Select::SQL_OR : \Zend_Db_Select::SQL_AND;
+                        $unionOperator = $isNegation ? \Magento\Framework\DB\Select::SQL_OR : \Magento\Framework\DB\Select::SQL_AND;
 
                         return $this->conditionManager->combineQueries([$fromCondition, $toCondition], $unionOperator);
                     }

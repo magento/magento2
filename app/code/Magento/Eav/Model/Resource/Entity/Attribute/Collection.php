@@ -32,7 +32,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Zend_Db_Adapter_Abstract|null $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -41,7 +41,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->eavConfig = $eavConfig;
@@ -85,7 +85,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function useLoadDataFields()
     {
-        $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
+        $this->getSelect()->reset(\Magento\Framework\DB\Select::COLUMNS);
         $this->getSelect()->columns($this->_getLoadDataFields());
 
         return $this;
@@ -465,7 +465,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function getSelectCountSql()
     {
         $countSelect = parent::getSelectCountSql();
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $countSelect->columns('COUNT(DISTINCT main_table.attribute_id)');
         return $countSelect;
     }

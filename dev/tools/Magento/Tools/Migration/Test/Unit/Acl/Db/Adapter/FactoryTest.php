@@ -50,7 +50,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new \Magento\Tools\Migration\Acl\Db\Adapter\Factory($objectManager);
         $adapter = $factory->getConnection($this->_config, $adapterType);
 
-        $this->assertInstanceOf('Zend_Db_Adapter_Abstract', $adapter);
+        $this->assertInstanceOf('Magento\Framework\DB\Adapter\Pdo\Mysql', $adapter);
     }
 
     /**
