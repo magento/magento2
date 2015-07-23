@@ -303,7 +303,6 @@ abstract class Grid extends Block
     {
         $selectItem = $this->getRow($filter)->find($this->selectItem);
         if ($selectItem->isVisible()) {
-            $this->waitLoader();
             $selectItem->click();
         } else {
             throw new \Exception('Searched item was not found.');
@@ -443,7 +442,6 @@ abstract class Grid extends Block
     {
         $this->waitLoader();
         $isVisible = $this->getRow($filter, $isSearchable, $isStrict)->isVisible();
-        $this->waitLoader();
 
         return $isVisible;
     }
