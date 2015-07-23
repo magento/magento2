@@ -84,7 +84,7 @@ define('globalNavigationScroll', [
 
                     menu.css('top', -nextTop);
 
-                } else if (winTop < winTopLast) { // scroll up
+                } else if (winTop <= winTopLast) { // scroll up
 
                     nextTop > -scrollStep ?
                         nextTop += scrollStep : nextTop = 0;
@@ -126,14 +126,20 @@ define('globalNavigationScroll', [
     });
 
     //  Add event to menuItems to check submenu overlap
-    menuItems.on('click', function () {
+    menuItems.on('click', function (e) {
 
-        var submenu = $(this).children(subMenuClass);
+        var submenu = $(this).children(subMenuClass),
+            delta;
 
         submenuHeight = submenu.height();
 
-        if (submenuHeight > menuHeight && menuHeight > win.height()) {
-            menu.css('height', submenuHeight);
+        if (submenuHeight > menuHeight && menuHeight > winHeight) {
+            menu.height(submenuHeight - $('.logo')[0].offsetHeight);
+            delta = -menu.position().top;
+            window.scrollTo(0, 0);
+            positionMenu();
+            window.scrollTo(0, delta);
+            positionMenu();
             menuHeight = submenuHeight;
         }
 
