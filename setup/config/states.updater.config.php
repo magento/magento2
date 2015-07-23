@@ -99,5 +99,24 @@ return [
             'order'       => 7,
             'main'        => true
         ],
+        [
+            'id'          => 'root.home',
+            'url'         => 'home',
+            'templateUrl' => "$base/home",
+            'title'       => 'Home',
+            'controller'  => 'homeController',
+            'default'     => true,
+            'order'       => 8,
+        ],
+        [
+            'id'          => 'root.system-upgrade',
+            'url'         => 'system-upgrade',
+            'templateUrl' => "{$base}/system-upgrade",
+            'title'       => 'Home',
+            'controller'  => 'systemUpgradeController',
+            'header'      => 'Step 1: Select Version',
+            'order'       => 9,
+            'nav-bar'     => true
+        ]
     ]
 ];
