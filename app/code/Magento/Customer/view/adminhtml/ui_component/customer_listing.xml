@@ -23,7 +23,7 @@
     </argument>
     <dataSource name="customer_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">CustomerGridDataProvider</argument>
+            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
             <argument name="name" xsi:type="string">customer_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
@@ -157,38 +157,38 @@
                     </item>
                 </argument>
             </filterSelect>
-            <filterInput name="billing_telephone">
+            <filterInput name="telephone">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">billing_telephone</item>
+                        <item name="dataScope" xsi:type="string">telephone</item>
                         <item name="label" xsi:type="string" translate="true">Phone</item>
                     </item>
                 </argument>
             </filterInput>
-            <filterInput name="billing_postcode">
+            <filterInput name="postcode">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">billing_postcode</item>
+                        <item name="dataScope" xsi:type="string">postcode</item>
                         <item name="label" xsi:type="string" translate="true">ZIP</item>
                     </item>
                 </argument>
             </filterInput>
-            <filterSelect name="billing_country_id">
+            <filterSelect name="country_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Directory\Model\Resource\Country\Collection</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">billing_country_id</item>
+                        <item name="dataScope" xsi:type="string">country_id</item>
                         <item name="label" xsi:type="string" translate="true">Country</item>
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
                     </item>
                 </argument>
             </filterSelect>
-            <filterInput name="billing_region">
+            <filterInput name="region">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">billing_region</item>
+                        <item name="dataScope" xsi:type="string">region</item>
                         <item name="label" xsi:type="string" translate="true">State/Province</item>
                     </item>
                 </argument>
@@ -383,7 +383,7 @@
                 </item>
             </argument>
         </column>
-        <column name="billing_telephone">
+        <column name="telephone">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -397,7 +397,7 @@
                 </item>
             </argument>
         </column>
-        <column name="billing_postcode">
+        <column name="postcode">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -411,7 +411,7 @@
                 </item>
             </argument>
         </column>
-        <column name="billing_country_id" class="Magento\Customer\Ui\Component\Listing\Column\Country">
+        <column name="country_id" class="Magento\Customer\Ui\Component\Listing\Column\Country">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -425,7 +425,7 @@
                 </item>
             </argument>
         </column>
-        <column name="billing_region" >
+        <column name="region" >
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
