@@ -56,9 +56,9 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 
             $unionSelect = clone $this->getSelect();
 
-            $unionSelect->reset(\Zend_Db_Select::ORDER);
-            $unionSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-            $unionSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
+            $unionSelect->reset(\Magento\Framework\DB\Select::ORDER);
+            $unionSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+            $unionSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
 
             $countSelect = clone $this->getSelect();
             $countSelect->reset();

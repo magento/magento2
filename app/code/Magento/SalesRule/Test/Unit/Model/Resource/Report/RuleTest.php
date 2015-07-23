@@ -25,7 +25,19 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUniqRulesNamesList()
     {
-        $dbAdapterMock = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', [], '', false);
+        $dbAdapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+            ->setMethods(['_connect', 'quote'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dbAdapterMock
+            ->expects($this->any())
+            ->method('quote')
+            ->willReturnCallback(
+                function ($value) {
+                    return "'$value'";
+                }
+            );
+
         $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [$dbAdapterMock]);
         $select->expects(
             $this->once()

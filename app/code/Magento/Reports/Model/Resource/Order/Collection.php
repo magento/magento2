@@ -96,7 +96,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
@@ -217,7 +217,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         /**
          * Reset all columns, because result will group only by 'created_at' field
          */
-        $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
+        $this->getSelect()->reset(\Magento\Framework\DB\Select::COLUMNS);
 
         $expression = $this->_getSalesAmountExpression();
         if ($isFilter == 0) {
@@ -252,7 +252,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             [\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT, \Magento\Sales\Model\Order::STATE_NEW]
         )->order(
             'range',
-            \Zend_Db_Select::SQL_ASC
+            \Magento\Framework\DB\Select::SQL_ASC
         )->group(
             $tzRangeOffsetExpression
         );
@@ -276,7 +276,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         /**
          * Reset all columns, because result will group only by 'created_at' field
          */
-        $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
+        $this->getSelect()->reset(\Magento\Framework\DB\Select::COLUMNS);
         $rangePeriod = $this->_getRangeExpressionForAttribute($range, 'main_table.period');
 
         $tableName = $this->getConnection()->quoteIdentifier('main_table.period');
@@ -884,12 +884,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     public function getSelectCountSql()
     {
         $countSelect = clone $this->getSelect();
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-        $countSelect->reset(\Zend_Db_Select::HAVING);
+        $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
+        $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
         $countSelect->columns("COUNT(DISTINCT main_table.entity_id)");
 
         return $countSelect;

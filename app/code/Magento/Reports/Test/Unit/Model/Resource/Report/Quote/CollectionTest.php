@@ -81,6 +81,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $constructArgs['eventManager'] = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
         $resourceMock = $this->getMock('\Magento\Quote\Model\Resource\Quote', [], [], '', false);
+        $resourceMock
+            ->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false));
         $constructArgs['resource'] = $resourceMock;
         $productResourceMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
         $constructArgs['productResource'] = $productResourceMock;
@@ -101,7 +105,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 '_initSelect',
                 'getTable',
                 'getItems',
-                'getOrdersData',
+                'getOrdersData'
             ],
             $constructArgs
         );

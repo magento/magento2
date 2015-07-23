@@ -114,12 +114,12 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Add variable store and default value to select
      *
-     * @param \Zend_Db_Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @param integer $storeId
      * @return \Magento\Variable\Model\Resource\Variable
      */
     protected function _addValueToSelect(
-        \Zend_Db_Select $select,
+        \Magento\Framework\DB\Select $select,
         $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
     ) {
         $connection = $this->getConnection();

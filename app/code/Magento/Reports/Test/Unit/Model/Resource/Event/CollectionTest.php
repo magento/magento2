@@ -41,12 +41,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Zend_Db_Adapter_Abstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dbMock;
 
     /**
-     * @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $selectMock;
 
@@ -64,7 +64,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->managerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
             ->getMock();
 
-        $this->selectMock = $this->getMockBuilder('Zend_Db_Select')
+        $this->selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->setMethods(['where', 'from'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -75,7 +75,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->willReturnSelf();
 
-        $this->dbMock = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $this->dbMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbMock->expects($this->any())

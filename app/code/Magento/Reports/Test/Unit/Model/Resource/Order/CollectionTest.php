@@ -74,12 +74,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $orderFactoryMock;
 
     /**
-     * @var \Zend_Db_Adapter_Abstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dbMock;
 
     /**
-     * @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $selectMock;
 
@@ -121,7 +121,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->selectMock = $this->getMockBuilder('Zend_Db_Select')
+        $this->selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock
@@ -146,7 +146,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
 
         $this->dbMock = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract',
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [],
             '',
             false,
@@ -383,7 +383,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->dbMock
             ->expects($this->at(0))
             ->method('prepareSqlCondition')
-            ->with('"created_at"', ['from' => $fromDate, 'to' => $toDate]);
+            ->with('`created_at`', ['from' => $fromDate, 'to' => $toDate]);
 
         $this->collection->setDateRange($fromDate, $toDate);
     }

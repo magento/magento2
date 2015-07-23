@@ -30,18 +30,11 @@ use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 abstract class AbstractEntity extends \Magento\Framework\Model\Resource\AbstractResource implements EntityInterface
 {
     /**
-     * Read connection
+     * Connection name
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql | string
+     * @var string
      */
-    protected $_read;
-
-    /**
-     * Write connection
-     *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql | string
-     */
-    protected $_write;
+    protected $connectionName;
 
     /**
      * Entity type configuration
@@ -230,15 +223,12 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * Set connections for entity operations
      *
      * @deprecated
-     * @param \Zend_Db_Adapter_Abstract|string $read
-     * @param \Zend_Db_Adapter_Abstract|string|null $write
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|string $connection
      * @return $this
      */
-    public function setConnection($read, $write = null)
+    public function setConnection($connection)
     {
-        $this->_read = $read;
-        $this->_write = $write ? $write : $read;
-
+        $this->connectionName = $connection;
         return $this;
     }
 
@@ -1049,11 +1039,11 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * Prepare select object for loading entity attributes values
      *
      * @param  array $selects
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _prepareLoadSelect(array $selects)
     {
-        return $this->getConnection()->select()->union($selects, \Zend_Db_Select::SQL_UNION_ALL);
+        return $this->getConnection()->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
     }
 
     /**
@@ -1061,7 +1051,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param   \Magento\Framework\Object $object
      * @param   string|int $rowId
-     * @return  \Zend_Db_Select
+     * @return  \Magento\Framework\DB\Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getLoadRowSelect($object, $rowId)
@@ -1081,7 +1071,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param   \Magento\Framework\Object $object
      * @param   string $table
-     * @return  \Zend_Db_Select
+     * @return  \Magento\Framework\DB\Select
      */
     protected function _getLoadAttributesSelect($object, $table)
     {

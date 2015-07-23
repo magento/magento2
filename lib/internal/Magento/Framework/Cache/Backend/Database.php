@@ -51,7 +51,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     ];
 
     /**
-     * @var \Zend_Db_Adapter_Abstract
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection = null;
 
@@ -64,9 +64,9 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     {
         parent::__construct($options);
         if (empty($this->_options['adapter_callback'])) {
-            if (!$this->_options['adapter'] instanceof \Zend_Db_Adapter_Abstract) {
+            if (!$this->_options['adapter'] instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
                 \Zend_Cache::throwException(
-                    'Option "adapter" should be declared and extend \Zend_Db_Adapter_Abstract!'
+                    'Option "adapter" should be declared and extend \Magento\Framework\DB\Adapter\AdapterInterface!'
                 );
             }
         }
@@ -91,8 +91,10 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             } else {
                 $connection = $this->_options['adapter'];
             }
-            if (!$connection instanceof \Zend_Db_Adapter_Abstract) {
-                \Zend_Cache::throwException('DB Adapter should be declared and extend \Zend_Db_Adapter_Abstract');
+            if (!$connection instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
+                \Zend_Cache::throwException(
+                    'DB Adapter should be declared and extend \Magento\Framework\DB\Adapter\AdapterInterface'
+                );
             } else {
                 $this->_connection = $connection;
             }

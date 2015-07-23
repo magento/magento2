@@ -589,7 +589,7 @@ class Full
         }
 
         if ($selects) {
-            $select = $connection->select()->union($selects, \Zend_Db_Select::SQL_UNION_ALL);
+            $select = $connection->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
             $query = $connection->query($select);
             while ($row = $query->fetch()) {
                 $result[$row['entity_id']][$row['attribute_id']] = $row['value'];

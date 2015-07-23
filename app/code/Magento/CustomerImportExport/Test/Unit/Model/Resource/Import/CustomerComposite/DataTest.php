@@ -51,7 +51,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
         $selectMock->expects($this->any())->method('order')->will($this->returnSelf());
 
-        /** @var $connectionMock \Magento\Framework\DB\Adapter\Pdo\Mysql */
+        /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface */
         $connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'from', 'order', 'query'],

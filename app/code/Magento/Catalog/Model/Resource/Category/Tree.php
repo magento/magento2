@@ -563,7 +563,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      *
      * @param bool $sorted
      * @param array $optionalAttributes
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _createCollectionDataSelect($sorted = true, $optionalAttributes = [])
     {

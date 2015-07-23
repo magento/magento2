@@ -25,7 +25,7 @@ class Factory
      * @param array $config
      * @param string $type
      * @throws \InvalidArgumentException
-     * @return \Zend_Db_Adapter_Abstract
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     public function getConnection(array $config, $type = null)
     {
@@ -40,9 +40,11 @@ class Factory
         }
 
         $connection = $this->_objectManager->create($connectionClassName, ['config' => $config]);
-        if (false == $connection instanceof \Zend_Db_Adapter_Abstract) {
+        if (false == $connection instanceof \Magento\Framework\DB\Adapter\Pdo\Mysql) {
             unset($connection);
-            throw new \InvalidArgumentException('Specified adapter is not instance of \Zend_Db_Adapter_Abstract');
+            throw new \InvalidArgumentException(
+                'Specified adapter is not instance of \Magento\Framework\DB\Adapter\Pdo\Mysql'
+            );
         }
         return $connection;
     }
