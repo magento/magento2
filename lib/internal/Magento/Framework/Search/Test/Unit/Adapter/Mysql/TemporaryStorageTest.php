@@ -118,12 +118,20 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $table->expects($this->at(1))
             ->method('addColumn')
-            ->with(TemporaryStorage::FIELD_ENTITY_ID, Table::TYPE_INTEGER, 10,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true], 'Entity ID');
+            ->with(
+                TemporaryStorage::FIELD_ENTITY_ID,
+                Table::TYPE_INTEGER, 10,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Entity ID'
+            );
         $table->expects($this->at(2))
             ->method('addColumn')
-            ->with('score', Table::TYPE_DECIMAL, [32, 16],
-                ['unsigned' => true, 'nullable' => false], 'Score');
+            ->with(
+                'score', Table::TYPE_DECIMAL,
+                [32, 16],
+                ['unsigned' => true, 'nullable' => false],
+                'Score'
+            );
         $table->expects($this->once())
             ->method('setOption')
             ->with('type', 'memory');
