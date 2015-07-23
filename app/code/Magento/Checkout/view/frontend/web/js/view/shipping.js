@@ -6,6 +6,7 @@
 define(
     [
         'jquery',
+        "underscore",
         'Magento_Ui/js/form/form',
         'ko',
         'Magento_Customer/js/model/customer',
@@ -30,6 +31,7 @@ define(
     ],
     function(
         $,
+        _,
         Component,
         ko,
         customer,
@@ -75,6 +77,9 @@ define(
             initialize: function () {
                 var self = this;
                 this._super();
+                if (!quote.isVirtual()) {
+                    stepNavigator.registerStep('shipping', 'Shipping', this.visible, _.bind(this.navigate, this), 10);
+                }
 
                 checkoutDataResolver.resolveShippingAddress();
 
@@ -86,10 +91,6 @@ define(
                 });
 
                 this.isNewAddressAdded(hasNewAddress);
-
-                if (!quote.isVirtual()) {
-                    stepNavigator.registerStep('shipping', 'Shipping', this.visible, this.navigate, 10);
-                }
 
                 this.isFormPopUpVisible.subscribe(function (value) {
                     if (value) {
@@ -118,8 +119,7 @@ define(
             },
 
             navigate: function () {
-                window.location.href = window.checkoutConfig.checkoutUrl + "#shipping";
-                $('html, body').animate({scrollTop: $('#shipping').offset().top}, 0);
+                //load data from server for shipping step
             },
 
             initElement: function(element) {
