@@ -16,18 +16,20 @@ interface ProcessingErrorAggregatorInterface
 
     /**
      * @param string $errorCode
+     * @param string $errorLevel
      * @param int|null $rowNumber
      * @param string|null $columnName
      * @param string|null $errorMessage
-     * @param string|null $errorLevel
+     * @param string|null $errorDescription
      * @return $this
      */
     public function addError(
         $errorCode,
+        $errorLevel = ProcessingError::ERROR_LEVEL_CRITICAL,
         $rowNumber = null,
         $columnName = null,
         $errorMessage = null,
-        $errorLevel = null
+        $errorDescription = null
     );
 
     /**
@@ -59,6 +61,11 @@ interface ProcessingErrorAggregatorInterface
     /**
      * @return bool
      */
+    public function isConsideredSuccessful();
+
+    /**
+     * @return bool
+     */
     public function isErrorLimitExceeded();
 
     /**
@@ -72,10 +79,17 @@ interface ProcessingErrorAggregatorInterface
     public function getAllErrors();
 
     /**
-     * @param string|null $errorCode
+     * @param array $codes
      * @return array
      */
-    public function getRowsGroupedByMessage($errorCode = null);
+    public function getErrorsByCode(array $codes);
+
+    /**
+     * @param array $errorCode
+     * @param array $excludedCodes
+     * @return array
+     */
+    public function getRowsGroupedByCode(array $errorCode = [], array $excludedCodes = []);
 
     /**
      * @return int

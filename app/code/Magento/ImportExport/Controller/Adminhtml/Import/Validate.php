@@ -28,7 +28,7 @@ class Validate extends ImportController
         $errorAggregator = $import->getErrorAggregator();
         if ($import->getProcessedRowsCount() == $errorAggregator->getInvalidRowsCount()) {
             $resultBlock->addNotice(__('This file is invalid. Please fix errors and re-upload the file.'));
-        } elseif ($errorAggregator->hasFatalExceptions()) {
+        } elseif ($errorAggregator->isConsideredSuccessful()) {
             $resultBlock->addNotice(
                 __(
                     'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
@@ -50,11 +50,9 @@ class Validate extends ImportController
                 );
             }
         }
-        // errors info
-        foreach ($errorAggregator->getRowsGroupedByMessage() as $errorCode => $rows) {
-            $error = $errorCode . ' ' . __('in rows:') . ' ' . implode(', ', $rows);
-            $resultBlock->addError($error);
-        }
+
+        $errors = $this->getImportProcessingMessages($errorAggregator);
+        $resultBlock->addError($errors);
     }
 
     /**

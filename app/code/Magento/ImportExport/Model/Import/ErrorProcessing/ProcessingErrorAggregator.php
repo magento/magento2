@@ -57,18 +57,20 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
     /**
      * @param string $errorCode
+     * @param string $errorLevel
      * @param int|null $rowNumber
      * @param string|null $columnName
      * @param string|null $errorMessage
-     * @param string|null $errorLevel
+     * @param string|null $errorDescription
      * @return $this
      */
     public function addError(
         $errorCode,
+        $errorLevel = ProcessingError::ERROR_LEVEL_CRITICAL,
         $rowNumber = null,
         $columnName = null,
         $errorMessage = null,
-        $errorLevel = null
+        $errorDescription = null
     ) {
         $rowNumber++;
         $this->processErrorStatistics($errorLevel);
@@ -77,22 +79,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
 
         /** @var ProcessingError $newError */
         $newError = $this->errorFactory->create();
-        $newError->init($errorCode, $rowNumber, $columnName, $errorMessage, $errorLevel);
+        $newError->init($errorCode, $errorLevel, $rowNumber, $columnName, $errorMessage, $errorDescription);
         $this->items[] = $newError;
-
-        return $this;
-    }
-
-    /**
-     * @param string $errorLevel
-     * @return $this
-     */
-    protected function processErrorStatistics($errorLevel)
-    {
-        if (null !== $errorLevel) {
-            isset($this->errorStatistics[$errorLevel]) ?
-                $this->errorStatistics[$errorLevel]++ : $this->errorStatistics[$errorLevel] = 1;
-        }
 
         return $this;
     }
@@ -111,24 +99,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         }
 
         return $this;
-    }
-
-    /**
-     * @param string $errorCode
-     * @param string $errorMessage
-     * @param string $columnName
-     * @return string
-     */
-    protected function getErrorMessage($errorCode, $errorMessage, $columnName)
-    {
-        if (null === $errorMessage && isset($this->messageTemplate[$errorCode])) {
-            $errorMessage = (string)__($this->messageTemplate[$errorCode]);
-        }
-        if ($columnName) {
-            $errorMessage = sprintf($errorMessage, $columnName);
-        }
-
-        return $errorMessage;
     }
 
     /**
@@ -186,15 +156,23 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @return bool
      */
+    public function isConsideredSuccessful()
+    {
+        return !$this->hasFatalExceptions() && !$this->isErrorLimitExceeded();
+    }
+
+    /**
+     * @return bool
+     */
     public function isErrorLimitExceeded()
     {
         $isExceeded = false;
         if ($this->validationStrategy == self::VALIDATION_STRATEGY_STOP_ON_ERROR
-            && $this->getErrorsCount(ProcessingError::ERROR_LEVEL_NOT_CRITICAL) > 0
+            && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) > 0
         ) {
             $isExceeded = true;
         } elseif ($this->validationStrategy == self::VALIDATION_STRATEGY_SKIP_ERRORS
-            && $this->getErrorsCount(ProcessingError::ERROR_LEVEL_NOT_CRITICAL) > $this->allowedErrorsCount
+            && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) > $this->allowedErrorsCount
         ) {
             $isExceeded = true;
         }
@@ -207,8 +185,9 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     public function hasFatalExceptions()
     {
-        return (bool)$this->getErrorsCount(ProcessingError::ERROR_LEVEL_CRITICAL);
+        return (bool)$this->getErrorsCount([ProcessingError::ERROR_LEVEL_CRITICAL]);
     }
+
 
     /**
      * @return ProcessingError[]
@@ -219,14 +198,33 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
-     * @param string|null $errorCode
-     * @return array
+     * @param string[] $codes
+     * @return ProcessingError[]
      */
-    public function getRowsGroupedByMessage($errorCode = null)
+    public function getErrorsByCode(array $codes)
     {
         $result = [];
         foreach ($this->items as $error) {
-            if ((null !== $errorCode) && ($error->getErrorCode() != $errorCode)) {
+            if (in_array($error->getErrorCode(), $codes)) {
+                $result[] = $error;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $errorCode
+     * @param array $excludedCodes
+     * @return array
+     */
+    public function getRowsGroupedByCode(array $errorCode = [], array $excludedCodes = [])
+    {
+        $result = [];
+        foreach ($this->items as $error) {
+            if ((null !== $errorCode && in_array($error->getErrorCode(), $errorCode))
+                || in_array($error->getErrorCode(), $excludedCodes)
+            ) {
                 continue;
             }
             $message = $error->getErrorMessage();
@@ -260,6 +258,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         foreach ($errorLevels as $errorLevel) {
             $result += isset($this->errorStatistics[$errorLevel]) ? $this->errorStatistics[$errorLevel] : 0;
         }
+
         return $result;
     }
 
@@ -271,6 +270,38 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $this->items = [];
         $this->errorStatistics = [];
         $this->invalidRows = [];
+
+        return $this;
+    }
+
+    /**
+     * @param string $errorCode
+     * @param string $errorMessage
+     * @param string $columnName
+     * @return string
+     */
+    protected function getErrorMessage($errorCode, $errorMessage, $columnName)
+    {
+        if (null === $errorMessage && isset($this->messageTemplate[$errorCode])) {
+            $errorMessage = (string)__($this->messageTemplate[$errorCode]);
+        }
+        if ($columnName) {
+            $errorMessage = sprintf($errorMessage, $columnName);
+        }
+
+        return $errorMessage;
+    }
+
+    /**
+     * @param string $errorLevel
+     * @return $this
+     */
+    protected function processErrorStatistics($errorLevel)
+    {
+        if (!empty($errorLevel)) {
+            isset($this->errorStatistics[$errorLevel]) ?
+                $this->errorStatistics[$errorLevel]++ : $this->errorStatistics[$errorLevel] = 1;
+        }
 
         return $this;
     }
