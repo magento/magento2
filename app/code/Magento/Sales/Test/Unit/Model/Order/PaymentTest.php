@@ -81,6 +81,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected $creditMemoMock;
 
     /**
+     * @var \Magento\Sales\Model\Order\Payment\TransactionRepository | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionRepositoryMock;
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -109,6 +113,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->currencyMock = $this->getMockBuilder('Magento\Directory\Model\Currency')
             ->disableOriginalConstructor()
             ->setMethods(['formatTxt'])
+            ->getMock();
+        $this->transactionRepositoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\TransactionRepository')
+            ->disableOriginalConstructor()
+            ->setMethods(['get', 'getByTxnType', 'getByTxnId'])
             ->getMock();
 
         $this->priceCurrencyMock->expects($this->any())
@@ -1274,25 +1282,20 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $parentTransactionId = 1;
+        $paymentId = 22;
+        $this->payment->setId($paymentId);
         $this->payment->setParentTransactionId($parentTransactionId);
 
         $transaction = $this->getMock('Magento\Sales\Model\Order\Payment\Transaction', [], [], '', false);
         $transaction->expects($this->once())
-            ->method('setOrderPaymentObject')
-            ->willReturnSelf();
-        $transaction->expects($this->once())
-            ->method('loadByTxnId')
-            ->willReturnSelf();
-        $transaction->expects($this->once())
             ->method('getId')
             ->willReturn($parentTransactionId);
-
         $transaction->expects($this->once())
             ->method('getIsClosed')
             ->willReturn(false);
-
-        $this->transactionFactory->expects($this->once())
-            ->method('create')
+        $this->transactionRepositoryMock->expects($this->once())
+            ->method('getByTxnId')
+            ->with($parentTransactionId, $paymentId)
             ->willReturn($transaction);
 
         $this->assertTrue($this->payment->canCapture());
@@ -1302,38 +1305,17 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $paymentId = 1;
         $this->payment->setId($paymentId);
-
+        $orderId = 12;
+        $this->orderMock->setId($orderId);
         $this->paymentMethodMock->expects($this->once())
             ->method('canCapture')
             ->willReturn(true);
-
         $transaction = $this->getMock('Magento\Sales\Model\Order\Payment\Transaction', [], [], '', false);
-        $collection = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->transactionCollectionFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($collection);
-        $collection->expects($this->once())
-            ->method('setOrderFilter')
-            ->willReturnSelf();
-        $collection->expects($this->once())
-            ->method('addPaymentIdFilter')
-            ->willReturnSelf();
-        $collection->expects($this->once())
-            ->method('addTxnTypeFilter')
-            ->willReturnSelf();
-        $collection->method('setOrder')
-            ->willReturnMap(
-                [
-                    ['created_at', \Magento\Framework\Data\Collection::SORT_ORDER_DESC, $collection],
-                    ['transaction_id', \Magento\Framework\Data\Collection::SORT_ORDER_DESC, [$transaction]]
-                ]
-            );
+
+        $this->transactionRepositoryMock->expects($this->once())
+            ->method('getByTxnType')
+            ->with(Payment\Transaction::TYPE_AUTH, $paymentId, $orderId)
+            ->willReturn($transaction);
 
         $this->assertTrue($this->payment->canCapture());
     }
@@ -1414,24 +1396,17 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->payment->setParentTransactionId($this->transactionId);
         $transaction = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Payment\Transaction',
-            ['setOrderPaymentObject', 'loadByTxnId', 'getId'],
+            ['getId'],
             [],
             '',
             false
         );
-        $this->transactionFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($transaction);
-        $transaction->expects($this->atLeastOnce())
-            ->method('setOrderPaymentObject')
-            ->with($this->payment)
-            ->willReturnSelf();
-        $transaction->expects($this->exactly(2))
-            ->method('loadByTxnId')
+        $this->transactionRepositoryMock->expects($this->exactly(2))
+            ->method('getByTxnId')
             ->withConsecutive(
                 [$this->transactionId],
                 [$this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND]
-            )->willReturnSelf();
+            )->willReturn($transaction);
         $transaction->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturnOnConsecutiveCalls(
@@ -1494,34 +1469,27 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $parentTransaction = $this->getMock(
             'Magento\Sales\Model\Order\Payment\Transaction',
-            ['setOrderPaymentObject', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType'],
+            ['setOrderPaymentObject', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType'],
             [],
             '',
             false
         );
-        $this->transactionFactory->expects($this->exactly(3))
+        $newTransactionId = $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND;
+        $this->transactionRepositoryMock->expects($this->exactly(2))
+            ->method('getByTxnId')
+            ->willReturnMap(
+                [
+                    $this->transactionId => $parentTransaction,
+                    $newTransactionId => $newTransaction
+                ]
+            );
+        $this->transactionFactory->expects($this->exactly(1))
             ->method('create')
-            ->willReturnOnConsecutiveCalls($parentTransaction, $newTransaction, $newTransaction, $newTransaction);
-        $parentTransaction->expects($this->atLeastOnce())
+            ->willReturnOnConsecutiveCalls($newTransaction);
+        $newTransaction->expects($this->atLeastOnce())
             ->method('setOrderPaymentObject')
             ->with($this->payment)
             ->willReturnSelf();
-        $parentTransaction->expects($this->exactly(1))
-            ->method('loadByTxnId')
-            ->with($this->transactionId)->willReturnSelf();
-        $newTransaction->expects($this->exactly(1))
-            ->method('loadByTxnId')
-            ->with($this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND)
-            ->willReturnSelf();
-        $parentTransaction->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturnOnConsecutiveCalls(
-                $this->transactionId,
-                $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
-            )->willReturnOnConsecutiveCalls(
-                $this->transactionId,
-                $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
-            );
         $newTransaction->expects($this->once())->method('setTxnId')->with(
             $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
         )->willReturn($newTransaction);
@@ -1573,14 +1541,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $parentTransaction->expects($this->atLeastOnce())
-            ->method('setOrderPaymentObject')
-            ->with($this->payment)
-            ->willReturnSelf();
-        $parentTransaction->expects($this->exactly(1))
-            ->method('loadByTxnId')
-            ->with($this->transactionId)->willReturnSelf();
-        $newTransaction = $this->getMock(
+         $newTransaction = $this->getMock(
             'Magento\Sales\Model\Order\Payment\Transaction',
             [
                 'getId',
@@ -1596,16 +1557,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->transactionFactory->expects($this->exactly(2))
-            ->method('create')
+        $this->transactionRepositoryMock->expects($this->exactly(2))
+            ->method('getByTxnId')
             ->willReturnOnConsecutiveCalls($parentTransaction, $newTransaction);
-        $newTransaction->expects($this->exactly(1))
-            ->method('loadByTxnId')
-            ->with($this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND)
-            ->willReturnSelf();
-        $newTransaction->expects($this->atLeastOnce())
-            ->method('setOrderPaymentObject')
-            ->willReturnSelf();
         $this->assertSame($this->payment, $this->payment->registerRefundNotification($amount));
     }
 
@@ -1641,7 +1595,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'paymentData' => $this->helperMock,
                 'priceCurrency' => $this->priceCurrencyMock,
                 'transactionFactory' => $this->transactionFactory,
-                'transactionCollectionFactory' => $this->transactionCollectionFactory
+                'transactionCollectionFactory' => $this->transactionCollectionFactory,
+                'transactionRepository' => $this->transactionRepositoryMock
             ]
         );
 

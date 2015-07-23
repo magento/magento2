@@ -100,6 +100,11 @@ class Payment extends Info implements OrderPaymentInterface
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     */
+    protected $transactionRepository;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -128,6 +133,7 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
+        \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -137,6 +143,7 @@ class Payment extends Info implements OrderPaymentInterface
         $this->_transactionFactory = $transactionFactory;
         $this->_transactionCollectionFactory = $transactionCollectionFactory;
         $this->_storeManager = $storeManager;
+        $this->transactionRepository = $transactionRepository;
         parent::__construct(
             $context,
             $registry,
@@ -196,6 +203,16 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $this->setData('transaction_id', $transactionId);
         return $this;
+    }
+
+    /**
+     * Return transaction id
+     *
+     * @return int
+     */
+    public function getTransactionId()
+    {
+        return $this->getData('transaction_id');
     }
 
     /**
@@ -459,6 +476,7 @@ class Payment extends Info implements OrderPaymentInterface
             $method->setStore(
                 $order->getStoreId()
             );
+            //TODO replace for sale usage
             $method->capture($this, $amountToCapture);
 
             $transaction = $this->_addTransaction(
@@ -485,15 +503,14 @@ class Payment extends Info implements OrderPaymentInterface
                 $this->_updateTotals(['base_amount_paid_online' => $amountToCapture]);
             }
             $message = $this->_prependMessage($message);
-            $message = $this->_appendTransactionToMessage($transaction, $message);
+            $this->addTransactionCommentsToOrder($transaction, $message);
 
             if (!$status) {
                 $status = $order->getConfig()->getStateDefaultStatus($state);
             }
 
             $order->setState($state)
-                ->setStatus($status)
-                ->addStatusHistoryComment($message);
+                ->setStatus($status);
 
             $invoice->setTransactionId($this->getLastTransId());
             return $this;
@@ -572,9 +589,9 @@ class Payment extends Info implements OrderPaymentInterface
             true
         );
         $message = $this->_prependMessage($message);
-        $message = $this->_appendTransactionToMessage($transaction, $message);
+        $this->addTransactionCommentsToOrder($transaction, $message);
 
-        $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
+        $order->setState($state)->setStatus($status);
         return $this;
     }
 
@@ -1064,7 +1081,6 @@ class Payment extends Info implements OrderPaymentInterface
         $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
         $invoice = $this->_getInvoiceForTransactionId($transactionId);
 
-        
         if ($isOnline) {
             $method = $this->getMethodInstance();
             $method->setStore($this->getOrder()->getStoreId());
@@ -1202,13 +1218,13 @@ class Payment extends Info implements OrderPaymentInterface
         // update transactions, order state and add comments
         $transaction = $this->_addTransaction(Transaction::TYPE_ORDER);
         $message = $this->_prependMessage($message);
-        $message = $this->_appendTransactionToMessage($transaction, $message);
+        $this->addTransactionCommentsToOrder($transaction, $message);
 
         if (!$status) {
             $status = $order->getConfig()->getStateDefaultStatus($state);
         }
 
-        $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
+        $order->setState($state)->setStatus($status);
         return $this;
     }
 
@@ -1272,13 +1288,13 @@ class Payment extends Info implements OrderPaymentInterface
         // update transactions, order state and add comments
         $transaction = $this->_addTransaction(Transaction::TYPE_AUTH);
         $message = $this->_prependMessage($message);
-        $message = $this->_appendTransactionToMessage($transaction, $message);
+        $this->addTransactionCommentsToOrder($transaction, $message);
 
         if (!$status) {
             $status = $order->getConfig()->getStateDefaultStatus($state);
         }
 
-        $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
+        $order->setState($state)->setStatus($status);
 
         return $this;
     }
@@ -1444,17 +1460,16 @@ class Payment extends Info implements OrderPaymentInterface
      * @param bool|string $message
      * @return null|Transaction
      */
-    public function addTransaction($type, $salesDocument = null, $failsafe = false, $message = false)
+    public function addTransaction($type, $salesDocument = null, $failsafe = false)
     {
-        $transaction = $this->_addTransaction($type, $salesDocument, $failsafe);
+        return $this->_addTransaction($type, $salesDocument, $failsafe);
+    }
 
-        if ($message) {
-            $order = $this->getOrder();
-            $message = $this->_appendTransactionToMessage($transaction, $message);
-            $order->addStatusHistoryComment($message);
-        }
-
-        return $transaction;
+    public function addTransactionCommentsToOrder($transaction, $message)
+    {
+        $order = $this->getOrder();
+        $message = $this->_appendTransactionToMessage($transaction, $message);
+        $order->addStatusHistoryComment($message);
     }
 
     /**
@@ -1591,32 +1606,24 @@ class Payment extends Info implements OrderPaymentInterface
     {
         if (!$txnId) {
             if ($txnType && $this->getId()) {
-                $collection = $this->_transactionCollectionFactory->create()->setOrderFilter(
-                    $this->getOrder()
-                )->addPaymentIdFilter(
-                    $this->getId()
-                )->addTxnTypeFilter(
-                    $txnType
-                )->setOrder(
-                    'created_at',
-                    \Magento\Framework\Data\Collection::SORT_ORDER_DESC
-                )->setOrder(
-                    'transaction_id',
-                    \Magento\Framework\Data\Collection::SORT_ORDER_DESC
+                $txn = $this->transactionRepository->getByTxnType(
+                    $txnType,
+                    $this->getId(),
+                    $this->getOrder()->getId()
                 );
-                foreach ($collection as $txn) {
+                if ($txn) {
                     $txn->setOrderPaymentObject($this);
                     $this->_transactionsLookup[$txn->getTxnId()] = $txn;
-                    return $txn;
                 }
+                return $txn;
             }
             return false;
         }
         if (isset($this->_transactionsLookup[$txnId])) {
             return $this->_transactionsLookup[$txnId];
         }
-        $txn = $this->_transactionFactory->create()->setOrderPaymentObject($this)->loadByTxnId($txnId);
-        if ($txn->getId()) {
+        $txn = $this->transactionRepository->getByTxnId($txnId, $this->getId());
+        if ($txn && $txn->getId()) {
             $this->_transactionsLookup[$txnId] = $txn;
         } else {
             $this->_transactionsLookup[$txnId] = false;
