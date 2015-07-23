@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<section class="home-page-inner-wrap ng-scope">
+    <p class="upgrade-home-title">
+        Hello <?php echo $this->userName;?>, welcome to the Magento Setup Tool. Please choose a task below.
+    </p>
+
+    <div class="row">
+        <div class="col-m-4">
+            <a class="upgrade-home-item upgrade-home-item-component" ng-click="goToState('root.component-grid')">
+                <span class="upgrade-home-item-title">Component Manager</span>
+                <span class="upgrade-home-item-description">I want to manage my packages and modules.</span>
+            </a>
+        </div>
+        <div class="col-m-4">
+            <a class="upgrade-home-item upgrade-home-item-upgrade" ng-click="goToState('root.system-upgrade')">
+                <span class="upgrade-home-item-title">System Upgrade</span>
+                <span class="upgrade-home-item-description">I want to upgrade my Magento Admin version.</span>
+            </a>
+        </div>
+        <div class="col-m-4">
+            <a class="upgrade-home-item upgrade-home-item-configuration" ng-click="goToState('root.component-grid')">
+                <span class="upgrade-home-item-title">System Configuration</span>
+                <span class="upgrade-home-item-description">I want to change my Magento system configurations.</span>
+            </a>
+        </div>
+    </div>
+</section>

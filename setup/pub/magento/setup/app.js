@@ -22,6 +22,8 @@ var app = angular.module(
         'create-backup',
         'complete-backup',
         'component-upgrade',
+        'home',
+        'system-upgrade',
         'component-upgrade-success'
     ]);
 
