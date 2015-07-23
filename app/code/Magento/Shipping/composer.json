@@ -14,6 +14,7 @@
         "magento/module-tax": "1.0.0-beta",
         "magento/module-catalog-inventory": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",
+        "magento/module-ui": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "ext-gd": "*",
         "magento/magento-composer-installer": "*"

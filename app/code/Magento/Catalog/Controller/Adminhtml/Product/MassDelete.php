@@ -14,11 +14,14 @@ use Magento\Ui\Component\MassAction\Filter;
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
+     * Massactions filter
+     *
      * @var Filter
      */
     protected $filter;
 
     /**
+     * @param Builder $productBuilder
      * @param Context $context
      * @param Filter $filter
      */

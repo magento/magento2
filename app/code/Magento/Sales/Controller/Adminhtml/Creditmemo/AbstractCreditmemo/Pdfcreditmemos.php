@@ -7,31 +7,47 @@ namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\Order\Pdf\Creditmemo;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Ui\Component\MassAction\Filter;
 
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
-    protected $_fileFactory;
+    protected $fileFactory;
 
     /**
-     * @var string
+     * @var Creditmemo
      */
-    protected $collection = 'Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Collection';
+    protected $pdfCreditmemo;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @var DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param Context $context
+     * @param Creditmemo $pdfCreditmemo
+     * @param Filter $filter
+     * @param DateTime $dateTime
+     * @param FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Ui\Component\MassAction\Filter $filter
+        Context $context,
+        Creditmemo $pdfCreditmemo,
+        Filter $filter,
+        DateTime $dateTime,
+        FileFactory $fileFactory
     ) {
-        $this->_fileFactory = $fileFactory;
+        $this->pdfCreditmemo = $pdfCreditmemo;
+        $this->fileFactory = $fileFactory;
+        $this->dateTime = $dateTime;
         parent::__construct($context, $filter);
     }
 
@@ -45,22 +61,15 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
 
     /**
      * @param AbstractCollection $collection
-     * @return ResponseInterface|\Magento\Framework\Controller\Result\Redirect
+     * @return ResponseInterface
      * @throws \Exception
+     * @throws \Zend_Pdf_Exception
      */
     public function massAction(AbstractCollection $collection)
     {
-        if (!isset($pdf)) {
-            $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')->getPdf($collection);
-        } else {
-            $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')->getPdf($collection);
-            $pdf->pages = array_merge($pdf->pages, $pages->pages);
-        }
-        $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
-
-        return $this->_fileFactory->create(
-            'creditmemo' . $date . '.pdf',
-            $pdf->render(),
+        return $this->fileFactory->create(
+            sprintf('creditmemo%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
+            $this->pdfCreditmemo->getPdf($collection)->render(),
             DirectoryList::VAR_DIR,
             'application/pdf'
         );

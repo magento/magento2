@@ -21,6 +21,7 @@ use Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory as Creditmem
 
 /**
  * Class Pdfdocs
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -75,6 +76,8 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
      * @param ShipmentCollectionFactory $shipmentCollectionFactory
      * @param InvoiceCollectionFactory $invoiceCollectionFactory
      * @param CreditmemoCollectionFactory $creditmemoCollectionFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,

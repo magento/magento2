@@ -16,7 +16,7 @@ use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
 class Collection extends AbstractCollection implements ShipmentSearchResultInterface
 {
     /**
-     * @var
+     * @var string
      */
     protected $_idFieldName = 'entity_id';
 
