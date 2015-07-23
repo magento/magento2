@@ -132,7 +132,7 @@ define('globalNavigationScroll', [
 
         submenuHeight = submenu.height();
 
-        if (submenuHeight > menuHeight) {
+        if (submenuHeight > menuHeight && menuHeight > win.height()) {
             menu.css('height', submenuHeight);
             menuHeight = submenuHeight;
         }
