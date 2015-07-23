@@ -9,6 +9,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * TemporaryStorage Factory
+ *
+ * @codeCoverageIgnore
  */
 class TemporaryStorageFactory
 {
