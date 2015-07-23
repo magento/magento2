@@ -30,7 +30,8 @@ define([
             'newCustomerShippingAddress' : null,
             'selectedShippingRate' : null,
             'selectedPaymentMethod' : null,
-            'billingAddressData' : null
+            'billingAddressData' : null,
+            'billingAddressFormData' : null
         };
         saveData(checkoutData);
     }
@@ -90,6 +91,16 @@ define([
             var obj = getData();
             obj.billingAddressData = data;
             saveData(obj);
+        },
+
+        setBillingAddressFromData: function (data) {
+            var obj = getData();
+            obj.billingAddressFromData = data;
+            saveData(obj);
+        },
+
+        getBillingAddressFromData: function () {
+            return getData().billingAddressFromData;
         }
     }
 });
