@@ -49,9 +49,9 @@ class Improved implements AlgorithmInterface
     public function getItems(
         BucketInterface $bucket,
         array $dimensions,
-        Table $entityIdsTable
+        \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
     ) {
-        $aggregations = $this->dataProvider->getAggregations($entityIdsTable);
+        $aggregations = $this->dataProvider->getAggregations($entityStorage);
 
         $options = $this->options->get();
         if ($aggregations['count'] < $options['interval_division_limit']) {
@@ -66,7 +66,7 @@ class Improved implements AlgorithmInterface
 
         $this->algorithm->setLimits($aggregations['min'], $aggregations['max'] + 0.01);
 
-        $interval = $this->dataProvider->getInterval($bucket, $dimensions, $entityIdsTable);
+        $interval = $this->dataProvider->getInterval($bucket, $dimensions, $entityStorage);
         $data = $this->algorithm->calculateSeparators($interval);
 
         $data[0]['from'] = ''; // We should not calculate min and max value

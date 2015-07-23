@@ -141,7 +141,7 @@ class Mapper
         );
 
         $select->limit($request->getSize());
-        $select->order('relevance ' . Select::SQL_DESC);
+        $select->order('score ' . Select::SQL_DESC);
         return $select;
     }
 
@@ -160,7 +160,7 @@ class Mapper
                 ['main_select' => $select],
                 [
                     $this->entityMetadata->getEntityId() => 'entity_id',
-                    'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
+                    'score' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
                 ]
             )
             ->group($this->entityMetadata->getEntityId());
@@ -356,14 +356,14 @@ class Mapper
             $select = $this->createAroundSelect($select, $scoreBuilder);
             $subSelect = $select;
             $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
-            $tables = array_merge(array_keys($matchQueries), ['main_select.relevance']);
-            $relevance = implode('.relevance + ', $tables);
+            $tables = array_merge(array_keys($matchQueries), ['main_select.score']);
+            $score = implode('.score + ', $tables);
             $select
                 ->from(
                     ['main_select' => $subSelect],
                     [
                         $this->entityMetadata->getEntityId() => 'entity_id',
-                        'relevance' => sprintf('(%s)', $relevance),
+                        'score' => sprintf('(%s)', $score),
                     ]
                 );
 

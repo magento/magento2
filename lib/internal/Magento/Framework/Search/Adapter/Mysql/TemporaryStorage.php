@@ -15,12 +15,7 @@ class TemporaryStorage
     const TEMPORARY_TABLE_PREFIX = 'search_tmp_';
 
     const FIELD_ENTITY_ID = 'entity_id';
-    const FIELD_RELEVANCE = 'relevance';
-
-    /**
-     * @var Table[]
-     */
-    private $createdTables = [];
+    const FIELD_SCORE = 'score';
 
     /**
      * @var \Magento\Framework\App\Resource
@@ -45,7 +40,7 @@ class TemporaryStorage
         foreach ($documents as $document) {
             $data[] = [
                 $document->getId(),
-                $document->getField('relevance')->getValue(),
+                $document->getField('score')->getValue(),
             ];
         }
 
@@ -55,7 +50,7 @@ class TemporaryStorage
                 $table->getName(),
                 [
                     self::FIELD_ENTITY_ID,
-                    self::FIELD_RELEVANCE,
+                    self::FIELD_SCORE,
                 ],
                 $data
             );
@@ -100,11 +95,11 @@ class TemporaryStorage
             'Entity ID'
         );
         $table->addColumn(
-            self::FIELD_RELEVANCE,
+            self::FIELD_SCORE,
             Table::TYPE_DECIMAL,
             [32, 16],
             ['unsigned' => true, 'nullable' => false],
-            'Relevance'
+            'Score'
         );
         $table->setOption('type', 'memory');
         $connection->createTemporaryTable($table);
