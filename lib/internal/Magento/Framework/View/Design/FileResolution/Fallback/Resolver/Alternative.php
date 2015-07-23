@@ -25,14 +25,11 @@ class Alternative extends Simple
      *
      * @param Filesystem $filesystem
      * @param \Magento\Framework\View\Design\Fallback\RulePool $rulePool
-     * @param Fallback\CacheDataInterface $cache
      * @param array $alternativeExtensions
-     * @throws \InvalidArgumentException
      */
     public function __construct(
         Filesystem $filesystem,
         \Magento\Framework\View\Design\Fallback\RulePool $rulePool,
-        Fallback\CacheDataInterface $cache,
         array $alternativeExtensions
     ) {
         foreach ($alternativeExtensions as $extension => $newExtensions) {
@@ -44,7 +41,7 @@ class Alternative extends Simple
             }
         }
         $this->alternativeExtensions = $alternativeExtensions;
-        parent::__construct($filesystem, $rulePool, $cache);
+        parent::__construct($filesystem, $rulePool);
     }
 
     /**

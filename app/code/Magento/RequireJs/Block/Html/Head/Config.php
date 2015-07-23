@@ -68,6 +68,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     protected function _prepareLayout()
     {
         $requireJsConfig = $this->fileManager->createRequireJsConfigAsset();
+        $requireJsMixinsConfig = $this->fileManager->createRequireJsMixinsAsset();
         $assetCollection = $this->pageConfig->getAssetCollection();
 
         $after = RequireJsConfig::REQUIRE_JS_FILE_NAME;
@@ -107,6 +108,12 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $assetCollection->insert(
             $requireJsConfig->getFilePath(),
             $requireJsConfig,
+            $after
+        );
+
+        $assetCollection->insert(
+            $requireJsMixinsConfig->getFilePath(),
+            $requireJsMixinsConfig,
             $after
         );
 
