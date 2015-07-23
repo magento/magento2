@@ -11,10 +11,27 @@ define(
     ],
     function($, ko) {
         var steps = ko.observableArray();
-
         return {
             steps: steps,
             stepCodes: [],
+
+            handleHash: function () {
+                var hashString = window.location.hash.replace('#', '');
+                if (hashString == '') {
+                    return false;
+                }
+                var isRequestedStepVisible = steps.sort(this.sortItems).some(function(element) {
+                    return element.code == hashString && element.isVisible();
+                });
+
+                //if requested step is visible, then we don't need to load step data from server
+                if (isRequestedStepVisible) {
+                    return false;
+                }
+                this.navigateTo(hashString);
+                return false;
+            },
+
             registerStep: function(code, title, isVisible, navigate, sortOrder) {
                 steps.push({
                     code: code,
@@ -24,6 +41,10 @@ define(
                     sortOrder: sortOrder
                 });
                 this.stepCodes.push(code);
+                var hash = window.location.hash.replace('#', '');
+                if (hash != '' && hash != code) {
+                    isVisible(false);
+                }
             },
 
             sortItems: function(itemOne, itemTwo) {
@@ -55,15 +76,29 @@ define(
                 return activeItemIndex > requestedItemIndex;
             },
 
-            navigateTo: function(step) {
+            navigateTo: function(code) {
                 var sortedItems = steps.sort(this.sortItems);
-                if (!this.isProcessed(step.code)) {
+                sortedItems.forEach(function(element) {
+                    if (element.code == code) {
+                        element.navigate();
+                    } else {
+                        element.isVisible(false);
+                    }
+
+                });
+            },
+
+            goTo: function(code) {
+                var sortedItems = steps.sort(this.sortItems);
+                if (!this.isProcessed(code)) {
                     return;
                 }
                 sortedItems.forEach(function(element) {
-                    if (element.code == step.code) {
+                    if (element.code == code) {
                         element.isVisible(true);
-                        element.navigate();
+                        $('body').animate({scrollTop: $('#' + code).offset().top}, 0, function () {
+                            window.location = window.checkoutConfig.checkoutUrl + "#" + code;
+                        });
                     } else {
                         element.isVisible(false);
                     }
@@ -80,8 +115,11 @@ define(
                     }
                 });
                 if (steps().length > activeIndex + 1) {
+                    var code = steps()[activeIndex + 1].code;
                     steps()[activeIndex + 1].isVisible(true);
-                    steps()[activeIndex + 1].navigate();
+                    $('body').animate({scrollTop: $('#' + code).offset().top}, 0, function () {
+                        window.location = window.checkoutConfig.checkoutUrl + "#" + code;
+                    });
                 }
             },
 
@@ -94,7 +132,6 @@ define(
                     }
                 });
                 if (steps()[activeIndex - 1]) {
-                    steps()[activeIndex - 1].isVisible(true);
                     steps()[activeIndex - 1].navigate();
                 }
             }
