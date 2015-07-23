@@ -111,7 +111,11 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
             \Zend_Db_Select::COLUMNS
         )->columns(
             [
-                'rel_id' => $connection->getCheckSql('main_table.query_id=sr.query_id', 'sr.relation_id', 'sr.query_id'),
+                'rel_id' => $connection->getCheckSql(
+                    'main_table.query_id=sr.query_id',
+                    'sr.relation_id',
+                    'sr.query_id'
+                ),
             ]
         );
         if (!empty($limit)) {
