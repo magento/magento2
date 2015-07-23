@@ -57,10 +57,39 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
             ),
         ];
 
+        /** @var \Magento\Framework\Search\EntityMetadata $entityMetadata */
+        $entityMetadata = $objectManager->create('Magento\Framework\Search\EntityMetadata', ['entityId' => 'id']);
+        $idKey = $entityMetadata->getEntityId();
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory $documentFactory */
+        $documentFactory = $objectManager->create(
+            'Magento\Framework\Search\Adapter\Mysql\DocumentFactory',
+            ['entityMetadata' => $entityMetadata]
+        );
+
+        /** @var \Magento\Framework\Search\Document[] $documents */
+        $documents = [];
+        foreach ($entityIds as $entityId) {
+            $rawDocument = [
+                [
+                    'name' => $idKey,
+                    'value' => $entityId,
+                ],
+                [
+                    'name' => 'score',
+                    'value' => 1,
+                ],
+            ];
+            $documents[] = $documentFactory->create($rawDocument);
+        }
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage $temporaryStorage */
+        $temporaryStorage = $objectManager->create('Magento\Framework\Search\Adapter\Mysql\TemporaryStorage');
+        $table = $temporaryStorage->storeDocuments($documents);
+
         /** @var \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $dataProvider */
         $dataProvider = $objectManager->create('Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider');
-        $select = $dataProvider->getDataSet($termBucket, $dimensions, null);
-        $select->where('main_table.entity_id IN (?)', $entityIds);
+        $select = $dataProvider->getDataSet($termBucket, $dimensions, $table);
 
         /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory $intervalFactory */
         $intervalFactory = $objectManager->create('Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory');
