@@ -304,8 +304,17 @@ class DefaultConfigProvider implements ConfigProviderInterface
             ],
             'activeCarriers' => $this->getActiveCarriers(),
             'originCountryCode' => $this->getOriginCountryCode(),
-            'paymentMethods' => $this->getPaymentMethods()
+            'paymentMethods' => $this->getPaymentMethods(),
+            'autocomplete' => $this->getAutocomplete()
         ];
+    }
+
+    private function getAutocomplete()
+    {
+         return $this->scopeConfig->getValue(
+             \Magento\Customer\Model\Form::XML_PATH_DISABLE_AUTOCOMPLETE,
+             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+         ) ? 'off' : 'on';
     }
 
     /**
