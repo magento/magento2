@@ -151,7 +151,8 @@ class Mapper
      * @return Select
      */
     private function createAroundSelect(Select $select, ScoreBuilder $scoreBuilder) {
-        return $this->resource->getConnection()->select()->from(
+        $parentSelect = $this->resource->getConnection()->select();
+        $parentSelect->from(
             ['main_select' => $select],
             [
                 $this->entityMetadata->getEntityId() => 'entity_id',
@@ -160,6 +161,7 @@ class Mapper
         )->group(
             $this->entityMetadata->getEntityId()
         );
+        return $parentSelect;
     }
 
     /**
