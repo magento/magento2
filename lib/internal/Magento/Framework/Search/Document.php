@@ -54,7 +54,7 @@ class Document implements \IteratorAggregate
      */
     public function getField($fieldName)
     {
-        return $this->documentFields[$fieldName];
+        return array_key_exists($fieldName, $this->documentFields) ? $this->documentFields[$fieldName] : $fieldName;
     }
 
     /**

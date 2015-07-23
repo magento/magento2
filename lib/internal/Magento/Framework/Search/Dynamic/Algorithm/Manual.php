@@ -7,6 +7,7 @@ namespace Magento\Framework\Search\Dynamic\Algorithm;
 
 use Magento\Framework\Search\Adapter\OptionsInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
+use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
 
 class Manual implements AlgorithmInterface
@@ -37,14 +38,14 @@ class Manual implements AlgorithmInterface
     public function getItems(
         BucketInterface $bucket,
         array $dimensions,
-        \Magento\Framework\DB\Ddl\Table $entityIdsTable
+        EntityStorage $entityStorage
     ) {
         $range = $this->dataProvider->getRange();
         $options = $this->options->get();
         if (!$range) {
             $range = $options['range_step'];
         }
-        $dbRanges = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityIdsTable);
+        $dbRanges = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityStorage);
         $dbRanges = $this->processRange($dbRanges, $options['max_intervals_number']);
         $data = $this->dataProvider->prepareData($range, $dbRanges);
 

@@ -97,7 +97,7 @@ class Adapter implements AdapterInterface
     {
         $connection = $this->getConnection();
         $select = $connection->select();
-        $select->from($table->getName(), ['entity_id', 'relevance']);
+        $select->from($table->getName(), ['entity_id', 'score']);
         return $connection->fetchAssoc($select);
     }
 

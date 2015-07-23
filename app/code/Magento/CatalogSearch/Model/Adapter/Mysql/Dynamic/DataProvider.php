@@ -78,7 +78,7 @@ class DataProvider implements DataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getAggregations(Table $entityIdsTable)
+    public function getAggregations(\Magento\Framework\Search\Dynamic\EntityStorage $entityStorage)
     {
         $aggregation = [
             'count' => 'count(DISTINCT main_table.entity_id)',
@@ -90,8 +90,10 @@ class DataProvider implements DataProviderInterface
         $select = $this->getSelect();
 
         $tableName = $this->resource->getTableName('catalog_product_index_price');
+        /** @var Table $table */
+        $table = $entityStorage->getSource();
         $select->from(['main_table' => $tableName], [])
-            ->joinInner(['entities' => $entityIdsTable->getName()], 'main_table.entity_id  = entities.entity_id', [])
+            ->joinInner(['entities' => $table->getName()], 'main_table.entity_id  = entities.entity_id', [])
             ->columns($aggregation);
 
         $select = $this->setCustomerGroupId($select);
@@ -108,9 +110,9 @@ class DataProvider implements DataProviderInterface
     public function getInterval(
         BucketInterface $bucket,
         array $dimensions,
-        Table $entityIdsTable
+        \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
     ) {
-        $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityIdsTable);
+        $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityStorage->getSource());
 
         return $this->intervalFactory->create(['select' => $select]);
     }
@@ -122,9 +124,9 @@ class DataProvider implements DataProviderInterface
         BucketInterface $bucket,
         array $dimensions,
         $range,
-        Table $entityIdsTable
+        \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
     ) {
-        $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityIdsTable);
+        $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityStorage->getSource());
         $column = $select->getPart(Select::COLUMNS)[0];
         $select->reset(Select::COLUMNS);
         $rangeExpr = new \Zend_Db_Expr(

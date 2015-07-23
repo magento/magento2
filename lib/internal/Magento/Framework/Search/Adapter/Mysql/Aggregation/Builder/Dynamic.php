@@ -8,6 +8,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\Algorithm\Repository;
+use Magento\Framework\Search\Dynamic\EntityStorageFactory;
 use Magento\Framework\Search\Request\Aggregation\DynamicBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
@@ -19,11 +20,20 @@ class Dynamic implements BucketInterface
     private $algorithmRepository;
 
     /**
-     * @param Repository $algorithmRepository
+     * @var EntityStorageFactory
      */
-    public function __construct(Repository $algorithmRepository)
-    {
+    private $entityStorageFactory;
+
+    /**
+     * @param Repository $algorithmRepository
+     * @param EntityStorageFactory $entityStorageFactory
+     */
+    public function __construct(
+        Repository $algorithmRepository,
+        EntityStorageFactory $entityStorageFactory
+    ) {
         $this->algorithmRepository = $algorithmRepository;
+        $this->entityStorageFactory = $entityStorageFactory;
     }
 
     /**
@@ -37,7 +47,7 @@ class Dynamic implements BucketInterface
     ) {
         /** @var DynamicBucket $bucket */
         $algorithm = $this->algorithmRepository->get($bucket->getMethod());
-        $data = $algorithm->getItems($bucket, $dimensions, $entityIdsTable);
+        $data = $algorithm->getItems($bucket, $dimensions, $this->entityStorageFactory->create($entityIdsTable));
 
         $resultData = $this->prepareData($data);
 
