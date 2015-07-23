@@ -5,70 +5,41 @@
  */
 namespace Magento\Framework\View\File\Collector;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\File\AbstractCollector;
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\View\File\CollectorInterface;
-use Magento\Framework\View\File\Factory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Source of view files introduced by a theme
  */
-class Theme implements CollectorInterface
+class Theme extends AbstractCollector
 {
-    /**
-     * File factory
-     *
-     * @var \Magento\Framework\View\File\Factory
-     */
-    private $fileFactory;
-
-    /**
-     * Themes directory
-     *
-     * @var ReadInterface
-     */
-    protected $themesDirectory;
-
-    /**
-     * @var string
-     */
-    protected $subDir;
-
-    /**
-     * Constructor
-     *
-     * @param Filesystem $filesystem
-     * @param \Magento\Framework\View\File\Factory $fileFactory
-     * @param string $subDir
-     */
-    public function __construct(
-        Filesystem $filesystem,
-        Factory $fileFactory,
-        $subDir = ''
-    ) {
-        $this->themesDirectory = $filesystem->getDirectoryRead(DirectoryList::THEMES);
-        $this->fileFactory = $fileFactory;
-        $this->subDir = $subDir ? $subDir . '/' : '';
-    }
-
     /**
      * Retrieve files
      *
-     * @param ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param string $filePath
-     * @return array|\Magento\Framework\View\File[]
+     * @return \Magento\Framework\View\File[]
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
         $themePath = $theme->getFullPath();
-        $files = $this->themesDirectory->search("{$themePath}/{$this->subDir}{$filePath}");
+        $files = $this->directory->search("{$themePath}/{$this->subDir}{$filePath}");
         $result = [];
         foreach ($files as $file) {
-            $filename = $this->themesDirectory->getAbsolutePath($file);
+            $filename = $this->directory->getAbsolutePath($file);
             $result[] = $this->fileFactory->create($filename, null, $theme);
         }
         return $result;
+    }
+
+    /**
+     * Get scope directory of this file collector
+     *
+     * @return string
+     */
+    protected function getScopeDirectory()
+    {
+        return DirectoryList::THEMES;
     }
 }
