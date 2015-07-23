@@ -168,7 +168,6 @@
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
         </arguments>
     </type>
-
     <virtualType name="Magento\Customer\Model\Resource\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">customer_grid_flat</argument>
