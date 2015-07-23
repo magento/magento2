@@ -168,18 +168,18 @@
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
         </arguments>
     </type>
-    <virtualType name="CustomerGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+
+    <virtualType name="Magento\Customer\Model\Resource\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
-            <argument name="appliers" xsi:type="array">
-                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            <argument name="mainTable" xsi:type="string">customer_grid_flat</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\Resource\Customer</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="customer_listing_data_source" xsi:type="string">Magento\Customer\Model\Resource\Grid\Collection</item>
             </argument>
         </arguments>
-    </virtualType>
-    <virtualType name="CustomerGridDataProvider" type="Magento\Customer\Ui\DataProvider\Customer\CustomerDataProvider">
-        <arguments>
-            <argument name="collection" xsi:type="object" shared="false">Magento\Customer\Model\Resource\Customer\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">CustomerGridFilterPool</argument>
-        </arguments>
-    </virtualType>
+    </type>
 </config>
