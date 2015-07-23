@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Adapter\Mysql\Adapter;
+use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Response\Aggregation\Value;
 use Magento\Framework\Search\Response\QueryResponse;
 
@@ -206,14 +207,14 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             [
                 'search_result' => $table->getName(),
             ],
-            'e.entity_id = search_result.entity_id',
+            'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
             []
         );
 
         $this->_totalRecords = $this->queryResponse->count();
 
         if ($this->order && 'relevance' === $this->order['field']) {
-            $this->getSelect()->order('search_result.relevance ' . $this->order['dir']);
+            $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
         }
         return parent::_renderFiltersBefore();
     }

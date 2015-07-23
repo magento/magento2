@@ -8,6 +8,7 @@ namespace Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Adapter\OptionsInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
+use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
 
 class Auto implements AlgorithmInterface
@@ -38,13 +39,13 @@ class Auto implements AlgorithmInterface
     public function getItems(
         BucketInterface $bucket,
         array $dimensions,
-        Table $entityIdsTable
+        EntityStorage $entityStorage
     ) {
         $data = [];
         $range = $this->dataProvider->getRange();
-        if (!$range && !empty($entityIdsTable)) {
-            $range = $this->getRange($bucket, $dimensions, $entityIdsTable);
-            $dbRanges = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityIdsTable, 'count');
+        if (!$range && $entityStorage->getSource()) {
+            $range = $this->getRange($bucket, $dimensions, $entityStorage);
+            $dbRanges = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityStorage);
             $data = $this->dataProvider->prepareData($range, $dbRanges);
         }
 
@@ -57,13 +58,13 @@ class Auto implements AlgorithmInterface
      * @param int[] $entityIds
      * @return number
      */
-    private function getRange($bucket, array $dimensions, Table $entityIdsTable)
+    private function getRange($bucket, array $dimensions, EntityStorage $entityStorage)
     {
-        $maxPrice = $this->getMaxPriceInt($entityIdsTable);
+        $maxPrice = $this->getMaxPriceInt($entityStorage);
         $index = 1;
         do {
             $range = pow(10, strlen(floor($maxPrice)) - $index);
-            $items = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityIdsTable);
+            $items = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityStorage);
             $index++;
         } while ($range > $this->getMinRangePower() && count($items) < 2);
 
@@ -73,12 +74,12 @@ class Auto implements AlgorithmInterface
     /**
      * Get maximum price from layer products set
      *
-     * @param int[] $entityIdsTable
+     * @param EntityStorage $entityStorage
      * @return float
      */
-    private function getMaxPriceInt(Table $entityIdsTable)
+    private function getMaxPriceInt(EntityStorage $entityStorage)
     {
-        $aggregations = $this->dataProvider->getAggregations($entityIdsTable);
+        $aggregations = $this->dataProvider->getAggregations($entityStorage);
         $maxPrice = $aggregations['max'];
         $maxPrice = floor($maxPrice);
 
