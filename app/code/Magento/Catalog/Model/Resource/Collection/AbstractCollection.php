@@ -255,7 +255,10 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         } else {
             $storeId = $this->getDefaultStoreId();
         }
-        $condition[] = $connection->quoteInto($connection->quoteColumnAs("{$tableAlias}.store_id", null) . ' = ?', $storeId);
+        $condition[] = $connection->quoteInto(
+            $connection->quoteColumnAs("{$tableAlias}.store_id", null) . ' = ?',
+            $storeId
+        );
         return parent::_joinAttributeToSelect($method, $attribute, $tableAlias, $condition, $fieldCode, $fieldAlias);
     }
 }

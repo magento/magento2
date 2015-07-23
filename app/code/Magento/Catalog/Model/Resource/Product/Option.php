@@ -460,7 +460,10 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ' AND ',
             [
                 'option_title_default.option_id=product_option.option_id',
-                $connection->quoteInto('option_title_default.store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+                $connection->quoteInto(
+                    'option_title_default.store_id = ?',
+                    \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                )
             ]
         );
 
@@ -498,7 +501,10 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ' AND ',
             [
                 'option_title_default.option_type_id=option_type.option_type_id',
-                $connection->quoteInto('option_title_default.store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+                $connection->quoteInto(
+                    'option_title_default.store_id = ?',
+                    \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                )
             ]
         );
 
