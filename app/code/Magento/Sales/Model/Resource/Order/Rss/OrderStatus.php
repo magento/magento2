@@ -35,9 +35,9 @@ class OrderStatus
      */
     public function getAllCommentCollection($orderId)
     {
-        /** @var $resource Resource */
+        /** @var $resource \Magento\Framework\App\Resource */
         $resource = $this->_resource;
-        $read = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $read = $resource->getConnection();
 
         $fields = ['notified' => 'is_customer_notified', 'comment', 'created_at'];
         $commentSelects = [];

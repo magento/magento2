@@ -38,7 +38,7 @@ class TableBuilder
         \Magento\Framework\App\Resource $resource
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
-        $this->_connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->_connection = $resource->getConnection();
     }
 
     /**

@@ -83,7 +83,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_CONNECTION)
             ->willReturn($this->connection);
         $this->resource->expects($this->once())
             ->method('getTableName')
@@ -136,7 +135,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_CONNECTION)
             ->willReturn($this->connection);
         $this->connection->expects($this->any())
             ->method('fetchRow')

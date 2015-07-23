@@ -50,7 +50,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     public function populateAcl(\Magento\Framework\Acl $acl)
     {
         $roleTableName = $this->_resource->getTableName('authorization_role');
-        $connection = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->_resource->getConnection();
 
         $select = $connection->select()->from($roleTableName)->order('tree_level');
 

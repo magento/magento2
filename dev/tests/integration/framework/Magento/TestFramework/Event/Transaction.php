@@ -123,7 +123,7 @@ class Transaction
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|\Magento\TestFramework\Db\Adapter\TransactionInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getConnection($connectionName = \Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE)
+    protected function _getConnection($connectionName = \Magento\Framework\App\Resource::DEFAULT_CONNECTION)
     {
         /** @var $resource \Magento\Framework\App\Resource */
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');

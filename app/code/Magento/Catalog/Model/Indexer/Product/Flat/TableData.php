@@ -40,7 +40,7 @@ class TableData implements TableDataInterface
      */
     public function move($flatTable, $flatDropName, $temporaryFlatTableName)
     {
-        $connection = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->_resource->getConnection();
         $renameTables = [];
 
         if ($connection->isTableExists($flatTable)) {

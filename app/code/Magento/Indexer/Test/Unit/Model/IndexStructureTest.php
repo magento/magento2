@@ -52,7 +52,6 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resource->expects($this->atLeastOnce())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_CONNECTION)
             ->willReturn($this->connectionInterface);
         $this->indexScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
             ->setMethods(['resolve'])

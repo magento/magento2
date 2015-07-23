@@ -51,7 +51,7 @@ class Links
     ) {
         $this->productLink = $productLink;
         $this->importFactory = $importFactory;
-        $this->connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->connection = $resource->getConnection();
     }
 
     /**

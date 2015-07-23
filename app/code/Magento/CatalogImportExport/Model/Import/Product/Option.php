@@ -344,7 +344,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (isset($data['connection'])) {
             $this->_connection = $data['connection'];
         } else {
-            $this->_connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+            $this->_connection = $resource->getConnection();
         }
 
         if (isset($data['resource_helper'])) {

@@ -69,8 +69,6 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
             $this->any()
         )->method(
             'getConnection'
-        )->with(
-            Resource::DEFAULT_CONNECTION
         )->will(
             $this->returnValue($this->_connectionMock)
         );

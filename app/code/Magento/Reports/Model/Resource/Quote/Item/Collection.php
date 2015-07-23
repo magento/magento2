@@ -171,7 +171,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function getProductData(array $productIds)
     {
-        $productConnection = $this->productResource->getConnection(Resource::DEFAULT_CONNECTION);
+        $productConnection = $this->productResource->getConnection();
         $productAttrName = $this->productResource->getAttribute('name');
         $productAttrNameId = (int)$productAttrName->getAttributeId();
         $productAttrPrice = $this->productResource->getAttribute('price');

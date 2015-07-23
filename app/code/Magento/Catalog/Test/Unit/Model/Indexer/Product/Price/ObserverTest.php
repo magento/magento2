@@ -107,21 +107,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
         $this->_resourceMock->expects(
             $this->once()
-        )
-        ->method(
+        )->method(
             'getConnection'
-        )
-        ->with(
-            Resource::DEFAULT_CONNECTION
-        )
-        ->will(
+        )->will(
             $this->returnValue($connectionMock)
         );
 
-
         $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
-
 
         $this->_storeManagerMock->expects(
             $this->once()

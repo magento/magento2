@@ -30,7 +30,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @var string
      */
-    protected $connectionName = 'core';
+    protected $connectionName = \Magento\Framework\App\Resource::DEFAULT_CONNECTION;
 
     /**
      * Connections cache for this resource model

@@ -54,6 +54,14 @@ return [
         'Mage_Core_Model_Resource',
         'Magento_Core_Model_Config_Resource::DEFAULT_WRITE_CONNECTION',
     ],
+    [
+        'DEFAULT_READ_RESOURCE',
+        'Magento\Framework\App\Resource',
+    ],
+    [
+        'DEFAULT_WRITE_RESOURCE',
+        'Magento\Framework\App\Resource',
+    ],
     ['DEFAULT_READ_CONNECTION', 'Magento\Framework\App\Resource\Config'],
     ['DEFAULT_WRITE_CONNECTION', 'Magento\Framework\App\Resource\Config'],
     ['DEFAULT_ERROR_HANDLER', 'Mage'],

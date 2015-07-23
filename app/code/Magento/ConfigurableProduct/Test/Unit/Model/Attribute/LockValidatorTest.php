@@ -84,7 +84,7 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $object->expects($this->once())->method('getAttributeId')->will($this->returnValue($attributeId));
 
-        $this->resource->expects($this->once())->method('getConnection')->with(Resource::DEFAULT_CONNECTION)
+        $this->resource->expects($this->once())->method('getConnection')
             ->will($this->returnValue($this->connectionMock));
         $this->resource->expects($this->at(1))->method('getTableName')
             ->with($this->equalTo('catalog_product_super_attribute'))

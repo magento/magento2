@@ -143,6 +143,6 @@ class Preprocessor implements PreprocessorInterface
      */
     private function getConnection()
     {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        return $this->resource->getConnection();
     }
 }

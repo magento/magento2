@@ -60,7 +60,6 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_WRITE_RESOURCE)
             ->will($this->returnValue($this->connectionMock));
         $this->connectionMock->expects($this->any())
             ->method('select')

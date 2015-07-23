@@ -22,7 +22,7 @@ class ConditionManager
      */
     public function __construct(Resource $resource)
     {
-        $this->connection = $resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        $this->connection = $resource->getConnection();
     }
 
     /**

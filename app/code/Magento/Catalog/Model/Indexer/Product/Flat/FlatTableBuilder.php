@@ -57,7 +57,7 @@ class FlatTableBuilder
         \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
-        $this->_connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->_connection = $resource->getConnection();
         $this->_config = $config;
         $this->_storeManager = $storeManager;
         $this->_tableData = $tableData;

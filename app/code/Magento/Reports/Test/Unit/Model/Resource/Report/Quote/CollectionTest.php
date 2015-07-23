@@ -135,7 +135,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $productResourceMock->expects($this->once())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_CONNECTION)
             ->willReturn($connectionMock);
         $productResourceMock->expects($this->any())
             ->method('getAttribute')
