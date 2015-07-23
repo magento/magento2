@@ -102,15 +102,11 @@ define([
             var availablePaymentMethods = paymentService.getAvailablePaymentMethods();
             var selectedPaymentMethod = checkoutData.getSelectedPaymentMethod();
             if (selectedPaymentMethod) {
-                var isMethodAvailable = availablePaymentMethods.some(function (method) {
-                    if (method.method == selectedPaymentMethod.method) {
-                        return true;
+                availablePaymentMethods.some(function (payment) {
+                    if (payment.method == selectedPaymentMethod) {
+                        selectPaymentMethodAction(payment);
                     }
-                    return false;
                 });
-                if (isMethodAvailable) {
-                    selectPaymentMethodAction(selectedPaymentMethod);
-                }
             }
         }
     }
