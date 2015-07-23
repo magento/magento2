@@ -229,7 +229,7 @@ abstract class AbstractMapper implements MapperInterface
         $this->setResourceModelName($resourceInterface);
         $this->setConnection($this->getResource()->getConnection());
         if (!$this->select) {
-            $this->select = $this->connection->select();
+            $this->select = $this->getConnection()->select();
             $this->initSelect();
         }
     }
@@ -308,7 +308,7 @@ abstract class AbstractMapper implements MapperInterface
     protected function translateCondition($field, $condition)
     {
         $field = $this->getMappedField($field);
-        return $this->getConditionSql($this->connection->quoteIdentifier($field), $condition);
+        return $this->getConditionSql($this->getConnection()->quoteIdentifier($field), $condition);
     }
 
     /**
@@ -377,7 +377,7 @@ abstract class AbstractMapper implements MapperInterface
      */
     protected function getConditionSql($fieldName, $condition)
     {
-        return $this->connection->prepareSqlCondition($fieldName, $condition);
+        return $this->getConnection()->prepareSqlCondition($fieldName, $condition);
     }
 
     /**
