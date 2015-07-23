@@ -29,6 +29,11 @@ class ProcessingError
     /**
      * @var string
      */
+    protected $errorDescription;
+
+    /**
+     * @var string
+     */
     protected $rowNumber;
 
     /**
@@ -47,19 +52,22 @@ class ProcessingError
      * @param int|null $rowNumber
      * @param string|null $columnName
      * @param string|null $errorLevel
+     * @param string|null $errorDescription
      */
     public function init(
         $errorCode,
+        $errorLevel = null,
         $rowNumber = null,
         $columnName = null,
         $errorMessage = null,
-        $errorLevel = null
+        $errorDescription = null
     ) {
         $this->errorCode = $errorCode;
+        $this->errorLevel = $errorLevel;
         $this->rowNumber = $rowNumber;
         $this->columnName = $columnName;
         $this->errorMessage = $errorMessage;
-        $this->errorLevel = $errorLevel;
+        $this->errorDescription = $errorDescription;
     }
 
     /**
@@ -94,12 +102,19 @@ class ProcessingError
         return $this->columnName;
     }
 
-
     /**
      * @return string
      */
     public function getErrorLevel()
     {
         return $this->errorLevel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorDescription()
+    {
+        return $this->errorDescription;
     }
 }

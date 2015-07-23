@@ -17,6 +17,8 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  */
 abstract class AbstractEntity
 {
+    const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
+
     /**
      * Database constants
      */
@@ -230,6 +232,11 @@ abstract class AbstractEntity
         $this->string = $string;
         $this->errorAggregator = $errorAggregator;
 
+        $this->errorAggregator->addErrorMessageTemplate(
+            self::ERROR_CODE_SYSTEM_EXCEPTION,
+            __('General system exception happened')
+        );
+
         $entityType = $config->getEntityType($this->getEntityTypeCode());
 
         $this->_entityTypeId = $entityType->getEntityTypeId();
@@ -354,6 +361,7 @@ abstract class AbstractEntity
      * @param string $colName OPTIONAL Column name.
      * @param string $errorMessage OPTIONAL Column name.
      * @param string $errorLevel
+     * @param string $errorDescription
      * @return $this
      */
     public function addRowError(
@@ -361,15 +369,17 @@ abstract class AbstractEntity
         $errorRowNum,
         $colName = null,
         $errorMessage = null,
-        $errorLevel = ProcessingError::ERROR_LEVEL_CRITICAL
+        $errorLevel = ProcessingError::ERROR_LEVEL_CRITICAL,
+        $errorDescription = null
     ) {
         $errorCode = (string)$errorCode;
         $this->errorAggregator->addError(
             $errorCode,
+            $errorLevel,
             $errorRowNum,
             $colName,
             $errorMessage,
-            $errorLevel
+            $errorDescription
         );
 
         return $this;
