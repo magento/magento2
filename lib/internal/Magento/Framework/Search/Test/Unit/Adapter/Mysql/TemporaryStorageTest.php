@@ -120,14 +120,16 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
             ->method('addColumn')
             ->with(
                 TemporaryStorage::FIELD_ENTITY_ID,
-                Table::TYPE_INTEGER, 10,
+                Table::TYPE_INTEGER,
+                10,
                 ['unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Entity ID'
             );
         $table->expects($this->at(2))
             ->method('addColumn')
             ->with(
-                'score', Table::TYPE_DECIMAL,
+                'score',
+                Table::TYPE_DECIMAL,
                 [32, 16],
                 ['unsigned' => true, 'nullable' => false],
                 'Score'
