@@ -106,35 +106,74 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $model->getWebsiteId());
     }
 
-    /**
-     * @dataProvider getWebsiteDataProvider
-     *
-     * @param int $websiteId
-     * @param \Magento\Store\Model\Website $website
-     */
-    public function testGetWebsite($websiteId, $website)
+    public function testGetWebsite()
     {
-        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
-        $storeManager->expects($this->any())
-            ->method('getWebsite')
+        $websiteId = 2;
+        $website = $this->getMock('Magento\Store\Api\Data\WebsiteInterface');
+
+        $websiteRepository = $this->getMock('Magento\Store\Api\WebsiteRepositoryInterface');
+        $websiteRepository->expects($this->once())
+            ->method('getById')
             ->with($websiteId)
-            ->will($this->returnValue($website));
+            ->willReturn($website);
+
         /** @var \Magento\Store\Model\Store $model */
-        $model = $this->objectManagerHelper->getObject(
-            'Magento\Store\Model\Store',
-            ['storeManager' => $storeManager]
-        );
+        $model = $this->objectManagerHelper->getObject('Magento\Store\Model\Store', [
+            'websiteRepository' => $websiteRepository,
+        ]);
         $model->setWebsiteId($websiteId);
+
         $this->assertEquals($website, $model->getWebsite());
     }
 
-    public function getWebsiteDataProvider()
+    public function testGetWebsiteIfWebsiteIsNotExist()
     {
-        $website = $this->getMock('\Magento\Store\Model\Website', ['__wakeup'], [], '', false);
-        return [
-            [null, false],
-            [2, $website]
-        ];
+        $websiteRepository = $this->getMock('Magento\Store\Api\WebsiteRepositoryInterface');
+        $websiteRepository->expects($this->never())
+            ->method('getById');
+
+        /** @var \Magento\Store\Model\Store $model */
+        $model = $this->objectManagerHelper->getObject('Magento\Store\Model\Store', [
+            'websiteRepository' => $websiteRepository,
+        ]);
+        $model->setWebsiteId(null);
+
+        $this->assertFalse($model->getWebsite());
+    }
+
+    public function testGetGroup()
+    {
+        $groupId = 2;
+        $group = $this->getMock('Magento\Store\Api\Data\GroupInterface');
+
+        $groupRepository = $this->getMock('Magento\Store\Api\GroupRepositoryInterface');
+        $groupRepository->expects($this->once())
+            ->method('get')
+            ->with($groupId)
+            ->willReturn($group);
+
+        /** @var \Magento\Store\Model\Store $model */
+        $model = $this->objectManagerHelper->getObject('Magento\Store\Model\Store', [
+            'groupRepository' => $groupRepository,
+        ]);
+        $model->setGroupId($groupId);
+
+        $this->assertEquals($group, $model->getGroup());
+    }
+
+    public function testGetGroupIfGroupIsNotExist()
+    {
+        $groupRepository = $this->getMock('Magento\Store\Api\GroupRepositoryInterface');
+        $groupRepository->expects($this->never())
+            ->method('getById');
+
+        /** @var \Magento\Store\Model\Store $model */
+        $model = $this->objectManagerHelper->getObject('Magento\Store\Model\Store', [
+            'groupRepository' => $groupRepository,
+        ]);
+        $model->setGroupId(null);
+
+        $this->assertFalse($model->getGroup());
     }
 
     public function testGetUrl()

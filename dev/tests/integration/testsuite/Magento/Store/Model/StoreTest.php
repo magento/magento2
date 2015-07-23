@@ -52,6 +52,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'session' => $objectManager->get('Magento\Framework\Session\SessionManagerInterface'),
             'currencyFactory' => $objectManager->get('Magento\Directory\Model\CurrencyFactory'),
             'currencyInstalled' => 'system/currency/installed',
+            'groupRepository' => $objectManager->get('Magento\Store\Api\GroupRepositoryInterface'),
+            'websiteRepository' => $objectManager->get('Magento\Store\Api\WebsiteRepositoryInterface'),
         ];
 
         return $this->getMock('Magento\Store\Model\Store', ['getUrl'], $this->modelParams);
