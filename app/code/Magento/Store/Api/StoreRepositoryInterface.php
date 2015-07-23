@@ -6,6 +6,7 @@
 namespace Magento\Store\Api;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreIsInactiveException;
 
 /**
  * Store repository interface
@@ -28,7 +29,6 @@ interface StoreRepositoryInterface
      *
      * @param string $code
      * @return Data\StoreInterface
-     * @throws NoSuchEntityException
      * @throws StoreIsInactiveException
      */
     public function getActiveStoreByCode($code);
