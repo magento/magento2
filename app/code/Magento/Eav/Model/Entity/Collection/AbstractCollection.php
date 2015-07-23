@@ -1584,6 +1584,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $field
      * @param string $alias
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addFieldToSelect($field, $alias = null)
     {

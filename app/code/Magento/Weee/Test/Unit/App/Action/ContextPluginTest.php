@@ -185,7 +185,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 0], 0);
 
-        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+        $action = $this->objectManager->getObject('Magento\Framework\App\Test\Unit\Action\Stub\ActionStub');
         $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
         $expectedResult = 'expectedResult';
         $proceed = function ($request) use ($expectedResult) {
@@ -217,7 +217,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->method('getTaxBasedOn')
             ->willReturn('origin');
 
-        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+        $action = $this->objectManager->getObject('Magento\Framework\App\Test\Unit\Action\Stub\ActionStub');
         $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
         $expectedResult = 'expectedResult';
         $proceed = function ($request) use ($expectedResult) {
@@ -292,7 +292,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 1], 0);
 
-        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+        $action = $this->objectManager->getObject('Magento\Framework\App\Test\Unit\Action\Stub\ActionStub');
         $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
         $expectedResult = 'expectedResult';
         $proceed = function ($request) use ($expectedResult) {
@@ -367,7 +367,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 1], 0);
 
-        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+        $action = $this->objectManager->getObject('Magento\Framework\App\Test\Unit\Action\Stub\ActionStub');
         $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
         $expectedResult = 'expectedResult';
         $proceed = function ($request) use ($expectedResult) {
