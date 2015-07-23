@@ -47,7 +47,7 @@ class Categories extends LayoutForm
         $this->_rootElement->find($this->chooser, Locator::SELECTOR_XPATH)->click();
         $this->getTemplateBlock()->waitLoader();
         $mapping = $this->dataMapping(['entities' => '']);
-        $mapping['entities']['value'] =  implode('/', $this->prepareFullCategoryPath($category));
+        $mapping['entities']['value'] = implode('/', $this->prepareFullCategoryPath($category));
         $this->_fill($mapping, $element);
         $this->getTemplateBlock()->waitLoader();
         $this->_rootElement->find($this->apply, Locator::SELECTOR_XPATH)->click();

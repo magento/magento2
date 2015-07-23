@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
-use \Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Backend catalog product grid.
@@ -19,13 +19,6 @@ class Grid extends DataGrid
      * @var string
      */
     protected $rowPattern = './/tr[%s]';
-
-    /**
-     * An element locator which allows to select entities in grid.
-     *
-     * @var string
-     */
-    protected $selectItem = 'tbody tr [data-action="select-row"]';
 
     /**
      * Filters array mapping.

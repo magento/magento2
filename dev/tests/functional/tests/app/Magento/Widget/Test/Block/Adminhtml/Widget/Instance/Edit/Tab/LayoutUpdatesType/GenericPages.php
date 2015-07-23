@@ -6,9 +6,8 @@
 
 namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdatesType;
 
-
 /**
- * Filling Generic Pages type layout
+ * Filling Generic Pages type layout.
  */
 class GenericPages extends LayoutForm
 {
