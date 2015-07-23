@@ -305,7 +305,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'activeCarriers' => $this->getActiveCarriers(),
             'originCountryCode' => $this->getOriginCountryCode(),
             'paymentMethods' => $this->getPaymentMethods(),
-            'autocomplete' => $this->getAutocomplete()
+            'autocomplete' => $this->getIsAutocompleteEnabled(),
         ];
     }
 
@@ -314,7 +314,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      */
-    private function getAutocomplete()
+    private function getIsAutocompleteEnabled()
     {
          return $this->scopeConfig->getValue(
              \Magento\Customer\Model\Form::XML_PATH_DISABLE_AUTOCOMPLETE,
