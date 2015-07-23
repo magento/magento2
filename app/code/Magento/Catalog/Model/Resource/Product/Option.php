@@ -445,9 +445,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getSearchableData($productId, $storeId)
     {
         $searchData = [];
-
         $connection = $this->getConnection();
-
         $titleCheckSql = $connection->getCheckSql(
             'option_title_store.title IS NULL',
             'option_title_default.title',
@@ -455,7 +453,6 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         // retrieve options title
-
         $defaultOptionJoin = implode(
             ' AND ',
             [
@@ -496,7 +493,6 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         //select option type titles
-
         $defaultOptionJoin = implode(
             ' AND ',
             [
