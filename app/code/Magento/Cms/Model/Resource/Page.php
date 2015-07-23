@@ -201,7 +201,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $field
      * @param mixed $value
      * @param \Magento\Cms\Model\Page $object
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -294,7 +294,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId];
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores, 1);
-        $select->reset(\Zend_Db_Select::COLUMNS)->columns('cp.page_id')->order('cps.store_id DESC')->limit(1);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS)->columns('cp.page_id')->order('cps.store_id DESC')->limit(1);
 
         return $this->getConnection()->fetchOne($select);
     }
@@ -313,7 +313,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores);
-        $select->reset(\Zend_Db_Select::COLUMNS)->columns('cp.title')->order('cps.store_id DESC')->limit(1);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS)->columns('cp.title')->order('cps.store_id DESC')->limit(1);
 
         return $this->getConnection()->fetchOne($select);
     }

@@ -105,7 +105,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_ratingFactory = $ratingFactory;
         $this->_voteFactory = $voteFactory;
@@ -213,10 +213,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Applies all store filters in one place to prevent multiple joins in select
      *
-     * @param null|\Zend_Db_Select $select
+     * @param null|\Magento\Framework\DB\Select $select
      * @return $this
      */
-    protected function _applyStoresFilterToSelect(\Zend_Db_Select $select = null)
+    protected function _applyStoresFilterToSelect(\Magento\Framework\DB\Select $select = null)
     {
         $connection = $this->getConnection();
         $storesIds = $this->_storesIds;
@@ -374,10 +374,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     public function getAllIds($limit = null, $offset = null)
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $idsSelect->columns('rt.review_id');
         return $this->getConnection()->fetchCol($idsSelect);
     }
@@ -390,10 +390,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     public function getResultingIds()
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
         $idsSelect->columns('rt.review_id');
         return $this->getConnection()->fetchCol($idsSelect);
     }
@@ -406,7 +406,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     public function getSelectCountSql()
     {
         $select = parent::getSelectCountSql();
-        $select->reset(\Zend_Db_Select::COLUMNS)->columns('COUNT(e.entity_id)')->reset(\Zend_Db_Select::HAVING);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS)->columns('COUNT(e.entity_id)')->reset(\Magento\Framework\DB\Select::HAVING);
 
         return $select;
     }

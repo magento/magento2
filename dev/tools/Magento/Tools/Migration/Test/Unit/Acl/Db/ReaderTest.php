@@ -22,14 +22,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_adapterMock = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract',
+        $this->_adapterMock = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            ['select', 'fetchPairs'],
             [],
             '',
-            false,
-            false,
-            false,
-            ['select', 'fetchPairs']
+            false
         );
         $this->_model = new \Magento\Tools\Migration\Acl\Db\Reader($this->_adapterMock, 'dummy');
     }

@@ -50,9 +50,9 @@ class Select extends \Zend_Db_Select
      * Class constructor
      * Add straight join support
      *
-     * @param \Zend_Db_Adapter_Abstract $adapter
+     * @param \Magento\Framework\DB\Adapter\Pdo\Mysql $adapter
      */
-    public function __construct(\Zend_Db_Adapter_Abstract $adapter)
+    public function __construct(\Magento\Framework\DB\Adapter\Pdo\Mysql $adapter)
     {
         if (!isset(self::$_partsInit[self::STRAIGHT_JOIN])) {
             self::$_partsInit = [self::STRAIGHT_JOIN => false] + self::$_partsInit;
@@ -274,7 +274,7 @@ class Select extends \Zend_Db_Select
      * @param  string $cond Join on this condition
      * @param  array|string $cols The columns to select from the joined table
      * @param  string $schema The database name to specify, if any.
-     * @return \Zend_Db_Select This \Zend_Db_Select object
+     * @return \Magento\Framework\DB\Select This \Magento\Framework\DB\Select object
      * @throws \Zend_Db_Select_Exception
      */
     protected function _join($type, $name, $cond, $cols, $schema = null)

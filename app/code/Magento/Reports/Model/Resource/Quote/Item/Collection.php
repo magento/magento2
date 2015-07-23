@@ -52,7 +52,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Catalog\Model\Resource\Product\Collection $productResource
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param \Magento\Sales\Model\Resource\Order\Collection $orderResource
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -63,7 +63,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Catalog\Model\Resource\Product\Collection $productResource,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         \Magento\Sales\Model\Resource\Order\Collection $orderResource,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
@@ -156,8 +156,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function getSelectCountSql()
     {
         $countSelect = clone $this->prepareActiveCartItems();
-        $countSelect->reset(\Zend_Db_Select::COLUMNS)
-            ->reset(\Zend_Db_Select::GROUP)
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS)
+            ->reset(\Magento\Framework\DB\Select::GROUP)
             ->columns('COUNT(DISTINCT main_table.product_id)');
         return $countSelect;
     }

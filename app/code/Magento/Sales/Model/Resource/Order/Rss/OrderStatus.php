@@ -68,7 +68,7 @@ class OrderStatus
         );
         $commentSelects[] = '(' . $select . ')';
 
-        $commentSelect = $read->select()->union($commentSelects, \Zend_Db_Select::SQL_UNION_ALL);
+        $commentSelect = $read->select()->union($commentSelects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
 
         $select = $read->select()->from(
             ['orders' => $resource->getTableName('sales_order')],
