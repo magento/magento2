@@ -109,7 +109,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->select));
         $resource->expects($this->atLeastOnce())
             ->method('getConnection')
-            ->with(\Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE)
             ->will($this->returnValue($this->connection));
         $this->filter = $this->getMockBuilder('\Magento\Framework\Search\Request\FilterInterface')
             ->disableOriginalConstructor()

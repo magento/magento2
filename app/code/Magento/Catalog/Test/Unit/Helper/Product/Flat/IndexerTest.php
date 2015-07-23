@@ -154,8 +154,6 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             $this->once()
         )->method(
             'getConnection'
-        )->with(
-            Resource::DEFAULT_CONNECTION
         )->will(
             $this->returnValue($this->_connectionMock)
         );
@@ -202,8 +200,6 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             $this->once()
         )->method(
             'getConnection'
-        )->with(
-            Resource::DEFAULT_CONNECTION
         )->will(
             $this->returnValue($this->_connectionMock)
         );
@@ -242,8 +238,6 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             $this->once()
         )->method(
             'getConnection'
-        )->with(
-            Resource::DEFAULT_CONNECTION
         )->will(
             $this->returnValue($this->_connectionMock)
         );

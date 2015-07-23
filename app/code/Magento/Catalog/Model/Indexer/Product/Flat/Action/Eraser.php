@@ -37,7 +37,7 @@ class Eraser
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->productIndexerHelper = $productHelper;
-        $this->connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
     }
 

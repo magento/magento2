@@ -325,7 +325,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAttributeCodes()
     {
         if ($this->_attributeCodes === null) {
-            $connection = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
+            $connection = $this->_resource->getConnection();
             $this->_attributeCodes = [];
 
             foreach ($this->_flatAttributeGroups as $attributeGroupName) {
@@ -494,7 +494,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function deleteAbandonedStoreFlatTables()
     {
-        $connection = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->_resource->getConnection();
         $existentTables = $connection->getTables($connection->getTableName('catalog_product_flat_%'));
         $this->_changelog->setViewId('catalog_product_flat');
         foreach ($existentTables as $key => $tableName) {

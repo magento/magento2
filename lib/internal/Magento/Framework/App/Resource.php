@@ -22,10 +22,6 @@ class Resource
 
     const DEFAULT_CONNECTION = 'default';
 
-    const DEFAULT_READ_RESOURCE = 'core_read';
-
-    const DEFAULT_WRITE_RESOURCE = 'core_write';
-
     /**
      * Instances of actual connections
      *
@@ -89,7 +85,7 @@ class Resource
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
      * @codeCoverageIgnore
      */
-    public function getConnection($resourceName)
+    public function getConnection($resourceName = self::DEFAULT_CONNECTION)
     {
         $connectionName = $this->_config->getConnectionName($resourceName);
         return $this->getConnectionByName($connectionName);
@@ -130,7 +126,7 @@ class Resource
      * @return  string
      * @api
      */
-    public function getTableName($modelEntity, $connectionName = self::DEFAULT_READ_RESOURCE)
+    public function getTableName($modelEntity, $connectionName = self::DEFAULT_CONNECTION)
     {
         $tableSuffix = null;
         if (is_array($modelEntity)) {
@@ -165,7 +161,7 @@ class Resource
      */
     public function getTriggerName($tableName, $time, $event)
     {
-        return $this->getConnection(self::DEFAULT_READ_RESOURCE)->getTriggerName($tableName, $time, $event);
+        return $this->getConnection()->getTriggerName($tableName, $time, $event);
     }
 
     /**
@@ -210,7 +206,7 @@ class Resource
         $fields,
         $indexType = \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
     ) {
-        return $this->getConnection(self::DEFAULT_READ_RESOURCE)
+        return $this->getConnection()
             ->getIndexName(
                 $this->getTableName($tableName),
                 $fields,
@@ -229,9 +225,7 @@ class Resource
      */
     public function getFkName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
-        return $this->getConnection(
-            self::DEFAULT_READ_RESOURCE
-        )->getForeignKeyName(
+        return $this->getConnection()->getForeignKeyName(
             $this->getTableName($priTableName),
             $priColumnName,
             $this->getTableName($refTableName),

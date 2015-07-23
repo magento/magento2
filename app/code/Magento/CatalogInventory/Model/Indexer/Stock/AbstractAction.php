@@ -104,7 +104,7 @@ abstract class AbstractAction
     protected function _getConnection()
     {
         if (null === $this->_connection) {
-            $this->_connection = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
+            $this->_connection = $this->_resource->getConnection();
         }
         return $this->_connection;
     }

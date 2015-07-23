@@ -87,7 +87,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
 
         /** @var $resource \Magento\Framework\App\Resource */
         $resource = $this->_objectManager->get('Magento\Framework\App\Resource');
-        $this->_connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->_connection = $resource->getConnection();
         $this->_sessionTable = $resource->getTableName('session');
 
         // session stores serialized objects with protected properties

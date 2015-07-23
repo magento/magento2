@@ -64,7 +64,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->with(\Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE)
             ->will($this->returnValue($this->connection));
 
         $this->request = $this->getMockBuilder('\Magento\Framework\Search\RequestInterface')

@@ -139,7 +139,7 @@ class Base implements ActionInterface
         IndexStructure $indexStructure,
         $data = []
     ) {
-        $this->connection = $resource->getConnection(AppResource::DEFAULT_CONNECTION);
+        $this->connection = $resource->getConnection();
         $this->fieldsetPool = $fieldsetPool;
         $this->data = $data;
         $this->sourcePool = $sourcePool;

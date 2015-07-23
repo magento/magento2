@@ -30,7 +30,7 @@ class OrdersFixture extends Fixture
         }
         $this->fixtureModel->resetObjectManager();
 
-        $connection = $this->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->getConnection();
 
         $quoteTableName = $this->getTableName(
             'quote',
@@ -305,19 +305,18 @@ class OrdersFixture extends Fixture
     public function getTableName($tableName, $resourceName)
     {
         $resource = $this->fixtureModel->getObjectManager()->get($resourceName);
-        return $this->getConnection(Resource::DEFAULT_CONNECTION)->getTableName($resource->getTable($tableName));
+        return $this->getConnection()->getTableName($resource->getTable($tableName));
     }
 
     /**
      * Retrieve connection to resource specified by $resourceName
      *
-     * @param string $resourceName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
      */
-    public function getConnection($resourceName)
+    public function getConnection()
     {
         return $this->fixtureModel->getObjectManager()->get(
             'Magento\Framework\App\Resource'
-        )->getConnection($resourceName);
+        )->getConnection();
     }
 }

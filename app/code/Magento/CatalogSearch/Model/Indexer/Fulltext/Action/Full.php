@@ -237,7 +237,7 @@ class Full
      */
     protected function getConnection()
     {
-        return $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
+        return $this->resource->getConnection();
     }
 
     /**

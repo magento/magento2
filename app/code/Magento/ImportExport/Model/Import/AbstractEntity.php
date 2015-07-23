@@ -263,7 +263,7 @@ abstract class AbstractEntity
         $this->_connection =
             isset($data['connection']) ?
             $data['connection'] :
-            $resource->getConnection(Resource::DEFAULT_CONNECTION);
+            $resource->getConnection();
         $this->string = $string;
         $this->_pageSize = isset(
             $data['page_size']

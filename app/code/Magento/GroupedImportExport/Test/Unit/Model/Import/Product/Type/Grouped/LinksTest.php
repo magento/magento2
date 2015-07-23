@@ -40,7 +40,6 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->resource
             ->expects($this->once())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_CONNECTION)
             ->will($this->returnValue($this->connection));
 
         $this->import = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);

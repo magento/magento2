@@ -33,7 +33,7 @@ class LockValidator implements LockValidatorInterface
      */
     public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {
-        $connection = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->resource->getConnection();
         $attrTable = $this->resource->getTableName('catalog_product_super_attribute');
         $productTable = $this->resource->getTableName('catalog_product_entity');
 

@@ -177,7 +177,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
         $this->_dataSourceModel = $importData;
-        $this->_connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->_connection = $resource->getConnection();
         $this->_resourceFactory = $resourceFactory;
         $this->_productModel = $productModel;
         $this->_catalogData = $catalogData;

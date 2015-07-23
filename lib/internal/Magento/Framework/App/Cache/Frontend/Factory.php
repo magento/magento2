@@ -301,7 +301,7 @@ class Factory
     protected function _getDbAdapterOptions()
     {
         $options['adapter_callback'] = function () {
-            return $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
+            return $this->_resource->getConnection();
         };
         $options['data_table_callback'] = function () {
             return $this->_resource->getTableName('cache');

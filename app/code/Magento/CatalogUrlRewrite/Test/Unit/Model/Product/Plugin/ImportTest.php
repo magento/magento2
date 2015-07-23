@@ -264,7 +264,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->resource
             ->expects($this->any())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_READ_RESOURCE)
             ->willReturn($this->connection);
         $this->select = $this->getMock(
             '\Magento\Framework\DB\Select',

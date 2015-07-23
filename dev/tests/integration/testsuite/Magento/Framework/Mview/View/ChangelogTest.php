@@ -41,7 +41,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
-        $this->connection = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->connection = $this->resource->getConnection();
 
         $this->model = $this->objectManager->create(
             'Magento\Framework\Mview\View\Changelog',

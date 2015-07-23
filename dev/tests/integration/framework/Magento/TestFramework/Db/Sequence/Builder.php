@@ -190,7 +190,7 @@ class Builder extends \Magento\SalesSequence\Model\Builder
             $this->data['entity_type'],
             $this->data['store_id']
         );
-        $connection = $this->appResource->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->appResource->getConnection();
         if ($metadata->getId() && !$connection->isTableExists($this->getSequenceName())) {
             throw new \Magento\Framework\Exception\AlreadyExistsException(
                 __('Sequence with this metadata already exists')

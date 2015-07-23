@@ -90,7 +90,7 @@ abstract class AbstractAction
         $this->_storeManager = $storeManager;
         $this->_productIndexerHelper = $productHelper;
         $this->_productType = $productType;
-        $this->_connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->_connection = $resource->getConnection();
         $this->_tableBuilder = $tableBuilder;
         $this->_flatTableBuilder = $flatTableBuilder;
     }

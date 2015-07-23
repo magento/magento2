@@ -150,21 +150,16 @@ class Mapper
      * @param ScoreBuilder $scoreBuilder
      * @return Select
      */
-    private function createAroundSelect(
-        Select $select,
-        ScoreBuilder $scoreBuilder
-    ) {
-        $parentSelect = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
-        $parentSelect
-            ->from(
-                ['main_select' => $select],
-                [
-                    $this->entityMetadata->getEntityId() => 'entity_id',
-                    'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
-                ]
-            )
-            ->group($this->entityMetadata->getEntityId());
-        return $parentSelect;
+    private function createAroundSelect(Select $select, ScoreBuilder $scoreBuilder) {
+        return $this->resource->getConnection()->select()->from(
+            ['main_select' => $select],
+            [
+                $this->entityMetadata->getEntityId() => 'entity_id',
+                'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
+            ]
+        )->group(
+            $this->entityMetadata->getEntityId()
+        );
     }
 
     /**
@@ -355,7 +350,7 @@ class Mapper
             $select->columns($scoreBuilder->build());
             $select = $this->createAroundSelect($select, $scoreBuilder);
             $subSelect = $select;
-            $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
+            $select = $this->resource->getConnection()->select();
             $tables = array_merge(array_keys($matchQueries), ['main_select.relevance']);
             $relevance = implode('.relevance + ', $tables);
             $select

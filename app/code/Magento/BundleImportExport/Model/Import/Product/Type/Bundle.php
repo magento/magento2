@@ -155,7 +155,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_resource = $resource;
-        $this->connection = $resource->getConnection(\Magento\Framework\App\Resource::DEFAULT_CONNECTION);
+        $this->connection = $resource->getConnection();
     }
 
     /**

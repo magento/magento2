@@ -100,6 +100,6 @@ class IndexStructure
      */
     private function getConnection()
     {
-        return $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
+        return $this->resource->getConnection();
     }
 }

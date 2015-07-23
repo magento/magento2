@@ -33,7 +33,7 @@ class Indexer
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
     ) {
         $this->_productIndexerHelper = $productHelper;
-        $this->_connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->_connection = $resource->getConnection();
     }
 
     /**

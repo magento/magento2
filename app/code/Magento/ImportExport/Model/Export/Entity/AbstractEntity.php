@@ -162,7 +162,7 @@ abstract class AbstractEntity
         $this->_storeManager = $storeManager;
         $entityCode = $this->getEntityTypeCode();
         $this->_entityTypeId = $config->getEntityType($entityCode)->getEntityTypeId();
-        $this->_connection = $resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $this->_connection = $resource->getConnection();
     }
 
     /**

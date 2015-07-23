@@ -39,7 +39,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
     {
         $ruleTable = $this->_resource->getTableName("authorization_rule");
 
-        $connection = $this->_resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->_resource->getConnection();
 
         $select = $connection->select()->from(['r' => $ruleTable]);
 

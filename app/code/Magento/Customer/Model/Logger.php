@@ -95,7 +95,7 @@ class Logger
     protected function loadLogData($customerId)
     {
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
-        $connection = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->resource->getConnection();
 
         $select = $connection->select()
             ->from(
