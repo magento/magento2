@@ -50,7 +50,7 @@ class GenericMapper extends AbstractMapper
         foreach ($filters as $filter) {
             switch ($filter['type']) {
                 case 'or':
-                    $condition = $this->connection->quoteInto($filter['field'] . '=?', $filter['condition']);
+                    $condition = $this->getConnection()->quoteInto($filter['field'] . '=?', $filter['condition']);
                     $this->getSelect()->orWhere($condition);
                     break;
                 case 'string':
@@ -62,7 +62,7 @@ class GenericMapper extends AbstractMapper
                     $this->getSelect()->where($this->getConditionSql($field, $condition), null, Select::TYPE_CONDITION);
                     break;
                 default:
-                    $condition = $this->connection->quoteInto($filter['field'] . '=?', $filter['condition']);
+                    $condition = $this->getConnection()->quoteInto($filter['field'] . '=?', $filter['condition']);
                     $this->getSelect()->where($condition);
             }
         }

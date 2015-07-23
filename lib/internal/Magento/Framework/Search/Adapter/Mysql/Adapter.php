@@ -83,6 +83,6 @@ class Adapter implements AdapterInterface
      */
     private function executeQuery(Select $select)
     {
-        return $this->resource->getConnection(Resource::DEFAULT_CONNECTION)->fetchAssoc($select);
+        return $this->resource->getConnection()->fetchAssoc($select);
     }
 }
