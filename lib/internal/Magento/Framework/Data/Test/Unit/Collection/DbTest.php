@@ -56,15 +56,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddOrder()
     {
-        $adapter = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['fetchAll']
-        );
+        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['fetchAll'], [], '', false);
         $this->collection->setConnection($adapter);
 
         $select = $this->collection->getSelect();

@@ -85,7 +85,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->entityFactoryMock2 = $this->getMock('Magento\Eav\Model\EntityFactory', [], [], '', false);
         $this->helperMock = $this->getMock('Magento\Catalog\Model\Resource\Helper', [], [], '', false);
         $entity = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
-        $adapter = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\Pdo\Mysql', [], '', false);
+        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', null, [], '', false);
         $entity->expects($this->any())->method('getConnection')->will($this->returnValue($adapter));
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
         $this->universalFactoryMock = $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false);
