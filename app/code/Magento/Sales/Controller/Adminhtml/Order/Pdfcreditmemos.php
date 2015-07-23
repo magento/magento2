@@ -17,6 +17,10 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory;
 use Magento\Sales\Model\Resource\Order\Collection as OrderCollection;
 
+/**
+ * Class Pdfcreditmemos
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**

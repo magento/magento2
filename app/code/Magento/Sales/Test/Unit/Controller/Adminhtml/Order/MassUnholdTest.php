@@ -75,6 +75,11 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderCollectionMock;
 
+    /**
+     * @var \Magento\Ui\Component\MassAction\Filter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterMock;
+
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -164,10 +169,16 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($resultFactoryMock);
 
+        $this->filterMock = $this->getMock('Magento\Ui\Component\MassAction\Filter', [], [], '', false);
+        $this->filterMock->expects($this->once())
+            ->method('getCollection')
+            ->willReturn($this->orderCollectionMock);
+
         $this->massAction = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\MassUnhold',
             [
                 'context' => $this->contextMock,
+                'filter' => $this->filterMock
             ]
         );
     }
@@ -176,6 +187,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
     {
         $selected = [1, 2];
         $countOrders = count($selected);
+        $idFieldName = 'entity_id';
 
         $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
@@ -184,26 +196,11 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestMock->expects($this->at(0))
-            ->method('getParam')
-            ->with('selected')
-            ->willReturn($selected);
+        $orders = [$order1, $order2];
 
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('excluded')
-            ->willReturn([]);
-
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\Sales\Model\Resource\Order\Grid\Collection')
-            ->willReturn($this->orderCollectionMock);
-        $this->orderCollectionMock->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with(\Magento\Sales\Controller\Adminhtml\Order\MassCancel::ID_FIELD, ['in' => $selected]);
         $this->orderCollectionMock->expects($this->any())
             ->method('getItems')
-            ->willReturn([$order1, $order2]);
+            ->willReturn($orders);
 
         $order1->expects($this->once())
             ->method('canUnhold')
@@ -215,7 +212,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
 
         $this->orderCollectionMock->expects($this->once())
             ->method('count')
-            ->willReturn($countOrders);
+            ->willReturn(count($orders));
 
         $order2->expects($this->once())
             ->method('canUnhold')
@@ -239,9 +236,6 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteOneOrderWhereNotReleasedFromHold()
     {
-        $excluded = [1, 2];
-        $countOrders = count($excluded);
-
         $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
             ->getMock();
@@ -249,26 +243,11 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestMock->expects($this->at(0))
-            ->method('getParam')
-            ->with('selected')
-            ->willReturn([]);
+        $orders = [$order1, $order2];
 
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('excluded')
-            ->willReturn($excluded);
-
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\Sales\Model\Resource\Order\Grid\Collection')
-            ->willReturn($this->orderCollectionMock);
-        $this->orderCollectionMock->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with(\Magento\Sales\Controller\Adminhtml\Order\MassCancel::ID_FIELD, ['nin' => $excluded]);
         $this->orderCollectionMock->expects($this->any())
             ->method('getItems')
-            ->willReturn([$order1, $order2]);
+            ->willReturn($orders);
 
         $order1->expects($this->once())
             ->method('canUnhold')
@@ -276,7 +255,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
 
         $this->orderCollectionMock->expects($this->once())
             ->method('count')
-            ->willReturn($countOrders);
+            ->willReturn(count($orders));
 
         $order2->expects($this->once())
             ->method('canUnhold')

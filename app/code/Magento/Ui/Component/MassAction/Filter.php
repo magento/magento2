@@ -55,7 +55,7 @@ class Filter
         $dataProvider = $component->getContext()->getDataProvider();
 
         $collection = $this->applySelection($dataProvider->getCollection());
-        $data = $dataProvider->getData();
+        $dataProvider->getData();
         return $collection;
     }
 
