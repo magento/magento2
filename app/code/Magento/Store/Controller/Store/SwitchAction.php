@@ -9,8 +9,6 @@ namespace Magento\Store\Controller\Store;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\App\Http\Context as HttpContext;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
@@ -35,11 +33,6 @@ class SwitchAction extends Action
     protected $storeRepository;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
      * @param ActionContext $context
      * @param StoreCookieManagerInterface $storeCookieManager
      * @param HttpContext $httpContext
@@ -55,7 +48,6 @@ class SwitchAction extends Action
         $this->storeCookieManager = $storeCookieManager;
         $this->httpContext = $httpContext;
         $this->storeRepository = $storeRepository;
-        $this->messageManager = $context->getMessageManager();
     }
 
     /**
