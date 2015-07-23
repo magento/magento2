@@ -57,7 +57,7 @@
     <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Api\Data\Shipment\Repository"/>
     <preference for="Magento\Sales\Api\ShipmentManagementInterface" type="Magento\Sales\Model\Service\ShipmentService"/>
     <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentTrack\Repository"/>
-    <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Api\Data\Transaction\Repository"/>
+    <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\TransactionRepository"/>
     <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\Customer\Management" />
     <preference for="Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Comment"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoItemResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Item"/>
@@ -576,6 +576,17 @@
     <type name="Magento\Sales\Model\OrderRepository">
         <arguments>
             <argument name="metadata" xsi:type="object">orderMetadata</argument>
+        </arguments>
+    </type>
+    <virtualType name="transactionMetaData" type="Magento\Sales\Model\Resource\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Payment\Transaction</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Payment\Transaction</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\Order\Payment\TransactionRepository">
+        <arguments>
+            <argument name="metaData" xsi:type="object">transactionMetaData</argument>
         </arguments>
     </type>
 </config>

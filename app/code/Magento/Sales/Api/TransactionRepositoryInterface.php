@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Api;
 
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Api\Data\TransactionInterface;
+
 /**
  * Transaction repository interface.
  *
@@ -25,14 +29,33 @@ interface TransactionRepositoryInterface
      * Loads a specified transaction.
      *
      * @param int $id The transaction ID.
-     * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
+     * @return TransactionInterface Transaction interface.
      */
     public function get($id);
 
     /**
+     * Get payment transaction by type
+     *
+     * @param string $txnType
+     * @param int $paymentId
+     * @param int $orderId
+     * @return false|TransactionInterface Transaction interface.
+     */
+    public function getByTxnType($txnType, $paymentId, $orderId);
+
+    /**
+     * Get payment transaction by transaction id
+     *
+     * @param string $txnId
+     * @param int $paymentId
+     * @return false|TransactionInterface Transaction interface.
+     */
+    public function getByTxnId($txnId, $paymentId);
+
+    /**
      * Deletes a specified transaction.
      *
-     * @param \Magento\Sales\Api\Data\TransactionInterface $entity The transaction.
+     * @param TransactionInterface $entity The transaction.
      * @return bool
      */
     public function delete(\Magento\Sales\Api\Data\TransactionInterface $entity);
@@ -40,8 +63,8 @@ interface TransactionRepositoryInterface
     /**
      * Performs persist operations for a specified transaction.
      *
-     * @param \Magento\Sales\Api\Data\TransactionInterface $entity The transaction.
-     * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
+     * @param TransactionInterface $entity The transaction.
+     * @return TransactionInterface Transaction interface.
      */
     public function save(\Magento\Sales\Api\Data\TransactionInterface $entity);
 }

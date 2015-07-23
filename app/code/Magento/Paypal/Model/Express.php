@@ -380,7 +380,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             $message = __('Ordered amount of %1', $formattedPrice);
         }
 
-        $payment->addTransaction(Transaction::TYPE_ORDER, null, false, $message);
+        $transaction = $payment->addTransaction(Transaction::TYPE_ORDER, null, false);
+        $payment->addTransactionCommentsToOrder($transaction, $message);
 
         $this->_pro->importPaymentInfo($api, $payment);
 
@@ -402,7 +403,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $payment->setTransactionId($api->getTransactionId());
         $payment->setParentTransactionId($orderTransactionId);
 
-        $payment->addTransaction(Transaction::TYPE_AUTH, null, false, $message);
+        $transaction = $payment->addTransaction(Transaction::TYPE_AUTH, null, false);
+        $payment->addTransactionCommentsToOrder($transaction, $message);
 
         $order->setState($state)
             ->setStatus($status);
@@ -511,7 +513,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                     $message = __('The authorized amount is %1.', $formatedPrice);
                 }
 
-                $transaction = $payment->addTransaction(Transaction::TYPE_AUTH, null, true, $message);
+                $transaction = $payment->addTransaction(Transaction::TYPE_AUTH, null, true);
+                $payment->addTransactionCommentsToOrder($transaction, $message);
 
                 $payment->setParentTransactionId($api->getTransactionId());
                 $isAuthorizationCreated = true;
