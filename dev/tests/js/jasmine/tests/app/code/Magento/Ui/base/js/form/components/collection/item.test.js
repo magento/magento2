@@ -4,17 +4,15 @@
  */
 
 define([
-    'Magento_Ui/js/lib/events'
-], function (EventBus) {
+    'Magento_Ui/js/form/components/collection/item'
+], function (constr) {
     'use strict';
 
     var EVENT = 'testEvent';
 
-    describe('Magento_Ui/js/lib/events', function () {
+    describe('Magento_Ui/js/form/components/collection/item', function () {
         describe('"on" method', function () {
-            afterEach(function () {
-                EventBus.off(EVENT);
-            });
+            console.info('asd' , new constr);
 
             it('calls passed callback when event is triggered', function () {
                 var callback = jasmine.createSpy();
