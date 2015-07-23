@@ -15,17 +15,17 @@ use Magento\Framework\Api\Filter;
  */
 class FulltextFilter implements FilterApplierInterface
 {
+
     /**
      * Returns list of columns from fulltext index (doesn't support more then one FTI per table)
      *
-     * @param DbResource $resource
-     * @param string $indexTable
+     * @param DbCollection $collection
+     * @param $indexTable
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getFulltextIndexColumns(DbResource $resource, $indexTable)
+    protected function getFulltextIndexColumns(DbCollection $collection, $indexTable)
     {
-        $indexes = $resource->getReadConnection()->getIndexList($indexTable);
+        $indexes = $collection->getConnection()->getIndexList($indexTable);
         foreach ($indexes as $index) {
             if (strtoupper($index['INDEX_TYPE']) == 'FULLTEXT') {
                 return $index['COLUMNS_LIST'];
@@ -43,7 +43,7 @@ class FulltextFilter implements FilterApplierInterface
      */
     public function apply(DbCollection $collection, Filter $filter)
     {
-        $columns = $this->getFulltextIndexColumns($collection->getResource(), $collection->getMainTable());
+        $columns = $this->getFulltextIndexColumns($collection, $collection->getMainTable());
         if (!$columns) {
             return;
         }
