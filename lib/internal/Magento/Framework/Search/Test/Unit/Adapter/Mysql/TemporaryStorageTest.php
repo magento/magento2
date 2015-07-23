@@ -98,7 +98,7 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
             ->willReturn($documentId);
         $document->expects($this->once())
             ->method('getField')
-            ->with('relevance')
+            ->with('score')
             ->willReturn($documentField);
 
         $table = $this->createTemporaryTable();
@@ -122,8 +122,8 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
                 ['unsigned' => true, 'nullable' => false, 'primary' => true], 'Entity ID');
         $table->expects($this->at(2))
             ->method('addColumn')
-            ->with(TemporaryStorage::FIELD_RELEVANCE, Table::TYPE_DECIMAL, [32, 16],
-                ['unsigned' => true, 'nullable' => false], 'Relevance');
+            ->with('score', Table::TYPE_DECIMAL, [32, 16],
+                ['unsigned' => true, 'nullable' => false], 'Score');
         $table->expects($this->once())
             ->method('setOption')
             ->with('type', 'memory');
