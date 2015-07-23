@@ -78,7 +78,7 @@ class IndexBuilder implements IndexBuilderInterface
     public function build(RequestInterface $request)
     {
         $searchIndexTable = $this->scopeResolver->resolve($request->getIndex(), $request->getDimensions());
-        $select = $this->getSelect()
+        $select = $this->resource->getConnection()->select()
             ->from(
                 ['search_index' => $searchIndexTable],
                 ['entity_id' => 'entity_id']
@@ -113,7 +113,7 @@ class IndexBuilder implements IndexBuilderInterface
             $select->joinLeft(
                 ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
                 'search_index.entity_id = stock_index.product_id'
-                . $this->getConnection()->quoteInto(
+                . $this->resource->getConnection()->quoteInto(
                     ' AND stock_index.website_id = ?',
                     $this->storeManager->getWebsite()->getId()
                 ),
@@ -163,26 +163,6 @@ class IndexBuilder implements IndexBuilderInterface
         }
 
         return $preparedDimensions;
-    }
-
-    /**
-     * Get read connection
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    private function getConnection()
-    {
-        return $this->resource->getConnection();
-    }
-
-    /**
-     * Get empty Select
-     *
-     * @return Select
-     */
-    private function getSelect()
-    {
-        return $this->getConnection()->select();
     }
 
     /**

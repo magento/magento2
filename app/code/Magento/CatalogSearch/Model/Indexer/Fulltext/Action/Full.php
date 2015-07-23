@@ -147,6 +147,11 @@ class Full
     private $dimensionFactory;
 
     /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected $connection;
+
+    /**
      * @param Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -186,6 +191,7 @@ class Full
         \Magento\Indexer\Model\ConfigInterface $indexerConfig
     ) {
         $this->resource = $resource;
+        $this->connection = $resource->getConnection();
         $this->catalogProductType = $catalogProductType;
         $this->eavConfig = $eavConfig;
         $this->searchRequestConfig = $searchRequestConfig;
@@ -231,16 +237,6 @@ class Full
     }
 
     /**
-     * Retrieve connection for write data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function getConnection()
-    {
-        return $this->resource->getConnection();
-    }
-
-    /**
      * Regenerate search index for all stores
      *
      * @param int|array|null $productIds
@@ -269,7 +265,7 @@ class Full
      */
     protected function getProductIdsFromParents(array $entityIds)
     {
-        return $this->getConnection()
+        return $this->connection
             ->select()
             ->from($this->getTable('catalog_product_relation'), 'parent_id')
             ->distinct(true)
@@ -400,9 +396,7 @@ class Full
         $limit = 100
     ) {
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        $connection = $this->getConnection();
-
-        $select = $connection->select()
+        $select = $this->connection->select()
             ->useStraightJoin(true)
             ->from(
                 ['e' => $this->getTable('catalog_product_entity')],
@@ -410,7 +404,7 @@ class Full
             )
             ->join(
                 ['website' => $this->getTable('catalog_product_website')],
-                $connection->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
+                $this->connection->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
                 []
             );
 
@@ -420,7 +414,7 @@ class Full
 
         $select->where('e.entity_id > ?', $lastProductId)->limit($limit)->order('e.entity_id');
 
-        $result = $connection->fetchAll($select);
+        $result = $this->connection->fetchAll($select);
 
         return $result;
     }
@@ -539,7 +533,7 @@ class Full
     protected function unifyField($field, $backendType = 'varchar')
     {
         if ($backendType == 'datetime') {
-            $expr = $this->getConnection()->getDateFormatSql($field, '%Y-%m-%d %H:%i:%s');
+            $expr = $this->connection->getDateFormatSql($field, '%Y-%m-%d %H:%i:%s');
         } else {
             $expr = $field;
         }
@@ -558,17 +552,16 @@ class Full
     {
         $result = [];
         $selects = [];
-        $connection = $this->getConnection();
-        $ifStoreValue = $connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
+        $ifStoreValue = $this->connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
-                $selects[] = $connection->select()->from(
+                $selects[] = $this->connection->select()->from(
                     ['t_default' => $tableName],
                     ['entity_id', 'attribute_id']
                 )->joinLeft(
                     ['t_store' => $tableName],
-                    $connection->quoteInto(
+                    $this->connection->quoteInto(
                         't_default.entity_id=t_store.entity_id' .
                         ' AND t_default.attribute_id=t_store.attribute_id' .
                         ' AND t_store.store_id = ?',
@@ -589,8 +582,8 @@ class Full
         }
 
         if ($selects) {
-            $select = $connection->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
-            $query = $connection->query($select);
+            $select = $this->connection->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
+            $query = $this->connection->query($select);
             while ($row = $query->fetch()) {
                 $result[$row['entity_id']][$row['attribute_id']] = $row['value'];
             }
@@ -630,7 +623,7 @@ class Full
         ) ? $typeInstance->getRelationInfo() : false;
 
         if ($relation && $relation->getTable() && $relation->getParentFieldName() && $relation->getChildFieldName()) {
-            $select = $this->getConnection()->select()->from(
+            $select = $this->connection->select()->from(
                 ['main' => $this->getTable($relation->getTable())],
                 [$relation->getChildFieldName()]
             )->where(
@@ -640,7 +633,7 @@ class Full
             if ($relation->getWhere() !== null) {
                 $select->where($relation->getWhere());
             }
-            return $this->getConnection()->fetchCol($select);
+            return $this->connection->fetchCol($select);
         }
 
         return null;
