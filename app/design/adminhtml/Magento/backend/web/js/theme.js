@@ -131,6 +131,7 @@ define('globalNavigationScroll', [
         var submenu = $(this).children(subMenuClass);
 
         submenuHeight = submenu.height();
+
         if (submenuHeight > menuHeight) {
             menu.css('height', submenuHeight);
             menuHeight = submenuHeight;
