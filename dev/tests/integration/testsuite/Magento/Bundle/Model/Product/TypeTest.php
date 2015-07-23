@@ -44,7 +44,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->indexer =  $indexerRegistry->get('catalogsearch_fulltext');
 
         $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
-        $this->connectionMock = $this->resource->getConnection('core_read');
+        $this->connectionMock = $this->resource->getConnection();
     }
 
     /**

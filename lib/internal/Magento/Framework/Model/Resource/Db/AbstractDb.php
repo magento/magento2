@@ -283,7 +283,7 @@ abstract class AbstractDb extends AbstractResource
         }
 
         if (!isset($this->_tables[$cacheName])) {
-            $connectionName = $this->connectionName . '_read';
+            $connectionName = $this->connectionName;
             $this->_tables[$cacheName] = $this->_resources->getTableName($tableName, $connectionName);
         }
         return $this->_tables[$cacheName];
@@ -316,7 +316,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function getConnection()
     {
-        $fullResourceName = ($this->connectionName ? $this->connectionName . '_write' : 'default');
+        $fullResourceName = ($this->connectionName ? $this->connectionName : 'default');
         return $this->_resources->getConnection($fullResourceName);
     }
 
