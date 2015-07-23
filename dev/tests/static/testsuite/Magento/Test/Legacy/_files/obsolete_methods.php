@@ -2357,4 +2357,6 @@ return [
         'Magento\Sales\Model\Order\Address\Validator',
         'Magento\Sales\Model\Order\Address\Validator::validateForCustomer'
     ],
+    ['prepareShipment', 'Magento\Sales\Model\Order'],
+    ['prepareShipment', 'Magento\Sales\Model\Service\Order'],
 ];
