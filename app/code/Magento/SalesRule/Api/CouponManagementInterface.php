@@ -37,7 +37,7 @@ interface CouponManagementInterface
      *
      * @param string[] $codes
      * @param bool $ignoreInvalidIds
-     * @return bool true on success
+     * @return string[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */

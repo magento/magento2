@@ -126,7 +126,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      *
      * @param string[] codes
      * @param bool $ignoreInvalidCodes
-     * @return bool true on success
+     * @return string[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteByCodes(array $codes, $ignoreInvalidCodes = true)
@@ -140,7 +140,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      * @param string $fieldName
      * @param string[] fieldValues
      * @param bool $ignoreInvalid
-     * @return bool true on success
+     * @return string[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function massDelete($fieldName, array $fieldValues, $ignoreInvalid)
@@ -157,11 +157,14 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
             }
         }
         try {
+            $fieldValues = [];
             /** @var \Magento\SalesRule\Model\Coupon $coupon */
             foreach ($couponsCollection as $coupon) {
                 $coupon->delete();
+                $fieldValues[] = $coupon->getData($fieldName);
             }
-            return true;
+
+            return $fieldValues;
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Error occurred when deleting coupons: %1.', $e->getMessage())
