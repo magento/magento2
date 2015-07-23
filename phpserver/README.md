@@ -5,7 +5,7 @@ php has a Built-in webserver since version 5.4
 https://secure.php.net/manual/en/features.commandline.webserver.php
 
 As many applications and frameworks rely on rewrites on webserver side,
-the same as magento does, it offers an argument for a router script.
+the same as Magento does, it offers an argument for a router script.
 Either the script returns false which means, it should try to deliver the file
 as usual via file system lookup, or it executes the specific php scripts via include.
 
@@ -22,7 +22,7 @@ example usage: ```php -S 127.0.0.41:8082 -t ./pub/ ./phpserver/router.php```
 
 first we have an low level `$debug` closure, for the case you need to debug execution.
 
-If the requestpath starts with index.php, get.php, static.php, we return to normal request flow.  
+If the request path starts with index.php, get.php, static.php, we return to normal request flow.
 If we notice a favicon.ico request, the same.
 
 Then rewrite paths for `pub/errors/default/` by removing the `pub/` part. (was at least needed for older versions)
@@ -30,6 +30,6 @@ Then rewrite paths for `pub/errors/default/` by removing the `pub/` part. (was a
 Request starting with `media/`, `opt/`, `static/` test if the file exists.
 If Yes, then handle it, if not "forward" `static` to `static.php` and `media` to `get.php`
 
-If non of the rules matched, return 404.
-You may instead include the index.php, if 404 should be handled by magento or you want
+If none of the rules matched, return 404.
+You may instead include the index.php, if 404 should be handled by Magento or you want
 urls without `index.php/`.
