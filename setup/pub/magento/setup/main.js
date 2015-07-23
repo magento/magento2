@@ -31,6 +31,15 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', '$win
             }
         };
 
+        //alert("1"+stateId);
+
+        $scope.goToState = function (stateId) {
+            alert("2"+stateId);
+            $state.go(stateId)
+        }
+
+        $scope.state = $state;
+
         $scope.previousState = function () {
                 $scope.valid = true;
                 $state.go(navigationService.getPreviousState().id);

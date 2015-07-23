@@ -15,6 +15,7 @@ class Navigation
      */
     const NAV_INSTALLER = 'navInstaller';
     const NAV_UPDATER = 'navUpdater';
+    const NAV_UPGRADER = 'navUpgrader';
     /**#@- */
 
     /**
@@ -35,8 +36,8 @@ class Navigation
     {
         $objectManager = $objectManagerProvider->get();
         if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
-            $this->navStates = $serviceLocator->get('config')[self::NAV_UPDATER];
-            $this->navType = self::NAV_UPDATER;
+            $this->navStates = $serviceLocator->get('config')[self::NAV_UPGRADER];
+            $this->navType = self::NAV_UPGRADER;
         } else {
             $this->navStates = $serviceLocator->get('config')[self::NAV_INSTALLER];
             $this->navType = self::NAV_INSTALLER;
