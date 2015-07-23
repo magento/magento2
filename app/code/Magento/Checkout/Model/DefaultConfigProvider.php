@@ -309,6 +309,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
         ];
     }
 
+    /**
+     * Is autocomplete enabled for storefront
+     *
+     * @return string
+     */
     private function getAutocomplete()
     {
          return $this->scopeConfig->getValue(
