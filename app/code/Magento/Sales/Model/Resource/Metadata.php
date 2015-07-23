@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Resource;
 
 /**
@@ -28,8 +27,8 @@ class Metadata
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param $resourceClassName
-     * @param $modelClassName
+     * @param string $resourceClassName
+     * @param string $modelClassName
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,

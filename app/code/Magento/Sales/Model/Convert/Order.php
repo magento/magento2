@@ -32,9 +32,9 @@ class Order extends \Magento\Framework\Object
     protected $_invoiceItemFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentFactory
+     * @var \Magento\Sales\Model\Order\ShipmentRepository
      */
-    protected $_orderShipmentFactory;
+    protected $shipmentRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\CreditmemoFactory
@@ -55,7 +55,7 @@ class Order extends \Magento\Framework\Object
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory
      * @param \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $orderShipmentFactory
+     * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
      * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
      * @param \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory
@@ -68,7 +68,7 @@ class Order extends \Magento\Framework\Object
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory,
         \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory,
-        \Magento\Sales\Model\Order\ShipmentFactory $orderShipmentFactory,
+        \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
         \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
         \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
         \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory,
@@ -78,7 +78,7 @@ class Order extends \Magento\Framework\Object
         $this->_eventManager = $eventManager;
         $this->_orderInvoiceFactory = $orderInvoiceFactory;
         $this->_invoiceItemFactory = $invoiceItemFactory;
-        $this->_orderShipmentFactory = $orderShipmentFactory;
+        $this->shipmentRepository = $shipmentRepository;
         $this->_shipmentItemFactory = $shipmentItemFactory;
         $this->_creditmemoFactory = $creditmemoFactory;
         $this->_creditmemoItemFactory = $creditmemoItemFactory;
@@ -139,7 +139,7 @@ class Order extends \Magento\Framework\Object
      */
     public function toShipment(\Magento\Sales\Model\Order $order)
     {
-        $shipment = $this->_orderShipmentFactory->create();
+        $shipment = $this->shipmentRepository->create();
         $shipment->setOrder(
             $order
         )->setStoreId(
