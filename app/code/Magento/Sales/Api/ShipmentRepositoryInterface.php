@@ -45,4 +45,11 @@ interface ShipmentRepositoryInterface
      * @return \Magento\Sales\Api\Data\ShipmentInterface Shipment interface.
      */
     public function save(\Magento\Sales\Api\Data\ShipmentInterface $entity);
+
+    /**
+     * Creates new shipment instance.
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentInterface Shipment interface.
+     */
+    public function create();
 }
