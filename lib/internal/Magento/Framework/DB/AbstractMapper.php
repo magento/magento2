@@ -45,7 +45,7 @@ abstract class AbstractMapper implements MapperInterface
      *
      * @var AdapterInterface
      */
-    protected $conn;
+    protected $connection;
 
     /**
      * Select object
@@ -229,7 +229,7 @@ abstract class AbstractMapper implements MapperInterface
         $this->setResourceModelName($resourceInterface);
         $this->setConnection($this->getResource()->getConnection());
         if (!$this->select) {
-            $this->select = $this->getConnection()->select();
+            $this->select = $this->connection->select();
             $this->initSelect();
         }
     }
@@ -276,26 +276,26 @@ abstract class AbstractMapper implements MapperInterface
      */
     protected function getConnection()
     {
-        return $this->conn;
+        return $this->connection;
     }
 
     /**
      * Set database connection adapter
      *
-     * @param AdapterInterface $conn
+     * @param AdapterInterface $connection
      * @return void
      * @throws \InvalidArgumentException
      */
-    protected function setConnection($conn)
+    protected function setConnection($connection)
     {
-        if (!$conn instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
+        if (!$connection instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
             throw new \InvalidArgumentException(
                 (string)new \Magento\Framework\Phrase(
                     'dbModel read resource does not implement \Magento\Framework\DB\Adapter\AdapterInterface'
                 )
             );
         }
-        $this->conn = $conn;
+        $this->connection = $connection;
     }
 
     /**
@@ -308,7 +308,7 @@ abstract class AbstractMapper implements MapperInterface
     protected function translateCondition($field, $condition)
     {
         $field = $this->getMappedField($field);
-        return $this->getConditionSql($this->getConnection()->quoteIdentifier($field), $condition);
+        return $this->getConditionSql($this->connection->quoteIdentifier($field), $condition);
     }
 
     /**
@@ -377,7 +377,7 @@ abstract class AbstractMapper implements MapperInterface
      */
     protected function getConditionSql($fieldName, $condition)
     {
-        return $this->getConnection()->prepareSqlCondition($fieldName, $condition);
+        return $this->connection->prepareSqlCondition($fieldName, $condition);
     }
 
     /**

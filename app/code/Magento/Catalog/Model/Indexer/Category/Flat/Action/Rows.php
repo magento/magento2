@@ -59,7 +59,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         foreach ($stores as $store) {
             $tableName = $this->getTableNameByStore($store, $useTempTable);
 
-            if (!$this->getConnection()->isTableExists($tableName)) {
+            if (!$this->connection->isTableExists($tableName)) {
                 continue;
             }
 
@@ -95,7 +95,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
                     foreach (array_keys($row) as $key) {
                         $updateFields[$key] = $key;
                     }
-                    $this->getConnection()->insertOnDuplicate($tableName, $row, $updateFields);
+                    $this->connection->insertOnDuplicate($tableName, $row, $updateFields);
                 }
             }
             $this->deleteNonStoreCategories($store, $useTempTable);
@@ -115,12 +115,12 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     {
         $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
 
-        $rootIdExpr = $this->getConnection()->quote((string)$rootId);
-        $rootCatIdExpr = $this->getConnection()->quote("{$rootId}/{$store->getRootCategoryId()}");
-        $catIdExpr = $this->getConnection()->quote("{$rootId}/{$store->getRootCategoryId()}/%");
+        $rootIdExpr = $this->connection->quote((string)$rootId);
+        $rootCatIdExpr = $this->connection->quote("{$rootId}/{$store->getRootCategoryId()}");
+        $catIdExpr = $this->connection->quote("{$rootId}/{$store->getRootCategoryId()}/%");
 
         /** @var \Magento\Framework\DB\Select $select */
-        $select = $this->getConnection()->select()->from(
+        $select = $this->connection->select()->from(
             ['cf' => $this->getTableNameByStore($store, $useTempTable)]
         )->joinLeft(
             ['ce' => $this->getTableName('catalog_category_entity')],
@@ -133,7 +133,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         );
 
         $sql = $select->deleteFromSelect('cf');
-        $this->getConnection()->query($sql);
+        $this->connection->query($sql);
     }
 
     /**
@@ -147,11 +147,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     {
         $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
 
-        $rootIdExpr = $this->getConnection()->quote((string)$rootId);
-        $rootCatIdExpr = $this->getConnection()->quote("{$rootId}/{$store->getRootCategoryId()}");
-        $catIdExpr = $this->getConnection()->quote("{$rootId}/{$store->getRootCategoryId()}/%");
+        $rootIdExpr = $this->connection->quote((string)$rootId);
+        $rootCatIdExpr = $this->connection->quote("{$rootId}/{$store->getRootCategoryId()}");
+        $catIdExpr = $this->connection->quote("{$rootId}/{$store->getRootCategoryId()}/%");
 
-        $select = $this->getConnection()->select()->from(
+        $select = $this->connection->select()->from(
             $this->getTableName('catalog_category_entity'),
             ['entity_id']
         )->where(
@@ -162,7 +162,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         );
 
         $resultIds = [];
-        foreach ($this->getConnection()->fetchAll($select) as $category) {
+        foreach ($this->connection->fetchAll($select) as $category) {
             $resultIds[] = $category['entity_id'];
         }
         return $resultIds;

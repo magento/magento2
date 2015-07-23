@@ -248,7 +248,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     public function getConnection()
     {
-        return $this->_resource->getConnection(Config::DEFAULT_SETUP_CONNECTION);
+        return $this->_resource->getConnection();
     }
 
     /**

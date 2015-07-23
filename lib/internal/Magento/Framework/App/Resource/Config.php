@@ -11,8 +11,6 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInterface
 {
-    const DEFAULT_SETUP_CONNECTION = 'default';
-
     /**
      * List of connection names per resource
      *
@@ -54,7 +52,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      */
     public function getConnectionName($resourceName)
     {
-        $connectionName = self::DEFAULT_SETUP_CONNECTION;
+        $connectionName = \Magento\Framework\App\Resource::DEFAULT_CONNECTION;
 
         if (!isset($this->_connectionNames[$resourceName])) {
             $resourcesConfig = $this->get();
