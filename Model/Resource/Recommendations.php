@@ -108,7 +108,7 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ['sr' => $collection->getTable('catalogsearch_recommendations')],
             '(sr.query_id=main_table.query_id OR sr.relation_id=main_table.query_id) AND ' . $queryIdCond
         )->reset(
-            \Zend_Db_Select::COLUMNS
+            \Magento\Framework\DB\Select::COLUMNS
         )->columns(
             [
                 'rel_id' => $adapter->getCheckSql('main_table.query_id=sr.query_id', 'sr.relation_id', 'sr.query_id'),
