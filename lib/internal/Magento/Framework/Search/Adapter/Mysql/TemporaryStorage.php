@@ -50,14 +50,16 @@ class TemporaryStorage
         }
 
         $table = $this->createTemporaryTable();
-        $this->getConnection()->insertArray(
-            $table->getName(),
-            [
-                self::FIELD_ENTITY_ID,
-                self::FIELD_RELEVANCE,
-            ],
-            $data
-        );
+        if (!empty($data)) {
+            $this->getConnection()->insertArray(
+                $table->getName(),
+                [
+                    self::FIELD_ENTITY_ID,
+                    self::FIELD_RELEVANCE,
+                ],
+                $data
+            );
+        }
         return $table;
     }
 
