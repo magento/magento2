@@ -16,8 +16,8 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
-            'shipmentFactory' => $this->getMock(
-                'Magento\Sales\Model\Order\ShipmentFactory',
+            'shipmentRepository' => $this->getMock(
+                'Magento\Sales\Model\Order\ShipmentRepository',
                 [],
                 [],
                 '',
