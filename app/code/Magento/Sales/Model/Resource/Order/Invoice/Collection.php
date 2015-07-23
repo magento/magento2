@@ -16,7 +16,9 @@ use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
 class Collection extends AbstractCollection implements InvoiceSearchResultInterface
 {
     /**
-     * @var
+     * Id field name
+     *
+     * @var string
      */
     protected $_idFieldName = 'entity_id';
 
