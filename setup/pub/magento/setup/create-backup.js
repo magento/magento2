@@ -8,15 +8,31 @@ angular.module('create-backup', ['ngStorage'])
     .controller('createBackupController', ['$scope', '$state', '$localStorage', function ($scope, $state, $localStorage) {
         $scope.backupInfo = {
             options: {
-                code: false,
-                media: false,
-                db: false
+                code: true,
+                media: true,
+                db: true
             }
         };
 
         if ($localStorage.backupInfo) {
             $scope.backupInfo = $localStorage.backupInfo;
         }
+
+        $scope.nextButtonStatus = false;
+
+        $scope.optionsSelected = function () {
+            if (!$scope.backupInfo.options.code && !$scope.backupInfo.options.media && !$scope.backupInfo.options.db) {
+                $scope.nextButtonStatus = true;
+                return true;
+            } else {
+                $scope.nextButtonStatus = false;
+                return false;
+            }
+        };
+
+        $scope.$on('nextState', function () {
+            $localStorage.backupInfo = $scope.backupInfo;
+        });
 
         $scope.$watch('backupInfo.options.code', function() {
             $localStorage.backupInfo = $scope.backupInfo;

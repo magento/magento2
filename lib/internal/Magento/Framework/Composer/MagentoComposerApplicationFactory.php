@@ -6,7 +6,9 @@
 
 namespace Magento\Framework\Composer;
 
+use Magento\Composer\InfoCommand;
 use Magento\Composer\MagentoComposerApplication;
+use Magento\Composer\RequireUpdateDryRunCommand;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class MagentoComposerApplicationFactory
@@ -42,5 +44,25 @@ class MagentoComposerApplicationFactory
     public function create()
     {
         return new MagentoComposerApplication($this->pathToComposerHome, $this->pathToComposerJson);
+    }
+
+    /**
+     * Creates InfoCommand instance
+     *
+     * @return InfoCommand
+     */
+    public function createInfoCommand()
+    {
+        return new InfoCommand($this->create());
+    }
+
+    /**
+     * Creates RequireUpdateDryRunCommand instance
+     *
+     * @return RequireUpdateDryRunCommand
+     */
+    public function createRequireUpdateDryRunCommand()
+    {
+        return new RequireUpdateDryRunCommand($this->create(), $this->createInfoCommand());
     }
 }

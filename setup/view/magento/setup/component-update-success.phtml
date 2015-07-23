@@ -10,11 +10,16 @@
         Success
     </h1>
     <p>Your store is no longer in maintenance mode.</p>
-    <p>You upgraded:</p>
-    <br/>
-    <ul ng-repeat="package in packages">
-        <li>{{package.name}}</li>
-    </ul>
+    <div ng-hide="rollbackStarted">
+        <p>You updated:</p>
+        <br/>
+        <ul ng-repeat="package in packages">
+            <li>{{package.name}}</li>
+        </ul>
+    </div>
+    <div ng-show="rollbackStarted">
+        Rollback performed successfully.
+    </div>
 
     <button
         class="btn btn-large btn-prime"
