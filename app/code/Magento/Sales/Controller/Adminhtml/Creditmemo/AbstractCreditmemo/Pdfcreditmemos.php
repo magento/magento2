@@ -14,6 +14,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Ui\Component\MassAction\Filter;
 
+/**
+ * Class Pdfcreditmemos
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
@@ -33,15 +37,15 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
 
     /**
      * @param Context $context
-     * @param Creditmemo $pdfCreditmemo
      * @param Filter $filter
+     * @param Creditmemo $pdfCreditmemo
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
      */
     public function __construct(
         Context $context,
-        Creditmemo $pdfCreditmemo,
         Filter $filter,
+        Creditmemo $pdfCreditmemo,
         DateTime $dateTime,
         FileFactory $fileFactory
     ) {
