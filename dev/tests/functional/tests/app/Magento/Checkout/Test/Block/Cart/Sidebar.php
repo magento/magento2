@@ -57,8 +57,25 @@ class Sidebar extends Block
      */
     protected $counterQty = '.minicart-wrapper .counter.qty';
 
-    protected $counterNumber = '//*[@class="counter-number" and normalize-space(text()) != ""]/ancestor::*[@class="minicart-wrapper"]';
+    /**
+     * Count product in cart block.
+     *
+     * @var string
+     */
+    protected $counterNumberBlock = '//*[@class="counter-number" and normalize-space(text()) != ""]';
 
+    /**
+     * Count product in cart wrapper.
+     *
+     * @var string
+     */
+    protected $counterNumberWrapper = '/ancestor::*[@class="minicart-wrapper"]';
+
+    /**
+     * Loading masc.
+     *
+     * @var string
+     */
     protected $loadingMask = '.loading-mask';
 
     /**
@@ -85,7 +102,7 @@ class Sidebar extends Block
         $selector = $this->counterQty;
         $browser->waitUntil(
             function () use ($browser, $selector) {
-                $counterQty = $browser->find($selector, Locator::SELECTOR_XPATH);
+                $counterQty = $browser->find($selector);
                 return $counterQty->isVisible() ? true : null;
             }
         );
@@ -140,7 +157,7 @@ class Sidebar extends Block
     public function waitInit()
     {
         $browser = $this->browser;
-        $selector = $this->counterNumber;
+        $selector = $this->counterNumberBlock . $this->counterNumberWrapper;
         $browser->waitUntil(
             function () use ($browser, $selector) {
                 $counterQty = $browser->find($selector, Locator::SELECTOR_XPATH);

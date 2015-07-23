@@ -58,10 +58,7 @@ class AssertProductForm extends AbstractAssertForm
         CatalogProductIndex $productGrid,
         CatalogProductEdit $productPage
     ) {
-        $filter = [
-            'name' => $product->getName(),
-            'sku' => $product->getSku()
-        ];
+        $filter = ['sku' => $product->getSku()];
         $productGrid->open();
         $productGrid->getProductGrid()->searchAndOpen($filter);
 

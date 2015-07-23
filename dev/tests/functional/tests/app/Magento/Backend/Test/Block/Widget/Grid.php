@@ -189,27 +189,6 @@ abstract class Grid extends Block
     protected $rowPattern = '//tbody/tr[%s]';
 
     /**
-     * Mass action toggle list.
-     *
-     * @var string
-     */
-    protected $massActionToggleList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
-
-    /**
-     * Mass action toggle button.
-     *
-     * @var string
-     */
-    protected $massActionToggleButton = '.action-multiselect-toggle';
-
-    /**
-     * Mass action button.
-     *
-     * @var string
-     */
-    protected $massActionButton = '.action-select';
-
-    /**
      * Get backend abstract block
      *
      * @return \Magento\Backend\Test\Block\Template
@@ -253,7 +232,6 @@ abstract class Grid extends Block
     public function search(array $filter)
     {
         $this->resetFilter();
-        $this->waitLoader();
         $this->prepareForSearch($filter);
         $this->_rootElement->find($this->searchButton, Locator::SELECTOR_CSS)->click();
         $this->waitLoader();
@@ -267,6 +245,7 @@ abstract class Grid extends Block
      */
     public function searchAndOpen(array $filter)
     {
+        $this->search($filter);
         $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->editLink, Locator::SELECTOR_CSS)->click();
@@ -301,6 +280,7 @@ abstract class Grid extends Block
      */
     public function searchAndSelect(array $filter)
     {
+        $this->search($filter);
         $selectItem = $this->getRow($filter)->find($this->selectItem);
         if ($selectItem->isVisible()) {
             $selectItem->click();
@@ -320,7 +300,7 @@ abstract class Grid extends Block
     }
 
     /**
-     * Perform selected massaction over checked items
+     * Perform selected massaction over checked items.
      *
      * @param array $items
      * @param array|string $action [array -> key = value from first select; value => value from subselect]
@@ -336,38 +316,19 @@ abstract class Grid extends Block
         if (!is_array($action)) {
             $action = [$action => '-'];
         }
-
+        foreach ($items as $item) {
+            $this->searchAndSelect($item);
+        }
         if ($massActionSelection) {
-            $massActionToggle = $this->_rootElement->find($this->massActionToggleButton);
-            if ($massActionToggle->isVisible()) {
-                $massActionToggle->click();
-                $this->_rootElement
-                    ->find(sprintf($this->massActionToggleList, $massActionSelection), Locator::SELECTOR_XPATH)
-                    ->click();
-            } else {
-                $this->_rootElement->find($this->massactionAction, Locator::SELECTOR_CSS, 'select')
-                    ->setValue($massActionSelection);
-            }
-        } else {
-            foreach ($items as $item) {
-                $this->searchAndSelect($item);
-            }
+            $this->_rootElement->find($this->massactionAction, Locator::SELECTOR_CSS, 'select')
+                ->setValue($massActionSelection);
         }
         $actionType = key($action);
-        $massActionSelectElement = $this->_rootElement->find($this->massactionSelect, Locator::SELECTOR_CSS, 'select');
-        if ($massActionSelectElement->isVisible()) {
-            $massActionSelectElement->setValue($actionType);
-
-            if (isset($action[$actionType]) && $action[$actionType] != '-') {
-                $this->_rootElement->find($this->option, Locator::SELECTOR_CSS, 'select')->setValue($action[$actionType]);
-            }
-            $this->massActionSubmit($acceptAlert);
-        } else {
-            $this->_rootElement->find($this->massActionButton)->click();
-            $this->_rootElement
-                ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
-                ->click();
+        $this->_rootElement->find($this->massactionSelect, Locator::SELECTOR_CSS, 'select')->setValue($actionType);
+        if (isset($action[$actionType]) && $action[$actionType] != '-') {
+            $this->_rootElement->find($this->option, Locator::SELECTOR_CSS, 'select')->setValue($action[$actionType]);
         }
+        $this->massActionSubmit($acceptAlert);
     }
 
     /**
@@ -388,15 +349,11 @@ abstract class Grid extends Block
      * Obtain specific row in grid
      *
      * @param array $filter
-     * @param bool $isSearchable
      * @param bool $isStrict
      * @return SimpleElement
      */
-    protected function getRow(array $filter, $isSearchable = true, $isStrict = true)
+    protected function getRow(array $filter, $isStrict = true)
     {
-        if ($isSearchable) {
-            $this->search($filter);
-        }
         $rowTemplate = ($isStrict) ? $this->rowTemplateStrict : $this->rowTemplate;
         $rows = [];
         foreach ($filter as $value) {
@@ -441,9 +398,11 @@ abstract class Grid extends Block
     public function isRowVisible(array $filter, $isSearchable = true, $isStrict = true)
     {
         $this->waitLoader();
-        $isVisible = $this->getRow($filter, $isSearchable, $isStrict)->isVisible();
+        if ($isSearchable) {
+            $this->search($filter);
+        }
 
-        return $isVisible;
+        return $this->getRow($filter, $isStrict)->isVisible();
     }
 
     /**
