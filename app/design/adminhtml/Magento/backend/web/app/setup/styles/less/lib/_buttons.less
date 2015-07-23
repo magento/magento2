@@ -91,7 +91,9 @@
     color: @link__color;
     font-family: @btn__base__font-size;
     font-size: 1.5rem; // ToDo UI: Check font-size and standardize
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
         background-color: transparent;
         color: @link__hover__color;
     }
@@ -110,14 +112,17 @@
         );
         color: @btn-prime__color;
     }
-    &:active {
+    &:active,
+    &:focus {
         .background-gradient(
         @_background-gradient: true,
         @_background-gradient-direction: horizontal,
         @_background-gradient-color-start: @btn-prime__color-gradient-end,
         @_background-gradient-color-end: @btn-prime__color-gradient-start
         );
+        color: @btn-prime__color;
     }
+
     //  Disabled state for IE9
     &[disabled],
     &.disabled {
@@ -141,9 +146,12 @@
         background-color: @btn-secondary__hover__background-color;
         color: @btn-secondary__color;
     }
-    &:active {
+    &:active,
+    &:focus {
         background-color: @btn-secondary__active__background-color;
+        color: @btn-secondary__color;
     }
+
     //  Disabled state for IE9
     &[disabled],
     &.disabled {
