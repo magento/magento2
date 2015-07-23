@@ -9,16 +9,28 @@
         <span><?php echo __('Additional Cache Management') ?></span>
     </div>
     <div class="field">
-        <button onclick="setLocation('<?php echo $block->getCleanImagesUrl()?>')" type="button">
+        <button onclick="setLocation('<?php echo $block->getCleanImagesUrl() ?>')" type="button">
             <?php echo __('Flush Catalog Images Cache') ?>
         </button>
-        <label class="label"><?php echo __('Pregenerated product images files')?></label>
+        <label class="label"><?php echo __('Pregenerated product images files') ?></label>
     </div>
     <div class="field">
-        <button onclick="setLocation('<?php echo $block->getCleanMediaUrl()?>')" type="button">
+        <button onclick="setLocation('<?php echo $block->getCleanMediaUrl() ?>')" type="button">
             <?php echo __('Flush JavaScript/CSS Cache') ?>
         </button>
-        <label class="label"><?php echo __('Themes JavaScript and CSS files combined to one file.')?></label>
+        <label class="label"><?php echo __('Themes JavaScript and CSS files combined to one file.') ?></label>
     </div>
+    <?php
+    if (!$block->isInProductionMode()):
+        ?>
+        <div class="field">
+            <button onclick="setLocation('<?php echo $block->getCleanStaticFilesUrl() ?>')" type="button">
+                <?php echo __('Flush Static Files Cache') ?>
+            </button>
+            <label class="label"><?php echo __('Preprocessed view files and static files') ?></label>
+        </div>
+    <?php
+    endif;
+    ?>
     <?php echo $block->getChildHtml(); ?>
 </div>

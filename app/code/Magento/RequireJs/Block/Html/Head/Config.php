@@ -60,6 +60,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     {
         $after = RequireJsConfig::REQUIRE_JS_FILE_NAME;
         $requireJsConfig = $this->fileManager->createRequireJsConfigAsset();
+        $requireJsMixinsConfig = $this->fileManager->createRequireJsMixinsAsset();
         $assetCollection = $this->pageConfig->getAssetCollection();
 
         if ($this->bundleConfig->isBundlingJsFiles()) {
@@ -88,6 +89,12 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $assetCollection->insert(
             $requireJsConfig->getFilePath(),
             $requireJsConfig,
+            $after
+        );
+
+        $assetCollection->insert(
+            $requireJsMixinsConfig->getFilePath(),
+            $requireJsMixinsConfig,
             $after
         );
 
