@@ -29,6 +29,7 @@ interface StoreRepositoryInterface
      *
      * @param string $code
      * @return Data\StoreInterface
+     * @throws NoSuchEntityException
      * @throws StoreIsInactiveException
      */
     public function getActiveStoreByCode($code);
