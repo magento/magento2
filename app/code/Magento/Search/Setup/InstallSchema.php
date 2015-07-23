@@ -123,6 +123,15 @@ class InstallSchema implements InstallSchemaInterface
                 $installer->getIdxName('search_query', 'synonym_for'),
                 'synonym_for'
             )
+            ->addIndex(
+                $installer->getIdxName(
+                    'search_query',
+                    ['query_text', 'store_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['query_text', 'store_id'],
+                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+            )
             ->addForeignKey(
                 $installer->getFkName('search_query', 'store_id', 'store', 'store_id'),
                 'store_id',
