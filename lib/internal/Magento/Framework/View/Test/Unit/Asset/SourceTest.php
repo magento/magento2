@@ -40,11 +40,6 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     private $staticDirRead;
 
     /**
-     * @var \Magento\Framework\View\Asset\PreProcessor\Cache|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $cache;
-
-    /**
      * @var \Magento\Framework\View\Asset\PreProcessor\Pool|\PHPUnit_Framework_MockObject_MockObject
      */
     private $preProcessorPool;
@@ -76,9 +71,6 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cache = $this->getMock(
-            'Magento\Framework\View\Asset\PreProcessor\Cache', [], [], '', false
-        );
         $this->preProcessorPool = $this->getMock(
             'Magento\Framework\View\Asset\PreProcessor\Pool', [], [], '', false
         );
@@ -107,37 +99,8 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $this->initFilesystem();
 
         $this->object = new Source(
-            $this->cache,
-            $this->filesystem,
-            $this->preProcessorPool,
-            $this->viewFileResolution,
-            $themeList,
-            $this->chainFactory
+            $this->filesystem, $this->preProcessorPool, $this->viewFileResolution, $themeList, $this->chainFactory
         );
-    }
-
-    public function testGetFileCached()
-    {
-        $root = '/root/some/file.ext';
-        $expected = '/var/some/file.ext';
-        $filePath = 'some/file.ext';
-        $this->viewFileResolution->expects($this->once())
-            ->method('getFile')
-            ->with('frontend', $this->theme, 'en_US', $filePath, 'Magento_Module')
-            ->will($this->returnValue($root));
-        $this->rootDirRead->expects($this->once())
-            ->method('getRelativePath')
-            ->with($root)
-            ->will($this->returnValue($filePath));
-        $this->cache->expects($this->once())
-            ->method('load')
-            ->with("some/file.ext:{$filePath}")
-            ->will($this->returnValue(serialize([DirectoryList::VAR_DIR, $filePath])));
-
-        $this->varDir->expects($this->once())->method('getAbsolutePath')
-            ->with($filePath)
-            ->will($this->returnValue($expected));
-        $this->assertSame($expected, $this->object->getFile($this->getAsset()));
     }
 
     /**
@@ -151,7 +114,6 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     public function testGetFile($origFile, $origPath, $origContent, $isMaterialization)
     {
         $filePath = 'some/file.ext';
-        $cacheValue = "{$origPath}:{$filePath}";
         $this->viewFileResolution->expects($this->once())
             ->method('getFile')
             ->with('frontend', $this->theme, 'en_US', $filePath, 'Magento_Module')
@@ -160,9 +122,6 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             ->method('getRelativePath')
             ->with($origFile)
             ->will($this->returnValue($origPath));
-        $this->cache->expects($this->once())
-            ->method('load')
-            ->will($this->returnValue(false));
         $this->rootDirRead->expects($this->once())
             ->method('readFile')
             ->with($origPath)
@@ -186,20 +145,11 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             $this->varDir->expects($this->once())
                 ->method('writeFile')
                 ->with('view_preprocessed/source/some/file.ext', 'processed');
-            $this->cache->expects($this->once())
-                ->method('save')
-                ->with(
-                    serialize([DirectoryList::VAR_DIR, 'view_preprocessed/source/some/file.ext']),
-                    $cacheValue
-                );
             $this->varDir->expects($this->once())
                 ->method('getAbsolutePath')
                 ->with('view_preprocessed/source/some/file.ext')->will($this->returnValue('result'));
         } else {
             $this->varDir->expects($this->never())->method('writeFile');
-            $this->cache->expects($this->once())
-                ->method('save')
-                ->with(serialize([DirectoryList::ROOT, 'source/some/file.ext']), $cacheValue);
             $this->rootDirRead->expects($this->once())
                 ->method('getAbsolutePath')
                 ->with('source/some/file.ext')

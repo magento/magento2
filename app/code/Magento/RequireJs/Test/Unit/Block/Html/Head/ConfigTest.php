@@ -82,6 +82,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($requireJsAsset));
         $this->fileManager
             ->expects($this->once())
+            ->method('createRequireJsMixinsAsset')
+            ->will($this->returnValue($requireJsAsset));
+        $this->fileManager
+            ->expects($this->once())
             ->method('createStaticJsAsset')
             ->will($this->returnValue($requireJsAsset));
         $this->fileManager
