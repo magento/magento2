@@ -7,7 +7,7 @@
 //  Forms
 //  _____________________________________________
 
-.form-element-input(
+.mixin-form-element-input(
     @_type: @form-element-input-type,
     @_background: ~"@{@{_type}__background}",
     @_border: ~"@{@{_type}__border}",
@@ -90,7 +90,7 @@
     );
 }
 
-.form-element-choice(
+.mixin-form-element-choice(
     @_type: @form-element-choice__type,
     @_vertical-align: ~"@{@{_type}__vertical-align}",
     @_margin: ~"@{@{_type}__margin}",
@@ -103,7 +103,7 @@
     }
 }
 
-.form-element-number-reset() {
+.mixin-form-element-number-reset() {
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -112,7 +112,7 @@
     -moz-appearance: textfield;
 }
 
-.form-element-search-reset() {
+.mixin-form-element-search-reset() {
     -webkit-appearance: none;
     &::-webkit-search-cancel-button,
     &::-webkit-search-decoration,
@@ -122,11 +122,11 @@
     }
 }
 
-.form-element-textarea-resize(@_textarea-resize: @textarea__resize) {
+.mixin-form-element-textarea-resize(@_textarea-resize: @textarea__resize) {
     .css(resize, @_textarea-resize);
 }
 
-.form-element-color(
+.mixin-form-element-color(
     @_border-color: '',
     @_background: '',
     @_color: '',
@@ -162,7 +162,7 @@
     }
 }
 
-.form-validation(
+.mixin-form-validation(
     @_element-color-error: @form-element-validation__color-error,
     @_element-color-valid: @form-element-validation__color-valid,
     @_element-border-color-error: @form-element-validation__border-error,
@@ -171,14 +171,14 @@
     @_element-background-valid: @form-element-validation__background-valid
 ) {
     &.mage-error {
-        .form-element-color(
+        .mixin-form-element-color(
             @_border-color: @_element-border-color-error,
             @_background: @_element-background-error,
             @_color: @_element-color-error
         );
     }
     &.valid {
-        .form-element-color(
+        .mixin-form-element-color(
             @_border-color: @_element-border-color-valid,
             @_background: @_element-background-valid,
             @_color: @_element-color-valid
@@ -186,7 +186,7 @@
     }
 }
 
-.form-validation-note(
+.mixin-form-validation-note(
     @_note-color: @form-validation-note__color-error,
     @_note-font-size: @form-validation-note__font-size,
     @_note-font-family: @form-validation-note__font-family,
@@ -233,7 +233,7 @@
     );
 }
 
-.form-validation-color(
+.mixin-form-validation-color(
     @_element-border-color-error: '',
     @_element-background-error: '',
     @_element-color-error: '',
@@ -242,14 +242,14 @@
     @_element-color-valid: ''
 ) {
     &.mage-error {
-        .form-element-color(
+        .mixin-form-element-color(
             @_border-color: @_element-border-color-error,
             @_background: @_element-background-error,
             @_color: @_element-color-error
         );
     }
     &.valid {
-        .form-element-color(
+        .mixin-form-element-color(
             @_border-color: @_element-border-color-valid,
             @_background: @_element-background-valid,
             @_color: @_element-color-valid
@@ -257,7 +257,7 @@
     }
 }
 
-.form-element-all() {
+.mixin-form-element-all() {
     input[type="text"],
     input[type="password"],
     input[type="url"],
@@ -266,19 +266,19 @@
     input[type="number"],
     input[type="datetime"],
     input[type="email"] {
-        .form-element-input(@_type: input-text);
+        .mixin-form-element-input(@_type: input-text);
     }
 
     input[type="number"] {
-        .form-element-number-reset();
+        .mixin-form-element-number-reset();
     }
 
     input[type="search"] {
-        .form-element-search-reset();
+        .mixin-form-element-search-reset();
     }
 
     select {
-        .form-element-input(@_type: select);
+        .mixin-form-element-input(@_type: select);
     }
 
     select[multiple="multiple"] {
@@ -287,26 +287,26 @@
     }
 
     textarea {
-        .form-element-input(@_type: textarea);
-        .form-element-textarea-resize();
+        .mixin-form-element-input(@_type: textarea);
+        .mixin-form-element-textarea-resize();
     }
 
     input[type="checkbox"] {
-        .form-element-choice(@_type: input-checkbox);
+        .mixin-form-element-choice(@_type: input-checkbox);
     }
 
     input[type="radio"] {
-        .form-element-choice(@_type: input-radio);
+        .mixin-form-element-choice(@_type: input-radio);
     }
 
     input,
     select,
     textarea {
-        .form-validation();
+        .mixin-form-validation();
     }
 
     div.mage-error[generated] {
-        .form-validation-note();
+        .mixin-form-validation-note();
     }
 
     input[type="button"],
@@ -341,7 +341,7 @@
     @_note-icon-font-position,
     @_note-icon-font-text-hide
 ) when (@_note-icon-use = true) {
-    .icon-font(
+    .mixin-icon-font(
         @_icon-font-content: @_note-icon-font-content,
         @_icon-font: @_note-icon-font,
         @_icon-font-size: @_note-icon-font-size,
@@ -439,7 +439,7 @@
     .css(color, @_color-state);
 }
 
-.form-fieldset(
+.mixin-form-fieldset(
     @_border: @form-fieldset__border,
     @_margin: @form-fieldset__margin,
     @_padding: @form-fieldset__padding,
@@ -488,7 +488,7 @@
     }
 }
 
-.form-field(
+.mixin-form-field(
     @_type: @form-field-type,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -545,7 +545,7 @@
 ) {
     .css(border, @_border);
 
-    .form-field-type(
+    .mixin-form-field-type(
         @_type,
         @_type-inline-margin,
         @_type-inline-label-margin,
@@ -564,7 +564,7 @@
         margin-bottom: 0;
     }
 
-    .form-field-column(
+    .mixin-form-field-column(
         @_column,
         @_column-padding,
         @_column-number
@@ -628,7 +628,7 @@
         .addafter {
             .vendor-prefix-order(3);
             display: inline-block;
-            .form-element-input(@_type: input-text);
+            .mixin-form-element-input(@_type: input-text);
             width: auto;
             white-space: nowrap;
             vertical-align: middle;
@@ -677,7 +677,7 @@
     );
 }
 
-.form-field-type(
+.mixin-form-field-type(
     @_type: @form-field-type,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -702,7 +702,7 @@
     );
 }
 
-.form-field-type(
+.mixin-form-field-type(
     @_type: @form-field-type,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -840,7 +840,7 @@
         );
         .css(margin, @_note-margin);
         .css(padding, @_note-padding);
-        .icon-font(
+        .mixin-icon-font(
             @_icon-font-content: @_note-icon-font-content,
             @_icon-font: @_note-icon-font,
             @_icon-font-size: @_note-icon-font-size,
@@ -856,7 +856,7 @@
     }
 }
 
-.form-field-type-revert(
+.mixin-form-field-type-revert(
     @_type: @form-field-type-revert,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -899,7 +899,7 @@
     }
 }
 
-.form-field-type-revert(
+.mixin-form-field-type-revert(
     @_type: @form-field-type-revert,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -929,7 +929,7 @@
     );
 }
 
-.form-field-column(
+.mixin-form-field-column(
     @_column: @form-field-column,
     @_column-padding: @form-field-column__padding,
     @_column-number: @form-field-column__number
@@ -938,7 +938,7 @@
     //float: left;
     display: inline-block;
     .css(padding, @_column-padding);
-    .form-field-column-number(@_column-number);
+    .mixin-form-field-column-number(@_column-number);
     vertical-align: top;
 
     & + .fieldset {
@@ -946,7 +946,7 @@
     }
 }
 
-.form-field-column-number(@_column-number: @form-field-column__number) {
+.mixin-form-field-column-number(@_column-number: @form-field-column__number) {
     .css(width, 100% / @_column-number);
 }
 
@@ -968,7 +968,7 @@
     margin: 0;
 }
 
-.form-hasrequired(
+.mixin-form-hasrequired(
     @_position: @form-hasrequired__position,
     @_color: @form-hasrequired__color,
     @_font-size: @form-hasrequired__font-size,

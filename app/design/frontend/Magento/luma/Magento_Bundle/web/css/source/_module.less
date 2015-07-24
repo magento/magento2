@@ -126,7 +126,7 @@
                 &:extend(.abs-actions-addto all);
                 margin-right: 5%;
                 &.tocompare {
-                    .icon-font-symbol(
+                    .mixin-icon-font-symbol(
                         @_icon-font-content: @icon-compare-full,
                         @_icon-font-position: before
                     );
@@ -146,7 +146,7 @@
     }
     .nested {
         .field.qty {
-            .form-field-type(@_type: block);
+            .mixin-form-field-type(@_type: block);
             .label {
                 font-weight: @form-field-label__font-weight;
             }

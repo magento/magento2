@@ -352,7 +352,7 @@
     &:active:before {
         .css(color, @_icon-font-color-active);
     }
-    .icon-font(
+    .mixin-icon-font(
         @_icon-font-content: @_icon-font-content,
         @_icon-font: @_icon-font,
         @_icon-font-size: @_icon-font-size,
@@ -382,7 +382,7 @@
     @_icon-font-position: @_pager-icon-font-position,
     @_icon-font-text-hide: @_pager-icon-font-text-hide
 ) when (@_pager-icon-use = true) and (@_icon-font-position = after) {
-    .icon-font(
+    .mixin-icon-font(
         @_icon-font-content: @_icon-font-content,
         @_icon-font: @_icon-font,
         @_icon-font-size: @_icon-font-size,

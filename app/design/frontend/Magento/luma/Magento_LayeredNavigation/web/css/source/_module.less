@@ -107,7 +107,7 @@
             z-index: 1;
             text-transform: uppercase;
 
-            .icon-font(
+            .mixin-icon-font(
                 @_icon-font-content: @icon-down,
                 @_icon-font-size: 13px,
                 @_icon-font-position: after,
@@ -122,7 +122,7 @@
                 .css(color, @filter-link-hover);
             }
             .active > & {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                 );
@@ -208,7 +208,7 @@
                         background: none;
                         .css(box-shadow, none);
                         color: transparent;
-                        .icon-font(
+                        .mixin-icon-font(
                             @icon-remove,
                             @_icon-font-color: @text__color__muted,
                             @_icon-font-size: 16px,
@@ -278,7 +278,7 @@
             text-transform: uppercase;
             position: relative;
             z-index: 1;
-            .icon-font(
+            .mixin-icon-font(
                 @_icon-font-content: @icon-down,
                 @_icon-font-size: 13px,
                 @_icon-font-position: before,
@@ -299,7 +299,7 @@
         &.active {
             padding-bottom: 30px;
             .block-subtitle {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: before
                 );

@@ -14,13 +14,13 @@
 & when (@media-common = true) {
 
 .fieldset {
-    .form-fieldset();
+    .mixin-form-fieldset();
     &:last-child {
         margin-bottom: 0;
     }
     > .field,
     > .fields > .field {
-        .form-field();
+        .mixin-form-field();
         &.no-label {
             > .label {
                 .visually-hidden();
@@ -111,8 +111,8 @@ select:focus ~ .tooltip .tooltip-content {
 
 .hasDatepicker {
     + .ui-datepicker-trigger {
-        .button-reset();
-        .icon-font(
+        .mixin-button-reset();
+        .mixin-icon-font(
         @_icon-font-content: @icon-calendar,
         @_icon-font-color: @primary__color__lighter,
         @_icon-font-size: @icon-calendar__font-size,

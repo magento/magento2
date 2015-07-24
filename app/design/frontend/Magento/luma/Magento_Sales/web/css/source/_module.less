@@ -152,7 +152,7 @@
     }
     .action {
         &.show {
-            .icon-font(
+            .mixin-icon-font(
                 @icon-down,
                 @_icon-font-size: 10px,
                 @_icon-font-line-height: 10px,
@@ -162,7 +162,7 @@
             );
             .css(color, @primary__color);
             &.expanded {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                 );

@@ -75,14 +75,14 @@
 
         .action-gift {
             &:extend(.cart.table-wrapper .actions-toolbar > .action all);
-            .button-icon(
+            .mixin-button-icon(
             @icon-down,
             @_icon-font-size: 32px,
             @_icon-font-line-height: 16px,
             @_icon-font-position: after
             );
             &._active {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                 @icon-up,
                 @_icon-font-position: after
                 );
@@ -98,7 +98,7 @@
         margin: 0;
         &._active {
             .title {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                 @icon-up,
                 @_icon-font-position: after
                 );
@@ -107,7 +107,7 @@
 
         .title {
             border-radius: 3px;
-            .button(
+            .mixin-button(
             @_button-margin: 20px 0 0,
             @_button-padding: 7px 15px,
             @_button-icon-use: true,
@@ -169,7 +169,7 @@
             }
         }
         .action.show {
-            .icon-font(
+            .mixin-icon-font(
             @_icon-font-content: @icon-down,
             @_icon-font-size: 22px,
             @_icon-font-text-hide: false,
@@ -184,7 +184,7 @@
                 top: -4px;
             }
             &.expanded {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                 @_icon-font-content: @icon-up,
                 @_icon-font-position: after
                 );
@@ -254,7 +254,7 @@
         }
         .field {
             &:extend(.abs-clearfix all);
-            .form-field-type-revert(
+            .mixin-form-field-type-revert(
             @_type: inline,
             @_type-inline-label-align: left
             );

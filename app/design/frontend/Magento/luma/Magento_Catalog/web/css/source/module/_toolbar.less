@@ -80,13 +80,13 @@
         width: auto;
     }
     &-action {
-        .icon-font(
+        .mixin-icon-font(
             @icon-arrow-up,
             @_icon-font-size: 16px,
             @_icon-font-color: @header-icons-color,
             @_icon-font-color-hover: @header-icons-color-hover
         );
-        .icon-text-hide();
+        .mixin-icon-text-hide();
         &.sort-desc:before {
             content: @icon-arrow-down;
         }
@@ -182,7 +182,7 @@
                 background: darken(@toolbar-element-background, 7%);
                 color: @color-gray62;
             }
-            .icon-font(
+            .mixin-icon-font(
                 @icon-grid,
                 @_icon-font-size: @toolbar-mode-icon-font-size,
                 @_icon-font-text-hide: true

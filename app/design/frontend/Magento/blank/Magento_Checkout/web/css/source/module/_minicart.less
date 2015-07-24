@@ -91,7 +91,7 @@
     }
 
     .minicart-wrapper {
-        .dropdown(
+        .mixin-dropdown(
         @_toggle-selector: ~".action.showcart",
         @_options-selector: ~".block-minicart",
         @_dropdown-toggle-icon-content: @icon-cart,
@@ -131,13 +131,13 @@
 
         .action {
             &.close {
-                .button-icon(
+                .mixin-button-icon(
                 @icon-remove,
                 @_icon-font-size: 32px,
                 @_icon-font-line-height: 32px,
                 @_icon-font-text-hide: true
                 );
-                .button-reset();
+                .mixin-button-reset();
                 height: 40px;
                 position: absolute;
                 right: 0;
@@ -218,7 +218,7 @@
                 float: left;
             }
             .toggle {
-                .icon-font(
+                .mixin-icon-font(
                 @_icon-font-content: @icon-down,
                 @_icon-font-size: 28px,
                 @_icon-font-line-height: 16px,
@@ -236,7 +236,7 @@
             }
             &.active {
                 > .toggle {
-                    .icon-font-symbol(
+                    .mixin-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                     );
@@ -271,7 +271,7 @@
         }
         .product.options {
             .tooltip.toggle {
-                .icon-font(
+                .mixin-icon-font(
                 @icon-down,
                 @_icon-font-size: 28px,
                 @_icon-font-line-height: 28px,
@@ -305,7 +305,7 @@
         .action {
             &.edit,
             &.delete {
-                .icon-font(
+                .mixin-icon-font(
                 @icon-settings,
                 @_icon-font-size: 28px,
                 @_icon-font-line-height: 28px,
@@ -316,7 +316,7 @@
                 );
             }
             &.delete {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                 @_icon-font-content: @icon-trash
                 );
             }

@@ -253,7 +253,7 @@
 ) when (@_popup-actions-toolbar = true) {
     .popup-footer {
         .actions.toolbar {
-            .actions-toolbar(
+            .mixin-actions-toolbar(
                 @_actions-toolbar-actions-position: @_popup-actions-toolbar-actions-position,
                 @_actions-toolbar-actions-reverse: @_popup-actions-toolbar-actions-reverse,
                 @_actions-toolbar-margin: @_popup-actions-toolbar-margin,
@@ -284,7 +284,7 @@
     @_popup-icon-font-position,
     @_popup-icon-font-text-hide
 ) when (@_popup-button-close-icon = true) {
-    .button-icon(
+    .mixin-button-icon(
         @_icon-font-content: @_popup-icon-font-content,
         @_icon-font: @_popup-icon-font,
         @_icon-font-size: @_popup-icon-font-size,
@@ -303,5 +303,5 @@
 ._popup-button-close-reset (
     @_popup-button-close-reset
 ) when (@_popup-button-close-reset = true) {
-    .button-reset();
+    .mixin-button-reset();
 }

@@ -357,7 +357,7 @@
     text-align: center;
     .action.tocompare {
         &:extend(.abs-actions-addto all);
-        .icon-font-symbol(
+        .mixin-icon-font-symbol(
             @_icon-font-content: @icon-compare-full,
             @_icon-font-position: before
         );
@@ -387,7 +387,7 @@
 }
 
 .ui-dialog-titlebar-close {
-    .button-as-link();
+    .mixin-button-as-link();
 }
 
 
@@ -755,7 +755,7 @@ body.catalog-product-compare-index {
 
         .action.split,
         .action.toggle {
-            .button-s();
+            .mixin-button-s();
         }
 
         .action.toggle {

@@ -225,7 +225,7 @@
           position: absolute;
           right: 16px;
           top: 0;
-          .icon-font(
+          .mixin-icon-font(
           @icon-edit,
           @_icon-font-size: 18px,
           @_icon-font-line-height: 20px,
@@ -237,7 +237,7 @@
         }
         > .action-delete {
           right: 0;
-          .icon-font-symbol(
+          .mixin-icon-font-symbol(
           @_icon-font-content: @icon-trash
           );
         }
@@ -544,7 +544,7 @@
         }
         .fieldset {
           .field {
-            .form-field-type-revert(@_type: block);
+            .mixin-form-field-type-revert(@_type: block);
             margin: 0 0 @indent__s;
           }
         }
