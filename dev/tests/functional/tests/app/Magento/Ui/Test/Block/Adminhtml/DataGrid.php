@@ -26,7 +26,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $editLink = '.data-grid-actions-cell a';
+    protected $editLink = '.action-menu-item[href*="edit"]';
 
     /**
      * Locator value for container of applied Filters.
@@ -76,6 +76,13 @@ class DataGrid extends Grid
      * @var string
      */
     protected $actionButton = '.modal-inner-wrap .action-secondary';
+
+    /**
+     * Select action toggle.
+     *
+     * @var string
+     */
+    protected $selectAction = '.action-select';
 
     /**
      * Clear all applied Filters.
@@ -153,6 +160,10 @@ class DataGrid extends Grid
         $this->search($filter);
         $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
+            $actionSelect = $rowItem->find($this->selectAction);
+            if ($actionSelect->isVisible()) {
+                $actionSelect->click();
+            }
             $rowItem->find($this->editLink)->click();
         } else {
             throw new \Exception('Searched item was not found.');
