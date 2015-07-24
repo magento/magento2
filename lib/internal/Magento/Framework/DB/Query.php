@@ -272,7 +272,6 @@ class Query implements QueryInterface
     }
 
     /**
-    /**
      * Get \Magento\Framework\DB\Select object instance
      *
      * @return Select
