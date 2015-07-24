@@ -35,16 +35,16 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
 
     /**
      * @param Context $context
+     * @param Filter $filter
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
-     * @param Filter $filter
      * @param Invoice $pdfInvoice
      */
     public function __construct(
         Context $context,
+        Filter $filter,
         DateTime $dateTime,
         FileFactory $fileFactory,
-        Filter $filter,
         Invoice $pdfInvoice
     ) {
         $this->fileFactory = $fileFactory;

@@ -21,13 +21,13 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $filter;
 
     /**
-     * @param Builder $productBuilder
      * @param Context $context
+     * @param Builder $productBuilder
      * @param Filter $filter
      */
     public function __construct(
-        Builder $productBuilder,
         Context $context,
+        Builder $productBuilder,
         Filter $filter
     ) {
         $this->filter = $filter;

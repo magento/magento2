@@ -83,54 +83,25 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->contextMock = $this->getMock(
-            'Magento\Backend\App\Action\Context',
-            [
-                'getRequest',
-                'getResponse',
-                'getMessageManager',
-                'getRedirect',
-                'getObjectManager',
-                'getSession',
-                'getActionFlag',
-                'getHelper',
-                'getResultRedirectFactory',
-                'getResultFactory'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
         $resultRedirectFactory = $this->getMock(
             'Magento\Backend\Model\View\Result\RedirectFactory',
-            ['create'],
+            [],
             [],
             '',
             false
         );
-        $this->responseMock = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
-        );
+        $this->responseMock = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()->getMock();
         $this->objectManagerMock = $this->getMock(
             'Magento\Framework\ObjectManager\ObjectManager',
-            ['create'],
+            [],
             [],
             '',
             false
         );
-        $this->messageManagerMock = $this->getMock(
-            'Magento\Framework\Message\Manager',
-            ['addSuccess', 'addError'],
-            [],
-            '',
-            false
-        );
+        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
 
         $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Collection')
             ->disableOriginalConstructor()
@@ -185,10 +156,6 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteTwoOrdersReleasedFromHold()
     {
-        $selected = [1, 2];
-        $countOrders = count($selected);
-        $idFieldName = 'entity_id';
-
         $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
             ->getMock();
