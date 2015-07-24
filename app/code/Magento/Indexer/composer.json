@@ -3,7 +3,6 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-page-cache": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
