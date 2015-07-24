@@ -57,4 +57,14 @@ class InterceptionCache implements OperationInterface
 
         $this->configInterface->initialize($definitions);
     }
+
+    /**
+     * Returns operation name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Interception cache generation';
+    }
 }

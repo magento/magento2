@@ -11,6 +11,11 @@ namespace Magento\Framework\View\Asset;
 class Merged implements \Iterator
 {
     /**
+     * Directory for dynamically generated public view files, relative to STATIC_VIEW
+     */
+    const CACHE_VIEW_REL = '_cache';
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
@@ -169,6 +174,6 @@ class Merged implements \Iterator
      */
     public static function getRelativeDir()
     {
-        return Minified\AbstractAsset::CACHE_VIEW_REL . '/merged';
+        return self::CACHE_VIEW_REL . '/merged';
     }
 }
