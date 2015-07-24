@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+
 /**
  * Import entity abstract product type model
  *
@@ -51,11 +53,21 @@ abstract class AbstractType
     protected $_indexValueAttributes = [];
 
     /**
-     * Validation failure message template definitions
+     * Validation failure entity specific message template definitions
      *
      * @var array
      */
     protected $_messageTemplates = [];
+
+    /**
+     * Validation failure general message template definitions
+     *
+     * @var array
+     */
+    protected $_genericMessageTemplates = [
+        RowValidatorInterface::ERROR_INVALID_WEIGHT => 'Weight value is incorrect',
+        RowValidatorInterface::ERROR_INVALID_WEBSITE => 'Provided Website code doesn\'t exist'
+    ];
 
     /**
      * Column names that holds values with particular meaning.
@@ -134,11 +146,25 @@ abstract class AbstractType
             $this->_entityModel = $params[0];
             $this->_type = $params[1];
 
-            foreach ($this->_messageTemplates as $errorCode => $message) {
-                $this->_entityModel->addMessageTemplate($errorCode, $message);
-            }
+            $this->initMessageTemplates(
+                array_merge($this->_genericMessageTemplates, $this->_messageTemplates)
+            );
+
             $this->_initAttributes();
         }
+    }
+
+    /**
+     * @param array $templateCollection
+     * @return $this
+     */
+    protected function initMessageTemplates(array $templateCollection)
+    {
+        foreach ($templateCollection as $errorCode => $message) {
+            $this->_entityModel->addMessageTemplate($errorCode, $message);
+        }
+
+        return $this;
     }
 
     /**
