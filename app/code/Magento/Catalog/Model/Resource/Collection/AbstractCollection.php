@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\Resource\Collection;
  * Implement using different stores for retrieve attribute values
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {

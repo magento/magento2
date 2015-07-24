@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
-use Magento\Framework\DB\Adapter\AdapterInterface;
-
 class DatabaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -97,15 +95,12 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      */
     public function loadDataProvider()
     {
-        $connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['select', 'fetchOne'],
-            [],
-            '',
-            false
-        );
+        $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+            ->setMethods(['select', 'fetchOne'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $selectMock = $this->getMock('\Magento\Framework\DB\Select', ['where', 'from'], [], '', false);
+        $selectMock = $this->getMock('Magento\Framework\DB\Select', ['where', 'from'], [], '', false);
 
         $selectMock->expects($this->any())
             ->method('where')
@@ -137,7 +132,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connectionMock
+     * @param \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject $connectionMock
      * @return array
      */
     public function getOptionsWithStoreData($connectionMock)
@@ -154,13 +149,15 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null|AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connectionMock
+     * @param null|\Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject $connectionMock
      * @return array
      */
     public function getOptionsWithoutStoreData($connectionMock = null)
     {
         if (null === $connectionMock) {
-            $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+            $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+                ->disableOriginalConstructor()
+                ->getMock();
         }
 
         return [
@@ -232,7 +229,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $result
-     * @return AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getSaveAdapterMock($result)
     {
@@ -241,10 +238,10 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $dbStatementMock = $this->getMockBuilder('\Magento\Framework\DB\Statement\Pdo\Mysql')
+        $dbStatementMock = $this->getMockBuilder('Zend_Db_Statement_Interface')
             ->setMethods(['rowCount'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $dbStatementMock->expects($this->any())
             ->method('rowCount')
@@ -423,7 +420,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectMock = $this->getMock('\Magento\Framework\DB\Select', ['from'], [], '', false);
+        $selectMock = $this->getMock('Magento\Framework\DB\Select', ['from'], [], '', false);
 
         $selectMock->expects($this->any())
             ->method('from')
@@ -457,7 +454,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectMock = $this->getMock('\Magento\Framework\DB\Select', ['from', 'distinct'], [], '', false);
+        $selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'distinct'], [], '', false);
 
         $selectMock->expects($this->any())
             ->method('from')
@@ -492,7 +489,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $selectMock = $this->getMock(
-            '\Magento\Framework\DB\Select',
+            'Magento\Framework\DB\Select',
             ['from', 'distinct', 'where', 'group', 'having'],
             [],
             '',
@@ -544,7 +541,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $selectMock = $this->getMock(
-            '\Magento\Framework\DB\Select',
+            'Magento\Framework\DB\Select',
             ['from', 'distinct', 'where', 'group', 'having'],
             [],
             '',
@@ -599,7 +596,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectMock = $this->getMock('\Magento\Framework\DB\Select', ['from', 'distinct'], [], '', false);
+        $selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'distinct'], [], '', false);
 
         $selectMock->expects($this->any())
             ->method('from')
@@ -633,7 +630,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectMock = $this->getMock('\Magento\Framework\DB\Select', ['from', 'where'], [], '', false);
+        $selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'where'], [], '', false);
 
         $selectMock->expects($this->any())
             ->method('from')
