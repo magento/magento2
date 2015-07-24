@@ -117,7 +117,7 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
 
         $dataModel = $this->getMockBuilder('\Magento\SalesRule\Model\Data\Rule')
         ->disableOriginalConstructor()
-        ->setMethods(['create', 'getStoreLabels' , 'setStoreLabels', 'getCouponType', 'setCouponType'])
+        ->setMethods(['create', 'getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType'])
         ->getMock();
 
         $dataLabel = $this->getMockBuilder('\Magento\SalesRule\Api\Data\RuleLabel')
