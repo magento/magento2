@@ -8,7 +8,7 @@
     <!-- ko text: currentBillingAddress().firstname --><!-- /ko --> <!-- ko text: currentBillingAddress().lastname --><!-- /ko --><br/>
     <!-- ko text: currentBillingAddress().street --><!-- /ko --><br/>
     <!-- ko text: currentBillingAddress().city --><!-- /ko -->, <!-- ko text: currentBillingAddress().region --><!-- /ko --> <!-- ko text: currentBillingAddress().postcode --><!-- /ko --><br/>
-
+    <!-- ko text: getCountryName(currentBillingAddress().countryId) --><!-- /ko --><br/>
     <!-- ko text: currentBillingAddress().telephone --><!-- /ko --><br/>
     <button type="button"
             class="action action-edit-address"

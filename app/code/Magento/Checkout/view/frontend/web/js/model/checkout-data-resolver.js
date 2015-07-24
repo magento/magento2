@@ -16,7 +16,9 @@ define([
     'Magento_Checkout/js/action/select-shipping-method',
     'Magento_Checkout/js/model/payment-service',
     'Magento_Checkout/js/action/select-payment-method',
-    'Magento_Checkout/js/model/address-converter'
+    'Magento_Checkout/js/model/address-converter',
+    'Magento_Checkout/js/action/select-billing-address',
+    'Magento_Checkout/js/action/create-billing-address'
 ], function (
     addressList,
     quote,
@@ -26,7 +28,9 @@ define([
     selectShippingMethodAction,
     paymentService,
     selectPaymentMethodAction,
-    addressConverter
+    addressConverter,
+    selectBillingAddress,
+    createBillingAddress
 ) {
     'use strict';
 
@@ -115,6 +119,30 @@ define([
                         selectPaymentMethodAction(payment);
                     }
                 });
+            }
+        },
+
+        resolveBillingAddress: function () {
+            var selectedBillingAddress = checkoutData.getSelectedBillingAddress(),
+                newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress(),
+                shippingAddress = quote.shippingAddress();
+            if (!selectedBillingAddress && shippingAddress) {
+                //set billing address same as shipping by default if it is not empty
+                if (shippingAddress.countryId != undefined && shippingAddress.canUseForBilling()) {
+                    selectBillingAddress(quote.shippingAddress());
+                }
+            }
+
+            if (selectedBillingAddress) {
+                if (selectedBillingAddress == 'new-customer-address' && newCustomerBillingAddressData) {
+                    selectBillingAddress(createBillingAddress(newCustomerBillingAddressData));
+                } else {
+                    addressList.some(function (address) {
+                        if (selectedBillingAddress == address.getKey()) {
+                            selectBillingAddress(address);
+                        }
+                    });
+                }
             }
         }
     }

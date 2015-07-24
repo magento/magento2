@@ -14,9 +14,21 @@ define(
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/model/payment/method-converter',
-        'Magento_Checkout/js/action/get-payment-information'
+        'Magento_Checkout/js/action/get-payment-information',
+        'Magento_Checkout/js/model/checkout-data-resolver'
     ],
-    function ($, _, Component, ko, quote, stepNavigator, paymentService, methodConverter, getPaymentInformation) {
+    function (
+        $,
+        _,
+        Component,
+        ko,
+        quote,
+        stepNavigator,
+        paymentService,
+        methodConverter,
+        getPaymentInformation,
+        checkoutDataResolver
+    ) {
         'use strict';
 
         /** Set payment methods to collection */
@@ -35,6 +47,7 @@ define(
 
             initialize: function () {
                 this._super();
+                checkoutDataResolver.resolvePaymentMethod();
                 stepNavigator.registerStep(
                     'payment',
                     'Review & Payments',
@@ -47,7 +60,6 @@ define(
 
             navigate: function () {
                 var self = this;
-                console.info('load data from server for payment step');
                 getPaymentInformation().done(function () {
                     self.isVisible(true);
                 });
