@@ -13,6 +13,7 @@ define(
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/checkout-data',
+        'Magento_Checkout/js/model/checkout-data-resolver',
         'uiRegistry'
     ],
     function (
@@ -25,6 +26,7 @@ define(
         customer,
         paymentService,
         checkoutData,
+        checkoutDataResolver,
         registry
     ) {
         'use strict';
@@ -38,7 +40,7 @@ define(
              */
             initialize: function () {
                 this._super().initChildren();
-
+                checkoutDataResolver.resolveBillingAddress();
                 quote.billingAddress.subscribe(function(address) {
                     this.isPlaceOrderActionAllowed((address !== null));
                 }, this);

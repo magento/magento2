@@ -143,13 +143,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $cartTotalRepository;
 
     /**
-     * Shipping method data factory.
-     *
-     * @var \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory
-     */
-    protected $estimatedAddressFactory;
-
-    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -197,7 +190,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param Cart\ImageProvider $imageProvider
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param CartTotalRepositoryInterface $cartTotalRepository
-     * @param \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingMethodConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -227,7 +219,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         Cart\ImageProvider $imageProvider,
         \Magento\Directory\Helper\Data $directoryHelper,
         CartTotalRepositoryInterface $cartTotalRepository,
-        \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory,
         ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingMethodConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -256,7 +247,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->imageProvider = $imageProvider;
         $this->directoryHelper = $directoryHelper;
         $this->cartTotalRepository = $cartTotalRepository;
-        $this->estimatedAddressFactory = $estimatedAddressFactory;
         $this->scopeConfig = $scopeConfig;
         $this->shippingMethodConfig = $shippingMethodConfig;
         $this->storeManager = $storeManager;
