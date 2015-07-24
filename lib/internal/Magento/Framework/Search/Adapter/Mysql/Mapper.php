@@ -150,7 +150,8 @@ class Mapper
      * @param ScoreBuilder $scoreBuilder
      * @return Select
      */
-    private function createAroundSelect(Select $select, ScoreBuilder $scoreBuilder) {
+    private function createAroundSelect(Select $select, ScoreBuilder $scoreBuilder)
+    {
         $parentSelect = $this->resource->getConnection()->select();
         $parentSelect->from(
             ['main_select' => $select],
