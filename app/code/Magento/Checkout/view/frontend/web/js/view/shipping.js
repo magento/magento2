@@ -209,6 +209,10 @@ define(
                     emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
                 }
 
+                if (!emailValidationResult) {
+                    $(loginFormSelector + ' input[name=username]').focus();
+                }
+
                 if (this.isFormInline) {
                     this.source.set('params.invalid', false);
                     this.source.trigger('shippingAddress.data.validate');

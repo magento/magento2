@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\Model\Resource;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 class Iterator extends \Magento\Framework\Object
 {
@@ -18,7 +21,7 @@ class Iterator extends \Magento\Framework\Object
      * @param \Zend_Db_Statement_Interface|\Magento\Framework\DB\Select|string $query
      * @param array|string $callbacks
      * @param array $args
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @return \Magento\Framework\Model\Resource\Iterator
      */
     public function walk($query, array $callbacks, array $args = [], $connection = null)
@@ -43,11 +46,11 @@ class Iterator extends \Magento\Framework\Object
      * Fetch Zend statement instance
      *
      * @param \Zend_Db_Statement_Interface|\Magento\Framework\DB\Select|string $query
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $conn
+     * @param AdapterInterface $connection
      * @return \Zend_Db_Statement_Interface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    protected function _getStatement($query, \Magento\Framework\DB\Adapter\AdapterInterface $conn = null)
+    protected function _getStatement($query, AdapterInterface $connection = null)
     {
         if ($query instanceof \Zend_Db_Statement_Interface) {
             return $query;
@@ -58,9 +61,12 @@ class Iterator extends \Magento\Framework\Object
         }
 
         if (is_string($query)) {
-            return $conn->query($query);
+            if (!$connection instanceof AdapterInterface) {
+                throw new LocalizedException(new Phrase('Invalid connection'));
+            }
+            return $connection->query($query);
         }
 
-        throw new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Invalid query'));
+        throw new LocalizedException(new Phrase('Invalid query'));
     }
 }

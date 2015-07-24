@@ -212,11 +212,6 @@
             <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Asset\MinifyService">
-        <arguments>
-            <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Cache\Frontend\Factory">
         <arguments>
             <argument name="enforcedOptions" xsi:type="init_parameter">Magento\Framework\App\Cache\Frontend\Factory::PARAM_CACHE_FORCED_OPTIONS</argument>
@@ -624,9 +619,14 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="viewFileMinifiedFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification">
+        <arguments>
+            <argument name="fallback" xsi:type="object">viewFileFallbackResolver</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\StaticFile">
         <arguments>
-            <argument name="resolver" xsi:type="object">viewFileFallbackResolver</argument>
+            <argument name="resolver" xsi:type="object">viewFileMinifiedFallbackResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Code\Generator">
