@@ -48,7 +48,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDecodeInvalidTopic()
     {
-        $this->encoder->decode('Some message', 'customer.created');
+        $this->encoder->decode('customer.created', 'Some message');
     }
 
     /**

@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Amqp;
 
-use \Magento\Framework\Amqp\Config\Data as QueueConfig;
-use \Magento\Framework\Amqp\Config\Converter as QueueConfigConverter;
+use Magento\Framework\Amqp\Config\Data as QueueConfig;
+use Magento\Framework\Amqp\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
@@ -23,12 +23,12 @@ class MessageEncoder
     /**
      * @var \Magento\Framework\Webapi\ServiceOutputProcessor
      */
-    private $encoder;
+    private $dataObjectEncoder;
 
     /**
      * @var \Magento\Framework\Webapi\ServiceInputProcessor
      */
-    private $decoder;
+    private $dataObjectDecoder;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
@@ -46,19 +46,19 @@ class MessageEncoder
      * @param QueueConfig $queueConfig
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
-     * @param \Magento\Framework\Webapi\ServiceOutputProcessor $encoder
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor $decoder
+     * @param \Magento\Framework\Webapi\ServiceOutputProcessor $dataObjectEncoder
+     * @param \Magento\Framework\Webapi\ServiceInputProcessor $dataObjectDecoder
      */
     public function __construct(
         QueueConfig $queueConfig,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Json\DecoderInterface $jsonDecoder,
-        \Magento\Framework\Webapi\ServiceOutputProcessor $encoder,
-        \Magento\Framework\Webapi\ServiceInputProcessor $decoder
+        \Magento\Framework\Webapi\ServiceOutputProcessor $dataObjectEncoder,
+        \Magento\Framework\Webapi\ServiceInputProcessor $dataObjectDecoder
     ) {
         $this->queueConfig = $queueConfig;
-        $this->encoder = $encoder;
-        $this->decoder = $decoder;
+        $this->dataObjectEncoder = $dataObjectEncoder;
+        $this->dataObjectDecoder = $dataObjectDecoder;
         $this->jsonEncoder = $jsonEncoder;
         $this->jsonDecoder = $jsonDecoder;
     }
@@ -82,18 +82,18 @@ class MessageEncoder
                 )
             );
         }
-        return $this->jsonEncoder->encode($this->encoder->convertValue($message, $messageDataType));
+        return $this->jsonEncoder->encode($this->dataObjectEncoder->convertValue($message, $messageDataType));
     }
 
     /**
      * Decode message content based on current topic.
      *
-     * @param string $message
      * @param string $topic
+     * @param string $message
      * @return mixed
      * @throws LocalizedException
      */
-    public function decode($message, $topic)
+    public function decode($topic, $message)
     {
         $messageDataType = $this->getTopicSchema($topic);
         try {
@@ -101,7 +101,7 @@ class MessageEncoder
         } catch (\Exception $e) {
             throw new LocalizedException(new Phrase("Error occurred during message decoding."));
         }
-        return $this->decoder->convertValue($decodedJson, $messageDataType);
+        return $this->dataObjectDecoder->convertValue($decodedJson, $messageDataType);
     }
 
     /**
