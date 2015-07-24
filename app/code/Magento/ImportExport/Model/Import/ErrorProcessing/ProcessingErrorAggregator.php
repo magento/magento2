@@ -222,12 +222,12 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     {
         $result = [];
         foreach ($this->items as $error) {
-            if ((null !== $errorCode && in_array($error->getErrorCode(), $errorCode))
+            if ((!empty($errorCode) && in_array($error->getErrorCode(), $errorCode))
                 || in_array($error->getErrorCode(), $excludedCodes)
             ) {
                 continue;
             }
-            $message = $error->getErrorMessage();
+            $message = $error->getErrorMessage() !== null ? $error->getErrorMessage() : $error->getErrorCode();
             if (null !== $message) {
                 if (!isset($result[$message])) {
                     $result[$message] = [];

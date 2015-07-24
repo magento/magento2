@@ -265,20 +265,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $messages = [];
         if ($this->getProcessedRowsCount()) {
             if ($validationResult->getErrorsCount()) {
-                if ($this->getProcessedRowsCount() == $validationResult->getInvalidRowsCount()) {
-                    $messages[] = __('This file is invalid. Please fix errors and re-upload the file.');
-                } elseif ($validationResult->hasFatalExceptions()) {
-                    $messages[] = __(
-                        'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
-                        $validationResult->getAllowedErrorsCount()
-                    );
-                } else {
-                    if ($this->isImportAllowed()) {
-                        $messages[] = __('Please fix errors and re-upload the file.');
-                    } else {
-                        $messages[] = __('The file is partially valid, but we can\'t import it for some reason.');
-                    }
-                }
+                $messages[] = __('Data validation is failed. Please fix errors and re-upload the file.');
+
                 // errors info
                 foreach ($validationResult->getRowsGroupedByCode() as $errorMessage => $rows) {
                     $error = $errorMessage . ' ' . __('in rows') . ': ' . implode(', ', $rows);
@@ -291,6 +279,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     $messages[] = __('The file is valid, but we can\'t import it for some reason.');
                 }
             }
+
             $messages[] = __(
                 'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
                 $this->getProcessedRowsCount(),
@@ -564,7 +553,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->hasFatalExceptions();
+        $result = !$errorAggregator->getErrorsCount();
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }

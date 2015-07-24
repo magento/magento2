@@ -234,7 +234,7 @@ abstract class AbstractEntity
 
         $this->errorAggregator->addErrorMessageTemplate(
             self::ERROR_CODE_SYSTEM_EXCEPTION,
-            __('General system exception happened')
+            'General system exception happened'
         );
 
         $entityType = $config->getEntityType($this->getEntityTypeCode());
@@ -583,18 +583,6 @@ abstract class AbstractEntity
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = true;
         }
         return (bool)$valid;
-    }
-
-    /**
-     * Is all of data valid?
-     *
-     * @return bool
-     */
-    public function isDataValid()
-    {
-        /** @var ImportExport\ErrorProcessing\ProcessingErrorAggregatorInterface $errorAggregator */
-        $errorAggregator = $this->validateData();
-        return $errorAggregator->hasFatalExceptions();
     }
 
     /**
