@@ -32,7 +32,7 @@
     <type name="Magento\Customer\Block\SectionConfig">
         <arguments>
             <argument name="clientSideSections" xsi:type="array">
-                <item name="checkoutData" xsi:type="string">checkoutData</item>
+                <item name="checkout-data" xsi:type="string">checkout-data</item>
             </argument>
         </arguments>
     </type>

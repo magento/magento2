@@ -13,7 +13,7 @@ define([
 ], function ($, storage) {
     'use strict';
 
-    var cacheKey = 'checkoutData';
+    var cacheKey = 'checkout-data';
 
     var getData = function () {
         return storage.get(cacheKey)();
