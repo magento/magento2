@@ -3,19 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Asset\PreProcessor;
+namespace Magento\Framework\View\Asset\File;
 
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory for Magento\Framework\View\Asset\PreProcessor\Chain
- * @codeCoverageIgnore
+ * Factory class for \Magento\Framework\View\Asset\File\Context
  */
-class ChainFactory implements ChainFactoryInterface
+class ContextFactory
 {
     /**
-     * Object manager
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -29,10 +26,13 @@ class ChainFactory implements ChainFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Create class instance with specified parameters
+     *
+     * @param array $data
+     * @return \Magento\Framework\View\Asset\File\Context
      */
-    public function create(array $arguments = [])
+    public function create(array $data = [])
     {
-        return $this->objectManager->create(Chain::class, $arguments);
+        return $this->objectManager->create(Context::class, $data);
     }
 }
