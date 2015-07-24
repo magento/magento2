@@ -150,6 +150,7 @@ class DataGrid extends Grid
      */
     public function searchAndOpen(array $filter)
     {
+        $this->search($filter);
         $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->editLink)->click();
