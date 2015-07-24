@@ -134,10 +134,6 @@ class AssertProductForm extends AbstractAssertForm
             $data = $this->sortDataByPath($data, $path);
         }
 
-        if (isset($data['price'])) {
-            $data['price'] = str_replace(',', '', $data['price']);
-        }
-
         return $data;
     }
 
