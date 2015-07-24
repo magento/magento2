@@ -61,7 +61,7 @@ class Iterator extends \Magento\Framework\Object
         }
 
         if (is_string($query)) {
-            if (!$connection instanceof \Zend_Db_Adapter_Abstract) {
+            if (!$connection instanceof AdapterInterface) {
                 throw new LocalizedException(new Phrase('Invalid connection'));
             }
             return $connection->query($query);
