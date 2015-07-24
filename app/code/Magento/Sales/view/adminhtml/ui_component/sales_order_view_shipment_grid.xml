@@ -8,20 +8,23 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid_data_source</item>
-            <item name="deps" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid_data_source</item>
+            <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid_data_source</item>
+            <item name="deps" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">sales_order_shipment_columns</item>
     </argument>
-    <dataSource name="sales_order_shipment_grid_data_source">
+    <dataSource name="sales_order_view_shipment_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">sales_order_shipment_grid_data_source</argument>
+            <argument name="name" xsi:type="string">sales_order_view_shipment_grid_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">increment_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="filter_url_params" xsi:type="array">
+                        <item name="order_id" xsi:type="string">*</item>
+                    </item>
                 </item>
             </argument>
         </argument>
@@ -45,7 +48,7 @@
                     <item name="storageConfig" xsi:type="array">
                         <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
                         <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
-                        <item name="namespace" xsi:type="string">sales_order_shipment_grid</item>
+                        <item name="namespace" xsi:type="string">sales_order_view_shipment_grid</item>
                     </item>
                 </item>
             </argument>
@@ -54,7 +57,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.sales_order_shipment_columns</item>
+                        <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.sales_order_shipment_columns</item>
                     </item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
@@ -83,10 +86,10 @@
         <filterSearch name="fulltext">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid_data_source</item>
-                    <item name="chipsProvider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.listing_filters_chips</item>
+                    <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid_data_source</item>
+                    <item name="chipsProvider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.listing_filters_chips</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.search</item>
                     </item>
                 </item>
@@ -98,13 +101,13 @@
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="dataScope" xsi:type="string">filters</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.filters</item>
                     </item>
                     <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.listing_filters</item>
+                        <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.listing_filters</item>
                         <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                            <item name="visible" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
                         </item>
                     </item>
                 </item>
@@ -123,7 +126,7 @@
                         <item name="dataScope" xsi:type="string">created_at</item>
                         <item name="label" xsi:type="string" translate="true">Ship Date</item>
                         <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.listing_filters</item>
+                            <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.listing_filters</item>
                         </item>
                     </item>
                 </argument>
@@ -162,7 +165,7 @@
                         <item name="dataScope" xsi:type="string">order_created_at</item>
                         <item name="label" xsi:type="string" translate="true">Order Date</item>
                         <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.listing_filters</item>
+                            <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.listing_filters</item>
                         </item>
                     </item>
                 </argument>
@@ -201,7 +204,7 @@
                         <item name="dataScope" xsi:type="string">total_qty</item>
                         <item name="label" xsi:type="string" translate="true">Total Quantity</item>
                         <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.listing_filters</item>
+                            <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.listing_filters</item>
                         </item>
                     </item>
                 </argument>
@@ -316,18 +319,13 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.sales_order_shipment_columns.ids</item>
+                    <item name="selectProvider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.sales_order_shipment_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="actions" xsi:type="array">
                         <item name="pdfshipments_order" xsi:type="array">
                             <item name="type" xsi:type="string">pdfshipments_order</item>
                             <item name="label" xsi:type="string" translate="true">PDF Shipments</item>
                             <item name="url" xsi:type="string">sales/shipment/pdfshipments</item>
-                        </item>
-                        <item name="print_shipping_label" xsi:type="array">
-                            <item name="type" xsi:type="string">print_shipping_label</item>
-                            <item name="label" xsi:type="string" translate="true">Print Shipping Labels</item>
-                            <item name="url" xsi:type="string">adminhtml/shipment/massPrintShippingLabel</item>
                         </item>
                     </item>
                     <item name="indexField" xsi:type="string">entity_id</item>
@@ -338,10 +336,10 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
-                    <item name="selectProvider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.sales_order_shipment_columns.ids</item>
+                    <item name="selectProvider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.sales_order_shipment_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
@@ -373,7 +371,7 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.bookmarks</item>
+                    <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.bookmarks</item>
                     <item name="namespace" xsi:type="string">current</item>
                 </item>
                 <item name="childDefaults" xsi:type="array">
@@ -381,7 +379,7 @@
                     <item name="actionField" xsi:type="string">actions</item>
                     <item name="clickAction" xsi:type="string">view</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.listing_top.bookmarks</item>
                         <item name="root" xsi:type="string">columns.${ $.index }</item>
                         <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
                     </item>
