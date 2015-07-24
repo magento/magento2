@@ -126,12 +126,6 @@ define([
             var selectedBillingAddress = checkoutData.getSelectedBillingAddress(),
                 newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress(),
                 shippingAddress = quote.shippingAddress();
-            if (!selectedBillingAddress && shippingAddress) {
-                //set billing address same as shipping by default if it is not empty
-                if (shippingAddress.countryId != undefined && shippingAddress.canUseForBilling()) {
-                    selectBillingAddress(quote.shippingAddress());
-                }
-            }
 
             if (selectedBillingAddress) {
                 if (selectedBillingAddress == 'new-customer-address' && newCustomerBillingAddressData) {
@@ -143,6 +137,9 @@ define([
                         }
                     });
                 }
+            } else if (shippingAddress && shippingAddress.canUseForBilling()) {
+                //set billing address same as shipping by default if it is not empty
+                selectBillingAddress(quote.shippingAddress());
             }
         }
     }
