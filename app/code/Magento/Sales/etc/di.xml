@@ -37,7 +37,7 @@
     <preference for="Magento\Sales\Api\Data\ShipmentTrackInterface" type="Magento\Sales\Model\Order\Shipment\Track"/>
     <preference for="Magento\Sales\Api\Data\ShipmentTrackSearchResultInterface" type="Magento\Sales\Model\Resource\Order\Shipment\Track\Collection"/>
     <preference for="Magento\Sales\Api\Data\TransactionInterface" type="Magento\Sales\Model\Order\Payment\Transaction"/>
-    <preference for="Magento\Sales\Api\Data\TransactionSearchResultInterface" type="Magento\Sales\Model\Resource\Transaction\Grid\Collection"/>
+    <preference for="Magento\Sales\Api\Data\TransactionSearchResultInterface" type="Magento\Sales\Model\Resource\Transaction\Collection"/>
     <preference for="Magento\Sales\Api\CreditmemoCommentRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoComment\Repository"/>
     <preference for="Magento\Sales\Api\CreditmemoItemRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoItem\Repository"/>
     <preference for="Magento\Sales\Api\CreditmemoRepositoryInterface" type="Magento\Sales\Api\Data\Creditmemo\Repository"/>
