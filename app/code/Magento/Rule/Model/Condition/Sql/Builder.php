@@ -151,7 +151,7 @@ class Builder
         $conditions = $combine->getConditions();
         foreach ($conditions as $key => $condition) {
             /** @var $condition AbstractCondition|Combine */
-            $con = ($getAggregator == 'any' ? \Zend_Db_Select::SQL_OR : \Zend_Db_Select::SQL_AND);
+            $con = ($getAggregator == 'any' ? \Magento\Framework\DB\Select::SQL_OR : \Magento\Framework\DB\Select::SQL_AND);
             $con = (isset($conditions[$key+1]) ? $con : '');
             if ($condition instanceof Combine) {
                 $out .= $this->_getMappedSqlCombination($condition, $value);

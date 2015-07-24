@@ -15,7 +15,7 @@ class Iterator extends \Magento\Framework\Object
     /**
      * Walk over records fetched from query one by one using callback function
      *
-     * @param \Zend_Db_Statement_Interface|Zend_Db_Select|string $query
+     * @param \Zend_Db_Statement_Interface|\Magento\Framework\DB\Select|string $query
      * @param array|string $callbacks
      * @param array $args
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $adapter
@@ -42,12 +42,12 @@ class Iterator extends \Magento\Framework\Object
     /**
      * Fetch Zend statement instance
      *
-     * @param \Zend_Db_Statement_Interface|Zend_Db_Select|string $query
-     * @param \Zend_Db_Adapter_Abstract $conn
+     * @param \Zend_Db_Statement_Interface|\Magento\Framework\DB\Select|string $query
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $conn
      * @return \Zend_Db_Statement_Interface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getStatement($query, $conn = null)
+    protected function _getStatement($query, \Magento\Framework\DB\Adapter\AdapterInterface $conn = null)
     {
         if ($query instanceof \Zend_Db_Statement_Interface) {
             return $query;
@@ -58,11 +58,6 @@ class Iterator extends \Magento\Framework\Object
         }
 
         if (is_string($query)) {
-            if (!$conn instanceof \Zend_Db_Adapter_Abstract) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase('Invalid connection')
-                );
-            }
             return $conn->query($query);
         }
 

@@ -107,13 +107,13 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         // reset columns, order and limitation conditions
-        $select->reset(\Zend_Db_Select::COLUMNS);
-        $select->reset(\Zend_Db_Select::ORDER);
-        $select->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $select->reset(\Zend_Db_Select::LIMIT_OFFSET);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $select->reset(\Magento\Framework\DB\Select::ORDER);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
 
         // remove join with main table
-        $fromPart = $select->getPart(\Zend_Db_Select::FROM);
+        $fromPart = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (!isset(
                 $fromPart[\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS]
             ) || !isset(
@@ -126,22 +126,22 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         // processing FROM part
         $priceIndexJoinPart = $fromPart[\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS];
         $priceIndexJoinConditions = explode('AND', $priceIndexJoinPart['joinCondition']);
-        $priceIndexJoinPart['joinType'] = \Zend_Db_Select::FROM;
+        $priceIndexJoinPart['joinType'] = \Magento\Framework\DB\Select::FROM;
         $priceIndexJoinPart['joinCondition'] = null;
         $fromPart[\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS] = $priceIndexJoinPart;
         unset($fromPart[\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS]);
-        $select->setPart(\Zend_Db_Select::FROM, $fromPart);
+        $select->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
         foreach ($fromPart as $key => $fromJoinItem) {
             $fromPart[$key]['joinCondition'] = $this->_replaceTableAlias($fromJoinItem['joinCondition']);
         }
-        $select->setPart(\Zend_Db_Select::FROM, $fromPart);
+        $select->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
 
         // processing WHERE part
-        $wherePart = $select->getPart(\Zend_Db_Select::WHERE);
+        $wherePart = $select->getPart(\Magento\Framework\DB\Select::WHERE);
         foreach ($wherePart as $key => $wherePartItem) {
             $wherePart[$key] = $this->_replaceTableAlias($wherePartItem);
         }
-        $select->setPart(\Zend_Db_Select::WHERE, $wherePart);
+        $select->setPart(\Magento\Framework\DB\Select::WHERE, $wherePart);
         $excludeJoinPart = \Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS . '.entity_id';
         foreach ($priceIndexJoinConditions as $condition) {
             if (strpos($condition, $excludeJoinPart) !== false) {

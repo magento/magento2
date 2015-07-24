@@ -49,7 +49,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
