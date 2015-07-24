@@ -22,6 +22,7 @@ class Identifier
 
     /**
      * @param \Magento\Framework\App\Request\Http $request
+     * @param \Magento\Framework\App\Http\Context $context
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,

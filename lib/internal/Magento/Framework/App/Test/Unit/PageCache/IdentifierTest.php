@@ -34,7 +34,10 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMockBuilder('\Magento\Framework\App\Http\Context')
             ->getMock();
 
-        $model = new \Magento\Framework\App\PageCache\Identifier($this->getRequestMock($isSecure, $uri, $vary), $contextMock);
+        $model = new \Magento\Framework\App\PageCache\Identifier(
+            $this->getRequestMock($isSecure, $uri, $vary),
+            $contextMock
+        );
         $this->assertEquals($expected, $model->getValue());
 
         $contextMock->expects($this->once())
