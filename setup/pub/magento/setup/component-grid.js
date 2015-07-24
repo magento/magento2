@@ -43,7 +43,9 @@ angular.module('component-grid', ['ngStorage'])
       };
 
       $scope.isAvailableUpdatePackage = function(packageName) {
-          return packageName in $scope.availableUpdatePackages;
+          var isAvailable = typeof $scope.availableUpdatePackages !== 'undefined'
+              && packageName in $scope.availableUpdatePackages;
+          return isAvailable;
       };
 
       $scope.getIndicatorInfo = function(component, type) {
@@ -59,7 +61,7 @@ angular.module('component-grid', ['ngStorage'])
             type = 'icon';
           }
 
-          if (component.name in $scope.availableUpdatePackages) {
+          if ($scope.isAvailableUpdatePackage(component.name)) {
               return indicators.info[type];
           }
           return indicators.on[type];
