@@ -15,7 +15,8 @@ define([
     'Magento_Checkout/js/action/select-shipping-address',
     'Magento_Checkout/js/action/select-shipping-method',
     'Magento_Checkout/js/model/payment-service',
-    'Magento_Checkout/js/action/select-payment-method'
+    'Magento_Checkout/js/action/select-payment-method',
+    'Magento_Checkout/js/model/address-converter'
 ], function (
     addressList,
     quote,
@@ -24,7 +25,8 @@ define([
     selectShippingAddress,
     selectShippingMethodAction,
     paymentService,
-    selectPaymentMethodAction
+    selectPaymentMethodAction,
+    addressConverter
 ) {
     'use strict';
 
@@ -34,6 +36,12 @@ define([
             if (newCustomerShippingAddress) {
                 createShippingAddress(newCustomerShippingAddress);
             }
+
+            if (addressList().length == 0) {
+                var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
+                selectShippingAddress(address);
+            }
+
             var shippingAddress = quote.shippingAddress();
             if (!shippingAddress) {
                 var isShippingAddressInitialized = addressList.some(function (address) {

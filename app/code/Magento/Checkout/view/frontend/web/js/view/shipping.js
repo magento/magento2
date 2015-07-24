@@ -21,7 +21,6 @@ define(
         'Magento_Checkout/js/action/select-shipping-method',
         'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Checkout/js/action/set-shipping-information',
-        'Magento_Checkout/js/model/new-customer-address',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Ui/js/modal/modal',
         'Magento_Checkout/js/model/checkout-data-resolver',
@@ -46,7 +45,6 @@ define(
         selectShippingMethodAction,
         rateRegistry,
         setShippingInformationAction,
-        newAddress,
         stepNavigator,
         modal,
         checkoutDataResolver,
@@ -55,12 +53,7 @@ define(
         $t
     ) {
         'use strict';
-
         var popUp = null;
-        if (addressList().length == 0) {
-            var address = new newAddress({});
-            selectShippingAddress(address);
-        }
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping'
@@ -80,14 +73,10 @@ define(
                 if (!quote.isVirtual()) {
                     stepNavigator.registerStep('shipping', 'Shipping', this.visible, _.bind(this.navigate, this), 10);
                 }
-
                 checkoutDataResolver.resolveShippingAddress();
 
                 var hasNewAddress = addressList.some(function (address) {
-                    if (address.getType() == 'new-customer-address') {
-                        return true;
-                    }
-                    return false;
+                    return address.getType() == 'new-customer-address';
                 });
 
                 this.isNewAddressAdded(hasNewAddress);
