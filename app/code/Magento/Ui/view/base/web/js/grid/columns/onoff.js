@@ -11,7 +11,13 @@ define([
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'ui/grid/cells/onoff'
+            bodyTmpl: 'ui/grid/cells/onoff',
+            imports: {
+                selectedData: '${ $.provider }:data.selectedData'
+            },
+            listens: {
+                '${ $.provider }:reloaded': 'setDefaultSelections'
+            }
         },
 
         /**
@@ -31,6 +37,23 @@ define([
             return this._super();
         },
 
+
+        /**
+         * Sets the ids for preselected elements
+         * @returns void
+         */
+        setDefaultSelections: function() {
+            if(this.selected().length == 0) {
+                for (var key in this.selectedData) {
+                    this.selected.push(key);
+                }
+            }
+        },
+        /**
+         * Show/hide action in the massaction menu
+         * @param actionId
+         * @returns {boolean}
+         */
         isActionRelevant: function (actionId) {
             var relevant = true;
 
