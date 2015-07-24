@@ -84,7 +84,7 @@ class Document extends Object implements DocumentInterface
         $output = [];
         foreach ($this->getData() as $key => $value) {
             $attribute = $this->attributeValueFactory->create();
-            $output[] = $attribute->setValue($key)->setValue($value);
+            $output[] = $attribute->setAttributeCode($key)->setValue($value);
         }
         return $output;
     }
