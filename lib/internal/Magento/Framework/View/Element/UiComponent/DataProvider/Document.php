@@ -34,6 +34,9 @@ class Document extends Object implements DocumentInterface
      */
     public function getId()
     {
+        if (!$this->id) {
+            $this->id = $this->getData($this->getIdFieldName());
+        }
         return $this->id;
     }
 

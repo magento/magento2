@@ -60,6 +60,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
             null
         );
         $this->setMainTable($this->_resource->getTable($mainTable));
+        $this->_setIdFieldName($this->getResource()->getIdFieldName());
     }
 
     /**
