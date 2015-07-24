@@ -10,13 +10,6 @@
 .sync-login-wrap {
     margin: -2.5rem 0 0;
     padding: 0 10% @indent__xl;
-    .messages {
-        + form {
-            .legend {
-                display: none;
-            }
-        }
-    }
 
     .legend {
         .font-size(26);
@@ -27,6 +20,9 @@
         margin: -1rem 0 2.5rem;
         position: static;
         width: 100%;
+        &._hidden {
+            display: none;
+        }
     }
     .login-header {
         .font-size(34);
