@@ -10,6 +10,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Model\Cron\Status;
+use Magento\Setup\Model\ObjectManagerProvider;
 
 class Navigation extends AbstractActionController
 {
@@ -29,16 +30,23 @@ class Navigation extends AbstractActionController
     protected $view;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @param NavModel $navigation
      * @param Status $status
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(NavModel $navigation, Status $status)
+    public function __construct(NavModel $navigation, Status $status, ObjectManagerProvider $objectManagerProvider)
     {
         $this->navigation = $navigation;
         $this->status = $status;
         $this->view = new ViewModel;
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
+        $this->objectManager = $objectManagerProvider->get();
     }
 
     /**
@@ -67,6 +75,9 @@ class Navigation extends AbstractActionController
     {
         $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
         $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
+        /** @var \Magento\Backend\Helper\Data $backendHelper*/
+        $backendHelper = $this->objectManager->get('Magento\Backend\Helper\Data');
+        $this->view->setVariable('homePageUrl', $backendHelper->getHomePageUrl());
         $this->view->setTerminal(true);
         return $this->view;
     }
@@ -82,7 +93,7 @@ class Navigation extends AbstractActionController
             if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
                 $this->view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
             }
-            $this->view->setVariable('headerTitle', 'Magento Setup Tool');
+            $this->view->setVariable('headerTitle', 'Magento Component Manager');
         }
         $this->view->setTemplate('/magento/setup/navigation/header-bar.phtml');
         $this->view->setTerminal(true);
