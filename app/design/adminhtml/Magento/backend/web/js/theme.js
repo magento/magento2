@@ -10,7 +10,6 @@ define('globalNavigationScroll', [
 
     var win = $(window),
         subMenuClass = '.submenu',
-        overlapClassName = '_overlap',
         fixedClassName = '_fixed',
         menu = $('.menu-wrapper'),
         content = $('.page-wrapper'),
@@ -118,8 +117,6 @@ define('globalNavigationScroll', [
         //  Reset position if fixed and out of smart scroll
         if ((menuHeight < contentHeight) && (menuHeight <= winHeight)) {
             menu.removeAttr('style');
-            //  Remove overlap classes from submenus and clear overlap adding event
-            subMenus.removeClass(overlapClassName);
             menuItems.off();
         }
 
@@ -141,10 +138,6 @@ define('globalNavigationScroll', [
             window.scrollTo(0, delta);
             positionMenu();
             menuHeight = submenuHeight;
-        }
-
-        if (isMenuFixed() && (submenuHeight > winHeight)) {
-            checkAddClass(submenu, overlapClassName);
         }
     });
 
