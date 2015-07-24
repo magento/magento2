@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\DeployStaticContentCommand;
+use Magento\Deploy\Console\Command\DeployStaticContentCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Validator\Locale;
 
@@ -17,12 +17,7 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     private $deploymentConfig;
 
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManagerProvider;
-
-    /**
-     * @var \Magento\Setup\Model\Deployer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Deploy\Deployer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $deployer;
 
@@ -30,6 +25,11 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
+
+    /**
+     * @var \Magento\Framework\App\ObjectManagerFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManagerFactory;
 
     /**
      * @var \Magento\Framework\App\Utility\Files|\PHPUnit_Framework_MockObject_MockObject
@@ -48,14 +48,14 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->deployer = $this->getMock('Magento\Setup\Model\Deployer', [], [], '', false);
+        $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
+        $this->deployer = $this->getMock('Magento\Deploy\Deployer', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->filesUtil = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
         $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
         $this->command = new DeployStaticContentCommand(
-            $this->objectManagerProvider,
+            $this->objectManagerFactory,
             $this->deploymentConfig,
             $this->validator
         );
@@ -64,11 +64,11 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $omFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $this->objectManagerProvider->expects($this->any())
+        $this->objectManagerFactory->expects($this->any())
             ->method('get')
             ->will($this->returnValue($this->objectManager));
 
-        $this->objectManagerProvider->expects($this->once())
+        $this->objectManagerFactory->expects($this->once())
             ->method('getObjectManagerFactory')
             ->with([])
             ->willReturn($omFactory);
@@ -97,7 +97,7 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
             ->will($this->returnValue(false));
-        $this->objectManagerProvider->expects($this->never())->method('get');
+        $this->objectManagerFactory->expects($this->never())->method('get');
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertStringMatchesFormat(
