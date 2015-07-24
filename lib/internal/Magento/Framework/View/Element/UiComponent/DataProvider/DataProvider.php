@@ -6,8 +6,9 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class DataProvider
@@ -125,14 +126,6 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * @return \Magento\Framework\Api\Search\SearchResultInterface
-     */
-    public function getCollection()
-    {
-        return $this->searchData();
-    }
-
-    /**
      * Get Data Provider name
      *
      * @return string
@@ -211,18 +204,6 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * Add field to select
-     *
-     * @param string|array $field
-     * @param string|null $alias
-     * @return void
-     */
-    public function addField($field, $alias = null)
-    {
-//        $this->collection->addFieldToSelect($field, $alias);
-    }
-
-    /**
      * self::setOrder() alias
      *
      * @param string $field
@@ -248,25 +229,23 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * Removes field from select
-     *
-     * @param string|null $field
-     * @param bool $isAlias Alias identifier
-     * @return void
+     * @param SearchResultInterface $searchResult
+     * @return array
      */
-    public function removeField($field, $isAlias = false)
+    protected function searchResultToOutput(SearchResultInterface $searchResult)
     {
-//        $this->collection->removeFieldFromSelect($field, $isAlias);
-    }
+        $arrItems = [];
+        $arrItems['totalRecords'] = $searchResult->getTotalCount();
 
-    /**
-     * Removes all fields from select
-     *
-     * @return void
-     */
-    public function removeAllFields()
-    {
-//        $this->collection->removeAllFieldsFromSelect();
+        $arrItems['items'] = [];
+        foreach ($searchResult->getItems() as $item) {
+            $itemData = [];
+            foreach ($item->getCustomAttributes() as $attribute) {
+                $itemData[$attribute->getAttributeCode()] = $attribute->getValue();
+            }
+            $arrItems['items'][] = $itemData;
+        }
+        return $arrItems;
     }
 
     /**
@@ -276,30 +255,9 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
-        return $this->searchData()->toArray();
-    }
-
-    /**
-     * Search data
-     *
-     * @return \Magento\Framework\Api\Search\SearchResultInterface
-     */
-    protected function searchData()
-    {
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchCriteria->setRequestName($this->name);
-
-        return $this->reporting->search($searchCriteria);
-    }
-
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return 10;
+        return $this->searchResultToOutput($this->reporting->search($searchCriteria));
     }
 
     /**
