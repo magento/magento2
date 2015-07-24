@@ -56,7 +56,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->render = new Render($contextMock, $this->uiFactoryMock);
     }
 
-    public function testExecute()
+    public function testExecuteAjaxRequest()
     {
         $name = 'test-name';
         $renderedData = '<html>data</html>';
@@ -94,6 +94,6 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($viewMock);
 
-        $this->render->execute();
+        $this->render->executeAjaxRequest();
     }
 }

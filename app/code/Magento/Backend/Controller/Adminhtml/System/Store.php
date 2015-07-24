@@ -17,7 +17,7 @@ use Magento\Framework\Filesystem;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Store extends Action
+abstract class Store extends Action
 {
     /**
      * Core registry
