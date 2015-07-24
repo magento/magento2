@@ -41,15 +41,15 @@ define([
         /**
          * Initializes observable actions.
          *
-         * Chainable.
+         * Recursive function
          */
         recursiveObserveActions: function (actions) {
-            _.each(actions, function (action) {
+            _.each(actions, function (list, action, context) {
                 if (action.actions) {
                     action.visible = ko.observable(false);
-                    this.recursiveObserveActions(action.actions);
+                    context.recursiveObserveActions(action.actions);
                 }
-            }.bind(this));
+            });
         },
         /**
          * Applies specified action.
