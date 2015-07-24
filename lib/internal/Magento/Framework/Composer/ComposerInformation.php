@@ -243,6 +243,9 @@ class ComposerInformation
     {
         $actualUpdatePackages = [];
         $updatePackagesInfo = $this->loadPackagesForUpdateFromCache();
+        if (!$updatePackagesInfo) {
+            return false;
+        }
         $updatePackages = $updatePackagesInfo['packages'];
         $availablePackages = $this->getRootRequiredPackageTypesByNameVersion();
         foreach ($updatePackages as $package) {
