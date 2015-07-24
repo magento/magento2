@@ -100,7 +100,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->selectMock = $this->getMock(
-            'Zend_Db_Select',
+            'Magento\Framework\DB\Select',
             ['from', 'where', 'group'],
             [],
             '',

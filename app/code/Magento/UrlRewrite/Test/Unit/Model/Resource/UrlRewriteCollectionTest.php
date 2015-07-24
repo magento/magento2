@@ -20,17 +20,17 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
-     * @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $adapter;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connection;
 
@@ -42,7 +42,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->select = $this->getMock('Zend_Db_Select', ['from', 'where'], [], '', false);
+        $this->select = $this->getMock('Magento\Framework\DB\Select', ['from', 'where'], [], '', false);
         $this->adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'prepareSqlCondition', 'quoteIdentifier'],

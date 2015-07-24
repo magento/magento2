@@ -98,10 +98,10 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
         // clone select from collection with filters
         $select = clone $collection->getSelect();
         // reset columns, order and limitation conditions
-        $select->reset(\Zend_Db_Select::COLUMNS);
-        $select->reset(\Zend_Db_Select::ORDER);
-        $select->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $select->reset(\Zend_Db_Select::LIMIT_OFFSET);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $select->reset(\Magento\Framework\DB\Select::ORDER);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
 
         $attributeId = $filter->getAttributeModel()->getId();
         $storeId = $collection->getStoreId();

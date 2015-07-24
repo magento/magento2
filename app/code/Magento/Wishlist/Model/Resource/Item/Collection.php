@@ -150,7 +150,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
      * @param \Magento\Wishlist\Model\Resource\Item $resource
      * @param \Magento\Framework\App\State $appState
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -172,7 +172,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
         \Magento\Wishlist\Model\Resource\Item $resource,
         \Magento\Framework\App\State $appState,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->_adminhtmlSales = $adminhtmlSales;
@@ -376,7 +376,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function resetSortOrder()
     {
-        $this->getSelect()->reset(\Zend_Db_Select::ORDER);
+        $this->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
         return $this;
     }
 

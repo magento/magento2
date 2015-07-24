@@ -75,7 +75,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getQuoteIdentifierSymbol()
     {
-        /** @var \Zend_Db_Adapter_Abstract $adapter */
+        /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $adapter */
         $adapter = $this->_collection->getConnection();
         $quote = $adapter->getQuoteIdentifierSymbol();
         return $quote;

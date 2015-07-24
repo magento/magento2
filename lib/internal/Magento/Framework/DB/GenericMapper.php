@@ -91,7 +91,7 @@ class GenericMapper extends AbstractMapper
      */
     public function mapFields(array $fields)
     {
-        $columns = $this->getSelect()->getPart(\Zend_Db_Select::COLUMNS);
+        $columns = $this->getSelect()->getPart(\Magento\Framework\DB\Select::COLUMNS);
         $selectedUniqueNames = [];
         foreach ($fields as $fieldInfo) {
             if (is_string($fieldInfo)) {
@@ -112,7 +112,7 @@ class GenericMapper extends AbstractMapper
             $selectedUniqueNames[] = $selectedUniqueName;
             $columns[] = [$correlationName, $field, $alias];
         }
-        $this->getSelect()->setPart(\Zend_Db_Select::COLUMNS, $columns);
+        $this->getSelect()->setPart(\Magento\Framework\DB\Select::COLUMNS, $columns);
     }
 
     /**

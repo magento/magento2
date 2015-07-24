@@ -54,7 +54,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param AbstractDb $resource
      */
     public function __construct(
@@ -63,7 +63,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
@@ -241,8 +241,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         if ($attribute == '*') {
             // Save previous selected columns
-            $columns = $this->getSelect()->getPart(\Zend_Db_Select::COLUMNS);
-            $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
+            $columns = $this->getSelect()->getPart(\Magento\Framework\DB\Select::COLUMNS);
+            $this->getSelect()->reset(\Magento\Framework\DB\Select::COLUMNS);
             foreach ($columns as $column) {
                 if ($column[0] == 'main_table') {
                     // If column selected from main table,

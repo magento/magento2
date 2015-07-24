@@ -52,7 +52,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
      * @param string $field
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {

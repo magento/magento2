@@ -77,7 +77,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
      */
     protected function getUniversalFactory()
     {
-        $connection = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
