@@ -10,9 +10,21 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="publisher" type="publisherType" maxOccurs="unbounded" minOccurs="0"/>
-                <xs:element type="topicType" name="topic" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element name="topic" type="topicType" maxOccurs="unbounded" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
+        <xs:unique name="topic-unique-name">
+            <xs:selector xpath="topic"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:key name="publisher-name">
+            <xs:selector xpath="publisher"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:keyref name="publisher-ref" refer="publisher-name">
+            <xs:selector xpath="topic"/>
+            <xs:field xpath="@publisher"/>
+        </xs:keyref>
     </xs:element>
     <xs:complexType name="publisherType">
         <xs:attribute type="xs:string" name="name" use="required"/>
