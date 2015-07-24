@@ -94,4 +94,14 @@ class Interception implements OperationInterface
         $configuration = $this->interceptionConfigurationBuilder->getInterceptionConfiguration($classesList);
         $generator->generateList($configuration);
     }
+
+    /**
+     * Returns operation name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Interceptors generation';
+    }
 }

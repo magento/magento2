@@ -114,6 +114,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $arguments = [
             'scopeConfig' => $scopeConfig,
+            'xmlSecurity' => new \Magento\Framework\Xml\Security(),
             'xmlElFactory' => $xmlElFactory,
             'rateFactory' => $rateFactory,
             'rateMethodFactory' => $rateMethodFactory,
