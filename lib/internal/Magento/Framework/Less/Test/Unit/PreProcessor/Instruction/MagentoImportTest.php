@@ -76,7 +76,7 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($originalContent, $foundPath, $resolvedPath, $foundFiles, $expectedContent)
     {
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css');
+        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css', 'path');
         $relatedAsset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
         $relatedAsset->expects($this->once())
             ->method('getFilePath')
@@ -163,7 +163,7 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
     {
         $originalContent = 'color: #000000;';
         $expectedContent = 'color: #000000;';
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css');
+        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css', 'orig');
         $this->assetRepo->expects($this->never())
             ->method('createRelated');
         $this->object->process($chain);
@@ -174,7 +174,7 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
     public function testProcessException()
     {
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
-            $this->asset, '//@magento_import "some/file.css";', 'css'
+            $this->asset, '//@magento_import "some/file.css";', 'css', 'path'
         );
         $exception = new \LogicException('Error happened');
         $this->assetRepo->expects($this->once())
