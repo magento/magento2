@@ -129,62 +129,6 @@ class Order
     }
 
     /**
-     * Prepare order shipment based on order items and requested items qty
-     *
-     * @param array $qtys
-     * @return \Magento\Sales\Model\Order\Shipment
-     */
-    public function prepareShipment($qtys = [])
-    {
-        $totalQty = 0;
-        $shipment = $this->_convertor->toShipment($this->_order);
-        foreach ($this->_order->getAllItems() as $orderItem) {
-            if (!$this->_canShipItem($orderItem, $qtys)) {
-                continue;
-            }
-
-            $item = $this->_convertor->itemToShipmentItem($orderItem);
-
-            if ($orderItem->isDummy(true)) {
-                $qty = 0;
-                if (isset($qtys[$orderItem->getParentItemId()])) {
-                    $productOptions = $orderItem->getProductOptions();
-                    if (isset($productOptions['bundle_selection_attributes'])) {
-                        $bundleSelectionAttributes = unserialize($productOptions['bundle_selection_attributes']);
-
-                        if ($bundleSelectionAttributes) {
-                            $qty = $bundleSelectionAttributes['qty'] * $qtys[$orderItem->getParentItemId()];
-                            $qty = min($qty, $orderItem->getSimpleQtyToShip());
-
-                            $item->setQty($qty);
-                            $shipment->addItem($item);
-                            continue;
-                        } else {
-                            $qty = 1;
-                        }
-                    }
-                } else {
-                    $qty = 1;
-                }
-            } else {
-                if (isset($qtys[$orderItem->getId()])) {
-                    $qty = min($qtys[$orderItem->getId()], $orderItem->getQtyToShip());
-                } elseif (!count($qtys)) {
-                    $qty = $orderItem->getQtyToShip();
-                } else {
-                    continue;
-                }
-            }
-            $totalQty += $qty;
-            $item->setQty($qty);
-            $shipment->addItem($item);
-        }
-
-        $shipment->setTotalQty($totalQty);
-        return $shipment;
-    }
-
-    /**
      * Prepare order creditmemo based on order items and requested params
      *
      * @param array $data
@@ -376,53 +320,6 @@ class Order
             }
         } else {
             return $item->getQtyToInvoice() > 0;
-        }
-    }
-
-    /**
-     * Check if order item can be shipped. Dummy item can be shipped or with his children or
-     * with parent item which is included to shipment
-     *
-     * @param \Magento\Sales\Model\Order\Item $item
-     * @param array $qtys
-     * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _canShipItem($item, $qtys = [])
-    {
-        if ($item->getIsVirtual() || $item->getLockedDoShip()) {
-            return false;
-        }
-        if ($item->isDummy(true)) {
-            if ($item->getHasChildren()) {
-                if ($item->isShipSeparately()) {
-                    return true;
-                }
-                foreach ($item->getChildrenItems() as $child) {
-                    if ($child->getIsVirtual()) {
-                        continue;
-                    }
-                    if (empty($qtys)) {
-                        if ($child->getQtyToShip() > 0) {
-                            return true;
-                        }
-                    } else {
-                        if (isset($qtys[$child->getId()]) && $qtys[$child->getId()] > 0) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            } elseif ($item->getParentItem()) {
-                $parent = $item->getParentItem();
-                if (empty($qtys)) {
-                    return $parent->getQtyToShip() > 0;
-                } else {
-                    return isset($qtys[$parent->getId()]) && $qtys[$parent->getId()] > 0;
-                }
-            }
-        } else {
-            return $item->getQtyToShip() > 0;
         }
     }
 

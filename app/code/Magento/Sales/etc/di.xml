@@ -54,7 +54,7 @@
     <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Api\Data\OrderStatusHistory\Repository"/>
     <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentComment\Repository"/>
     <preference for="Magento\Sales\Api\ShipmentItemRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentItem\Repository"/>
-    <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Api\Data\Shipment\Repository"/>
+    <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Model\Order\ShipmentRepository"/>
     <preference for="Magento\Sales\Api\ShipmentManagementInterface" type="Magento\Sales\Model\Service\ShipmentService"/>
     <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentTrack\Repository"/>
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\TransactionRepository"/>
@@ -573,17 +573,28 @@
             <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Sales\Model\OrderRepository">
+    <virtualType name="shipmentMetadata" type="Magento\Sales\Model\Resource\Metadata">
         <arguments>
-            <argument name="metadata" xsi:type="object">orderMetadata</argument>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order\Shipment</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Shipment</argument>
         </arguments>
-    </type>
+    </virtualType>
     <virtualType name="transactionMetaData" type="Magento\Sales\Model\Resource\Metadata">
         <arguments>
             <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Payment\Transaction</argument>
             <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Payment\Transaction</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Sales\Model\OrderRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">orderMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\ShipmentRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">shipmentMetadata</argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Model\Order\Payment\TransactionRepository">
         <arguments>
             <argument name="metaData" xsi:type="object">transactionMetaData</argument>

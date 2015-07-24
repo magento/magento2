@@ -1872,18 +1872,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Create new shipment with maximum qty for shipping for each item
-     *
-     * @param array $qtys
-     * @return \Magento\Sales\Model\Order\Shipment
-     */
-    public function prepareShipment($qtys = [])
-    {
-        $shipment = $this->_serviceOrderFactory->create(['order' => $this])->prepareShipment($qtys);
-        return $shipment;
-    }
-
-    /**
      * Check whether order is canceled
      *
      * @return bool
