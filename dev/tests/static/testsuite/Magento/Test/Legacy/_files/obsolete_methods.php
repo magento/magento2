@@ -2338,6 +2338,8 @@ return [
     ['getChilds', 'Magento\Bundle\Block\Sales\Order\Items\Renderer', 'getChildren'],
     ['getChilds', 'Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems', 'getChildren'],
     ['prepareIndexdata', 'Magento\Search\Helper\Data'],
+    ['isAssetMinification', 'Magento\Framework\View\Asset\ConfigInterface', 'Magento\Framework\View\Asset\Minification::isEnabled'],
+    ['isAssetMinification', 'Magento\Framework\View\Asset\Config', 'Magento\Framework\View\Asset\Minification::isEnabled'],
     ['getPriceValues', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'],
     ['getPricingValue', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue'],
     ['getIsPercent', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue'],
