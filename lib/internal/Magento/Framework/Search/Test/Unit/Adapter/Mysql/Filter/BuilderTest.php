@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface;
@@ -101,7 +102,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                                 $filter->getTo()
                             );
                         }
-                        $unionOperator = $isNegation ? \Magento\Framework\DB\Select::SQL_OR : \Magento\Framework\DB\Select::SQL_AND;
+                        $unionOperator = $isNegation ? Select::SQL_OR : Select::SQL_AND;
 
                         return $this->conditionManager->combineQueries([$fromCondition, $toCondition], $unionOperator);
                     }

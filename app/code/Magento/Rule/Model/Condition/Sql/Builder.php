@@ -6,6 +6,7 @@
 
 namespace Magento\Rule\Model\Condition\Sql;
 
+use Magento\Framework\DB\Select;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
 
@@ -151,7 +152,7 @@ class Builder
         $conditions = $combine->getConditions();
         foreach ($conditions as $key => $condition) {
             /** @var $condition AbstractCondition|Combine */
-            $con = ($getAggregator == 'any' ? \Magento\Framework\DB\Select::SQL_OR : \Magento\Framework\DB\Select::SQL_AND);
+            $con = ($getAggregator == 'any' ? Select::SQL_OR : Select::SQL_AND);
             $con = (isset($conditions[$key+1]) ? $con : '');
             if ($condition instanceof Combine) {
                 $out .= $this->_getMappedSqlCombination($condition, $value);

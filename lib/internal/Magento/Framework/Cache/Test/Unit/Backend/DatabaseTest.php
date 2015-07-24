@@ -488,7 +488,13 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'distinct', 'where', 'group', 'having'], [], '', false);
+        $selectMock = $this->getMock(
+            'Magento\Framework\DB\Select',
+            ['from', 'distinct', 'where', 'group', 'having'],
+            [],
+            '',
+            false
+        );
 
         $selectMock->expects($this->any())
             ->method('from')
@@ -534,7 +540,13 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'distinct', 'where', 'group', 'having'], [], '', false);
+        $selectMock = $this->getMock(
+            'Magento\Framework\DB\Select',
+            ['from', 'distinct', 'where', 'group', 'having'],
+            [],
+            '',
+            false
+        );
 
         $selectMock->expects($this->any())
             ->method('from')
