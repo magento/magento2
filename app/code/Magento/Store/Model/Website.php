@@ -297,7 +297,8 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getGroupCollection()
     {
-        return $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($this->getId());
+        return $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($this->getId())
+            ->setLoadDefault(true);
     }
 
     /**
@@ -403,7 +404,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getStoreCollection()
     {
-        return $this->storeListFactory->create()->addWebsiteFilter($this->getId());
+        return $this->storeListFactory->create()->addWebsiteFilter($this->getId())->setLoadDefault(true);
     }
 
     /**
@@ -482,7 +483,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getWebsiteGroupStore()
     {
-        return join('-', [$this->getWebsiteId(), $this->getGroupId(), $this->getStoreId()]);
+        return implode('-', [$this->getWebsiteId(), $this->getGroupId(), $this->getStoreId()]);
     }
 
     /**
