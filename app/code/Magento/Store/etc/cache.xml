@@ -18,14 +18,6 @@
         <label>Blocks HTML output</label>
         <description>Page blocks HTML.</description>
     </type>
-    <type name="view_files_fallback" translate="label,description" instance="Magento\Framework\View\Design\FileResolution\Fallback\Cache">
-        <label>View files fallback</label>
-        <description>Paths to view files (e.g., PHTML templates, images, CSS, JS files).</description>
-    </type>
-    <type name="view_files_preprocessing" translate="label,description" instance="Magento\Framework\View\Asset\PreProcessor\Cache">
-        <label>View files pre-processing</label>
-        <description>Paths to pre-processed view files (e.g, CSS files with fixed paths or generated from LESS files).</description>
-    </type>
     <type name="collections" translate="label,description" instance="Magento\Framework\App\Cache\Type\Collection">
         <label>Collections Data</label>
         <description>Collection data files.</description>
