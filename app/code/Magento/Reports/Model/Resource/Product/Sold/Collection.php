@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\Resource\Product\Sold;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Collection extends \Magento\Reports\Model\Resource\Order\Collection
 {
     /**
