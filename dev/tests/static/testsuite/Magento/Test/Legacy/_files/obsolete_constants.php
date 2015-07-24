@@ -731,6 +731,12 @@ return [
     ],
     ['CURRENT_CUSTOMER', 'Magento\Customer\Controller\RegistryConstants'],
     ['METHOD_WPS', 'Magento\Paypal\Model\Config'],
+    [
+        'XML_PATH_MINIFICATION_ENABLED',
+        'Magento\Framework\View\Asset\Config',
+        'Magento\Framework\View\Asset\Minification::XML_PATH_MINIFICATION_ENABLED'
+    ],
+    ['XML_PATH_MINIFICATION_ADAPTER', 'Magento\Framework\View\Asset\Config'],
     ['ERROR_INVALID_PRICE_CORRECTION', 'Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
     ['EXCEPTION_CODE_NOT_SALABLE', 'Magento\Wishlist\Model\Item'],
     ['EXCEPTION_CODE_HAS_REQUIRED_OPTIONS', 'Magento\Wishlist\Model\Item'],
