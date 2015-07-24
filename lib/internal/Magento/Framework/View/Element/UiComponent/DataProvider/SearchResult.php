@@ -51,7 +51,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
         $resourceModel
     ) {
         $this->_init('Magento\Framework\View\Element\UiComponent\DataProvider\Document', $resourceModel);
-        $this->setMainTable($mainTable);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -60,6 +59,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
             null,
             null
         );
+        $this->setMainTable($this->_resource->getTable($mainTable));
     }
 
     /**

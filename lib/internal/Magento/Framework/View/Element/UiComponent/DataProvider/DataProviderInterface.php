@@ -80,15 +80,6 @@ interface DataProviderInterface
     public function getData();
 
     /**
-     * Add field to select
-     *
-     * @param string|array $field
-     * @param string|null $alias
-     * @return void
-     */
-    public function addField($field, $alias = null);
-
-    /**
      * Add field filter to collection
      *
      * @param \Magento\Framework\Api\Filter $filter
@@ -113,27 +104,4 @@ interface DataProviderInterface
      * @return void
      */
     public function setLimit($offset, $size);
-
-    /**
-     * Removes field from select
-     *
-     * @param string|null $field
-     * @param bool $isAlias Alias identifier
-     * @return void
-     */
-    public function removeField($field, $isAlias = false);
-
-    /**
-     * Removes all fields from select
-     *
-     * @return void
-     */
-    public function removeAllFields();
-
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count();
 }
