@@ -23,6 +23,11 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     protected $actionFactory;
 
     /**
+     * @var StructureFactory
+     */
+    protected $structureFactory;
+
+    /**
      * @var \Magento\Framework\Mview\ViewInterface
      */
     protected $view;
@@ -53,6 +58,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     public function __construct(
         ConfigInterface $config,
         ActionFactory $actionFactory,
+        StructureFactory $structureFactory,
         \Magento\Framework\Mview\ViewInterface $view,
         Indexer\StateFactory $stateFactory,
         Indexer\CollectionFactory $indexersFactory,
@@ -60,6 +66,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
+        $this->structureFactory = $structureFactory;
         $this->view = $view;
         $this->stateFactory = $stateFactory;
         $this->indexersFactory = $indexersFactory;
@@ -352,7 +359,23 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     protected function getActionInstance()
     {
-        return $this->actionFactory->create($this->getActionClass(), ['data' => $this->getData()]);
+        return $this->actionFactory->create(
+            $this->getActionClass(),
+            [
+                'indexStructure' => $this->getStructureInstance(),
+                'data' => $this->getData(),
+            ]
+        );
+    }
+
+    /**
+     * Return indexer structure instance
+     *
+     * @return IndexStructureInterface
+     */
+    protected function getStructureInstance()
+    {
+        return $this->structureFactory->create($this->getData('structure'));
     }
 
     /**

@@ -14,7 +14,7 @@ use Magento\Framework\Stdlib\String as StdString;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
-use Magento\Indexer\Model\IndexStructure;
+use Magento\Indexer\Model\IndexStructureInterface;
 use Magento\Indexer\Model\SaveHandlerFactory;
 use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
@@ -100,7 +100,7 @@ class Base implements ActionInterface
     protected $string;
 
     /**
-     * @var IndexStructure
+     * @var IndexStructureInterface
      */
     protected $indexStructure;
 
@@ -126,7 +126,7 @@ class Base implements ActionInterface
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param FieldsetPool $fieldsetPool
      * @param StdString $string
-     * @param IndexStructure $indexStructure
+     * @param IndexStructureInterface $indexStructure
      * @param array $data
      */
     public function __construct(
@@ -136,7 +136,7 @@ class Base implements ActionInterface
         SaveHandlerFactory $saveHandlerFactory,
         FieldsetPool $fieldsetPool,
         StdString $string,
-        IndexStructure $indexStructure,
+        IndexStructureInterface $indexStructure,
         $data = []
     ) {
         $this->connection = $resource->getConnection('write');
@@ -159,7 +159,7 @@ class Base implements ActionInterface
     {
         $this->prepareFields();
         $this->indexStructure->delete($this->getTableName());
-        $this->indexStructure->create($this->getTableName(), $this->filterable);
+        $this->indexStructure->create($this->getTableName(), array_merge($this->filterable, $this->searchable));
         $this->getSaveHandler()->cleanIndex([]);
         $this->getSaveHandler()->saveIndex([], $this->prepareDataSource($ids));
     }
