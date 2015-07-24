@@ -15,7 +15,7 @@ use Magento\Framework\View\Result\LayoutFactory;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-class Transactions extends \Magento\Backend\App\Action
+abstract class Transactions extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

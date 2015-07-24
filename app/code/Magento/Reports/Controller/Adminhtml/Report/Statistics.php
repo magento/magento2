@@ -14,7 +14,7 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Backend\Model\Session;
 
-class Statistics extends \Magento\Backend\App\Action
+abstract class Statistics extends \Magento\Backend\App\Action
 {
     /**
      * Admin session model
