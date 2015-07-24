@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Console\Command;
+namespace Magento\Deploy\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Symfony\Component\Console\Input\InputArgument;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Validator\Locale;
 
 /**
@@ -31,9 +31,9 @@ class DeployStaticContentCommand extends Command
     const LANGUAGE_OPTION = 'languages';
 
     /**
-     * Object manager provider
+     * Object manager factory
      *
-     * @var ObjectManagerProvider
+     * @var ObjectManagerFactory;
      */
     private $objectManagerProvider;
 
@@ -52,16 +52,16 @@ class DeployStaticContentCommand extends Command
     /**
      * Inject dependencies
      *
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param ObjectManagerFactory $objectManagerFactory
      * @param DeploymentConfig $deploymentConfig
      * @param Locale $validator
      */
     public function __construct(
-        ObjectManagerProvider $objectManagerProvider,
+        ObjectManagerFactory $objectManagerFactory,
         DeploymentConfig $deploymentConfig,
         Locale $validator
     ) {
-        $this->objectManagerProvider = $objectManagerProvider;
+        $this->objectManagerFactory = $objectManagerFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->validator = $validator;
         parent::__construct();
@@ -114,7 +114,7 @@ class DeployStaticContentCommand extends Command
         }
 
         try {
-            $objectManager = $this->objectManagerProvider->get();
+            $objectManager = $this->objectManagerFactory->create([]);
 
             // run the deployment logic
             $filesUtil = $objectManager->create(
@@ -122,18 +122,15 @@ class DeployStaticContentCommand extends Command
                 ['pathToSource' => BP]
             );
 
-            $objectManagerFactory = $this->objectManagerProvider->getObjectManagerFactory();
-
-            /** @var \Magento\Setup\Model\Deployer $deployer */
             $deployer = $objectManager->create(
-                'Magento\Setup\Model\Deployer',
+                'Magento\Deploy\Deployer',
                 ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
             );
-            $deployer->deploy($objectManagerFactory, $languages);
+            $deployer->deploy($this->objectManagerFactory, $languages);
 
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>>');
-            if ($output->isVerbose()) {
+            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
             return;
