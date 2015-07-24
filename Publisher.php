@@ -6,7 +6,7 @@
 namespace Magento\Framework\Amqp;
 
 /**
- * Class which creates Producers
+ * Client class which will publish any message
  */
 class Publisher
 {
@@ -31,7 +31,7 @@ class Publisher
      *
      * @param string $topicName
      * @param object $data
-     * @return ProducerInterface
+     * @return void
      */
     public function publish($topicName, $data)
     {
