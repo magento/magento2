@@ -10,6 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
+use Magento\Catalog\Model\Resource\Product\CollectionFactory;
 
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -21,6 +22,11 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $filter;
 
     /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
      * @param Context $context
      * @param Builder $productBuilder
      * @param Filter $filter
@@ -28,9 +34,11 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
     public function __construct(
         Context $context,
         Builder $productBuilder,
-        Filter $filter
+        Filter $filter,
+        CollectionFactory $collectionFactory
     ) {
         $this->filter = $filter;
+        $this->collectionFactory = $collectionFactory;
         parent::__construct($context, $productBuilder);
     }
 
@@ -39,7 +47,7 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $collection = $this->filter->getCollection();
+        $collection = $this->filter->getCollection($this->collectionFactory->create());
 
         foreach ($collection->getItems() as $product) {
             $product->delete();

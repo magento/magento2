@@ -13,8 +13,8 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\Order\Pdf\Shipment;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory;
-use Magento\Sales\Model\Resource\Order\Collection as OrderCollection;
+use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
+use Magento\Sales\Model\Resource\Order\CollectionFactory;
 
 class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -34,9 +34,9 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
     protected $pdfShipment;
 
     /**
-     * @var CollectionFactory
+     * @var ShipmentCollectionFactory
      */
-    protected $collectionFactory;
+    protected $shipmentCollectionFactotory;
 
     /**
      * @param CollectionFactory $collectionFactory
@@ -52,12 +52,14 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
         DateTime $dateTime,
         FileFactory $fileFactory,
         Filter $filter,
-        Shipment $shipment
+        Shipment $shipment,
+        ShipmentCollectionFactory $shipmentCollectionFactory
     ) {
         $this->fileFactory = $fileFactory;
         $this->dateTime = $dateTime;
         $this->pdfShipment = $shipment;
         $this->collectionFactory = $collectionFactory;
+        $this->shipmentCollectionFactotory = $shipmentCollectionFactory;
         parent::__construct($context, $filter);
     }
 
@@ -69,7 +71,9 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
      */
     protected function massAction(AbstractCollection $collection)
     {
-        $shipmentsCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
+        $shipmentsCollection = $this->shipmentCollectionFactotory
+            ->create()
+            ->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$shipmentsCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
             return $this->resultRedirectFactory->create()->setPath('sales/*/');

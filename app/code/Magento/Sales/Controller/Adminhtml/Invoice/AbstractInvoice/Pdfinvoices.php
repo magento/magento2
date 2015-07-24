@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Pdf\Invoice;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Backend\App\Action\Context;
-use Magento\Sales\Model\Resource\Order\Collection as OrderCollection;
+use Magento\Sales\Model\Resource\Order\Invoice\CollectionFactory;
 
 abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -45,11 +45,13 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
         Filter $filter,
         DateTime $dateTime,
         FileFactory $fileFactory,
-        Invoice $pdfInvoice
+        Invoice $pdfInvoice,
+        CollectionFactory $collectionFactory
     ) {
         $this->fileFactory = $fileFactory;
         $this->dateTime = $dateTime;
         $this->pdfInvoice = $pdfInvoice;
+        $this->collectionFactory = $collectionFactory;
         parent::__construct($context, $filter);
     }
 

@@ -14,11 +14,9 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Backend\App\Action\Context;
 use Magento\Shipping\Model\Shipping\LabelGenerator;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Sales\Model\Order\Pdf\Shipment;
-use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory;
-use Magento\Sales\Model\Resource\Order\Collection as OrderCollection;
+use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Sales\Model\Resource\Order\CollectionFactory;
 
 class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -38,6 +36,11 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
     protected $collectionFactory;
 
     /**
+     * @var ShipmentCollectionFactory
+     */
+    protected $shipmentCollectionFactory;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param Context $context
      * @param FileFactory $fileFactory
@@ -49,10 +52,12 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
         Context $context,
         FileFactory $fileFactory,
         Filter $filter,
-        LabelGenerator $labelGenerator
+        LabelGenerator $labelGenerator,
+        ShipmentCollectionFactory $shipmentCollectionFactory
     ) {
         $this->fileFactory = $fileFactory;
         $this->collectionFactory = $collectionFactory;
+        $this->shipmentCollectionFactory = $shipmentCollectionFactory;
         $this->labelGenerator = $labelGenerator;
         parent::__construct($context, $filter);
     }
@@ -75,7 +80,7 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
     protected function massAction(AbstractCollection $collection)
     {
         $labelsContent = [];
-        $shipments = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
+        $shipments = $this->shipmentCollectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
 
         if ($shipments->getSize()) {
             /** @var \Magento\Sales\Model\Order\Shipment $shipment */

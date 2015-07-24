@@ -14,6 +14,7 @@ use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\Order\Pdf\Shipment;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Sales\Model\Resource\Shipment\CollectionFactory;
 
 abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -44,11 +45,13 @@ abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\Ab
         Filter $filter,
         DateTime $dateTime,
         FileFactory $fileFactory,
-        Shipment $shipment
+        Shipment $shipment,
+        CollectionFactory $collectionFactory
     ) {
         $this->fileFactory = $fileFactory;
         $this->dateTime = $dateTime;
         $this->pdfShipment = $shipment;
+        $this->collectionFactory = $collectionFactory;
         parent::__construct($context, $filter);
     }
 
