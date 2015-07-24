@@ -62,8 +62,8 @@ abstract class AbstractIndexerCommand extends Command
             /** @var \Magento\Framework\App\State $appState */
             $appState = $this->objectManager->get('Magento\Framework\App\State');
             $appState->setAreaCode($area);
-            $configLocator = $this->objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
-            $this->objectManager->configure($configLocator->load($area));
+            $configLoader = $this->objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
+            $this->objectManager->configure($configLoader->load($area));
         }
         return $this->objectManager;
     }

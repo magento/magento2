@@ -5,10 +5,15 @@
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\ObjectManagerFactory;
 
 class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager\ConfigLoader
+     */
+    private $configLoaderMock;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|IndexerFactory
      */
@@ -41,10 +46,14 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
         $this->objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
 
         $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->configLoaderMock = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
+
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->with('Magento\Framework\App\State')
-            ->willReturn($this->stateMock);
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\State', $this->stateMock],
+                ['Magento\Framework\App\ObjectManager\ConfigLoader', $this->configLoaderMock]
+            ]));
 
         $this->collectionFactory = $this->getMockBuilder('Magento\Indexer\Model\Indexer\CollectionFactory')
             ->disableOriginalConstructor()
@@ -62,5 +71,20 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
                 ['Magento\Indexer\Model\Indexer\CollectionFactory', [], $this->collectionFactory],
                 ['Magento\Indexer\Model\IndexerFactory', [], $this->indexerFactory],
             ]));
+    }
+
+    protected function configureAdminArea()
+    {
+        $config = ['test config'];
+        $this->configLoaderMock->expects($this->once())
+            ->method('load')
+            ->with(FrontNameResolver::AREA_CODE)
+            ->will($this->returnValue($config));
+        $this->objectManager->expects($this->once())
+            ->method('configure')
+            ->with($config);
+        $this->stateMock->expects($this->once())
+            ->method('setAreaCode')
+            ->with(FrontNameResolver::AREA_CODE);
     }
 }
