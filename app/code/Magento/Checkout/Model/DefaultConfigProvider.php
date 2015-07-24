@@ -270,49 +270,48 @@ class DefaultConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $quoteId = $this->checkoutSession->getQuote()->getId();
-        return [
-            'formKey' => $this->formKey->getFormKey(),
-            'customerData' => $this->getCustomerData(),
-            'quoteData' => $this->getQuoteData(),
-            'quoteItemData' => $this->getQuoteItemData(),
-            'isCustomerLoggedIn' => $this->isCustomerLoggedIn(),
-            'selectedShippingMethod' => $this->getSelectedShippingMethod(),
-            'storeCode' => $this->getStoreCode(),
-            'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
-            'isCustomerLoginRequired' => $this->isCustomerLoginRequired(),
-            'registerUrl' => $this->getRegisterUrl(),
-            'checkoutUrl' => $this->getCheckoutUrl(),
-            'forgotPasswordUrl' => $this->getForgotPasswordUrl(),
-            'staticBaseUrl' => $this->getStaticBaseUrl(),
-            'priceFormat' => $this->localeFormat->getPriceFormat(
-                null,
-                $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
+        $output['formKey'] = $this->formKey->getFormKey();
+        $output['customerData'] = $this->getCustomerData();
+        $output['quoteData'] = $this->getQuoteData();
+        $output['quoteItemData'] = $this->getQuoteItemData();
+        $output['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
+        $output['selectedShippingMethod'] = $this->getSelectedShippingMethod();
+        $output['storeCode'] = $this->getStoreCode();
+        $output['isGuestCheckoutAllowed'] = $this->isGuestCheckoutAllowed();
+        $output['isCustomerLoginRequired'] = $this->isCustomerLoginRequired();
+        $output['registerUrl'] = $this->getRegisterUrl();
+        $output['checkoutUrl'] = $this->getCheckoutUrl();
+        $output['forgotPasswordUrl'] = $this->getForgotPasswordUrl();
+        $output['staticBaseUrl'] = $this->getStaticBaseUrl();
+        $output['priceFormat'] = $this->localeFormat->getPriceFormat(
+            null,
+            $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
+        );
+        $output['basePriceFormat'] = $this->localeFormat->getPriceFormat(
+            null,
+            $this->currencyManager->getDefaultCurrency()
+        );
+        $output['postCodes'] = $this->postCodesConfig->getPostCodes();
+        $output['imageData'] = $this->imageProvider->getImages($quoteId);
+        $output['countryData'] = $this->getCountryData();
+        $output['defaultCountryId'] = $this->directoryHelper->getDefaultCountry();
+        $output['totalsData'] = $this->getTotalsData();
+        $output['shippingPolicy'] = [
+            'isEnabled' => $this->scopeConfig->isSetFlag(
+                'shipping/shipping_policy/enable_shipping_policy',
+                ScopeInterface::SCOPE_STORE
             ),
-            'basePriceFormat' => $this->localeFormat->getPriceFormat(
-                null,
-                $this->currencyManager->getDefaultCurrency()
-            ),
-            'postCodes' => $this->postCodesConfig->getPostCodes(),
-            'imageData' => $this->imageProvider->getImages($quoteId),
-            'countryData' => $this->getCountryData(),
-            'defaultCountryId' => $this->directoryHelper->getDefaultCountry(),
-            'totalsData' => $this->getTotalsData(),
-            'shippingPolicy' => [
-                'isEnabled' => $this->scopeConfig->isSetFlag(
-                    'shipping/shipping_policy/enable_shipping_policy',
+            'shippingPolicyContent' => nl2br(
+                $this->scopeConfig->getValue(
+                'shipping/shipping_policy/shipping_policy_content',
                     ScopeInterface::SCOPE_STORE
-                ),
-                'shippingPolicyContent' => nl2br(
-                    $this->scopeConfig->getValue(
-                        'shipping/shipping_policy/shipping_policy_content',
-                        ScopeInterface::SCOPE_STORE
-                    )
                 )
-            ],
-            'activeCarriers' => $this->getActiveCarriers(),
-            'originCountryCode' => $this->getOriginCountryCode(),
-            'paymentMethods' => $this->getPaymentMethods()
-        ];
+            )
+        ];    
+        $output['activeCarriers'] = $this->getActiveCarriers();
+        $output['originCountryCode'] = $this->getOriginCountryCode();
+        $output['paymentMethods'] = $this->getPaymentMethods();
+        return $output;
     }
 
     /**
