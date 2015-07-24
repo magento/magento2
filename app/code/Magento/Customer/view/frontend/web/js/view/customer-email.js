@@ -13,14 +13,21 @@ define(
         'Magento_Customer/js/action/check-email-availability',
         'Magento_Customer/js/action/login',
         'Magento_Checkout/js/model/quote',
+        'Magento_Customer/js/customer-email-data',
         'mage/validation'
     ],
-    function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote) {
+    function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, customerEmailData) {
         "use strict";
+
+        var validatedEmail = customerEmailData.getValidatedValue();
+        if (validatedEmail && !customer.isLoggedIn()) {
+            quote.guestEmail = validatedEmail;
+        }
+
         return Component.extend({
             defaults: {
                 template: 'Magento_Customer/customer-email',
-                email: '',
+                email: customerEmailData.getInputFieldValue(),
                 isLoading: false,
                 isPasswordVisible: false
             },
@@ -51,6 +58,7 @@ define(
                 clearTimeout(this.emailCheckTimeout);
                 if (self.validateEmail()) {
                     quote.guestEmail = self.email();
+                    customerEmailData.setValidatedValue(self.email());
                 }
                 this.emailCheckTimeout = setTimeout(function () {
                     if (self.validateEmail()) {
@@ -60,6 +68,7 @@ define(
                     }
                 }, self.checkDelay);
 
+                customerEmailData.setInputFieldValue(self.email());
             },
 
             checkEmailAvailability: function() {
