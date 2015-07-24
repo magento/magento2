@@ -77,7 +77,7 @@
                 border-bottom: @border-width__base solid @border-color__base;
                 .css(padding, @indent__s @indent__xl @indent__s 0);
                 cursor: pointer;
-                .icon-font(
+                .mixin-icon-font(
                 @icon-down,
                 @_icon-font-size: 30px,
                 @_icon-font-line-height: 12px,
@@ -101,7 +101,7 @@
             }
             &.active {
                 > .title {
-                    .icon-font-symbol(
+                    .mixin-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                     );

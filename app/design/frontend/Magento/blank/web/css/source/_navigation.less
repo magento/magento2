@@ -21,13 +21,13 @@
 }
 
 .nav-toggle {
-    .icon-font(
+    .mixin-icon-font(
         @icon-menu,
         @_icon-font-size: 28px,
         @_icon-font-color: @header-icons-color,
         @_icon-font-color-hover: @header-icons-color-hover
     );
-    .icon-text-hide();
+    .mixin-icon-text-hide();
     display: block;
     position: absolute;
     top: 15px;
@@ -48,7 +48,7 @@
         padding: 0;
         .parent .level-top {
             position: relative;
-            .icon-font(
+            .mixin-icon-font(
                 @_icon-font-content: @icon-down,
                 @_icon-font-size: 42px,
                 @_icon-font-position: after,
@@ -60,7 +60,7 @@
                 top: -8px;
             }
             &.ui-state-active {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                 );
@@ -95,7 +95,7 @@
                 strong {
                     display: inline-block!important;
                     position: relative;
-                    .icon-font(
+                    .mixin-icon-font(
                         @_icon-font-content: @icon-down,
                         @_icon-font-size: 42px,
                         @_icon-font-position: after,
@@ -108,7 +108,7 @@
                     }
                 }
                 &.active strong {
-                    .icon-font-symbol(
+                    .mixin-icon-font-symbol(
                         @_icon-font-content: @icon-up,
                         @_icon-font-position: after
                     );

@@ -30,7 +30,7 @@
           border-top: @border-width__base solid @border-color__base;
           cursor: pointer;
           font-weight: @font-weight__semibold;
-          .icon-font(
+          .mixin-icon-font(
           @_icon-font-content: @icon-down,
           @_icon-font-size: 30px,
           @_icon-font-position: after,
@@ -57,7 +57,7 @@
         }
         &.active {
           > .title {
-            .icon-font-symbol(
+            .mixin-icon-font-symbol(
             @_icon-font-content: @icon-prev,
             @_icon-font-position: after
             );
@@ -157,7 +157,7 @@
         &:extend(.abs-add-clearfix all);
         > .action {
           &:extend(button all);
-          .link-as-button();
+          .mixin-link-as-button();
           margin-bottom: @indent__s;
           margin-right: @indent__s;
           &:last-child {
@@ -320,7 +320,7 @@
       .block {
         .fieldset {
           .field {
-            .form-field-type-revert(@_type: block);
+            .mixin-form-field-type-revert(@_type: block);
             margin: 0 0 @indent__s;
           }
         }

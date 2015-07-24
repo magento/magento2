@@ -261,7 +261,7 @@
     .page-footer {
         .switcher {
             .options {
-                .dropdown(
+                .mixin-dropdown(
                 @_dropdown-actions-padding: 0,
                 @_dropdown-list-item-padding: 0,
                 @_dropdown-toggle-icon-content: @icon-down,
@@ -433,7 +433,7 @@
     }
 
     .customer-welcome {
-        .dropdown(
+        .mixin-dropdown(
         @_toggle-selector: ~".action.switch",
         @_options-selector: ~"ul",
         @_dropdown-actions-padding: 0,
@@ -467,7 +467,7 @@
             display: none;
         }
         .action.switch {
-            .button-reset();
+            .mixin-button-reset();
             .css(color, @color-white);
         }
         .header.links {
@@ -475,7 +475,7 @@
         }
         &.active {
             .action.switch {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                 @_icon-font-content: @icon-up,
                 @_icon-font-position: after
                 );

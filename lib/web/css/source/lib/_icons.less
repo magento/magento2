@@ -11,7 +11,7 @@
 //  Icons using font
 //  ---------------------------------------------
 
-.icon-font(
+.mixin-icon-font(
     @_icon-font-content,
     @_icon-font: @icon-font,
     @_icon-font-size: @icon-font__size,
@@ -52,7 +52,7 @@
     }
 }
 
-.icon-font(
+.mixin-icon-font(
     @_icon-font-content,
     @_icon-font: @icon-font,
     @_icon-font-size: @icon-font__size,
@@ -92,7 +92,7 @@
     }
 }
 
-.icon-font-size(
+.mixin-icon-font-size(
     @_icon-font-size: @icon-font__size,
     @_icon-font-line-height: @icon-font__line-height,
     @_icon-font-position: @icon-font__position
@@ -102,7 +102,7 @@
     }
 }
 
-.icon-font-size(
+.mixin-icon-font-size(
     @_icon-font-size: @icon-font__size,
     @_icon-font-line-height: @icon-font__line-height,
     @_icon-font-position: @icon-font__position
@@ -112,8 +112,7 @@
     }
 }
 
-
-.icon-font-symbol(
+.mixin-icon-font-symbol(
     @_icon-font-content,
     @_icon-font-position: @icon-font__position
 ) when (@_icon-font-position = before) {
@@ -122,7 +121,7 @@
     }
 }
 
-.icon-font-symbol(
+.mixin-icon-font-symbol(
     @_icon-font-content,
     @_icon-font-position: @icon-font__position
 ) when (@_icon-font-position = after) {
@@ -135,7 +134,7 @@
 //  Icons using image or sprite
 //  ---------------------------------------------
 
-.icon-image(
+.mixin-icon-image(
     @_icon-image,
     @_icon-image-width: @icon__width,
     @_icon-image-height: @icon__height,
@@ -162,7 +161,7 @@
     }
 }
 
-.icon-image(
+.mixin-icon-image(
     @_icon-image,
     @_icon-image-width: @icon__width,
     @_icon-image-height: @icon__height,
@@ -189,7 +188,7 @@
     }
 }
 
-.icon-image-position(
+.mixin-icon-image-position(
     @_icon-image-position-x: @icon-image__position-x,
     @_icon-image-position-y: @icon-image__position-y,
     @_icon-image-position: @icon__position
@@ -202,7 +201,7 @@
     }
 }
 
-.icon-image-position(
+.mixin-icon-image-position(
     @_icon-image-position-x: @icon-image__position-x,
     @_icon-image-position-y: @icon-image__position-y,
     @_icon-image-position: @icon__position
@@ -215,7 +214,7 @@
     }
 }
 
-.icon-sprite-position(
+.mixin-icon-sprite-position(
     @_icon-sprite-position-x: @icon-sprite__position-x,
     @_icon-sprite-position-y: @icon-sprite__position-y,
     @_icon-sprite-grid: @icon-sprite__grid,
@@ -230,7 +229,7 @@
     }
 }
 
-.icon-sprite-position(
+.mixin-icon-sprite-position(
     @_icon-sprite-position-x: @icon-sprite__position-x,
     @_icon-sprite-position-y: @icon-sprite__position-y,
     @_icon-sprite-grid: @icon-sprite__grid,
@@ -245,7 +244,7 @@
     }
 }
 
-.icon-image-size(
+.mixin-icon-image-size(
     @_icon-image-width: @icon__width,
     @_icon-image-height: @icon__height,
     @_icon-image-position: @icon__position
@@ -255,7 +254,7 @@
     }
 }
 
-.icon-image-size(
+.mixin-icon-image-size(
     @_icon-image-width: @icon__width,
     @_icon-image-height: @icon__height,
     @_icon-image-position: @icon__position
@@ -265,7 +264,7 @@
     }
 }
 
-.icon-text-hide() {
+.mixin-icon-text-hide() {
     > span {
         .visually-hidden();
     }
@@ -276,7 +275,7 @@
 //  ---------------------------------------------
 
 ._icon-text-hide(@_icon-text-hide) when (@_icon-text-hide = true) {
-    .icon-text-hide();
+    .mixin-icon-text-hide();
 }
 
 ._icon-image(

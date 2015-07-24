@@ -79,7 +79,7 @@
         .action-edit,
         .action-delete {
             &:extend(.abs-action-button-as-link all);
-            .icon-font(
+            .mixin-icon-font(
             @icon-edit,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,
@@ -90,7 +90,7 @@
             );
         }
         .action-delete {
-            .icon-font-symbol(
+            .mixin-icon-font-symbol(
             @_icon-font-content: @icon-trash
             );
         }
@@ -141,7 +141,7 @@
         .title {
             .css(color, @gift-item-block-title__color);
             cursor: pointer;
-            .icon-font(
+            .mixin-icon-font(
             @gift-item-block-title-icon__content,
             @_icon-font-size: @gift-item-block-title-icon__font-size,
             @_icon-font-line-height: @gift-item-block-title-icon__line-height,
@@ -252,7 +252,7 @@
 
     .cart.table-wrapper {
         .action-gift {
-            .icon-font(
+            .mixin-icon-font(
             @icon-present,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,
@@ -313,7 +313,7 @@
         }
         .field {
             &:extend(.abs-clearfix all);
-            .form-field-type-revert(
+            .mixin-form-field-type-revert(
             @_type: inline,
             @_type-inline-label-align: left
             );
@@ -344,7 +344,7 @@
     .cart.table-wrapper {
         .action-gift {
             float: left;
-            .icon-font(
+            .mixin-icon-font(
             @icon-down,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,

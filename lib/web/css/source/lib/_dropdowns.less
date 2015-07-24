@@ -11,7 +11,7 @@
 //  Simple dropdown
 //  ---------------------------------------------
 
-.dropdown(
+.mixin-dropdown(
     @_toggle-selector : ~".action.toggle",
     @_options-selector : ~"ul.dropdown",
 
@@ -105,7 +105,7 @@
 //  Split dropdown
 //  ---------------------------------------------
 
-.dropdown-split(
+.mixin-dropdown-split(
     @_toggle-selector : ~".action.toggle",
     @_options-selector : ~"ul.dropdown",
     @_button-selector : ~".action.split",
@@ -341,7 +341,7 @@
     @_icon-font-position,
     @_icon-font-text-hide
 ) {
-    .icon-font(
+    .mixin-icon-font(
         @_icon-font-content: @_dropdown-toggle-icon-content,
         @_icon-font: @_icon-font,
         @_icon-font-size: @_icon-font-size,
@@ -355,7 +355,7 @@
         @_icon-font-text-hide: @_icon-font-text-hide
     );
     &.active {
-        .icon-font(
+        .mixin-icon-font(
             @_icon-font-content: @_dropdown-toggle-active-icon-content,
             @_icon-font: @_icon-font,
             @_icon-font-size: @_icon-font-size,
@@ -390,7 +390,7 @@
     @_icon-font-position,
     @_icon-font-text-hide
 ) {
-    .button-icon(
+    .mixin-button-icon(
         @_icon-font-content: @_dropdown-toggle-icon-content,
         @_icon-font: @_icon-font,
         @_icon-font-size: @_icon-font-size,
@@ -404,7 +404,8 @@
         @_icon-font-text-hide: @_icon-font-text-hide
     );
     &.active {
-        .button-icon(
+        // ToDo IU: chack if it can be replaced to icon-symbol() mixin
+        .mixin-button-icon(
             @_icon-font-content: @_dropdown-toggle-active-icon-content,
             @_icon-font: @_icon-font,
             @_icon-font-size: @_icon-font-size,

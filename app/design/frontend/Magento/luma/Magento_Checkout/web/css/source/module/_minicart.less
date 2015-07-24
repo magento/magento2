@@ -91,7 +91,7 @@
     }
 
     .minicart-wrapper {
-        .dropdown(
+        .mixin-dropdown(
             @_toggle-selector: ~".action.showcart",
             @_options-selector: ~".block-minicart",
             @_dropdown-toggle-icon-content: @icon-cart,
@@ -142,8 +142,8 @@
                 top: 0;
                 right: 0;
                 position: absolute;
-                .button-reset();
-                .button-icon(
+                .mixin-button-reset();
+                .mixin-button-icon(
                     @icon-remove,
                     @_icon-font-color: @minicart-icons-color,
                     @_icon-font-size: 16px,
@@ -262,7 +262,7 @@
             }
             .active {
                 > .toggle {
-                    .icon-font-symbol(
+                    .mixin-icon-font-symbol(
                         @_icon-font-content: @icon-up,
                         @_icon-font-position: after
                     );
@@ -273,7 +273,7 @@
             }
             &.options {
                 .tooltip.toggle {
-                    .icon-font(
+                    .mixin-icon-font(
                         @icon-down,
                         @_icon-font-size: 12px,
                         @_icon-font-line-height: 12px,
@@ -305,7 +305,7 @@
         .action {
             &.edit,
             &.delete {
-                .icon-font(
+                .mixin-icon-font(
                     @icon-edit,
                     @_icon-font-size: 18px,
                     @_icon-font-line-height: 20px,
@@ -316,7 +316,7 @@
                 );
             }
             &.delete {
-                .icon-font-symbol(
+                .mixin-icon-font-symbol(
                     @_icon-font-content: @icon-trash
                 );
             }
@@ -359,7 +359,7 @@
     }
     .minilist .action.delete,
     .minicart-wrapper .action.edit {
-        .icon-font-size(
+        .mixin-icon-font-size(
             @_icon-font-size: 16px
         );
     }

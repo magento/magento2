@@ -26,7 +26,7 @@
         margin-bottom: 0;
     }
     .label {
-        .icon-font(
+        .mixin-icon-font(
             @_icon-font-content: @icon-search,
             @_icon-font-size: 22px,
             @_icon-font-line-height: 28px,
@@ -206,7 +206,7 @@
             right: @indent__s;
             top: 0;
             z-index: 1;
-            .button-icon(
+            .mixin-button-icon(
                 @_icon-font-content: @icon-search,
                 @_icon-font-size: 16px,
                 @_icon-font-text-hide: true,
@@ -214,7 +214,7 @@
                 @_icon-font-color-hover: @header-icons-color-hover,
                 @_icon-font-line-height: 32px
             );
-            .button-reset();
+            .mixin-button-reset();
             &:focus {
                 &:before {
                     .css(color, @color-gray20);

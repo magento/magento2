@@ -23,8 +23,8 @@
 //  ---------------------------------------------
 
 .abs-action-link-button {
-    .button();
-    .link-as-button();
+    .mixin-button();
+    .mixin-link-as-button();
     .css(border-radius, @button__border-radius);
 }
 
@@ -63,7 +63,7 @@
 //  ---------------------------------------------
 
 @abs-button-responsive: {
-    .button-responsive();
+    .mixin-button-responsive();
 };
 
 .abs-button-responsive {
@@ -200,7 +200,7 @@
 //  ---------------------------------------------
 
 .abs-dropdown-simple {
-    .dropdown(
+    .mixin-dropdown(
         @_dropdown-list-item-padding: 5px 5px 5px 23px,
         @_dropdown-list-min-width: 200px,
         @_icon-font-margin: 0 0 0 5px,
@@ -230,7 +230,7 @@
 //  ---------------------------------------------
 
 .abs-remove-button-for-blocks {
-    .icon-font(
+    .mixin-icon-font(
         @icon-remove,
         @_icon-font-size: 26px,
         @_icon-font-line-height: 15px,
@@ -522,7 +522,7 @@
         .fieldset {
             > .field,
             .fields > .field {
-                .form-field-type-revert(@_type: block);
+                .mixin-form-field-type-revert(@_type: block);
                 &:not(:first-child):last-of-type {
                     margin-bottom: 0;
                 }
@@ -536,7 +536,7 @@
 //  ---------------------------------------------
 
 .abs-navigation-icon {
-    .icon-font(
+    .mixin-icon-font(
         @_icon-font-content: @icon-down,
         @_icon-font-size: 34px,
         @_icon-font-line-height: 1.2,
@@ -555,7 +555,7 @@
 //  ---------------------------------------------
 
 .abs-split-button {
-    .dropdown-split(
+    .mixin-dropdown-split(
         @_options-selector : ~".items",
         @_dropdown-split-button-border-radius-fix: true
     );
@@ -568,11 +568,11 @@
 
 .abs-action-addto-product {
     &:extend(.abs-action-link-button all);
-    .button-s();
+    .mixin-button-s();
 }
 
 .abs-actions-addto-gridlist {
-    .icon-font(
+    .mixin-icon-font(
         @_icon-font-content: '',
         @_icon-font-size: 29px,
         @_icon-font-color: @addto-color,
@@ -588,7 +588,7 @@
 //  ---------------------------------------------
 
 .abs-button-l {
-    .button-l();
+    .mixin-button-l();
 }
 
 //
@@ -596,7 +596,7 @@
 //  ---------------------------------------------
 
 .abs-action-button-as-link {
-    .button-as-link(
+    .mixin-button-as-link(
         @_margin: false
     );
     border-radius: 0;
@@ -613,7 +613,7 @@
 //  ---------------------------------------------
 
 .abs-revert-secondary-color {
-    .button-revert-secondary-color();
+    .mixin-button-revert-secondary-color();
 }
 
 //
@@ -621,7 +621,7 @@
 //  ---------------------------------------------
 
 .abs-revert-secondary-size {
-    .button-revert-secondary-size();
+    .mixin-button-revert-secondary-size();
 }
 
 //
@@ -664,7 +664,7 @@
     cursor: pointer;
     padding-right: 12px;
     position: relative;
-    .icon-font(
+    .mixin-icon-font(
         @icon-down,
         @_icon-font-size: 26px,
         @_icon-font-line-height: 10px,
@@ -677,7 +677,7 @@
         top: 3px;
     }
     &-expanded {
-        .icon-font-symbol(
+        .mixin-icon-font-symbol(
             @_icon-font-content: @icon-up,
             @_icon-font-position: after
         );
@@ -685,7 +685,7 @@
 }
 
 .abs-tax-total-expanded {
-    .icon-font-symbol(
+    .mixin-icon-font-symbol(
         @_icon-font-content: @icon-up,
         @_icon-font-position: after
     );
@@ -770,7 +770,7 @@
 //  ---------------------------------------------
 
 .abs-icon-add {
-    .icon-font(
+    .mixin-icon-font(
         @_icon-font-content: @icon-expand,
         @_icon-font-size: 10px,
         @_icon-font-line-height: 10px,
@@ -780,7 +780,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-icon-add-mobile {
-        .icon-font(
+        .mixin-icon-font(
             @_icon-font-content: @icon-expand,
             @_icon-font-size: 10px,
             @_icon-font-line-height: 10px,
@@ -822,7 +822,7 @@
         margin-bottom: 0;
         padding: @indent__s @indent__xl @indent__s @layout__width-xs-indent;
         position: relative;
-        .icon-font(
+        .mixin-icon-font(
             @_icon-font-content: @icon-down,
             @_icon-font-size: 28px,
             @_icon-font-text-hide: false,
@@ -835,7 +835,7 @@
             top: 0;
         }
         &.active {
-            .icon-font-symbol(
+            .mixin-icon-font-symbol(
                 @_icon-font-content: @icon-up,
                 @_icon-font-position: after
             );
@@ -951,8 +951,8 @@
 .abs-shopping-cart-items {
     .action {
         &.continue {
-            .link-as-button();
-            .button(
+            .mixin-link-as-button();
+            .mixin-button(
                 @_button-padding: 7px 15px 7px 0,
                 @_button-icon-use: true,
                 @_button-font-content: @icon-prev,
@@ -967,7 +967,7 @@
             }
         }
         &.update {
-            .button-icon(
+            .mixin-button-icon(
                 @icon-update,
                 @_icon-font-size: 32px,
                 @_icon-font-line-height: 16px
@@ -1151,7 +1151,7 @@
             .amount .price {
                 position: relative;
                 padding-right: @indent__m;
-                .icon-font(
+                .mixin-icon-font(
                 @icon-down,
                 @_icon-font-size: 30px,
                 @_icon-font-text-hide: true,
@@ -1170,7 +1170,7 @@
                     border-bottom: 0;
                 }
                 .amount .price {
-                    .icon-font-symbol(
+                    .mixin-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                     );
