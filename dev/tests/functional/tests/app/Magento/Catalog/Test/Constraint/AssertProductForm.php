@@ -133,6 +133,11 @@ class AssertProductForm extends AbstractAssertForm
         foreach ($sortFields as $path) {
             $data = $this->sortDataByPath($data, $path);
         }
+
+        if (isset($data['price'])) {
+            $data['price'] = str_replace(',', '', $data['price']);
+        }
+
         return $data;
     }
 

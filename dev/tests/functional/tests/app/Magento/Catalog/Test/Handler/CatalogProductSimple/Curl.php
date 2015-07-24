@@ -180,6 +180,15 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     {
         $fields = $this->replaceMappingData($fixture->getData());
 
+        if (!isset($fields['status'])) {
+            // Default product is enabled
+            $fields['status'] = 1;
+        }
+        if (!isset($fields['visibility'])) {
+            // Default product is visible on Catalog, Search
+            $fields['visibility'] = 4;
+        }
+
         // Getting Tax class id
         if ($fixture->hasData('tax_class_id')) {
             $fields['tax_class_id'] = $fixture->getDataFieldConfig('tax_class_id')['source']->getTaxClassId();
@@ -258,15 +267,20 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     {
         $options = [];
         foreach ($fields['custom_options'] as $key => $customOption) {
-            $options[$key] = ['option_id' => 0, 'is_delete' => ''];
+            $options[$key] = [
+                'is_delete' => '',
+                'option_id' => 0,
+                'type' => $this->optionNameConvert($customOption['type']),
+            ];
+
             foreach ($customOption['options'] as $index => $option) {
                 $customOption['options'][$index]['is_delete'] = '';
                 $customOption['options'][$index]['price_type'] = strtolower($option['price_type']);
             }
-            $options[$key]['type'] = $this->optionNameConvert($customOption['type']);
             $options[$key] += in_array($options[$key]['type'], $this->selectOptions)
                 ? ['values' => $customOption['options']]
                 : $customOption['options'][0];
+
             unset($customOption['options']);
             $options[$key] += $customOption;
         }
