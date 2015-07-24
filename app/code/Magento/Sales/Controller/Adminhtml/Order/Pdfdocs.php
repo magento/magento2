@@ -15,6 +15,7 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\Order\Pdf\Shipment;
 use Magento\Sales\Model\Order\Pdf\Creditmemo;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Sales\Model\Resource\Order\CollectionFactory as OrderCollectionFactory;
 use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
 use Magento\Sales\Model\Resource\Order\Invoice\CollectionFactory as InvoiceCollectionFactory;
 use Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory as CreditmemoCollectionFactory;
@@ -89,7 +90,8 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
         DateTime $dateTime,
         ShipmentCollectionFactory $shipmentCollectionFactory,
         InvoiceCollectionFactory $invoiceCollectionFactory,
-        CreditmemoCollectionFactory $creditmemoCollectionFactory
+        CreditmemoCollectionFactory $creditmemoCollectionFactory,
+        OrderCollectionFactory $orderCollectionFactory
     ) {
         $this->pdfInvoice = $pdfInvoice;
         $this->pdfShipment = $pdfShipment;
@@ -99,6 +101,7 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
         $this->shipmentCollectionFactory = $shipmentCollectionFactory;
         $this->invoiceCollectionFactory = $invoiceCollectionFactory;
         $this->creditmemoCollectionFactory = $creditmemoCollectionFactory;
+        $this->collectionFactory = $orderCollectionFactory;
         parent::__construct($context, $filter);
     }
 

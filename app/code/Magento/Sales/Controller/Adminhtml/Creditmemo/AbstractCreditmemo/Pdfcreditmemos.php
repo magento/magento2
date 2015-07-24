@@ -13,6 +13,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Ui\Component\MassAction\Filter;
+use Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory;
 
 /**
  * Class Pdfcreditmemos
@@ -47,11 +48,13 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
         Filter $filter,
         Creditmemo $pdfCreditmemo,
         DateTime $dateTime,
-        FileFactory $fileFactory
+        FileFactory $fileFactory,
+        CollectionFactory $collectionFactory
     ) {
         $this->pdfCreditmemo = $pdfCreditmemo;
         $this->fileFactory = $fileFactory;
         $this->dateTime = $dateTime;
+        $this->collectionFactory = $collectionFactory;
         parent::__construct($context, $filter);
     }
 

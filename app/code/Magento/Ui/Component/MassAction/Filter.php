@@ -43,10 +43,11 @@ class Filter
     }
 
     /**
+     * @param AbstractDb $collection
      * @return AbstractDb
      * @throws LocalizedException
      */
-    public function getCollection()
+    public function getCollection(AbstractDb $collection)
     {
         $component = $this->factory->create($this->request->getParam('namespace'));
         $this->prepareComponent($component);
@@ -54,9 +55,16 @@ class Filter
 
         $dataProvider = $component->getContext()->getDataProvider();
 
-        $collection = $this->applySelection($dataProvider->getCollection());
-        $dataProvider->getData();
-        return $collection;
+        /** @var \Magento\Framework\Api\Search\SearchResultInterface $searchResult */
+        $searchResult = $dataProvider->getData();
+
+        $ids = [];
+        foreach ($searchResult->getItems() as $document) {
+            $ids[] = $document->getId();
+        }
+
+        $collection->addFieldToFilter($collection->getIdFieldName(), ['in' => $ids]);
+        return $this->applySelection($collection);
     }
 
     /**

@@ -28,6 +28,11 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     protected $filter;
 
     /**
+     * @var object
+     */
+    protected $collectionFactory;
+
+    /**
      * @param Context $context
      * @param Filter $filter
      */
@@ -46,7 +51,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $collection = $this->filter->getCollection();
+            $collection = $this->filter->getCollection($this->collectionFactory->create());
             return $this->massAction($collection);
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
