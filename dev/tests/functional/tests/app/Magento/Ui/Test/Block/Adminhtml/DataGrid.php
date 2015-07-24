@@ -6,6 +6,7 @@
 
 namespace Magento\Ui\Test\Block\Adminhtml;
 
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Grid;
 
 /**
@@ -25,7 +26,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $editLink = '[data-action="grid-row-edit"]';
+    protected $editLink = '.data-grid-actions-cell a';
 
     /**
      * Locator value for container of applied Filters.
@@ -40,6 +41,41 @@ class DataGrid extends Grid
      * @var string
      */
     protected $filterButton = '[data-action="grid-filter-expand"]';
+
+    /**
+     * An element locator which allows to select entities in grid.
+     *
+     * @var string
+     */
+    protected $selectItem = 'tbody tr [data-action="select-row"]';
+
+    /**
+     * Mass action toggle list.
+     *
+     * @var string
+     */
+    protected $massActionToggleList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
+
+    /**
+     * Mass action toggle button.
+     *
+     * @var string
+     */
+    protected $massActionToggleButton = '.action-multiselect-toggle';
+
+    /**
+     * Mass action button.
+     *
+     * @var string
+     */
+    protected $massActionButton = '.action-select';
+
+    /**
+     * Locator fo action button.
+     *
+     * @var string
+     */
+    protected $actionButton = '.modal-inner-wrap .action-secondary';
 
     /**
      * Clear all applied Filters.
@@ -114,12 +150,45 @@ class DataGrid extends Grid
      */
     public function searchAndOpen(array $filter)
     {
-        $this->waitLoader();
+        $this->search($filter);
         $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->editLink)->click();
         } else {
             throw new \Exception('Searched item was not found.');
         }
+    }
+
+    /**
+     * Perform selected massaction over checked items.
+     *
+     * @param array $items
+     * @param array|string $action [array -> key = value from first select; value => value from subselect]
+     * @param bool $acceptAlert [optional]
+     * @param string $massActionSelection [optional]
+     * @return void
+     */
+    public function massaction(array $items, $action, $acceptAlert = false, $massActionSelection = '')
+    {
+        if ($this->_rootElement->find($this->noRecords)->isVisible()) {
+            return;
+        }
+        if (!is_array($action)) {
+            $action = [$action => '-'];
+        }
+
+        if ($massActionSelection) {
+            $this->_rootElement->find($this->massActionToggleButton)->click();
+            $this->_rootElement
+                ->find(sprintf($this->massActionToggleList, $massActionSelection), Locator::SELECTOR_XPATH)
+                ->click();
+
+        }
+        $actionType = key($action);
+        $this->_rootElement->find($this->massActionButton)->click();
+        $this->_rootElement
+            ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
+            ->click();
+        $this->browser->find($this->actionButton)->click();
     }
 }

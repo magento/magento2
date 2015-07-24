@@ -151,30 +151,12 @@ class Attribute extends Form
      */
     public function fillAttributes(array $attributes)
     {
-        $grid = $this->getAttributesGrid();
         foreach ($attributes as $attribute) {
-            $isExistAttribute = true;
-            try {
-                $grid->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
-            } catch (\Exception $e) {
-                if ($e->getMessage() === 'Searched item was not found.') {
-                    $isExistAttribute = false;
-                } else {
-                    throw $e;
-                }
-            }
-
-            if (!$isExistAttribute && empty($attribute['attribute_id'])) {
+            if (empty($attribute['attribute_id'])) {
                 $this->createNewVariationSet($attribute);
-                $this->waitBlock($this->newAttributeFrame);
-                $grid->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
-            } else {
-                if (!$isExistAttribute) {
-                    $this->getAttributeSelector()->setValue($attribute['frontend_label']);
-                }
             }
+            $this->getAttributesGrid()->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
         }
-
         $this->browser->find($this->nextButton)->click();
 
         foreach ($attributes as $attribute) {
@@ -274,13 +256,10 @@ class Attribute extends Form
         $attributeBlock = $this->browser->find(sprintf($this->attributeBlockByName, $attribute['frontend_label']));
         $count = 0;
 
-        if (isset($attribute['label'])) {
-            // label is not editable anymore
-            // $attributeBlock->find($this->attributeLabel)->setValue($attribute['label']);
-        }
         foreach ($attribute['options'] as $option) {
             $count++;
-            $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $option['label']));
+            $label = isset($option['admin']) ? $option['admin'] : $option['label'];
+            $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
 
             if (!$optionContainer->isVisible()) {
                 $mapping = $this->dataMapping($option);
