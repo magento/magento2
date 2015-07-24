@@ -282,7 +282,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'isCustomerLoginRequired' => $this->isCustomerLoginRequired(),
             'registerUrl' => $this->getRegisterUrl(),
             'checkoutUrl' => $this->getCheckoutUrl(),
-            'customerAddressCount' => $this->getCustomerAddressCount(),
             'forgotPasswordUrl' => $this->getForgotPasswordUrl(),
             'staticBaseUrl' => $this->getStaticBaseUrl(),
             'priceFormat' => $this->localeFormat->getPriceFormat(
@@ -296,6 +295,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'postCodes' => $this->postCodesConfig->getPostCodes(),
             'imageData' => $this->imageProvider->getImages($quoteId),
             'countryData' => $this->getCountryData(),
+            'defaultCountryId' => $this->directoryHelper->getDefaultCountry(),
             'totalsData' => $this->getTotalsData(),
             'shippingPolicy' => [
                 'isEnabled' => $this->scopeConfig->isSetFlag(
