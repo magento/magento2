@@ -52,4 +52,10 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->object->unsValue('key1');
         $this->assertEquals(['key2' => 'value2'], $this->object->getData());
     }
+
+    public function testGetVaryString()
+    {
+        $this->object->setValue('key2', 'value2', 'default2');
+        $this->assertEquals(sha1(serialize(['key2' => 'value2'])), $this->object->getVaryString());
+     }
 }

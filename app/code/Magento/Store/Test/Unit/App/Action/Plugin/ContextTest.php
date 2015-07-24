@@ -83,8 +83,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->httpRequestMock = $this->getMock('Magento\Framework\App\Request\Http',
             ['getParam'], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager',
-            ['getWebsite', '__wakeup'], [], '', false);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+            ['getWebsite', 'getDefaultStoreView', '__wakeup'], [], '', false);
+        $this->storeMock = $this->getMock('Magento\Store\Model\Store', ['getDefaultCurrency', 'getCode'], [], '', false);
         $this->currencyMock = $this->getMock('Magento\Directory\Model\Currency',
             ['getCode', '__wakeup'], [], '', false);
         $this->websiteMock = $this->getMock('Magento\Store\Model\Website',
@@ -107,29 +107,20 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testAroundDispatch()
     {
-        $this->storeManagerMock->expects($this->exactly(2))
-            ->method('getWebsite')
+        $this->storeManagerMock->method('getWebsite')
             ->will($this->returnValue($this->websiteMock));
-        $this->websiteMock->expects($this->exactly(2))
-            ->method('getDefaultStore')
+        $this->storeManagerMock->method('getDefaultStoreView')
+            ->willReturn($this->storeMock);
+        $this->websiteMock->method('getDefaultStore')
             ->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())
-            ->method('getDefaultCurrency')
+        $this->storeMock->method('getDefaultCurrency')
             ->will($this->returnValue($this->currencyMock));
-        $this->storeMock->expects($this->once())
-            ->method('getStoreCodeFromCookie')
-            ->will($this->returnValue('storeCookie'));
-        $this->currencyMock->expects($this->once())
-            ->method('getCode')
+        $this->storeMock->method('getCode')
+            ->willReturn('default');
+        $this->currencyMock->method('getCode')
             ->will($this->returnValue('UAH'));
-        $this->sessionMock->expects($this->once())
-            ->method('getCurrencyCode')
+        $this->sessionMock->method('getCurrencyCode')
             ->will($this->returnValue('UAH'));
-
-        $this->httpRequestMock->expects($this->once())
-            ->method('getParam')
-            ->with($this->equalTo('___store'))
-            ->will($this->returnValue('default'));
 
         $this->httpContextMock->expects($this->atLeastOnce())
             ->method('setValue')
