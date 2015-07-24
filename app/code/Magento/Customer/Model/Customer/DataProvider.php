@@ -109,14 +109,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * @inheritdoc
-     */
-    public function addFilter(\Magento\Framework\Api\Filter $filter)
-    {
-        //@todo implement this method
-    }
-
-    /**
      * Get data
      *
      * @return array
@@ -126,7 +118,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-        $this->filterPool->applyFilters($this->collection);
         $items = $this->collection->getItems();
         /** @var Customer $customer */
         foreach ($items as $customer) {
@@ -148,17 +139,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         return $this->loadedData;
-    }
-
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count()
-    {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->count();
     }
 
     /**

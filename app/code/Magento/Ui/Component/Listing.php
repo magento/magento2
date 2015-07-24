@@ -34,9 +34,6 @@ class Listing extends AbstractComponent
      */
     public function getDataSourceData()
     {
-        return [
-            'data' => $this->getContext()->getDataProvider()->getData(),
-            'totalCount' => $this->getContext()->getDataProvider()->count()
-        ];
+        return ['data' => $this->getContext()->getDataProvider()->getData()];
     }
 }
