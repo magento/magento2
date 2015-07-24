@@ -1595,6 +1595,24 @@ class Payment extends Info implements OrderPaymentInterface
         return $this->getOrder()->getBaseCurrency()->formatTxt($amount);
     }
 
+    protected function getByTxnType($type, $paymentId)
+    {
+        $transaction = $this->transactionRepository->getByTxnType($type, $paymentId);
+        if ($transaction instanceof Transaction) {
+            $transaction->setOrderPaymentObject($this);
+        }
+        return $transaction;
+    }
+
+    protected function getByTxnId($id, $paymentId)
+    {
+        $transaction = $this->transactionRepository->getByTxnId($id, $paymentId);
+        if ($transaction instanceof Transaction) {
+            $transaction->setOrderPaymentObject($this);
+        }
+        return $transaction;
+    }
+
     /**
      * Find one transaction by ID or type
      *
@@ -1608,8 +1626,7 @@ class Payment extends Info implements OrderPaymentInterface
             if ($txnType && $this->getId()) {
                 $txn = $this->transactionRepository->getByTxnType(
                     $txnType,
-                    $this->getId(),
-                    $this->getOrder()->getId()
+                    $this->getId()
                 );
                 if ($txn) {
                     $txn->setOrderPaymentObject($this);
@@ -1649,16 +1666,15 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function getAuthorizationTransaction()
     {
+        $transaction = false;
         if ($this->getParentTransactionId()) {
-            $txn = $this->_lookupTransaction($this->getParentTransactionId());
-        } else {
-            $txn = false;
+            $transaction = $this->getByTxnId($this->getParentTransactionId(), $this->getId());
         }
 
-        if (!$txn) {
-            $txn = $this->_lookupTransaction(false, Transaction::TYPE_AUTH);
-        }
-        return $txn;
+        return $transaction ?: $this->getByTxnType(
+            Transaction::TYPE_AUTH,
+            $this->getId()
+        );
     }
 
     /**

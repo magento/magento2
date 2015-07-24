@@ -34,10 +34,9 @@ interface TransactionRepositoryInterface
      *
      * @param string $txnType
      * @param int $paymentId
-     * @param int $orderId
      * @return false|\Magento\Sales\Api\Data\TransactionInterface Transaction interface.
      */
-    public function getByTxnType($txnType, $paymentId, $orderId);
+    public function getByTxnType($txnType, $paymentId);
 
     /**
      * Get payment transaction by transaction id
