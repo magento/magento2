@@ -33,4 +33,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Block\SectionConfig">
+        <arguments>
+            <argument name="clientSideSections" xsi:type="array">
+                <item name="customer-email" xsi:type="string">customer-email</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
