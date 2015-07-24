@@ -82,7 +82,7 @@ class Navigation extends AbstractActionController
             if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
                 $this->view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
             }
-            $this->view->setVariable('headerTitle', 'Magento Component Manager');
+            $this->view->setVariable('headerTitle', 'Magento Setup Tool');
         }
         $this->view->setTemplate('/magento/setup/navigation/header-bar.phtml');
         $this->view->setTerminal(true);

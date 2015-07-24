@@ -19,7 +19,7 @@
 <div class="menu-wrapper"
     ng-show="<?php echo implode( '&&', $expressions); ?>"
     >
-<nav class="admin__menu" role="navigation">
+<nav class="admin__menu" role="navigation" ng-controller="mainController">
     <a
         class="logo"
         href="/"
@@ -29,26 +29,25 @@
              alt="Magento Admin Panel">
     </a>
     <ul id="nav" role="menubar">
-        <li class="item-home level-0">
-            <a href="#">
-                <span>Home</span>
-            </a>
-        </li>
-        <li class="item-component level-0 _active">
+        <li class="item-home level-0" ng-class="{_active: state.current.name === 'root.home'}">
             <a
-                class="_active"
-                href="#">
-                <span>Component Manager</span>
+            ng-class="{_active: state.current.name === 'root.home'}"
+            ng-click="goToState('root.home')">
+            <span>Home</span>
             </a>
         </li>
-        <li class="item-upgrade level-0">
-            <a href="#">
+        <li class="item-component level-0"   ng-class="{_active: state.current.name === 'root.component-grid'}">
+            <a
+                ng-class="{_active: state.current.name === 'root.component-grid'}"
+                ng-click="goToState('root.component-grid')">
+            <span>Component Manager</span>
+            </a>
+        </li>
+        <li class="item-upgrade level-0" ng-class="{_active: state.current.name === 'root.system-upgrade'}">
+            <a
+                ng-class="{_active: state.current.name === 'system-upgrade'}"
+                ng-click="goToState('root.system-upgrade')">
                 <span>System Upgrade</span>
-            </a>
-        </li>
-        <li class="item-system-config level-0">
-            <a href="#">
-                <span>System Config</span>
             </a>
         </li>
     </ul>
