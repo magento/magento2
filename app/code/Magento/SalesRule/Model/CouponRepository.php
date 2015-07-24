@@ -14,6 +14,7 @@ use \Magento\SalesRule\Model\Resource\Coupon\Collection;
 /**
  * Coupon CRUD class
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterface
 {
@@ -50,6 +51,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     /**
      * @param CouponFactory $couponFactory
      * @param RuleFactory $ruleFactory
+     * @param \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory $searchResultFactory
      * @param Resource\Coupon\CollectionFactory $collectionFactory
      * @param Spi\CouponResourceInterface $resourceModel
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor

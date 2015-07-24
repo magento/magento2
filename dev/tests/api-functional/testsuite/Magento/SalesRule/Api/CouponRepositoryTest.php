@@ -74,13 +74,6 @@ class CouponRepositoryTest extends WebapiAbstract
         $this->assertEquals(true, $this->deleteCoupon($couponId));
     }
 
-
-    /**
-     * Create Coupon
-     *
-     * @param $couponId
-     * @return int
-     */
     public function verifyGetList($couponId)
     {
         $searchCriteria = [
@@ -129,13 +122,7 @@ class CouponRepositoryTest extends WebapiAbstract
         return $response['items'][0];
     }
 
-    /**
-     * Create Coupon
-     *
-     * @param $couponId
-     * @return int
-     */
-    protected function createCoupon($couponId)
+    protected function createCoupon($coupon)
     {
         $serviceInfo = [
             'rest' => [
@@ -148,15 +135,10 @@ class CouponRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $requestData = ['coupon' => $couponId];
+        $requestData = ['coupon' => $coupon];
         return $this->_webApiCall($serviceInfo, $requestData);
     }
 
-    /**
-     * @param int $couponId
-     * @return bool
-     * @throws \Exception
-     */
     protected function deleteCoupon($couponId)
     {
         $serviceInfo = [
@@ -174,11 +156,6 @@ class CouponRepositoryTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, ['coupon_id' => $couponId]);
     }
 
-    /**
-     * @param int $couponId
-     * @return bool
-     * @throws \Exception
-     */
     protected function updateCoupon($couponId, $data)
     {
         $serviceInfo = [
@@ -198,9 +175,10 @@ class CouponRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Retrieve an existing coupon
+     *
      * @param int $couponId
-     * @return bool
-     * @throws \Exception
+     * @return \Magento\SalesRule\Api\Data\CouponInterface
      */
     protected function getCoupon($couponId)
     {
