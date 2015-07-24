@@ -241,7 +241,23 @@ class ComposerInformation
      */
     public function getPackagesForUpdate()
     {
-        return $this->loadPackagesForUpdateFromCache();
+        $actualUpdatePackages = [];
+        $updatePackagesInfo = $this->loadPackagesForUpdateFromCache();
+        if (!$updatePackagesInfo) {
+            return false;
+        }
+        $updatePackages = $updatePackagesInfo['packages'];
+        $availablePackages = $this->getRootRequiredPackageTypesByNameVersion();
+        foreach ($updatePackages as $package) {
+            $packageName = $package['name'];
+            if (array_key_exists($packageName, $availablePackages)) {
+                if (version_compare($availablePackages[$packageName]['version'], $package['latestVersion'], '<')) {
+                    $actualUpdatePackages[$packageName] = $package;
+                }
+            }
+        }
+        $updatePackagesInfo['packages'] = $actualUpdatePackages;
+        return $updatePackagesInfo;
     }
 
     /**
