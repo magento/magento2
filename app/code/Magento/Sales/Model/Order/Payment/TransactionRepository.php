@@ -14,6 +14,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory;
 use Magento\Sales\Model\Resource\Order\Payment\Transaction as TransactionResource;
 
 /**
@@ -22,18 +23,11 @@ use Magento\Sales\Model\Resource\Order\Payment\Transaction as TransactionResourc
 class TransactionRepository implements TransactionRepositoryInterface
 {
     /**
-     * transactionFactory
+     * Collection Result Factory
      *
-     * @var TransactionFactory
+     * @var TransactionSearchResultInterfaceFactory
      */
-    private $transactionFactory = null;
-
-    /**
-     * Collection Factory
-     *
-     * @var TransactionResource\CollectionFactory
-     */
-    private $transactionCollectionFactory = null;
+    private $transactionSearchResultFactory = null;
 
     /**
      * Magento\Sales\Model\Order\Payment\Transaction[]
@@ -65,21 +59,18 @@ class TransactionRepository implements TransactionRepositoryInterface
     /**
      * Repository constructor
      *
-     * @param TransactionFactory $transactionFactory
-     * @param TransactionResource\CollectionFactory $transactionCollectionFactory
+     * @param TransactionSearchResultInterfaceFactory $transactionSearchResultFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        TransactionFactory $transactionFactory,
-        TransactionResource\CollectionFactory $transactionCollectionFactory,
+        TransactionSearchResultInterfaceFactory $transactionSearchResultFactory,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrder $sortOrder,
         Metadata $metaData
     ) {
-        $this->transactionFactory = $transactionFactory;
-        $this->transactionCollectionFactory = $transactionCollectionFactory;
+        $this->transactionSearchResultFactory = $transactionSearchResultFactory;
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sortOrder = $sortOrder;
@@ -156,26 +147,12 @@ class TransactionRepository implements TransactionRepositoryInterface
     }
 
     /**
-     * Register entity
-     *
-     * @param TransactionInterface $object
-     * @return TransactionRepository
-     */
-    private function register(TransactionInterface $object)
-    {
-        if ($object->getTransactionId() && !isset($this->registry[$object->getTransactionId()])) {
-            $this->registry[$object->getTransactionId()] = $object;
-        }
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
     {
         /** @var TransactionResource\Collection $collection */
-        $collection = $this->transactionCollectionFactory->create();
+        $collection = $this->transactionSearchResultFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
@@ -186,9 +163,6 @@ class TransactionRepository implements TransactionRepositoryInterface
         $collection->setPageSize($criteria->getPageSize());
         $collection->addPaymentInformation(['method']);
         $collection->addOrderInformation(['increment_id']);
-        foreach ($collection as $object) {
-            $this->register($object);
-        }
         return $collection;
     }
 
