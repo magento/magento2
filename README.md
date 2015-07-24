@@ -68,7 +68,7 @@ To learn about issues, click [here][2]. To open an issue, click [here][3].
 
 To suggest documentation improvements, click [here][4].
 
-[1]: <http://devdocs.magento.com/guides/v1.0/contributor-guide/CONTRIBUTING.html>
-[2]: <http://devdocs.magento.com/guides/v1.0/contributor-guide/CONTRIBUTING.html#report>
+[1]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html>
+[2]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html#report>
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <http://devdocs.magento.com>
