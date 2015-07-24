@@ -67,10 +67,11 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
 
     var params = Form.serializeElements(elements, true);
     params.form_key = FORM_KEY;
+    if ($$('#'+idPrefix + 'information_fieldset .messages')) {
+        $$('#'+idPrefix + 'information_fieldset .messages')[0].update();
+    }
     if ($('messages')) {
         $('messages').update();
-    } else if ($$('#'+idPrefix + 'information_fieldset .messages')) {
-        $$('#'+idPrefix + 'information_fieldset .messages')[0].update();
     }
     var couponCodesGrid = eval(grid);
     new Ajax.Request(generateUrl, {
@@ -85,10 +86,10 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
                 couponCodesGrid.reload();
             }
             if (response && response.messages) {
-                if ($('messages')) {
-                    $('messages').update(response.messages);
-                } else if ($$('#'+idPrefix + 'information_fieldset .messages')) {
+                if ($$('#'+idPrefix + 'information_fieldset .messages')) {
                     $$('#'+idPrefix + 'information_fieldset .messages')[0].update(response.messages);
+                } else if ($('messages')) {
+                    $('messages').update(response.messages);
                 }
             }
             if (response && response.error) {
