@@ -136,11 +136,23 @@
             </td>
             <td class="data-grid-actions-cell">
                 <div class="action-select-wrap">
-                    <button class="action-select" disabled>
-                        <span data-bind="text: $t('Select')">Select</span>
+                    <button class="action-select">
+                        <span>Select</span>
                     </button>
+                    <ul class="action-menu">
+                        <li>
+                            <a class="action-menu-item" href="http://magento2.js/index.php/admin/cms/page/edit/page_id/2/">Edit</a>
+                        </li>
+
+                        <li>
+                            <a class="action-menu-item" href="http://magento2.js/index.php/admin/cms/page/delete/page_id/2/">Delete</a>
+                        </li>
+
+                        <li>
+                            <a class="action-menu-item" href="http://magento2.js/index.php/home/?SID=9jm7kopgjjq5ir55t1pcaqbfh5&amp;___store=default">Preview</a>
+                        </li>
+                    </ul>
                 </div>
-                <!-- /ko -->
             </td>
         </tr>
         <tr class="data-grid-editable-row data-grid-editable-row-actions">
@@ -149,14 +161,6 @@
                 <button class="action-primary" type="button"><span>Save</span></button>
             </td>
         </tr>
-
-        <!-- ko foreach: { data: rows, as: 'row' } -->
-        <tr data-part="body.row">
-            <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
-            <!-- ko template: getBody() --><!-- /ko -->
-            <!-- /ko -->
-        </tr>
-        <!-- /ko -->
 
         <!-- /ko -->
 
