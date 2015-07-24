@@ -48,7 +48,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     {
         $this->_actions = [];
         /**  */
-        if ($this->_salesReorder->canReorder($row->getCustomAttribute('entity_id'))) {
+        if ($this->_salesReorder->canReorder($row->getId())) {
             $reorderAction = [
                 '@' => [
                     'href' => $this->getUrl('sales/order_create/reorder', ['order_id' => $row->getId()]),
