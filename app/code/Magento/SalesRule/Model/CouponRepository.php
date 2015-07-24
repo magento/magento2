@@ -9,7 +9,7 @@ namespace Magento\SalesRule\Model;
 use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use \Magento\SalesRule\Model\Resource\Rule\Collection;
+use \Magento\SalesRule\Model\Resource\Coupon\Collection;
 
 /**
  * Coupon CRUD class
@@ -26,6 +26,11 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      * @var \Magento\SalesRule\Model\RuleFactory
      */
     protected $ruleFactory;
+
+    /**
+     * @var \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory
+     */
+    protected $searchResultFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory
@@ -52,12 +57,14 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
+        \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory $searchResultFactory,
         \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $collectionFactory,
         \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->couponFactory = $couponFactory;
         $this->ruleFactory = $ruleFactory;
+        $this->searchResultFactory = $searchResultFactory;
         $this->collectionFactory = $collectionFactory;
         $this->resourceModel = $resourceModel;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
@@ -106,7 +113,44 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        // TODO: Implement getList() method.
+        /** @var \Magento\SalesRule\Model\Resource\Coupon\Collection $collection */
+        $collection = $this->collectionFactory->create();
+        $couponInterfaceName = 'Magento\SalesRule\Api\Data\CouponInterface';
+        $this->extensionAttributesJoinProcessor->process($collection, $couponInterfaceName);
+
+        //Add filters from root filter group to the collection
+        /** @var FilterGroup $group */
+        foreach ($searchCriteria->getFilterGroups() as $group) {
+            $this->addFilterGroupToCollection($group, $collection);
+        }
+
+        $sortOrders = $searchCriteria->getSortOrders();
+        if ($sortOrders === null) {
+            $sortOrders = [];
+        }
+        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+        foreach ($sortOrders as $sortOrder) {
+            $field = $sortOrder->getField();
+            $collection->addOrder(
+                $field,
+                ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+            );
+        }
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
+        $collection->load();
+
+        $coupons = [];
+        /** @var \Magento\SalesRule\Model\Coupon $couponModel */
+        foreach ($collection as $couponModel) {
+            $coupons[] = $couponModel->getData();
+        }
+
+        $searchResults = $this->searchResultFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
+        $searchResults->setItems($coupons);
+        $searchResults->setTotalCount($collection->getSize());
+        return $searchResults;
     }
 
     /**
@@ -129,5 +173,28 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
 
         $this->resourceModel->delete($coupon);
         return true;
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param Collection $collection
+     * @return void
+     */
+    protected function addFilterGroupToCollection(
+        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        Collection $collection
+    ) {
+        $fields = [];
+        $conditions = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $fields[] = $filter->getField();
+            $conditions[] = [$condition => $filter->getValue()];
+        }
+        if ($fields) {
+            $collection->addFieldToFilter($fields, $conditions);
+        }
     }
 }
