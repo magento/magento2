@@ -756,11 +756,13 @@ class File implements DriverInterface
      */
     public function getRelativePath($basePath, $path = null)
     {
-        $path = $this->fixSeparator($path);
-        if (strpos($path, $basePath) === 0 || $basePath == $path . '/') {
-            $result = substr($path, strlen($basePath));
+        $normalizedPath = $this->fixSeparator($path);
+        if ($this->isRelativePath($normalizedPath)) {
+            $result = $normalizedPath;
+        } elseif ($this->isEqualPath($basePath, $normalizedPath)) {
+            $result = '';
         } else {
-            $result = $path;
+            $result = $this->buildRelativePath($basePath, $normalizedPath);
         }
         return $result;
     }
@@ -775,6 +777,66 @@ class File implements DriverInterface
     protected function fixSeparator($path)
     {
         return str_replace('\\', '/', $path);
+    }
+
+    /**
+     * @param string $basePath
+     * @param string $path
+     * @return string
+     */
+    private function buildRelativePath($basePath, $path)
+    {
+        if (strpos($path, $basePath) === 0) {
+            $result = substr($path, strlen($basePath));
+        } else {
+            $pathParts = explode('/', rtrim($path, '/'));
+            $basePathParts = explode('/', rtrim($basePath, '/'));
+            $commonDirCount = $this->getCountOfSharedDirectories($basePathParts, $pathParts);
+            $downPath = $this->buildDownPortionOfRelativePath($commonDirCount, $basePathParts);
+            $upPath = $this->buildUpPortionOfRelativePath($commonDirCount, $pathParts);
+            $result = $downPath . $upPath . (substr($path, -1) === '/' ? '/' : '');
+        }
+        return $result;
+    }
+
+    /**
+     * @param string[] $basePathParts
+     * @param string[] $pathParts
+     * @return int
+     */
+    private function getCountOfSharedDirectories(array $basePathParts, array $pathParts)
+    {
+        $commonPartCount = 0;
+        for ($max = min(count($pathParts), count($basePathParts)); $commonPartCount < $max; $commonPartCount++) {
+            if ($pathParts[$commonPartCount] !== $basePathParts[$commonPartCount]) {
+                break;
+            }
+        }
+        return $commonPartCount;
+    }
+
+    /**
+     * @param int $commonDirCount
+     * @param string[] $basePathParts
+     * @return string
+     */
+    private function buildDownPortionOfRelativePath($commonDirCount, array $basePathParts)
+    {
+        $numDown = count(array_slice($basePathParts, $commonDirCount));
+        return implode('/', array_fill(0, $numDown, '..'));
+    }
+
+    /**
+     * @param int $commonDirCount
+     * @param string[] $pathParts
+     * @return string
+     */
+    private function buildUpPortionOfRelativePath($commonDirCount, array $pathParts)
+    {
+        if ($commonDirCount === count($pathParts)) {
+            return '';
+        }
+        return '/' . implode('/', array_slice($pathParts, $commonDirCount));
     }
 
     /**
@@ -850,5 +912,24 @@ class File implements DriverInterface
             $realPath[] = $pathPart;
         }
         return implode(DIRECTORY_SEPARATOR, $realPath);
+    }
+
+    /**
+     * @param string $path
+     * @return bool
+     */
+    private function isRelativePath($path)
+    {
+        return substr($path, 0, 1) !== '/';
+    }
+
+    /**
+     * @param $basePath
+     * @param $normalizedPath
+     * @return bool
+     */
+    private function isEqualPath($basePath, $normalizedPath)
+    {
+        return $basePath === $normalizedPath || $basePath === $normalizedPath . '/';
     }
 }
