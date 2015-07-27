@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Test\Unit\Console\Command;
+namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\DeployStaticContentCommand;
 use Symfony\Component\Console\Tester\CommandTester;
