@@ -390,10 +390,10 @@ button {
         .appearing__on();
     }
     > li {
-        position: relative;
-        display: block;
         border: none; // ToDo UI: Should be deleted with old styles
+        display: block;
         padding: 0;
+        position: relative;
         transition: background-color .1s linear;
         > a {
             &:hover {
@@ -418,11 +418,11 @@ button {
     }
     .action-submenu {
         &:extend(.action-menu all);
-        position: absolute;
-        top: 0;
-        right: auto;
         left: 100%;
         margin-top: -1px;
+        position: absolute;
+        right: auto;
+        top: 0;
     }
     a {
         &.action-menu-item {
