@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
+use \Magento\Sales\Model\Order\CreditmemoRepository;
+
 /**
  * Class Email
  *
@@ -12,6 +14,22 @@ namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
  */
 class Email extends \Magento\Backend\App\Action
 {
+    /**
+     * @var CreditmemoRepository
+     */
+    protected $creditmemoRepository;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        CreditmemoRepository $creditmemoRepository
+    ) {
+        $this->creditmemoRepository = $creditmemoRepository;
+        parent::__construct($context);
+    }
+
     /**
      * @return bool
      */
@@ -31,7 +49,7 @@ class Email extends \Magento\Backend\App\Action
         if (!$creditmemoId) {
             return;
         }
-        $creditmemo = $this->_objectManager->create('Magento\Sales\Model\Order\Creditmemo')->load($creditmemoId);
+        $creditmemo = $this->creditmemoRepository->get($creditmemoId);
         if (!$creditmemo) {
             return;
         }
