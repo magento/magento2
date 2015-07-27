@@ -81,7 +81,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected $creditMemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\TransactionRepository | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $transactionRepositoryMock;
     /**
@@ -114,7 +114,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['formatTxt'])
             ->getMock();
-        $this->transactionRepositoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\TransactionRepository')
+        $this->transactionRepositoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\Transaction\Repository')
             ->disableOriginalConstructor()
             ->setMethods(['get', 'getByTxnType', 'getByTxnId'])
             ->getMock();
