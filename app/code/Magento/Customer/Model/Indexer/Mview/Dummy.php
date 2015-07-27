@@ -16,35 +16,39 @@ class Dummy implements ActionInterface, MviewActionInterface
      * @return void
      */
     public function executeFull()
-    {}
+    {
+    }
 
     /**
      * Execute partial indexation by ID list
      *
      * @param int[] $ids
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeList(array $ids)
-    {}
+    {
+    }
 
     /**
      * Execute partial indexation by ID
      *
      * @param int $id
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeRow($id)
-    {}
+    {
+    }
 
     /**
      * Execute materialization on ids entities
      *
      * @param int[] $ids
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($ids)
-    {}
+    {
+    }
 }

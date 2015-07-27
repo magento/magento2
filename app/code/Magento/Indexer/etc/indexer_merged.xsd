@@ -122,9 +122,9 @@
                 Fieldset of field declaration.
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence>
+        <xs:sequence minOccurs="0">
             <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="field" type="fieldType" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="field" type="fieldType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="source" type="classType" use="required"/>
         <xs:attribute name="provider" type="classType" use="optional"/>
@@ -187,6 +187,9 @@
             <xs:enumeration value="varchar" />
             <xs:enumeration value="text" />
             <xs:enumeration value="mediumtext" />
+            <xs:enumeration value="timestamp" />
+            <xs:enumeration value="datetime" />
+            <xs:enumeration value="date" />
         </xs:restriction>
     </xs:simpleType>
 

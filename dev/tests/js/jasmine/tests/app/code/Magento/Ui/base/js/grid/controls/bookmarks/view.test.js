@@ -10,56 +10,56 @@ define([
     describe('ui/js/grid/controls/bookmarks/view', function () {
         var view, returnContextOfItself;
         beforeEach(function(){
-            view = BookmarkView();
+            view = new BookmarkView({
+                index: 'index',
+                name: 'name',
+                indexField: 'id',
+                dataScope: 'scope',
+                provider: 'provider'
+            });
+        });
+        it('has initialize method', function () {
+            spyOn(view, "initialize");
+            view.initialize();
+            expect(view.initialize).toHaveBeenCalled();
         });
         it('has initObservable method', function () {
-            returnContextOfItself = view.initObservable();
+            spyOn(view, "initObservable");
+            view.initObservable();
             expect(view.initObservable).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(view);
-        });
-        it('has getSaved method', function () {
-            view.getSaved();
-            expect(view.getSaved).toHaveBeenCalled();
         });
         it('has getData method', function () {
+            spyOn(view, "getData");
             view.getData();
             expect(view.getData).toHaveBeenCalled();
         });
         it('has setData method', function () {
-            returnContextOfItself = view.setData();
+            spyOn(view, "setData");
+            view.setData();
             expect(view.setData).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(view);
         });
-        it('has setLabel method', function () {
-            returnContextOfItself = view.setLabel();
-            expect(view.setLabel).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(view);
+        it('has syncLabel method', function () {
+            spyOn(view, "syncLabel");
+            view.syncLabel();
+            expect(view.syncLabel).toHaveBeenCalled();
         });
         it('has startEdit method', function () {
-            returnContextOfItself = view.startEdit();
+            spyOn(view, "startEdit");
+            view.startEdit();
             expect(view.startEdit).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(view);
         });
-        it('has endEdit method', function () {
-            returnContextOfItself = view.endEdit();
-            expect(view.endEdit).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(view);
-        });
-        it('has save method', function () {
-            view.save();
-            expect(view.save).toHaveBeenCalled();
-            expect(view.isNew).toBeFalsy();
-        });
-        it('has checkChanges method', function () {
-            view.checkChanges();
-            expect(view.checkChanges).toHaveBeenCalled();
-            expect(view.changed).toHaveBeenCalled();
+        it('has exportView method', function () {
+            spyOn(view, "exportView");
+            view.exportView();
+            expect(view.exportView).toHaveBeenCalled();
         });
         it('has onActivate method', function () {
+            spyOn(view, "onActivate");
             view.onActivate();
             expect(view.onActivate).toHaveBeenCalled();
         });
         it('has onActiveChange method', function () {
+            spyOn(view, "onActiveChange");
             view.onActiveChange();
             expect(view.onActiveChange).toHaveBeenCalled();
         });
