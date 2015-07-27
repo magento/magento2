@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="sales_shipment.grid.container">
-            <block class="Magento\Backend\Block\Widget\Grid" name="sales.shipment.grid" as="grid">
+            <block class="Magento\Sales\Block\Adminhtml\Order\Shipment\Grid" name="sales.shipment.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">sales_shipment_grid</argument>
                     <argument name="dataSource" xsi:type="object">Magento\Sales\Model\Resource\Order\Shipment\Grid\Collection</argument>

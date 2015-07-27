@@ -6,10 +6,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <update handle="sales_order_invoice_grid_block"/>
-    <update handle="sales_order_shipment_grid_block"/>
     <update handle="sales_order_transactions_grid_block"/>
-    <update handle="sales_order_creditmemo_grid_block"/>
     <head>
         <link src="Magento_Sales::js/bootstrap/order-create-index.js"/>
     </head>
@@ -74,6 +71,15 @@
         </referenceContainer>
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Js\Components" name="sales_page_head_components" template="Magento_Sales::page/js/components.phtml"/>
+        </referenceBlock>
+        <referenceBlock name="sales_order_invoice.grid.container">
+            <uiComponent name="sales_order_view_invoice_grid"/>
+        </referenceBlock>
+        <referenceBlock name="sales_order_creditmemo.grid.container">
+            <uiComponent name="sales_order_view_creditmemo_grid"/>
+        </referenceBlock>
+        <referenceBlock name="sales_order_shipment.grid.container">
+            <uiComponent name="sales_order_view_shipment_grid"/>
         </referenceBlock>
     </body>
 </page>
