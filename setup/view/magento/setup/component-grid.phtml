@@ -119,7 +119,9 @@
                     <!-- "_active" class should be added when .action-select button clicked to the -->
                     <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
-                        <button class="action-select" ng-click="toggleActiveActionsCell(component)" ng-blur="closeActiveActionsCell(component)">
+                        <button class="action-select"
+                            ng-click="toggleActiveActionsCell(component)"
+                            ng-blur="closeActiveActionsCell(component)">
                             <span>Select</span>
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(component)}">
