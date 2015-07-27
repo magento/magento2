@@ -8,23 +8,14 @@ namespace Magento\Framework\Amqp;
 use Magento\Framework\Amqp\Config\Data as QueueConfig;
 use Magento\Framework\Amqp\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 use Magento\Framework\Phrase;
 
 /**
- * Class which creates Producers
+ * Class which creates Publishers
  */
 class ProducerFactory
 {
-    /**
-     * A map from connection name to the implementation class. Probably should read this from a config file eventually.
-     *
-     * @var array
-     */
-    private $connectionNameToClassMap = [
-        'rabbitmq' => 'Magento\Framework\Amqp\AmqpProducer'
-    ];
-
     /**
      * All of the merged queue config information
      *
@@ -33,28 +24,58 @@ class ProducerFactory
     private $queueConfig;
 
     /**
-     * Object Manager instance
-     *
-     * @var ObjectManagerInterface
+     * @var ProducerInterface[]
      */
-    private $objectManager;
+    private $publishers;
 
     /**
      * Initialize dependencies.
      *
+     * <type name="Magento\Framework\Amqp\ProducerFactory">
+     *     <arguments>
+     *         <argument name="publishers" xsi:type="array">
+     *             <item name="rabbitmq" xsi:type="array">
+     *                 <item name="type" xsi:type="object">Magento\Framework\Amqp\AmqpProducer</item>
+     *                 <item name="connectionName" xsi:type="string">rabbitmq</item>
+     *                 <item name="sortOrder" xsi:type="string">10</item>
+     *             </item>
+     *         </argument>
+     *     </arguments>
+     * </type>
+     *
      * @param QueueConfig $queueConfig
-     * @param ObjectManagerInterface $objectManager
+     * @param CompositeHelper $compositeHelper
+     * @param ProducerInterface[] $publishers
      */
     public function __construct(
         QueueConfig $queueConfig,
-        ObjectManagerInterface $objectManager
+        CompositeHelper $compositeHelper,
+        $publishers = []
     ) {
         $this->queueConfig = $queueConfig;
-        $this->objectManager = $objectManager;
+        $this->publishers = [];
+
+        $publishers = $compositeHelper->filterAndSortDeclaredComponents($publishers);
+        foreach ($publishers as $name => $publisherConfig) {
+            $this->add($publisherConfig['connectionName'], $publisherConfig['type']);
+        }
     }
 
     /**
-     * Retrieves the queue configuration and returns an initialized a producer.
+     * Add publisher.
+     *
+     * @param string $name
+     * @param ProducerInterface $publisher
+     * @return $this
+     */
+    private function add($name, ProducerInterface $publisher)
+    {
+        $this->publishers[$name] = $publisher;
+        return $this;
+    }
+
+    /**
+     * Retrieves the queue configuration and returns a concrete publisher.
      *
      * @param string $topicName
      * @return ProducerInterface
@@ -65,20 +86,20 @@ class ProducerFactory
         $publisherName = $this->getPublisherNameForTopic($topicName);
 
         $publisherConfig = $this->getPublisherConfigForName($publisherName);
-        $producerTypeName = $this->getProducerTypeName($publisherConfig[QueueConfigConverter::PUBLISHER_CONNECTION]);
-        return $this->objectManager->create($producerTypeName, [ 'config' => $publisherConfig ]);
+        $producer = $this->getPublisherForConnectionName($publisherConfig[QueueConfigConverter::PUBLISHER_CONNECTION]);
+        return $producer;
     }
 
     /**
-     * Return the class type of producer to create.
+     * Return the class type of publisher to create.
      *
      * @param string $connectionName
-     * @return string
+     * @return ProducerInterface
      */
-    private function getProducerTypeName($connectionName)
+    private function getPublisherForConnectionName($connectionName)
     {
-        if (isset($this->connectionNameToClassMap[$connectionName])) {
-            return $this->connectionNameToClassMap[$connectionName];
+        if (isset($this->publishers[$connectionName])) {
+            return $this->publishers[$connectionName];
         }
         throw new LocalizedException(
             new Phrase('Could not find an implementation type for connection "%name".', ['name' => $connectionName])
@@ -98,7 +119,7 @@ class ProducerFactory
             return $queueConfig[QueueConfigConverter::PUBLISHERS][$publisherName];
         }
         throw new LocalizedException(
-            new Phrase('Specified publisher "%publisher" is not declared.', ['publisher' => $publisher])
+            new Phrase('Specified publisher "%publisher" is not declared.', ['publisher' => $publisherName])
         );
     }
 
@@ -109,7 +130,7 @@ class ProducerFactory
      * @return string
      * @throws LocalizedException
      */
-    protected function getPublisherNameForTopic($topicName)
+    private function getPublisherNameForTopic($topicName)
     {
         /* TODO: Probably should have the queueConfig itself figure out if there's a runtime environment configuration
            to override a particular queue's publisher */

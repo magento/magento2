@@ -30,7 +30,7 @@ class Publisher
      * Publishes a message on a topic.
      *
      * @param string $topicName
-     * @param object $data
+     * @param array|object $data
      * @return void
      */
     public function publish($topicName, $data)
