@@ -33,4 +33,9 @@
             <argument name="themeFiles" xsi:type="object">Magento\Framework\View\File\Collector\Theme</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\RequireJs\Config">
+        <arguments>
+            <argument name="minifyAdapter" xsi:type="object">jsMinificationAdapter</argument>
+        </arguments>
+    </type>
 </config>
