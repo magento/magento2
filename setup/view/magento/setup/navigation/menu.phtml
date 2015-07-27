@@ -8,39 +8,25 @@
 
 ?>
 <head>
-<title><?php echo $this->headerTitle?></title>
+<title>{{$state.current.title}}</title>
+<style>
+    a.white-space-pre-line {
+        white-space: pre-line;
+    }
+</style>
+
 </head>
-<?php $expressions = []; foreach ( $this->main as $item ): ?>
-    <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')'; ?>
-<?php endforeach; ?>
-<?php $showNavMenuExpressions = []; foreach ( $this->menu as $item ): ?>
-    <?php $showNavMenuExpressions[] = '$state.includes(\'' . $item['id'] . '\')'; ?>
-<?php endforeach; ?>
 
-<nav
-    ng-controller="navigationController"
-    ng-class="{'show' :
-        <?php
-            echo implode( '&&', $expressions) . '&& (' . implode('||', $showNavMenuExpressions) . ')';
-        ?>}"
-    data-ng-init="redirectTo('<?php echo $this->redirect?>')"
-    id="menu"
-    class="nav ng-cloak"
-    >
-
-    <ul class="nav-bar">
-        <?php foreach ($this->menu as $item): ?>
-        <li ng-class="{ active: $state.includes('<?php echo $item['id'] ?>'), disabled: itemStatus(<?php echo $item['order']; ?>)}"
-            id="<?php echo $item['id']; ?>"
-            >
+<div>
+    <nav ng-controller="navigationController" data-ng-init="redirectTo(redirect)" id="menu" class="nav ng-scope show"
+     ng-hide="$state.current.main || $state.current.default">
+    <ul class="nav-bar" >
+        <li ng-repeat="menuState in navService.menu | filter:{type:$state.current.type}"
+            ng-class="{active: $state.includes(menuState.id), disabled: itemStatus(menuState.order)}">
             <a
-                ng-class=""
-                ui-sref="<?php echo $item['id']; ?>"
-                href="#/<?php echo $item['url']; ?>"
-                >
-                <?php echo nl2br( $item['title'] ); ?>
-            </a>
+               class="white-space-pre-line" ui-sref="{{menuState.id}}"
+               href="{{menuState.url}}">{{menuState.title}}</a>
         </li>
-        <?php endforeach; ?>
     </ul>
 </nav>
+</div>

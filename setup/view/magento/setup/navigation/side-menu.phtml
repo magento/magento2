@@ -32,21 +32,21 @@
         <li class="item-home level-0" ng-class="{_active: state.current.name === 'root.home'}">
             <a
             ng-class="{_active: state.current.name === 'root.home'}"
-            ng-click="goToState('root.home')">
+            ui-sref="root.home">
             <span>Home</span>
             </a>
         </li>
-        <li class="item-component level-0"   ng-class="{_active: state.current.name === 'root.component-grid'}">
+        <li class="item-component level-0"   ng-class="{_active: state.current.name === 'root.cm'}">
             <a
-                ng-class="{_active: state.current.name === 'root.component-grid'}"
-                ng-click="goToState('root.component-grid')">
+                ng-class="{_active: state.current.name === 'root.cm'}"
+                ui-sref="root.cm">
             <span>Component Manager</span>
             </a>
         </li>
-        <li class="item-upgrade level-0" ng-class="{_active: state.current.name === 'root.system-upgrade'}">
+        <li class="item-upgrade level-0" ng-class="{_active: state.current.name === 'root.su'}">
             <a
-                ng-class="{_active: state.current.name === 'system-upgrade'}"
-                ng-click="goToState('root.system-upgrade')">
+                ng-class="{_active: state.current.name === 'root.su'}"
+                ui-sref="root.su">
                 <span>System Upgrade</span>
             </a>
         </li>
