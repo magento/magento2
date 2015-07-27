@@ -26,12 +26,12 @@ interface CouponRepositoryInterface
     /**
      * Get coupon by coupon id.
      *
-     * @param int $id
+     * @param int $couponId
      * @return \Magento\SalesRule\Api\Data\CouponInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If $id is not found
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If $couponId is not found
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getById($id);
+    public function getById($couponId);
 
     /**
      * Retrieve coupon.
@@ -45,10 +45,10 @@ interface CouponRepositoryInterface
     /**
      * Delete coupon by coupon id.
      *
-     * @param int $id
+     * @param int $couponId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById($id);
+    public function deleteById($couponId);
 }
