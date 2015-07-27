@@ -18,7 +18,7 @@ Without a router script, that is not possible via the php built-in server.
 
 example usage: ```php -S 127.0.0.41:8082 -t ./pub/ ./phpserver/router.php```
 
-### What exactly does the script
+### What exactly the script does
 
 first we have an low level `$debug` closure, for the case you need to debug execution.
 
