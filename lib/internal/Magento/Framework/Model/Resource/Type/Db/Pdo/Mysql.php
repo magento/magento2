@@ -58,7 +58,7 @@ class Mysql extends Db implements ConnectionAdapterInterface
             return null;
         }
 
-        $connection = $this->_getDbAdapterInstance($logger);
+        $connection = $this->_getDbConnectionInstance($logger);
         if (!empty($this->_connectionConfig['initStatements']) && $connection) {
             $connection->query($this->_connectionConfig['initStatements']);
         }
@@ -73,23 +73,23 @@ class Mysql extends Db implements ConnectionAdapterInterface
     }
 
     /**
-     * Create and return DB adapter object instance
+     * Create and return DB connection object instance
      *
      * @param LoggerInterface $logger
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected function _getDbAdapterInstance(LoggerInterface $logger)
+    protected function _getDbConnectionInstance(LoggerInterface $logger)
     {
-        $className = $this->_getDbAdapterClassName();
+        $className = $this->_getDbConnectionClassName();
         return new $className($this->string, $this->dateTime, $logger, $this->_connectionConfig);
     }
 
     /**
-     * Retrieve DB adapter class name
+     * Retrieve DB connection class name
      *
      * @return string
      */
-    protected function _getDbAdapterClassName()
+    protected function _getDbConnectionClassName()
     {
         return 'Magento\Framework\DB\Adapter\Pdo\Mysql';
     }
