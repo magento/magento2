@@ -99,7 +99,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
         $coupon = $this->couponFactory->create()
             ->load($couponId);
 
-        if (!$coupon->getId()) {
+        if (!$coupon->getCouponId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException();
         }
         return $coupon;
@@ -139,11 +139,10 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
-        $collection->load();
 
         $coupons = [];
         /** @var \Magento\SalesRule\Model\Coupon $couponModel */
-        foreach ($collection as $couponModel) {
+        foreach ($collection->getItems() as $couponModel) {
             $coupons[] = $couponModel->getData();
         }
 
