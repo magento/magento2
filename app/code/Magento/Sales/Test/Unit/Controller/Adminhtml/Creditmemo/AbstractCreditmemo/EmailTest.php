@@ -29,6 +29,11 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     protected $context;
 
     /**
+     * @var \Magento\Sales\Model\Order\CreditmemoRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $creditmemoRepositoryMock;
+
+    /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
@@ -93,6 +98,13 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->creditmemoRepositoryMock = $this->getMock(
+            'Magento\Sales\Model\Order\CreditmemoRepository',
+            [],
+            [],
+            '',
+            false
+        );
         $this->response = $this->getMock(
             'Magento\Framework\App\ResponseInterface',
             ['setRedirect', 'sendResponse'],
@@ -135,8 +147,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email',
             [
                 'context' => $this->context,
-                'request' => $this->request,
-                'response' => $this->response,
+                'creditmemoRepository' => $this->creditmemoRepositoryMock
             ]
         );
     }
@@ -144,31 +155,26 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     public function testEmail()
     {
         $cmId = 10000031;
-        $creditmemoClassName = 'Magento\Sales\Model\Order\Creditmemo';
         $cmNotifierClassName = 'Magento\Sales\Model\Order\CreditmemoNotifier';
-        $creditmemo = $this->getMock($creditmemoClassName, ['load', '__wakeup'], [], '', false);
+        $creditmemo = $this->getMock('Magento\Sales\Model\Order\Creditmemo', ['load', '__wakeup'], [], '', false);
         $cmNotifier = $this->getMock($cmNotifierClassName, ['notify', '__wakeup'], [], '', false);
         $this->prepareRedirect($cmId);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
-            ->will($this->returnValue($cmId));
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->with($creditmemoClassName)
-            ->will($this->returnValue($creditmemo));
-        $creditmemo->expects($this->once())
-            ->method('load')
+            ->willReturn($cmId);
+        $this->creditmemoRepositoryMock->expects($this->once())
+            ->method('get')
             ->with($cmId)
-            ->will($this->returnSelf());
-        $this->objectManager->expects($this->at(1))
+            ->willReturn($creditmemo);
+        $this->objectManager->expects($this->once())
             ->method('create')
             ->with($cmNotifierClassName)
-            ->will($this->returnValue($cmNotifier));
+            ->willReturn($cmNotifier);
         $cmNotifier->expects($this->once())
             ->method('notify')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with('You sent the message.');
@@ -193,21 +199,15 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     public function testEmailNoCreditmemo()
     {
         $cmId = 10000031;
-        $creditmemoClassName = 'Magento\Sales\Model\Order\Creditmemo';
-        $creditmemo = $this->getMock($creditmemoClassName, ['load', '__wakeup'], [], '', false);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
             ->will($this->returnValue($cmId));
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->with($creditmemoClassName)
-            ->will($this->returnValue($creditmemo));
-        $creditmemo->expects($this->once())
-            ->method('load')
+        $this->creditmemoRepositoryMock->expects($this->once())
+            ->method('get')
             ->with($cmId)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertNull($this->creditmemoEmail->execute());
     }
