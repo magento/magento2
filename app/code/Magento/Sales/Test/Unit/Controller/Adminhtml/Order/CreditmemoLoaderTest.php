@@ -122,7 +122,6 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
             $this->creditmemoFactoryMock,
             $this->orderFactoryMock,
             $this->invoiceRepositoryMock,
-            $this->serviceOrderFactoryMock,
             $this->eventManagerMock,
             $this->sessionMock,
             $this->messageManagerMock,
