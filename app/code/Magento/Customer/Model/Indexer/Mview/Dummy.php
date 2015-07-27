@@ -24,7 +24,7 @@ class Dummy implements ActionInterface, MviewActionInterface
      *
      * @param int[] $ids
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeList(array $ids)
     {
@@ -35,7 +35,7 @@ class Dummy implements ActionInterface, MviewActionInterface
      *
      * @param int $id
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeRow($id)
     {
@@ -46,7 +46,7 @@ class Dummy implements ActionInterface, MviewActionInterface
      *
      * @param int[] $ids
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($ids)
     {
