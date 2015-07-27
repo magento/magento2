@@ -16,7 +16,8 @@ class Dummy implements ActionInterface, MviewActionInterface
      * @return void
      */
     public function executeFull()
-    {}
+    {
+    }
 
     /**
      * Execute partial indexation by ID list
@@ -26,7 +27,8 @@ class Dummy implements ActionInterface, MviewActionInterface
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function executeList(array $ids)
-    {}
+    {
+    }
 
     /**
      * Execute partial indexation by ID
@@ -36,7 +38,8 @@ class Dummy implements ActionInterface, MviewActionInterface
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function executeRow($id)
-    {}
+    {
+    }
 
     /**
      * Execute materialization on ids entities
@@ -46,5 +49,6 @@ class Dummy implements ActionInterface, MviewActionInterface
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute($ids)
-    {}
+    {
+    }
 }
