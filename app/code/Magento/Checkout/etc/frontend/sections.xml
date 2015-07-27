@@ -31,7 +31,6 @@
     <action name="checkout/onepage/saveOrder">
         <section name="cart"/>
         <section name="checkout-data"/>
-        <section name="customer-email"/>
     </action>
     <action name="checkout/sidebar/removeItem">
         <section name="cart"/>
@@ -45,11 +44,9 @@
     <action name="rest/*/V1/carts/*/payment-information">
         <section name="cart"/>
         <section name="checkout-data"/>
-        <section name="customer-email"/>
     </action>
     <action name="rest/*/V1/guest-carts/*/payment-information">
         <section name="cart"/>
         <section name="checkout-data"/>
-        <section name="customer-email"/>
     </action>
 </config>
