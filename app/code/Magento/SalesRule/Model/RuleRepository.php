@@ -160,7 +160,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 
         $rules = [];
         /** @var \Magento\SalesRule\Model\Rule $ruleModel */
-        foreach ($collection as $ruleModel) {
+        foreach ($collection->getItems() as $ruleModel) {
             $ruleModel->getCustomerGroupIds();
             $ruleModel->getStoreLabels();
             $rules[] = $this->toDataModelConverter->toDataModel($ruleModel);
