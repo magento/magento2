@@ -29,7 +29,6 @@ class ModificationChain implements ModificationInterface
         $this->modificationsList = $modificationsList;
     }
 
-
     /**
      * Modifies input config
      *

@@ -29,11 +29,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\MinifyService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $assetMinifyServiceMock;
-
-    /**
      * @var \Magento\Framework\View\Asset\AssetInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $assetInterfaceMock;
@@ -84,11 +79,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assetMinifyServiceMock = $this->getMockBuilder('Magento\Framework\View\Asset\MinifyService')
-            ->setMethods(['getAssets'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->assetMergeServiceMock = $this->getMockBuilder('Magento\Framework\View\Asset\MergeService')
             ->disableOriginalConstructor()
             ->getMock();
@@ -126,7 +116,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Page\Config\Renderer',
             [
                 'pageConfig' => $this->pageConfigMock,
-                'assetMinifyService' => $this->assetMinifyServiceMock,
                 'assetMergeService' => $this->assetMergeServiceMock,
                 'urlBuilder' => $this->urlBuilderMock,
                 'escaper' => $this->escaperMock,
@@ -317,10 +306,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assetsCollection->expects($this->once())
             ->method('getGroups')
             ->willReturn([$groupMockOne, $groupMockTwo]);
-
-        $this->assetMinifyServiceMock->expects($this->exactly(2))
-            ->method('getAssets')
-            ->willReturnArgument(0);
 
         $this->assetMergeServiceMock->expects($this->exactly(1))
             ->method('getMergedAssets')

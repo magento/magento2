@@ -1,0 +1,4 @@
+app/code/**/*.js
+app/design/**/*.js
+dev/tests/js/jasmine/tests/**/*.js
+lib/web/mage/**/*.js
