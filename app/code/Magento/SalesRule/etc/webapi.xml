@@ -40,7 +40,7 @@
     </route>
 
     <!-- Coupon CRUD -->
-    <route url="/V1/coupons/:id" method="GET">
+    <route url="/V1/coupons/:couponId" method="GET">
         <service class="Magento\SalesRule\Api\CouponRepositoryInterface" method="getById"/>
         <resources>
             <resource ref="Magento_SalesRule::quote"/>
@@ -58,13 +58,13 @@
             <resource ref="Magento_SalesRule::quote"/>
         </resources>
     </route>
-    <route url="/V1/coupons/:id" method="PUT">
+    <route url="/V1/coupons/:couponId" method="PUT">
         <service class="Magento\SalesRule\Api\CouponRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_SalesRule::quote"/>
         </resources>
     </route>
-    <route url="/V1/coupons/:id" method="DELETE">
+    <route url="/V1/coupons/:couponId" method="DELETE">
         <service class="Magento\SalesRule\Api\CouponRepositoryInterface" method="deleteById"/>
         <resources>
             <resource ref="Magento_SalesRule::quote"/>
