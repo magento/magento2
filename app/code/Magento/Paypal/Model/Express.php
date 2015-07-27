@@ -167,6 +167,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_exception;
 
     /**
+     * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     */
+    protected $transactionRepository;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -180,6 +185,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param CartFactory $cartFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Exception\LocalizedExceptionFactory $exception
+     * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -199,6 +205,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Paypal\Model\CartFactory $cartFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Exception\LocalizedExceptionFactory $exception,
+        \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -220,6 +227,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_cartFactory = $cartFactory;
         $this->_checkoutSession = $checkoutSession;
         $this->_exception = $exception;
+        $this->transactionRepository = $transactionRepository;
 
         $proInstance = array_shift($data);
         if ($proInstance && $proInstance instanceof \Magento\Paypal\Model\Pro) {
@@ -439,7 +447,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             $this->_isOrderPaymentActionKey
         ) && !$payment->getVoidOnlyAuthorization()
         ) {
-            $orderTransaction = $payment->lookupTransaction(false, Transaction::TYPE_ORDER);
+            $orderTransaction = $this->transactionRepository->getByTxnType(
+                Transaction::TYPE_ORDER,
+                $payment->getId(),
+                $payment->getOrder()->getId()
+            );
             if ($orderTransaction) {
                 $payment->setParentTransactionId($orderTransaction->getTxnId());
                 $payment->setTransactionId($orderTransaction->getTxnId() . '-void');
@@ -521,7 +533,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             }
             //close order transaction if needed
             if ($payment->getShouldCloseParentTransaction()) {
-                $orderTransaction = $payment->lookupTransaction(false, Transaction::TYPE_ORDER);
+                $orderTransaction = $this->transactionRepository->getByTxnType(
+                    Transaction::TYPE_ORDER,
+                    $payment->getId(),
+                    $payment->getOrder()->getId()
+                );
 
                 if ($orderTransaction) {
                     $orderTransaction->setIsClosed(true);
@@ -740,7 +756,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     {
         $info = $this->getInfoInstance();
         if ($info->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $info->lookupTransaction(false, Transaction::TYPE_ORDER);
+            $orderTransaction = $this->transactionRepository->getByTxnType(
+                Transaction::TYPE_ORDER,
+                $info->getId(),
+                $info->getOrder()->getId()
+            );
             if ($orderTransaction) {
                 $info->setParentTransactionId($orderTransaction->getTxnId());
             }
@@ -760,7 +780,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_pro->getConfig()->setStoreId($payment->getOrder()->getStore()->getId());
 
         if ($payment->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $payment->lookupTransaction(false, Transaction::TYPE_ORDER);
+            $orderTransaction = $this->transactionRepository->getByTxnType(
+                Transaction::TYPE_ORDER,
+                $payment->getId(),
+                $payment->getOrder()->getId()
+            );
             if ($orderTransaction->getIsClosed()) {
                 return false;
             }
