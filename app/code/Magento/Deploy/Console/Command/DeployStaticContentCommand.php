@@ -31,13 +31,6 @@ class DeployStaticContentCommand extends Command
     const LANGUAGE_OPTION = 'languages';
 
     /**
-     * Object manager factory
-     *
-     * @var ObjectManagerFactory;
-     */
-    private $objectManagerProvider;
-
-    /**
      * Deployment configuration
      *
      * @var DeploymentConfig
