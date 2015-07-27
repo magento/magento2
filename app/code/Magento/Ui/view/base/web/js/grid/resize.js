@@ -21,7 +21,7 @@ define([
         initialize: function () {
             _.bindAll(this, 'refreshResizeConfig', 'initResizeConfig');
             this._super();
-            this.config = {
+            this.resizeConfig = {
                 entryTable: {
                     state: false,
                     promise: $.Deferred()
@@ -32,8 +32,10 @@ define([
                     divsResizableAttribute: 'data-cl-elem',
                     divsResizableAttrName: 'shadow-div'
                 },
+                columnsVisibility: [],
                 showLines: 4,
-                dragRange: 10
+                dragRange: 10,
+                resizable: false
             };
         },
         /**
@@ -41,7 +43,8 @@ define([
          * @returns Object with handlers methods
          */
         _handlers: function () {
-            var t = this;
+            var t = this,
+                cfg = t.resizeConfig;
 
             return {
                 /**
@@ -50,7 +53,6 @@ define([
                  * @returns {Object} with entry property
                  */
                 entryInTable: function () {
-                    var cfg = t.config;
 
                     if (!cfg.entryTable.state) {
                         cfg.entryTable.state = true;
@@ -61,12 +63,72 @@ define([
                 }
             };
         },
-
         eventListener: function () {
-            var t = this;
+            var t = this,
+                divAttrProp = Object.getOwnPropertyNames(t.divsAttrParams)[0],
+                divAttrPropValue = t.divsAttrParams[divAttrProp];
 
+            console.log(this);
             $(t.table).bind('mouseenter', t._handlers().entryInTable);
-            t.config.entryTable.promise.done(t.initResizeConfig);
+            t.resizeConfig.entryTable.promise.done(function () {
+                $('['+divAttrProp+'='+divAttrPropValue+']').bind('mousedown', t.resizable().resizeMousedown);
+                t.initResizeConfig();
+            });
+        },
+        resizable: function () {
+            var t = this,
+                cfg = t.resizeConfig,
+                curElement,
+                depElement;
+
+            return {
+                resizeMousedown: function (event) {
+                    var get = t._get(),
+                        columnId = get.columnId(event),
+                        depElement = get.depElement(columnId);
+                    console.log(depElement)
+
+                    curElement = $(event.target).parent();
+                    cfg.resizable = true;
+
+                    $(window)
+                        .bind('mousemove', this.resizeMousemove)
+                        .bind('mouseup', this.resizeMouseup);
+                },
+                resizeMousemove: function (event) {
+
+                },
+                resizeMouseup: function (event) {
+                    cfg.resizable = false;
+                    $(window)
+                        .unbind('mousemove', this.resizeMousemove)
+                        .unbind('mouseup', this.resizeMouseup);
+                }
+            };
+        },
+        _get: function () {
+            var t = this,
+                cfg = t.resizeConfig;
+
+            return {
+                columnId: function (event) {
+                    var attr = $(event.target).parent().attr(cfg.nameSpacing.cellsDataAttribute);
+
+                    return Number(attr.match(/\d+/));
+                },
+                depAttr: function (num) {
+                    return cfg.nameSpacing.cellsDataAttrPrefix+num;
+                },
+                depElement: function (index) {
+                    var depIndex = index + 1;
+
+                    if (t._is().columnVisible(depIndex)) {
+                        return this.depAttr(depIndex);
+                    } else {
+                        this.depElement.call(this, depIndex);
+                    }
+                }
+            };
         },
         /**
          * @see set property to config
@@ -74,7 +136,7 @@ define([
          */
         _set: function () {
             var t = this,
-                cfg = this.config;
+                cfg = this.resizeConfig;
 
             return {
                 /**
@@ -210,7 +272,8 @@ define([
          * @returns Object with add methods
          */
         _is: function () {
-            var t = this;
+            var t = this,
+                cfg = t.resizeConfig;
 
             return {
                 /**
@@ -220,6 +283,9 @@ define([
                  */
                 rows: function (obj) {
                     return Boolean(obj.rows);
+                },
+                columnVisible: function(num) {
+                    return cfg.resizeColumnsVisibility[num];
                 }
             };
         },
@@ -230,7 +296,7 @@ define([
          */
         _add: function () {
             var t = this,
-                cfg = t.config;
+                cfg = t.resizeConfig;
 
             return {
                 /**
@@ -255,27 +321,6 @@ define([
                     }
 
                     return cfg;
-                },
-                /**
-                 * @see add divs to cells for resize columns
-                 * @returns this
-                 */
-                divsResizable: function (columnsElements, columnsLength, dragRange) {
-                    var ce = columnsElements || cfg.columnsElements || t._set().columnsElements(),
-                        cl = columnsLength || cfg.columnsLength || t._set().columnsLength(),
-                        drAttr = cfg.nameSpacing.divsResizableAttribute,
-                        drAttrName = cfg.nameSpacing.divsResizableAttrName,
-                        drRange = dragRange || cfg.dragRange || 10,
-                        i = 0,
-                        template = '<div ' + drAttr + '="' + drAttrName + '" style="position:absolute; ' +
-                            'width:' + drRange + 'px; height:100%; top:0; right:0; margin-right:-' + drRange + 'px;' +
-                            'cursor: e-resize;"></div>';
-
-                    for (i; i < cl; i++) {
-                        $(columnsElements[i][0])
-                            .css({position: 'relative'})
-                            .append(template);
-                    }
                 }
             };
         },
@@ -286,11 +331,8 @@ define([
         },
 
         setColumn: function (elem, viewModel) {
-            viewModel.on('visible', this.refreshConfig);
-
-            if (this._is().rows(viewModel)) {
-
-            }
+            viewModel.on('visible', this.refreshResizeConfig);
+            this.resizeConfig.columnsVisibility.push(viewModel.visible());
         },
 
         initResizeConfig: function () {
@@ -307,14 +349,12 @@ define([
             set.rowsElements();     //{Array}   - set to this.config.rowsElements
             set.rowsMaxHeight();    //{Array}   - set to this.config.rowsMaxHeight
             add.dataAttribute();    //{Object}  - add data attribute to table cells
-            add.divsResizable();     //{Object}  - add data attribute to table cells
-            //set.columnsResizable();
 
             return this;
         },
 
         refreshResizeConfig: function () {
-            var cfg = this.config,
+            var cfg = this.resizeConfig,
                 t = this;
 
             console.log(this);
