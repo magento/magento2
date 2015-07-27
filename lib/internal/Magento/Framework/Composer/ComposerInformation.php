@@ -14,6 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class ComposerInformation uses Composer to determine dependency information.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ComposerInformation
 {
