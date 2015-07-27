@@ -6,6 +6,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Composer\MagentoComposerApplication;
+use Magento\Composer\RequireUpdateDryRunCommand;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
