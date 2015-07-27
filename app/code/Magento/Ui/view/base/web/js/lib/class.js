@@ -4,112 +4,59 @@
  */
 define([
     'underscore',
-    'mageUtils'
-], function (_, utils) {
+    'mageUtils',
+    'mage/utils/super'
+], function (_, utils, wrapper) {
     'use strict';
 
-    /**
-     * Checks if string has a '_super' substring.
-     */
-    var superReg = /\b_super\b/;
+    var Class;
 
     /**
-     * Checks wether the incoming method contains calls of the '_super' property.
+     * Returns property of an object if
+     * it's his own property.
      *
-     * @param {Function} method - Method to be checked.
-     * @returns {Boolean}
+     * @param {Object} obj - Object whose property should be retrieved.
+     * @param {String} prop - Name of the property.
+     * @returns {*} Value of the property or false.
      */
-    function hasSuper(method) {
-        return _.isFunction(method) && superReg.test(method);
+    function getOwn(obj, prop) {
+        return obj.hasOwnProperty(prop) && obj[prop];
     }
 
     /**
-     * Wraps the incoming method to implement support of the '_super' method.
+     * Creates constructor function which allows
+     * initialization without usage of a 'new' operator.
      *
-     * @param {Object} parent - Reference to parents' prototype.
-     * @param {String} name - Name of the method.
-     * @param {Function} method - Method to be wrapped.
-     * @returns {Function} Wrapped method.
+     * @param {Object} protoProps - Prototypal propeties of a new consturctor.
+     * @returns {Function} Created consturctor.
      */
-    function superWrapper(parent, name, method) {
-        return function () {
-            var superTmp = this._super,
-                args = arguments,
-                result;
+    function createConstructor(protoProps, consturctor) {
+        var constr = consturctor;
 
-            this._super = function () {
-                var superArgs = arguments.length ? arguments : args;
+        if (!constr) {
+            /**
+             * Default constructor function.
+             */
+            constr = function () {
+                var obj = this;
 
-                return parent[name].apply(this, superArgs);
-            };
+                if (!obj || !Object.getPrototypeOf(obj) === constr.prototype) {
+                    obj = Object.create(constr.prototype);
+                }
 
-            result = method.apply(this, args);
+                obj.initialize.apply(obj, arguments);
 
-            this._super = superTmp;
-
-            return result;
-        };
-    }
-
-    /**
-     * Creates new constructor based on a current prototype properties,
-     * extending them with properties specified in 'exender' object.
-     *
-     * @param {Object} [extender={}]
-     * @returns {Function} New constructor.
-     */
-    function extend(extender) {
-        var parent = this,
-            defaults = extender.defaults || {},
-            parentProto = parent.prototype,
-            child;
-
-        defaults = defaults || {};
-        extender = extender || {};
-
-        delete extender.defaults;
-
-        if (extender.hasOwnProperty('constructor')) {
-            child = extender.constructor;
-        } else {
-            child = function () {
-                parent.apply(this, arguments);
+                return obj;
             };
         }
 
-        child.prototype = Object.create(parentProto);
-        child.prototype.constructor = child;
+        constr.prototype = protoProps;
+        constr.prototype.constructor = constr;
 
-        _.each(extender, function (method, name) {
-            child.prototype[name] = hasSuper(method) ?
-                superWrapper(parentProto, name, method) :
-                method;
-        });
-
-        return _.extend(child, {
-            __super__:  parentProto,
-            extend:     parent.extend,
-            defaults:   utils.extend({}, parent.defaults, defaults)
-        });
+        return constr;
     }
 
-    /**
-     * Constructor.
-     */
-    function Class() {
-        this.initialize.apply(this, arguments);
-    }
-
-    _.extend(Class, {
-        defaults: {
-            ignoreTmpls: {
-                templates: true
-            }
-        },
-        extend: extend
-    });
-
-    _.extend(Class.prototype, {
+    Class = createConstructor({
         /**
          * Entry point to the initialization of consturctors' instance.
          *
@@ -143,6 +90,45 @@ define([
             });
 
             return _.extend(this, config);
+        }
+    });
+
+    _.extend(Class, {
+        defaults: {
+            ignoreTmpls: {
+                templates: true
+            }
+        },
+
+        /**
+         * Creates new constructor based on a current prototype properties,
+         * extending them with properties specified in 'exender' object.
+         *
+         * @param {Object} [extender={}]
+         * @returns {Function} New constructor.
+         */
+        extend: function (extender) {
+            var parent      = this,
+                parentProto = parent.prototype,
+                childProto  = Object.create(parentProto),
+                child       = createConstructor(childProto, getOwn(extender, 'constructor')),
+                defaults    = extender.defaults || {};
+
+            defaults = defaults || {};
+            extender = extender || {};
+
+            delete extender.defaults;
+
+            _.each(extender, function (method, name) {
+                childProto[name] = wrapper.wrapSuper(parentProto[name], method);
+            });
+
+            return _.extend(child, {
+                __super__:  parentProto,
+                extend:     parent.extend,
+                defaults:   utils.extend({}, parent.defaults, defaults)
+            });
+
         }
     });
 
