@@ -7,6 +7,7 @@ namespace Magento\AdvancedPricingImportExport\Model\Import;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Class AdvancedPricing
@@ -154,6 +155,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\GroupPrice $groupPriceValidator
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -169,7 +171,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ImportProduct $importProduct,
         AdvancedPricing\Validator $validator,
         AdvancedPricing\Validator\Website $websiteValidator,
-        AdvancedPricing\Validator\GroupPrice $groupPriceValidator
+        AdvancedPricing\Validator\GroupPrice $groupPriceValidator,
+        ProcessingErrorAggregatorInterface $errorAggregator
     ) {
         $this->_localeDate = $localeDate;
         $this->jsonHelper = $jsonHelper;
@@ -186,6 +189,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->websiteValidator = $websiteValidator;
         $this->groupPriceValidator = $groupPriceValidator;
+        $this->errorAggregator = $errorAggregator;
         $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
     }
 
@@ -210,7 +214,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     {
         $sku = false;
         if (isset($this->_validatedRows[$rowNum])) {
-            return !isset($this->_invalidRows[$rowNum]);
+            return !$this->errorAggregator->isRowInvalid($rowNum);
         }
         $this->_validatedRows[$rowNum] = true;
         // BEHAVIOR_DELETE use specific validation logic
@@ -232,7 +236,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         if (false === $sku) {
             $this->addRowError(ValidatorInterface::ERROR_ROW_IS_ORPHAN, $rowNum);
         }
-        return !isset($this->_invalidRows[$rowNum]);
+        return !$this->errorAggregator->isRowInvalid($rowNum);
     }
 
     /**
