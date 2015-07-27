@@ -126,7 +126,10 @@ define([
         it('Clears filters data.', function () {
             var elem = {
                 value: '',
-                clear: function() {
+                getPreview: function () {
+                    return true;
+                },
+                clear: function () {
                     this.value = '';
                     return this.value;
                 }
@@ -143,7 +146,10 @@ define([
         });
         it('Set active elements where exist value from elems.', function () {
             var elem = {
-                hasData: function() {
+                getPreview: function () {
+                    return true;
+                },
+                hasData: function () {
                     return false;
                 }
             };
