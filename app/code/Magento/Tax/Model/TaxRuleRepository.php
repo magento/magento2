@@ -7,7 +7,6 @@
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -163,7 +162,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
             foreach ($sortOrders as $sortOrder) {
                 $collection->addOrder(
                     $this->translateField($sortOrder->getField()),
-                    ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
+                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         }

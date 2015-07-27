@@ -737,7 +737,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn('Field');
         $sortOrder->expects($this->once())
             ->method('getDirection')
-            ->willReturn(1);
+            ->willReturn(\Magento\Framework\Api\SortOrder::SORT_ASC);
         $searchCriteria->expects($this->once())
             ->method('getCurrentPage')
             ->willReturn(1);

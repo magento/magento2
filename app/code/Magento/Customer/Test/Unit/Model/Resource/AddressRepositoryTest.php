@@ -326,7 +326,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn('Field');
         $sortOrder->expects($this->once())
             ->method('getDirection')
-            ->willReturn(1);
+            ->willReturn(\Magento\Framework\Api\SortOrder::SORT_ASC);
         $collection->expects($this->once())
             ->method('addOrder')
             ->with('Field', 'ASC');
