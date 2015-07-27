@@ -22,7 +22,7 @@ class Additional extends Block
     protected $flushButton = './/div/button[normalize-space(.)= "%s"]';
 
     /**
-     * Flush cache in 'Additional Cache Management'
+     * Flush cache in 'Additional Cache Management'.
      *
      * @param string $flushButtonName
      * @return void

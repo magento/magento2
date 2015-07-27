@@ -25,7 +25,7 @@ class StoreGrid extends Grid
     protected $editLink = 'td[data-column="store_title"] > a';
 
     /**
-     * Secondary part of row locator template for getRow() method with strict option
+     * Secondary part of row locator template for getRow() method with strict option.
      *
      * @var string
      */
