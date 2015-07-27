@@ -45,7 +45,7 @@
                                 <a href="<?php echo $block->getViewUrl($_order) ?>" class="action view">
                                     <span><?php echo __('View Order') ?></span>
                                 </a>
-                                <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order)) : ?>
+                                <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order->getEntityId())) : ?>
                                     <a href="<?php echo $block->getReorderUrl($_order) ?>" class="action order">
                                         <span><?php echo __('Reorder') ?></span>
                                     </a>

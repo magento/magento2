@@ -156,6 +156,16 @@ abstract class AbstractDataProvider implements DataProviderInterface
             [$filter->getConditionType() => $filter->getValue()]
         );
     }
+    /**
+     * Returns search criteria
+     *
+     * @return void
+     */
+    public function getSearchCriteria()
+    {
+        //TODO: Technical dept, should be implemented as part of SearchAPI support for Catalog Grids
+        return null;
+    }
 
     /**
      * Add field to select
