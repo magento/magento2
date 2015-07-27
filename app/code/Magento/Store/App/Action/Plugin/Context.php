@@ -73,7 +73,10 @@ class Context
 
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,
-            $defaultStore->getCode(),
+            $this->httpRequest->getParam(
+                '___store',
+                $defaultStore->getStoreCodeFromCookie()
+            ),
             $this->storeManager->getDefaultStoreView()->getCode()
         );
         return $proceed($request);
