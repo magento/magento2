@@ -106,4 +106,11 @@ interface DataProviderInterface
      * @return void
      */
     public function setLimit($offset, $size);
+
+    /**
+     * Returns search criteria
+     *
+     * @return \Magento\Framework\Api\Search\SearchCriteriaInterface
+     */
+    public function getSearchCriteria();
 }

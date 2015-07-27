@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
@@ -66,7 +67,12 @@ class DataProvider implements DataProviderInterface
     /**
      * @var RequestInterface
      */
-    protected $resuest;
+    protected $request;
+
+    /**
+     * @var SearchCriteria
+     */
+    protected $searchCriteria;
 
     /**
      * @param string $name
@@ -90,7 +96,7 @@ class DataProvider implements DataProviderInterface
         array $meta = [],
         array $data = []
     ) {
-        $this->resuest = $request;
+        $this->request = $request;
         $this->filterBuilder = $filterBuilder;
         $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
@@ -109,7 +115,7 @@ class DataProvider implements DataProviderInterface
         }
         foreach ($this->data['config']['filter_url_params'] as $paramName => $paramValue) {
             if ('*' == $paramValue) {
-                $paramValue = $this->resuest->getParam($paramName);
+                $paramValue = $this->request->getParam($paramName);
             }
             if ($paramValue) {
                 $this->data['config']['update_url'] = sprintf(
@@ -249,21 +255,33 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Returns search criteria
+     *
+     * @return \Magento\Framework\Api\Search\SearchCriteria
+     */
+    public function getSearchCriteria()
+    {
+        if (!$this->searchCriteria) {
+            $this->searchCriteria = $this->searchCriteriaBuilder->create();
+            $this->searchCriteria->setRequestName($this->name);
+        }
+        return $this->searchCriteria;
+    }
+
+    /**
      * Get data
      *
      * @return array
      */
     public function getData()
     {
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $searchCriteria->setRequestName($this->name);
-        return $this->searchResultToOutput($this->reporting->search($searchCriteria));
+        return $this->searchResultToOutput($this->reporting->search($this->getSearchCriteria()));
     }
 
     /**
      * Get config data
      *
-     * @return mixed
+     * @return array
      */
     public function getConfigData()
     {
