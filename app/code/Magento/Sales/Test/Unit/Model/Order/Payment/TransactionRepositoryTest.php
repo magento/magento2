@@ -6,13 +6,13 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 
-use \Magento\Sales\Model\Order\Payment\TransactionRepository;
+use \Magento\Sales\Model\Order\Payment\Repository;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class TransactionRepositoryTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var TransactionRepository */
+    /** @var Repository */
     protected $transactionRepository;
 
     /** @var ObjectManagerHelper */

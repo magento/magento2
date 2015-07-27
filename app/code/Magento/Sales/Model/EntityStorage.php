@@ -51,6 +51,17 @@ class EntityStorage
     }
 
     /**
+     * Add entity to registry if entity in it
+     *
+     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @return bool|FrameworkAbstractModel
+     */
+    public function add($entity)
+    {
+        $this->registry[$entity->getId()] = $entity;
+    }
+
+    /**
      * Retrieve entity from registry if entity in it
      *
      * @param $id
