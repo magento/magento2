@@ -93,6 +93,22 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     }
 
     /**
+     * Check if specific row exists in grid.
+     *
+     * @param array $filter
+     * @param bool $isSearchable
+     * @param bool $isStrict
+     * @return bool
+     */
+    public function isRowVisible(array $filter, $isSearchable = true, $isStrict = true)
+    {
+        if (isset($filter['options'])) {
+            unset($filter['options']);
+        }
+        return parent::isRowVisible($filter, $isSearchable, $isStrict);
+    }
+
+    /**
      * Obtain specific row in grid
      *
      * @param array $filter

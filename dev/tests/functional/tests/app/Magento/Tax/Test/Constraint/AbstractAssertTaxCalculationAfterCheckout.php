@@ -87,7 +87,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
         $shippingMethod = ['shipping_service' => 'Flat Rate', 'shipping_method' => 'Fixed'];
         $checkoutOnepage->getShippingMethodBlock()->selectShippingMethod($shippingMethod);
         $checkoutOnepage->getShippingMethodBlock()->clickContinue();
-        $checkoutOnepage->getPaymentMethodsBlock()->selectPaymentMethod(['method' => 'checkmo']);
+        $checkoutOnepage->getPaymentBlock()->selectPaymentMethod(['method' => 'checkmo']);
         $actualPrices = [];
         $actualPrices = $this->getReviewPrices($actualPrices, $product);
         $actualPrices = $this->getReviewTotals($actualPrices);
@@ -100,7 +100,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
             $message
         );
 
-        $checkoutOnepage->getPaymentMethodsBlock()->placeOrder();
+        $checkoutOnepage->getPaymentBlock()->placeOrder();
         $checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         $checkoutOnepageSuccess->getSuccessBlock()->openOrder();
         $actualPrices = [];
