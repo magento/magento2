@@ -18,10 +18,12 @@ define([
         defaults: {
             modules: {
                 multiselect: '${ $.multiselectName }',
-                attributeProvider: '${ $.providerName }'
+                attributeProvider: '${ $.providerName }',
+                configurableVariations: '${ "configurableVariations" }'
             },
             listens: {
-                '${ $.multiselectName }:selected': 'doSelectedAttributesLabels'
+                '${ $.multiselectName }:selected': 'doSelectedAttributesLabels',
+                '${ $.multiselectName }:rows': 'doSelectChosenAttributes'
             }
         },
         initialize: function () {
@@ -35,6 +37,11 @@ define([
             return this;
         },
         render: function (wizard) {
+        },
+        doSelectChosenAttributes: function() {
+            this.configurableVariations(function(configurableVariations) {
+                this.multiselect().selected(_.pluck(configurableVariations.attributes(), 'id'));
+            }.bind(this));
         },
         doSelectedAttributesLabels: function(selected) {
             this.selected = selected;

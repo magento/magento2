@@ -44,6 +44,11 @@ define([
     });
 
     return Collapsible.extend({
+        defaults: {
+            modules: {
+                configurableVariations: '${ "configurableVariations" }'
+            }
+        },
         attributes: ko.observableArray([]),
         createOption: function () {
             // this - current attribute
@@ -136,6 +141,19 @@ define([
                 showLoader: true
             }).done(function(attributes){
                 this.attributes(saveAttributes.call(this, attributes));
+
+                _.each(this.attributes(), function(attribute) {
+                    var selectedAttribute = _.findWhere(
+                        this.configurableVariations().attributes(), {id: attribute.id}
+                    );
+                    if (selectedAttribute) {
+                        var selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
+                        var selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
+                            return _.contains(selectedOptions, option.value)
+                        }), 'id');
+                        attribute.chosenOptions(selectedOptionsIds);
+                    }
+                }.bind(this));
             }.bind(this));
         },
         render: function(wizard) {

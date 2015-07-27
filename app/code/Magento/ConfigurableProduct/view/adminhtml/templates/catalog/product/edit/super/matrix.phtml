@@ -46,7 +46,7 @@ if ($variations) {
                     'value' => $optionId,
                 ];
                 $variationOptions[] = $variationOption;
-                $attributes[$attribute->getAttributeId()]['chosen'][] = $variationOption;
+                $attributes[$attribute->getAttributeId()]['chosen'][$optionId] = $variationOption;
             }
 
             $productMatrix[] = [
