@@ -94,8 +94,9 @@ class MassgeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGeneratePool()
     {
+        $qty = 10;
         $data = [
-            'qty' => 10,
+            'qty' => $qty,
             'length' => 15,
             'format' => 'test-format',
         ];
@@ -160,6 +161,9 @@ class MassgeneratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($massgenerator, $massgenerator->generatePool());
+        $this->assertEquals($qty, $massgenerator->getGeneratedCount());
+        $codes = $massgenerator->getGeneratedCodes();
+        ($qty > 0) ? $this->assertNotEmpty($codes) : $this->assertEmpty($codes);
     }
 
     /**
