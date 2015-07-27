@@ -96,7 +96,8 @@ class TransactionRepository implements TransactionRepositoryInterface
         }
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\TransactionInterface $entity */
-            $entity = $this->metaData->getMapper()->load($this->metaData->getNewInstance(), $id);
+            $entity = $this->metaData->getNewInstance();
+            $entity = $this->metaData->getMapper()->load($entity, $id);
             if (!$entity->getTransactionId()) {
                 throw new NoSuchEntityException('Requested entity doesn\'t exist');
             }

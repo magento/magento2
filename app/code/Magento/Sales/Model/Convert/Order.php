@@ -22,9 +22,9 @@ class Order extends \Magento\Framework\Object
     protected $_eventManager = null;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
      */
-    protected $_orderInvoiceFactory;
+    protected $invoiceRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Invoice\ItemFactory
@@ -53,7 +53,7 @@ class Order extends \Magento\Framework\Object
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory
+     * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory
      * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
@@ -66,7 +66,7 @@ class Order extends \Magento\Framework\Object
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory,
+        \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
         \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory,
         \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
         \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
@@ -76,7 +76,7 @@ class Order extends \Magento\Framework\Object
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
-        $this->_orderInvoiceFactory = $orderInvoiceFactory;
+        $this->invoiceRepository = $invoiceRepository;
         $this->_invoiceItemFactory = $invoiceItemFactory;
         $this->shipmentRepository = $shipmentRepository;
         $this->_shipmentItemFactory = $shipmentItemFactory;
@@ -94,7 +94,7 @@ class Order extends \Magento\Framework\Object
      */
     public function toInvoice(\Magento\Sales\Model\Order $order)
     {
-        $invoice = $this->_orderInvoiceFactory->create();
+        $invoice = $this->invoiceRepository->create();
         $invoice->setOrder(
             $order
         )->setStoreId(
