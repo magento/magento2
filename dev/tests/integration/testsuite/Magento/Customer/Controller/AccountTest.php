@@ -65,7 +65,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
-    public function testCreatepasswordAction()
+    public function testCreatepasswordActionWithDirectLink()
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
@@ -80,7 +80,43 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam('id', $customer->getId());
 
         $this->dispatch('customer/account/createPassword');
-        $text = $this->getResponse()->getBody();
+
+        $response = $this->getResponse();
+        $this->assertEquals(302, $response->getHttpResponseCode());
+        $text = $response->getBody();
+        $this->assertFalse((bool)preg_match('/' . $token . '/m', $text));
+        $this->assertRedirect($this->stringContains('customer/account/createpassword'));
+
+        /** @var \Magento\Customer\Model\Session $customer */
+        $session = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $this->assertEquals($token, $session->getRpToken());
+        $this->assertEquals($customer->getId(), $session->getRpCustomerId());
+        $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCreatepasswordActionWithSession()
+    {
+        /** @var \Magento\Customer\Model\Customer $customer */
+        $customer = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Model\Customer')->load(1);
+
+        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
+            ->getUniqueHash();
+        $customer->changeResetPasswordLinkToken($token);
+        $customer->save();
+
+        /** @var \Magento\Customer\Model\Session $customer */
+        $session = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $session->setRpToken($token);
+        $session->setRpCustomerId($customer->getId());
+
+        $this->dispatch('customer/account/createPassword');
+
+        $response = $this->getResponse();
+        $text = $response->getBody();
         $this->assertTrue((bool)preg_match('/' . $token . '/m', $text));
     }
 
@@ -237,37 +273,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 ' to get your password and access your account.', ]),
             MessageInterface::TYPE_ERROR
         );
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testOpenActionCreatePasswordAction()
-    {
-        /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer')->load(1);
-
-        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
-            ->getUniqueHash();
-        $customer->changeResetPasswordLinkToken($token);
-        $customer->save();
-
-        $this->getRequest()->setParam('token', $token);
-        $this->getRequest()->setParam('id', $customer->getId());
-
-        $this->dispatch('customer/account/createPassword');
-        $this->assertNotEmpty($this->getResponse()->getBody());
-
-        $headers = $this->getResponse()->getHeaders();
-        $failed = false;
-        foreach ($headers as $header) {
-            if (preg_match('~customer\/account\/login~', $header->getFieldValue())) {
-                $failed = true;
-                break;
-            }
-        }
-        $this->assertFalse($failed, 'Action is closed');
     }
 
     /**
