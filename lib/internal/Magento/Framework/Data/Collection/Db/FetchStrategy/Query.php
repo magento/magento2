@@ -18,6 +18,6 @@ class Query implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
      */
     public function fetchAll(Select $select, array $bindParams = [])
     {
-        return $select->getAdapter()->fetchAll($select, $bindParams);
+        return $select->getConnection()->fetchAll($select, $bindParams);
     }
 }
