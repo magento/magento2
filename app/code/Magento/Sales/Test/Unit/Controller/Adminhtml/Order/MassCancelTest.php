@@ -71,9 +71,14 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
     protected $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Resource\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderCollectionMock;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderCollectionFactoryMock;
 
     /**
      * @var \Magento\Ui\Component\MassAction\Filter|\PHPUnit_Framework_MockObject_MockObject
@@ -105,6 +110,11 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
 
         $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Collection')
             ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->orderCollectionFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->sessionMock = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
@@ -141,13 +151,17 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
         $this->filterMock = $this->getMock('Magento\Ui\Component\MassAction\Filter', [], [], '', false);
         $this->filterMock->expects($this->once())
             ->method('getCollection')
+            ->with($this->orderCollectionMock)
             ->willReturn($this->orderCollectionMock);
-
+        $this->orderCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->orderCollectionMock);
         $this->massAction = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\MassCancel',
             [
                 'context' => $this->contextMock,
-                'filter' => $this->filterMock
+                'filter' => $this->filterMock,
+                'collectionFactory' => $this->orderCollectionFactoryMock
             ]
         );
     }
@@ -156,7 +170,7 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
      * Test for selected orders
      * Two orders, only $order1 can be canceled
      */
-    public function testExecuteTwoOrderCanceled()
+    public function testExecuteCanCancelOneOrder()
     {
         $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
@@ -164,7 +178,6 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
         $order2 = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
             ->getMock();
-
         $orders = [$order1, $order2];
         $countOrders = count($orders);
 
@@ -208,7 +221,7 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
      * Test for excluded orders
      * Two orders could't be canceled
      */
-    public function testExcludedOrderCannotBeCanceled()
+    public function testExcludedCannotCancelOrders()
     {
         $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()

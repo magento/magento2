@@ -36,6 +36,11 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
     protected $customerSessionMock;
 
     /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $repositoryMock;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -55,9 +60,12 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->repositoryMock = $this->getMockBuilder('Magento\Sales\Api\OrderRepositoryInterface')
+            ->getMockForAbstractClass();
         $this->helper = new \Magento\Sales\Helper\Reorder(
             $contextMock,
-            $this->customerSessionMock
+            $this->customerSessionMock,
+            $this->repositoryMock
         );
 
         $this->storeParam = $this->getMockBuilder('Magento\Sales\Model\Store')
@@ -131,7 +139,11 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
     public function testCanReorderStoreNotAllowed()
     {
         $this->setupOrderMock(false);
-        $this->assertFalse($this->helper->canReorder($this->orderMock));
+        $this->repositoryMock->expects($this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($this->orderMock);
+        $this->assertFalse($this->helper->canReorder(1));
     }
 
     /**
@@ -146,8 +158,11 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
             ->will($this->returnValue(false));
-
-        $this->assertTrue($this->helper->canReorder($this->orderMock));
+        $this->repositoryMock->expects($this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($this->orderMock);
+        $this->assertTrue($this->helper->canReorder(1));
     }
 
     /**
@@ -168,8 +183,11 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('canReorder')
             ->will($this->returnValue($orderCanReorder));
-
-        $this->assertEquals($orderCanReorder, $this->helper->canReorder($this->orderMock));
+        $this->repositoryMock->expects($this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($this->orderMock);
+        $this->assertEquals($orderCanReorder, $this->helper->canReorder(1));
     }
 
     /**
