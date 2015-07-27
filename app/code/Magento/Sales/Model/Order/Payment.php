@@ -80,16 +80,6 @@ class Payment extends Info implements OrderPaymentInterface
     protected $_serviceOrderFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\TransactionFactory
-     */
-    protected $_transactionFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory
-     */
-    protected $_transactionCollectionFactory;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -112,8 +102,6 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
-     * @param Payment\TransactionFactory $transactionFactory
-     * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -129,7 +117,6 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
-        \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
@@ -140,8 +127,6 @@ class Payment extends Info implements OrderPaymentInterface
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_serviceOrderFactory = $serviceOrderFactory;
-        $this->_transactionFactory = $transactionFactory;
-        $this->_transactionCollectionFactory = $transactionCollectionFactory;
         $this->_storeManager = $storeManager;
         $this->transactionRepository = $transactionRepository;
         parent::__construct(
@@ -1406,7 +1391,7 @@ class Payment extends Info implements OrderPaymentInterface
                 $transaction = $this->_lookupTransaction($transactionId);
             }
             if (!$transaction) {
-                $transaction = $this->_transactionFactory->create()->setTxnId($transactionId);
+                $transaction = $this->transactionRepository->create()->setTxnId($transactionId);
             }
             $transaction->setOrderPaymentObject($this)->setTxnType($type)->isFailsafe($failsafe);
 
@@ -1611,8 +1596,7 @@ class Payment extends Info implements OrderPaymentInterface
                     $this->getId(),
                     $this->getOrder()->getId()
                 );
-                if ($txn) {
-                    $txn->setOrderPaymentObject($this);
+                if ($txn && $txn->getId()) {
                     $this->_transactionsLookup[$txn->getTxnId()] = $txn;
                 }
                 return $txn;
@@ -1622,7 +1606,7 @@ class Payment extends Info implements OrderPaymentInterface
         if (isset($this->_transactionsLookup[$txnId])) {
             return $this->_transactionsLookup[$txnId];
         }
-        $txn = $this->transactionRepository->getByTxnId($txnId, $this->getId());
+        $txn = $this->transactionRepository->getByTxnId($txnId, $this->getId(), $this->getOrder()->getId());
         if ($txn && $txn->getId()) {
             $this->_transactionsLookup[$txnId] = $txn;
         } else {
@@ -1649,16 +1633,20 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function getAuthorizationTransaction()
     {
+        $transaction = false;
         if ($this->getParentTransactionId()) {
-            $txn = $this->_lookupTransaction($this->getParentTransactionId());
-        } else {
-            $txn = false;
+            $transaction = $this->transactionRepository->getByTxnId(
+                $this->getParentTransactionId(),
+                $this->getId(),
+                $this->getOrder()->getId()
+            );
         }
 
-        if (!$txn) {
-            $txn = $this->_lookupTransaction(false, Transaction::TYPE_AUTH);
-        }
-        return $txn;
+        return $transaction ?: $this->transactionRepository->getByTxnType(
+            Transaction::TYPE_AUTH,
+            $this->getId(),
+            $this->getOrder()->getId()
+        );
     }
 
     /**

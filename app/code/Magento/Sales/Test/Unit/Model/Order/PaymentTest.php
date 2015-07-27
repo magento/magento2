@@ -81,7 +81,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected $creditMemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\TransactionRepository | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $transactionRepositoryMock;
     /**
@@ -114,7 +114,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['formatTxt'])
             ->getMock();
-        $this->transactionRepositoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\TransactionRepository')
+        $this->transactionRepositoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\Transaction\Repository')
             ->disableOriginalConstructor()
             ->setMethods(['get', 'getByTxnType', 'getByTxnId'])
             ->getMock();
@@ -1288,9 +1288,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $transaction = $this->getMock('Magento\Sales\Model\Order\Payment\Transaction', [], [], '', false);
         $transaction->expects($this->once())
-            ->method('getId')
-            ->willReturn($parentTransactionId);
-        $transaction->expects($this->once())
             ->method('getIsClosed')
             ->willReturn(false);
         $this->transactionRepositoryMock->expects($this->once())
@@ -1305,8 +1302,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $paymentId = 1;
         $this->payment->setId($paymentId);
-        $orderId = 12;
-        $this->orderMock->setId($orderId);
         $this->paymentMethodMock->expects($this->once())
             ->method('canCapture')
             ->willReturn(true);
@@ -1314,7 +1309,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTxnType')
-            ->with(Payment\Transaction::TYPE_AUTH, $paymentId, $orderId)
+            ->with(Payment\Transaction::TYPE_AUTH, $paymentId)
             ->willReturn($transaction);
 
         $this->assertTrue($this->payment->canCapture());
