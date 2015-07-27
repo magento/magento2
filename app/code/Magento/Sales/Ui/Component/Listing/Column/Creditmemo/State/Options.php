@@ -6,7 +6,7 @@
 namespace Magento\Sales\Ui\Component\Listing\Column\Creditmemo\State;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Order\CreditmemoRepository;
 
 /**
  * Class Options
@@ -19,18 +19,18 @@ class Options implements OptionSourceInterface
     protected $options;
 
     /**
-     * @var CreditmemoFactory
+     * @var CreditmemoRepository
      */
-    protected $creditmemoFactory;
+    protected $creditmemoRepository;
 
     /**
      * Constructor
      *
-     * @param CreditmemoFactory $creditmemoFactory
+     * @param CreditmemoRepository $creditmemoRepository
      */
-    public function __construct(CreditmemoFactory $creditmemoFactory)
+    public function __construct(CreditmemoRepository $creditmemoRepository)
     {
-        $this->creditmemoFactory = $creditmemoFactory;
+        $this->creditmemoRepository = $creditmemoRepository;
     }
 
     /**
@@ -44,7 +44,7 @@ class Options implements OptionSourceInterface
             $this->options = [];
 
             /** @var \Magento\Framework\Phrase $state */
-            foreach ($this->creditmemoFactory->create()->getStates() as $id => $state) {
+            foreach ($this->creditmemoRepository->create()->getStates() as $id => $state) {
                 $this->options[] = [
                     'value' => $id,
                     'label' => $state->render()
