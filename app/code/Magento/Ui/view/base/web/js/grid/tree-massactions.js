@@ -101,7 +101,6 @@ define([
             }, this);
 
             return result;
-
         },
 
         /**
