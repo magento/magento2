@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Controller\Account;
+namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
