@@ -6,7 +6,6 @@
 
 namespace Magento\SalesRule\Model;
 
-use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use \Magento\SalesRule\Model\Resource\Coupon\Collection;
@@ -90,15 +89,15 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     /**
      * Get coupon by coupon id.
      *
-     * @param int $id
+     * @param int $couponId
      * @return \Magento\SalesRule\Api\Data\CouponInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If $id is not found
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If $couponId is not found
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getById($id)
+    public function getById($couponId)
     {
         $coupon = $this->couponFactory->create()
-            ->load($id);
+            ->load($couponId);
 
         if (!$coupon->getId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException();
@@ -158,16 +157,16 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     /**
      * Delete coupon by coupon id.
      *
-     * @param int $id
+     * @param int $couponId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById($id)
+    public function deleteById($couponId)
     {
         /** @var \Magento\SalesRule\Model\Coupon $coupon */
         $coupon = $this->couponFactory->create()
-            ->load($id);
+            ->load($couponId);
 
         if (!$coupon->getCouponId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException();
