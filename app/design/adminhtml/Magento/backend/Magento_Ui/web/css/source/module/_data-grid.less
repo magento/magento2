@@ -63,6 +63,7 @@
     margin-bottom: 2rem;
     max-width: 100%;
     overflow-x: auto;
+    padding-bottom: 1rem;
     padding-top: 0;
 }
 
@@ -89,10 +90,7 @@
 }
 
 .data-grid {
-    border-bottom: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
-    border-left: none;
-    border-right: none;
-    border-top: none;
+    border: none;
     box-sizing: border-box; // ToDo UI: Rewrite old styles. Should be deleted afterwards
     font-size: @data-grid__font-size;
     margin-bottom: 0;
@@ -135,6 +133,13 @@
             &:hover {
                 td {
                     background-color: @data-grid-tr__hover__background-color;
+                }
+            }
+            &:not(.data-grid-editable-row) {
+                &:last-child {
+                    td {
+                        border-bottom: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
+                    }
                 }
             }
             &._clickable,
@@ -419,6 +424,7 @@
         }
         .data-grid-editable-row {
             border: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-editable-cell__border-color;
+            border-bottom-color: @color-gray76;
             td {
                 background-color: @data-grid-td__odd__background-color;
                 border-bottom-color: @data-grid-td__odd__background-color;
@@ -460,7 +466,6 @@
         }
     }
     .data-grid-editable-row {
-        position: relative;
         td {
             border-left-color: @data-grid-td__odd__background-color;
             border-left-style: solid;
