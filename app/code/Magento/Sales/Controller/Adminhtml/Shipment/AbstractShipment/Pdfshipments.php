@@ -14,7 +14,7 @@ use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\Order\Pdf\Shipment;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Sales\Model\Resource\Shipment\CollectionFactory;
+use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory;
 
 abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
