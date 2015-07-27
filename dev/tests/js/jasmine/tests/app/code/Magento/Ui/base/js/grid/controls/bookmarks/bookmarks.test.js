@@ -8,99 +8,97 @@ define([
 ], function (Bookmarks) {
     'use strict';
     describe('ui/js/grid/controls/bookmarks/bookmarks', function () {
-        var BookmarksElement, returnContextOfItself;
+        var bookmarksElement, returnContext;
+
         beforeEach(function () {
-            BookmarksElement = Bookmarks();
+            bookmarksElement = new Bookmarks({
+                index: 'index',
+                name: 'name',
+                indexField: 'id',
+                dataScope: 'scope',
+                provider: 'provider'
+            });
+
         });
-        it('has initObservable method', function () {
-            returnContextOfItself = BookmarksElement.initObservable();
-            expect(BookmarksElement.initObservable).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(BookmarksElement);
+        it('has initialize method', function () {
+            spyOn(bookmarksElement, "initialize");
+            bookmarksElement.initialize();
+            expect(bookmarksElement.initialize).toHaveBeenCalled();
         });
         it('has initStorage method', function () {
-            BookmarksElement.initStorage();
-            expect(BookmarksElement.initStorage).toHaveBeenCalled();
+            spyOn(bookmarksElement, "initStorage");
+            bookmarksElement.initStorage();
+            expect(bookmarksElement.initStorage).toHaveBeenCalled();
         });
         it('has initElement method', function () {
-            BookmarksElement.initElement();
-            expect(BookmarksElement.initElement).toHaveBeenCalled();
+            spyOn(bookmarksElement, "initElement");
+            bookmarksElement.initElement();
+            expect(bookmarksElement.initElement).toHaveBeenCalled();
         });
         it('has initViews method', function () {
-            returnContextOfItself = BookmarksElement.initViews();
-            expect(BookmarksElement.initViews).toHaveBeenCalled();
-            expect(BookmarksElement.activeIndex).toBe('');
-            expect(returnContextOfItself).toBe(BookmarksElement);
+            spyOn(bookmarksElement, "initViews");
+            bookmarksElement.initViews();
+            expect(bookmarksElement.initViews).toHaveBeenCalled();
         });
         it('has createView method', function () {
-            returnContextOfItself = BookmarksElement.createView();
-            expect(BookmarksElement.createView).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(BookmarksElement);
+            spyOn(bookmarksElement, "createView");
+            bookmarksElement.createView();
+            expect(bookmarksElement.createView).toHaveBeenCalled();
         });
         it('has createNewView method', function () {
-            returnContextOfItself = BookmarksElement.createNewView();
-            expect(BookmarksElement.createNewView).toHaveBeenCalled();
-            expect(BookmarksElement.createView).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(BookmarksElement);
+            spyOn(bookmarksElement, "createNewView");
+            bookmarksElement.createNewView();
+            expect(bookmarksElement.createNewView).toHaveBeenCalled();
         });
         it('has removeView method', function () {
-            returnContextOfItself = BookmarksElement.removeView();
-            expect(BookmarksElement.removeView).toHaveBeenCalled();
-            expect(BookmarksElement.removeStored).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(BookmarksElement);
+            spyOn(bookmarksElement, "removeView");
+            bookmarksElement.removeView();
+            expect(bookmarksElement.removeView).toHaveBeenCalled();
         });
         it('has saveView method', function () {
-            returnContextOfItself = BookmarksElement.saveView();
-            expect(BookmarksElement.saveView).toHaveBeenCalled();
-            expect(BookmarksElement.hasChanges).toHaveBeenCalled();
-            expect(BookmarksElement.store).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(BookmarksElement);
+            spyOn(bookmarksElement, "saveView");
+            bookmarksElement.saveView();
+            expect(bookmarksElement.saveView).toHaveBeenCalled();
         });
-        it('has saveCurrent method', function () {
-            returnContextOfItself = BookmarksElement.saveCurrent();
-            expect(BookmarksElement.saveCurrent).toHaveBeenCalled();
-            expect(BookmarksElement.store).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(BookmarksElement);
+        it('has applyView method', function () {
+            spyOn(bookmarksElement, "applyView");
+            bookmarksElement.applyView();
+            expect(bookmarksElement.applyView).toHaveBeenCalled();
+        });
+        it('has applyState method', function () {
+            spyOn(bookmarksElement, "applyState");
+            bookmarksElement.applyState();
+            expect(bookmarksElement.applyState).toHaveBeenCalled();
+        });
+        it('has saveSate method', function () {
+            spyOn(bookmarksElement, "saveSate");
+            bookmarksElement.saveSate();
+            expect(bookmarksElement.saveSate).toHaveBeenCalled();
         });
         it('has checkChanges method', function () {
-            returnContextOfItself = BookmarksElement.checkChanges();
-            expect(BookmarksElement.checkChanges).toHaveBeenCalled();
-            expect(BookmarksElement.activeView).toHaveBeenCalled();
-            expect(BookmarksElement.hasChanges).toHaveBeenCalled();
-            expect(returnContextOfItself).toBe(BookmarksElement);
+            spyOn(bookmarksElement, "checkChanges");
+            bookmarksElement.checkChanges();
+            expect(bookmarksElement.checkChanges).toHaveBeenCalled();
         });
-        it('has getSaved method', function () {
-            returnContextOfItself = BookmarksElement.saveCurrent();
-            expect(BookmarksElement.getSaved).toHaveBeenCalled();
-            expect(BookmarksElement.activeView).toHaveBeenCalled();
-            expect(BookmarksElement.getSaved).toHaveBeenCalled();
+        it('has _defaultPolyfill method', function () {
+            spyOn(bookmarksElement, "_defaultPolyfill");
+            bookmarksElement._defaultPolyfill();
+            expect(bookmarksElement._defaultPolyfill).toHaveBeenCalled();
         });
-        it('has getDefault method', function () {
-            BookmarksElement.getDefault();
-            expect(BookmarksElement.getDefault).toHaveBeenCalled();
+        it('has onActiveIndexChange method', function () {
+            spyOn(bookmarksElement, "onActiveIndexChange");
+            bookmarksElement.onActiveIndexChange();
+            expect(bookmarksElement.onActiveIndexChange).toHaveBeenCalled();
         });
-        it('has defaultPolyfill method', function () {
-            BookmarksElement.saveCurrent();
-            expect(BookmarksElement.defaultPolyfill).toHaveBeenCalled();
-            expect(BookmarksElement.activeView).toHaveBeenCalled();
-            expect(BookmarksElement.checkChanges).toHaveBeenCalled();
-        });
-        it('has onActiveChange method', function () {
-            BookmarksElement.saveCurrent();
-            expect(BookmarksElement.onActiveChange).toHaveBeenCalled();
-            expect(BookmarksElement.store).toHaveBeenCalled();
-            expect(BookmarksElement.activeView).toHaveBeenCalled();
-            expect(BookmarksElement.hasChanges).toHaveBeenCalled();
-            expect(BookmarksElement.initialSet).toBeFalsy();
-        });
-        it('has onDataChange method', function () {
-            BookmarksElement.onDataChange();
-            expect(BookmarksElement.onDataChange).toHaveBeenCalled();
-            expect(BookmarksElement.saveCurrent).toHaveBeenCalled();
-            expect(BookmarksElement.activeView).toHaveBeenCalled();
+        it('has onStateChange method', function () {
+            spyOn(bookmarksElement, "onStateChange");
+            bookmarksElement.onStateChange();
+            expect(bookmarksElement.onStateChange).toHaveBeenCalled();
         });
         it('has onEditingChange method', function () {
-            BookmarksElement.onEditingChange();
-            expect(BookmarksElement.onEditingChange).toHaveBeenCalled();
+            spyOn(bookmarksElement, "onEditingChange");
+            bookmarksElement.onEditingChange();
+            expect(bookmarksElement.onEditingChange).toHaveBeenCalled();
         });
     });
 });
