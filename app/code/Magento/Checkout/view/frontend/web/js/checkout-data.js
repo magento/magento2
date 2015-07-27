@@ -116,6 +116,28 @@ define([
 
         getNewCustomerBillingAddress: function () {
             return getData().newCustomerBillingAddress;
+        },
+
+        getValidatedEmailValue: function () {
+            var obj = getData();
+            return (obj.validatedEmailValue) ? obj.validatedEmailValue : '';
+        },
+
+        setValidatedEmailValue: function (email) {
+            var obj = getData();
+            obj.validatedEmailValue = email;
+            saveData(obj);
+        },
+
+        getInputFieldEmailValue: function () {
+            var obj = getData();
+            return (obj.inputFieldEmailValue) ? obj.inputFieldEmailValue : '';
+        },
+
+        setInputFieldEmailValue: function (email) {
+            var obj = getData();
+            obj.inputFieldEmailValue = email;
+            saveData(obj);
         }
     }
 });
