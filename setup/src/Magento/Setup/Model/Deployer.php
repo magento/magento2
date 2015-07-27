@@ -55,9 +55,6 @@ class Deployer
     /** @var \Magento\Framework\View\Template\Html\MinifierInterface */
     private $htmlMinifier;
 
-    /** @var \Magento\Framework\View\Asset\MinifyService */
-    protected $minifyService;
-
     /**
      * @var ObjectManagerInterface
      */
@@ -72,7 +69,6 @@ class Deployer
      * @param Files $filesUtil
      * @param OutputInterface $output
      * @param Version\StorageInterface $versionStorage
-     * @param \Magento\Framework\View\Asset\MinifyService $minifyService
      * @param JsTranslationConfig $jsTranslationConfig
      * @param bool $isDryRun
      */
@@ -80,7 +76,6 @@ class Deployer
         Files $filesUtil,
         OutputInterface $output,
         Version\StorageInterface $versionStorage,
-        \Magento\Framework\View\Asset\MinifyService $minifyService,
         JsTranslationConfig $jsTranslationConfig,
         $isDryRun = false
     ) {
@@ -88,7 +83,6 @@ class Deployer
         $this->output = $output;
         $this->versionStorage = $versionStorage;
         $this->isDryRun = $isDryRun;
-        $this->minifyService = $minifyService;
         $this->jsTranslationConfig = $jsTranslationConfig;
         $this->parentTheme = [];
     }
@@ -275,7 +269,6 @@ class Deployer
                 $requestedPath,
                 ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
             );
-            $asset = $this->minifyService->getAssets([$asset], true)[0];
             if ($this->output->isVeryVerbose()) {
                 $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'");
             } else {
