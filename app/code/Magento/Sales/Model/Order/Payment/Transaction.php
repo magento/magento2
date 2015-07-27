@@ -465,47 +465,6 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Check object before loading by by specified transaction ID
-     *
-     * @param mixed $txnId
-     * @return $this
-     */
-    protected function _beforeLoadByTxnId($txnId)
-    {
-        $this->_verifyPaymentObject();
-        $this->_eventManager->dispatch(
-            $this->_eventPrefix . '_load_by_txn_id_before',
-            $this->_getEventData() + ['txn_id' => $txnId]
-        );
-        return $this;
-    }
-
-    /**
-     * Load self by specified transaction ID. Requires the valid payment object to be set
-     *
-     * @param string $txnId
-     * @return $this
-     */
-    public function loadByTxnId($txnId)
-    {
-        $this->_beforeLoadByTxnId($txnId);
-        $this->getResource()->loadObjectByTxnId($this, $this->getOrderId(), $this->_paymentObject->getId(), $txnId);
-        $this->_afterLoadByTxnId();
-        return $this;
-    }
-
-    /**
-     * Check object after loading by by specified transaction ID
-     *
-     * @return $this
-     */
-    protected function _afterLoadByTxnId()
-    {
-        $this->_eventManager->dispatch($this->_eventPrefix . '_load_by_txn_id_after', $this->_getEventData());
-        return $this;
-    }
-
-    /**
      * Additional information setter
      * Updates data inside the 'additional_information' array
      * Doesn't allow to set arrays

@@ -37,9 +37,9 @@ class Order extends \Magento\Framework\Object
     protected $shipmentRepository;
 
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoFactory
+     * @var \Magento\Sales\Model\Order\CreditmemoRepository
      */
-    protected $_creditmemoFactory;
+    protected $creditmemoRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\ItemFactory
@@ -57,7 +57,7 @@ class Order extends \Magento\Framework\Object
      * @param \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory
      * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
-     * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
+     * @param \Magento\Sales\Model\Order\creditmemoRepository $creditmemoRepository
      * @param \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory
      * @param \Magento\Framework\Object\Copy $objectCopyService
      * @param array $data
@@ -70,7 +70,7 @@ class Order extends \Magento\Framework\Object
         \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory,
         \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
         \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
-        \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
+        \Magento\Sales\Model\Order\CreditmemoRepository $creditmemoRepository,
         \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory,
         \Magento\Framework\Object\Copy $objectCopyService,
         array $data = []
@@ -80,7 +80,7 @@ class Order extends \Magento\Framework\Object
         $this->_invoiceItemFactory = $invoiceItemFactory;
         $this->shipmentRepository = $shipmentRepository;
         $this->_shipmentItemFactory = $shipmentItemFactory;
-        $this->_creditmemoFactory = $creditmemoFactory;
+        $this->creditmemoRepository = $creditmemoRepository;
         $this->_creditmemoItemFactory = $creditmemoItemFactory;
         $this->_objectCopyService = $objectCopyService;
         parent::__construct($data);
@@ -184,7 +184,7 @@ class Order extends \Magento\Framework\Object
      */
     public function toCreditmemo(\Magento\Sales\Model\Order $order)
     {
-        $creditmemo = $this->_creditmemoFactory->create();
+        $creditmemo = $this->creditmemoRepository->create();
         $creditmemo->setOrder(
             $order
         )->setStoreId(
