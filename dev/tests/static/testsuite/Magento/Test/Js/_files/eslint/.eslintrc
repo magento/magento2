@@ -1,0 +1,6 @@
+{
+    "extends": [
+    	"./.eslintrc-reset",
+    	"./.eslintrc-magento"
+    ]
+}

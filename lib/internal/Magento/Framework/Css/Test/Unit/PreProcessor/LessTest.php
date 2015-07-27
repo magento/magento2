@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Css\Test\Unit\PreProcessor;
 
+use Magento\Framework\View\Asset\PreProcessor\Chain;
+
 class LessTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,7 +20,7 @@ class LessTest extends \PHPUnit_Framework_TestCase
     private $adapter;
 
     /**
-     * @var \Magento\Framework\View\Asset\PreProcessor\Chain
+     * @var Chain
      */
     private $chain;
 
@@ -33,7 +35,7 @@ class LessTest extends \PHPUnit_Framework_TestCase
         $this->adapter = $this->getMockForAbstractClass('\Magento\Framework\Css\PreProcessor\AdapterInterface');
         $asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
         $asset->expects($this->once())->method('getContentType')->will($this->returnValue('origType'));
-        $this->chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($asset, 'original content', 'origType');
+        $this->chain = new Chain($asset, 'original content', 'origType', 'origPath');
         $this->object = new \Magento\Framework\Css\PreProcessor\Less($this->fileGenerator, $this->adapter);
     }
 
