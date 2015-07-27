@@ -3,7 +3,6 @@
  * See COPYING.txt for license details.
  */
 define([
-    'ko',
     'underscore',
     'uiRegistry',
     'mageUtils',
@@ -11,7 +10,7 @@ define([
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
     'mage/translate'
-], function (ko, _, registry, utils, Collapsible, confirm, alert, $t) {
+], function (_, registry, utils, Collapsible, confirm, alert, $t) {
     'use strict';
 
     return Collapsible.extend({
@@ -34,23 +33,9 @@ define([
             this._super()
                 .observe('actions');
 
-            this.recursiveObserveActions(this.actions());
-
             return this;
         },
-        /**
-         * Initializes observable actions.
-         *
-         * Recursive function
-         */
-        recursiveObserveActions: function (actions) {
-            _.each(actions, function (list, action, context) {
-                if (action.actions) {
-                    action.visible = ko.observable(false);
-                    context.recursiveObserveActions(action.actions);
-                }
-            });
-        },
+
         /**
          * Applies specified action.
          *
@@ -59,14 +44,8 @@ define([
          */
         applyAction: function (actionIndex) {
             var data = this.getSelections(),
-                action = this.getAction(actionIndex),
+                action,
                 callback;
-
-            if (action.visible) {
-                action.visible(!action.visible());
-
-                return this;
-            }
 
             if (!data.total) {
                 alert({
@@ -76,6 +55,7 @@ define([
                 return this;
             }
 
+            action   = this.getAction(actionIndex);
             callback = this._getCallback(action, data);
 
             action.confirm ?
@@ -142,7 +122,7 @@ define([
          */
         _getCallback: function (action, selections) {
             var callback = action.callback,
-                args = [action, selections];
+                args     = [action, selections];
 
             if (utils.isObject(callback)) {
                 args.unshift(callback.target);

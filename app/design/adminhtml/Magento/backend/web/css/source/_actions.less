@@ -390,6 +390,7 @@ button {
         .appearing__on();
     }
     > li {
+        position: relative;
         display: block;
         border: none; // ToDo UI: Should be deleted with old styles
         padding: 0;
@@ -398,6 +399,9 @@ button {
             &:hover {
                 text-decoration: none;
             }
+        }
+        &._visible-submenu {
+            background-color: @action-menu__hover__background-color;
         }
         &:hover {
             background-color: @action-menu__hover__background-color;
@@ -411,6 +415,14 @@ button {
         display: block;
         padding: .6875em 1em;
         cursor: pointer;
+    }
+    .action-submenu {
+        &:extend(.action-menu all);
+        position: absolute;
+        top: 0;
+        right: auto;
+        left: 100%;
+        margin-top: -1px;
     }
     a {
         &.action-menu-item {
