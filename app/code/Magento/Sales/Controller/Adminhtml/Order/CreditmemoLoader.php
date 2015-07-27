@@ -34,9 +34,9 @@ class CreditmemoLoader extends Object
     protected $orderFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\InvoiceFactory
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
      */
-    protected $invoiceFactory;
+    protected $invoiceRepository;
 
     /**
      * @var \Magento\Sales\Model\Service\OrderFactory
@@ -71,7 +71,7 @@ class CreditmemoLoader extends Object
     /**
      * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory
+     * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Sales\Model\Service\OrderFactory $orderServiceFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Model\Session $backendSession
@@ -84,7 +84,7 @@ class CreditmemoLoader extends Object
     public function __construct(
         \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory,
+        \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
         \Magento\Sales\Model\Service\OrderFactory $orderServiceFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Backend\Model\Session $backendSession,
@@ -95,7 +95,7 @@ class CreditmemoLoader extends Object
     ) {
         $this->creditmemoFactory = $creditmemoFactory;
         $this->orderFactory = $orderFactory;
-        $this->invoiceFactory = $invoiceFactory;
+        $this->invoiceRepository = $invoiceRepository;
         $this->orderServiceFactory = $orderServiceFactory;
         $this->eventManager = $eventManager;
         $this->backendSession = $backendSession;
@@ -158,11 +158,8 @@ class CreditmemoLoader extends Object
     {
         $invoiceId = $this->getInvoiceId();
         if ($invoiceId) {
-            $invoice = $this->invoiceFactory->create()->load(
-                $invoiceId
-            )->setOrder(
-                $order
-            );
+            $invoice = $this->invoiceRepository->get($invoiceId);
+            $invoice->setOrder($order);
             if ($invoice->getId()) {
                 return $invoice;
             }

@@ -162,14 +162,17 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('invoice_id')
             ->willReturn($invoiceId);
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn($invoice);
         $this->objectManager->expects($this->at(0))
             ->method('create')
-            ->with($invoiceClassName)
-            ->willReturn($invoice);
-        $invoice->expects($this->once())
-            ->method('load')
-            ->with($invoiceId)
-            ->willReturnSelf();
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
+
         $invoice->expects($this->once())
             ->method('getOrder')
             ->willReturn($order);
@@ -221,14 +224,18 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('invoice_id')
             ->willReturn($invoiceId);
+
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn(null);
         $this->objectManager->expects($this->at(0))
             ->method('create')
-            ->with($invoiceClassName)
-            ->willReturn($invoice);
-        $invoice->expects($this->once())
-            ->method('load')
-            ->with($invoiceId)
-            ->willReturn(null);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
+
         $this->resultForwardFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->resultForward);
