@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Indexer extends \Magento\Framework\Object implements IndexerInterface
 {
     /**
