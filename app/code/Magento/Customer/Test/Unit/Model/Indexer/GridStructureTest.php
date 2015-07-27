@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Customer\Test\Unit\Model\Indexer;
 
 use Magento\Customer\Model\Indexer\GridStructure;

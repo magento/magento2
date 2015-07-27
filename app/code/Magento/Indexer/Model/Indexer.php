@@ -50,6 +50,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
+     * @param StructureFactory $structureFactory
      * @param \Magento\Framework\Mview\ViewInterface $view
      * @param Indexer\StateFactory $stateFactory
      * @param Indexer\CollectionFactory $indexersFactory
