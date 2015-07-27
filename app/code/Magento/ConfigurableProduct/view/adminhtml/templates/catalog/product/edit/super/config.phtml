@@ -29,7 +29,13 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                 <div class="product-create-configuration-actions">
                     <button data-action="open-steps-wizard" title="Create Product Configurations"
                             class="action-secondary" onclick="return openVariationsWizard();">
-                        <span><?= __('Create Configurations') ?></span>
+                        <span data-role="button-label" data-edit-label="<?= __('Edit Configurations') ?>">
+                            <?= $block->getProduct()->getId()
+                                && $block->getProduct()->getTypeId() === 'configurable'
+                                ? __('Edit Configurations')
+                                : __('Create Configurations')
+                            ?>
+                        </span>
                     </button>
                 </div>
             </div>
