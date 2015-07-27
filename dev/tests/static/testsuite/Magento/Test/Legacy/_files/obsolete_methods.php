@@ -2391,7 +2391,5 @@ return [
     ['_getReadAdapter', 'Magento\MediaStorage\Model\Resource\File\Storage\AbstractStorage'],
     ['_getWriteAdapter', 'Magento\MediaStorage\Model\Resource\File\Storage\AbstractStorage'],
     ['getAdapter', 'Magento\Search\Model\SearchEngine'],
-    ['_getReadAdapter', 'Magento\Framework\Model\Resource\AbstractResource'],
-    ['_getWriteAdapter', 'Magento\Framework\Model\Resource\AbstractResource'],
     ['getAdapter', 'Magento\Framework\DB\Select'],
 ];
