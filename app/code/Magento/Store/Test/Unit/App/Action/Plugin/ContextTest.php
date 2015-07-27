@@ -121,6 +121,9 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())
             ->method('getStoreCodeFromCookie')
             ->will($this->returnValue('storeCookie'));
+        $this->storeMock->expects($this->once())
+            ->method('getCode')
+            ->willReturn('default');
         $this->currencyMock->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('UAH'));
