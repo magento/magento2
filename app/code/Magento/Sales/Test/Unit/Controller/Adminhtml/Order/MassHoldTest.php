@@ -71,9 +71,14 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
     protected $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Resource\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderCollectionMock;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderCollectionFactoryMock;
 
     /**
      * @var \Magento\Ui\Component\MassAction\Filter|\PHPUnit_Framework_MockObject_MockObject
@@ -105,7 +110,10 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
         $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-
+        $this->orderCollectionFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $redirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,18 +150,23 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
         $this->filterMock = $this->getMock('Magento\Ui\Component\MassAction\Filter', [], [], '', false);
         $this->filterMock->expects($this->once())
             ->method('getCollection')
+            ->with($this->orderCollectionMock)
+            ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionFactoryMock->expects($this->once())
+            ->method('create')
             ->willReturn($this->orderCollectionMock);
 
         $this->massAction = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\MassHold',
             [
                 'context' => $this->contextMock,
-                'filter' => $this->filterMock
+                'filter' => $this->filterMock,
+                'collectionFactory' => $this->orderCollectionFactoryMock
             ]
         );
     }
 
-    public function testExecuteTwoOrdersPutOnHold()
+    public function testExecuteOneOrderPutOnHold()
     {
         $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
@@ -201,7 +214,7 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
         $this->massAction->execute();
     }
 
-    public function testExecuteOneOrderCannotBePutOnHold()
+    public function testExecuteNoOrdersPutOnHold()
     {
         $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
