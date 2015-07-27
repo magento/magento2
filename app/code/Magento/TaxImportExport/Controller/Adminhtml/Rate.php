@@ -8,7 +8,7 @@ namespace Magento\TaxImportExport\Controller\Adminhtml;
 /**
  * Adminhtml tax rate controller
  */
-class Rate extends \Magento\Backend\App\Action
+abstract class Rate extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
