@@ -183,7 +183,9 @@ class DataGrid extends Grid
         if (!is_array($action)) {
             $action = [$action => '-'];
         }
-
+        foreach ($items as $item) {
+            $this->searchAndSelect($item);
+        }
         if ($massActionSelection) {
             $this->_rootElement->find($this->massActionToggleButton)->click();
             $this->_rootElement
