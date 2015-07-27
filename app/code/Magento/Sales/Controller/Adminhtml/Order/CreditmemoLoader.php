@@ -7,6 +7,8 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\Object;
+use \Magento\Sales\Model\Order\CreditmemoRepository;
+use \Magento\Sales\Model\Order\CreditmemoFactory;
 
 /**
  * Class CreditmemoLoader
@@ -24,7 +26,12 @@ use Magento\Framework\Object;
 class CreditmemoLoader extends Object
 {
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoFactory
+     * @var CreditmemoRepository;
+     */
+    protected $creditmemoRepository;
+
+    /**
+     * @var CreditmemoFactory;
      */
     protected $creditmemoFactory;
 
@@ -37,11 +44,6 @@ class CreditmemoLoader extends Object
      * @var \Magento\Sales\Model\Order\InvoiceFactory
      */
     protected $invoiceFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Service\OrderFactory
-     */
-    protected $orderServiceFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
@@ -69,10 +71,10 @@ class CreditmemoLoader extends Object
     protected $stockConfiguration;
 
     /**
-     * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
+     * @param CreditmemoRepository $creditmemoRepository
+     * @param CreditmemoFactory $creditmemoFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory
-     * @param \Magento\Sales\Model\Service\OrderFactory $orderServiceFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -82,10 +84,10 @@ class CreditmemoLoader extends Object
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
+        CreditmemoRepository $creditmemoRepository,
+        CreditmemoFactory $creditmemoFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory,
-        \Magento\Sales\Model\Service\OrderFactory $orderServiceFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -93,10 +95,10 @@ class CreditmemoLoader extends Object
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         array $data = []
     ) {
+        $this->creditmemoRepository = $creditmemoRepository;
         $this->creditmemoFactory = $creditmemoFactory;
         $this->orderFactory = $orderFactory;
         $this->invoiceFactory = $invoiceFactory;
-        $this->orderServiceFactory = $orderServiceFactory;
         $this->eventManager = $eventManager;
         $this->backendSession = $backendSession;
         $this->messageManager = $messageManager;
@@ -182,7 +184,7 @@ class CreditmemoLoader extends Object
         $creditmemoId = $this->getCreditmemoId();
         $orderId = $this->getOrderId();
         if ($creditmemoId) {
-            $creditmemo = $this->creditmemoFactory->create()->load($creditmemoId);
+            $creditmemo = $this->creditmemoRepository->get($creditmemoId);
         } elseif ($orderId) {
             $data = $this->getCreditmemo();
             $order = $this->orderFactory->create()->load($orderId);
@@ -206,11 +208,10 @@ class CreditmemoLoader extends Object
             }
             $data['qtys'] = $qtys;
 
-            $service = $this->orderServiceFactory->create(['order' => $order]);
             if ($invoice) {
-                $creditmemo = $service->prepareInvoiceCreditmemo($invoice, $data);
+                $creditmemo = $this->creditmemoFactory->createByInvoice($invoice, $data);
             } else {
-                $creditmemo = $service->prepareCreditmemo($data);
+                $creditmemo = $this->creditmemoFactory->createByOrder($order, $data);
             }
 
             /**

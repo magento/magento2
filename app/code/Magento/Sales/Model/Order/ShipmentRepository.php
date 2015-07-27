@@ -63,7 +63,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
             $this->metadata->getMapper()->load($entity, $id);
 
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException('Requested entity doesn\'t exist');
+                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
 
             $this->registry[$id] = $entity;
