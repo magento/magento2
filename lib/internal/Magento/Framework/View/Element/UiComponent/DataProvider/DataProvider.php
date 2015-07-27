@@ -275,7 +275,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
-        return $this->searchResultToOutput($this->reporting->search($this->getSearchCriteria()));
+        return $this->searchResultToOutput($this->getSearchResult());
     }
 
     /**
@@ -297,5 +297,15 @@ class DataProvider implements DataProviderInterface
     public function setConfigData($config)
     {
         $this->data['config'] = $config;
+    }
+
+    /**
+     * Returns Search result
+     *
+     * @return SearchResultInterface
+     */
+    public function getSearchResult()
+    {
+        return $this->reporting->search($this->getSearchCriteria());
     }
 }
