@@ -38,6 +38,7 @@ class CreateGroupedProductEntityTest extends Injectable
     const TEST_TYPE = 'acceptance_test';
     const MVP = 'no';
     const DOMAIN = 'MX';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
