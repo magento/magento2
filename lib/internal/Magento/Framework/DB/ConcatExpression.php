@@ -65,12 +65,11 @@ class ConcatExpression extends \Zend_Db_Expr
     public function __toString()
     {
         $columns = [];
-        $tableName = !$this->isTableAlias ? $this->resource->getTableName($this->tableName) : $this->tableName;
         foreach ($this->columns as $key => $column) {
             $columns[$key] = sprintf(
                 "ifnull(%s, '')",
                 $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)
-                    ->quoteIdentifier($tableName . '.' .$column)
+                    ->quoteIdentifier($this->tableName . '.' .$column)
             );
         }
         return sprintf(
