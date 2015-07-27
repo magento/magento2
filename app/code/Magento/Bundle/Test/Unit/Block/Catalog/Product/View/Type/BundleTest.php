@@ -237,6 +237,12 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
+
+        $eventManager = $this->getMockBuilder('\Magento\Framework\Event\Manager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $eventManager->expects($this->any())->method('dispatch')->will($this->returnValue(true));
+
         $optionCollection = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Option\Collection')
             ->disableOriginalConstructor()
             ->getMock();
@@ -285,6 +291,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())
             ->method('getTaxData')
             ->will($this->returnValue($taxHelperMock));
+        $context->expects($this->any())
+            ->method('getEventManager')
+            ->will($this->returnValue($eventManager));
 
         $jsonEncoderMock = $this->getMockBuilder('\Magento\Framework\Json\Encoder')
             ->disableOriginalConstructor()
