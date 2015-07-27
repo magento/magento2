@@ -49,6 +49,8 @@ class LogoutUserOnBackendStep implements TestStepInterface
     {
         $this->adminAuth->open();
 
+        $this->dashboard->getSystemMessageDialog()->closePopup();
+
         if ($this->dashboard->getAdminPanelHeader()->isVisible()) {
             $this->dashboard->getAdminPanelHeader()->logOut();
         }
