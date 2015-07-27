@@ -463,48 +463,53 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="CustomerNameAggregator" type="Magento\Sales\Model\Resource\Order\Grid\Sql\Concat">
+    <virtualType name="CustomerNameAggregator" type="Magento\Framework\DB\ConcatExpression">
         <arguments>
+            <argument name="tableName" xsi:type="string">sales_order</argument>
             <argument name="columns" xsi:type="array">
-                <item name="customer_firstname" xsi:type="string">sales_order.customer_firstname</item>
-                <item name="customer_lastname" xsi:type="string">sales_order.customer_lastname</item>
+                <item name="customer_firstname" xsi:type="string">customer_firstname</item>
+                <item name="customer_lastname" xsi:type="string">customer_lastname</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="ShippingNameAggregator" type="Magento\Sales\Model\Resource\Order\Grid\Sql\Concat">
+    <virtualType name="ShippingNameAggregator" type="Magento\Framework\DB\ConcatExpression">
         <arguments>
+            <argument name="tableName" xsi:type="string">sales_shipping_address</argument>
             <argument name="columns" xsi:type="array">
-                <item name="firstname" xsi:type="string">sales_shipping_address.firstname</item>
-                <item name="lastname" xsi:type="string">sales_shipping_address.lastname</item>
+                <item name="firstname" xsi:type="string">firstname</item>
+                <item name="lastname" xsi:type="string">lastname</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BillingNameAggregator" type="Magento\Sales\Model\Resource\Order\Grid\Sql\Concat">
+    <virtualType name="BillingNameAggregator" type="Magento\Framework\DB\ConcatExpression">
         <arguments>
+            <argument name="tableName" xsi:type="string">sales_billing_address</argument>
             <argument name="columns" xsi:type="array">
-                <item name="firstname" xsi:type="string">sales_billing_address.firstname</item>
-                <item name="lastname" xsi:type="string">sales_billing_address.lastname</item>
+                <item name="firstname" xsi:type="string">firstname</item>
+                <item name="lastname" xsi:type="string">lastname</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="ShippingAddressAggregator" type="Magento\Sales\Model\Resource\Order\Grid\Sql\Concat">
+    <virtualType name="ShippingAddressAggregator" type="Magento\Framework\DB\ConcatExpression">
         <arguments>
+            <argument name="tableName" xsi:type="string">sales_shipping_address</argument>
             <argument name="columns" xsi:type="array">
-                <item name="street" xsi:type="string">sales_shipping_address.street</item>
-                <item name="city" xsi:type="string">sales_shipping_address.city</item>
-                <item name="region" xsi:type="string">sales_shipping_address.region</item>
-                <item name="postcode" xsi:type="string">sales_shipping_address.postcode</item>
+                <item name="street" xsi:type="string">street</item>
+                <item name="city" xsi:type="string">city</item>
+                <item name="region" xsi:type="string">region</item>
+                <item name="postcode" xsi:type="string">postcode</item>
             </argument>
             <argument name="separator" xsi:type="string">, </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BillingAddressAggregator" type="Magento\Sales\Model\Resource\Order\Grid\Sql\Concat">
+    <virtualType name="BillingAddressAggregator" type="Magento\Framework\DB\ConcatExpression">
         <arguments>
+            <argument name="tableName" xsi:type="string">sales_billing_address</argument>
             <argument name="columns" xsi:type="array">
-                <item name="street" xsi:type="string">sales_billing_address.street</item>
-                <item name="city" xsi:type="string">sales_billing_address.city</item>
-                <item name="region" xsi:type="string">sales_billing_address.region</item>
-                <item name="postcode" xsi:type="string">sales_billing_address.postcode</item>
+                <item name="street" xsi:type="string">street</item>
+                <item name="city" xsi:type="string">city</item>
+                <item name="region" xsi:type="string">region</item>
+                <item name="postcode" xsi:type="string">postcode</item>
             </argument>
             <argument name="separator" xsi:type="string">, </argument>
         </arguments>
