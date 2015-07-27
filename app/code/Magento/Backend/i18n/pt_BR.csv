@@ -412,6 +412,8 @@ Scope:,Scope:
 "Pregenerated product images files","Pregenerated product images files"
 "Flush JavaScript/CSS Cache","Flush JavaScript/CSS Cache"
 "Themes JavaScript and CSS files combined to one file.","Themes JavaScript and CSS files combined to one file."
+"Flush Static Files Cache", "Flush Static Files Cache"
+"Preprocessed view files and static files", "Preprocessed view files and static files"
 Catalog,Catalog
 JavaScript/CSS,JavaScript/CSS
 "JavaScript/CSS Cache","JavaScript/CSS Cache"
