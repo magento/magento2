@@ -63,15 +63,9 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $omFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->objectManagerFactory->expects($this->any())
-            ->method('get')
+            ->method('create')
             ->will($this->returnValue($this->objectManager));
-
-        $this->objectManagerFactory->expects($this->once())
-            ->method('getObjectManagerFactory')
-            ->with([])
-            ->willReturn($omFactory);
 
         $this->deployer->expects($this->once())->method('deploy');
 
