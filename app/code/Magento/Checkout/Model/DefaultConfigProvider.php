@@ -194,6 +194,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Shipping\Model\Config $shippingMethodConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
+     * @param UrlInterface $urlBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -293,11 +294,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
             ),
             'shippingPolicyContent' => nl2br(
                 $this->scopeConfig->getValue(
-                'shipping/shipping_policy/shipping_policy_content',
+                    'shipping/shipping_policy/shipping_policy_content',
                     ScopeInterface::SCOPE_STORE
                 )
             )
-        ];    
+        ];
         $output['activeCarriers'] = $this->getActiveCarriers();
         $output['originCountryCode'] = $this->getOriginCountryCode();
         $output['paymentMethods'] = $this->getPaymentMethods();
@@ -335,22 +336,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
             ->getFormatByCode(\Magento\Customer\Model\Address\Config::DEFAULT_ADDRESS_FORMAT)
             ->getRenderer()
             ->renderArray($builtOutputAddressData);
-    }
-
-    /**
-     * Retrieve number of customer addresses
-     *
-     * @return int
-     */
-    private function getCustomerAddressCount()
-    {
-        $customerAddressCount = 0;
-        if ($this->isCustomerLoggedIn()) {
-            $customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
-            $addresses = $customer->getAddresses();
-            $customerAddressCount = count($addresses);
-        }
-        return $customerAddressCount;
     }
 
     /**
