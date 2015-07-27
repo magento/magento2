@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
 
 /**
  * Order payment information
@@ -95,6 +96,11 @@ class Payment extends Info implements OrderPaymentInterface
     protected $transactionRepository;
 
     /**
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface
+     */
+    protected $transactionManager;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -102,8 +108,11 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
+     * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+     * @param \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface $transactionManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -121,6 +130,7 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
+        ManagerInterface $transactionManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -129,6 +139,7 @@ class Payment extends Info implements OrderPaymentInterface
         $this->_serviceOrderFactory = $serviceOrderFactory;
         $this->_storeManager = $storeManager;
         $this->transactionRepository = $transactionRepository;
+        $this->transactionManager = $transactionManager;
         parent::__construct(
             $context,
             $registry,
@@ -235,9 +246,10 @@ class Payment extends Info implements OrderPaymentInterface
         // Check Authorization transaction state
         $authTransaction = $this->getAuthorizationTransaction();
         if ($authTransaction && $authTransaction->getIsClosed()) {
-            $orderTransaction = $this->_lookupTransaction(
-                null,
-                Transaction::TYPE_ORDER
+            $orderTransaction = $this->transactionRepository->getByTxnType(
+                Transaction::TYPE_ORDER,
+                $this->getId(),
+                $this->getOrder()->getId()
             );
             if (!$orderTransaction) {
                 return false;
@@ -464,7 +476,7 @@ class Payment extends Info implements OrderPaymentInterface
             //TODO replace for sale usage
             $method->capture($this, $amountToCapture);
 
-            $transaction = $this->_addTransaction(
+            $transaction = $this->addTransaction(
                 Transaction::TYPE_CAPTURE,
                 $invoice,
                 true
@@ -568,7 +580,7 @@ class Payment extends Info implements OrderPaymentInterface
             $status = $order->getConfig()->getStateDefaultStatus($state);
         }
 
-        $transaction = $this->_addTransaction(
+        $transaction = $this->addTransaction(
             Transaction::TYPE_CAPTURE,
             $invoice,
             true
@@ -751,7 +763,11 @@ class Payment extends Info implements OrderPaymentInterface
             $invoice = $creditmemo->getInvoice();
             if ($invoice) {
                 $isOnline = true;
-                $captureTxn = $this->_lookupTransaction($invoice->getTransactionId());
+                $captureTxn = $this->transactionRepository->getByTxnId(
+                    $invoice->getTransactionId(),
+                    $this->getId(),
+                    $this->getOrder()->getId()
+                );
                 if ($captureTxn) {
                     $this->setParentTransactionId($captureTxn->getTxnId());
                 }
@@ -792,7 +808,7 @@ class Payment extends Info implements OrderPaymentInterface
         );
 
         // update transactions and order state
-        $transaction = $this->_addTransaction(
+        $transaction = $this->addTransaction(
             Transaction::TYPE_REFUND,
             $creditmemo,
             $isOnline
@@ -833,7 +849,11 @@ class Payment extends Info implements OrderPaymentInterface
         $notificationAmount = $amount;
         $this->_generateTransactionId(
             Transaction::TYPE_REFUND,
-            $this->_lookupTransaction($this->getParentTransactionId())
+            $this->transactionRepository->getByTxnId(
+                $this->getParentTransactionId(),
+                $this->getId(),
+                $this->getOrder()->getId()
+            )
         );
         if ($this->_isTransactionExists()) {
             return $this;
@@ -905,7 +925,7 @@ class Payment extends Info implements OrderPaymentInterface
 
         $this->setCreatedCreditmemo($creditmemo);
         // update transactions and order state
-        $transaction = $this->_addTransaction(
+        $transaction = $this->addTransaction(
             Transaction::TYPE_REFUND,
             $creditmemo
         );
@@ -1201,7 +1221,7 @@ class Payment extends Info implements OrderPaymentInterface
         }
 
         // update transactions, order state and add comments
-        $transaction = $this->_addTransaction(Transaction::TYPE_ORDER);
+        $transaction = $this->addTransaction(Transaction::TYPE_ORDER);
         $message = $this->_prependMessage($message);
         $this->addTransactionCommentsToOrder($transaction, $message);
 
@@ -1271,7 +1291,7 @@ class Payment extends Info implements OrderPaymentInterface
         }
 
         // update transactions, order state and add comments
-        $transaction = $this->_addTransaction(Transaction::TYPE_AUTH);
+        $transaction = $this->addTransaction(Transaction::TYPE_AUTH);
         $message = $this->_prependMessage($message);
         $this->addTransactionCommentsToOrder($transaction, $message);
 
@@ -1330,7 +1350,7 @@ class Payment extends Info implements OrderPaymentInterface
         }
 
         // update transactions, order state and add comments
-        $transaction = $this->_addTransaction(Transaction::TYPE_VOID, null, true);
+        $transaction = $this->addTransaction(Transaction::TYPE_VOID, null, true);
         $message = $this->hasMessage() ? $this->getMessage() : __('Voided authorization.');
         $message = $this->_prependMessage($message);
         if ($amount) {
@@ -1342,112 +1362,17 @@ class Payment extends Info implements OrderPaymentInterface
         return $this;
     }
 
-    //    /**
-    //     * TODO: implement this
-    //     * @param Invoice $invoice
-    //     * @return $this
-    //     */
-    //    public function cancelCapture($invoice = null)
-    //    {
-    //    }
-
-    /**
-     * Create transaction,
-     * prepare its insertion into hierarchy and add its information to payment and comments
-     *
-     * To add transactions and related information,
-     * the following information should be set to payment before processing:
-     * - transaction_id
-     * - is_transaction_closed (optional) - whether transaction should be closed or open (closed by default)
-     * - parent_transaction_id (optional)
-     * - should_close_parent_transaction (optional) - whether to close parent transaction (closed by default)
-     *
-     * If the sales document is specified, it will be linked to the transaction as related for future usage.
-     * Currently transaction ID is set into the sales object
-     * This method writes the added transaction ID into last_trans_id field of the payment object
-     *
-     * To make sure transaction object won't cause trouble before saving, use $failsafe = true
-     *
-     * @param string $type
-     * @param \Magento\Sales\Model\AbstractModel $salesDocument
-     * @param bool $failsafe
-     * @return null|Transaction
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function _addTransaction($type, $salesDocument = null, $failsafe = false)
-    {
-        if ($this->getSkipTransactionCreation()) {
-            $this->unsTransactionId();
-            return null;
-        }
-
-        // look for set transaction ids
-        $transactionId = $this->getTransactionId();
-        if (null !== $transactionId) {
-            // set transaction parameters
-            $transaction = false;
-            if ($this->getOrder()->getId()) {
-                $transaction = $this->_lookupTransaction($transactionId);
-            }
-            if (!$transaction) {
-                $transaction = $this->transactionRepository->create()->setTxnId($transactionId);
-            }
-            $transaction->setOrderPaymentObject($this)->setTxnType($type)->isFailsafe($failsafe);
-
-            if ($this->hasIsTransactionClosed()) {
-                $transaction->setIsClosed((int)$this->getIsTransactionClosed());
-            }
-
-            //set transaction addition information
-            if ($this->_transactionAdditionalInfo) {
-                foreach ($this->_transactionAdditionalInfo as $key => $value) {
-                    $transaction->setAdditionalInformation($key, $value);
-                }
-                $this->_transactionAdditionalInfo = [];
-            }
-
-            // link with sales entities
-            $this->setLastTransId($transactionId);
-            $this->setCreatedTransaction($transaction);
-            $this->getOrder()->addRelatedObject($transaction);
-            if ($salesDocument && $salesDocument instanceof \Magento\Sales\Model\AbstractModel) {
-                $salesDocument->setTransactionId($transactionId);
-            }
-
-            // link with parent transaction
-            $parentTransactionId = $this->getParentTransactionId();
-
-            if ($parentTransactionId) {
-                $transaction->setParentTxnId($parentTransactionId);
-                if ($this->getShouldCloseParentTransaction()) {
-                    $parentTransaction = $this->_lookupTransaction($parentTransactionId);
-                    if ($parentTransaction) {
-                        if (!$parentTransaction->getIsClosed()) {
-                            $parentTransaction->isFailsafe($failsafe)->close(false);
-                        }
-                        $this->getOrder()->addRelatedObject($parentTransaction);
-                    }
-                }
-            }
-            return $transaction;
-        }
-
-        return null;
-    }
-
     /**
      * Public access to _addTransaction method
      *
      * @param string $type
      * @param \Magento\Sales\Model\AbstractModel $salesDocument
-     * @param bool $failsafe
-     * @param bool|string $message
+     * @param bool $failSafe
      * @return null|Transaction
      */
-    public function addTransaction($type, $salesDocument = null, $failsafe = false)
+    public function addTransaction($type, $salesDocument = null, $failSafe = false)
     {
-        return $this->_addTransaction($type, $salesDocument, $failsafe);
+        return $this->transactionManager->addTransaction($this, $type, $salesDocument, $failSafe);
     }
 
     public function addTransactionCommentsToOrder($transaction, $message)
@@ -1473,12 +1398,10 @@ class Payment extends Info implements OrderPaymentInterface
             $this,
             $transactionTo->getTxnId()
         );
-        if ($method) {
-            $transactionTo->setAdditionalInformation(
-                Transaction::RAW_DETAILS,
-                $method
-            );
-        }
+        $transactionTo->setAdditionalInformation(
+            Transaction::RAW_DETAILS,
+            $method
+        );
         return $this;
     }
 
@@ -1510,7 +1433,7 @@ class Payment extends Info implements OrderPaymentInterface
         if (null === $txnId) {
             $txnId = $this->getTransactionId();
         }
-        return $txnId && $this->_lookupTransaction($txnId);
+        return $txnId && $this->transactionRepository->getByTxnId($txnId, $this->getId(), $this->getOrder()->getId());
     }
 
     /**
@@ -1581,53 +1504,6 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * Find one transaction by ID or type
-     *
-     * @param string $txnId
-     * @param bool|string $txnType
-     * @return Transaction|false
-     */
-    protected function _lookupTransaction($txnId, $txnType = false)
-    {
-        if (!$txnId) {
-            if ($txnType && $this->getId()) {
-                $txn = $this->transactionRepository->getByTxnType(
-                    $txnType,
-                    $this->getId(),
-                    $this->getOrder()->getId()
-                );
-                if ($txn && $txn->getId()) {
-                    $this->_transactionsLookup[$txn->getTxnId()] = $txn;
-                }
-                return $txn;
-            }
-            return false;
-        }
-        if (isset($this->_transactionsLookup[$txnId])) {
-            return $this->_transactionsLookup[$txnId];
-        }
-        $txn = $this->transactionRepository->getByTxnId($txnId, $this->getId(), $this->getOrder()->getId());
-        if ($txn && $txn->getId()) {
-            $this->_transactionsLookup[$txnId] = $txn;
-        } else {
-            $this->_transactionsLookup[$txnId] = false;
-        }
-        return $this->_transactionsLookup[$txnId];
-    }
-
-    /**
-     * Find one transaction by ID or type
-     *
-     * @param string $txnId
-     * @param bool|string $txnType
-     * @return Transaction|false
-     */
-    public function lookupTransaction($txnId, $txnType = false)
-    {
-        return $this->_lookupTransaction($txnId, $txnType);
-    }
-
-    /**
      * Lookup an authorization transaction using parent transaction id, if set
      * @return Transaction|false
      */
@@ -1656,7 +1532,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function getTransaction($transactionId)
     {
-        return $this->_lookupTransaction($transactionId);
+        return $this->transactionRepository->getByTxnId($transactionId, $this->getId(), $this->getOrder()->getId());
     }
 
     /**
