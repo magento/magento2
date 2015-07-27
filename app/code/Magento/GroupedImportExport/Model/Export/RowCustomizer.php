@@ -25,9 +25,7 @@ class RowCustomizer implements RowCustomizerInterface
         $columns = array_merge(
             $columns,
             [
-                '_associated_sku',
-                '_associated_default_qty',
-                '_associated_position'
+                'associated_skus'
             ]
         );
         return $columns;
