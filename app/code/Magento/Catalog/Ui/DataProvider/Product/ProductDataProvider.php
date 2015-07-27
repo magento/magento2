@@ -58,16 +58,6 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Get collection
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
-     */
-    protected function getCollection()
-    {
-        return $this->collection;
-    }
-
-    /**
      * Get data
      *
      * @return array
@@ -104,12 +94,17 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * {@inheritdoc}
      */
-    public function addFilter($condition, $field = null, $type = 'regular')
+    public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        if (isset($this->addFilterStrategies[$field])) {
-            $this->addFilterStrategies[$field]->addFilter($this->getCollection(), $field, $condition);
+        if (isset($this->addFilterStrategies[$filter->getField()])) {
+            $this->addFilterStrategies[$filter->getField()]
+                ->addFilter(
+                    $this->getCollection(),
+                    $filter->getField(),
+                    [$filter->getConditionType() => $filter->getValue()]
+                );
         } else {
-            parent::addFilter($condition, $field);
+            parent::addFilter($filter);
         }
     }
 }

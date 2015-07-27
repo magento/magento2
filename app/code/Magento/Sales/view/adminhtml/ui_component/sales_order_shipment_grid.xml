@@ -15,7 +15,7 @@
     </argument>
     <dataSource name="sales_order_shipment_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">ShipmentGridDataProvider</argument>
+            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
             <argument name="name" xsi:type="string">sales_order_shipment_grid_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">increment_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
@@ -323,6 +323,11 @@
                             <item name="type" xsi:type="string">pdfshipments_order</item>
                             <item name="label" xsi:type="string" translate="true">PDF Shipments</item>
                             <item name="url" xsi:type="string">sales/shipment/pdfshipments</item>
+                        </item>
+                        <item name="print_shipping_label" xsi:type="array">
+                            <item name="type" xsi:type="string">print_shipping_label</item>
+                            <item name="label" xsi:type="string" translate="true">Print Shipping Labels</item>
+                            <item name="url" xsi:type="string">adminhtml/shipment/massPrintShippingLabel</item>
                         </item>
                     </item>
                     <item name="indexField" xsi:type="string">entity_id</item>
