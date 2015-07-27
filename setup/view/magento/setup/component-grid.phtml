@@ -32,7 +32,7 @@
                     <span ng-hide="isOutOfSync">
                         at {{lastSyncDate|date:"h:mm:ssa"}} on {{lastSyncDate|date:"d MMM yyyy"}}
                     </span>
-                    <span ng-show="isOutOfSync">Out-of-sync</span></div>
+                    <span ng-show="isOutOfSync">No sync history</span></div>
                 <button type="button" class="btn" ng-click="sync()">Sync</button>
             </li>
         </ul>
@@ -56,7 +56,7 @@
                 </select>
                 <label class="admin__control-support-text" for="perPage">per page</label>
                 <div class="admin__data-grid-pager">
-                    <button class="action-previous" type="button">
+                    <button class="action-previous disabled" type="button">
                         <span>Previous page</span>
                     </button>
                     <input id="pageCurrent" class="admin__control-text" type="number" value="1">
@@ -97,7 +97,11 @@
             <tbody>
             <tr ng-repeat="component in components">
                 <td class="data-grid-indicator-cell">
-                    <span class="component-indicator" ng-class="getIndicatorInfo(component, 'icon')" data-label="{{getIndicatorInfo(component, 'label')}}"><span>{{getIndicatorInfo(component, 'label')}}</span></span>
+                    <span class="component-indicator"
+                          ng-class="getIndicatorInfo(component, 'icon')"
+                          data-label="{{getIndicatorInfo(component, 'label')}}"
+                        ><span>{{getIndicatorInfo(component, 'label')}}</span>
+                    </span>
                 </td>
                 <td>
                     <span class="data-grid-data">{{component.name}}</span>
@@ -112,7 +116,8 @@
                     <span class="data-grid-data">{{component.updated}}</span>
                 </td>
                 <td class="data-grid-actions-cell">
-                    <!-- "_active" class should be added when .action-select button clicked to the wrapper and .action-menu to show actions -->
+                    <!-- "_active" class should be added when .action-select button clicked to the -->
+                    <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
                         <button class="action-select" ng-click="toggleActiveActionsCell(component)">
                             <span>Select</span>
@@ -125,7 +130,8 @@
                                 <a class="action-menu-item">Disable</a>
                             </li>
 
-                            <li ng-class="{'hide' : !isAvailableUpdatePackage(component.name)}" ng-click="update(component)">
+                            <li ng-class="{'hide' : !isAvailableUpdatePackage(component.name)}"
+                                ng-click="update(component)">
                                 <a class="action-menu-item">Update</a>
                             </li>
                         </ul>
