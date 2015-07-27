@@ -261,14 +261,13 @@ abstract class Grid extends Block
      */
     protected function waitLoader()
     {
-        $browser = $this->browser;
-        $selector = $this->loader;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $productSavedMessage = $browser->find($selector);
-                return $productSavedMessage->isVisible() == false ? true : null;
+        $this->browser->waitUntil(
+            function () {
+                $element = $this->browser->find($this->loader);
+                return $element->isVisible() == false ? true : null;
             }
         );
+
         $this->getTemplateBlock()->waitLoader();
     }
 

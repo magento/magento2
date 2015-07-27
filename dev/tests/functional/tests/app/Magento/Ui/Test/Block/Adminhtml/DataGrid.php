@@ -8,19 +8,13 @@ namespace Magento\Ui\Test\Block\Adminhtml;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Grid;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Backend Data Grid with advanced functionality for managing entities.
  */
 class DataGrid extends Grid
 {
-    /**
-     * Filters array mapping.
-     *
-     * @var array
-     */
-    protected $filters = [];
-
     /**
      * Locator value for "Edit" link inside action column.
      *
@@ -78,13 +72,6 @@ class DataGrid extends Grid
     protected $actionButton = '.modal-inner-wrap .action-secondary';
 
     /**
-     * Select action toggle.
-     *
-     * @var string
-     */
-    protected $selectAction = '.action-select';
-
-    /**
      * Clear all applied Filters.
      *
      * @return void
@@ -138,6 +125,17 @@ class DataGrid extends Grid
     }
 
     /**
+     * Click on "Edit" link.
+     *
+     * @param SimpleElement $rowItem
+     * @return void
+     */
+    protected function clickEditLink(SimpleElement $rowItem)
+    {
+        $rowItem->find($this->editLink)->click();
+    }
+
+    /**
      * Search item using Data Grid Filter.
      *
      * @param array $filter
@@ -147,6 +145,8 @@ class DataGrid extends Grid
     {
         $this->openFilterBlock();
         parent::search($filter);
+        $this->waitForElementNotVisible($this->searchButton);
+        $this->waitLoader();
     }
 
     /**
@@ -160,11 +160,7 @@ class DataGrid extends Grid
         $this->search($filter);
         $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
-            $actionSelect = $rowItem->find($this->selectAction);
-            if ($actionSelect->isVisible()) {
-                $actionSelect->click();
-            }
-            $rowItem->find($this->editLink)->click();
+            $this->clickEditLink($rowItem);
         } else {
             throw new \Exception('Searched item was not found.');
         }
