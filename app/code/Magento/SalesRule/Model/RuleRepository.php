@@ -183,8 +183,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      */
     public function deleteById($id)
     {
-        $model = $this->ruleFactory->create()
-            ->load($id);
+        $model = $this->ruleFactory->create()->load($id);
 
         if (!$model->getId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException();
