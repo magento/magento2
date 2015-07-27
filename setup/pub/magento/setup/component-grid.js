@@ -5,7 +5,7 @@
 
 'use strict';
 angular.module('component-grid', ['ngStorage'])
-    .controller('componentGridController', ['$scope', '$http', '$localStorage', function ($scope, $http, $localStorage) {
+    .controller('componentGridController', ['$scope', '$http', '$localStorage', '$timeout', function ($scope, $http, $localStorage, $timeout) {
 
       $http.get('index.php/componentGrid/components').success(function(data) {
           $scope.components = data.components;
@@ -30,6 +30,16 @@ angular.module('component-grid', ['ngStorage'])
 
       $scope.toggleActiveActionsCell = function(component) {
           $scope.selectedComponent = $scope.selectedComponent == component ? null : component;
+      };
+
+      $scope.closeActiveActionsCell = function(component) {
+          // Use $timeout to delay closing the drop down. Currently, this function is called by an ng-blur
+          // directive. So when something loses focus, it will execute this function. However, since
+          // this function hides DOM elements, any ng-click directive is not executed. So in order to make
+          // regular ng-click directives to work, use a tiny delay in closing the drop down.
+          $timeout(function() {
+              $scope.toggleActiveActionsCell(component);
+          }, 10);
       };
 
       $scope.sync = function() {
