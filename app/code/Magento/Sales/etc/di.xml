@@ -579,6 +579,12 @@
             <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Shipment</argument>
         </arguments>
     </virtualType>
+    <virtualType name="creditmemoMetadata" type="Magento\Sales\Model\Resource\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order\Creditmemo</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Creditmemo</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="transactionMetaData" type="Magento\Sales\Model\Resource\Metadata">
         <arguments>
             <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Payment\Transaction</argument>
@@ -593,6 +599,11 @@
     <type name="Magento\Sales\Model\Order\ShipmentRepository">
         <arguments>
             <argument name="metadata" xsi:type="object">shipmentMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\CreditmemoRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">creditmemoMetadata</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Model\Order\Payment\TransactionRepository">

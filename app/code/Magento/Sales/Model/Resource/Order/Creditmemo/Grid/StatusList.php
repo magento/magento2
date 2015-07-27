@@ -11,16 +11,16 @@ namespace Magento\Sales\Model\Resource\Order\Creditmemo\Grid;
 class StatusList implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoFactory
+     * @var \Magento\Sales\Model\Order\CreditmemoRepository
      */
-    protected $creditmemoFactory;
+    protected $creditmemoRepository;
 
     /**
-     * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
+     * @param \Magento\Sales\Model\Order\CreditmemoRepository $creditmemoRepository
      */
-    public function __construct(\Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory)
+    public function __construct(\Magento\Sales\Model\Order\CreditmemoRepository $creditmemoRepository)
     {
-        $this->creditmemoFactory = $creditmemoFactory;
+        $this->creditmemoRepository = $creditmemoRepository;
     }
 
     /**
@@ -30,6 +30,6 @@ class StatusList implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->creditmemoFactory->create()->getStates();
+        return $this->creditmemoRepository->create()->getStates();
     }
 }
