@@ -28,8 +28,8 @@ class Data extends FrontendDataHelper
         OrderFactory $orderFactory,
         UrlInterface $backendUrl
     ) {
-        $this->_urlBuilder = $backendUrl;
         parent::__construct($context, $storeManager, $orderFactory);
+        $this->_urlBuilder = $backendUrl;
     }
 
     /**
@@ -85,6 +85,8 @@ class Data extends FrontendDataHelper
      *
      * @param null|int|string $storeId
      * @return string
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getRelayUrl($storeId = null)
     {

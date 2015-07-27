@@ -485,4 +485,50 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $this->_ruleProductProcessor->getIndexer()->invalidate();
         return parent::afterDelete();
     }
+
+    /**
+     * Check if rule behavior changed
+     *
+     * @return bool
+     */
+    public function isRuleBehaviorChanged()
+    {
+        if (!$this->isObjectNew()) {
+            $arrayDiff = $this->dataDiff($this->getOrigData(), $this->getStoredData());
+            unset($arrayDiff['name']);
+            unset($arrayDiff['description']);
+            if (empty($arrayDiff)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get array with data differences
+     * @param array $array1
+     * @param array $array2
+     *
+     * @return array
+     */
+    protected function dataDiff($array1, $array2)
+    {
+        $result = [];
+        foreach ($array1 as $key => $value) {
+            if (array_key_exists($key, $array2)) {
+                if (is_array($value)) {
+                    if ($value != $array2[$key]) {
+                        $result[$key] = true;
+                    }
+                } else {
+                    if ($value != $array2[$key]) {
+                        $result[$key] = true;
+                    }
+                }
+            } else {
+                $result[$key] = true;
+            }
+        }
+        return $result;
+    }
 }
