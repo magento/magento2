@@ -101,6 +101,11 @@ class Payment extends Info implements OrderPaymentInterface
     protected $transactionManager;
 
     /**
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface
+     */
+    protected $transactionBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -108,11 +113,10 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
-     * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface $transactionManager
+     * @param Transaction\BuilderInterface $transactionBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -126,20 +130,19 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
-        \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         ManagerInterface $transactionManager,
+        \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_serviceOrderFactory = $serviceOrderFactory;
-        $this->_storeManager = $storeManager;
         $this->transactionRepository = $transactionRepository;
         $this->transactionManager = $transactionManager;
+        $this->transactionBuilder = $transactionBuilder;
         parent::__construct(
             $context,
             $registry,
@@ -1372,7 +1375,14 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function addTransaction($type, $salesDocument = null, $failSafe = false)
     {
-        return $this->transactionManager->addTransaction($this, $type, $salesDocument, $failSafe);
+        $builder = $this->transactionBuilder->setPayment($this)
+            ->setOrder($this->getOrder())
+            ->setFailSafe($failSafe)
+            ->setAdditionalInformation($this->_transactionAdditionalInfo);
+        if ($salesDocument) {
+            $builder->setSalesDocument($salesDocument);
+        }
+        return $builder->build($type);
     }
 
     public function addTransactionCommentsToOrder($transaction, $message)
@@ -1509,17 +1519,8 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function getAuthorizationTransaction()
     {
-        $transaction = false;
-        if ($this->getParentTransactionId()) {
-            $transaction = $this->transactionRepository->getByTxnId(
-                $this->getParentTransactionId(),
-                $this->getId(),
-                $this->getOrder()->getId()
-            );
-        }
-
-        return $transaction ?: $this->transactionRepository->getByTxnType(
-            Transaction::TYPE_AUTH,
+        return $this->transactionManager->getAuthorizationTransaction(
+            $this->getParentTransactionId(),
             $this->getId(),
             $this->getOrder()->getId()
         );
@@ -1593,25 +1594,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function setTransactionAdditionalInfo($key, $value)
     {
-        if (is_array($key)) {
-            $this->_transactionAdditionalInfo = $key;
-        } else {
-            $this->_transactionAdditionalInfo[$key] = $value;
-        }
-    }
-
-    /**
-     * Additional transaction info getter
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getTransactionAdditionalInfo($key = null)
-    {
-        if (is_null($key)) {
-            return $this->_transactionAdditionalInfo;
-        }
-        return isset($this->_transactionAdditionalInfo[$key]) ? $this->_transactionAdditionalInfo[$key] : null;
+        $this->_transactionAdditionalInfo[$key] = $value;
     }
 
     /**
