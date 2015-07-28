@@ -34,6 +34,7 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
      * @param FileFactory $fileFactory
      * @param Filter $filter
      * @param LabelGenerator $labelGenerator
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,

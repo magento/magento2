@@ -12,6 +12,7 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Psr\Log\LoggerInterface as Logger;
+
 /**
  * Class Collection
  * Collection for order related documents to display grids on order view page
@@ -38,7 +39,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param string $model
      * @param $mainTable
      * @param $resourceModel
      */
@@ -94,6 +94,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      */
     public function setSearchCriteria(Api\SearchCriteriaInterface $searchCriteria)
     {
+        $this->searchCriteria = $searchCriteria;
         return $this;
     }
 
