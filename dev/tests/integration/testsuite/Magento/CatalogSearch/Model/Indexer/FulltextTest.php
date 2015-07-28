@@ -196,6 +196,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Simple Product');
 
+        $this->assertCount(4, $products);
+
         $productsData = [
             [
                 'expected' => $this->productApple->getData(),
@@ -216,7 +218,6 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertEquals([], $productsData);
 
-        $this->assertCount(4, $products);
         $this->assertEquals($this->productApple->getId(), $products[0]->getId());
         $this->assertEquals($this->productOrange->getId(), $products[1]->getId());
         $this->assertEquals($this->productPapaya->getId(), $products[2]->getId());
