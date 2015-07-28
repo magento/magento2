@@ -14,6 +14,11 @@ use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
+/**
+ * Class QuoteRepository
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 {
     /**

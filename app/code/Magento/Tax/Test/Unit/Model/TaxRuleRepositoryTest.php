@@ -8,7 +8,6 @@ namespace Magento\Tax\Test\Unit\Model;
 use Magento\Framework\Api\SortOrder;
 use \Magento\Tax\Model\TaxRuleRepository;
 
-
 class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
