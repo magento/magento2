@@ -26,7 +26,8 @@ define(
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Checkout/js/checkout-data',
         'uiRegistry',
-        'mage/translate'
+        'mage/translate',
+        'Magento_Checkout/js/model/shipping-rate-service'
     ],
     function(
         $,
