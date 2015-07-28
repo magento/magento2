@@ -12,6 +12,7 @@
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
@@ -155,7 +156,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $select = new \Zend_Db_Select($this->_mockAdapter);
+        $select = new Select($this->_mockAdapter);
         $select->from('user');
         try {
             $this->_mockAdapter->query($select);

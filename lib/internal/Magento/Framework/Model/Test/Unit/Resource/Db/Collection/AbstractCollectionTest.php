@@ -8,6 +8,7 @@
 
 namespace Magento\Framework\Model\Test\Unit\Resource\Db\Collection;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 use Magento\Framework\Object as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -196,7 +197,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getPart');
 
-        $this->assertTrue($this->uut->getSelect() instanceof \Zend_Db_Select);
+        $this->assertTrue($this->uut->getSelect() instanceof Select);
     }
 
     /**
@@ -217,7 +218,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($getPartRet));
 
         $this->selectMock->expects($this->once())->method('setPart')->with(\Magento\Framework\DB\Select::COLUMNS, $expected);
-        $this->assertTrue($this->uut->getSelect() instanceof \Zend_Db_Select);
+        $this->assertTrue($this->uut->getSelect() instanceof Select);
     }
 
     public function getSelectDataProvider()
@@ -320,11 +321,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Zend_Db_Select does not extend \Magento\Framework\Object
+     * @expectedExceptionMessage Magento\Framework\DB\Select does not extend \Magento\Framework\Object
      */
     public function testSetModelInvalidType()
     {
-        $this->uut->setModel('Zend_Db_Select');
+        $this->uut->setModel(Select::class);
     }
 
     public function testSetModel()

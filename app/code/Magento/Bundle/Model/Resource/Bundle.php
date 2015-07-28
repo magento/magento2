@@ -55,7 +55,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param int $productId
      * @param array $columns
-     * @return \Zend_DB_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getSelect($productId, $columns = [])
     {
