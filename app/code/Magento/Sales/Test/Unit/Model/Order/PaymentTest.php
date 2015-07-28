@@ -1576,22 +1576,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-         $newTransaction = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction',
-            [
-                'getId',
-                'setOrderPaymentObject',
-                'loadByTxnId',
-                'setTxnId',
-                'setTxnType',
-                'isFailsafe',
-                'getTxnId',
-                'getTxnType'
-            ],
-            [],
-            '',
-            false
-        );
         //generate new transaction and check if not exists
         $this->transactionRepositoryMock->expects($this->exactly(2))
             ->method('getByTxnId')
