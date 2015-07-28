@@ -11,16 +11,16 @@ namespace Magento\Sales\Model\Resource\Order\Invoice\Grid;
 class StatusList implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Sales\Model\Order\InvoiceFactory
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
      */
-    protected $invoiceFactory;
+    protected $invoiceRepository;
 
     /**
-     * @param \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory
+     * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      */
-    public function __construct(\Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory)
+    public function __construct(\Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository)
     {
-        $this->invoiceFactory = $invoiceFactory;
+        $this->invoiceRepository = $invoiceRepository;
     }
 
     /**
@@ -30,6 +30,6 @@ class StatusList implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->invoiceFactory->create()->getStates();
+        return $this->invoiceRepository->create()->getStates();
     }
 }

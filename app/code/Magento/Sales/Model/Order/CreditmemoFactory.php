@@ -14,16 +14,6 @@ class CreditmemoFactory
     protected $convertor;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
-     */
-    protected $orderFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Order\InvoiceFactory
-     */
-    protected $invoiceFactory;
-
-    /**
      * @var \Magento\Tax\Model\Config
      */
     protected $taxConfig;
@@ -31,20 +21,14 @@ class CreditmemoFactory
     /**
      * Factory constructor
      *
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param InvoiceFactory $invoiceFactory
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
      * @param \Magento\Tax\Model\Config $taxConfig
      */
     public function __construct(
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory,
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
         \Magento\Tax\Model\Config $taxConfig
     ) {
         $this->convertor = $convertOrderFactory->create();
-        $this->orderFactory = $orderFactory;
-        $this->invoiceFactory = $invoiceFactory;
         $this->taxConfig = $taxConfig;
     }
 
