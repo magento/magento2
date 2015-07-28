@@ -36,15 +36,6 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCreateNull()
-    {
-        $this->objectManagerMock->expects($this->never())
-            ->method('get');
-        $this->assertNull($this->model->create([]));
-        $this->assertNull($this->model->create(['something']));
-        $this->assertNull($this->model->create(['active' => null]));
-    }
-
     public function testCreate()
     {
         $cacheAdapterMock = $this->getMockBuilder('Magento\Framework\Cache\FrontendInterface')

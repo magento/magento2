@@ -24,10 +24,12 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $config
      * @dataProvider dataProviderCreateNoActiveConfig
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage MySQL adapter: Missing required configuration option 'host'
      */
     public function testCreateNoActiveConfig($config)
     {
-        $this->assertNull($this->connectionFactory->create($config));
+        $this->connectionFactory->create($config);
     }
 
     /**

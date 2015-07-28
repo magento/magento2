@@ -35,7 +35,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
         $object = new Mysql($this->string, $this->dateTime, $inputConfig);
-        $this->assertAttributeEquals($expectedConfig, '_connectionConfig', $object);
+        $this->assertAttributeEquals($expectedConfig, 'connectionConfig', $object);
     }
 
     /**
@@ -80,6 +80,10 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         new Mysql($this->string, $this->dateTime, []);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Configuration array must have a key for 'dbname' that names the database instance
+     */
     public function testGetConnectionInactive()
     {
         $config = ['host' => 'localhost', 'active' => false];
