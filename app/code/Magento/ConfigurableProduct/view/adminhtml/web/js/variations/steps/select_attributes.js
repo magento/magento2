@@ -15,6 +15,8 @@ define([
         });
     };
     return Component.extend({
+        attributesLabels: {},
+        initSavedAttributes: true,
         defaults: {
             modules: {
                 multiselect: '${ $.multiselectName }',
@@ -23,7 +25,7 @@ define([
             },
             listens: {
                 '${ $.multiselectName }:selected': 'doSelectedAttributesLabels',
-                '${ $.multiselectName }:rows': 'doSelectChosenAttributes'
+                '${ $.multiselectName }:rows': 'doSelectSavedAttributes'
             }
         },
         initialize: function () {
@@ -38,19 +40,24 @@ define([
         },
         render: function (wizard) {
         },
-        doSelectChosenAttributes: function() {
-            this.configurableVariations(function(configurableVariations) {
-                this.multiselect().selected(_.pluck(configurableVariations.attributes(), 'id'));
-            }.bind(this));
+        doSelectSavedAttributes: function() {
+            if (this.initSavedAttributes) {
+                this.initSavedAttributes = false;
+                this.configurableVariations(function (configurableVariations) {
+                    this.multiselect().selected(_.pluck(configurableVariations.attributes(), 'id'));
+                }.bind(this));
+            }
         },
         doSelectedAttributesLabels: function(selected) {
             this.selected = selected;
             var labels = [];
-            _.each(this.multiselect().rows(), function(attribute) {
-                if (_.contains(selected, attribute.attribute_id)) {
-                    labels.push(attribute.frontend_label);
+            _.each(selected, function(attributeId) {
+                if (!this.attributesLabels[attributeId]) {
+                    var attribute = _.findWhere(this.multiselect().rows(), {attribute_id: attributeId});
+                    this.attributesLabels[attribute.attribute_id] = attribute.frontend_label;
                 }
-            });
+                labels.push(this.attributesLabels[attributeId]);
+            }.bind(this));
             this.selectedAttributes(labels.join(', '));
         },
         force: function (wizard) {
