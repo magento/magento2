@@ -51,15 +51,9 @@ class Filter
     {
         $component = $this->factory->create($this->request->getParam('namespace'));
         $this->prepareComponent($component);
-
-
         $dataProvider = $component->getContext()->getDataProvider();
-
-        /** @var \Magento\Framework\Api\Search\SearchResultInterface $searchResult */
-        $searchResult = $dataProvider->getData();
-
         $ids = [];
-        foreach ($searchResult->getItems() as $document) {
+        foreach ($dataProvider->getSearchResult()->getItems() as $document) {
             $ids[] = $document->getId();
         }
 

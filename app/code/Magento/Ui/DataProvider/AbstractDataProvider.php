@@ -159,9 +159,20 @@ abstract class AbstractDataProvider implements DataProviderInterface
     /**
      * Returns search criteria
      *
-     * @return void
+     * @return null
      */
     public function getSearchCriteria()
+    {
+        //TODO: Technical dept, should be implemented as part of SearchAPI support for Catalog Grids
+        return null;
+    }
+
+    /**
+     * Returns SearchResult
+     *
+     * @return null
+     */
+    public function getSearchResult()
     {
         //TODO: Technical dept, should be implemented as part of SearchAPI support for Catalog Grids
         return null;
