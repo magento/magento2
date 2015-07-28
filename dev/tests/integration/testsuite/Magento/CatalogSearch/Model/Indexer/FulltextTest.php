@@ -200,20 +200,20 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $productsData = [
             [
-                'expected' => $this->productApple->getData(),
-                'actual' => $products[0]->getData()
+                'expected' => ['id' => $this->productApple->getId()] + $this->productApple->getData(),
+                'actual' => ['id' => $products[0]->getId()] + $products[0]->getData()
             ],
             [
-                'expected' => $this->productOrange->getData(),
-                'actual' => $products[1]->getData()
+                'expected' => ['id' => $this->productOrange->getId()] + $this->productOrange->getData(),
+                'actual' => ['id' => $products[1]->getId()] + $products[1]->getData()
             ],
             [
-                'expected' => $this->productPapaya->getData(),
-                'actual' => $products[2]->getData()
+                'expected' => ['id' => $this->productPapaya->getId()] + $this->productPapaya->getData(),
+                'actual' => ['id' => $products[2]->getId()] + $products[2]->getData()
             ],
             [
-                'expected' => $this->productCherry->getData(),
-                'actual' => $products[3]->getData()
+                'expected' => ['id' => $this->productCherry->getId()] + $this->productCherry->getData(),
+                'actual' => ['id' => $products[3]->getId()] + $products[3]->getData()
             ]
         ];
         $this->assertEquals('', json_encode($productsData));
