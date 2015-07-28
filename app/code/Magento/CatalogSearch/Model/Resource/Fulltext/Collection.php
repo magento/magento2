@@ -52,7 +52,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     private $order = null;
 
     /** @var string */
-    private $request;
+    private $searchRequest;
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
@@ -85,7 +85,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param \Zend_Db_Adapter_Abstract $connection
-     * @param string $request
+     * @param string $searchRequest
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -114,7 +114,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         $connection = null
-        $request = 'catalog_view_container'
+        $searchRequest = 'catalog_view_container'
     ) {
         $this->_catalogSearchFulltext = $catalogSearchFulltext;
         $this->queryFactory = $catalogSearchData;
@@ -143,7 +143,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
         $this->temporaryStorageFactory = $temporaryStorageFactory;
-        $this->request = $request;
+        $this->searchRequest = $searchRequest;
     }
 
     /**
@@ -201,7 +201,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $this->requestBuilder->bind('price_dynamic_algorithm', $priceRangeCalculation);
         }
 
-        $this->requestBuilder->setRequestName($this->request);
+        $this->requestBuilder->setRequestName($this->searchRequest);
         $queryRequest = $this->requestBuilder->create();
 
         $this->queryResponse = $this->searchEngine->search($queryRequest);

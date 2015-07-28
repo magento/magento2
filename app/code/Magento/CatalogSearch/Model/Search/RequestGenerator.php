@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 use Magento\Framework\Search\Request\BucketInterface;
@@ -41,9 +42,9 @@ class RequestGenerator
     {
         $requests = [];
         $requests['catalog_view_container'] =
-            $this->generateRequest('is_filterable', 'catalog_view_container');
+            $this->generateRequest(EavAttributeInterface::IS_FILTERABLE, 'catalog_view_container');
         $requests['quick_search_container'] =
-            $this->generateRequest('is_filterable_in_search', 'quick_search_container');
+            $this->generateRequest(EavAttributeInterface::IS_FILTERABLE_IN_SEARCH, 'quick_search_container');
         $requests['advanced_search_container'] = $this->generateAdvancedSearchRequest();
         return $requests;
     }
