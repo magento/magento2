@@ -14,8 +14,8 @@ class ConnectionAdapter extends \Magento\Framework\Model\Resource\Type\Db\Pdo\My
      *
      * @return string
      */
-    protected function _getDbConnectionClassName()
+    protected function getDbConnectionClassName()
     {
-        return 'Magento\TestFramework\Db\Adapter\Mysql';
+        return \Magento\TestFramework\Db\Adapter\Mysql::class;
     }
 }

@@ -5,7 +5,10 @@
  */
 namespace Magento\Framework\Model\Test\Unit\Resource\Type\Db;
 
-use \Magento\Framework\Model\Resource\Type\Db\ConnectionFactory;
+use Magento\Framework\App\Resource\ConnectionAdapterInterface;
+use Magento\Framework\DB\LoggerInterface;
+use Magento\Framework\Model\Resource\Type\Db\ConnectionFactory;
+use Magento\Framework\ObjectManagerInterface;
 
 class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,31 +17,51 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManagerMock;
+
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
-        $this->model = new ConnectionFactory(
-            $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface')
-        );
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMockForAbstractClass();
+        $this->model = new ConnectionFactory($this->objectManagerMock);
     }
 
     /**
-     * @param array $config
-     * @dataProvider dataProviderCreateNoActiveConfig
+     * @return void
      */
-    public function testCreateNoActiveConfig($config)
+    public function testCreateNoActiveConfig()
     {
-        $this->assertNull($this->model->create($config));
-    }
+        $config = ['foo' => 'bar'];
 
-    /**
-     * @return array
-     */
-    public function dataProviderCreateNoActiveConfig()
-    {
-        return [
-            [[]],
-            [['value']],
-            [['active' => 0]],
-        ];
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->getMockForAbstractClass();
+
+        $connectionAdapterMock = $this->getMockBuilder(ConnectionAdapterInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->objectManagerMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(ConnectionAdapterInterface::class, ['config' => $config])
+            ->willReturn($connectionAdapterMock);
+        $this->objectManagerMock
+            ->expects($this->once())
+            ->method('get')
+            ->with(LoggerInterface::class)
+            ->willReturn($loggerMock);
+
+        $connectionAdapterMock
+            ->expects($this->once())
+            ->method('getConnection')
+            ->with($loggerMock)
+            ->willReturn('Expected result');
+
+        $this->assertEquals('Expected result', $this->model->create($config));
     }
 }

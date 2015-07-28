@@ -187,7 +187,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
      * @param array $config
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         String $string,
@@ -198,7 +198,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
-        parent::__construct($config);
+        try {
+            parent::__construct($config);
+        } catch (\Zend_Db_Adapter_Exception $e) {
+            throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
