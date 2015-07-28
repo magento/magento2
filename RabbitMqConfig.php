@@ -9,7 +9,7 @@ namespace Magento\Framework\Amqp;
 use Magento\Framework\App\DeploymentConfig;
 
 /**
- * Reads the RabbitMQ config in the deployed environment
+ * Reads the RabbitMQ config in the deployed environment configuration
  */
 class RabbitMqConfig
 {
@@ -49,16 +49,16 @@ class RabbitMqConfig
      *
      * Example environment config:
      * 'queue' =>
-     *     array(
-     *         'rabbit' => array(
+     *     [
+     *         'rabbit' => [
      *             'host' => 'localhost',
      *             'port' => 5672,
      *             'username' => 'guest',
      *             'password' => 'guest',
      *             'virtual_host' => '/',
      *             'ssl' => [],
-     *     ),
-     * ),
+     *         ],
+     *     ],
      *
      * @param DeploymentConfig $config
      */
