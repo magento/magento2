@@ -69,7 +69,7 @@ class Mysql extends \Magento\Framework\Model\Resource\Type\Db implements Connect
      * Create and return DB connection object instance
      *
      * @param DB\LoggerInterface $logger
-     * @return DB\Adapter\Pdo\Mysql
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected function getDbConnectionInstance(DB\LoggerInterface $logger)
     {
