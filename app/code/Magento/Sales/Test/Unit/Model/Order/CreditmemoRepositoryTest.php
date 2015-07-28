@@ -6,23 +6,25 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use \Magento\Sales\Model\Order\CreditmemoRepository;
+
 /**
  * Class CreditmemoRepositoryTest
  */
 class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\CreditmemoRepository
+     * @var CreditmemoRepository
      */
     protected $creditmemo;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Resource\Metadata|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $searchResultFactoryMock;
 
