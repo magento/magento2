@@ -120,7 +120,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterEdit()
     {
-        $this->testReindexAll();
+        $this->indexer->reindexAll();
+
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
@@ -145,7 +146,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterMassAction()
     {
-        $this->testReindexRowAfterEdit();
+        $this->indexer->reindexAll();
+
         $productIds = [
             $this->productApple->getId(),
             $this->productBanana->getId(),
@@ -188,7 +190,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterDelete()
     {
-        $this->testReindexRowAfterEdit();
+        $this->indexer->reindexAll();
 
         $this->productBanana->delete();
 
