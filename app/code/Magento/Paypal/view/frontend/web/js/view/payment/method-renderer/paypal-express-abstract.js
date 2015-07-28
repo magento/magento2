@@ -69,6 +69,8 @@ define(
 
             /** Redirect to paypal */
             continueToPayPal: function () {
+                //update payment method information if additional data was changed
+                this.selectPaymentMethod();
                 setPaymentMethodAction();
                 return false;
             }
