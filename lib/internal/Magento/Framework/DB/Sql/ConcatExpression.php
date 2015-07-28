@@ -52,6 +52,7 @@ class ConcatExpression extends \Zend_Db_Expr
     /**
      * Returns SQL expression
      *   TRIM(CONCAT_WS(separator, IFNULL(str1,''), IFNULL(str2,''), ...))
+     *
      * @return string
      */
     public function __toString()
