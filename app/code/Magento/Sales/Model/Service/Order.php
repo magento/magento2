@@ -261,6 +261,82 @@ class Order
     }
 
     /**
+     * Check if order item can be refunded
+     *
+     * @param \Magento\Sales\Model\Order\Item $item
+     * @param array $qtys
+     * @param array $invoiceQtysRefundLimits
+     * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function _canRefundItem($item, $qtys = [], $invoiceQtysRefundLimits = [])
+    {
+        if ($item->isDummy()) {
+            if ($item->getHasChildren()) {
+                foreach ($item->getChildrenItems() as $child) {
+                    if (empty($qtys)) {
+                        if ($this->canRefundNoDummyItem($child, $invoiceQtysRefundLimits)) {
+                            return true;
+                        }
+                    } else {
+                        if (isset($qtys[$child->getId()]) && $qtys[$child->getId()] > 0) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            } elseif ($item->getParentItem()) {
+                $parent = $item->getParentItem();
+                if (empty($qtys)) {
+                    return $this->canRefundNoDummyItem($parent, $invoiceQtysRefundLimits);
+                } else {
+                    return isset($qtys[$parent->getId()]) && $qtys[$parent->getId()] > 0;
+                }
+            }
+        } else {
+            return $this->canRefundNoDummyItem($item, $invoiceQtysRefundLimits);
+        }
+    }
+
+    /**
+     * Check if no dummy order item can be refunded
+     *
+     * @param \Magento\Sales\Model\Order\Item $item
+     * @param array $invoiceQtysRefundLimits
+     * @return bool
+     */
+    protected function canRefundNoDummyItem($item, $invoiceQtysRefundLimits = [])
+    {
+        if ($item->getQtyToRefund() < 0) {
+            return false;
+        }
+        if (isset($invoiceQtysRefundLimits[$item->getId()])) {
+            return $invoiceQtysRefundLimits[$item->getId()] > 0;
+        }
+        return true;
+    }
+
+    /**
+     * Initialize creditmemo state based on requested parameters
+     *
+     * @param Creditmemo $creditmemo
+     * @param array $data
+     * @return void
+     */
+    protected function _initCreditmemoData($creditmemo, $data)
+    {
+        if (isset($data['shipping_amount'])) {
+            $creditmemo->setBaseShippingAmount((double)$data['shipping_amount']);
+        }
+        if (isset($data['adjustment_positive'])) {
+            $creditmemo->setAdjustmentPositive($data['adjustment_positive']);
+        }
+        if (isset($data['adjustment_negative'])) {
+            $creditmemo->setAdjustmentNegative($data['adjustment_negative']);
+        }
+    }
+
+    /**
      * Check if order item can be invoiced. Dummy item can be invoiced or with his children or
      * with parent item which is included to invoice
      *

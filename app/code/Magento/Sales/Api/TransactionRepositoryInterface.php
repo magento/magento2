@@ -44,9 +44,10 @@ interface TransactionRepositoryInterface
      *
      * @param string $txnId
      * @param int $paymentId
+     * @param int $orderId
      * @return false|\Magento\Sales\Api\Data\TransactionInterface Transaction interface.
      */
-    public function getByTxnId($txnId, $paymentId);
+    public function getByTxnId($txnId, $paymentId, $orderId);
 
     /**
      * Deletes a specified transaction.
@@ -63,4 +64,11 @@ interface TransactionRepositoryInterface
      * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
      */
     public function save(\Magento\Sales\Api\Data\TransactionInterface $entity);
+
+    /**
+     * Creates new Transaction instance.
+     *
+     * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
+     */
+    public function create();
 }

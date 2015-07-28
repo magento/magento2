@@ -51,7 +51,7 @@ abstract class Email extends \Magento\Backend\App\Action
         if (!$invoiceId) {
             return $this->resultForwardFactory->create()->forward('noroute');
         }
-        $invoice = $this->_objectManager->create('Magento\Sales\Model\Order\Invoice')->load($invoiceId);
+        $invoice = $this->_objectManager->create('Magento\Sales\Api\InvoiceRepositoryInterface')->get($invoiceId);
         if (!$invoice) {
             return $this->resultForwardFactory->create()->forward('noroute');
         }

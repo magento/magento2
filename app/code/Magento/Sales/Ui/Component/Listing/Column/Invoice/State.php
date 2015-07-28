@@ -8,7 +8,7 @@ namespace Magento\Sales\Ui\Component\Listing\Column\Invoice;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Sales\Model\Order\InvoiceFactory;
+use Magento\Sales\Model\InvoiceRepository;
 
 /**
  * Class State
@@ -25,18 +25,18 @@ class State extends Column
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param InvoiceFactory $invoiceFactory
+     * @param InvoiceRepository $invoiceRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        InvoiceFactory $invoiceFactory,
+        InvoiceRepository $invoiceRepository,
         array $components = [],
         array $data = []
     ) {
-        $this->states = $invoiceFactory->create()->getStates();
+        $this->states = $invoiceRepository->create()->getStates();
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
