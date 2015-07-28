@@ -42,7 +42,7 @@ define([
         doSelectSavedAttributes: function() {
             if (false === this.stepInitialized) {
                 this.stepInitialized = true;
-                this.multiselect().selected(_.pluck(this.initData, 'id'));
+                this.multiselect().selected(_.pluck(this.initData.attributes, 'id'));
             }
         },
         doSelectedAttributesLabels: function(selected) {
