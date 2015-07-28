@@ -45,7 +45,9 @@ define([
                 expect(type).toEqual('object');
             });
             it('Check called "this.observe" method', function () {
-                obj.observe = jasmine.createSpy().and.callFake(function() { return obj; });
+                obj.observe = jasmine.createSpy().and.callFake(function () {
+                    return obj;
+                });
                 obj.initObservable();
                 expect(obj.observe).toHaveBeenCalled();
             });
@@ -60,7 +62,9 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check called "this.trigger" inner onUniqueUpdate method', function () {
-                obj.trigger = jasmine.createSpy().and.callFake(function() { return obj; });
+                obj.trigger = jasmine.createSpy().and.callFake(function () {
+                    return obj;
+                });
                 obj.onUniqueUpdate();
                 expect(obj.trigger).toHaveBeenCalled();
             });
@@ -75,7 +79,9 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check called "this.setUnique" inner activate method', function () {
-                obj.setUnique = jasmine.createSpy().and.callFake(function() { return obj; });
+                obj.setUnique = jasmine.createSpy().and.callFake(function () {
+                    return obj;
+                });
                 obj.activate();
                 expect(obj.setUnique).toHaveBeenCalled();
             });

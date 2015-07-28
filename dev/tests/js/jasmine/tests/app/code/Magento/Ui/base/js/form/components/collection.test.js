@@ -49,24 +49,24 @@ define([
             });
             it('Check returned value type if method called object arguments', function () {
                 var arg = {
-                    initContainer: function () {
+                        initContainer: function () {
+                        },
+                        activate: function () {
+                        }
                     },
-                    activate: function () {
-                    }
-                },
-                type = typeof(obj.initElement(arg));
+                    type = typeof(obj.initElement(arg));
 
                 expect(type).toEqual('object');
             });
             it('Check call method "this.bubble" inner initElement method', function () {
                 var arg = {
-                        initContainer: function () {
-                        },
-                        activate: function () {
-                        }
-                    };
+                    initContainer: function () {
+                    },
+                    activate: function () {
+                    }
+                };
                 obj.bubble = jasmine.createSpy();
-                obj.initElement(arg)
+                obj.initElement(arg);
                 expect(obj.bubble).toHaveBeenCalled();
             });
         });

@@ -45,7 +45,9 @@ define([
                 expect(type).toEqual('object');
             });
             it('Check called "this.observe" method', function () {
-                obj.observe = jasmine.createSpy().and.callFake(function() { return obj; });
+                obj.observe = jasmine.createSpy().and.callFake(function () {
+                    return obj;
+                });
                 obj.initObservable();
                 expect(obj.observe).toHaveBeenCalled();
             });
@@ -76,8 +78,8 @@ define([
             });
             it('Check called "arguments.on" method inner "initContainer" method', function () {
                 var parent = {
-                        on: jasmine.createSpy()
-                    };
+                    on: jasmine.createSpy()
+                };
 
                 obj.initContainer(parent);
                 expect(parent.on).toHaveBeenCalled();
@@ -130,14 +132,20 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check call method "this.shouldLoad" inner onContainerToggle method', function () {
-                obj.shouldLoad = jasmine.createSpy().and.callFake(function() {return true;});
+                obj.shouldLoad = jasmine.createSpy().and.callFake(function () {
+                    return true;
+                });
 
                 obj.onContainerToggle(true);
                 expect(obj.shouldLoad).toHaveBeenCalled();
             });
             it('Check call method "this.loadData" inner onContainerToggle method', function () {
-                obj.shouldLoad = jasmine.createSpy().and.callFake(function() {return true;});
-                obj.loadData = jasmine.createSpy().and.callFake(function() {return true;});
+                obj.shouldLoad = jasmine.createSpy().and.callFake(function () {
+                    return true;
+                });
+                obj.loadData = jasmine.createSpy().and.callFake(function () {
+                    return true;
+                });
 
                 obj.onContainerToggle(true);
                 expect(obj.loadData).toHaveBeenCalled();
@@ -198,7 +206,9 @@ define([
             it('Check call method "this.updateContent" inner onDataLoaded method', function () {
                 var data = 'magento';
 
-                obj.updateContent = jasmine.createSpy().and.callFake(function() {return obj;});
+                obj.updateContent = jasmine.createSpy().and.callFake(function () {
+                    return obj;
+                });
                 obj.onDataLoaded(data);
                 expect(obj.loadData).toHaveBeenCalled();
             });

@@ -45,7 +45,9 @@ define([
                 expect(type).toEqual('object');
             });
             it('Check called "this.observe" method', function () {
-                obj.observe = jasmine.createSpy().and.callFake(function() { return obj; });
+                obj.observe = jasmine.createSpy().and.callFake(function () {
+                    return obj;
+                });
                 obj.initObservable();
                 expect(obj.observe).toHaveBeenCalled();
             });
@@ -60,12 +62,16 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check returned value if this.elems.getLength return 1', function () {
-                obj.elems.getLength = jasmine.createSpy().and.callFake(function() { return 1; });
+                obj.elems.getLength = jasmine.createSpy().and.callFake(function () {
+                    return 1;
+                });
 
                 expect(obj.isSingle()).toEqual(true);
             });
             it('Check returned value if this.elems.getLength return not 1', function () {
-                obj.elems.getLength = jasmine.createSpy().and.callFake(function() { return 2; });
+                obj.elems.getLength = jasmine.createSpy().and.callFake(function () {
+                    return 2;
+                });
 
                 expect(obj.isSingle()).toEqual(false);
             });
@@ -75,7 +81,9 @@ define([
                 expect(type).toEqual('boolean');
             });
             it('Check called "this.observe" method', function () {
-                obj.elems.getLength = jasmine.createSpy().and.callFake(function() { return 1; });
+                obj.elems.getLength = jasmine.createSpy().and.callFake(function () {
+                    return 1;
+                });
                 obj.isSingle();
                 expect(obj.elems.getLength).toHaveBeenCalled();
             });
@@ -90,12 +98,16 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check returned value if this.elems.getLength return more 1', function () {
-                obj.elems.getLength = jasmine.createSpy().and.callFake(function() { return 4; });
+                obj.elems.getLength = jasmine.createSpy().and.callFake(function () {
+                    return 4;
+                });
 
                 expect(obj.isMultiple()).toEqual(true);
             });
             it('Check returned value if this.elems.getLength return 1 or less', function () {
-                obj.elems.getLength = jasmine.createSpy().and.callFake(function() { return 1; });
+                obj.elems.getLength = jasmine.createSpy().and.callFake(function () {
+                    return 1;
+                });
 
                 expect(obj.isMultiple()).toEqual(false);
             });
@@ -105,7 +117,9 @@ define([
                 expect(type).toEqual('boolean');
             });
             it('Check called "this.observe" method', function () {
-                obj.elems.getLength = jasmine.createSpy().and.callFake(function() { return 1; });
+                obj.elems.getLength = jasmine.createSpy().and.callFake(function () {
+                    return 1;
+                });
                 obj.isMultiple();
                 expect(obj.elems.getLength).toHaveBeenCalled();
             });
