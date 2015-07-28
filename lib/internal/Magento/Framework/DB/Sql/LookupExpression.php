@@ -47,8 +47,8 @@ class LookupExpression extends \Zend_Db_Expr
 
     /**
      * @param Resource $resource
-     * @param $targetColumn
-     * @param $targetTable
+     * @param string $targetColumn
+     * @param string $targetTable
      * @param array $referenceColumns
      * @param array $sortOrder
      */
@@ -71,17 +71,24 @@ class LookupExpression extends \Zend_Db_Expr
      * Process WHERE clause
      *
      * @param Select $select
+     * @return void
      */
     protected function processWhereCondition(Select $select)
     {
         foreach ($this->referenceColumns as $column => $referenceColumn) {
+            $identifier = '';
+            if (isset($referenceColumn['tableAlias'])) {
+                $identifier = $referenceColumn['tableAlias'] . '.';
+            }
+            $columnName = $column;
+            if (isset($referenceColumn['columnName'])) {
+                $columnName = $referenceColumn['columnName'] . '.';
+            }
             $select->where(
-                sprintf('%s = %s',
+                sprintf(
+                    '%s = %s',
                     $this->adapter->quoteIdentifier('lookup.' . $column),
-                    $this->adapter->quoteIdentifier(
-                        (isset($referenceColumn['tableAlias']) ? $referenceColumn['tableAlias'] . '.' : '')
-                        . (isset($referenceColumn['columnName']) ? $referenceColumn['columnName'] : $column)
-                    )
+                    $this->adapter->quoteIdentifier($identifier . $columnName)
                 )
             );
         }
@@ -91,6 +98,7 @@ class LookupExpression extends \Zend_Db_Expr
      * Process ORDER BY clause
      *
      * @param Select $select
+     * @return void
      */
     protected function processSortOrder(Select $select)
     {

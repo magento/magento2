@@ -40,19 +40,19 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMass
     protected $collectionFactory;
 
     /**
-     * @param CollectionFactory $collectionFactory
      * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
-     * @param Filter $filter
      * @param Invoice $pdfInvoice
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
         Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
         DateTime $dateTime,
         FileFactory $fileFactory,
-        Filter $filter,
         Invoice $pdfInvoice
     ) {
         $this->fileFactory = $fileFactory;
