@@ -88,7 +88,7 @@ class Context
     /**
      * Return vary string to be used as a part of page cache identifier
      *
-     * @return string
+     * @return string|null
      */
     public function getVaryString()
     {
