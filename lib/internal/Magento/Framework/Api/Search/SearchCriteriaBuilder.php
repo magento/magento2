@@ -10,7 +10,6 @@ use Magento\Framework\Api\AbstractSimpleObjectBuilder;
 use Magento\Framework\Api\ObjectFactory;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
-//use Magento\Framework\Api\Search\FilterGroupBuilder;
 
 /**
  * Builder for SearchCriteria Service Data Object
@@ -57,7 +56,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     /**
      * Create a filter group based on the filter array provided and add to the filter groups
      *
-     * @param \Magento\Framework\Api\Filter[] $filter
+     * @param \Magento\Framework\Api\Filter $filter
      * @return $this
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
@@ -67,8 +66,8 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     }
 
     /**
-     * @param $field
-     * @param $direction
+     * @param string $field
+     * @param string $direction
      * @return $this
      */
     public function addSortOrder($field, $direction)

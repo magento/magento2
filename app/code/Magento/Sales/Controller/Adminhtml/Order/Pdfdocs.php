@@ -77,7 +77,7 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
      * @param ShipmentCollectionFactory $shipmentCollectionFactory
      * @param InvoiceCollectionFactory $invoiceCollectionFactory
      * @param CreditmemoCollectionFactory $creditmemoCollectionFactory
-     *
+     * @param OrderCollectionFactory $orderCollectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

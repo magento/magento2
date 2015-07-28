@@ -11,6 +11,7 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 use Psr\Log\LoggerInterface;
+
 /**
  * Class Result
  */
