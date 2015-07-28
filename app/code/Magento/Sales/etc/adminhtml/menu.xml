@@ -14,6 +14,6 @@
         <add id="Magento_Sales::sales_shipment" title="Shipments" module="Magento_Sales" sortOrder="30" parent="Magento_Sales::sales_operation" action="sales/shipment" resource="Magento_Sales::shipment"/>
         <add id="Magento_Sales::sales_creditmemo" title="Credit Memos" module="Magento_Sales" sortOrder="40" parent="Magento_Sales::sales_operation" action="sales/creditmemo" resource="Magento_Sales::sales_creditmemo"/>
         <add id="Magento_Sales::sales_transactions" title="Transactions" module="Magento_Sales" sortOrder="70" parent="Magento_Sales::sales_operation" action="sales/transactions" resource="Magento_Sales::transactions"/>
-        <add id="Magento_Sales::system_order_statuses" title="Order Status" module="Magento_Sales" sortOrder="40" parent="Magento_Backend::stores_settings" action="sales/order_status" resource="Magento_Sales::order_statuses"/>
+        <add id="Magento_Sales::system_order_statuses" title="Order Statuses" module="Magento_Sales" sortOrder="40" parent="Magento_Backend::stores_settings" action="sales/order_status" resource="Magento_Sales::order_statuses"/>
     </menu>
 </config>

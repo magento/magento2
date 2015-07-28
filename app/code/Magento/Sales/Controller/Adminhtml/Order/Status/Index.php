@@ -41,7 +41,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Status
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Sales::system_order_statuses');
-        $resultPage->getConfig()->getTitle()->prepend(__('Order Status'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Order Statuses'));
 
         return $resultPage;
     }
