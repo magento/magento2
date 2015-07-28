@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 /**
  * Class BuilderTest
  */
-class ManagementTest extends \PHPUnit_Framework_TestCase
+class CustomerManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

@@ -43,20 +43,20 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
     protected $shipmentCollectionFactotory;
 
     /**
-     * @param CollectionFactory $collectionFactory
      * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
-     * @param Filter $filter
      * @param Shipment $shipment
      * @param ShipmentCollectionFactory $shipmentCollectionFactory
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
         Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
         DateTime $dateTime,
         FileFactory $fileFactory,
-        Filter $filter,
         Shipment $shipment,
         ShipmentCollectionFactory $shipmentCollectionFactory
     ) {
