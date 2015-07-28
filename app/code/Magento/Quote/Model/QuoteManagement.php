@@ -9,6 +9,7 @@ namespace Magento\Quote\Model;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
@@ -324,6 +325,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
 
         $order = $this->submit($quote);
+
+        if (null == $order) {
+            throw new LocalizedException(__('Cannot place order.'));
+        }
+
         $this->checkoutSession->setLastQuoteId($quote->getId());
         $this->checkoutSession->setLastSuccessQuoteId($quote->getId());
         $this->checkoutSession->setLastOrderId($order->getId());
@@ -347,7 +353,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      *
      * @param Quote $quote
      * @param array $orderData
-     * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object|void
+     * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object|null
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -355,7 +361,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         if (!$quote->getAllVisibleItems()) {
             $quote->setIsActive(false);
-            return;
+            return null;
         }
 
         return $this->submitQuote($quote, $orderData);
