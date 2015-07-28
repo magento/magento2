@@ -44,6 +44,7 @@ define([
     });
 
     return Collapsible.extend({
+        initSavedOptions: true,
         defaults: {
             modules: {
                 configurableVariations: '${ "configurableVariations" }'
@@ -141,7 +142,12 @@ define([
                 showLoader: true
             }).done(function(attributes){
                 this.attributes(saveAttributes.call(this, attributes));
-
+                this.doInitSavedOptions();
+            }.bind(this));
+        },
+        doInitSavedOptions: function() {
+            if (this.initSavedOptions) {
+                this.initSavedOptions = false;
                 _.each(this.attributes(), function(attribute) {
                     var selectedAttribute = _.findWhere(
                         this.configurableVariations().attributes(), {id: attribute.id}
@@ -154,7 +160,7 @@ define([
                         attribute.chosenOptions(selectedOptionsIds);
                     }
                 }.bind(this));
-            }.bind(this));
+            }
         },
         render: function(wizard) {
             this.wizard = wizard;
