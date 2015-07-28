@@ -15,6 +15,7 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
     /**
      * @param Context $context
      * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {

@@ -39,6 +39,7 @@ abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\Ab
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
      * @param Shipment $shipment
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,

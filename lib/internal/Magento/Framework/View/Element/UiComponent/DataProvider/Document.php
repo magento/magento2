@@ -24,6 +24,9 @@ class Document extends Object implements DocumentInterface
      */
     protected $attributeValueFactory;
 
+    /**
+     * @param AttributeValueFactory $attributeValueFactory
+     */
     public function __construct(AttributeValueFactory $attributeValueFactory)
     {
         $this->attributeValueFactory = $attributeValueFactory;
@@ -104,7 +107,8 @@ class Document extends Object implements DocumentInterface
         /** @var \Magento\Framework\Api\AttributeInterface $attribute */
         foreach ($attributes as $attribute) {
             $this->setData(
-                $attribute->getAttributeCode(),$attribute->getValue()
+                $attribute->getAttributeCode(),
+                $attribute->getValue()
             );
         }
         return $this;

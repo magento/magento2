@@ -42,6 +42,7 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
      * @param Creditmemo $pdfCreditmemo
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,

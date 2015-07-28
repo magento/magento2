@@ -6,7 +6,6 @@
 namespace Magento\Framework\DB;
 
 use Magento\Framework\App\Resource;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Class Concat
@@ -41,7 +40,7 @@ class ConcatExpression extends \Zend_Db_Expr
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param array $columns
-     * @param $tableName
+     * @param string $tableName
      * @param bool|false $isTableAlias
      * @param string $separator
      */

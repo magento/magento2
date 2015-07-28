@@ -16,6 +16,10 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
 use Magento\Sales\Model\Resource\Order\CollectionFactory;
 
+/**
+ * Class Pdfshipments
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
@@ -45,6 +49,7 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
      * @param FileFactory $fileFactory
      * @param Filter $filter
      * @param Shipment $shipment
+     * @param ShipmentCollectionFactory $shipmentCollectionFactory
      */
     public function __construct(
         CollectionFactory $collectionFactory,

@@ -39,6 +39,7 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
      * @param Invoice $pdfInvoice
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,
