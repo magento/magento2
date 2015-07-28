@@ -40,7 +40,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
      * @param $mainTable
-     * @param $resourceModel
+     * @param string $resourceModel
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -64,7 +64,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @return Api\Search\AggregationInterface
+     * @return \Magento\Framework\Api\Search\AggregationInterface
      */
     public function getAggregations()
     {
@@ -72,7 +72,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @param Api\Search\AggregationInterface $aggregations
+     * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return $this
      */
     public function setAggregations($aggregations)
@@ -81,7 +81,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @return Api\Search\SearchCriteriaInterface|null
+     * @return \Magento\Framework\Api\Search\SearchCriteriaInterface|null
      */
     public function getSearchCriteria()
     {
@@ -89,10 +89,10 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @param Api\SearchCriteriaInterface $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      */
-    public function setSearchCriteria(Api\SearchCriteriaInterface $searchCriteria)
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         $this->searchCriteria = $searchCriteria;
         return $this;
