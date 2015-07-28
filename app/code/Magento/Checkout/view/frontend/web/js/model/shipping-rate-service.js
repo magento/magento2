@@ -16,27 +16,19 @@ define(
         processors['default'] =  defaultProcessor;
         processors['customer-address'] = customerAddressProcessor;
 
-        var getShippingRates = function (address) {
-            var type = address.getType();
+        quote.shippingAddress.subscribe(function () {
+            var type = quote.shippingAddress().getType();
             var rates = [];
             if (processors[type]) {
-                rates = processors[type].getRates(address);
+                rates = processors[type].getRates(quote.shippingAddress());
             } else {
-                rates = processors['default'].getRates(address);
+                rates = processors['default'].getRates(quote.shippingAddress());
             }
-            return rates;
-        };
-
-        quote.shippingAddress.subscribe(function () {
-            getShippingRates(quote.shippingAddress());
         });
 
         return {
             registerProcessor: function(type, processor) {
                 processors[type] = processor;
-            },
-            getRates: function (address) {
-                return getShippingRates(address);
             }
         }
     }
