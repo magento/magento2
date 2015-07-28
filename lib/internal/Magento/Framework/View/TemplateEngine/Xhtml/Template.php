@@ -25,8 +25,7 @@ class Template
     protected $templateNode;
 
     /**
-     * Constructor
-     *
+     * @param \Psr\Log\LoggerInterface $logger
      * @param string $content
      */
     public function __construct(

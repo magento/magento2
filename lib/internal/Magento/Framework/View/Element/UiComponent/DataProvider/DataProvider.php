@@ -108,6 +108,9 @@ class DataProvider implements DataProviderInterface
         $this->prepareUpdateUrl();
     }
 
+    /**
+     * @return void
+     */
     protected function prepareUpdateUrl()
     {
         if (!isset($this->data['config']['filter_url_params'])) {
