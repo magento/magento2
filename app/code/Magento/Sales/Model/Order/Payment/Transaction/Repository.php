@@ -114,12 +114,6 @@ class Repository implements TransactionRepositoryInterface
      */
     public function getByTxnType($txnType, $paymentId, $orderId)
     {
-        if (!$txnType) {
-            throw new \Magento\Framework\Exception\InputException(__('Txn Id required'));
-        }
-        if (!$paymentId) {
-            throw new \Magento\Framework\Exception\InputException(__('Payment Id required'));
-        }
         $identityFieldsForCache = [$txnType, $paymentId];
         $cacheStorage = 'txn_type';
         $entity = $this->entityStorage->getByIdentifyingFields($identityFieldsForCache, $cacheStorage);
@@ -174,7 +168,9 @@ class Repository implements TransactionRepositoryInterface
             );
             if ($entity && $entity->getId()) {
                 $this->entityStorage->addByIdentifyingFields($entity, $identityFieldsForCache, $cacheStorage);
+                return $entity;
             }
+            return false;
         }
         return $entity;
     }
