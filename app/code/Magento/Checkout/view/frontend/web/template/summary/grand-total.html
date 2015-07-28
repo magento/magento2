@@ -6,7 +6,7 @@
 -->
 <!-- ko if: isDisplayed() -->
 <tr>
-    <td colspan="2" data-bind="text: $t(title)"></td>
+    <td colspan="2" data-bind="i18n: title"></td>
     <td class="col grandtotal">
         <span data-bind ="text: getValue(), attr:{'data-label': $t(title)}"></span>
         <!-- ko foreach: elems() -->
