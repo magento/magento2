@@ -275,7 +275,9 @@ if ($variations) {
      "buttons":[]}}'
      style="display: none">
     <?php
-        echo $block->getVariationWizard($attributes);
+    echo $block->getVariationWizard([
+        'attributes' => $attributes
+    ]);
     ?>
 </div>
 <script type="text/x-magento-init">

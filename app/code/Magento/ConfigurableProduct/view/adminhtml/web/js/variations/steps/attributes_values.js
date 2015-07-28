@@ -144,7 +144,7 @@ define([
             if (false === this.stepInitialized) {
                 this.stepInitialized = true;
                 _.each(this.attributes(), function(attribute) {
-                    var selectedAttribute = _.findWhere(this.initData, {id: attribute.id});
+                    var selectedAttribute = _.findWhere(this.initData.attributes, {id: attribute.id});
                     if (selectedAttribute) {
                         var selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
                         var selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
