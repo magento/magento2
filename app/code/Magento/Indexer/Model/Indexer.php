@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Indexer extends \Magento\Framework\Object implements IndexerInterface
 {
     /**
@@ -21,6 +24,11 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      * @var ActionFactory
      */
     protected $actionFactory;
+
+    /**
+     * @var StructureFactory
+     */
+    protected $structureFactory;
 
     /**
      * @var \Magento\Framework\Mview\ViewInterface
@@ -45,6 +53,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
+     * @param StructureFactory $structureFactory
      * @param \Magento\Framework\Mview\ViewInterface $view
      * @param Indexer\StateFactory $stateFactory
      * @param Indexer\CollectionFactory $indexersFactory
@@ -53,6 +62,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     public function __construct(
         ConfigInterface $config,
         ActionFactory $actionFactory,
+        StructureFactory $structureFactory,
         \Magento\Framework\Mview\ViewInterface $view,
         Indexer\StateFactory $stateFactory,
         Indexer\CollectionFactory $indexersFactory,
@@ -60,6 +70,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
+        $this->structureFactory = $structureFactory;
         $this->view = $view;
         $this->stateFactory = $stateFactory;
         $this->indexersFactory = $indexersFactory;
@@ -352,7 +363,23 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     protected function getActionInstance()
     {
-        return $this->actionFactory->create($this->getActionClass(), ['data' => $this->getData()]);
+        return $this->actionFactory->create(
+            $this->getActionClass(),
+            [
+                'indexStructure' => $this->getStructureInstance(),
+                'data' => $this->getData(),
+            ]
+        );
+    }
+
+    /**
+     * Return indexer structure instance
+     *
+     * @return IndexStructureInterface
+     */
+    protected function getStructureInstance()
+    {
+        return $this->structureFactory->create($this->getData('structure'));
     }
 
     /**
