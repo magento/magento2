@@ -216,7 +216,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
                 'actual' => $products[3]->getData()
             ]
         ];
-        $this->assertEquals([], $productsData);
+        $this->assertEquals('', json_encode($productsData));
 
         $this->assertEquals($this->productApple->getId(), $products[0]->getId());
         $this->assertEquals($this->productOrange->getId(), $products[1]->getId());
