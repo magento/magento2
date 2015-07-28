@@ -463,12 +463,17 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="CustomerNameAggregator" type="Magento\Framework\DB\ConcatExpression">
+    <virtualType name="CustomerNameAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
-            <argument name="tableName" xsi:type="string">sales_order</argument>
             <argument name="columns" xsi:type="array">
-                <item name="customer_firstname" xsi:type="string">customer_firstname</item>
-                <item name="customer_lastname" xsi:type="string">customer_lastname</item>
+                <item name="customer_firstname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_order</item>
+                    <item name="columnName" xsi:type="string">customer_firstname</item>
+                </item>
+                <item name="customer_lastname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_order</item>
+                    <item name="columnName" xsi:type="string">customer_lastname</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
