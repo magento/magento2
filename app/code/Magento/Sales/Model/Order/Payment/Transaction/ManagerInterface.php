@@ -5,7 +5,7 @@
  */
 
 namespace Magento\Sales\Model\Order\Payment\Transaction;
-
+use Magento\Sales\Model\Order\Payment\Transaction;
 
 /**
  * Manage payment transaction
@@ -13,20 +13,12 @@ namespace Magento\Sales\Model\Order\Payment\Transaction;
 interface ManagerInterface
 {
     /**
-     * Create transaction,
-     * prepare its insertion into hierarchy and add its information to payment and comments
+     * Lookup an authorization transaction using parent transaction id, if set
      *
-     * @param string $type
-     * @param \Magento\Sales\Model\AbstractModel $salesDocument
-     * @param bool $failSafe
-     * @param bool|string $message
-     * @return null|\Magento\Sales\Api\Data\TransactionInterface
+     * @param $parentTransactionId
+     * @param $paymentId
+     * @param $orderId
+     * @return false|Transaction
      */
-    public function addTransaction(
-        \Magento\Sales\Api\Data\OrderPaymentInterface $payment,
-        $type,
-        $salesDocument = null,
-        $failSafe = false,
-        $message = false
-    );
+    public function getAuthorizationTransaction($parentTransactionId, $paymentId, $orderId);
 }

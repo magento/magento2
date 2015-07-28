@@ -37,7 +37,7 @@
     <preference for="Magento\Sales\Api\Data\ShipmentTrackInterface" type="Magento\Sales\Model\Order\Shipment\Track"/>
     <preference for="Magento\Sales\Api\Data\ShipmentTrackSearchResultInterface" type="Magento\Sales\Model\Resource\Order\Shipment\Track\Collection"/>
     <preference for="Magento\Sales\Api\Data\TransactionInterface" type="Magento\Sales\Model\Order\Payment\Transaction"/>
-    <preference for="Magento\Sales\Api\Data\TransactionSearchResultInterface" type="Magento\Sales\Model\Resource\Transaction\Collection"/>
+    <preference for="Magento\Sales\Api\Data\TransactionSearchResultInterface" type="Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection"/>
     <preference for="Magento\Sales\Api\CreditmemoCommentRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoComment\Repository"/>
     <preference for="Magento\Sales\Api\CreditmemoItemRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoItem\Repository"/>
     <preference for="Magento\Sales\Api\CreditmemoRepositoryInterface" type="Magento\Sales\Api\Data\Creditmemo\Repository"/>
@@ -59,6 +59,7 @@
     <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentTrack\Repository"/>
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Repository"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Manager"/>
+    <preference for="Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Builder"/>
     <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\Customer\Management" />
     <preference for="Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Comment"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoItemResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Item"/>
