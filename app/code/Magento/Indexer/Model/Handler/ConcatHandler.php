@@ -5,11 +5,25 @@
  */
 namespace Magento\Indexer\Model\Handler;
 
-use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Indexer\Model\HandlerInterface;
+use Magento\Framework\App\Resource\SourceProviderInterface;
 
-class DefaultHandler implements HandlerInterface
+class ConcatHandler implements HandlerInterface
 {
+    /**
+     * @var \Magento\Framework\DB\ConcatExpression
+     */
+    protected $concatExpression;
+
+    /**
+     * @param \Zend_Db_Expr $concatExpression
+     */
+    public function __construct(
+        \Zend_Db_Expr $concatExpression
+    ) {
+        $this->concatExpression = $concatExpression;
+    }
+
     /**
      * @param SourceProviderInterface $source
      * @param string $alias
@@ -18,7 +32,7 @@ class DefaultHandler implements HandlerInterface
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {
-        $source->getSelect()->columns($fieldInfo['name'], $alias);
+        $source->getSelect()->columns([$fieldInfo['name'] => $this->concatExpression]);
     }
 
     /**
@@ -28,6 +42,6 @@ class DefaultHandler implements HandlerInterface
      */
     public function prepareData(SourceProviderInterface $source, $fieldInfo)
     {
-        new \Exception('Not implemented yet');
+
     }
 }

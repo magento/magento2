@@ -11,10 +11,11 @@ interface HandlerInterface
 {
     /**
      * @param SourceProviderInterface $source
+     * @param string $alias
      * @param array $fieldInfo
      * @return void
      */
-    public function prepareSql(SourceProviderInterface $source, $fieldInfo);
+    public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo);
 
     /**
      * @param SourceProviderInterface $source
