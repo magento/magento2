@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Model\Resource\Db;
 
+use Magento\Framework\App\Resource;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Resource\AbstractResource;
@@ -316,7 +317,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function getConnection()
     {
-        $fullResourceName = ($this->connectionName ? $this->connectionName : 'default');
+        $fullResourceName = ($this->connectionName ? $this->connectionName : Resource::DEFAULT_CONNECTION);
         return $this->_resources->getConnection($fullResourceName);
     }
 
