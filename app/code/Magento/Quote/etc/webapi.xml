@@ -244,7 +244,7 @@
 
     <!-- Managing my Cart Items -->
     <route url="/V1/carts/mine/items" method="GET">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="getList"/>
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="getListForCustomer"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -253,7 +253,7 @@
         </data>
     </route>
     <route url="/V1/carts/mine/items" method="POST">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="saveForCustomer"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -262,7 +262,7 @@
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="PUT">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="saveForCustomer"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -271,7 +271,7 @@
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="DELETE">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="deleteById"/>
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="deleteByIdForCustomer"/>
         <resources>
             <resource ref="self" />
         </resources>
