@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Resource\Fulltext\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -40,24 +41,27 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $queryFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productApple;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productBanana;
+
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productOrange;
+
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productPapaya;
+
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productCherry;
 
@@ -104,15 +108,15 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Apple');
         $this->assertCount(1, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
+        $this->isEqual($this->productApple, $products[0]);
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[2]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[3]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[4]->getId());
+        $this->isEqual($this->productApple, $products[0]);
+        $this->isEqual($this->productBanana, $products[1]);
+        $this->isEqual($this->productOrange, $products[2]);
+        $this->isEqual($this->productPapaya, $products[3]);
+        $this->isEqual($this->productCherry, $products[4]);
     }
 
     /**
@@ -130,15 +134,15 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Cucumber');
         $this->assertCount(1, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
+        $this->isEqual($this->productApple, $products[0]);
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[2]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[3]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[4]->getId());
+        $this->isEqual($this->productApple, $products[0]);
+        $this->isEqual($this->productBanana, $products[1]);
+        $this->isEqual($this->productOrange, $products[2]);
+        $this->isEqual($this->productPapaya, $products[3]);
+        $this->isEqual($this->productCherry, $products[4]);
     }
 
     /**
@@ -173,16 +177,16 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Common');
         $this->assertCount(2, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
+        $this->isEqual($this->productApple, $products[0]);
+        $this->isEqual($this->productBanana, $products[1]);
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[2]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[3]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[4]->getId());
+        $this->isEqual($this->productApple, $products[0]);
+        $this->isEqual($this->productBanana, $products[1]);
+        $this->isEqual($this->productOrange, $products[2]);
+        $this->isEqual($this->productPapaya, $products[3]);
+        $this->isEqual($this->productCherry, $products[4]);
     }
 
     /**
@@ -201,33 +205,33 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $productsData = [
             [
                 'expected' => ['id' => $this->productApple->getId()] + $this->productApple->getData(),
-                'actual' => ['id' => $products[0]->getId()] + $products[0]->getData()
+                'actual' => ['id' => $products[0]->getId()] + $products[0]->getData(),
             ],
             [
                 'expected' => ['id' => $this->productOrange->getId()] + $this->productOrange->getData(),
-                'actual' => ['id' => $products[1]->getId()] + $products[1]->getData()
+                'actual' => ['id' => $products[1]->getId()] + $products[1]->getData(),
             ],
             [
                 'expected' => ['id' => $this->productPapaya->getId()] + $this->productPapaya->getData(),
-                'actual' => ['id' => $products[2]->getId()] + $products[2]->getData()
+                'actual' => ['id' => $products[2]->getId()] + $products[2]->getData(),
             ],
             [
                 'expected' => ['id' => $this->productCherry->getId()] + $this->productCherry->getData(),
-                'actual' => ['id' => $products[3]->getId()] + $products[3]->getData()
-            ]
+                'actual' => ['id' => $products[3]->getId()] + $products[3]->getData(),
+            ],
         ];
 
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId(), json_encode($productsData));
-        $this->assertEquals($this->productOrange->getId(), $products[1]->getId(), json_encode($productsData));
-        $this->assertEquals($this->productPapaya->getId(), $products[2]->getId(), json_encode($productsData));
-        $this->assertEquals($this->productCherry->getId(), $products[3]->getId(), json_encode($productsData));
+        $this->isEqual($this->productApple, $products[0]);
+        $this->isEqual($this->productOrange, $products[1]);
+        $this->isEqual($this->productPapaya, $products[2]);
+        $this->isEqual($this->productCherry, $products[3]);
     }
 
     /**
      * Search the text and return result collection
      *
      * @param string $text
-     * @return \Magento\Catalog\Model\Product[]
+     * @return Product[]
      */
     protected function search($text)
     {
@@ -247,14 +251,43 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      * Return product by SKU
      *
      * @param string $sku
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     protected function getProductBySku($sku)
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = Bootstrap::getObjectManager()->get(
             'Magento\Catalog\Model\Product'
         );
         return $product->loadByAttribute('sku', $sku);
+    }
+
+    /**
+     * @param Product $expectedProduct
+     * @param Product $actualProduct
+     * @return void
+     */
+    private function isEqual(Product $expectedProduct, Product $actualProduct)
+    {
+        $this->assertEquals(
+            $expectedProduct->getId(),
+            $actualProduct->getId(),
+            $this->getDebugData($expectedProduct, $actualProduct)
+        );
+    }
+
+    /**
+     * @param Product $expectedProduct
+     * @param Product $actualProduct
+     * @return string
+     */
+    private function getDebugData(Product $expectedProduct, Product $actualProduct)
+    {
+        return json_encode(
+            [
+                'expected' => ['id' => $expectedProduct->getId()] + $expectedProduct->getData(),
+                'actual' => ['id' => $actualProduct->getId()] + $actualProduct->getData(),
+            ]
+        );
     }
 }
