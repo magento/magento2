@@ -437,7 +437,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             );
         }
 
-        return $errorAggregator->isConsideredSuccessful();
+        return !$errorAggregator->isErrorsLimitExceeded();
     }
 
     /**

@@ -17,8 +17,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  */
 abstract class AbstractEntity
 {
-    const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
-
     /**
      * Database constants
      */
@@ -29,6 +27,22 @@ abstract class AbstractEntity
     const DB_MAX_VARCHAR_LENGTH = 256;
 
     const DB_MAX_TEXT_LENGTH = 65536;
+
+    const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
+    const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
+    const ERROR_CODE_COLUMN_EMPTY_HEADER = 'columnEmptyHeader';
+    const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
+    const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
+    const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
+
+    protected $errorMessageTemplates = [
+        self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
+        self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %1.',
+        self::ERROR_CODE_COLUMN_EMPTY_HEADER => 'Columns number: "%1" have empty headers',
+        self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%1" are invalid',
+        self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
+        self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
+    ];
 
     /**
      * DB connection.
@@ -232,10 +246,9 @@ abstract class AbstractEntity
         $this->string = $string;
         $this->errorAggregator = $errorAggregator;
 
-        $this->errorAggregator->addErrorMessageTemplate(
-            self::ERROR_CODE_SYSTEM_EXCEPTION,
-            'General system exception happened'
-        );
+        foreach ($this->errorMessageTemplates as $errorCode => $message) {
+            $this->errorAggregator->addErrorMessageTemplate($errorCode, $message);
+        }
 
         $entityType = $config->getEntityType($this->getEntityTypeCode());
 
@@ -328,6 +341,10 @@ abstract class AbstractEntity
                 $nextRowBackup = [];
             }
             if ($source->valid()) {
+                // errors limit check
+                if ($this->errorAggregator->isErrorsLimitExceeded()) {
+                    return $this;
+                }
                 $rowData = $source->current();
 
                 $this->_processedRowsCount++;
@@ -574,10 +591,10 @@ abstract class AbstractEntity
         }
 
         if (!$valid) {
-            $this->addRowError(__("Please correct the value for '%s'."), $rowNum, $attrCode);
+            $this->addRowError(self::ERROR_CODE_ATTRIBUTE_NOT_VALID, $rowNum, $attrCode);
         } elseif (!empty($attrParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])) {
-                $this->addRowError(__("Duplicate Unique Attribute for '%s'"), $rowNum, $attrCode);
+                $this->addRowError(self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE, $rowNum, $attrCode);
                 return false;
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = true;
@@ -662,10 +679,14 @@ abstract class AbstractEntity
     public function validateData()
     {
         if (!$this->_dataValidated) {
+            $this->errorAggregator->clear();
             // do all permanent columns exist?
             if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('We can\'t find required columns: %1.', implode(', ', $absentColumns))
+                $this->errorAggregator->addError(
+                    self::ERROR_CODE_COLUMN_NOT_FOUND,
+                    ProcessingError::ERROR_LEVEL_CRITICAL,
+                    null,
+                    implode(', ', $absentColumns)
                 );
             }
 
@@ -686,21 +707,27 @@ abstract class AbstractEntity
                 }
 
                 if ($emptyHeaderColumns) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Columns number: "%1" have empty headers', implode('", "', $emptyHeaderColumns))
+                    $this->errorAggregator->addError(
+                        self::ERROR_CODE_COLUMN_EMPTY_HEADER,
+                        ProcessingError::ERROR_LEVEL_CRITICAL,
+                        null,
+                        implode('", "', $emptyHeaderColumns)
                     );
                 }
                 if ($invalidColumns) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Column names: "%1" are invalid', implode('", "', $invalidColumns))
+                    $this->errorAggregator->addError(
+                        self::ERROR_CODE_COLUMN_NAME_INVALID,
+                        ProcessingError::ERROR_LEVEL_CRITICAL,
+                        null,
+                        $invalidColumns
                     );
                 }
             }
 
-            // initialize validation related attributes
-            $this->errorAggregator->clear();
-            $this->_saveValidatedBunches();
-            $this->_dataValidated = true;
+            if (!$this->errorAggregator->getErrorsCount()) {
+                $this->_saveValidatedBunches();
+                $this->_dataValidated = true;
+            }
         }
         return $this->errorAggregator;
     }

@@ -156,7 +156,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @return bool
      */
-    public function isConsideredSuccessful()
+    public function isErrorsLimitExceeded()
     {
         return !$this->hasFatalExceptions() && !$this->isErrorLimitExceeded();
     }
@@ -168,10 +168,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     {
         $isExceeded = false;
         if ($this->validationStrategy == self::VALIDATION_STRATEGY_STOP_ON_ERROR
-            && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) > 0
-        ) {
-            $isExceeded = true;
-        } elseif ($this->validationStrategy == self::VALIDATION_STRATEGY_SKIP_ERRORS
             && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) > $this->allowedErrorsCount
         ) {
             $isExceeded = true;
