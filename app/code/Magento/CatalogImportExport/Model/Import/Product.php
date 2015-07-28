@@ -1333,7 +1333,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
-                    continue;
+                    if (!$this->errorAggregator->isErrorsLimitExceeded()) {
+                        continue;
+                    }
+                    break 2;
                 }
                 $rowScope = $this->getRowScope($rowData);
 
