@@ -51,6 +51,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /** @var string|null */
     private $order = null;
 
+    /** @var string */
+    private $request;
+
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
      */
@@ -82,6 +85,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param \Zend_Db_Adapter_Abstract $connection
+     * @param string $request
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -110,6 +114,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         $connection = null
+        $request = 'catalog_view_container'
     ) {
         $this->_catalogSearchFulltext = $catalogSearchFulltext;
         $this->queryFactory = $catalogSearchData;
@@ -138,6 +143,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
         $this->temporaryStorageFactory = $temporaryStorageFactory;
+        $this->request = $request;
     }
 
     /**
@@ -195,7 +201,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $this->requestBuilder->bind('price_dynamic_algorithm', $priceRangeCalculation);
         }
 
-        $this->requestBuilder->setRequestName('quick_search_container');
+        $this->requestBuilder->setRequestName($this->request);
         $queryRequest = $this->requestBuilder->create();
 
         $this->queryResponse = $this->searchEngine->search($queryRequest);

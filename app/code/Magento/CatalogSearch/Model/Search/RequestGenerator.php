@@ -40,25 +40,30 @@ class RequestGenerator
     public function generate()
     {
         $requests = [];
-        $requests['quick_search_container'] = $this->generateQuickSearchRequest();
+        $requests['catalog_view_container'] =
+            $this->generateRequest('is_filterable', 'catalog_view_container');
+        $requests['quick_search_container'] =
+            $this->generateRequest('is_filterable_in_search', 'quick_search_container');
         $requests['advanced_search_container'] = $this->generateAdvancedSearchRequest();
         return $requests;
     }
 
     /**
-     * Generate quick search request
+     * Generate search request
      *
+     * @param string $attributeType
+     * @param string $container
      * @return array
      */
-    private function generateQuickSearchRequest()
+    private function generateRequest($attributeType, $container)
     {
         $request = [];
         foreach ($this->getSearchableAttributes() as $attribute) {
-            if ($attribute->getIsFilterable()) {
+            if ($attribute->getData($attributeType)) {
                 if (!in_array($attribute->getAttributeCode(), ['price', 'category_ids'])) {
                     $queryName = $attribute->getAttributeCode() . '_query';
 
-                    $request['queries']['quick_search_container']['queryReference'][] = [
+                    $request['queries'][$container]['queryReference'][] = [
                         'clause' => 'should',
                         'ref' => $queryName,
                     ];
@@ -125,8 +130,8 @@ class RequestGenerator
         /** @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection $productAttributes */
         $productAttributes = $this->productAttributeCollectionFactory->create();
         $productAttributes->addFieldToFilter(
-            ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable'],
-            [1, 1, [1, 2]]
+            ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable', 'is_filterable_in_search'],
+            [1, 1, [1, 2], 1]
         );
 
         return $productAttributes;
