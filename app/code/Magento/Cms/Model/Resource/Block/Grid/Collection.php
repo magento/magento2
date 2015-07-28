@@ -42,14 +42,10 @@ class Collection extends BlockCollection implements SearchResultInterface
         $eventPrefix,
         $eventObject,
         $resourceModel,
-        $model = 'Magento\Framework\Api\Search\Document',
+        $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
-        $this->_eventPrefix = $eventPrefix;
-        $this->_eventObject = $eventObject;
-        $this->_init($model, $resourceModel);
-        $this->setMainTable($mainTable);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -58,6 +54,10 @@ class Collection extends BlockCollection implements SearchResultInterface
             $connection,
             $resource
         );
+        $this->_eventPrefix = $eventPrefix;
+        $this->_eventObject = $eventObject;
+        $this->_init($model, $resourceModel);
+        $this->setMainTable($mainTable);
     }
 
     /**

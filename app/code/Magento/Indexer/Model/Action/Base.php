@@ -120,6 +120,11 @@ class Base implements ActionInterface
     protected $saveHandler;
 
     /**
+     * @var string
+     */
+    protected $tableAlias = 'main_table';
+
+    /**
      * @param AppResource $resource
      * @param SourcePool $sourcePool
      * @param HandlerPool $handlerPool
@@ -227,7 +232,13 @@ class Base implements ActionInterface
     protected function getSaveHandler()
     {
         if ($this->saveHandler === null) {
-            $this->saveHandler = $this->saveHandlerFactory->create($this->data['saveHandler'], ['data' => $this->data]);
+            $this->saveHandler = $this->saveHandlerFactory->create(
+                $this->data['saveHandler'],
+                [
+                    'indexStructure' => $this->indexStructure,
+                    'data' => $this->data,
+                ]
+            );
         }
         return $this->saveHandler;
     }
@@ -265,15 +276,15 @@ class Base implements ActionInterface
             if (isset($fieldset['references'])) {
                 foreach ($fieldset['references'] as $reference) {
                     $source = $fieldset['source'];
-                    $referenceSource = $this->data['fieldsets'][$reference['fieldset']]['source'];
                     /** @var SourceProviderInterface $source */
-                    /** @var SourceProviderInterface $referenceSource */
                     $currentEntityName = $source->getMainTable();
-                    $select->joinInner(
-                        $currentEntityName,
+                    $alias = $this->getPrimaryFieldset()['name'] == $reference['fieldset']
+                        ? $this->tableAlias
+                        : $reference['fieldset'];
+                    $select->joinLeft(
+                        [$fieldset['name'] => $currentEntityName],
                         new \Zend_Db_Expr(
-                            $referenceSource->getMainTable() . '.' . $reference['from']
-                            . '=' . $currentEntityName . '.' . $reference['to']
+                            $fieldset['name'] . '.' . $reference['from'] . '=' . $alias . '.' . $reference['to']
                         ),
                         null
                     );
@@ -282,9 +293,19 @@ class Base implements ActionInterface
             foreach ($fieldset['fields'] as $field) {
                 $handler = $field['handler'];
                 /** @var HandlerInterface $handler */
-                $handler->prepareSql($fieldset['source'], $field);
+                $handler->prepareSql(
+                    $this->getPrimaryResource(),
+                    $this->getPrimaryFieldset()['name'] == $fieldset['name'] ? $this->tableAlias : $fieldset['name'],
+                    $field
+                );
             }
         }
+
+        echo "\n";
+        echo "\n";
+        echo $this->getPrimaryResource()->getSelect();
+        echo "\n";
+        echo "\n";
 
         return $this->getPrimaryResource();
     }

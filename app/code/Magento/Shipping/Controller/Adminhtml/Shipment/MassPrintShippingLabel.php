@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
+namespace Magento\Shipping\Controller\Adminhtml\Shipment;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
@@ -14,9 +14,8 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Backend\App\Action\Context;
 use Magento\Shipping\Model\Shipping\LabelGenerator;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Sales\Model\Resource\Order\CollectionFactory;
+use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory;
 
 class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -31,33 +30,20 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
     protected $fileFactory;
 
     /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var ShipmentCollectionFactory
-     */
-    protected $shipmentCollectionFactory;
-
-    /**
-     * @param CollectionFactory $collectionFactory
      * @param Context $context
      * @param FileFactory $fileFactory
      * @param Filter $filter
      * @param LabelGenerator $labelGenerator
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
         Context $context,
         FileFactory $fileFactory,
         Filter $filter,
         LabelGenerator $labelGenerator,
-        ShipmentCollectionFactory $shipmentCollectionFactory
+        CollectionFactory $collectionFactory
     ) {
-        $this->fileFactory = $fileFactory;
         $this->collectionFactory = $collectionFactory;
-        $this->shipmentCollectionFactory = $shipmentCollectionFactory;
+        $this->fileFactory = $fileFactory;
         $this->labelGenerator = $labelGenerator;
         parent::__construct($context, $filter);
     }
@@ -80,11 +66,10 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
     protected function massAction(AbstractCollection $collection)
     {
         $labelsContent = [];
-        $shipments = $this->shipmentCollectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
 
-        if ($shipments->getSize()) {
+        if ($collection->getSize()) {
             /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-            foreach ($shipments as $shipment) {
+            foreach ($collection as $shipment) {
                 $labelContent = $shipment->getShippingLabel();
                 if ($labelContent) {
                     $labelsContent[] = $labelContent;
@@ -102,7 +87,7 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
             );
         }
 
-        $this->messageManager->addError(__('There are no shipping labels related to selected orders.'));
-        return $this->resultRedirectFactory->create()->setPath('sales/order/');
+        $this->messageManager->addError(__('There are no shipping labels related to selected shipments.'));
+        return $this->resultRedirectFactory->create()->setPath('sales/shipment/');
     }
 }

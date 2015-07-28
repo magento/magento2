@@ -58,16 +58,6 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Get collection
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
-     */
-    protected function getCollection()
-    {
-        return $this->collection;
-    }
-
-    /**
      * Get data
      *
      * @return array

@@ -11,6 +11,7 @@ use Magento\Framework\IndexerInterface;
 use Magento\Indexer\Model\IndexStructure;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Indexer\Model\IndexStructureInterface;
 use Magento\Indexer\Model\ScopeResolver\FlatScopeResolver;
 use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
 
@@ -19,7 +20,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @var string[]
      */
-    private $dataTypes = ['searchable', 'filterable'];
+    protected $dataTypes = ['searchable', 'filterable'];
 
     /**
      * @var IndexStructure
@@ -34,7 +35,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @var array
      */
-    private $fields;
+    protected $fields;
 
     /**
      * @var Resource|Resource
@@ -44,12 +45,12 @@ class IndexerHandler implements IndexerInterface
     /**
      * @var Batch
      */
-    private $batch;
+    protected $batch;
 
     /**
      * @var int
      */
-    private $batchSize;
+    protected $batchSize;
 
     /**
      * @var IndexScopeResolverInterface[]
@@ -57,7 +58,7 @@ class IndexerHandler implements IndexerInterface
     private $scopeResolvers;
 
     /**
-     * @param IndexStructure $indexStructure
+     * @param IndexStructureInterface $indexStructure
      * @param Resource $resource
      * @param Batch $batch
      * @param \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
@@ -66,7 +67,7 @@ class IndexerHandler implements IndexerInterface
      * @param int $batchSize
      */
     public function __construct(
-        IndexStructure $indexStructure,
+        IndexStructureInterface $indexStructure,
         Resource $resource,
         Batch $batch,
         IndexScopeResolver $indexScopeResolver,
@@ -172,7 +173,7 @@ class IndexerHandler implements IndexerInterface
      * @param Dimension[] $dimensions
      * @return void
      */
-    private function insertDocumentsForFilterable(array $documents, array $dimensions)
+    protected function insertDocumentsForFilterable(array $documents, array $dimensions)
     {
         $onDuplicate = [];
         foreach ($this->fields as $field) {
@@ -192,7 +193,7 @@ class IndexerHandler implements IndexerInterface
      * @param array $documents
      * @return array
      */
-    private function prepareFilterableFields(array $documents)
+    protected function prepareFilterableFields(array $documents)
     {
         $insertDocuments = [];
         foreach ($documents as $entityId => $document) {

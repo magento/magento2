@@ -6,8 +6,10 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class DataProvider
@@ -65,7 +67,12 @@ class DataProvider implements DataProviderInterface
     /**
      * @var RequestInterface
      */
-    protected $resuest;
+    protected $request;
+
+    /**
+     * @var SearchCriteria
+     */
+    protected $searchCriteria;
 
     /**
      * @param string $name
@@ -89,7 +96,7 @@ class DataProvider implements DataProviderInterface
         array $meta = [],
         array $data = []
     ) {
-        $this->resuest = $request;
+        $this->request = $request;
         $this->filterBuilder = $filterBuilder;
         $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
@@ -108,7 +115,7 @@ class DataProvider implements DataProviderInterface
         }
         foreach ($this->data['config']['filter_url_params'] as $paramName => $paramValue) {
             if ('*' == $paramValue) {
-                $paramValue = $this->resuest->getParam($paramName);
+                $paramValue = $this->request->getParam($paramName);
             }
             if ($paramValue) {
                 $this->data['config']['update_url'] = sprintf(
@@ -122,14 +129,6 @@ class DataProvider implements DataProviderInterface
                 );
             }
         }
-    }
-
-    /**
-     * @return \Magento\Framework\Api\Search\SearchResultInterface
-     */
-    public function getCollection()
-    {
-        return $this->searchData();
     }
 
     /**
@@ -211,18 +210,6 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * Add field to select
-     *
-     * @param string|array $field
-     * @param string|null $alias
-     * @return void
-     */
-    public function addField($field, $alias = null)
-    {
-//        $this->collection->addFieldToSelect($field, $alias);
-    }
-
-    /**
      * self::setOrder() alias
      *
      * @param string $field
@@ -248,25 +235,37 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * Removes field from select
-     *
-     * @param string|null $field
-     * @param bool $isAlias Alias identifier
-     * @return void
+     * @param SearchResultInterface $searchResult
+     * @return array
      */
-    public function removeField($field, $isAlias = false)
+    protected function searchResultToOutput(SearchResultInterface $searchResult)
     {
-//        $this->collection->removeFieldFromSelect($field, $isAlias);
+        $arrItems = [];
+        $arrItems['totalRecords'] = $searchResult->getTotalCount();
+
+        $arrItems['items'] = [];
+        foreach ($searchResult->getItems() as $item) {
+            $itemData = [];
+            foreach ($item->getCustomAttributes() as $attribute) {
+                $itemData[$attribute->getAttributeCode()] = $attribute->getValue();
+            }
+            $arrItems['items'][] = $itemData;
+        }
+        return $arrItems;
     }
 
     /**
-     * Removes all fields from select
+     * Returns search criteria
      *
-     * @return void
+     * @return \Magento\Framework\Api\Search\SearchCriteria
      */
-    public function removeAllFields()
+    public function getSearchCriteria()
     {
-//        $this->collection->removeAllFieldsFromSelect();
+        if (!$this->searchCriteria) {
+            $this->searchCriteria = $this->searchCriteriaBuilder->create();
+            $this->searchCriteria->setRequestName($this->name);
+        }
+        return $this->searchCriteria;
     }
 
     /**
@@ -276,36 +275,13 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
-        return $this->searchData()->toArray();
-    }
-
-    /**
-     * Search data
-     *
-     * @return \Magento\Framework\Api\Search\SearchResultInterface
-     */
-    protected function searchData()
-    {
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $searchCriteria->setRequestName($this->name);
-
-        return $this->reporting->search($searchCriteria);
-    }
-
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return 10;
+        return $this->searchResultToOutput($this->getSearchResult());
     }
 
     /**
      * Get config data
      *
-     * @return mixed
+     * @return array
      */
     public function getConfigData()
     {
@@ -321,5 +297,15 @@ class DataProvider implements DataProviderInterface
     public function setConfigData($config)
     {
         $this->data['config'] = $config;
+    }
+
+    /**
+     * Returns Search result
+     *
+     * @return SearchResultInterface
+     */
+    public function getSearchResult()
+    {
+        return $this->reporting->search($this->getSearchCriteria());
     }
 }
