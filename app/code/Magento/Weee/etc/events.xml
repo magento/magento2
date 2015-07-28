@@ -12,4 +12,7 @@
     <event name="catalog_product_option_price_configuration_after">
         <observer name="weee" instance="Magento\Weee\Model\Observer" method="getPriceConfiguration" shared="false" />
     </event>
+    <event name="catalog_product_view_config">
+        <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateProductOptions" shared="true" />
+    </event>
 </config>
