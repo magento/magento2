@@ -111,7 +111,8 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
         $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderCollectionFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\CollectionFactory')
+        $orderCollection = 'Magento\Sales\Model\Resource\Order\CollectionFactory';
+        $this->orderCollectionFactoryMock = $this->getMockBuilder($orderCollection)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

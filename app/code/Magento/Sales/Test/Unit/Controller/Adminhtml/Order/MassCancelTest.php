@@ -112,7 +112,8 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderCollectionFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\CollectionFactory')
+        $resourceCollection = 'Magento\Sales\Model\Resource\Order\CollectionFactory';
+        $this->orderCollectionFactoryMock = $this->getMockBuilder($resourceCollection)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
