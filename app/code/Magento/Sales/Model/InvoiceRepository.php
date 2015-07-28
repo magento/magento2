@@ -1,21 +1,23 @@
 <?php
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
 namespace Magento\Sales\Model;
 
-use \Magento\Sales\Model\Resource\Order as Resource;
-use \Magento\Sales\Model\Resource\Metadata;
-use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Model\Resource\Metadata;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\InputException;
+use Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory as SearchResultFactory;
 
 /**
- * Repository class for @see \Magento\Sales\Api\Data\OrderInterface
+ * Class InvoiceRepository
  */
-class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
+class InvoiceRepository implements InvoiceRepositoryInterface
 {
+    /**
+     * \Magento\Sales\Api\Data\InvoiceInterface[]
+     *
+     * @var array
+     */
+    protected $registry = [];
+
     /**
      * @var Metadata
      */
@@ -24,46 +26,41 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * @var SearchResultFactory
      */
-    protected $searchResultFactory = null;
+    protected $searchResultFactory;
 
     /**
-     * \Magento\Sales\Api\Data\OrderInterface[]
+     * Repository constructor
      *
-     * @var array
-     */
-    protected $registry = [];
-
-    /**
-     * @param Metadata $metadata
+     * @param Metadata $invoiceMetadata
      * @param SearchResultFactory $searchResultFactory
      */
     public function __construct(
-        Metadata $metadata,
+        Metadata $invoiceMetadata,
         SearchResultFactory $searchResultFactory
     ) {
-        $this->metadata = $metadata;
+        $this->metadata = $invoiceMetadata;
         $this->searchResultFactory = $searchResultFactory;
     }
 
     /**
-     * load entity
+     * Load entity
      *
      * @param int $id
-     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @return mixed
+     * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($id)
     {
         if (!$id) {
-            throw new InputException('Id required');
+            throw new \Magento\Framework\Exception\InputException(__('ID required'));
         }
         if (!isset($this->registry[$id])) {
-            /** @var \Magento\Sales\Api\Data\OrderInterface $entity */
+            /** @var \Magento\Sales\Api\Data\InvoiceInterface $entity */
             $entity = $this->metadata->getNewInstance();
             $this->metadata->getMapper()->load($entity, $id);
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException('Requested entity doesn\'t exist');
+                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
             $this->registry[$id] = $entity;
         }
@@ -71,34 +68,41 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
+     * @return \Magento\Sales\Api\Data\InvoiceInterface
+     */
+    public function create()
+    {
+        return $this->metadata->getNewInstance();
+    }
+
+    /**
      * Find entities by criteria
      *
      * @param \Magento\Framework\Api\SearchCriteria  $criteria
-     * @return \Magento\Sales\Api\Data\OrderInterface[]
+     * @return \Magento\Sales\Api\Data\InvoiceInterface[]
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
     {
-        //@TODO: fix search logic
-        /** @var \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult */
-        $searchResult = $this->searchResultFactory->create();
+        /** @var \Magento\Sales\Model\Resource\Order\Invoice\Collection $collection */
+        $collection = $this->searchResultFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
+                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
-        $searchResult->setCurPage($criteria->getCurrentPage());
-        $searchResult->setPageSize($criteria->getPageSize());
-        return $searchResult;
+        $collection->setCurPage($criteria->getCurrentPage());
+        $collection->setPageSize($criteria->getPageSize());
+        return $collection;
     }
 
     /**
      * Register entity to delete
      *
-     * @param \Magento\Sales\Api\Data\OrderInterface $entity
+     * @param \Magento\Sales\Api\Data\InvoiceInterface $entity
      * @return bool
      */
-    public function delete(\Magento\Sales\Api\Data\OrderInterface $entity)
+    public function delete(\Magento\Sales\Api\Data\InvoiceInterface $entity)
     {
         $this->metadata->getMapper()->delete($entity);
         unset($this->registry[$entity->getEntityId()]);
@@ -120,10 +124,10 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * Perform persist operations for one entity
      *
-     * @param \Magento\Sales\Api\Data\OrderInterface $entity
-     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @param \Magento\Sales\Api\Data\InvoiceInterface $entity
+     * @return \Magento\Sales\Api\Data\InvoiceInterface
      */
-    public function save(\Magento\Sales\Api\Data\OrderInterface $entity)
+    public function save(\Magento\Sales\Api\Data\InvoiceInterface $entity)
     {
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
