@@ -63,7 +63,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     {
         $this->resource->expects($this->once())
             ->method('getTableName')
-            ->with('search_query', 'default')
+            ->with('search_query', Resource::DEFAULT_CONNECTION)
             ->willReturn('table_name_search_query');
         $this->connection->expects($this->once())
             ->method('update')
