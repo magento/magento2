@@ -80,7 +80,7 @@ class RabbitMqConfig
     }
 
     /**
-     * Load statuses (enabled/disabled) of cache types
+     * Load the configuration for RabbitMQ
      *
      * @return void
      */
