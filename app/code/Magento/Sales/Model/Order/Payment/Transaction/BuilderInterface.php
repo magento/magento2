@@ -64,9 +64,10 @@ interface BuilderInterface
 
     /**
      * Sets transaction id
+     * For getting rid of TransactionId in Payment model in future
      *
      * @param string|null $transactionId
-     * @return mixed
+     * @return $this
      */
     public function setTransactionId($transactionId);
 
