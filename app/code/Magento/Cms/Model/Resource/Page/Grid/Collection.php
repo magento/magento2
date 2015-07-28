@@ -28,8 +28,8 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed|null $mainTable
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $eventPrefix
-     * @param $eventObject
-     * @param $resourceModel
+     * @param mixed $eventObject
+     * @param mixed $resourceModel
      * @param string $model
      * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb|null $resource
