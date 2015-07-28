@@ -46,7 +46,7 @@
     <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceItem\Repository"/>
     <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Api\Data\Invoice\Repository"/>
     <preference for="Magento\Sales\Api\InvoiceManagementInterface" type="Magento\Sales\Model\Service\InvoiceService"/>
-    <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Api\Data\OrderAddress\Repository"/>
+    <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Model\Order\AddressRepository"/>
     <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Api\Data\OrderItem\Repository"/>
     <preference for="Magento\Sales\Api\OrderPaymentRepositoryInterface" type="Magento\Sales\Api\Data\OrderPayment\Repository"/>
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
@@ -591,6 +591,12 @@
             <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Payment\Transaction</argument>
         </arguments>
     </virtualType>
+    <virtualType name="orderAddressMetadata" type="Magento\Sales\Model\Resource\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order\Address</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Address</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Sales\Model\OrderRepository">
         <arguments>
             <argument name="metadata" xsi:type="object">orderMetadata</argument>
@@ -609,6 +615,11 @@
     <type name="Magento\Sales\Model\Order\Payment\TransactionRepository">
         <arguments>
             <argument name="metaData" xsi:type="object">transactionMetaData</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\AddressRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">orderAddressMetadata</argument>
         </arguments>
     </type>
 </config>
