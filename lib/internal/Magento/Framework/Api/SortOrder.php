@@ -19,6 +19,11 @@ class SortOrder extends AbstractSimpleObject
     const SORT_ASC = 'ASC';
     const SORT_DESC = 'DESC';
 
+    /**
+     * Initialize object and validate sort direction
+     *
+     * @param array $data
+     */
     public function __construct(array $data = [])
     {
         parent::__construct($data);
@@ -75,7 +80,7 @@ class SortOrder extends AbstractSimpleObject
      * Validate direction argument ASC or DESC
      * 
      * @param mixed $direction
-     * @return string
+     * @return null
      * @throws InputException
      */
     private function validateDirection($direction)
@@ -87,6 +92,7 @@ class SortOrder extends AbstractSimpleObject
     /**
      * @param string $direction
      * @throws InputException
+     * @return null
      */
     private function validateDirectionIsString($direction)
     {
@@ -101,6 +107,7 @@ class SortOrder extends AbstractSimpleObject
     /**
      * @param string $direction
      * @throws InputException
+     * @return null
      */
     private function validateDirectionIsAscOrDesc($direction)
     {
