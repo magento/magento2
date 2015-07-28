@@ -63,7 +63,7 @@ define([
                 var arg = {
                     initContainer: function () {
                     },
-                    on: function() {
+                    on: function () {
                     }
                 };
 
@@ -73,7 +73,7 @@ define([
                 var arg = {
                         initContainer: function () {
                         },
-                        on: function() {
+                        on: function () {
                         }
                     },
                     type = typeof(obj.initElement(arg));

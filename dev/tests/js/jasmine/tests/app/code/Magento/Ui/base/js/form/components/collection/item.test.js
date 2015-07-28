@@ -183,7 +183,9 @@ define([
                     prefix: 'magento'
                 };
 
-                obj.getPreview = jasmine.createSpy().and.callFake(function() { return []; });
+                obj.getPreview = jasmine.createSpy().and.callFake(function () {
+                    return [];
+                });
                 obj.buildPreview(arg);
                 expect(obj.getPreview).toHaveBeenCalledWith(arg.items);
             });
@@ -212,7 +214,9 @@ define([
                     prefix: 'magento'
                 };
 
-                obj.getPreview = jasmine.createSpy().and.callFake(function() { return []; });
+                obj.getPreview = jasmine.createSpy().and.callFake(function () {
+                    return [];
+                });
                 obj.hasPreview(arg);
                 expect(obj.getPreview).toHaveBeenCalledWith(arg.items);
             });

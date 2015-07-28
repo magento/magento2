@@ -131,13 +131,19 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check called "this.elems.sortBy" inner onValidate method', function () {
-                obj.elems.sortBy = jasmine.createSpy().and.callFake(function() { return []; });
+                obj.elems.sortBy = jasmine.createSpy().and.callFake(function () {
+                    return [];
+                });
                 obj.onValidate();
                 expect(obj.elems.sortBy).toHaveBeenCalled();
             });
             it('Check called "this.validate" in onValidate and count calls', function () {
-                obj.elems.sortBy = jasmine.createSpy().and.callFake(function() { return ['1', '2', '3']; });
-                obj.validate = jasmine.createSpy().and.callFake(function() { return []; });
+                obj.elems.sortBy = jasmine.createSpy().and.callFake(function () {
+                    return ['1', '2', '3'];
+                });
+                obj.validate = jasmine.createSpy().and.callFake(function () {
+                    return [];
+                });
                 obj.onValidate();
                 expect(obj.validate.calls.count()).toBe(3);
             });
