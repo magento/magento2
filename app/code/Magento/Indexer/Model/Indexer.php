@@ -390,7 +390,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     public function reindexAll()
     {
-//        if ($this->getState()->getStatus() != Indexer\State::STATUS_WORKING) {
+        if ($this->getState()->getStatus() != Indexer\State::STATUS_WORKING) {
             $state = $this->getState();
             $state->setStatus(Indexer\State::STATUS_WORKING);
             $state->save();
@@ -408,7 +408,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
                 $this->getView()->resume();
                 throw $exception;
             }
-//        }
+        }
     }
 
     /**
