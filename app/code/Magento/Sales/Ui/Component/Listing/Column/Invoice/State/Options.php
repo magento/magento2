@@ -6,7 +6,7 @@
 namespace Magento\Sales\Ui\Component\Listing\Column\Invoice\State;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Sales\Model\InvoiceRepository;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
 
 /**
  * Class Options
@@ -19,16 +19,16 @@ class Options implements OptionSourceInterface
     protected $options;
 
     /**
-     * @var InvoiceRepository
+     * @var InvoiceRepositoryInterface
      */
     protected $invoiceRepository;
 
     /**
      * Constructor
      *
-     * @param InvoiceRepository $invoiceRepository
+     * @param InvoiceRepositoryInterface $invoiceRepository
      */
-    public function __construct(InvoiceRepository $invoiceRepository)
+    public function __construct(InvoiceRepositoryInterface $invoiceRepository)
     {
         $this->invoiceRepository = $invoiceRepository;
     }
