@@ -3,10 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tax\Test\Unit\Model;
+namespace Magento\SalesRule\Test\Unit\Model;
 
 use \Magento\SalesRule\Model\CouponRepository;
-
 use Magento\Framework\Api\SearchCriteria as SearchCriteria;
 
 class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -77,7 +76,7 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->ruleFactory = $this->getMock('\Magento\SalesRule\Model\RuleFactory', ['create'], [], '', false);
         $this->collectionFactory = $this->getMock(
             '\Magento\SalesRule\Model\Resource\Coupon\CollectionFactory',
-            ['create', 'getIterator'],
+            ['create'],
             [],
             '',
             false
