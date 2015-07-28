@@ -60,6 +60,10 @@ define([
         force: function (wizard) {
             wizard.data.attributesIds = this.multiselect().selected;
 
+            if (this.initData && _.isEqual(_.pluck(this.initData.attributes, 'id').sort(), wizard.data.attributesIds().sort())) {
+                throw new Error($.mage.__('For continue editing, please change selected attributes'));
+            }
+
             if (!wizard.data.attributesIds() || wizard.data.attributesIds().length === 0) {
                 throw new Error($.mage.__('Please, select attribute(s)'));
             }
