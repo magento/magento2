@@ -133,7 +133,7 @@ class Converter implements ConverterInterface
                         ['references'][$this->getAttributeValue($childNode, 'fieldset')]
                             : [];
                     $data['fieldsets'][$this->getAttributeValue($node, 'name')]['references']
-                    [$this->getAttributeValue($childNode, 'fieldset')][] = [
+                    [$this->getAttributeValue($childNode, 'fieldset')] = [
                         'fieldset' => $this->getAttributeValue($childNode, 'fieldset'),
                         'from'     => $this->getAttributeValue($childNode, 'from'),
                         'to'       => $this->getAttributeValue($childNode, 'to'),

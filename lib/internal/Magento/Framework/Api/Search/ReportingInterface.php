@@ -1,11 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: akaplya
- * Date: 08.07.15
- * Time: 18:55
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Api\Search;
 
 /**

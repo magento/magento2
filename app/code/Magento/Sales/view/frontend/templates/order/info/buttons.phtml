@@ -9,7 +9,7 @@
 ?>
 <div class="actions">
     <?php  $_order = $block->getOrder() ?>
-    <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order)) : ?>
+    <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order->getEntityId())) : ?>
         <a class="action reorder" href="<?php echo $block->getReorderUrl($_order) ?>">
             <span><?php echo __('Reorder') ?></span>
         </a>

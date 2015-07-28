@@ -6,9 +6,22 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Sales\Model\Resource\Order\CollectionFactory;
 
 class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     */
+    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
+    {
+        parent::__construct($context, $filter);
+        $this->collectionFactory = $collectionFactory;
+    }
+
     /**
      * Cancel selected orders
      *
