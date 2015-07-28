@@ -44,9 +44,9 @@
     <preference for="Magento\Sales\Api\CreditmemoManagementInterface" type="Magento\Sales\Model\Service\CreditmemoService"/>
     <preference for="Magento\Sales\Api\InvoiceCommentRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceComment\Repository"/>
     <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceItem\Repository"/>
-    <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Api\Data\Invoice\Repository"/>
+    <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Model\InvoiceRepository"/>
     <preference for="Magento\Sales\Api\InvoiceManagementInterface" type="Magento\Sales\Model\Service\InvoiceService"/>
-    <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Api\Data\OrderAddress\Repository"/>
+    <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Model\Order\AddressRepository"/>
     <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Api\Data\OrderItem\Repository"/>
     <preference for="Magento\Sales\Api\OrderPaymentRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Repository"/>
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
@@ -574,6 +574,12 @@
             <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order</argument>
         </arguments>
     </virtualType>
+    <virtualType name="invoiceMetadata" type="Magento\Sales\Model\Resource\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order\Invoice</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Invoice</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="shipmentMetadata" type="Magento\Sales\Model\Resource\Metadata">
         <arguments>
             <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order\Shipment</argument>
@@ -598,9 +604,20 @@
             <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Payment</argument>
         </arguments>
     </virtualType>
+    <virtualType name="orderAddressMetadata" type="Magento\Sales\Model\Resource\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order\Address</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Address</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Sales\Model\OrderRepository">
         <arguments>
             <argument name="metadata" xsi:type="object">orderMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\InvoiceRepository">
+        <arguments>
+            <argument name="invoiceMetadata" xsi:type="object">invoiceMetadata</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Model\Order\ShipmentRepository">
@@ -621,6 +638,11 @@
     <type name="Magento\Sales\Model\Order\Payment\Repository">
         <arguments>
             <argument name="metaData" xsi:type="object">paymentMetaData</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\AddressRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">orderAddressMetadata</argument>
         </arguments>
     </type>
 </config>

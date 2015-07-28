@@ -34,7 +34,7 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $invoiceFactoryMock;
+    protected $invoiceRepositoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -83,10 +83,10 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->invoiceFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\InvoiceFactory')
+        $this->invoiceRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->serviceOrderFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Service\OrderFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -121,8 +121,7 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
             $this->creditmemoRepositoryMock,
             $this->creditmemoFactoryMock,
             $this->orderFactoryMock,
-            $this->invoiceFactoryMock,
-            $this->serviceOrderFactoryMock,
+            $this->invoiceRepositoryMock,
             $this->eventManagerMock,
             $this->sessionMock,
             $this->messageManagerMock,
@@ -179,17 +178,14 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
         $invoiceMock->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $invoiceMock->expects($this->any())
             ->method('setOrder')
             ->with($orderMock)
             ->willReturnSelf();
         $invoiceMock->expects($this->any())
             ->method('getId')
-            ->willReturn($invoiceId);
-        $this->invoiceFactoryMock->expects($this->once())
-            ->method('create')
+            ->willReturn(1);
+        $this->invoiceRepositoryMock->expects($this->once())
+            ->method('get')
             ->willReturn($invoiceMock);
 
         $this->assertFalse($this->loader->load());
@@ -224,19 +220,15 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($orderMock);
         $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $invoiceMock->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
         $invoiceMock->expects($this->any())
             ->method('setOrder')
             ->willReturnSelf();
         $invoiceMock->expects($this->any())
             ->method('getId')
-            ->willReturn($invoiceId);
-        $this->invoiceFactoryMock->expects($this->once())
-            ->method('create')
+            ->willReturn(1);
+        $this->invoiceRepositoryMock->expects($this->once())
+            ->method('get')
             ->willReturn($invoiceMock);
         $creditmemoMock = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
             ->disableOriginalConstructor()
