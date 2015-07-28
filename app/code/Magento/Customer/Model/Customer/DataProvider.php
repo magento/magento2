@@ -119,9 +119,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * @inheritdoc
      */
-    public function addFilter($condition, $field = null, $type = 'regular')
+    public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        $this->filterPool->registerNewFilter($condition, $field, $type);
+        //@todo implement this method
     }
 
     /**

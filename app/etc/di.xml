@@ -30,7 +30,7 @@
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists" />
     <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <preference for="Magento\Framework\Api\Search\SearchResultInterface" type="Magento\Framework\Api\Search\SearchResult" />
-    <preference for="Magento\Framework\Api\Search\SearchCriteriaInterface" type="Magento\Framework\Api\Search\SearchCriteria" />
+    <preference for="Magento\Framework\Api\Search\SearchCriteriaInterface" type="Magento\Framework\Api\Search\SearchCriteria"/>
     <preference for="Magento\Framework\Api\Search\DocumentInterface" type="Magento\Framework\Api\Search\Document" />
     <preference for="Magento\Framework\Api\Search\AggregationInterface" type="Magento\Framework\Search\Response\Aggregation" />
     <type name="Magento\Store\Model\Store">
@@ -1124,4 +1124,6 @@
             <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Api\Search\SearchCriteriaBuilder" shared="false"/>
+    <type name="Magento\Framework\Api\Search\FilterGroupBuilder" shared="false"/>
 </config>

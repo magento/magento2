@@ -3,10 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection as Collection;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 
 /**
  * Class DataProvider
@@ -35,11 +36,6 @@ class DataProvider implements DataProviderInterface
     protected $requestFieldName;
 
     /**
-     * @var Collection
-     */
-    protected $collection;
-
-    /**
      * @var array
      */
     protected $meta = [];
@@ -52,16 +48,33 @@ class DataProvider implements DataProviderInterface
     protected $data = [];
 
     /**
-     * @var FilterPool
+     * @var Reporting
      */
-    protected $filterPool;
+    protected $reporting;
+
+    /**
+     * @var FilterBuilder
+     */
+    protected $filterBuilder;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
+     * @var RequestInterface
+     */
+    protected $resuest;
 
     /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param Collection $collection
-     * @param FilterPool $filterPool
+     * @param Reporting $reporting
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
      * @param array $meta
      * @param array $data
      */
@@ -69,26 +82,54 @@ class DataProvider implements DataProviderInterface
         $name,
         $primaryFieldName,
         $requestFieldName,
-        Collection $collection,
-        FilterPool $filterPool,
+        Reporting $reporting,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        RequestInterface $request,
+        FilterBuilder $filterBuilder,
         array $meta = [],
         array $data = []
     ) {
+        $this->resuest = $request;
+        $this->filterBuilder = $filterBuilder;
         $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
-        $this->filterPool = $filterPool;
-        $this->collection = $collection;
+        $this->reporting = $reporting;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->meta = $meta;
         $this->data = $data;
+        $this->prepareUpdateUrl();
+    }
+
+    protected function prepareUpdateUrl()
+    {
+        if (!isset($this->data['config']['filter_url_params'])) {
+            return;
+        }
+        foreach ($this->data['config']['filter_url_params'] as $paramName => $paramValue) {
+            if ('*' == $paramValue) {
+                $paramValue = $this->resuest->getParam($paramName);
+            }
+            if ($paramValue) {
+                $this->data['config']['update_url'] = sprintf(
+                    '%s%s/%s',
+                    $this->data['config']['update_url'],
+                    $paramName,
+                    $paramValue
+                );
+                $this->addFilter(
+                    $this->filterBuilder->setField($paramName)->setValue($paramValue)->setConditionType('eq')->create()
+                );
+            }
+        }
     }
 
     /**
-     * @return Collection
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
      */
     public function getCollection()
     {
-        return $this->collection;
+        return $this->searchData();
     }
 
     /**
@@ -164,9 +205,9 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter($condition, $field = null, $type = 'regular')
+    public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        $this->filterPool->registerNewFilter($condition, $field, $type);
+        $this->searchCriteriaBuilder->addFilter($filter);
     }
 
     /**
@@ -178,7 +219,7 @@ class DataProvider implements DataProviderInterface
      */
     public function addField($field, $alias = null)
     {
-        $this->collection->addFieldToSelect($field, $alias);
+//        $this->collection->addFieldToSelect($field, $alias);
     }
 
     /**
@@ -190,7 +231,7 @@ class DataProvider implements DataProviderInterface
      */
     public function addOrder($field, $direction)
     {
-        $this->collection->addOrder($field, $direction);
+        $this->searchCriteriaBuilder->addSortOrder($field, $direction);
     }
 
     /**
@@ -202,8 +243,8 @@ class DataProvider implements DataProviderInterface
      */
     public function setLimit($offset, $size)
     {
-        $this->collection->setPageSize($size);
-        $this->collection->setCurPage($offset);
+        $this->searchCriteriaBuilder->setPageSize($size);
+        $this->searchCriteriaBuilder->setCurrentPage($offset);
     }
 
     /**
@@ -215,7 +256,7 @@ class DataProvider implements DataProviderInterface
      */
     public function removeField($field, $isAlias = false)
     {
-        $this->collection->removeFieldFromSelect($field, $isAlias);
+//        $this->collection->removeFieldFromSelect($field, $isAlias);
     }
 
     /**
@@ -225,7 +266,7 @@ class DataProvider implements DataProviderInterface
      */
     public function removeAllFields()
     {
-        $this->collection->removeAllFieldsFromSelect();
+//        $this->collection->removeAllFieldsFromSelect();
     }
 
     /**
@@ -235,8 +276,20 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->toArray();
+        return $this->searchData()->toArray();
+    }
+
+    /**
+     * Search data
+     *
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
+     */
+    protected function searchData()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchCriteria->setRequestName($this->name);
+
+        return $this->reporting->search($searchCriteria);
     }
 
     /**
@@ -246,8 +299,7 @@ class DataProvider implements DataProviderInterface
      */
     public function count()
     {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->count();
+        return 10;
     }
 
     /**
