@@ -113,4 +113,9 @@ interface DataProviderInterface
      * @return \Magento\Framework\Api\Search\SearchCriteriaInterface
      */
     public function getSearchCriteria();
+
+    /**
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
+     */
+    public function getSearchResult();
 }
