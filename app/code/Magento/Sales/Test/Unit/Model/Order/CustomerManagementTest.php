@@ -41,7 +41,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     protected $regionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Customer\Management
+     * @var \Magento\Sales\Model\Order\CustomerManagement
      */
     protected $service;
 
@@ -72,7 +72,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->orderRepository = $this->getMock('\Magento\Sales\Api\OrderRepositoryInterface');
 
-        $this->service = new \Magento\Sales\Model\Order\Customer\Management(
+        $this->service = new \Magento\Sales\Model\Order\CustomerManagement(
             $this->objectCopyService,
             $this->accountManagement,
             $this->customerFactory,

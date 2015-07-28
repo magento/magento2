@@ -58,7 +58,7 @@
     <preference for="Magento\Sales\Api\ShipmentManagementInterface" type="Magento\Sales\Model\Service\ShipmentService"/>
     <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentTrack\Repository"/>
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Api\Data\Transaction\Repository"/>
-    <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\Customer\Management" />
+    <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement" />
     <preference for="Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Comment"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoItemResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Item"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo"/>
@@ -477,57 +477,90 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="ShippingNameAggregator" type="Magento\Framework\DB\ConcatExpression">
+    <virtualType name="ShippingNameAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
-            <argument name="tableName" xsi:type="string">sales_shipping_address</argument>
             <argument name="columns" xsi:type="array">
-                <item name="firstname" xsi:type="string">firstname</item>
-                <item name="lastname" xsi:type="string">lastname</item>
+                <item name="firstname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">firstname</item>
+                </item>
+                <item name="lastname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">lastname</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BillingNameAggregator" type="Magento\Framework\DB\ConcatExpression">
+    <virtualType name="BillingNameAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
-            <argument name="tableName" xsi:type="string">sales_billing_address</argument>
             <argument name="columns" xsi:type="array">
-                <item name="firstname" xsi:type="string">firstname</item>
-                <item name="lastname" xsi:type="string">lastname</item>
+                <item name="firstname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">firstname</item>
+                </item>
+                <item name="lastname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">lastname</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="ShippingAddressAggregator" type="Magento\Framework\DB\ConcatExpression">
+    <virtualType name="ShippingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
-            <argument name="tableName" xsi:type="string">sales_shipping_address</argument>
             <argument name="columns" xsi:type="array">
-                <item name="street" xsi:type="string">street</item>
-                <item name="city" xsi:type="string">city</item>
-                <item name="region" xsi:type="string">region</item>
-                <item name="postcode" xsi:type="string">postcode</item>
+                <item name="street" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">street</item>
+                </item>
+                <item name="city" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">city</item>
+                </item>
+                <item name="region" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">region</item>
+                </item>
+                <item name="postcode" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">postcode</item>
+                </item>
             </argument>
             <argument name="separator" xsi:type="string">, </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BillingAddressAggregator" type="Magento\Framework\DB\ConcatExpression">
+    <virtualType name="BillingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
-            <argument name="tableName" xsi:type="string">sales_billing_address</argument>
             <argument name="columns" xsi:type="array">
-                <item name="street" xsi:type="string">street</item>
-                <item name="city" xsi:type="string">city</item>
-                <item name="region" xsi:type="string">region</item>
-                <item name="postcode" xsi:type="string">postcode</item>
+                <item name="street" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">street</item>
+                </item>
+                <item name="city" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">city</item>
+                </item>
+                <item name="region" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">region</item>
+                </item>
+                <item name="postcode" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">postcode</item>
+                </item>
             </argument>
             <argument name="separator" xsi:type="string">, </argument>
         </arguments>
     </virtualType>
-    <virtualType name="PaymentMethodSubSelect" type="Magento\Sales\Model\Resource\Order\Grid\Sql\SubSelect">
+    <virtualType name="PaymentMethodSubSelect" type="Magento\Framework\DB\Sql\LookupExpression">
         <arguments>
-            <argument name="connectionName" xsi:type="string">sales_read</argument>
-            <argument name="table" xsi:type="string">sales_order_payment</argument>
-            <argument name="columns" xsi:type="array">
-                <item name="method" xsi:type="string">method</item>
+            <argument name="targetTable" xsi:type="string">sales_order_payment</argument>
+            <argument name="targetColumn" xsi:type="string">method</argument>
+            <argument name="referenceColumns" xsi:type="array">
+                <item name="parent_id" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_order</item>
+                    <item name="columnName" xsi:type="string">entity_id</item>
+                </item>
             </argument>
-            <argument name="originColumn" xsi:type="string">parent_id</argument>
-            <argument name="targetColumn" xsi:type="string">sales_order.entity_id</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Sales\Model\Resource\GridPool">

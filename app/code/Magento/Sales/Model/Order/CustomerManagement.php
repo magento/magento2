@@ -3,11 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Order\Customer;
+namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Exception\AlreadyExistsException;
 
-class Management implements \Magento\Sales\Api\OrderCustomerManagementInterface
+/**
+ * Class CustomerManagement
+ */
+class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementInterface
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
