@@ -1,5 +1,5 @@
 <?php
-namespace Magento\Sales\Model;
+namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\Resource\Metadata;
