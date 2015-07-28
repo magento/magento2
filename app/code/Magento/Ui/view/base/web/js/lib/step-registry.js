@@ -8,11 +8,13 @@ define([
     "use strict";
 
     return Component.extend({
+        initData: [],
         initialize: function () {
             this._super();
             this.steps = [];
         },
         initElement: function (step) {
+            step.initData = this.initData;
             this.steps.push(step);
         }
     });

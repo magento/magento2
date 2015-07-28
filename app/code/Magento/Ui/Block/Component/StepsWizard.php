@@ -15,6 +15,11 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_Ui::stepswizard.phtml';
 
     /**
+     * @var array
+     */
+    protected $initData = [];
+
+    /**
      * @var null|\Magento\Ui\Block\Component\StepsWizard\StepInterface[]
      */
     private $steps;
@@ -48,5 +53,21 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
     public function getComponentName()
     {
         return $this->getNameInLayout();
+    }
+
+    /**
+     * @return array
+     */
+    public function getInitData()
+    {
+        return $this->initData;
+    }
+
+    /**
+     * @return array
+     */
+    public function setInitData($initData)
+    {
+        $this->initData = $initData;;
     }
 }
