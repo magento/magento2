@@ -106,9 +106,14 @@ class LookupExpression extends \Zend_Db_Expr
             if (!in_array($direction, [Select::SQL_ASC, Select::SQL_DESC])) {
                 $direction = '';
             }
-            $select->order(new \Zend_Db_Expr(
-                sprintf('%s %s', $this->adapter->quoteIdentifier('lookup.' . $column)), $direction)
+            $expr = new \Zend_Db_Expr(
+                sprintf(
+                    '%s %s',
+                    $this->adapter->quoteIdentifier('lookup.' . $column)
+                ),
+                $direction
             );
+            $select->order($expr);
         }
     }
 
