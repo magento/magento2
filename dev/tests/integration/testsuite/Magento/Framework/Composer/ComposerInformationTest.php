@@ -7,6 +7,7 @@
 namespace Magento\Framework\Composer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests Magento\Framework\ComposerInformation
@@ -14,9 +15,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
+     * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $directoryReadMock;
+    private $objectManager;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
@@ -29,57 +30,39 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     private $composerJsonFinder;
     
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\Framework\Filesystem
      */
-    private $objectManager;
-
-    /**
-     * @var BufferIoFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $bufferIoFactoryMock;
+    private $filesystem;
 
     public function setUp()
     {
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->directoryReadMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->filesystemMock
-            ->expects($this->any())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($this->directoryReadMock));
-        $this->ioMock = $this->getMock('Composer\IO\BufferIO', [], [], '', false);
-        $this->bufferIoFactoryMock = $this->getMock('Magento\Framework\Composer\BufferIoFactory', [], [], '', false);
-        $this->bufferIoFactoryMock->expects($this->any())->method('create')->willReturn($this->ioMock);
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
-     * Setup DirectoryListMock & DirectoryReadMock to use a specified directory for reading composer files
+     * Setup DirectoryList, Filesystem, and ComposerJsonFinder to use a specified directory for reading composer files
      *
      * @param $composerDir string Directory under _files that contains composer files
      */
-    private function setupDirectoryMock($composerDir)
+    private function setupDirectory($composerDir)
     {
-        $listValueMap = [
-            [DirectoryList::CONFIG, __DIR__ . '/_files/'],
-            [DirectoryList::ROOT, __DIR__ . '/_files/' . $composerDir],
-            [DirectoryList::COMPOSER_HOME, __DIR__ . '/_files/' . $composerDir],
+        $directories = [
+            DirectoryList::CONFIG => [DirectoryList::PATH => __DIR__ . '/_files/'],
+            DirectoryList::ROOT => [DirectoryList::PATH => __DIR__ . '/_files/' . $composerDir],
+            DirectoryList::COMPOSER_HOME => [DirectoryList::PATH =>  __DIR__ . '/_files/' . $composerDir],
         ];
 
-        $this->directoryList->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap($listValueMap));
+        $this->directoryList = $this->objectManager->create(
+            'Magento\Framework\App\Filesystem\DirectoryList',
+            [ 'root' => __DIR__ . '/_files/' . $composerDir, 'config' => $directories]
+        );
 
-        $readValueMap =                 [
-            ['vendor_path.php', null, __DIR__ . '/_files/vendor_path.php'],
-            [null, null,  __DIR__ . '/_files/' . $composerDir],
-        ];
+        $this->filesystem = $this->objectManager->create(
+            'Magento\Framework\Filesystem',
+            ['directoryList' => $this->directoryList]
+        );
 
-        $this->directoryReadMock
-            ->expects($this->any())
-            ->method('getAbsolutePath')
-            ->will($this->returnValueMap($readValueMap));
+        $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
     }
 
     /**
@@ -89,7 +72,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequiredPhpVersion($composerDir)
     {
-        $this->setupDirectoryMock($composerDir);
+        $this->setupDirectory($composerDir);
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(
@@ -99,8 +82,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                     $this->composerJsonFinder,
                     $this->directoryList
                 ),
-                'filesystem' => $this->filesystemMock,
-                'bufferIoFactory' => $this->bufferIoFactoryMock
+                'filesystem' => $this->filesystem,
              ]
         );
 
@@ -114,7 +96,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequiredExtensions($composerDir)
     {
-        $this->setupDirectoryMock($composerDir);
+        $this->setupDirectory($composerDir);
         $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv', 'intl'];
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
@@ -125,8 +107,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                     $this->composerJsonFinder,
                     $this->directoryList
                 ),
-                'filesystem' => $this->filesystemMock,
-                'bufferIoFactory' => $this->bufferIoFactoryMock
+                'filesystem' => $this->filesystem,
             ]
         );
 
@@ -143,7 +124,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRootRequiredPackagesAndTypes($composerDir)
     {
-        $this->setupDirectoryMock($composerDir);
+        $this->setupDirectory($composerDir);
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(
@@ -153,8 +134,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                     $this->composerJsonFinder,
                     $this->directoryList
                 ),
-                'filesystem' => $this->filesystemMock,
-                'bufferIoFactory' => $this->bufferIoFactoryMock
+                'filesystem' => $this->filesystem,
             ]
         );
 
@@ -166,9 +146,9 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPackagesForUpdate()
     {
-        $packageName = 'composer/composer';
+        $packageName = 'magento/language-de_de';
 
-        $this->setupDirectoryMock('testSkeleton');
+        $this->setupDirectory('testSkeleton');
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(
@@ -178,8 +158,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                     $this->composerJsonFinder,
                     $this->directoryList
                 ),
-                'filesystem' => $this->filesystemMock,
-                'bufferIoFactory' => $this->bufferIoFactoryMock
+                'filesystem' => $this->filesystem,
             ]
         );
 
@@ -220,7 +199,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testNoLock()
     {
-        $this->setupDirectoryMock('notARealDirectory');
+        $this->setupDirectory('notARealDirectory');
         $this->objectManager->create(
             'Magento\Framework\Composer\ComposerInformation',
             [
@@ -228,8 +207,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                     $this->composerJsonFinder,
                     $this->directoryList
                 ),
-                'filesystem' => $this->filesystemMock,
-                'bufferIoFactory' => $this->bufferIoFactoryMock
+                'filesystem' => $this->filesystem,
             ]
         );
     }
