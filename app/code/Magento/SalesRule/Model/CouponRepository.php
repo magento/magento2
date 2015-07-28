@@ -82,6 +82,14 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      */
     public function save(\Magento\SalesRule\Api\Data\CouponInterface $coupon)
     {
+        //if coupon id is provided, use the existing coupon and blend in the new data supplied
+        $couponId = $coupon->getCouponId();
+        if ($couponId) {
+            $existingCoupon = $this->getById($couponId);
+            $mergedData = array_merge($existingCoupon->getData(), $coupon->getData());
+            $coupon->setData($mergedData);
+        }
+
         $this->resourceModel->save($coupon);
         return $coupon;
     }
@@ -96,8 +104,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      */
     public function getById($couponId)
     {
-        $coupon = $this->couponFactory->create()
-            ->load($couponId);
+        $coupon = $this->couponFactory->create()->load($couponId);
 
         if (!$coupon->getCouponId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException();
