@@ -16,12 +16,11 @@ define([
     };
     return Component.extend({
         attributesLabels: {},
-        initSavedAttributes: true,
+        stepInitialized: false,
         defaults: {
             modules: {
                 multiselect: '${ $.multiselectName }',
-                attributeProvider: '${ $.providerName }',
-                configurableVariations: '${ "configurableVariations" }'
+                attributeProvider: '${ $.providerName }'
             },
             listens: {
                 '${ $.multiselectName }:selected': 'doSelectedAttributesLabels',
@@ -41,11 +40,9 @@ define([
         render: function (wizard) {
         },
         doSelectSavedAttributes: function() {
-            if (this.initSavedAttributes) {
-                this.initSavedAttributes = false;
-                this.configurableVariations(function (configurableVariations) {
-                    this.multiselect().selected(_.pluck(configurableVariations.attributes(), 'id'));
-                }.bind(this));
+            if (false === this.stepInitialized) {
+                this.stepInitialized = true;
+                this.multiselect().selected(_.pluck(this.initData, 'id'));
             }
         },
         doSelectedAttributesLabels: function(selected) {

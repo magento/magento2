@@ -44,12 +44,7 @@ define([
     });
 
     return Collapsible.extend({
-        initSavedOptions: true,
-        defaults: {
-            modules: {
-                configurableVariations: '${ "configurableVariations" }'
-            }
-        },
+        stepInitialized: false,
         attributes: ko.observableArray([]),
         createOption: function () {
             // this - current attribute
@@ -146,12 +141,10 @@ define([
             }.bind(this));
         },
         doInitSavedOptions: function() {
-            if (this.initSavedOptions) {
-                this.initSavedOptions = false;
+            if (false === this.stepInitialized) {
+                this.stepInitialized = true;
                 _.each(this.attributes(), function(attribute) {
-                    var selectedAttribute = _.findWhere(
-                        this.configurableVariations().attributes(), {id: attribute.id}
-                    );
+                    var selectedAttribute = _.findWhere(this.initData, {id: attribute.id});
                     if (selectedAttribute) {
                         var selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
                         var selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
