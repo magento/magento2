@@ -1509,24 +1509,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->creditMemoMock->expects($this->once())->method('save')->willReturnSelf();
         $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
 
-        $newTransaction = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction',
-            [
-                'getId',
-                'setOrderPaymentObject',
-                'loadByTxnId',
-                'setTxnId',
-                'setTxnType',
-                'isFailsafe',
-                'getTxnId',
-                'getHtmlTxnId',
-                'getTxnType'
-            ],
-            [],
-            '',
-            false
-        );
-
         $parentTransaction = $this->getMock(
             'Magento\Sales\Model\Order\Payment\Transaction',
             ['setOrderPaymentObject', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType'],
