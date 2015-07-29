@@ -224,14 +224,16 @@ class Converter implements ConverterInterface
      */
     protected function sorting($data)
     {
-        usort($data['fieldsets'], function ($current, $parent) {
-            if (!isset($current['references']) || isset($parent['references'][$current['name']])) {
+        usort($data['fieldsets'], function ($current, $parent) use ($data) {
+            if (!isset($current['references']) && $data['primary'] == $current['name']
+                || isset($parent['references'][$current['name']])
+            ) {
                 return -1;
-            }
-            if (!isset($parent['references']) || isset($current['references'][$parent['name']])) {
+            } elseif (!isset($parent['references']) || isset($current['references'][$parent['name']])) {
                 return 1;
+            } else {
+                return 0;
             }
-            return 0;
         });
         return $data;
     }

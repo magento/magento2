@@ -313,9 +313,10 @@ class Base implements ActionInterface
     {
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourcePool->get($fieldset['source']);
-            if (isset($fieldset['class'])) {
-                $fieldsetObject = $this->fieldsetPool->get($fieldset['class']);
-                $this->data['fieldsets'][$fieldsetName] = $fieldsetObject->addDynamicData($fieldset);
+            if (isset($fieldset['provider'])) {
+                $fieldsetObject = $this->fieldsetPool->get($fieldset['provider']);
+                $this->data['fieldsets'][$fieldsetName] =
+                    $fieldsetObject->addDynamicData($this->data['fieldsets'][$fieldsetName]);
             }
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 $this->saveFieldByType($field);
