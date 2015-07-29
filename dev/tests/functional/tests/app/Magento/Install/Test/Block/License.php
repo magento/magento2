@@ -26,7 +26,7 @@ class License extends Block
      *
      * @var string
      */
-    protected $license = '.container.ng-scope';
+    protected $license = 'license-text';
 
     /**
      * Click on 'Back' button.
@@ -45,6 +45,6 @@ class License extends Block
      */
     public function getLicense()
     {
-        return $this->_rootElement->find($this->license, Locator::SELECTOR_CSS)->getText();
+        return $this->_rootElement->find($this->license, Locator::SELECTOR_CLASS_NAME)->getText();
     }
 }
