@@ -7,7 +7,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\Object;
-use \Magento\Sales\Model\Order\CreditmemoRepository;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use \Magento\Sales\Model\Order\CreditmemoFactory;
 
 /**
@@ -26,7 +26,7 @@ use \Magento\Sales\Model\Order\CreditmemoFactory;
 class CreditmemoLoader extends Object
 {
     /**
-     * @var CreditmemoRepository;
+     * @var CreditmemoRepositoryInterface;
      */
     protected $creditmemoRepository;
 
@@ -71,7 +71,7 @@ class CreditmemoLoader extends Object
     protected $stockConfiguration;
 
     /**
-     * @param CreditmemoRepository $creditmemoRepository
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param CreditmemoFactory $creditmemoFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
@@ -84,7 +84,7 @@ class CreditmemoLoader extends Object
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        CreditmemoRepository $creditmemoRepository,
+        CreditmemoRepositoryInterface $creditmemoRepository,
         CreditmemoFactory $creditmemoFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,

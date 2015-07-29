@@ -40,7 +40,7 @@
     <preference for="Magento\Sales\Api\Data\TransactionSearchResultInterface" type="Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection"/>
     <preference for="Magento\Sales\Api\CreditmemoCommentRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoComment\Repository"/>
     <preference for="Magento\Sales\Api\CreditmemoItemRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoItem\Repository"/>
-    <preference for="Magento\Sales\Api\CreditmemoRepositoryInterface" type="Magento\Sales\Api\Data\Creditmemo\Repository"/>
+    <preference for="Magento\Sales\Api\CreditmemoRepositoryInterface" type="Magento\Sales\Model\Order\CreditmemoRepository"/>
     <preference for="Magento\Sales\Api\CreditmemoManagementInterface" type="Magento\Sales\Model\Service\CreditmemoService"/>
     <preference for="Magento\Sales\Api\InvoiceCommentRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceComment\Repository"/>
     <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceItem\Repository"/>

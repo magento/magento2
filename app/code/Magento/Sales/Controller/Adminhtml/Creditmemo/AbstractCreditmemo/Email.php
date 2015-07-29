@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
-use \Magento\Sales\Model\Order\CreditmemoRepository;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
 /**
  * Class Email
@@ -15,16 +15,17 @@ use \Magento\Sales\Model\Order\CreditmemoRepository;
 class Email extends \Magento\Backend\App\Action
 {
     /**
-     * @var CreditmemoRepository
+     * @var CreditmemoRepositoryInterface
      */
     protected $creditmemoRepository;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        CreditmemoRepository $creditmemoRepository
+        CreditmemoRepositoryInterface $creditmemoRepository
     ) {
         $this->creditmemoRepository = $creditmemoRepository;
         parent::__construct($context);
