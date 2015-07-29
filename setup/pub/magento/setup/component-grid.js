@@ -17,7 +17,9 @@ angular.module('component-grid', ['ngStorage'])
               $scope.isOutOfSync = false;
           }
           $scope.availableUpdatePackages = data.lastSyncData.packages;
-
+          $scope.currentPage = 0;
+          $scope.rowLimit = 20;
+          $scope.numberOfPages = Math.ceil(data.total/$scope.rowLimit);
       });
 
       $scope.isOutOfSync = false;
@@ -90,4 +92,11 @@ angular.module('component-grid', ['ngStorage'])
       $scope.convertDate = function(date) {
           return new Date(date);
       }
-    }]);
+    }])
+    .filter('startFrom', function() {
+        return function(input, start) {
+            start = +start; //parse to int
+            return input.slice(start);
+        }
+    })
+;

@@ -53,7 +53,7 @@ class ComponentGrid extends AbstractActionController
         return new JsonModel(
             [
                 'success' => true,
-                'components' => $components,
+                'components' => array_values($components),
                 'total' => count($components),
                 'lastSyncData' => $lastSyncData
             ]
