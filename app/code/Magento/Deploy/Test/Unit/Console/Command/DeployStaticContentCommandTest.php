@@ -17,7 +17,7 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     private $deploymentConfig;
 
     /**
-     * @var \Magento\Deploy\Deployer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Deploy\Model\Deployer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $deployer;
 
@@ -50,7 +50,7 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $this->deployer = $this->getMock('Magento\Deploy\Deployer', [], [], '', false);
+        $this->deployer = $this->getMock('Magento\Deploy\Model\Deployer', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->filesUtil = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
         $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
