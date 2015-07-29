@@ -15,6 +15,7 @@
                    value: row[indexField],
                    attr: {id: 'check' + row[indexField]}">
             <label class="switcher-label" data-bind="attr: {for: 'check' + row[indexField]}"></label>
+            <label data-bind="text: getLabel(row[indexField])" />
         </div>
     </label>
 </td>
