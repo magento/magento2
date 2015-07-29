@@ -14,6 +14,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * Checkout page not found controller
      *
      * @throws NotFoundException
+     * @return void
      */
     public function execute()
     {
