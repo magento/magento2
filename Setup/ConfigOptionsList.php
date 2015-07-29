@@ -76,14 +76,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_QUEUE_RABBITMQ_PORT,
                 'RabbitMQ server port',
-                5672
-            ),
-            new TextConfigOption(
-                self::INPUT_KEY_QUEUE_RABBITMQ_PORT,
-                TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_QUEUE_RABBITMQ_PORT,
-                'RabbitMQ server port',
-                5672
+                '5672'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_QUEUE_RABBITMQ_USER,
