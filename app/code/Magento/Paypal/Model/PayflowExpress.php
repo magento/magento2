@@ -64,6 +64,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Exception\LocalizedExceptionFactory $exception
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+     * @param Transaction\BuilderInterface $transactionBuilder
      * @param InfoFactory $paypalInfoFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -85,6 +86,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Exception\LocalizedExceptionFactory $exception,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
+        \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         InfoFactory $paypalInfoFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -105,6 +107,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
             $checkoutSession,
             $exception,
             $transactionRepository,
+            $transactionBuilder,
             $resource,
             $resourceCollection,
             $data
