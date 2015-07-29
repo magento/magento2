@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Model\Order\Payment\Transaction;
 
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
@@ -43,5 +44,37 @@ class Manager implements ManagerInterface
             $paymentId,
             $orderId
         );
+    }
+
+    /**
+     * Checks if transaction exists by txt id
+     *
+     * @param string $transactionId
+     * @return bool
+     */
+    public function isTransactionExists($transactionId, $paymentId, $orderId)
+    {
+        return $transactionId && $this->transactionRepository->getByTxnId($transactionId, $paymentId, $orderId);
+    }
+
+    /**
+     * Update transaction ids for further processing
+     * If no transactions were set before invoking, may generate an "offline" transaction id
+     *
+     * @param OrderPaymentInterface $payment
+     * @param string $type
+     * @param bool|Transaction $transactionBasedOn
+     * @return string|null
+     */
+    public function generateTransactionId(OrderPaymentInterface $payment, $type, $transactionBasedOn = false)
+    {
+        if (!$payment->getParentTransactionId() && !$payment->getTransactionId() && $transactionBasedOn) {
+            $payment->setParentTransactionId($transactionBasedOn->getTxnId());
+        }
+        // generate transaction id for an offline action or payment method that didn't set it
+        if (($parentTxnId = $payment->getParentTransactionId()) && !$payment->getTransactionId()) {
+            return "{$parentTxnId}-{$type}";
+        }
+        return $payment->getTransactionId();
     }
 }

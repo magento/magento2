@@ -234,36 +234,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * Register shipment
-     *
-     * Apply to order, order items etc.
-     *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function register()
-    {
-        if ($this->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot register an existing shipment'));
-        }
-
-        $totalQty = 0;
-        foreach ($this->getAllItems() as $item) {
-            if ($item->getQty() > 0) {
-                $item->register();
-                if (!$item->getOrderItem()->isDummy(true)) {
-                    $totalQty += $item->getQty();
-                }
-            } else {
-                $item->isDeleted(true);
-            }
-        }
-        $this->setTotalQty($totalQty);
-
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     public function getItemsCollection()
@@ -451,36 +421,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
             }
         }
         return $this->getComments();
-    }
-
-    /**
-     * Before object save
-     *
-     * @return $this
-     */
-    protected function _beforeSave()
-    {
-        return parent::_beforeSave();
-    }
-
-    /**
-     * Before object delete
-     *
-     * @return $this
-     */
-    protected function _beforeDelete()
-    {
-        return parent::_beforeDelete();
-    }
-
-    /**
-     * After object save manipulations
-     *
-     * @return $this
-     */
-    protected function _afterSave()
-    {
-        return parent::_afterSave();
     }
 
     /**

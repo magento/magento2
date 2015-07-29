@@ -11,14 +11,14 @@ namespace Magento\Sales\Model\Resource\Order\Creditmemo\Grid;
 class StatusList implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoRepository
+     * @var \Magento\Sales\Api\CreditmemoRepositoryInterface
      */
     protected $creditmemoRepository;
 
     /**
-     * @param \Magento\Sales\Model\Order\CreditmemoRepository $creditmemoRepository
+     * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
      */
-    public function __construct(\Magento\Sales\Model\Order\CreditmemoRepository $creditmemoRepository)
+    public function __construct(\Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository)
     {
         $this->creditmemoRepository = $creditmemoRepository;
     }

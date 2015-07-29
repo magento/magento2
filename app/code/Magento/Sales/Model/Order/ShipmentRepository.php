@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Model\Resource\Metadata;
 use Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory as SearchResultFactory;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 
@@ -102,12 +104,17 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
      *
      * @param \Magento\Sales\Api\Data\ShipmentInterface $entity
      * @return bool
+     * @throws CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\ShipmentInterface $entity)
     {
-        $this->metadata->getMapper()->delete($entity);
+        try {
+            $this->metadata->getMapper()->delete($entity);
 
-        unset($this->registry[$entity->getEntityId()]);
+            unset($this->registry[$entity->getEntityId()]);
+        } catch (\Exception $e) {
+            throw new CouldNotDeleteException(__('Could not delete shipment'), $e);
+        }
 
         return true;
     }
@@ -130,11 +137,16 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
      *
      * @param \Magento\Sales\Api\Data\ShipmentInterface $entity
      * @return \Magento\Sales\Api\Data\ShipmentInterface
+     * @throws CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\ShipmentInterface $entity)
     {
-        $this->metadata->getMapper()->save($entity);
-        $this->registry[$entity->getEntityId()] = $entity;
+        try {
+            $this->metadata->getMapper()->save($entity);
+            $this->registry[$entity->getEntityId()] = $entity;
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Could not save shipment'), $e);
+        }
 
         return $this->registry[$entity->getEntityId()];
     }
