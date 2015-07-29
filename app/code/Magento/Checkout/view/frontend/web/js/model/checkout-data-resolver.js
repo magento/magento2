@@ -137,7 +137,7 @@ define([
                         }
                     });
                 }
-            } else if (shippingAddress && shippingAddress.canUseForBilling()) {
+            } else if (shippingAddress && shippingAddress.canUseForBilling() && !quote.isVirtual()) {
                 //set billing address same as shipping by default if it is not empty
                 selectBillingAddress(quote.shippingAddress());
             }
