@@ -39,15 +39,11 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '2.0.1', '>=')) {
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
             /** @var CustomerSetup $customerSetup */
             $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
 
             $setup->startSetup();
-
-            $disableAGCAttribute = $customerSetup->getEavConfig()->getAttribute('customer', 'disable_auto_group_change');
-            $disableAGCAttribute->setData('used_in_forms', ['adminhtml_customer']);
-            $disableAGCAttribute->save();
 
             $entityAttributes = [
                 'customer' => [
@@ -60,43 +56,13 @@ class UpgradeData implements UpgradeDataInterface
                     'created_in' => [
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
+                        'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
-                    ],
-                    'prefix' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'firstname' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'middlename' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'lastname' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'suffix' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
                     ],
                     'email' => [
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
+                        'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'group_id' => [
@@ -108,18 +74,6 @@ class UpgradeData implements UpgradeDataInterface
                     'dob' => [
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'default_billing' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'default_shipping' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => true,
                         'is_searchable_in_grid' => false,
                     ],
@@ -149,86 +103,47 @@ class UpgradeData implements UpgradeDataInterface
                     ],
                 ],
                 'customer_address' => [
-                    'prefix' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'firstname' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'middlename' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'lastname' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'suffix' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
                     'company' => [
-                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
+                        'is_searchable_in_grid' => true,
                     ],
                     'street' => [
-                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'city' => [
-                        'is_used_in_grid' => false,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
+                        'is_searchable_in_grid' => true,
                     ],
                     'country_id' => [
-                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
                         'is_filterable_in_grid' => true,
                         'is_searchable_in_grid' => false,
                     ],
                     'region' => [
-                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
+                        'is_filterable_in_grid' => false,
+                        'is_searchable_in_grid' => true,
                     ],
                     'region_id' => [
-                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => true,
                         'is_searchable_in_grid' => false,
                     ],
                     'postcode' => [
-                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
+                        'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'telephone' => [
-                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
+                        'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'fax' => [
-                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
