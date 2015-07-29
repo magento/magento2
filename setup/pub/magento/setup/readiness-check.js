@@ -20,7 +20,7 @@ angular.module('readiness-check', [])
         $scope.resetProgress = function() {
             $scope.progressCounter = 0;
         };
-        $rootScope.checkingInProgress = function() {
+        $scope.checkingInProgress = function() {
             return $scope.progressCounter > 0;
         };
         $scope.requestFailedHandler = function(obj) {
@@ -287,7 +287,10 @@ angular.module('readiness-check', [])
         };
 
         $scope.$on('$stateChangeSuccess', function (event, nextState) {
-            if ((nextState.id == 'root.readiness-check-updater.progress') || (nextState.id == 'root.readiness-check-installer.progress')) {
+            if ((nextState.id == 'root.readiness-check-cm.progress')
+                || (nextState.id == 'root.readiness-check-su.progress')
+                || (nextState.id == 'root.readiness-check-installer.progress')
+            ) {
                 $scope.progress();
             }
         });

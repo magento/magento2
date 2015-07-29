@@ -47,7 +47,7 @@ return [
             'type'        => 'su'
         ],
         [
-            'id'          => 'root.readiness-check-updater',
+            'id'          => 'root.readiness-check-cm',
             'url'         => 'readiness-check-updater',
             'templateUrl' => "{$base}/readiness-check-updater",
             'title'       => "Readiness \n Check",
@@ -57,7 +57,7 @@ return [
             'type'        => 'cm'
         ],
         [
-            'id'          => 'root.readiness-check-updater.progress',
+            'id'          => 'root.readiness-check-cm.progress',
             'url'         => 'readiness-check-updater/progress',
             'templateUrl' => "$base/readiness-check-updater/progress",
             'title'       => 'Readiness Check',
@@ -68,7 +68,7 @@ return [
             'type'        => 'cm'
         ],
         [
-            'id'          => 'root.create-backup-componentManager',
+            'id'          => 'root.create-backup-cm',
             'url'         => 'create-backup',
             'templateUrl' => "$base/create-backup",
             'title'       => "Create \n Backup",
@@ -80,7 +80,7 @@ return [
             'type'        => 'cm'
         ],
         [
-            'id'          => 'root.create-backup.progress',
+            'id'          => 'root.create-backup-cm.progress',
             'url'         => 'create-backup/progress',
             'templateUrl' => "$base/complete-backup/progress",
             'title'       => "Create \n Backup",
@@ -111,7 +111,7 @@ return [
             'type'        => 'cm'
         ],
         [
-            'id'          => 'root.readiness-check',
+            'id'          => 'root.readiness-check-su',
             'url'         => 'readiness-check-updater',
             'templateUrl' => "$base/readiness-check-updater",
             'title'       => 'Readiness Check',
@@ -122,24 +122,46 @@ return [
             'type'        => 'su'
         ],
         [
-            'id'          => 'root.create-backup-updater',
+            'id'          => 'root.readiness-check-su.progress',
+            'url'         => 'readiness-check-updater/progress',
+            'templateUrl' => "$base/readiness-check-updater/progress",
+            'title'       => 'Readiness Check',
+            'header'      => 'Step 2: Readiness Check',
+            'controller'  => 'readinessCheckController',
+            'nav'         => false,
+            'order'       => 3,
+            'type'        => 'su'
+        ],
+        [
+            'id'          => 'root.create-backup-su',
             'url'         => 'create-backup',
             'templateUrl' => "$base/create-backup",
             'title'       => 'Create Backup',
             'controller'  => 'createBackupController',
             'header'      => 'Step 3: Create Backup',
-            'order'       => 3,
+            'order'       => 4,
             'nav'         => true,
             'type'        => 'su'
         ],
         [
-            'id'          => 'root.code-upgrade',
-            'url'         => 'code-upgrade',
-            'templateUrl' => "$base/code-upgrade",
-            'title'       => 'Code Upgrade',
-            'controller'  => 'createBackupController',
-            'header'      => 'Step 4: Code Upgrade',
-            'order'       => 4,
+            'id'          => 'root.create-backup-su.progress',
+            'url'         => 'create-backup/progress',
+            'templateUrl' => "$base/complete-backup/progress",
+            'title'       => "Create \n Backup",
+            'header'      => 'Step 3: Create Backup',
+            'controller'  => 'completeBackupController',
+            'nav'         => false,
+            'order'       => 5,
+            'type'        => 'su'
+        ],
+        [
+            'id'          => 'root.system-upgrade',
+            'url'         => 'system-upgrade',
+            'templateUrl' => "$base/system-upgrade",
+            'title'       => "System \n Upgrade",
+            'controller'  => 'systemUpgradeController',
+            'header'      => 'Step 4: System Upgrade',
+            'order'       => 6,
             'nav'         => true,
             'type'        => 'su'
         ],
