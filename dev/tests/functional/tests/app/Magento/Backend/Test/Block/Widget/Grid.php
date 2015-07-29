@@ -250,7 +250,7 @@ abstract class Grid extends Block
         if ($rowItem->isVisible()) {
             $rowItem->find($this->editLink, Locator::SELECTOR_CSS)->click();
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
     }
 
