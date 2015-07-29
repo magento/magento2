@@ -25,9 +25,9 @@ class RabbitMqConfig
 
     const HOST = 'host';
     const PORT = 'port';
-    const USERNAME = 'username';
+    const USERNAME = 'user';
     const PASSWORD = 'password';
-    const VIRTUAL_HOST = 'virtual_host';
+    const VIRTUALHOST = 'virtualhost';
     const SSL = 'ssl';
 
     /**
