@@ -7,7 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use \Magento\Sales\Model\Order\CreditmemoRepository;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
 class PrintAction extends \Magento\Backend\App\Action
 {
@@ -22,7 +22,7 @@ class PrintAction extends \Magento\Backend\App\Action
     protected $resultForwardFactory;
 
     /**
-     * @var CreditmemoRepository
+     * @var CreditmemoRepositoryInterface
      */
     protected $creditmemoRepository;
 
@@ -30,13 +30,13 @@ class PrintAction extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param CreditmemoRepository $creditmemoRepository
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        CreditmemoRepository $creditmemoRepository
+        CreditmemoRepositoryInterface $creditmemoRepository
     ) {
         $this->_fileFactory = $fileFactory;
         $this->resultForwardFactory = $resultForwardFactory;

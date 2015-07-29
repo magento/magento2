@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 namespace Magento\Sales\Model\Order;
 
 /**
@@ -76,7 +81,15 @@ class CreditmemoFactory
         return $creditmemo;
     }
 
-    public function createByInvoice($invoice, $data)
+    /**
+     * Prepare order creditmemo based on invoice and requested params
+     *
+     * @param \Magento\Sales\Model\Order\Invoice $invoice
+     * @param array $data
+     * @return Creditmemo
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function createByInvoice(\Magento\Sales\Model\Order\Invoice $invoice, array $data = array())
     {
         $order = $invoice->getOrder();
         $totalQty = 0;
