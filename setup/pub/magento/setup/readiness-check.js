@@ -20,7 +20,7 @@ angular.module('readiness-check', [])
         $scope.resetProgress = function() {
             $scope.progressCounter = 0;
         };
-        $scope.checkingInProgress = function() {
+        $rootScope.checkingInProgress = function() {
             return $scope.progressCounter > 0;
         };
         $scope.requestFailedHandler = function(obj) {

@@ -14,8 +14,8 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="$state.go('root.component-update')"
-                ng-disabled="checkingInProgress() || (hasErrors && $state.is('root.create-backup.progress'))
-                || (!nextButtonStatus && $state.is('root.create-backup'))"
+                ng-disabled="checkingInProgress() || (hasErrors && ($state.is('root.create-backup-cm.progress') || $state.is('root.create-backup-su.progress')))
+                || (!nextButtonStatus && ($state.is('root.create-backup-cm') || $state.is('root.create-backup-su')))"
                 >Next</button>
         </div>
         <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
@@ -26,7 +26,7 @@
                 ng-disabled="checkingInProgress() && !hasErrors"
                 >Back</button>
         </div>
-        <div class="btn-wrap btn-wrap-try-again" ng-show="$state.is('root.create-backup.progress')">
+        <div class="btn-wrap btn-wrap-try-again" ng-show="$state.is('root.create-backup-cm.progress') || $state.is('root.create-backup-su.progress')">
             <button
                 type="button"
                 class="btn btn-secondary"
@@ -39,7 +39,7 @@
 
 <h2 class="page-title">{{$state.current.header}}</h2>
 
-<div ng-show="$state.is('root.create-backup')">
+<div ng-show="$state.is('root.create-backup-cm') || $state.is('root.create-backup-su')">
     <form
         novalidate
         name="backup"
@@ -100,7 +100,7 @@
         </fieldset>
     </form>
 </div>
-<div ng-show="$state.is('root.create-backup') && (backupInfo.options.code || backupInfo.options.media || backupInfo.options.db)" class="accent-box">
+<div ng-show="($state.is('root.create-backup-cm') || $state.is('root.create-backup-su')) && (backupInfo.options.code || backupInfo.options.media || backupInfo.options.db)" class="accent-box">
     <p>Let's check your disk space availability for taking selected backups, and then create the backups.</p>
     <button
         class="btn btn-large btn-prime"

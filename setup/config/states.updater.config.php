@@ -115,7 +115,6 @@ return [
             'url'         => 'readiness-check-updater',
             'templateUrl' => "$base/readiness-check-updater",
             'title'       => 'Readiness Check',
-            'controller'  => 'readinessCheckController',
             'header'      => 'Step 2: Readiness Check',
             'order'       => 2,
             'nav'         => true,
