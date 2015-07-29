@@ -42,8 +42,10 @@ class Country extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->countryFactory->create()->load($item[$this->getData('name')])
-                    ->getName();
+                if ($item[$this->getData('name')]) {
+                    $item[$this->getData('name')] = $this->countryFactory->create()->load($item[$this->getData('name')])
+                        ->getName();
+                }
             }
         }
     }

@@ -301,12 +301,6 @@ class Base implements ActionInterface
             }
         }
 
-        echo "\n";
-        echo "\n";
-        echo $this->getPrimaryResource()->getSelect();
-        echo "\n";
-        echo "\n";
-
         return $this->getPrimaryResource();
     }
 
