@@ -34,7 +34,7 @@ define(
             },
 
             navigateTo: function(step) {
-                stepNavigator.goTo(step.code);
+                stepNavigator.navigateTo(step.code);
             },
 
             isProcessed: function(item) {

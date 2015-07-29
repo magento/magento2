@@ -50,6 +50,7 @@ define(
                 checkoutDataResolver.resolvePaymentMethod();
                 stepNavigator.registerStep(
                     'payment',
+                    null,
                     'Review & Payments',
                     this.isVisible,
                     _.bind(this.navigate, this),

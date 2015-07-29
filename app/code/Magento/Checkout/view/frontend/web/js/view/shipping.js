@@ -72,7 +72,13 @@ define(
                 var self = this;
                 this._super();
                 if (!quote.isVirtual()) {
-                    stepNavigator.registerStep('shipping', 'Shipping', this.visible, _.bind(this.navigate, this), 10);
+                    stepNavigator.registerStep(
+                        'shipping',
+                        '',
+                        'Shipping',
+                        this.visible, _.bind(this.navigate, this),
+                        10
+                    );
                 }
                 checkoutDataResolver.resolveShippingAddress();
 
