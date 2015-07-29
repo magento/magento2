@@ -112,15 +112,15 @@ class Repository implements TransactionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByTxnType($txnType, $paymentId, $orderId)
+    public function getByTransactionType($transactionType, $paymentId, $orderId)
     {
-        $identityFieldsForCache = [$txnType, $paymentId];
+        $identityFieldsForCache = [$transactionType, $paymentId];
         $cacheStorage = 'txn_type';
         $entity = $this->entityStorage->getByIdentifyingFields($identityFieldsForCache, $cacheStorage);
         if (!$entity) {
             $filters[] = $this->filterBuilder
                 ->setField(TransactionInterface::TXN_TYPE)
-                ->setValue($txnType)
+                ->setValue($transactionType)
                 ->create();
             $filters[] = $this->filterBuilder
                 ->setField(TransactionInterface::PAYMENT_ID)
@@ -154,17 +154,17 @@ class Repository implements TransactionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByTxnId($txnId, $paymentId, $orderId)
+    public function getByTransactionId($transactionId, $paymentId, $orderId)
     {
-        $identityFieldsForCache = [$txnId, $paymentId, $orderId];
-        $cacheStorage = 'txn_type';
+        $identityFieldsForCache = [$transactionId, $paymentId, $orderId];
+        $cacheStorage = 'txn_id';
         $entity = $this->entityStorage->getByIdentifyingFields($identityFieldsForCache, $cacheStorage);
         if (!$entity) {
             $entity = $this->metaData->getMapper()->loadObjectByTxnId(
                 $this->metaData->getNewInstance(),
                 $orderId,
                 $paymentId,
-                $txnId
+                $transactionId
             );
             if ($entity && $entity->getId()) {
                 $this->entityStorage->addByIdentifyingFields($entity, $identityFieldsForCache, $cacheStorage);

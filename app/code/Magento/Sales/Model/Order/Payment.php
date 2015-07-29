@@ -249,7 +249,7 @@ class Payment extends Info implements OrderPaymentInterface
         // Check Authorization transaction state
         $authTransaction = $this->getAuthorizationTransaction();
         if ($authTransaction && $authTransaction->getIsClosed()) {
-            $orderTransaction = $this->transactionRepository->getByTxnType(
+            $orderTransaction = $this->transactionRepository->getByTransactionType(
                 Transaction::TYPE_ORDER,
                 $this->getId(),
                 $this->getOrder()->getId()
@@ -777,7 +777,7 @@ class Payment extends Info implements OrderPaymentInterface
             $invoice = $creditmemo->getInvoice();
             if ($invoice) {
                 $isOnline = true;
-                $captureTxn = $this->transactionRepository->getByTxnId(
+                $captureTxn = $this->transactionRepository->getByTransactionId(
                     $invoice->getTransactionId(),
                     $this->getId(),
                     $this->getOrder()->getId()
@@ -865,7 +865,7 @@ class Payment extends Info implements OrderPaymentInterface
             $this->transactionManager->generateTransactionId(
                 $this,
                 Transaction::TYPE_REFUND,
-                $this->transactionRepository->getByTxnId(
+                $this->transactionRepository->getByTransactionId(
                     $this->getParentTransactionId(),
                     $this->getId(),
                     $this->getOrder()->getId()

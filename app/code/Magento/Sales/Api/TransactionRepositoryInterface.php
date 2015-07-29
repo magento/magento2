@@ -32,22 +32,22 @@ interface TransactionRepositoryInterface
     /**
      * Get payment transaction by type
      *
-     * @param string $txnType
+     * @param string $transactionType
      * @param int $paymentId
      * @param int $orderId
      * @return false|\Magento\Sales\Api\Data\TransactionInterface Transaction interface.
      */
-    public function getByTxnType($txnType, $paymentId, $orderId);
+    public function getByTransactionType($transactionType, $paymentId, $orderId);
 
     /**
      * Get payment transaction by transaction id
      *
-     * @param string $txnId
+     * @param string $transactionId
      * @param int $paymentId
      * @param int $orderId
      * @return false|\Magento\Sales\Api\Data\TransactionInterface Transaction interface.
      */
-    public function getByTxnId($txnId, $paymentId, $orderId);
+    public function getByTransactionId($transactionId, $paymentId, $orderId);
 
     /**
      * Deletes a specified transaction.

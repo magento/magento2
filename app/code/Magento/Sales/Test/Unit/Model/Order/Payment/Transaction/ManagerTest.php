@@ -59,13 +59,13 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
         if ($parentTransactionId) {
-            $this->repositoryMock->expects($this->once())->method('getByTxnId')->with(
+            $this->repositoryMock->expects($this->once())->method('getByTransactionId')->with(
                 $parentTransactionId,
                 $paymentId,
                 $orderId
             )->willReturn($transaction);
         } else {
-            $this->repositoryMock->expects($this->once())->method('getByTxnType')->with(
+            $this->repositoryMock->expects($this->once())->method('getByTransactionType')->with(
                 Transaction::TYPE_AUTH,
                 $paymentId,
                 $orderId
@@ -96,7 +96,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 '',
                 false
             );
-            $this->repositoryMock->expects($this->once())->method('getByTxnId')->willReturn($transaction);
+            $this->repositoryMock->expects($this->once())->method('getByTransactionId')->willReturn($transaction);
         }
 
         $this->assertEquals(

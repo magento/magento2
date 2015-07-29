@@ -32,14 +32,14 @@ class Manager implements ManagerInterface
     {
         $transaction = false;
         if ($parentTransactionId) {
-            $transaction = $this->transactionRepository->getByTxnId(
+            $transaction = $this->transactionRepository->getByTransactionId(
                 $parentTransactionId,
                 $paymentId,
                 $orderId
             );
         }
 
-        return $transaction ?: $this->transactionRepository->getByTxnType(
+        return $transaction ?: $this->transactionRepository->getByTransactionType(
             Transaction::TYPE_AUTH,
             $paymentId,
             $orderId
@@ -54,7 +54,7 @@ class Manager implements ManagerInterface
      */
     public function isTransactionExists($transactionId, $paymentId, $orderId)
     {
-        return $transactionId && $this->transactionRepository->getByTxnId($transactionId, $paymentId, $orderId);
+        return $transactionId && $this->transactionRepository->getByTransactionId($transactionId, $paymentId, $orderId);
     }
 
     /**
