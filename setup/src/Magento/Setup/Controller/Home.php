@@ -10,7 +10,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
- *Controller of homepage of setup
+ * Controller of homepage of setup
  */
 class Home extends AbstractActionController
 {
