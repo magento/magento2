@@ -43,9 +43,8 @@ class CreditmemoFactory
      * @param \Magento\Sales\Model\Order $order
      * @param array $data
      * @return Creditmemo
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function createByOrder(\Magento\Sales\Model\Order $order, array $data = array())
+    public function createByOrder(\Magento\Sales\Model\Order $order, array $data = [])
     {
         $totalQty = 0;
         $creditmemo = $this->convertor->toCreditmemo($order);
@@ -87,9 +86,8 @@ class CreditmemoFactory
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @param array $data
      * @return Creditmemo
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function createByInvoice(\Magento\Sales\Model\Order\Invoice $invoice, array $data = array())
+    public function createByInvoice(\Magento\Sales\Model\Order\Invoice $invoice, array $data = [])
     {
         $order = $invoice->getOrder();
         $totalQty = 0;

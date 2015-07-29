@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Model\Resource\Metadata;
 use Magento\Sales\Api\Data\OrderAddressSearchResultInterfaceFactory as SearchResultFactory;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 
@@ -102,12 +104,17 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      *
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $entity
      * @return bool
+     * @throws CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\OrderAddressInterface $entity)
     {
-        $this->metadata->getMapper()->delete($entity);
+        try {
+            $this->metadata->getMapper()->delete($entity);
 
-        unset($this->registry[$entity->getEntityId()]);
+            unset($this->registry[$entity->getEntityId()]);
+        } catch (\Exception $e) {
+            throw new CouldNotDeleteException(__('Could not delete order address'), $e);
+        }
 
         return true;
     }
@@ -130,11 +137,16 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      *
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $entity
      * @return \Magento\Sales\Api\Data\OrderAddressInterface
+     * @throws CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\OrderAddressInterface $entity)
     {
-        $this->metadata->getMapper()->save($entity);
-        $this->registry[$entity->getEntityId()] = $entity;
+        try {
+            $this->metadata->getMapper()->save($entity);
+            $this->registry[$entity->getEntityId()] = $entity;
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Could not save order address'), $e);
+        }
 
         return $this->registry[$entity->getEntityId()];
     }
