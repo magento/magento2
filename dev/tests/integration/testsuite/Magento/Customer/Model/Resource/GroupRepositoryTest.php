@@ -7,7 +7,7 @@
 namespace Magento\Customer\Model\Resource;
 
 use Magento\Customer\Api\Data\GroupInterface;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Integration test for \Magento\Customer\Model\Resource\GroupRepository
@@ -23,7 +23,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
-    /** @var \Magento\Customer\Model\Data\GroupInterfaceFactory */
+    /** @var \Magento\Customer\Api\Data\GroupInterfaceFactory */
     private $groupFactory;
 
     /** @var  \Magento\Framework\Api\SearchCriteriaBuilder */
@@ -281,9 +281,9 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetListSortOrder($field, $direction, $methodName, $expectedResult)
     {
-        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+        /** @var SortOrder $sortOrder */
         /** @var string $direction */
-        $direction = ($direction == 'ASC') ? SearchCriteria::SORT_ASC : SearchCriteria::SORT_DESC;
+        $direction = ($direction == 'ASC') ? SortOrder::SORT_ASC : SortOrder::SORT_DESC;
         $sortOrder = $this->sortOrderBuilder->setField($field)->setDirection($direction)->create();
         $this->searchCriteriaBuilder->addSortOrder($sortOrder);
 
