@@ -7,6 +7,7 @@
 namespace Magento\RequireJs\Block\Html\Head;
 
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Framework\Translate\Inline as Inline;
 use Magento\Framework\View\Asset\Minification;
 
 /**
@@ -35,12 +36,18 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     protected $minification;
 
     /**
+     * @var Inline
+     */
+    private $inline;
+
+    /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param RequireJsConfig $config
      * @param \Magento\RequireJs\Model\FileManager $fileManager
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
      * @param Minification $minification
+     * @param Inline $inline
      * @param array $data
      */
     public function __construct(
@@ -50,6 +57,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
         Minification $minification,
+        Inline $inline,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -58,6 +66,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $this->pageConfig = $pageConfig;
         $this->bundleConfig = $bundleConfig;
         $this->minification = $minification;
+        $this->inline = $inline;
     }
 
     /**
@@ -128,7 +137,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     private function addInlineTranslationConfig()
     {
-        if($this->inlineTranslation->isEnabled()) {
+        if($this->inline->isAllowed()) {
             $after = RequireJsConfig::REQUIRE_JS_FILE_NAME;
             $tConfig = $this->fileManager->createTranslateConfigAsset();
             $assetCollection = $this->pageConfig->getAssetCollection();
