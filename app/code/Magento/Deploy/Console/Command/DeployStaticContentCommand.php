@@ -123,7 +123,7 @@ class DeployStaticContentCommand extends Command
             );
 
             $deployer = $objectManager->create(
-                'Magento\Deploy\Deployer',
+                'Magento\Deploy\Model\Deployer',
                 ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
             );
             $deployer->deploy($this->objectManagerFactory, $languages);

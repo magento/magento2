@@ -3794,7 +3794,7 @@ return [
         'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
         . '\Configurable'
     ],
-    ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Deployer'],
+    ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Model\Deployer'],
     [
         'Magento\Setup\Console\Command\DeployStaticContentCommand',
         'Magento\Deploy\Console\Command\DeployStaticContentCommand'
