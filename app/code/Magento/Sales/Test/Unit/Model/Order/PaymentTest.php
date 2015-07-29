@@ -57,11 +57,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     private $transactionId;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\TransactionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $transactionFactory;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $transactionCollectionFactory;
@@ -1450,7 +1445,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     public function testRegisterRefundNotificationTransactionExists()
     {
         $amount = 10;
+        $paymentId = 1;
+        $orderId = 9;
         $this->payment->setParentTransactionId($this->transactionId);
+        $this->payment->setId($paymentId);
+        $this->orderMock->setId($orderId);
         $transaction = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Payment\Transaction',
             [],
@@ -1458,12 +1457,21 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->transactionRepositoryMock->expects($this->exactly(2))
+        $newTransactionId = $this->transactionId . '-' . Transaction::TYPE_REFUND;
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTxnId')
-            ->withConsecutive(
-                [$this->transactionId],
-                [$this->transactionId . '-' . Transaction::TYPE_REFUND]
-            )->willReturn($transaction);
+            ->with($this->transactionId)
+            ->willReturn($transaction);
+
+        $this->transactionManagerMock->expects($this->once())
+            ->method('isTransactionExists')
+            ->with($newTransactionId, $paymentId, $orderId)
+            ->willReturn(true);
+
+        $this->transactionManagerMock->expects($this->once())
+            ->method('generateTransactionId')
+            ->with($this->payment, Transaction::TYPE_REFUND, $transaction)
+            ->willReturn($newTransactionId);
 
         $this->assertSame($this->payment, $this->payment->registerRefundNotification($amount));
     }
@@ -1527,14 +1535,19 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             false
         );
         $newTransactionId = $this->transactionId . '-' . Transaction::TYPE_REFUND;
-        $this->transactionRepositoryMock->expects($this->exactly(2))
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTxnId')
-            ->willReturnMap(
-                [
-                    $this->transactionId => $parentTransaction,
-                    $newTransactionId => $newTransaction
-                ]
-            );
+            ->with($this->transactionId)
+            ->willReturn($parentTransaction);
+
+        $this->transactionManagerMock->expects($this->once())
+            ->method('isTransactionExists')
+            ->with($newTransactionId)
+            ->willReturn(false);
+        $this->transactionManagerMock->expects($this->once())
+            ->method('generateTransactionId')
+            ->with($this->payment, Transaction::TYPE_REFUND, $parentTransaction)
+            ->willReturn($newTransactionId);
 
         $status = 'status';
         $this->mockGetDefaultStatus(Order::STATE_PROCESSING, $status);
@@ -1577,10 +1590,21 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             false
         );
         //generate new transaction and check if not exists
-        $this->transactionRepositoryMock->expects($this->exactly(2))
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTxnId')
-            ->withConsecutive([$this->transactionId], [$this->transactionId . '-refund'])
-            ->willReturnOnConsecutiveCalls($parentTransaction, false);
+            ->with($this->transactionId)
+            ->willReturn($parentTransaction);
+
+        $newTransactionId = $this->transactionId . '-refund';
+        $this->transactionManagerMock->expects($this->once())
+            ->method('isTransactionExists')
+            ->with($newTransactionId)
+            ->willReturn(false);
+
+        $this->transactionManagerMock->expects($this->once())
+            ->method('generateTransactionId')
+            ->with($this->payment, Transaction::TYPE_REFUND, $parentTransaction)
+            ->willReturn($newTransactionId);
         $this->assertSame($this->payment, $this->payment->registerRefundNotification($amount));
     }
 
