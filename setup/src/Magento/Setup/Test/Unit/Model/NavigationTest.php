@@ -43,9 +43,9 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                 'navInstaller' => [
                     ['key1' => 'value1'],
                     ['key2' => 'value2'],
-                    ['nav-bar' => 'abc', 'key3' => 'value3'],
-                    ['nav-bar' => ''],
-                    ['nav-bar' => false],
+                    ['nav' => 'abc', 'key3' => 'value3'],
+                    ['nav' => ''],
+                    ['nav' => false],
                     ['main' => 'abc', 'key3' => 'value3'],
                     ['main' => ''],
                     ['main' => false],
@@ -65,9 +65,9 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
             [
                 ['key1' => 'value1'],
                 ['key2' => 'value2'],
-                ['nav-bar' => 'abc', 'key3' => 'value3'],
-                ['nav-bar' => ''],
-                ['nav-bar' => false],
+                ['nav' => 'abc', 'key3' => 'value3'],
+                ['nav' => ''],
+                ['nav' => false],
                 ['main' => 'abc', 'key3' => 'value3'],
                 ['main' => ''],
                 ['main' => false],
@@ -79,8 +79,8 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     public function testGetMenuItems()
     {
         $this->assertEquals(
-            [['nav-bar' => 'abc', 'key3' => 'value3']],
-            array_values($this->navigation->getMenuItems())
+            [['nav' => 'abc', 'key3' => 'value3']],
+            $this->navigation->getMenuItems()
         );
     }
 
