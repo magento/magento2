@@ -1429,14 +1429,16 @@ class Payment extends Info implements OrderPaymentInterface
         $method->setStore(
             $this->getOrder()->getStoreId()
         );
-        $method->fetchTransactionInfo(
+        $data = $method->fetchTransactionInfo(
             $this,
             $transactionTo->getTxnId()
         );
-        $transactionTo->setAdditionalInformation(
-            Transaction::RAW_DETAILS,
-            $method
-        );
+        if ($data) {
+            $transactionTo->setAdditionalInformation(
+                Transaction::RAW_DETAILS,
+                $data
+            );
+        }
         return $this;
     }
 
