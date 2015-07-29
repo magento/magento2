@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
+use Magento\Framework\Xml\Security;
 
 /**
  * Abstract online shipping carrier model
@@ -103,9 +104,17 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_rawRequest = null;
 
     /**
+     * The security scanner XML document
+     *
+     * @var Security
+     */
+    protected $xmlSecurity;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Security $xmlSecurity
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
@@ -125,6 +134,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
+        Security $xmlSecurity,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
@@ -150,6 +160,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         $this->_directoryData = $directoryData;
         $this->stockRegistry = $stockRegistry;
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
+        $this->xmlSecurity = $xmlSecurity;
     }
 
     /**
@@ -620,12 +631,19 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $xmlContent
      * @param string $customSimplexml
-     *
      * @return \SimpleXMLElement|bool
+     * @throws LocalizedException
+     *
      * @api
      */
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
-        return simplexml_load_string($xmlContent, $customSimplexml);
+        if (!$this->xmlSecurity->scan($xmlContent)) {
+            throw new LocalizedException(__('Security validation of XML document has been failed.'));
+        }
+
+        $xmlElement = simplexml_load_string($xmlContent, $customSimplexml);
+
+        return $xmlElement;
     }
 }
