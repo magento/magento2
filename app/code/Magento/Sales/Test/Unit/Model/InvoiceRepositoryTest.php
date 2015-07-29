@@ -12,7 +12,7 @@ namespace Magento\Sales\Test\Unit\Model;
 class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\InvoiceRepository
+     * @var \Magento\Sales\Model\Order\InvoiceRepository
      */
     protected $invoice;
 
@@ -35,7 +35,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->invoice = $objectManager->getObject(
-            'Magento\Sales\Model\InvoiceRepository',
+            'Magento\Sales\Model\Order\InvoiceRepository',
             [
                 'invoiceMetadata' => $this->invoiceMetadata,
                 'searchResultFactory' => $this->searchResultFactory
