@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+
 /**
  * Class FilterPool
  */
@@ -29,6 +30,7 @@ class FilterPool
     /**
      * @param AbstractDb $collection
      * @param SearchCriteriaInterface $criteria
+     * @return void
      */
     public function applyFilters(AbstractDb $collection, SearchCriteriaInterface $criteria)
     {

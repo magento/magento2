@@ -68,8 +68,8 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
 
     /**
      * @param Context $context
-     * @param FileFactory $fileFactory
      * @param Filter $filter
+     * @param FileFactory $fileFactory
      * @param Invoice $pdfInvoice
      * @param Shipment $pdfShipment
      * @param Creditmemo $pdfCreditmemo
@@ -77,13 +77,13 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
      * @param ShipmentCollectionFactory $shipmentCollectionFactory
      * @param InvoiceCollectionFactory $invoiceCollectionFactory
      * @param CreditmemoCollectionFactory $creditmemoCollectionFactory
-     *
+     * @param OrderCollectionFactory $orderCollectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
-        FileFactory $fileFactory,
         Filter $filter,
+        FileFactory $fileFactory,
         Invoice $pdfInvoice,
         Shipment $pdfShipment,
         Creditmemo $pdfCreditmemo,
@@ -134,7 +134,7 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
 
         if (empty($documents)) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
-            return $this->resultRedirectFactory->create()->setPath('sales/*/');
+            return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
 
         $pdf = array_shift($documents);

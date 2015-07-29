@@ -30,6 +30,7 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Context $context
      * @param Builder $productBuilder
      * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,

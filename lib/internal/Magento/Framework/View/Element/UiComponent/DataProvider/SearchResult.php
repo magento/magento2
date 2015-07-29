@@ -12,6 +12,7 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Psr\Log\LoggerInterface as Logger;
+
 /**
  * Class Collection
  * Collection for order related documents to display grids on order view page
@@ -38,9 +39,9 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param string $model
-     * @param $mainTable
-     * @param $resourceModel
+     * @param null|\Zend_Db_Adapter_Abstract $mainTable
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resourceModel
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -64,7 +65,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @return Api\Search\AggregationInterface
+     * @return \Magento\Framework\Api\Search\AggregationInterface
      */
     public function getAggregations()
     {
@@ -72,7 +73,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @param Api\Search\AggregationInterface $aggregations
+     * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return $this
      */
     public function setAggregations($aggregations)
@@ -81,7 +82,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @return Api\Search\SearchCriteriaInterface|null
+     * @return \Magento\Framework\Api\Search\SearchCriteriaInterface|null
      */
     public function getSearchCriteria()
     {
@@ -89,11 +90,12 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @param Api\SearchCriteriaInterface $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      */
-    public function setSearchCriteria(Api\SearchCriteriaInterface $searchCriteria)
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
+        $this->searchCriteria = $searchCriteria;
         return $this;
     }
 

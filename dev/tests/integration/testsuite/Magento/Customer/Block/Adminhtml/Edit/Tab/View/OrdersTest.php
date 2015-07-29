@@ -56,7 +56,6 @@ class OrdersTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
-        $this->block->setCollection(null);
     }
 
     /**

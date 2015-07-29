@@ -25,13 +25,15 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param null|\Zend_Db_Adapter_Abstract $mainTable
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param mixed|null $mainTable
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $eventPrefix
-     * @param string $eventObject
-     * @param string $resourceModel
+     * @param mixed $eventObject
+     * @param mixed $resourceModel
      * @param string $model
-     * @param string|null $connection
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @param null $connection
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb|null $resource
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,

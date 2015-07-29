@@ -24,16 +24,20 @@ class CollectionFactory
      */
     protected $objectManager;
 
+    /**
+     * @param ObjectManagerInterface $objectManagerInterface
+     * @param array $collections
+     */
     public function __construct(
         ObjectManagerInterface $objectManagerInterface,
-        array $collections  = []
+        array $collections = []
     ) {
         $this->collections = $collections;
         $this->objectManager = $objectManagerInterface;
     }
 
     /**
-     * @param $requestName
+     * @param string $requestName
      * @return AbstractCollection
      * @throws \Exception
      */

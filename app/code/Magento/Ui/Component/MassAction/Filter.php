@@ -31,6 +31,11 @@ class Filter
     protected $request;
 
     /**
+     * @var UiComponentInterface[]
+     */
+    protected $components = [];
+
+    /**
      * @param UiComponentFactory $factory
      * @param RequestInterface $request
      */
@@ -42,6 +47,15 @@ class Filter
         $this->request = $request;
     }
 
+    protected function getComponent()
+    {
+        $namespace = $this->request->getParam('namespace');
+        if (!isset($this->components[$namespace])) {
+            $this->components[$namespace] = $this->factory->create($namespace);
+        }
+        return $this->components[$namespace];
+    }
+
     /**
      * @param AbstractDb $collection
      * @return AbstractDb
@@ -49,7 +63,7 @@ class Filter
      */
     public function getCollection(AbstractDb $collection)
     {
-        $component = $this->factory->create($this->request->getParam('namespace'));
+        $component = $this->getComponent();
         $this->prepareComponent($component);
         $dataProvider = $component->getContext()->getDataProvider();
         $ids = [];
@@ -101,5 +115,16 @@ class Filter
             $this->prepareComponent($child);
         }
         $component->prepare();
+    }
+
+    /**
+     * Returns RefererUrl
+     *
+     * @return string|null
+     */
+    public function getComponentRefererUrl()
+    {
+        $data = $this->getComponent()->getContext()->getDataProvider()->getConfigData();
+        return (isset($data['referer_url'])) ? $data['referer_url'] : null;
     }
 }
