@@ -159,10 +159,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Get collection item identifier
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return mixed
      */
-    protected function _getItemId(\Magento\Framework\Object $item)
+    protected function _getItemId(\Magento\Framework\DataObject $item)
     {
         if ($field = $this->getIdFieldName()) {
             return $item->getData($field);
@@ -589,10 +589,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Let do something before add loaded item in collection
      *
-     * @param \Magento\Framework\Object $item
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $item
+     * @return \Magento\Framework\DataObject
      */
-    protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {
         return $item;
     }

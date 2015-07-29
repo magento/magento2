@@ -30,7 +30,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Website extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\Framework\Object\IdentityInterface,
+    \Magento\Framework\DataObject\IdentityInterface,
     \Magento\Framework\App\ScopeInterface
 {
     const ENTITY = 'store_website';

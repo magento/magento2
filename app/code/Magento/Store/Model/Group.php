@@ -18,7 +18,7 @@
 namespace Magento\Store\Model;
 
 
-class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
+class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     const ENTITY = 'store_group';
 

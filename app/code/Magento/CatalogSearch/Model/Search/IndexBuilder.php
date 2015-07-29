@@ -203,7 +203,7 @@ class IndexBuilder implements IndexBuilderInterface
         $hasFilters = false;
         switch ($query->getType()) {
             case RequestQueryInterface::TYPE_BOOL:
-                /** @var \Magento\Framework\Search\Request\Query\Bool $query */
+                /** @var \Magento\Framework\Search\Request\Query\BoolExpression $query */
                 foreach ($query->getMust() as $subQuery) {
                     $hasFilters |= $this->hasFilters($subQuery);
                 }

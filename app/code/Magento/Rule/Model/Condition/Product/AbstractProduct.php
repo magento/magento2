@@ -139,7 +139,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         try {
             $obj = $this->_config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $this->getAttribute());
         } catch (\Exception $e) {
-            $obj = new \Magento\Framework\Object();
+            $obj = new \Magento\Framework\DataObject();
             $obj->setEntity($this->_productFactory->create())->setFrontendInput('text');
         }
         return $obj;

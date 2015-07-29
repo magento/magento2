@@ -58,7 +58,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAdapterWithInvalidType()
     {
-        $adapterType = 'Magento\Framework\Object';
+        $adapterType = 'Magento\Framework\DataObject';
         $adapterMock = $this->getMock($adapterType, [], [], '', false);
 
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');

@@ -135,15 +135,15 @@ class Send extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieve Form data or empty \Magento\Framework\Object
+     * Retrieve Form data or empty \Magento\Framework\DataObject
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getFormData()
     {
         $data = $this->getData('form_data');
-        if (!$data instanceof \Magento\Framework\Object) {
-            $data = new \Magento\Framework\Object();
+        if (!$data instanceof \Magento\Framework\DataObject) {
+            $data = new \Magento\Framework\DataObject();
             $this->setData('form_data', $data);
         }
 
@@ -159,7 +159,7 @@ class Send extends \Magento\Framework\View\Element\Template
     public function setFormData($data)
     {
         if (is_array($data)) {
-            $this->setData('form_data', new \Magento\Framework\Object($data));
+            $this->setData('form_data', new \Magento\Framework\DataObject($data));
         }
 
         return $this;

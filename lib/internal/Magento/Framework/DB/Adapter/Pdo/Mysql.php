@@ -22,7 +22,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mview\View\Subscription;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Stdlib\String;
+use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -184,14 +184,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private $logger;
 
     /**
-     * @param \Magento\Framework\Stdlib\String|String $string
+     * @param \Magento\Framework\Stdlib\StringUtils|String $string
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
      * @param array $config
      * @throws \Zend_Db_Adapter_Exception
      */
     public function __construct(
-        String $string,
+        StringUtils $string,
         DateTime $dateTime,
         LoggerInterface $logger,
         array $config = []

@@ -13,7 +13,6 @@ namespace Magento\Framework\Filesystem\Io;
  *
  * @link        http://www.php.net/manual/en/function.ssh2-connect.php
  */
-require_once 'phpseclib/Net/SFTP.php';
 class Sftp extends AbstractIo
 {
     const REMOTE_TIMEOUT = 10;

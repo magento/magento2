@@ -24,7 +24,7 @@ class Post extends \Magento\Contact\Controller\Index
 
         $this->inlineTranslation->suspend();
         try {
-            $postObject = new \Magento\Framework\Object();
+            $postObject = new \Magento\Framework\DataObject();
             $postObject->setData($post);
 
             $error = false;

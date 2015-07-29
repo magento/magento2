@@ -73,7 +73,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
     /**
      * @inheritdoc
      */
-    protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {
         $this->entitySnapshot->registerSnapshot($item);
         return $item;

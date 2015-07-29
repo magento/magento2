@@ -10,7 +10,7 @@
 namespace Magento\Framework\Model\Resource;
 
 
-class Iterator extends \Magento\Framework\Object
+class Iterator extends \Magento\Framework\DataObject
 {
     /**
      * Walk over records fetched from query one by one using callback function

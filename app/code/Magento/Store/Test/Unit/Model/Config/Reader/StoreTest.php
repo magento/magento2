@@ -6,7 +6,7 @@
 namespace Magento\Store\Test\Unit\Model\Config\Reader;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
@@ -123,8 +123,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->with(['scope' => 'stores', 'scopeId' => $storeId])
             ->will($this->returnValue(
                 [
-                    new Object(['path' => 'config/key1', 'value' => 'store_db_value1']),
-                    new Object(['path' => 'config/key3', 'value' => 'store_db_value3']),
+                    new DataObject(['path' => 'config/key1', 'value' => 'store_db_value1']),
+                    new DataObject(['path' => 'config/key3', 'value' => 'store_db_value3']),
                 ]
             ));
 

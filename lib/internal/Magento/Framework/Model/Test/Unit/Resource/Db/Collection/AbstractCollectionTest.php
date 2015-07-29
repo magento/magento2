@@ -9,7 +9,7 @@
 namespace Magento\Framework\Model\Test\Unit\Resource\Db\Collection;
 
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
-use Magento\Framework\Object as MagentoObject;
+use Magento\Framework\DataObject as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -321,7 +321,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Zend_Db_Select does not extend \Magento\Framework\Object
+     * @expectedExceptionMessage Zend_Db_Select does not extend \Magento\Framework\DataObject
      */
     public function testSetModelInvalidType()
     {
@@ -330,13 +330,13 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testSetModel()
     {
-        $this->assertTrue($this->uut->setModel('Magento\Framework\Object') instanceof Uut);
+        $this->assertTrue($this->uut->setModel('Magento\Framework\DataObject') instanceof Uut);
     }
 
     public function testGetModelName()
     {
-        $this->uut->setModel('Magento\Framework\Object');
-        $this->assertEquals('Magento\Framework\Object', $this->uut->getModelName());
+        $this->uut->setModel('Magento\Framework\DataObject');
+        $this->assertEquals('Magento\Framework\DataObject', $this->uut->getModelName());
     }
 
     public function testGetResourceModelName()
@@ -403,8 +403,8 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         for ($i = 0; $i < 3; $i++) {
-            /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $item */
-            $item = $this->getMock('Magento\Framework\Object', ['save']);
+            /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $item */
+            $item = $this->getMock('Magento\Framework\DataObject', ['save']);
             $item->expects($this->once())->method('save');
             $this->uut->addItem($item);
         }
