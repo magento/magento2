@@ -21,6 +21,7 @@ return [
             'main'        => true,
             'nav'         => false,
             'order'       => -1,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.landing-installer',
@@ -31,6 +32,7 @@ return [
             'main'        => true,
             'default'     => true,
             'order'       => 0,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.readiness-check-installer',
@@ -40,6 +42,7 @@ return [
             'header'      => 'Step 1: Readiness Check',
             'nav'         => true,
             'order'       => 1,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.readiness-check-installer.progress',
@@ -50,6 +53,7 @@ return [
             'controller'  => 'readinessCheckController',
             'nav'         => false,
             'order'       => 2,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.add-database',
@@ -61,6 +65,7 @@ return [
             'nav'         => true,
             'validate'    => true,
             'order'       => 3,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.web-configuration',
@@ -72,6 +77,7 @@ return [
             'nav'         => true,
             'validate'    => true,
             'order'       => 4,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.customize-your-store',
@@ -82,6 +88,7 @@ return [
             'controller'  => 'customizeYourStoreController',
             'nav'         => true,
             'order'       => 5,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.create-admin-account',
@@ -93,6 +100,7 @@ return [
             'nav'         => true,
             'validate'    => true,
             'order'       => 6,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.install',
@@ -103,6 +111,7 @@ return [
             'controller'  => 'installController',
             'nav'         => true,
             'order'       => 7,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.success',
@@ -111,6 +120,7 @@ return [
             'controller'  => 'successController',
             'main'        => true,
             'order'       => 8,
+            'type'        => 'install'
         ],
     ],
 ];
