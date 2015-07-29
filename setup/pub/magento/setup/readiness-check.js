@@ -31,14 +31,6 @@ angular.module('readiness-check', [])
             $scope.stopProgress();
         };
 
-        $scope.requestFailedHandler = function(obj) {
-            obj.processed = true;
-            obj.isRequestError = true;
-            $scope.hasErrors = true;
-            $rootScope.hasErrors = true;
-            $scope.stopProgress();
-        };
-
         $scope.completed = false;
         $scope.hasErrors = false;
 
