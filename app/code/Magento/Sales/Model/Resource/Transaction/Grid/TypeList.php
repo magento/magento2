@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource\Transaction\Grid;
+use Magento\Sales\Api\TransactionRepositoryInterface;
 
 /**
  * Sales transaction types option array
@@ -11,16 +12,16 @@ namespace Magento\Sales\Model\Resource\Transaction\Grid;
 class TypeList implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Sales\Model\Order\Payment\TransactionFactory
+     * @var TransactionRepositoryInterface
      */
-    protected $_transactionFactory;
+    protected $transactionRepository;
 
     /**
-     * @param \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory
+     * @param TransactionRepositoryInterface $transactionRepository
      */
-    public function __construct(\Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory)
+    public function __construct(TransactionRepositoryInterface $transactionRepository)
     {
-        $this->_transactionFactory = $transactionFactory;
+        $this->transactionRepository = $transactionRepository;
     }
 
     /**
@@ -30,6 +31,6 @@ class TypeList implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->_transactionFactory->create()->getTransactionTypes();
+        return $this->transactionRepository->create()->getTransactionTypes();
     }
 }

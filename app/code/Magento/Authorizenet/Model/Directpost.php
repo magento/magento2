@@ -863,7 +863,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
-        $transaction = $payment->getTransaction($transactionId);
+        $transaction = $this->transactionRepository->getByTxnId(
+            $transactionId,
+            $payment->getId(),
+            $payment->getOrder()->getId()
+        );
 
         $response = $this->getTransactionResponse($transactionId);
         if ($response->getXResponseCode() == self::RESPONSE_CODE_APPROVED) {

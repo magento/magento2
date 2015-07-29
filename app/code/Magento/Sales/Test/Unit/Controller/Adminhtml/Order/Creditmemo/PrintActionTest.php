@@ -32,7 +32,7 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
     protected $creditmemoLoaderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\CreditmemoRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoRepositoryMock;
 
@@ -100,7 +100,7 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->getMock();
         $this->creditmemoRepositoryMock = $this->getMock(
-            'Magento\Sales\Model\Order\CreditmemoRepository',
+            'Magento\Sales\Api\CreditmemoRepositoryInterface',
             [],
             [],
             '',
