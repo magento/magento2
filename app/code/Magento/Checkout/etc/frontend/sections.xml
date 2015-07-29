@@ -53,10 +53,6 @@
         <section name="cart"/>
         <section name="checkout-data"/>
     </action>
-    <action name="rest/*/V1/guest-carts/*/selected-payment-method">
-        <section name="cart"/>
-        <section name="checkout-data"/>
-    </action>
     <action name="rest/*/V1/carts/*/selected-payment-method">
         <section name="cart"/>
         <section name="checkout-data"/>
