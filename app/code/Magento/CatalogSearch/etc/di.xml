@@ -142,7 +142,7 @@
 
     <virtualType name="Magento\CatalogSearch\Model\Resource\Fulltext\SearchCollection" type="Magento\CatalogSearch\Model\Resource\Fulltext\Collection">
         <arguments>
-            <argument name="searchRequest" xsi:type="string">quick_search_container</argument>
+            <argument name="searchRequestName" xsi:type="string">quick_search_container</argument>
         </arguments>
     </virtualType>
 
