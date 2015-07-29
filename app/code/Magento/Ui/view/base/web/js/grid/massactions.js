@@ -98,7 +98,7 @@ define([
          */
         addAction: function (action) {
             var actions = this.actions(),
-                index = _.findIdnex(actions, {
+                index = _.findIndex(actions, {
                     type: action.type
                 });
 

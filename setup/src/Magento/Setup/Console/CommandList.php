@@ -53,6 +53,7 @@ class CommandList
             'Magento\Setup\Console\Command\GenerateFixturesCommand',
             'Magento\Setup\Console\Command\I18nCollectPhrasesCommand',
             'Magento\Setup\Console\Command\I18nPackCommand',
+            'Magento\Setup\Console\Command\InfoAdminUriCommand',
             'Magento\Setup\Console\Command\InfoBackupsListCommand',
             'Magento\Setup\Console\Command\InfoCurrencyListCommand',
             'Magento\Setup\Console\Command\InfoLanguageListCommand',
