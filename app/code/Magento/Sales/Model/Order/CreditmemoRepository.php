@@ -3,10 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order;
 
-use \Magento\Sales\Model\Resource\Order\Creditmemo as Resource;
-use \Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Model\Resource\Order\Creditmemo as Resource;
+use Magento\Sales\Model\Resource\Metadata;
 use Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
