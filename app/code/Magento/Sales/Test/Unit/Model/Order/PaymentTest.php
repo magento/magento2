@@ -123,7 +123,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->transactionRepositoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\Transaction\Repository')
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'getByTxnType', 'getByTxnId'])
+            ->setMethods(['get', 'getByTransactionType', 'getByTransactionId'])
             ->getMock();
 
         $this->priceCurrencyMock->expects($this->any())
@@ -1365,7 +1365,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $transaction->expects($this->once())->method('getIsClosed')->willReturn(true);
 
         $this->transactionRepositoryMock->expects($this->once())
-            ->method('getByTxnType')
+            ->method('getByTransactionType')
             ->with(Transaction::TYPE_ORDER, $paymentId)
             ->willReturn($transaction);
 
@@ -1459,7 +1459,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         );
         $newTransactionId = $this->transactionId . '-' . Transaction::TYPE_REFUND;
         $this->transactionRepositoryMock->expects($this->once())
-            ->method('getByTxnId')
+            ->method('getByTransactionId')
             ->with($this->transactionId)
             ->willReturn($transaction);
 
@@ -1518,7 +1518,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         );
         $newTransactionId = $this->transactionId . '-' . Transaction::TYPE_REFUND;
         $this->transactionRepositoryMock->expects($this->once())
-            ->method('getByTxnId')
+            ->method('getByTransactionId')
             ->with($this->transactionId)
             ->willReturn($parentTransaction);
 
@@ -1573,7 +1573,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         );
         //generate new transaction and check if not exists
         $this->transactionRepositoryMock->expects($this->once())
-            ->method('getByTxnId')
+            ->method('getByTransactionId')
             ->with($this->transactionId)
             ->willReturn($parentTransaction);
 

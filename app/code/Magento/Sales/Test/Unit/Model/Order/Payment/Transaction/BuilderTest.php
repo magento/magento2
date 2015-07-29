@@ -102,7 +102,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $transaction->expects($this->atLeastOnce())->method('getTxnId')->willReturn($transactionId);
 
         if ($isTransactionExists) {
-            $this->repositoryMock->method('getByTxnId')
+            $this->repositoryMock->method('getByTransactionId')
                 ->withConsecutive(
                     [$transactionId, $paymentId, $orderId],
                     [$parentTransactionId, $paymentId, $orderId]
@@ -111,7 +111,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     $parentTransaction
                 );
         } else {
-            $this->repositoryMock->method('getByTxnId')
+            $this->repositoryMock->method('getByTransactionId')
                 ->withConsecutive(
                     [$transactionId, $paymentId, $orderId],
                     [$parentTransactionId, $paymentId, $orderId]

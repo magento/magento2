@@ -461,7 +461,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             $this->_isOrderPaymentActionKey
         ) && !$payment->getVoidOnlyAuthorization()
         ) {
-            $orderTransaction = $this->transactionRepository->getByTxnType(
+            $orderTransaction = $this->transactionRepository->getByTransactionType(
                 Transaction::TYPE_ORDER,
                 $payment->getId(),
                 $payment->getOrder()->getId()
@@ -551,7 +551,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             }
             //close order transaction if needed
             if ($payment->getShouldCloseParentTransaction()) {
-                $orderTransaction = $this->transactionRepository->getByTxnType(
+                $orderTransaction = $this->transactionRepository->getByTransactionType(
                     Transaction::TYPE_ORDER,
                     $payment->getId(),
                     $payment->getOrder()->getId()
@@ -774,7 +774,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     {
         $info = $this->getInfoInstance();
         if ($info->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $this->transactionRepository->getByTxnType(
+            $orderTransaction = $this->transactionRepository->getByTransactionType(
                 Transaction::TYPE_ORDER,
                 $info->getId(),
                 $info->getOrder()->getId()
@@ -798,7 +798,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_pro->getConfig()->setStoreId($payment->getOrder()->getStore()->getId());
 
         if ($payment->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $this->transactionRepository->getByTxnType(
+            $orderTransaction = $this->transactionRepository->getByTransactionType(
                 Transaction::TYPE_ORDER,
                 $payment->getId(),
                 $payment->getOrder()->getId()

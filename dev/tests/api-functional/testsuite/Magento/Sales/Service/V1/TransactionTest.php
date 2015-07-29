@@ -59,7 +59,7 @@ class TransactionTest extends WebapiAbstract
         /** @var Payment $payment */
         $payment = $order->getPayment();
         /** @var Transaction $transaction */
-        $transaction = $transactionRepository->getByTxnId('trx_auth', $payment->getId(), $order->getId());
+        $transaction = $transactionRepository->getByTransactionId('trx_auth', $payment->getId(), $order->getId());
 
         $childTransactions = $transaction->getChildTransactions();
         $childTransaction = reset($childTransactions);
@@ -102,7 +102,7 @@ class TransactionTest extends WebapiAbstract
         /** @var Payment $payment */
         $payment = $order->getPayment();
         /** @var Transaction $transaction */
-        $transaction = $transactionRepository->getByTxnId('trx_auth', $payment->getId(), $order->getId());
+        $transaction = $transactionRepository->getByTransactionId('trx_auth', $payment->getId(), $order->getId());
 
         $childTransactions = $transaction->getChildTransactions();
 
