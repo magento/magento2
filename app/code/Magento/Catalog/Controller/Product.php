@@ -10,7 +10,7 @@ namespace Magento\Catalog\Controller;
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Catalog\Model\Product as ModelProduct;
 
-class Product extends \Magento\Framework\App\Action\Action implements ViewInterface
+abstract class Product extends \Magento\Framework\App\Action\Action implements ViewInterface
 {
     /**
      * Initialize requested product object

@@ -10,7 +10,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Billing agreements controller
  */
-class Agreement extends \Magento\Framework\App\Action\Action
+abstract class Agreement extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
