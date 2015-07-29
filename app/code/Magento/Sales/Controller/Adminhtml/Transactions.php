@@ -45,6 +45,7 @@ abstract class Transactions extends \Magento\Backend\App\Action
      * @param Registry $coreRegistry
      * @param PageFactory $resultPageFactory
      * @param LayoutFactory $resultLayoutFactory
+     * @param OrderPaymentRepositoryInterface $orderPaymentRepository
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
