@@ -60,7 +60,7 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
 
 
         $className = '\Magento\SalesRule\Model\RuleFactory';
-        $this->ruleFactory = $this->getMock($className, [], [], '', false);
+        $this->ruleFactory = $this->getMock($className, ['create'], [], '', false);
 
 
         $className = '\Magento\SalesRule\Model\Resource\Coupon\CollectionFactory';
@@ -135,7 +135,15 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $this->couponGenerator->expects($this->once())->method('generatePool');
         $this->couponGenerator->expects($this->once())->method('getGeneratedCodes')->willReturn([]);
 
+        /**
+         * @var \Magento\SalesRule\Model\Rule $rule
+         */
+        $rule = $this->getMock('\Magento\SalesRule\Model\Rule', ['load', 'getRuleId'], [], '', false);
 
+        $rule->expects($this->any())->method('load')->willReturnSelf();
+        $rule->expects($this->any())->method('getRuleId')->willReturn(1);
+
+        $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
 
         $result =  $this->model->generate($couponSpec);
         $this->assertEquals([], $result);
@@ -152,6 +160,16 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec
          */
         $couponSpec = $this->getMock($className, [], [], '', false);
+
+        /**
+         * @var \Magento\SalesRule\Model\Rule $rule
+         */
+        $rule = $this->getMock('\Magento\SalesRule\Model\Rule', ['load', 'getRuleId'], [], '', false);
+
+        $rule->expects($this->any())->method('load')->willReturnSelf();
+        $rule->expects($this->any())->method('getRuleId')->willReturn(1);
+
+        $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
 
         $this->couponGenerator->expects($this->once())->method('validateData')
             ->willThrowException(new \Magento\Framework\Exception\InputException());
@@ -172,9 +190,48 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
          */
         $couponSpec = $this->getMock($className, [], [], '', false);
 
+        /**
+         * @var \Magento\SalesRule\Model\Rule $rule
+         */
+        $rule = $this->getMock('\Magento\SalesRule\Model\Rule', ['load', 'getRuleId'], [], '', false);
+
+        $rule->expects($this->any())->method('load')->willReturnSelf();
+        $rule->expects($this->any())->method('getRuleId')->willReturn(1);
+
+        $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
+
         $this->couponGenerator->expects($this->once())->method('validateData')->willReturn(true);
         $this->couponGenerator->expects($this->once())->method('generatePool')
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('')));
+
+        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
+
+        $this->model->generate($couponSpec);
+    }
+
+    /**
+     * test Generate with localized Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testGenerateNoSuchEntity()
+    {
+        $className = '\Magento\SalesRule\Api\Data\CouponGenerationSpecInterface';
+        /**
+         * @var \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec
+         */
+        $couponSpec = $this->getMock($className, [], [], '', false);
+
+        /**
+         * @var \Magento\SalesRule\Model\Rule $rule
+         */
+        $rule = $this->getMock('\Magento\SalesRule\Model\Rule', ['load', 'getRuleId'], [], '', false);
+
+        $rule->expects($this->any())->method('load')->willReturnSelf();
+        $rule->expects($this->any())->method('getRuleId')->willReturn(false);
+
+        $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
+
+        $this->couponGenerator->expects($this->once())->method('validateData')->willReturn(true);
 
         $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
 
