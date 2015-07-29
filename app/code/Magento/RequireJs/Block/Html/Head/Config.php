@@ -117,7 +117,27 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             $after
         );
 
+        $this->addInlineTranslationConfig();
+
         return parent::_prepareLayout();
+    }
+
+    /**
+     * Include RequireJs inline translation configuration as an asset on the page
+     * @return void
+     */
+    private function addInlineTranslationConfig()
+    {
+        if($this->inlineTranslation->isEnabled()) {
+            $after = RequireJsConfig::REQUIRE_JS_FILE_NAME;
+            $tConfig = $this->fileManager->createTranslateConfigAsset();
+            $assetCollection = $this->pageConfig->getAssetCollection();
+            $assetCollection->insert(
+                $tConfig->getFilePath(),
+                $tConfig,
+                $after
+            );
+        }
     }
 
     /**
