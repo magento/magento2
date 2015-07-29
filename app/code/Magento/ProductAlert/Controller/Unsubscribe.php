@@ -5,6 +5,6 @@
  */
 namespace Magento\ProductAlert\Controller;
 
-class Unsubscribe extends Add
+abstract class Unsubscribe extends Add
 {
 }

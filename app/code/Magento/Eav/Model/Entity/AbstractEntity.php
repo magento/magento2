@@ -13,6 +13,7 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
+use Magento\Framework\App\Resource\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
@@ -273,6 +274,16 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
             $this->_write = $this->_resource->getConnection($this->_write);
         }
         return $this->_write;
+    }
+
+    /**
+     * Get connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected function getConnection()
+    {
+        $this->_resource->getConnection(Config::DEFAULT_SETUP_CONNECTION);
     }
 
     /**

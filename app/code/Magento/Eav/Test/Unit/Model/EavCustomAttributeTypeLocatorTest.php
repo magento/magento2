@@ -184,6 +184,25 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testGetTypeIfAttributeDoesNotExist()
+    {
+        $this->attributeRepository
+            ->expects($this->any())
+            ->method('get')
+            ->willReturn(new \Magento\Framework\Exception\NoSuchEntityException());
+
+        $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
+            $this->attributeRepository,
+            new \Magento\Framework\Stdlib\String(),
+            [],
+            []
+        );
+
+        $this->assertNull(
+            $this->eavCustomAttributeTypeLocator->getType('media_galley', 'Magento\Catalog\Api\Data\ProductInterface')
+        );
+    }
+
     public function testGetAllServiceDataInterfaceEmpty()
     {
         $stringUtility = new \Magento\Framework\Stdlib\String();

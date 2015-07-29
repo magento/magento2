@@ -12,7 +12,7 @@ use Magento\Backend\App\AbstractAction;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class System extends AbstractAction
+abstract class System extends AbstractAction
 {
     /**
      * @return bool

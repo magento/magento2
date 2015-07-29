@@ -12,7 +12,7 @@ use Magento\Downloadable\Helper\Download as DownloadHelper;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Download extends \Magento\Framework\App\Action\Action
+abstract class Download extends \Magento\Framework\App\Action\Action
 {
     /**
      * Prepare response to output resource contents
