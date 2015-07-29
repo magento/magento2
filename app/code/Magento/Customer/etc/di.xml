@@ -201,17 +201,21 @@
             <argument name="concatExpression" xsi:type="object">LastVisitAtSubSelect</argument>
         </arguments>
     </virtualType>
-    <virtualType name="LastVisitAtSubSelect" type="Magento\Framework\DB\SubSelect">
+    <virtualType name="LastVisitAtSubSelect" type="Magento\Framework\DB\Sql\LookupExpression">
         <arguments>
-            <argument name="table" xsi:type="string">customer_visitor</argument>
-            <argument name="columns" xsi:type="array">
-                <item name="last_visit_at" xsi:type="string">last_visit_at</item>
+            <argument name="targetTable" xsi:type="string">customer_visitor</argument>
+            <argument name="targetColumn" xsi:type="string">last_visit_at</argument>
+            <argument name="referenceColumns" xsi:type="array">
+                <item name="customer_id" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">e</item>
+                    <item name="columnName" xsi:type="string">entity_id</item>
+                </item>
             </argument>
-            <argument name="originColumn" xsi:type="string">e.entity_id</argument>
-            <argument name="targetColumn" xsi:type="string">customer_visitor.customer_id</argument>
+            <argument name="sortOrder" xsi:type="array">
+                <item name="DESC" xsi:type="string">last_visit_at</item>
+            </argument>
         </arguments>
     </virtualType>
-
     <virtualType name="CustomerNameExpression" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="tableName" xsi:type="string">e</argument>
@@ -265,19 +269,19 @@
         <arguments>
             <argument name="columns" xsi:type="array">
                 <item name="prefix" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">shipping_address</item>
+                    <item name="tableAlias" xsi:type="string">billing_address</item>
                     <item name="columnName" xsi:type="string">street</item>
                 </item>
                 <item name="firstname" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">shipping_address</item>
+                    <item name="tableAlias" xsi:type="string">billing_address</item>
                     <item name="columnName" xsi:type="string">city</item>
                 </item>
                 <item name="middlename" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">shipping_address</item>
+                    <item name="tableAlias" xsi:type="string">billing_address</item>
                     <item name="columnName" xsi:type="string">region</item>
                 </item>
                 <item name="lastname" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">shipping_address</item>
+                    <item name="tableAlias" xsi:type="string">billing_address</item>
                     <item name="columnName" xsi:type="string">postcode</item>
                 </item>
             </argument>
