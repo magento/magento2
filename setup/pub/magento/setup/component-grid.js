@@ -39,7 +39,7 @@ angular.module('component-grid', ['ngStorage'])
           // regular ng-click directives to work, use a tiny delay in closing the drop down.
           $timeout(function() {
               $scope.toggleActiveActionsCell(component);
-          }, 10);
+          }, 100);
       };
 
       $scope.sync = function() {
