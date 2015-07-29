@@ -14,7 +14,7 @@ return [
             'Magento\Setup\Controller\CompleteBackup',
             'Magento\Setup\Controller\Navigation',
             'Magento\Setup\Controller\Home',
-            'Magento\Setup\Controller\SystemUpgrade',
+            'Magento\Setup\Controller\SelectVersion',
             'Magento\Setup\Controller\License',
             'Magento\Setup\Controller\ReadinessCheckInstaller',
             'Magento\Setup\Controller\ReadinessCheckUpdater',

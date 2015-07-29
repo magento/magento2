@@ -17,8 +17,10 @@
         ng-show="<?php echo implode( '&&', $expressions); ?>"
     >
     <div class="page-header-hgroup col-l-8 col-m-6">
-        <div class="page-title-wrapper">
-            <h1 class="page-title"><?php echo $this->headerTitle?></h1>
+        <div class="page-title-wrapper" ng-switch=$state.current.type>
+            <h1 class="page-title" ng-switch-when="cm">Component Manager</h1>
+            <h1 class="page-title" ng-switch-when="su">System Upgrade</h1>
+            <h1 class="page-title" ng-switch-default>Magento Installation</h1>
         </div>
     </div>
     <div class="page-header-actions col-l-4 col-m-6" style="display: none">

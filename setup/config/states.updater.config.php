@@ -39,7 +39,7 @@ return [
             'url'         => 'select-version',
             'templateUrl' => "$base/select-version",
             'title'       => 'Select Version',
-            'controller'  => 'systemUpgradeController',
+            'controller'  => 'selectVersionController',
             'header'      => 'Step 1: Select Version',
             'order'       => 1,
             'nav'         => true,
@@ -67,7 +67,7 @@ return [
             'type'        => 'cm'
         ],
         [
-            'id'          => 'root.create-backup',
+            'id'          => 'root.create-backup-componentManager',
             'url'         => 'create-backup',
             'templateUrl' => "{$base}/create-backup",
             'title'       => "Create \n Backup",
@@ -121,7 +121,7 @@ return [
             'type'        => 'su'
         ],
         [
-            'id'          => 'root.create-backup',
+            'id'          => 'root.create-backup-updater',
             'url'         => 'create-backup',
             'templateUrl' => "{$base}/create-backup",
             'title'       => 'Create Backup',
