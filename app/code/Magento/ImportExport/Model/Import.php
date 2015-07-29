@@ -59,6 +59,16 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
 
     /**
+     * Allowed errors count field name
+     */
+    const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
+
+    /**
+     * Validation startegt field name
+     */
+    const FIELD_NAME_VALIDATION_STRATEGY = 'validation_strategy';
+
+    /**
      * Import field separator.
      */
     const FIELD_FIELD_SEPARATOR = '_import_field_separator';
@@ -425,6 +435,12 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     {
         $errorAggregator = $this->_getEntityAdapter()->getErrorAggregator();
         try {
+            $this->_getEntityAdapter()
+                ->getErrorAggregator()
+                ->initValidationStrategy(
+                    $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
+                    $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
+                );
             $this->_getEntityAdapter()->importData();
         } catch (\Exception $e) {
             $errorAggregator->addError(
@@ -437,7 +453,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             );
         }
 
-        return !$errorAggregator->isErrorsLimitExceeded();
+        return !$errorAggregator->hasToBeTerminated();
     }
 
     /**

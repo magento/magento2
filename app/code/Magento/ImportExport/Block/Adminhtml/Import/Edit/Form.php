@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * Import edit form block
  *
@@ -86,6 +88,39 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'onchange' => 'varienImport.handleEntityTypeSelector();',
                 'values' => $this->_entityFactory->create()->toOptionArray(),
                 'after_element_html' => $this->getDownloadSampleFileHtml(),
+            ]
+        );
+
+        // base fieldset
+        $fieldsets['error_limit'] = $form->addFieldset('error_limit_fieldset', ['legend' => __('Errors limit')]);
+        $fieldsets['error_limit']->addField(
+            \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+            'select',
+            [
+                'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+                'title' => __('Validation strategy'),
+                'label' => __('Validation strategy'),
+                'required' => true,
+                'values' => [
+                    ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => 'Skip error entries',
+                    ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR => 'Stop on Error'
+                ],
+                'after_element_html' => $this->getDownloadSampleFileHtml(),
+            ]
+        );
+
+        $fieldsets['error_limit']->addField(
+            \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+            'text',
+            [
+                'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+                'label' => __('Allowed Error Count'),
+                'title' => __('Allowed Error Count'),
+                'required' => false,
+                'class' => 'validate-number validate-greater-than-zero input-text',
+                'note' => __(
+                    'Please specify number of errors to halt import process'
+                ),
             ]
         );
 

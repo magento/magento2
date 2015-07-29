@@ -156,9 +156,9 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @return bool
      */
-    public function isErrorsLimitExceeded()
+    public function hasToBeTerminated()
     {
-        return !$this->hasFatalExceptions() && !$this->isErrorLimitExceeded();
+        return $this->hasFatalExceptions() || $this->isErrorLimitExceeded();
     }
 
     /**

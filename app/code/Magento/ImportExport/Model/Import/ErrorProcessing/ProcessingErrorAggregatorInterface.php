@@ -61,7 +61,7 @@ interface ProcessingErrorAggregatorInterface
     /**
      * @return bool
      */
-    public function isErrorsLimitExceeded();
+    public function hasToBeTerminated();
 
     /**
      * @return bool

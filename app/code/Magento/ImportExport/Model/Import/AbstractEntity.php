@@ -336,10 +336,6 @@ abstract class AbstractEntity
                 $startNewBunch = false;
             }
             if ($source->valid()) {
-                // errors limit check
-                if ($this->errorAggregator->isErrorsLimitExceeded()) {
-                    return $this;
-                }
                 $rowData = $source->current();
 
                 if (isset($rowData[$masterAttributeCode]) && trim($rowData[$masterAttributeCode])) {
