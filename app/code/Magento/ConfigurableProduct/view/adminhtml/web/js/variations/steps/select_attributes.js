@@ -42,6 +42,10 @@ define([
         doSelectSavedAttributes: function() {
             if (false === this.stepInitialized) {
                 this.stepInitialized = true;
+                //cache attributes labels, which can be present on the 2nd page
+                _.each(this.initData.attributes, function(attribute) {
+                    this.attributesLabels[attribute.id] = attribute.label;
+                }.bind(this));
                 this.multiselect().selected(_.pluck(this.initData.attributes, 'id'));
             }
         },
@@ -51,7 +55,9 @@ define([
             _.each(selected, function(attributeId) {
                 if (!this.attributesLabels[attributeId]) {
                     var attribute = _.findWhere(this.multiselect().rows(), {attribute_id: attributeId});
-                    this.attributesLabels[attribute.attribute_id] = attribute.frontend_label;
+                    if (attribute) {
+                        this.attributesLabels[attribute.attribute_id] = attribute.frontend_label;
+                    }
                 }
                 labels.push(this.attributesLabels[attributeId]);
             }.bind(this));
