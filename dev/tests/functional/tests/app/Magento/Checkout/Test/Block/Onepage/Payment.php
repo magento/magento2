@@ -118,7 +118,7 @@ class Payment extends Block
         );
     }
 
-    /*
+    /**
      * Press "Place Order" button.
      *
      * @return void

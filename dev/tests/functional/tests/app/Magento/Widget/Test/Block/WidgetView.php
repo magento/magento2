@@ -91,9 +91,6 @@ class WidgetView extends Block
      */
     protected function getWidgetType(Widget $widget)
     {
-        $pieces = explode(' ', $widget->getCode());
-
-        $pieces[0] = strtolower($pieces[0]);
-        return implode('', $pieces);
+        return lcfirst(str_replace(' ', '', ucwords(strtolower($widget->getCode()))));
     }
 }

@@ -191,13 +191,14 @@ class DataGrid extends Grid
             $this->_rootElement
                 ->find(sprintf($this->massActionToggleList, $massActionSelection), Locator::SELECTOR_XPATH)
                 ->click();
-
         }
         $actionType = key($action);
         $this->_rootElement->find($this->massActionButton)->click();
         $this->_rootElement
             ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
-        $this->browser->find($this->actionButton)->click();
+        if ($acceptAlert) {
+            $this->browser->find($this->actionButton)->click();
+        }
     }
 }
