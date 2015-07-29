@@ -19,7 +19,7 @@
 
 <div>
     <nav ng-controller="navigationController" data-ng-init="redirectTo(redirect)" id="menu" class="nav ng-scope show"
-     ng-hide="$state.current.main || $state.current.default">
+     ng-hide="$state.current.noMenu || $state.current.main">
     <ul class="nav-bar" >
         <li ng-repeat="menuState in navService.menu | filter:{type:$state.current.type}"
             ng-class="{active: $state.includes(menuState.id), disabled: itemStatus(menuState.order)}">

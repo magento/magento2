@@ -21,6 +21,7 @@ return [
             'header'      => 'Home',
             'nav'         => false,
             'default'     => true,
+            'noMenu'      => true,
             'order'       => -1,
         ],
         [
@@ -30,7 +31,7 @@ return [
             'title'       => "Component Grid",
             'controller'  => 'componentGridController',
             'nav'         => false,
-            'default'     => true,
+            'noMenu'      => true,
             'order'       => 1,
             'type'        => 'cm'
         ],
@@ -50,7 +51,7 @@ return [
             'url'         => 'readiness-check-updater',
             'templateUrl' => "{$base}/readiness-check-updater",
             'title'       => "Readiness \n Check",
-            'header'      => 'Step 1: Readiness Check 22222',
+            'header'      => 'Step 1: Readiness Check',
             'nav'         => true,
             'order'       => 2,
             'type'        => 'cm'
@@ -135,7 +136,7 @@ return [
             'id'          => 'root.code-upgrade',
             'url'         => 'code-upgrade',
             'templateUrl' => "{$base}/code-upgrade",
-            'title'       => 'CodeUpgrade',
+            'title'       => 'Code Upgrade',
             'controller'  => 'createBackupController',
             'header'      => 'Step 4: Code Upgrade',
             'order'       => 4,

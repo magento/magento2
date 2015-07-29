@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<header class="page-header row">
+<header class="page-header row" ng-hide="$state.current.main">
     <div class="page-header-hgroup col-l-8 col-m-6">
         <div class="page-title-wrapper" ng-switch=$state.current.type>
             <h1 class="page-title" ng-switch-when="cm">Component Manager</h1>
