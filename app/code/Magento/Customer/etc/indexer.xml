@@ -45,11 +45,6 @@
             <field name="company" xsi:type="searchable" dataType="varchar"/>
         </fieldset>
 
-        <!--<fieldset name="visitor" source="Magento\Customer\Model\Resource\Visitor\Collection">-->
-            <!--<reference fieldset="customer" from="customer_id" to="entity_id"/>-->
-            <!--<field name="last_visit_at" xsi:type="filterable" dataType="datetime"/>-->
-        <!--</fieldset>-->
-
         <saveHandler class="Magento\Indexer\Model\SaveHandler\CustomerHandler"/>
         <structure class="Magento\Customer\Model\Indexer\GridStructure"/>
     </indexer>
