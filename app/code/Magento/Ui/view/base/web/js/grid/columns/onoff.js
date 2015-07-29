@@ -11,6 +11,7 @@ define([
 
     return Column.extend({
         defaults: {
+            headerTmpl: 'ui/grid/columns/onoff',
             bodyTmpl: 'ui/grid/cells/onoff',
             imports: {
                 selectedData: '${ $.provider }:data.selectedData'
@@ -20,6 +21,9 @@ define([
             }
         },
 
+        getLabel: function(id) {
+            return (this.selected.indexOf(id) > -1) ? "On" : "Off";
+        },
         /**
          * Initializes components' static properties.
          *
