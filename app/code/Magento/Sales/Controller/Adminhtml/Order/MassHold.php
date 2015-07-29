@@ -53,7 +53,7 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
         }
 
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('sales/*/');
+        $resultRedirect->setPath($this->getComponentRefererUrl());
         return $resultRedirect;
     }
 }

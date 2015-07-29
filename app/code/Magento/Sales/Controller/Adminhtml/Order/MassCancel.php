@@ -52,7 +52,7 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
             $this->messageManager->addSuccess(__('We canceled %1 order(s).', $countCancelOrder));
         }
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('sales/*/');
+        $resultRedirect->setPath($this->getComponentRefererUrl());
         return $resultRedirect;
     }
 }

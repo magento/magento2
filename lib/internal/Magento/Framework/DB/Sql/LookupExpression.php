@@ -82,7 +82,7 @@ class LookupExpression extends \Zend_Db_Expr
             }
             $columnName = $column;
             if (isset($referenceColumn['columnName'])) {
-                $columnName = $referenceColumn['columnName'] . '.';
+                $columnName = $referenceColumn['columnName'];
             }
             $select->where(
                 sprintf(
