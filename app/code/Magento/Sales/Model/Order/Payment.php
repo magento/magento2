@@ -1373,11 +1373,12 @@ class Payment extends Info implements OrderPaymentInterface
      * @param bool $failSafe
      * @return null|Transaction
      */
-    public function addTransaction($type, $salesDocument = null, $failSafe = false)
+    private function addTransaction($type, $salesDocument = null, $failSafe = false)
     {
         $builder = $this->transactionBuilder->setPayment($this)
             ->setOrder($this->getOrder())
             ->setFailSafe($failSafe)
+            ->setTransactionId($this->getTransactionId())
             ->setAdditionalInformation($this->_transactionAdditionalInfo);
         if ($salesDocument) {
             $builder->setSalesDocument($salesDocument);

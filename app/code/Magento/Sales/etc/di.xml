@@ -44,7 +44,7 @@
     <preference for="Magento\Sales\Api\CreditmemoManagementInterface" type="Magento\Sales\Model\Service\CreditmemoService"/>
     <preference for="Magento\Sales\Api\InvoiceCommentRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceComment\Repository"/>
     <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceItem\Repository"/>
-    <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Model\InvoiceRepository"/>
+    <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Model\Order\InvoiceRepository"/>
     <preference for="Magento\Sales\Api\InvoiceManagementInterface" type="Magento\Sales\Model\Service\InvoiceService"/>
     <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Model\Order\AddressRepository"/>
     <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Api\Data\OrderItem\Repository"/>
@@ -616,7 +616,7 @@
             <argument name="metadata" xsi:type="object">orderMetadata</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\InvoiceRepository">
+    <type name="Magento\Sales\Model\Order\InvoiceRepository">
         <arguments>
             <argument name="invoiceMetadata" xsi:type="object">invoiceMetadata</argument>
         </arguments>

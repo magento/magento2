@@ -8,7 +8,7 @@ namespace Magento\Sales\Ui\Component\Listing\Column\Invoice;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Sales\Model\InvoiceRepository;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
 
 /**
  * Class State
@@ -25,14 +25,14 @@ class State extends Column
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param InvoiceRepository $invoiceRepository
+     * @param InvoiceRepositoryInterface $invoiceRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        InvoiceRepository $invoiceRepository,
+        InvoiceRepositoryInterface $invoiceRepository,
         array $components = [],
         array $data = []
     ) {
