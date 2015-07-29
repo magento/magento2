@@ -9,6 +9,7 @@ use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 
 /**
  * Adminhtml sales transactions controller
@@ -35,6 +36,11 @@ abstract class Transactions extends \Magento\Backend\App\Action
     protected $resultLayoutFactory;
 
     /**
+     * @var OrderPaymentRepositoryInterface
+     */
+    protected $orderPaymentRepository;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param Registry $coreRegistry
      * @param PageFactory $resultPageFactory
@@ -44,11 +50,13 @@ abstract class Transactions extends \Magento\Backend\App\Action
         \Magento\Backend\App\Action\Context $context,
         Registry $coreRegistry,
         PageFactory $resultPageFactory,
-        LayoutFactory $resultLayoutFactory
+        LayoutFactory $resultLayoutFactory,
+        OrderPaymentRepositoryInterface $orderPaymentRepository
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->orderPaymentRepository = $orderPaymentRepository;
         parent::__construct($context);
     }
 
