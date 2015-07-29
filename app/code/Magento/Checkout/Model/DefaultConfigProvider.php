@@ -272,6 +272,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['isCustomerLoginRequired'] = $this->isCustomerLoginRequired();
         $output['registerUrl'] = $this->getRegisterUrl();
         $output['checkoutUrl'] = $this->getCheckoutUrl();
+        $output['pageNotFoundUrl'] = $this->pageNotFoundUrl();
         $output['forgotPasswordUrl'] = $this->getForgotPasswordUrl();
         $output['staticBaseUrl'] = $this->getStaticBaseUrl();
         $output['priceFormat'] = $this->localeFormat->getPriceFormat(
@@ -433,6 +434,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
     public function getCheckoutUrl()
     {
         return $this->urlBuilder->getUrl('checkout');
+    }
+
+    /**
+     * Retrieve checkout URL
+     *
+     * @return string
+     */
+    public function pageNotFoundUrl()
+    {
+        return $this->urlBuilder->getUrl('checkout/noroute');
     }
 
     /**

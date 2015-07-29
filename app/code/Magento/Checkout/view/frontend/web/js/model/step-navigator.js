@@ -14,27 +14,53 @@ define(
         return {
             steps: steps,
             stepCodes: [],
+            validCodes: [],
 
             handleHash: function () {
                 var hashString = window.location.hash.replace('#', '');
                 if (hashString == '') {
                     return false;
                 }
+
+                if (-1 == $.inArray(hashString, this.validCodes)) {
+                    window.location.href = window.checkoutConfig.pageNotFoundUrl;
+                    return false;
+                }
+
                 var isRequestedStepVisible = steps.sort(this.sortItems).some(function(element) {
-                    return element.code == hashString && element.isVisible();
+                    return (element.code == hashString || element.alias == hashString) && element.isVisible();
                 });
 
                 //if requested step is visible, then we don't need to load step data from server
                 if (isRequestedStepVisible) {
                     return false;
                 }
-                this.navigateTo(hashString);
+
+                steps.sort(this.sortItems).forEach(function(element) {
+                    if (element.code == hashString || element.alias == hashString) {
+                        element.navigate();
+                    } else {
+                        element.isVisible(false);
+                    }
+
+                });
                 return false;
             },
 
-            registerStep: function(code, title, isVisible, navigate, sortOrder) {
+            registerStep: function(code, alias, title, isVisible, navigate, sortOrder) {
+                if (-1 != $.inArray(code, this.validCodes)) {
+                    throw new DOMException('Step code [' + code + '] already registered in step navigator');
+                }
+                if (alias != null) {
+                    if (-1 != $.inArray(alias, this.validCodes)) {
+                        throw new DOMException('Step code [' + alias + '] already registered in step navigator');
+                    }
+                    this.validCodes.push(alias);
+                }
+                this.validCodes.push(code);
                 steps.push({
                     code: code,
+                    alias: alias != null ? alias : code,
                     title : title,
                     isVisible: isVisible,
                     navigate: navigate,
@@ -43,6 +69,7 @@ define(
                 this.stepCodes.push(code);
                 var hash = window.location.hash.replace('#', '');
                 if (hash != '' && hash != code) {
+                    //Force hiding of not active step
                     isVisible(false);
                 }
             },
@@ -78,18 +105,6 @@ define(
 
             navigateTo: function(code) {
                 var sortedItems = steps.sort(this.sortItems);
-                sortedItems.forEach(function(element) {
-                    if (element.code == code) {
-                        element.navigate();
-                    } else {
-                        element.isVisible(false);
-                    }
-
-                });
-            },
-
-            goTo: function(code) {
-                var sortedItems = steps.sort(this.sortItems);
                 if (!this.isProcessed(code)) {
                     return;
                 }
@@ -120,19 +135,6 @@ define(
                     $('body').animate({scrollTop: $('#' + code).offset().top}, 0, function () {
                         window.location = window.checkoutConfig.checkoutUrl + "#" + code;
                     });
-                }
-            },
-
-            back: function() {
-                var activeIndex = 0;
-                steps.sort(this.sortItems).forEach(function(element, index) {
-                    if (element.isVisible()) {
-                        element.isVisible(false);
-                        activeIndex = index;
-                    }
-                });
-                if (steps()[activeIndex - 1]) {
-                    steps()[activeIndex - 1].navigate();
                 }
             }
         };

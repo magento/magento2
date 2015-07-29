@@ -30,7 +30,7 @@ define(
 
             back: function() {
                 sidebarModel.hide();
-                stepNavigator.back();
+                stepNavigator.navigateTo('shipping');
             }
         });
     }
