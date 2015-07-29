@@ -3795,8 +3795,12 @@ return [
         . '\Configurable'
     ],
     ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Deployer'],
-    ['Magento\Setup\Console\Command\DeployStaticContentCommand',
-        'Magento\Deploy\Console\Command\DeployStaticContentCommand'],
-    ['Magento\Setup\Test\Unit\Console\Command\DeployStaticContentCommandTest',
-        'Magento\Deploy\Test\Unit\Console\Command\DeployStaticContentCommandTest'],
+    [
+	    'Magento\Setup\Console\Command\DeployStaticContentCommand',
+        'Magento\Deploy\Console\Command\DeployStaticContentCommand'
+    ],
+    [
+        'Magento\Setup\Test\Unit\Console\Command\DeployStaticContentCommandTest',
+        'Magento\Deploy\Test\Unit\Console\Command\DeployStaticContentCommandTest'
+    ],
 ];
