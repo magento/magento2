@@ -96,11 +96,6 @@ class DeployStaticContentCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln("<info>You need to install the Magento application before running this utility.</info>");
-            return;
-        }
-
         $options = $input->getOptions();
 
         $languages = $input->getArgument(self::LANGUAGE_OPTION);
