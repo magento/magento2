@@ -54,7 +54,7 @@ class EntityStorage
      * Add entity to registry if entity in it
      *
      * @param \Magento\Framework\Model\AbstractModel $entity
-     * @return bool|FrameworkAbstractModel
+     * @return void
      */
     public function add($entity)
     {
