@@ -45,7 +45,7 @@
         "magento/magento-composer-installer": "*",
         "braintree/braintree_php": "2.39.0",
         "symfony/console": "~2.3 <2.7",
-        "magento/composer": "1.0.0"
+        "magento/composer": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
