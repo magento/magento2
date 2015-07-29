@@ -84,6 +84,11 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultForwardFactory;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoiceManagement;
+
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -128,6 +133,9 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactory);
 
+        $this->invoiceManagement = $this->getMockBuilder('Magento\Sales\Api\InvoiceManagementInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,9 +158,11 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $invoiceId = 10000031;
         $orderId = 100000030;
         $invoiceClassName = 'Magento\Sales\Model\Order\Invoice';
-        $cmNotifierClassName = 'Magento\Sales\Model\Order\InvoiceNotifier';
+        $cmNotifierClassName = 'Magento\Sales\Api\InvoiceManagementInterface';
         $invoice = $this->getMock($invoiceClassName, [], [], '', false);
-        $notifier = $this->getMock($cmNotifierClassName, [], [], '', false);
+        $invoice->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($invoiceId);
         $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
         $order->expects($this->once())
             ->method('getId')
@@ -179,9 +189,11 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->at(1))
             ->method('create')
             ->with($cmNotifierClassName)
-            ->willReturn($notifier);
-        $notifier->expects($this->once())
+            ->willReturn($this->invoiceManagement);
+
+        $this->invoiceManagement->expects($this->once())
             ->method('notify')
+            ->with($invoiceId)
             ->willReturn(true);
         $this->messageManager->expects($this->once())
             ->method('addSuccess')

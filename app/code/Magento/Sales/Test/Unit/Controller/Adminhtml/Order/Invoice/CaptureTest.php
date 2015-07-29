@@ -65,6 +65,11 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
     protected $controller;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoiceManagement;
+
+    /**
      * @return void
      */
     public function setUp()
@@ -141,11 +146,20 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
 
+        $this->invoiceManagement = $this->getMockBuilder('Magento\Sales\Api\InvoiceManagementInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with('Magento\Sales\Api\InvoiceManagementInterface')
+            ->willReturn($this->invoiceManagement);
+
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\Capture',
             [
                 'context' => $contextMock,
-                'resultForwardFactory' => $this->resultForwardFactoryMock
+                'resultForwardFactory' => $this->resultForwardFactoryMock,
             ]
         );
     }
@@ -167,12 +181,17 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setIsInProcess', '__wakeup'])
             ->getMock();
 
+        $this->invoiceManagement->expects($this->once())
+            ->method('setCapture')
+            ->with($invoiceId);
+
         $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $invoiceMock->expects($this->once())
-            ->method('capture');
+        $invoiceMock->expects($this->any())
+            ->method('getEntityId')
+            ->will($this->returnValue($invoiceId));
         $invoiceMock->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($orderMock));
@@ -211,15 +230,13 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
             ->willReturn($invoiceRepository);
-
-        $this->objectManagerMock->expects($this->at(1))
+        $this->objectManagerMock->expects($this->at(2))
             ->method('create')
             ->with('Magento\Framework\DB\Transaction')
             ->will($this->returnValue($transactionMock));
 
         $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
@@ -256,7 +273,6 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
 
         $resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $resultForward->expects($this->once())->method('forward')->with(('noroute'))->will($this->returnSelf());
 
@@ -274,8 +290,13 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
     {
         $invoiceId = 2;
 
-        $message = 'model exception';
+        $message = 'Invoice capturing error';
         $e = new \Magento\Framework\Exception\LocalizedException(__($message));
+
+        $this->invoiceManagement->expects($this->once())
+            ->method('setCapture')
+            ->with($invoiceId)
+            ->will($this->throwException($e));
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
@@ -284,11 +305,7 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
 
         $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $invoiceMock->expects($this->once())
-            ->method('capture')
-            ->will($this->throwException($e));
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
@@ -296,6 +313,9 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
 
         $invoiceMock->expects($this->once())
             ->method('getId')
+            ->will($this->returnValue($invoiceId));
+        $invoiceMock->expects($this->once())
+            ->method('getEntityId')
             ->will($this->returnValue($invoiceId));
 
         $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
@@ -312,7 +332,6 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
 
         $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
@@ -338,13 +357,14 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
             ->with('invoice_id')
             ->will($this->returnValue($invoiceId));
 
+        $this->invoiceManagement->expects($this->once())
+            ->method('setCapture')
+            ->with($invoiceId)
+            ->will($this->throwException($e));
+
         $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $invoiceMock->expects($this->once())
-            ->method('capture')
-            ->will($this->throwException($e));
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
@@ -352,6 +372,9 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
 
         $invoiceMock->expects($this->once())
             ->method('getId')
+            ->will($this->returnValue($invoiceId));
+        $invoiceMock->expects($this->once())
+            ->method('getEntityId')
             ->will($this->returnValue($invoiceId));
 
         $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
