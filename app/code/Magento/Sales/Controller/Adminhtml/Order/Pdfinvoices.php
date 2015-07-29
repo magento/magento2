@@ -73,7 +73,7 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMass
         $invoicesCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$invoicesCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
-            return $this->resultRedirectFactory->create()->setPath('sales/*/');
+            return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
         return $this->fileFactory->create(
             sprintf('packingslip%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),

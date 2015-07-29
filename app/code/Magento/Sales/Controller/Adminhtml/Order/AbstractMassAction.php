@@ -62,6 +62,16 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     }
 
     /**
+     * Return component referer url
+     * TODO: Technical dept referer url should be implement as a part of Action configuration in in appropriate way
+     *
+     * @return null|string
+     */
+    protected function getComponentRefererUrl()
+    {
+        return $this->filter->getComponentRefererUrl()?: 'sales/*/';
+    }
+    /**
      * Set status to collection items
      *
      * @param AbstractCollection $collection
