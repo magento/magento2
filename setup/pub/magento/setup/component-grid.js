@@ -95,7 +95,7 @@ angular.module('component-grid', ['ngStorage'])
     }])
     .filter('startFrom', function() {
         return function(input, start) {
-            start = +start; //parse to int
+            start = parseInt(start);
             return input.slice(start);
         }
     })
