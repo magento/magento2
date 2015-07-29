@@ -3796,7 +3796,7 @@ return [
     ],
     ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Deployer'],
     [
-	    'Magento\Setup\Console\Command\DeployStaticContentCommand',
+        'Magento\Setup\Console\Command\DeployStaticContentCommand',
         'Magento\Deploy\Console\Command\DeployStaticContentCommand'
     ],
     [
