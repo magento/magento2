@@ -70,7 +70,7 @@ return [
         [
             'id'          => 'root.create-backup-componentManager',
             'url'         => 'create-backup',
-            'templateUrl' => "{$base}/create-backup",
+            'templateUrl' => "$base/create-backup",
             'title'       => "Create \n Backup",
             'header'      => 'Step 2: Create Backup',
             'controller'  => 'createBackupController',
@@ -82,7 +82,7 @@ return [
         [
             'id'          => 'root.create-backup.progress',
             'url'         => 'create-backup/progress',
-            'templateUrl' => "{$base}/complete-backup/progress",
+            'templateUrl' => "$base/complete-backup/progress",
             'title'       => "Create \n Backup",
             'header'      => 'Step 2: Create Backup',
             'controller'  => 'completeBackupController',
@@ -93,7 +93,7 @@ return [
         [
             'id'          => 'root.component-update',
             'url'         => 'component-update',
-            'templateUrl' => "{$base}/component-update",
+            'templateUrl' => "$base/component-update",
             'controller'  => 'componentUpdateController',
             'title'       => "Component \n Update",
             'header'      => 'Step 3: Component Update',
@@ -104,7 +104,7 @@ return [
         [
             'id'          => 'root.component-update-success',
             'url'         => 'component-update-success',
-            'templateUrl' => "{$base}/component-update-success",
+            'templateUrl' => "$base/component-update-success",
             'controller'  => 'componentUpdateSuccessController',
             'order'       => 7,
             'main'        => true,
@@ -112,8 +112,8 @@ return [
         ],
         [
             'id'          => 'root.readiness-check',
-            'url'         => 'readiness-check-upgrade',
-            'templateUrl' => "{$base}/readiness-check-upgrade",
+            'url'         => 'readiness-check-updater',
+            'templateUrl' => "$base/readiness-check-updater",
             'title'       => 'Readiness Check',
             'controller'  => 'readinessCheckController',
             'header'      => 'Step 2: Readiness Check',
@@ -124,7 +124,7 @@ return [
         [
             'id'          => 'root.create-backup-updater',
             'url'         => 'create-backup',
-            'templateUrl' => "{$base}/create-backup",
+            'templateUrl' => "$base/create-backup",
             'title'       => 'Create Backup',
             'controller'  => 'createBackupController',
             'header'      => 'Step 3: Create Backup',
@@ -135,7 +135,7 @@ return [
         [
             'id'          => 'root.code-upgrade',
             'url'         => 'code-upgrade',
-            'templateUrl' => "{$base}/code-upgrade",
+            'templateUrl' => "$base/code-upgrade",
             'title'       => 'Code Upgrade',
             'controller'  => 'createBackupController',
             'header'      => 'Step 4: Code Upgrade',
