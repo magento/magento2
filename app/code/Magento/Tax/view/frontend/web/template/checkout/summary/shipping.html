@@ -8,7 +8,7 @@
     <!-- ko if: isBothPricesDisplayed() -->
     <tr class="totals shipping excl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="i18n: title + ' ' + $t(excludingTaxMessage)"></span>
+            <span class="label" data-bind="text: $t(title)+ ' ' + $t(excludingTaxMessage)"></span>
             <span class="value" data-bind="i18n: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
@@ -24,7 +24,7 @@
     </tr>
     <tr class="totals shipping incl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="i18n: title + ' ' + includingTaxMessage"></span>
+            <span class="label" data-bind="text: $t(title) + ' ' + $t(includingTaxMessage)"></span>
             <span class="value" data-bind="i18n: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
