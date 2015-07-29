@@ -34,13 +34,27 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Verify that Admin Navigation Menu has valid structure format:
+     *  - navigation menu wrapper contains id & role;
+     *  - 1st level item is located on the nex level, contains link & title;
+     *  - 2nd level item is located on the next level, contains title;
+     *  - 3rd level items are located on the next level, contain links & titles, have valid sort order against
+     *      each other;
+     *  - mentioned above points are specified in valid order in scope of all html block.
+     */
     public function testRenderNavigation()
     {
         $menuConfig = $this->prepareMenuConfig();
+        $menuHtml = $this->blockMenu->renderNavigation($menuConfig->getMenu());
 
-        $this->assertStringEqualsFile(
-            __DIR__ . '/_files/menu/expected.txt',
-            $this->blockMenu->renderNavigation($menuConfig->getMenu())
+        $this->assertRegExp(
+            '~.*id="nav".*role="menubar".*' .
+                'role="menu-item".*a href=".*System.*' .
+                'class="submenu".*role="menu".*Report.*' .
+                'class="submenu".*role="menu".*a href=".*Private Sales.*a href=".*Invite.*a href=".*Invited Customers~',
+            $menuHtml,
+            'Admin Navigation Menu structure is invalid.'
         );
     }
 
