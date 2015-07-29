@@ -203,9 +203,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $_productVisibility;
 
     /**
-     * @var \Magento\Sales\Model\Service\OrderFactory
+     * @var \Magento\Sales\Api\InvoiceManagementInterface
      */
-    protected $_serviceOrderFactory;
+    protected $invoiceManagement;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
@@ -273,7 +273,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param Service\OrderFactory $serviceOrderFactory
+     * @param \Magento\Sales\Api\InvoiceManagementInterface $invoiceManagement
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Order\Status\HistoryFactory $orderHistoryFactory
@@ -302,7 +302,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
+        \Magento\Sales\Api\InvoiceManagementInterface $invoiceManagement,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Sales\Model\Order\Status\HistoryFactory $orderHistoryFactory,
@@ -326,7 +326,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->timezone = $timezone;
         $this->_orderItemCollectionFactory = $orderItemCollectionFactory;
         $this->_productVisibility = $productVisibility;
-        $this->_serviceOrderFactory = $serviceOrderFactory;
+        $this->invoiceManagement = $invoiceManagement;
         $this->_currencyFactory = $currencyFactory;
         $this->_eavConfig = $eavConfig;
         $this->_orderHistoryFactory = $orderHistoryFactory;
@@ -1867,8 +1867,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function prepareInvoice($qtys = [])
     {
-        $invoice = $this->_serviceOrderFactory->create(['order' => $this])->prepareInvoice($qtys);
-        return $invoice;
+        return $this->invoiceManagement->prepareInvoice($this->getEntityId(), $qtys);
     }
 
     /**

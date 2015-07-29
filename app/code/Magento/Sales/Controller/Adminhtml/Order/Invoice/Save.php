@@ -127,9 +127,9 @@ class Save extends \Magento\Backend\App\Action
                 );
             }
 
+            $invoiceManagement = $this->_objectManager->create('Magento\Sales\Api\InvoiceManagementInterface');
             /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order])
-                ->prepareInvoice($invoiceItems);
+            $invoice = $invoiceManagement->prepareInvoice($orderId, $invoiceItems);
 
             if (!$invoice) {
                 throw new LocalizedException(__('We can\'t save the invoice right now.'));
