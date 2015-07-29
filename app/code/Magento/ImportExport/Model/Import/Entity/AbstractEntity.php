@@ -341,10 +341,6 @@ abstract class AbstractEntity
                 $nextRowBackup = [];
             }
             if ($source->valid()) {
-                // errors limit check
-                if ($this->errorAggregator->isErrorsLimitExceeded()) {
-                    return $this;
-                }
                 $rowData = $source->current();
 
                 $this->_processedRowsCount++;
