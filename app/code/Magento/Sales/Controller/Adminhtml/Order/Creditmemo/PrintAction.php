@@ -7,7 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Backend\App\Action;
-use \Magento\Sales\Model\Order\CreditmemoRepository;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
 class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\PrintAction
 {
@@ -17,7 +17,7 @@ class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstrac
     protected $creditmemoLoader;
 
     /**
-     * @var CreditmemoRepository
+     * @var CreditmemoRepositoryInterface
      */
     protected $creditmemoRepository;
 
@@ -26,14 +26,14 @@ class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstrac
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
-     * @param CreditmemoRepository $creditmemoRepository
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
-        CreditmemoRepository $creditmemoRepository
+        CreditmemoRepositoryInterface $creditmemoRepository
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         parent::__construct(

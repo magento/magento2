@@ -8,7 +8,7 @@ namespace Magento\Sales\Controller\Guest;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
-use \Magento\Sales\Model\Order\CreditmemoRepository;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
 class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\PrintCreditmemo
 {
@@ -18,7 +18,7 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
     protected $orderLoader;
 
     /**
-     * @var CreditmemoRepository;
+     * @var CreditmemoRepositoryInterface;
      */
     protected $creditmemoRepository;
 
@@ -28,7 +28,7 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
      * @param OrderLoader $orderLoader
-     * @param CreditmemoRepository $creditmemoRepository
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
      */
     public function __construct(
         Context $context,
@@ -36,7 +36,7 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
         \Magento\Framework\Registry $registry,
         PageFactory $resultPageFactory,
         OrderLoader $orderLoader,
-        CreditmemoRepository $creditmemoRepository
+        CreditmemoRepositoryInterface $creditmemoRepository
     ) {
         $this->orderLoader = $orderLoader;
         $this->creditmemoRepository = $creditmemoRepository;
