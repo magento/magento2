@@ -8,7 +8,7 @@ namespace Magento\Sales\Ui\Component\Listing\Column\Creditmemo;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Sales\Model\Order\CreditmemoRepository;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
 /**
  * Class State
@@ -25,14 +25,14 @@ class State extends Column
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param CreditmemoRepository $creditmemoRepository
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        CreditmemoRepository $creditmemoRepository,
+        CreditmemoRepositoryInterface $creditmemoRepository,
         array $components = [],
         array $data = []
     ) {

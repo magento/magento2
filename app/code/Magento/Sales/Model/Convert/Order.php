@@ -37,7 +37,7 @@ class Order extends \Magento\Framework\Object
     protected $shipmentRepository;
 
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoRepository
+     * @var \Magento\Sales\Api\CreditmemoRepositoryInterface
      */
     protected $creditmemoRepository;
 
@@ -57,7 +57,7 @@ class Order extends \Magento\Framework\Object
      * @param \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory
      * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
-     * @param \Magento\Sales\Model\Order\creditmemoRepository $creditmemoRepository
+     * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
      * @param \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory
      * @param \Magento\Framework\Object\Copy $objectCopyService
      * @param array $data
@@ -70,7 +70,7 @@ class Order extends \Magento\Framework\Object
         \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory,
         \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
         \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
-        \Magento\Sales\Model\Order\CreditmemoRepository $creditmemoRepository,
+        \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository,
         \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory,
         \Magento\Framework\Object\Copy $objectCopyService,
         array $data = []

@@ -445,9 +445,12 @@ class Payment extends Info implements OrderPaymentInterface
         }
         $this->_isCaptureFinal($paidWorkaround);
 
-        $this->_generateTransactionId(
-            Transaction::TYPE_CAPTURE,
-            $this->getAuthorizationTransaction()
+        $this->setTransactionId(
+            $this->transactionManager->generateTransactionId(
+                $this,
+                Transaction::TYPE_CAPTURE,
+                $this->getAuthorizationTransaction()
+            )
         );
 
         $this->_eventManager->dispatch(
@@ -535,9 +538,12 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function registerCaptureNotification($amount, $skipFraudDetection = false)
     {
-        $this->_generateTransactionId(
-            Transaction::TYPE_CAPTURE,
-            $this->getAuthorizationTransaction()
+        $this->setTransactionId(
+            $this->transactionManager->generateTransactionId(
+                $this,
+                Transaction::TYPE_CAPTURE,
+                $this->getAuthorizationTransaction()
+            )
         );
 
         $order = $this->getOrder();
@@ -604,7 +610,11 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function registerAuthorizationNotification($amount)
     {
-        return $this->_isTransactionExists() ? $this : $this->authorize(false, $amount);
+        return $this->transactionManager->isTransactionExists(
+            $this->getTransactionId(),
+            $this->getId(),
+            $this->getOrder()->getId()
+        ) ? $this : $this->authorize(false, $amount);
     }
 
     /**
@@ -754,8 +764,9 @@ class Payment extends Info implements OrderPaymentInterface
     public function refund($creditmemo)
     {
         $baseAmountToRefund = $this->_formatAmount($creditmemo->getBaseGrandTotal());
-
-        $this->_generateTransactionId(Transaction::TYPE_REFUND);
+        $this->setTransactionId(
+            $this->transactionManager->generateTransactionId($this, Transaction::TYPE_REFUND)
+        );
 
         // call refund from gateway if required
         $isOnline = false;
@@ -850,15 +861,22 @@ class Payment extends Info implements OrderPaymentInterface
     public function registerRefundNotification($amount)
     {
         $notificationAmount = $amount;
-        $this->_generateTransactionId(
-            Transaction::TYPE_REFUND,
-            $this->transactionRepository->getByTxnId(
-                $this->getParentTransactionId(),
-                $this->getId(),
-                $this->getOrder()->getId()
+        $this->setTransactionId(
+            $this->transactionManager->generateTransactionId(
+                $this,
+                Transaction::TYPE_REFUND,
+                $this->transactionRepository->getByTxnId(
+                    $this->getParentTransactionId(),
+                    $this->getId(),
+                    $this->getOrder()->getId()
+                )
             )
         );
-        if ($this->_isTransactionExists()) {
+        if ($this->transactionManager->isTransactionExists(
+            $this->getTransactionId(),
+            $this->getId(),
+            $this->getOrder()->getId())
+        ) {
             return $this;
         }
         $order = $this->getOrder();
@@ -1324,7 +1342,9 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $order = $this->getOrder();
         $authTransaction = $this->getAuthorizationTransaction();
-        $this->_generateTransactionId(Transaction::TYPE_VOID, $authTransaction);
+        $this->setTransactionId(
+            $this->transactionManager->generateTransactionId($this, Transaction::TYPE_VOID, $authTransaction)
+        );
         $this->setShouldCloseParentTransaction(true);
 
         // attempt to void
@@ -1333,7 +1353,11 @@ class Payment extends Info implements OrderPaymentInterface
             $method->setStore($order->getStoreId());
             $method->{$gatewayCallback}($this);
         }
-        if ($this->_isTransactionExists()) {
+        if ($this->transactionManager->isTransactionExists(
+            $this->getTransactionId(),
+            $this->getId(),
+            $this->getOrder()->getId())
+        ) {
             return $this;
         }
 
@@ -1405,14 +1429,16 @@ class Payment extends Info implements OrderPaymentInterface
         $method->setStore(
             $this->getOrder()->getStoreId()
         );
-        $method->fetchTransactionInfo(
+        $data = $method->fetchTransactionInfo(
             $this,
             $transactionTo->getTxnId()
         );
-        $transactionTo->setAdditionalInformation(
-            Transaction::RAW_DETAILS,
-            $method
-        );
+        if ($data) {
+            $transactionTo->setAdditionalInformation(
+                Transaction::RAW_DETAILS,
+                $data
+            );
+        }
         return $this;
     }
 
@@ -1431,20 +1457,6 @@ class Payment extends Info implements OrderPaymentInterface
                 $this->setDataUsingMethod($key, $was + $amount);
             }
         }
-    }
-
-    /**
-     * Check transaction existence by specified transaction id
-     *
-     * @param string $txnId
-     * @return boolean
-     */
-    protected function _isTransactionExists($txnId = null)
-    {
-        if (null === $txnId) {
-            $txnId = $this->getTransactionId();
-        }
-        return $txnId && $this->transactionRepository->getByTxnId($txnId, $this->getId(), $this->getOrder()->getId());
     }
 
     /**
@@ -1525,35 +1537,6 @@ class Payment extends Info implements OrderPaymentInterface
             $this->getId(),
             $this->getOrder()->getId()
         );
-    }
-
-    /**
-     * Lookup the transaction by id
-     * @param string $transactionId
-     * @return Transaction|false
-     */
-    public function getTransaction($transactionId)
-    {
-        return $this->transactionRepository->getByTxnId($transactionId, $this->getId(), $this->getOrder()->getId());
-    }
-
-    /**
-     * Update transaction ids for further processing
-     * If no transactions were set before invoking, may generate an "offline" transaction id
-     *
-     * @param string $type
-     * @param bool|Transaction $transactionBasedOn
-     * @return void
-     */
-    protected function _generateTransactionId($type, $transactionBasedOn = false)
-    {
-        if (!$this->getParentTransactionId() && !$this->getTransactionId() && $transactionBasedOn) {
-            $this->setParentTransactionId($transactionBasedOn->getTxnId());
-        }
-        // generate transaction id for an offline action or payment method that didn't set it
-        if (($parentTxnId = $this->getParentTransactionId()) && !$this->getTransactionId()) {
-            $this->setTransactionId("{$parentTxnId}-{$type}");
-        }
     }
 
     /**
