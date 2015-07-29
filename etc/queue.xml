@@ -7,5 +7,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="queue.xsd">
     <publisher name="default" connection="rabbitmq" exchange="magento"/>
-    <topic name="hello" schema="string" publisher="default" />
+    <topic name="hello" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="default" />
 </config>
