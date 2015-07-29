@@ -34,7 +34,8 @@
 </div>
 
 <h2 class="page-title">{{$state.current.header}}</h2>
-<div ng-show="$state.is('root.readiness-check-updater') || $state.is('root.readiness-check-installer')"
+<div ng-show="$state.is('root.readiness-check') || $state.is('root.readiness-check-updater') || $state.is('root
+.readiness-check-installer')"
      ng-init="actionFrom='<?php echo $this->actionFrom ?>'" class="accent-box">
     <p>Let's check your environment for the correct PHP version, PHP extensions, file permissions and compatibility.</p>
     <button
