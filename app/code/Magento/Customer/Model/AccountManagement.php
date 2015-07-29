@@ -675,12 +675,9 @@ class AccountManagement implements AccountManagementInterface
      */
     public function validate(CustomerInterface $customer)
     {
-        $customerErrors = $this->validator->validateData(
-            $this->extensibleDataObjectConverter
-                ->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
-            [],
-            'customer'
-        );
+        $customerData = $this->extensibleDataObjectConverter
+            ->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface');
+        $customerErrors = $this->validator->validateData($customerData, [], 'customer');
 
         $validationResults = $this->validationResultsDataFactory->create();
         if ($customerErrors !== true) {
@@ -843,24 +840,13 @@ class AccountManagement implements AccountManagementInterface
 
         $customerEmailData = $this->getFullCustomerObject($customer);
 
-        $templateId = $this->scopeConfig->getValue(
+        $this->sendEmailTemplate(
+            $customer,
             self::XML_PATH_RESET_PASSWORD_TEMPLATE,
-            ScopeInterface::SCOPE_STORE,
+            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
             $storeId
         );
-
-        $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
-            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
-            ->setTemplateVars(['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)])
-            ->setFrom($this->scopeConfig->getValue(
-                self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-                ScopeInterface::SCOPE_STORE,
-                $storeId
-            ))
-            ->addTo($customer->getEmail(), $this->customerViewHelper->getCustomerName($customer))
-            ->getTransport();
-
-        $transport->sendMessage();
 
         return $this;
     }
