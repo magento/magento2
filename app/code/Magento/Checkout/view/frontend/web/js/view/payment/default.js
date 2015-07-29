@@ -40,10 +40,10 @@ define(
              */
             initialize: function () {
                 this._super().initChildren();
-                checkoutDataResolver.resolveBillingAddress();
                 quote.billingAddress.subscribe(function(address) {
                     this.isPlaceOrderActionAllowed((address !== null));
                 }, this);
+                checkoutDataResolver.resolveBillingAddress();
 
                 var billingAddressCode = 'billingAddress' + this.getCode();
                 registry.async('checkoutProvider')(function (checkoutProvider) {
