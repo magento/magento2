@@ -102,7 +102,7 @@ class Repository implements TransactionRepositoryInterface
             /** @var \Magento\Sales\Api\Data\TransactionInterface $entity */
             $this->metaData->getMapper()->load($entity, $id);
             if (!$entity->getTransactionId()) {
-                throw new NoSuchEntityException('Requested entity doesn\'t exist');
+                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
             $this->entityStorage->add($entity);
         }
