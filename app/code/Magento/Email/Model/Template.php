@@ -195,16 +195,14 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     public function isValidForSend()
     {
-        return !$this->scopeConfig->isSetFlag(
-            \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
-            ScopeInterface::SCOPE_STORE
-        ) && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
+        return !$this->scopeConfig->isSetFlag(Template::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)
+            && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
     }
 
     /**
      * Getter for template type
      *
-     * @return int|string
+     * @return int
      */
     public function getType()
     {
@@ -213,7 +211,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
             $templateType = $this->emailConfig->getTemplateType($this->getId());
             $templateType = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
         }
-        return $templateType;
+        return $templateType !== null ? $templateType : self::TYPE_HTML;
     }
 
     /**

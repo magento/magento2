@@ -393,7 +393,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function initiatePasswordReset($email, $template, $websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
         // load customer by email
@@ -463,12 +463,9 @@ class AccountManagement implements AccountManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function createAccount(
-        CustomerInterface $customer,
-        $password = null,
-        $redirectUrl = ''
-    ) {
-        if (!is_null($password)) {
+    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
+    {
+        if ($password !== null) {
             $this->checkPasswordStrength($password);
         } else {
             $password = $this->mathRandom->getRandomString(self::MIN_PASSWORD_LENGTH);
@@ -482,11 +479,8 @@ class AccountManagement implements AccountManagementInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function createAccountWithPasswordHash(
-        CustomerInterface $customer,
-        $hash,
-        $redirectUrl = ''
-    ) {
+    public function createAccountWithPasswordHash(CustomerInterface $customer, $hash, $redirectUrl = '')
+    {
         // This logic allows an existing customer to be added to a different store.  No new account is created.
         // The plan is to move this logic into a new method called something like 'registerAccountWithStore'
         if ($customer->getId()) {
@@ -706,7 +700,7 @@ class AccountManagement implements AccountManagementInterface
     public function isEmailAvailable($customerEmail, $websiteId = null)
     {
         try {
-            if (is_null($websiteId)) {
+            if ($websiteId === null) {
                 $websiteId = $this->storeManager->getStore()->getWebsiteId();
             }
             $this->customerRepository->get($customerEmail, $websiteId);

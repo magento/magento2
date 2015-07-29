@@ -7,7 +7,6 @@ namespace Magento\Email\Block\Adminhtml\Template;
 
 use Magento\Backend\Block\Widget;
 use Magento\Backend\Block\Widget\ContainerInterface;
-use Magento\Framework\App\TemplateTypesInterface;
 
 /**
  * Adminhtml system template edit block
@@ -341,16 +340,13 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     * Return template type from template object or TYPE_HTML by default
+     * Return template type from template object
      *
      * @return int
      */
     public function getTemplateType()
     {
-        if ($this->getEmailTemplate()->getTemplateType()) {
-            return $this->getEmailTemplate()->getTemplateType();
-        }
-        return TemplateTypesInterface::TYPE_HTML;
+        return $this->getEmailTemplate()->getType();
     }
 
     /**
