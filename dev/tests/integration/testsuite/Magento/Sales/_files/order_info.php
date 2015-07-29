@@ -74,12 +74,15 @@ $item = $order->getAllItems()[0];
 /** @var \Magento\Sales\Model\Service\Order $orderService */
 $orderService = $objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order]);
 
+/** @var \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory */
+$creditmemoFactory = $objectManager->get('Magento\Sales\Model\Order\CreditmemoFactory');
+
 /** @var $invoice \Magento\Sales\Model\Order\Invoice */
 $invoice = $orderService->prepareInvoice([$item->getId() => 10]);
 $invoice->register();
 $invoice->save();
 
-$creditmemo = $orderService->prepareInvoiceCreditmemo($invoice, ['qtys' => [$item->getId() => 5]]);
+$creditmemo = $creditmemoFactory->createByInvoice($invoice, ['qtys' => [$item->getId() => 5]]);
 
 foreach ($creditmemo->getAllItems() as $creditmemoItem) {
     //Workaround to return items to stock

@@ -29,7 +29,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     protected $context;
 
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\CreditmemoRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoRepositoryMock;
 
@@ -99,7 +99,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->creditmemoRepositoryMock = $this->getMock(
-            'Magento\Sales\Model\Order\CreditmemoRepository',
+            'Magento\Sales\Api\CreditmemoRepositoryInterface',
             [],
             [],
             '',
