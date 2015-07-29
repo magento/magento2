@@ -10,8 +10,11 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Model\Cron\Status;
-use Magento\Setup\Model\ObjectManagerProvider;
 
+/**
+ * Class Navigation
+ *
+ */
 class Navigation extends AbstractActionController
 {
     /**
@@ -30,23 +33,16 @@ class Navigation extends AbstractActionController
     protected $view;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @param NavModel $navigation
      * @param Status $status
-     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(NavModel $navigation, Status $status, ObjectManagerProvider $objectManagerProvider)
+    public function __construct(NavModel $navigation, Status $status)
     {
         $this->navigation = $navigation;
         $this->status = $status;
         $this->view = new ViewModel;
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
-        $this->objectManager = $objectManagerProvider->get();
     }
 
     /**
@@ -75,9 +71,7 @@ class Navigation extends AbstractActionController
     {
         $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
         $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
-        /** @var \Magento\Backend\Helper\Data $backendHelper*/
-        $backendHelper = $this->objectManager->get('Magento\Backend\Helper\Data');
-        $this->view->setVariable('homePageUrl', $backendHelper->getHomePageUrl());
+        $this->view->setVariable('homePageUrl', '..');
         $this->view->setTerminal(true);
         return $this->view;
     }
