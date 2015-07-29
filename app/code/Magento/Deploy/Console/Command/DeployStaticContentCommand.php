@@ -43,6 +43,13 @@ class DeployStaticContentCommand extends Command
     private $validator;
 
     /**
+     * Factory to get object manager
+     *
+     * @var ObjectManagerFactory
+     */
+    private $objectManagerFactory;
+
+    /**
      * Inject dependencies
      *
      * @param ObjectManagerFactory $objectManagerFactory
