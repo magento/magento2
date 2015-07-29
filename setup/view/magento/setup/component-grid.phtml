@@ -103,7 +103,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="component in components | startFrom:start | limitTo:2">
+            <tr ng-repeat="component in components | startFrom:start | limitTo:rowLimit">
                 <td class="data-grid-indicator-cell">
                     <span class="component-indicator"
                           ng-class="getIndicatorInfo(component, 'icon')"
