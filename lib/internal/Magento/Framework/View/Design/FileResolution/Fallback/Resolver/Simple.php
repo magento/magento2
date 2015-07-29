@@ -36,13 +36,11 @@ class Simple implements Fallback\ResolverInterface
      *
      * @param Filesystem $filesystem
      * @param RulePool $rulePool
-     * @param Fallback\CacheDataInterface $cache
      */
-    public function __construct(Filesystem $filesystem, RulePool $rulePool, Fallback\CacheDataInterface $cache)
+    public function __construct(Filesystem $filesystem, RulePool $rulePool)
     {
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->rulePool = $rulePool;
-        $this->cache = $cache;
     }
 
     /**
@@ -51,25 +49,18 @@ class Simple implements Fallback\ResolverInterface
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
         self::assertFilePathFormat($file);
-        $themePath = $theme ? $theme->getThemePath() : '';
-        $path = $this->cache->getFromCache($type, $file, $area, $themePath, $locale, $module);
-        if (false !== $path) {
-            $path = $path ? $this->rootDirectory->getAbsolutePath($path) : false;
-        } else {
-            $params = ['area' => $area, 'theme' => $theme, 'locale' => $locale];
-            foreach ($params as $key => $param) {
-                if ($param === null) {
-                    unset($params[$key]);
-                }
-            }
-            if (!empty($module)) {
-                list($params['namespace'], $params['module']) = explode('_', $module, 2);
-            }
-            $path = $this->resolveFile($this->rulePool->getRule($type), $file, $params);
-            $cachedValue = $path ? $this->rootDirectory->getRelativePath($path) : '';
 
-            $this->cache->saveToCache($cachedValue, $type, $file, $area, $themePath, $locale, $module);
+        $params = ['area' => $area, 'theme' => $theme, 'locale' => $locale];
+        foreach ($params as $key => $param) {
+            if ($param === null) {
+                unset($params[$key]);
+            }
         }
+        if (!empty($module)) {
+            list($params['namespace'], $params['module']) = explode('_', $module, 2);
+        }
+        $path = $this->resolveFile($this->rulePool->getRule($type), $file, $params);
+
         return $path;
     }
 
