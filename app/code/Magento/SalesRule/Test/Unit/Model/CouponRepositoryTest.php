@@ -105,7 +105,22 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $coupon = $this->getMock('\Magento\SalesRule\Model\Coupon', [], [], '', false);
+        $id = 1;
+        $coupon = $this->getMock('\Magento\SalesRule\Model\Coupon', ['load', 'getCouponId', 'getById'], [], '', false);
+        $coupon->expects($this->any())->method('load')->with($id)->willReturnSelf();
+        $coupon->expects($this->any())->method('getCouponId')->willReturn($id);
+        $this->couponFactory->expects($this->once())->method('create')->willReturn($coupon);
+
+        /**
+         * @var \Magento\SalesRule\Model\Rule $rule
+         */
+        $rule = $this->getMock('\Magento\SalesRule\Model\Rule', ['load', 'getRuleId'], [], '', false);
+
+        $rule->expects($this->any())->method('load')->willReturnSelf();
+        $rule->expects($this->any())->method('getRuleId')->willReturn($id);
+
+        $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
+
         $this->resource->expects($this->once())->method('save')->with($coupon);
         $this->assertEquals($coupon, $this->model->save($coupon));
     }
@@ -115,17 +130,31 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
      * @param $exceptionObject
      * @param $exceptionName
      * @param $exceptionMessage
+     * @param $id
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testSaveWithExceptions($exceptionObject, $exceptionName, $exceptionMessage)
+    public function testSaveWithExceptions($exceptionObject, $exceptionName, $exceptionMessage, $id)
     {
         /**
          * @var \Magento\SalesRule\Model\Coupon $coupon
          */
         $coupon = $this->getMock('\Magento\SalesRule\Model\Coupon', [], [], '', false);
-        $this->resource->expects($this->once())->method('save')->with($coupon)
-            ->willThrowException($exceptionObject);
+
+        /**
+         * @var \Magento\SalesRule\Model\Rule $rule
+         */
+        $rule = $this->getMock('\Magento\SalesRule\Model\Rule', ['load', 'getRuleId'], [], '', false);
+
+        $rule->expects($this->any())->method('load')->willReturnSelf();
+        $rule->expects($this->any())->method('getRuleId')->willReturn($id);
+
+        $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
+
+        if ($id) {
+            $this->resource->expects($this->once())->method('save')->with($coupon)
+                ->willThrowException($exceptionObject);
+        }
         $this->setExpectedException($exceptionName, $exceptionMessage);
         $this->model->save($coupon);
     }
@@ -136,7 +165,14 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 new \Magento\Framework\Exception\LocalizedException(__('Could not save')),
                 '\Magento\Framework\Exception\LocalizedException',
-                'Could not save'
+                'Could not save',
+                1
+            ],
+            [
+                null,
+                '\Magento\Framework\Exception\LocalizedException',
+                'Error occurred when saving coupon: No such entity with rule_id = ',
+                false
             ]
         ];
     }

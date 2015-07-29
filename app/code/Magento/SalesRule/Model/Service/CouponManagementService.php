@@ -10,6 +10,7 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use \Magento\SalesRule\Model\Resource\Rule\Collection;
+use \Magento\SalesRule\Model\Coupon;
 
 /**
  * Coupon management service class
@@ -80,6 +81,13 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
         try {
             $this->couponGenerator->setData($data);
+            $rule = $this->ruleFactory->create()->load($this->couponGenerator->getRuleId());
+            if (!$rule->getRuleId()) {
+                throw \Magento\Framework\Exception\NoSuchEntityException::singleField(
+                    \Magento\SalesRule\Model\Coupon::KEY_RULE_ID,
+                    $this->couponGenerator->getRuleId()
+                );
+            }
             $this->couponGenerator->generatePool();
             return $this->couponGenerator->getGeneratedCodes();
         } catch (\Exception $e) {
