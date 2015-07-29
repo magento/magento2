@@ -32,11 +32,10 @@ class Select extends AbstractFilter
     protected $optionsProvider;
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param OptionSourceInterface $optionsProvider
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param OptionSourceInterface|null $optionsProvider
      * @param array $components
      * @param array $data
      */

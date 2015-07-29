@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Test\Unit\Model\Order\Customer;
+namespace Magento\Sales\Test\Unit\Model\Order;
 
 /**
  * Class BuilderTest
  */
-class ManagementTest extends \PHPUnit_Framework_TestCase
+class CustomerManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -41,7 +41,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     protected $regionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Customer\Management
+     * @var \Magento\Sales\Model\Order\CustomerManagement
      */
     protected $service;
 
@@ -72,7 +72,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->orderRepository = $this->getMock('\Magento\Sales\Api\OrderRepositoryInterface');
 
-        $this->service = new \Magento\Sales\Model\Order\Customer\Management(
+        $this->service = new \Magento\Sales\Model\Order\CustomerManagement(
             $this->objectCopyService,
             $this->accountManagement,
             $this->customerFactory,

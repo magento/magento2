@@ -28,6 +28,7 @@ class MassDisable extends \Magento\Backend\App\Action
     /**
      * @param Context $context
      * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {

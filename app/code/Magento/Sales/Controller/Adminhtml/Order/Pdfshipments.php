@@ -16,6 +16,10 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
 use Magento\Sales\Model\Resource\Order\CollectionFactory;
 
+/**
+ * Class Pdfshipments
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
@@ -39,19 +43,20 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
     protected $shipmentCollectionFactotory;
 
     /**
-     * @param CollectionFactory $collectionFactory
      * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
-     * @param Filter $filter
      * @param Shipment $shipment
+     * @param ShipmentCollectionFactory $shipmentCollectionFactory
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
         Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
         DateTime $dateTime,
         FileFactory $fileFactory,
-        Filter $filter,
         Shipment $shipment,
         ShipmentCollectionFactory $shipmentCollectionFactory
     ) {
@@ -76,7 +81,7 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
             ->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$shipmentsCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
-            return $this->resultRedirectFactory->create()->setPath('sales/*/');
+            return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
         return $this->fileFactory->create(
             sprintf('packingslip%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),

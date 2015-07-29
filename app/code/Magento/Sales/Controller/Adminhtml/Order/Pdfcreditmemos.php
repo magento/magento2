@@ -44,19 +44,19 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
     protected $collectionFactory;
 
     /**
-     * @param CollectionFactory $collectionFactory
      * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
-     * @param Filter $filter
      * @param Creditmemo $pdfCreditmemo
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
         Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
         DateTime $dateTime,
         FileFactory $fileFactory,
-        Filter $filter,
         Creditmemo $pdfCreditmemo
     ) {
         $this->fileFactory = $fileFactory;
@@ -78,7 +78,7 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
         $creditmemoCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$creditmemoCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
-            return $this->resultRedirectFactory->create()->setPath('sales/*/');
+            return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
         return $this->fileFactory->create(
             sprintf('creditmemo%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),

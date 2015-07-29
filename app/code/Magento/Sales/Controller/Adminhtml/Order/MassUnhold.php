@@ -15,6 +15,7 @@ class MassUnhold extends AbstractMassAction
     /**
      * @param Context $context
      * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {
@@ -59,7 +60,7 @@ class MassUnhold extends AbstractMassAction
             );
         }
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('sales/*/');
+        $resultRedirect->setPath($this->getComponentRefererUrl());
         return $resultRedirect;
     }
 }
