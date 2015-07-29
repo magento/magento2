@@ -134,13 +134,16 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
             $this->_iterator = $this->getIterator();
             $this->_iterator->rewind();
         }
+        $dataRow = null;
         if ($this->_iterator->valid()) {
-            $dataRow = $this->_iterator->current();
-            $dataRow = $this->jsonHelper->jsonDecode($dataRow[0]);
-            $this->_iterator->next();
-        } else {
+            $encodedData = $this->_iterator->current();
+            if (array_key_exists(0, $encodedData) && $encodedData[0]) {
+                $dataRow = $this->jsonHelper->jsonDecode($encodedData[0]);
+                $this->_iterator->next();
+            }
+        }
+        if (!$dataRow) {
             $this->_iterator = null;
-            $dataRow = null;
         }
         return $dataRow;
     }

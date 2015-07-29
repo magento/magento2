@@ -216,12 +216,12 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
             /** @var \Magento\Authorization\Model\Role $parentRole */
             $parentRole = $this->_roleFactory->create()->load($parentId);
         } else {
-            $role = new \Magento\Framework\Object();
+            $role = new \Magento\Framework\DataObject();
             $role->setTreeLevel(0);
         }
 
         if ($parentRole->getId()) {
-            $data = new \Magento\Framework\Object(
+            $data = new \Magento\Framework\DataObject(
                 [
                     'parent_id' => $parentRole->getId(),
                     'tree_level' => $parentRole->getTreeLevel() + 1,

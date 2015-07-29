@@ -237,7 +237,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected function _joinFields()
     {
-        $this->_totals = new \Magento\Framework\Object();
+        $this->_totals = new \Magento\Framework\DataObject();
 
         $this->addAttributeToSelect('entity_id')->addAttributeToSelect('name')->addAttributeToSelect('price');
 

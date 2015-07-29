@@ -84,13 +84,13 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Check customer scope, email and confirmation key before saving
      *
-     * @param \Magento\Framework\Object $customer
+     * @param \Magento\Framework\DataObject $customer
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _beforeSave(\Magento\Framework\Object $customer)
+    protected function _beforeSave(\Magento\Framework\DataObject $customer)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         if ($customer->getStoreId() === null) {
@@ -168,10 +168,10 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Save customer addresses and set default addresses in attributes backend
      *
-     * @param \Magento\Framework\Object $customer
+     * @param \Magento\Framework\DataObject $customer
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Object $customer)
+    protected function _afterSave(\Magento\Framework\DataObject $customer)
     {
         return parent::_afterSave($customer);
     }
@@ -179,7 +179,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Retrieve select object for loading base entity row
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param string|int $rowId
      * @return \Magento\Framework\DB\Select
      */
@@ -319,10 +319,10 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Custom setter of increment ID if its needed
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
-    public function setNewIncrementId(\Magento\Framework\Object $object)
+    public function setNewIncrementId(\Magento\Framework\DataObject $object)
     {
         if ($this->_scopeConfig->getValue(
             \Magento\Customer\Model\Customer::XML_PATH_GENERATE_HUMAN_FRIENDLY_ID,

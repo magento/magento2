@@ -27,14 +27,14 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      */
-    public function __construct(\Magento\Framework\Stdlib\String $string)
+    public function __construct(\Magento\Framework\Stdlib\StringUtils $string)
     {
         $this->string = $string;
     }

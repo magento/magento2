@@ -82,7 +82,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
-     * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
+     * @param \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory
      * @param \Magento\Sales\Model\Resource\Order\Collection $orderResource
@@ -102,7 +102,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Framework\Object\Copy\Config $fieldsetConfig,
+        \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory,
         \Magento\Sales\Model\Resource\Order\Collection $orderResource,

@@ -96,7 +96,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnCallback(
                 function ($store) {
-                    return is_object($store) ? $store : new \Magento\Framework\Object(['id' => 42]);
+                    return is_object($store) ? $store : new \Magento\Framework\DataObject(['id' => 42]);
                 }
             ));
         $this->catalogHelperMock = $this->getMock('Magento\Catalog\Helper\Data', [], [], '', false);
@@ -138,7 +138,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $product->expects($this->any())->method('getId')->will($this->returnValue('5'));
-        $productStore = new \Magento\Framework\Object(['id' => 33]);
+        $productStore = new \Magento\Framework\DataObject(['id' => 33]);
         $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));
         $this->collection->setProduct($product);
         $this->assertEquals(33, $this->collection->getStoreId());

@@ -240,10 +240,10 @@ class Product extends AbstractResource
     /**
      * Process product data before save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
-    protected function _beforeSave(\Magento\Framework\Object $object)
+    protected function _beforeSave(\Magento\Framework\DataObject $object)
     {
         /**
          * Check if declared category ids in object data.
@@ -266,10 +266,10 @@ class Product extends AbstractResource
     /**
      * Save data related with product
      *
-     * @param \Magento\Framework\Object $product
+     * @param \Magento\Framework\DataObject $product
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Object $product)
+    protected function _afterSave(\Magento\Framework\DataObject $product)
     {
         $this->_saveWebsiteIds($product)->_saveCategories($product);
         return parent::_afterSave($product);
@@ -334,11 +334,11 @@ class Product extends AbstractResource
     /**
      * Save product category relations
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _saveCategories(\Magento\Framework\Object $object)
+    protected function _saveCategories(\Magento\Framework\DataObject $object)
     {
         /**
          * If category ids data is not declared we haven't do manipulations

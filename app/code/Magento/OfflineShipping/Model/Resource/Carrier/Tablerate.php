@@ -242,7 +242,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Upload table rate file and import data from it
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
      * @todo: this method should be refactored as soon as updated design will be provided
@@ -250,7 +250,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function uploadAndImport(\Magento\Framework\Object $object)
+    public function uploadAndImport(\Magento\Framework\DataObject $object)
     {
         if (empty($_FILES['groups']['tmp_name']['tablerate']['fields']['import']['value'])) {
             return $this;

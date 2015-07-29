@@ -320,11 +320,11 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param array $productRow
      * @param int $storeId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _prepareProduct(array $productRow, $storeId)
     {
-        $product = new \Magento\Framework\Object();
+        $product = new \Magento\Framework\DataObject();
 
         $product['id'] = $productRow[$this->getIdFieldName()];
         if (empty($productRow['url'])) {
@@ -339,7 +339,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Load product images
      *
-     * @param \Magento\Framework\Object $product
+     * @param \Magento\Framework\DataObject $product
      * @param int $storeId
      * @return void
      */
@@ -358,7 +358,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $product->getImage() != self::NOT_SELECTED_IMAGE
         ) {
             $imagesCollection = [
-                new \Magento\Framework\Object(
+                new \Magento\Framework\DataObject(
                     ['url' => $this->_getMediaConfig()->getBaseMediaUrlAddition() . $product->getImage()]
                 ),
             ];
@@ -374,7 +374,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
 
             $product->setImages(
-                new \Magento\Framework\Object(
+                new \Magento\Framework\DataObject(
                     ['collection' => $imagesCollection, 'title' => $product->getName(), 'thumbnail' => $thumbnail]
                 )
             );
@@ -384,7 +384,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Get all product images
      *
-     * @param \Magento\Framework\Object $product
+     * @param \Magento\Framework\DataObject $product
      * @param int $storeId
      * @return array
      */
@@ -397,7 +397,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($gallery) {
             $productMediaPath = $this->_getMediaConfig()->getBaseMediaUrlAddition();
             foreach ($gallery as $image) {
-                $imagesCollection[] = new \Magento\Framework\Object(
+                $imagesCollection[] = new \Magento\Framework\DataObject(
                     [
                         'url' => $productMediaPath . $image['file'],
                         'caption' => $image['label'] ? $image['label'] : $image['label_default'],

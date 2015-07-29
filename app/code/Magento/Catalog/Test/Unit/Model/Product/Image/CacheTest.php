@@ -90,7 +90,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     {
         $imageFile = 'image.jpg';
         $imageItem = $this->objectManager->getObject(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             [
                 'data' => ['file' => $imageFile]
             ]

@@ -38,7 +38,7 @@ class TableCollection extends AbstractCollection
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null,
         array $fixture = []
     ) {
-        $this->setModel('Magento\Framework\Object');
+        $this->setModel('Magento\Framework\DataObject');
         $this->setResourceModel('Magento\Mtf\Util\Generate\Repository\Resource');
 
         $resource = $this->getResource();

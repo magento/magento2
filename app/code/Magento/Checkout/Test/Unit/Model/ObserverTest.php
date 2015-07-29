@@ -68,8 +68,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $observer->expects($this->once())->method('getEvent')->will(
-            $this->returnValue(new \Magento\Framework\Object(
-                ['quote' => new \Magento\Framework\Object(['is_checkout_cart' => 1, 'id' => 7])]
+            $this->returnValue(new \Magento\Framework\DataObject(
+                ['quote' => new \Magento\Framework\DataObject(['is_checkout_cart' => 1, 'id' => 7])]
             ))
         );
         $this->checkoutSession->expects($this->once())->method('getQuoteId')->with(7);

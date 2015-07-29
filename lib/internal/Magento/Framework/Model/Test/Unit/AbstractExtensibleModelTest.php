@@ -96,9 +96,9 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomAttributesMetadata')
             ->willReturn(
                 [
-                    new \Magento\Framework\Object(['attribute_code' => 'attribute1']),
-                    new \Magento\Framework\Object(['attribute_code' => 'attribute2']),
-                    new \Magento\Framework\Object(['attribute_code' => 'attribute3']),
+                    new \Magento\Framework\DataObject(['attribute_code' => 'attribute1']),
+                    new \Magento\Framework\DataObject(['attribute_code' => 'attribute2']),
+                    new \Magento\Framework\DataObject(['attribute_code' => 'attribute3']),
                 ]
             );
         $extensionAttributesFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')

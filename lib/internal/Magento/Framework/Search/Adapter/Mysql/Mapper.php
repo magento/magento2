@@ -13,7 +13,7 @@ use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainerFactory;
 use Magento\Framework\Search\EntityMetadata;
-use Magento\Framework\Search\Request\Query\Bool as BoolQuery;
+use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
 use Magento\Framework\Search\Request\Query\Match as MatchQuery;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;

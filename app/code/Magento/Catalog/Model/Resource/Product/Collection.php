@@ -352,7 +352,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     protected function _preparePriceExpressionParameters($select)
     {
         // prepare response object for event
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setAdditionalCalculations([]);
         $tableAliases = array_keys($select->getPart(\Zend_Db_Select::FROM));
         if (in_array(self::INDEX_TABLE_ALIAS, $tableAliases)) {
@@ -499,7 +499,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Retrieve collection empty item
      * Redeclared for specifying id field name without getting resource model inside model
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getNewEmptyItem()
     {
@@ -662,7 +662,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             $objects = $this->_catalogUrl->getRewriteByProductStore($objects);
             foreach ($this->_items as $item) {
                 if (isset($objects[$item->getEntityId()])) {
-                    $object = new \Magento\Framework\Object($objects[$item->getEntityId()]);
+                    $object = new \Magento\Framework\DataObject($objects[$item->getEntityId()]);
                     $item->setUrlDataObject($object);
                 }
             }

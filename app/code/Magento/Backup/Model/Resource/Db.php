@@ -116,14 +116,14 @@ class Db
      * Retrieve table status
      *
      * @param string $tableName
-     * @return \Magento\Framework\Object|bool
+     * @return \Magento\Framework\DataObject|bool
      */
     public function getTableStatus($tableName)
     {
         $row = $this->_write->showTableStatus($tableName);
 
         if ($row) {
-            $statusObject = new \Magento\Framework\Object();
+            $statusObject = new \Magento\Framework\DataObject();
             foreach ($row as $field => $value) {
                 $statusObject->setData(strtolower($field), $value);
             }

@@ -139,7 +139,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with($this->selectMock, [])
             ->will($this->returnValue([$data]));
 
-        $objectMock = $this->getMock('Magento\Framework\Object', ['addData'], []);
+        $objectMock = $this->getMock('Magento\Framework\DataObject', ['addData'], []);
         $objectMock->expects($this->once())
             ->method('addData')
             ->with($data);

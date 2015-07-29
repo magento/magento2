@@ -173,7 +173,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     {
         if (null === $this->_salesAmountExpression) {
             $adapter = $this->getConnection();
-            $expressionTransferObject = new \Magento\Framework\Object(
+            $expressionTransferObject = new \Magento\Framework\DataObject(
                 [
                     'expression' => '%s - %s - %s - (%s - %s - %s)',
                     'arguments' => [

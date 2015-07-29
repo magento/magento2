@@ -72,7 +72,7 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
         for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
             for ($rowNumber = 1; $rowNumber <= $pageSize; $rowNumber++) {
                 $itemId = ($pageNumber - 1) * $pageSize + $rowNumber;
-                $item = new \Magento\Framework\Object(['id' => $itemId]);
+                $item = new \Magento\Framework\DataObject(['id' => $itemId]);
                 $collectionMock->addItem($item);
 
                 $callbackMock->expects($this->at($itemId - 1))->method('callback')->with($item);
