@@ -68,8 +68,8 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
 
     /**
      * @param Context $context
-     * @param FileFactory $fileFactory
      * @param Filter $filter
+     * @param FileFactory $fileFactory
      * @param Invoice $pdfInvoice
      * @param Shipment $pdfShipment
      * @param Creditmemo $pdfCreditmemo
@@ -82,8 +82,8 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
      */
     public function __construct(
         Context $context,
-        FileFactory $fileFactory,
         Filter $filter,
+        FileFactory $fileFactory,
         Invoice $pdfInvoice,
         Shipment $pdfShipment,
         Creditmemo $pdfCreditmemo,
