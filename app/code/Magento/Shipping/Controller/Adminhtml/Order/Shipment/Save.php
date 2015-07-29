@@ -111,7 +111,7 @@ class Save extends \Magento\Backend\App\Action
                 $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
             }
 
-            $shipment->register();
+            $this->registerShipment($shipment);
 
             $shipment->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
             $responseAjax = new \Magento\Framework\Object();
@@ -158,5 +158,40 @@ class Save extends \Magento\Backend\App\Action
         } else {
             $this->_redirect('sales/order/view', ['order_id' => $shipment->getOrderId()]);
         }
+    }
+
+    /**
+     * Registers shipment.
+     *
+     * @param \Magento\Sales\Model\Order\Shipment $shipment
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function registerShipment(\Magento\Sales\Model\Order\Shipment $shipment)
+    {
+        if ($shipment->getId()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot register an existing shipment')
+            );
+        }
+
+        $totalQty = 0;
+
+        /** @var \Magento\Sales\Model\Order\Shipment\Item $item */
+        foreach ($shipment->getAllItems() as $item) {
+            if ($item->getQty() > 0) {
+                $item->getOrderItem()->setQtyShipped(
+                    $item->getOrderItem()->getQtyShipped() + $item->getQty()
+                );
+
+                if (!$item->getOrderItem()->isDummy(true)) {
+                    $totalQty += $item->getQty();
+                }
+            } else {
+                $item->isDeleted(true);
+            }
+        }
+
+        $shipment->setTotalQty($totalQty);
     }
 }
