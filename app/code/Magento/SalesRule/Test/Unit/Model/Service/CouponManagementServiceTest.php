@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\SalesRule\Model\Service;
+namespace Magento\SalesRule\Test\Unit\Model\Service;
 
 use Magento\SalesRule\Model\Service\CouponManagementService;
 use \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface;
