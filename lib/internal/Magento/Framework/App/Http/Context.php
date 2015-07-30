@@ -93,6 +93,10 @@ class Context
     public function getVaryString()
     {
         $data = $this->getData();
-        return !empty($data) ? sha1(serialize($data)) : null;
+        if (!empty($data)) {
+            ksort($data);
+            return sha1(serialize($data));
+        }
+        return null;
     }
 }

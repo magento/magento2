@@ -54,11 +54,11 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $isSecure bool
-     * @param $uri string
-     * @param $varyStringCookie string|null
-     * @param $varyStringContext string|null
-     * @param $expected string
+     * @param bool $isSecure
+     * @param string $uri
+     * @param string|null $varyStringCookie
+     * @param string|null $varyStringContext
+     * @param string $expected
      * @dataProvider dataProvider
      */
     public function testGetValue($isSecure, $uri, $varyStringCookie, $varyStringContext, $expected)
@@ -85,7 +85,9 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
         $isSecure = 0;
         $vary = 1;
 
-        $expected = md5(serialize([$isSecure, $uri, $vary]));
+        $data = [$isSecure, $uri, $vary];
+        ksort($data);
+        $expected = md5(serialize($data));
 
         return [
             [$isSecure, $uri, $vary, null, $expected],
