@@ -83,9 +83,7 @@ class FileManager
      */
     public function createRequireJsMixinsAsset()
     {
-        $relPath = $this->config->getMixinsFileRelativePath();
-        $this->ensureSourceFile($relPath);
-        return $this->assetRepo->createArbitrary($relPath, '');
+        return $this->assetRepo->createArbitrary($this->config->getMixinsFileRelativePath(), '');
     }
 
     /**
@@ -95,12 +93,7 @@ class FileManager
      */
     public function createTranslateConfigAsset()
     {
-        $tcRelPath =  $this->config->getTranslationConfigRelativePath();
-        $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        if (!$dir->isExist($tcRelPath)) {
-            $dir->writeFile($tcRelPath, $this->config->getTranslationConfig());
-        }
-        return $this->assetRepo->createArbitrary($tcRelPath, '');
+        return $this->assetRepo->createArbitrary($this->config->getTranslationConfigRelativePath(), '');
     }
 
     /**
