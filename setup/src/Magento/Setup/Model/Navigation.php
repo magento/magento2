@@ -46,7 +46,7 @@ class Navigation
         } else {
             $this->navStates = $serviceLocator->get('config')[self::NAV_INSTALLER];
             $this->navType = self::NAV_INSTALLER;
-            $this->titles = $serviceLocator->get('config')[self::NAV_UPDATER . 'Titles'];
+            $this->titles = $serviceLocator->get('config')[self::NAV_INSTALLER . 'Titles'];
         }
     }
 
