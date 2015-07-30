@@ -42,6 +42,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Indexer\Model\IndexerRegistry
+     */
+    protected $indexerRegistry;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -78,12 +83,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         CustomerFactory $customerFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->_customerFactory = $customerFactory;
+        $this->indexerRegistry = $indexerRegistry;
         parent::__construct(
             $context,
             $registry,
@@ -299,5 +306,39 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getEntityTypeId()
     {
         return $this->getEntityType()->getId();
+    }
+
+    /**
+     * Processing object after save data
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        $this->_getResource()->addCommitCallback([$this, 'reindex']);
+        return parent::afterSave();
+    }
+
+    /**
+     * Init indexing process after customer delete
+     *
+     * @return \Magento\Framework\Model\AbstractModel
+     */
+    public function afterDeleteCommit()
+    {
+        $this->reindex();
+        return parent::afterDeleteCommit();
+    }
+
+    /**
+     * Init indexing process after customer save
+     *
+     * @return void
+     */
+    public function reindex()
+    {
+        /** @var \Magento\Indexer\Model\Indexer $indexer */
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexRow($this->getCustomerId());
     }
 }
