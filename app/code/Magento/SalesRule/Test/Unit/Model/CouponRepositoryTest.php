@@ -162,9 +162,9 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                new \Magento\Framework\Exception\LocalizedException(__('Could not save')),
+                new \Magento\Framework\Exception\LocalizedException(__('')),
                 '\Magento\Framework\Exception\LocalizedException',
-                'Could not save',
+                '',
                 1
             ],
             [
