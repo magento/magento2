@@ -139,19 +139,14 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $entityAdapter = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\Entity\AbstractEntity',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['_saveValidatedBunches', 'getErrorAggregator']
-        );
-        $entityAdapter->method('getErrorAggregator')->willReturn(
+        $this->_entityAdapter = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\AbstractEntity')
+            ->disableOriginalConstructor()
+            ->setMethods(['importData', '_saveValidatedBunches', 'getErrorAggregator'])
+            ->getMockForAbstractClass();
+        /*$this->_entityAdapter->method('getErrorAggregator')->willReturn(
             $this->getErrorAggregatorObject()
-        );
-        $this->_entityFactory->method('create')->willReturn($entityAdapter);
+        );*/
+        $this->_entityFactory->method('create')->willReturn($this->_entityAdapter);
 
         $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\Resource\Import\Data')
             ->disableOriginalConstructor()
@@ -215,18 +210,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                 'setData',
                 'getProcessedEntitiesCount',
                 'getProcessedRowsCount',
-                'getInvalidRowsCount',
-                'getErrorsCount',
                 'getEntity',
                 'getBehavior',
                 'isReportEntityType',
             ])
             ->getMock();
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
-        $this->_entityAdapter = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\AbstractEntity')
-            ->disableOriginalConstructor()
-            ->setMethods(['importData'])
-            ->getMockForAbstractClass();
+
     }
 
     /**
@@ -278,16 +268,23 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->_entityAdapter->expects($this->once())
                     ->method('importData')
                     ->will($this->returnSelf());
-        $this->import->expects($this->once())
+        /*$this->import->expects($this->any())
                     ->method('_getEntityAdapter')
-                    ->will($this->returnValue($this->_entityAdapter));
-
+                    ->will($this->returnValue($this->_entityAdapter));*/
+        $this->_importConfig
+            ->expects($this->any())
+            ->method('getEntities')
+            ->willReturn(
+                [
+                    $entityTypeCode => [
+                        'model' => $entityTypeCode
+                    ]
+                ]
+            );
         $importOnceMethodsReturnNull = [
             'getBehavior',
             'getProcessedRowsCount',
             'getProcessedEntitiesCount',
-            'getInvalidRowsCount',
-            'getErrorsCount',
         ];
 
         foreach ($importOnceMethodsReturnNull as $method) {
