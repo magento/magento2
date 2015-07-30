@@ -57,7 +57,7 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
 
         $this->conditionDataFactory = $this->getMockBuilder('Magento\SalesRule\Api\Data\ConditionInterfaceFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->dataObjectProcessor = $this->getMockBuilder('\Magento\Framework\Reflection\DataObjectProcessor')
@@ -67,7 +67,7 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
 
         $this->ruleLabelFactory = $this->getMockBuilder('\Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->salesRule = $this->getMockBuilder('\Magento\SalesRule\Model\Rule')

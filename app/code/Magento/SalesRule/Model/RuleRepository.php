@@ -6,10 +6,10 @@
 
 namespace Magento\SalesRule\Model;
 
-use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use \Magento\SalesRule\Model\Resource\Rule\Collection;
+use Magento\Framework\Api\SortOrder;
+use Magento\SalesRule\Model\Resource\Rule\Collection;
 
 /**
  * Sales rule CRUD class
@@ -151,7 +151,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
             $field = $sortOrder->getField();
             $collection->addOrder(
                 $field,
-                ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
