@@ -7,6 +7,12 @@
 -->
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
     <vars module="Magento_Catalog">
+
+        <!-- New gallery theme settings -->
+        <var name="gallery_nav">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
+        <var name="gallery_loop">true</var> <!-- Gallery navigation loop (true/false) -->
+        <!-- end -->
+
         <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->
         <var name="product_base_image_size">275</var>           <!-- Override for base product image -->
         <var name="product_base_image_icon_size">48</var>       <!-- Base product image icon size -->
