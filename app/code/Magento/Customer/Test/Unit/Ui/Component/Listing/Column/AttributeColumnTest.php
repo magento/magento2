@@ -6,11 +6,11 @@
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Customer\Ui\Component\Listing\Column\Gender;
+use Magento\Customer\Ui\Component\Listing\Column\AttributeColumn;
 
-class GenderTest extends \PHPUnit_Framework_TestCase
+class AttributeColumnTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Gender */
+    /** @var AttributeColumn */
     protected $component;
 
     /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -62,7 +62,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->component = new Gender(
+        $this->component = new AttributeColumn(
             $this->context,
             $this->uiComponentFactory,
             $this->customerMetadata
