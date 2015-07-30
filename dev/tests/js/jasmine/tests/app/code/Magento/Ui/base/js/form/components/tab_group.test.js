@@ -3,14 +3,25 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
+/*jscs:disable requirePaddingNewLinesInObjects*/
+/*jscs:disable jsDoc*/
+
 define([
     'underscore',
     'uiRegistry',
     'Magento_Ui/js/form/components/tab_group'
-], function (_, registry, constr) {
+], function (_, registry, Constr) {
     'use strict';
 
     describe('Magento_Ui/js/form/components/tab_group', function () {
+
+        var obj = new Constr({
+            provider: 'provName',
+            name: '',
+            index: ''
+        });
+
         window.FORM_KEY = 'magentoFormKey';
         registry.set('provName', {
             on: function () {
@@ -21,18 +32,12 @@ define([
             }
         });
 
-        var obj = new constr({
-            provider: 'provName',
-            name: '',
-            index: ''
-        });
-
         describe('"initElement" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initElement')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.initElement);
+                var type = typeof obj.initElement;
 
                 expect(type).toEqual('function');
             });
@@ -57,7 +62,7 @@ define([
                         active: function () {
                         }
                     },
-                    type = typeof(obj.initElement(arg));
+                    type = typeof obj.initElement(arg);
 
                 expect(type).toEqual('object');
             });
@@ -67,7 +72,7 @@ define([
                 expect(obj.hasOwnProperty('initActivation')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.initActivation);
+                var type = typeof obj.initActivation;
 
                 expect(type).toEqual('function');
             });
@@ -92,7 +97,7 @@ define([
                         active: function () {
                         }
                     },
-                    type = typeof(obj.initActivation(arg));
+                    type = typeof obj.initActivation(arg);
 
                 expect(type).toEqual('object');
             });
@@ -102,7 +107,7 @@ define([
                 expect(obj.hasOwnProperty('validate')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.validate);
+                var type = typeof obj.validate;
 
                 expect(type).toEqual('function');
             });
@@ -126,7 +131,7 @@ define([
                 expect(obj.hasOwnProperty('onValidate')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.onValidate);
+                var type = typeof obj.onValidate;
 
                 expect(type).toEqual('function');
             });

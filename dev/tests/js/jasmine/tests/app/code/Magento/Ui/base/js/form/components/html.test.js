@@ -3,14 +3,25 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
+/*jscs:disable requirePaddingNewLinesInObjects*/
+/*jscs:disable jsDoc*/
+
 define([
     'underscore',
     'uiRegistry',
     'Magento_Ui/js/form/components/html'
-], function (_, registry, constr) {
+], function (_, registry, Constr) {
     'use strict';
 
     describe('Magento_Ui/js/form/components/html', function () {
+
+        var obj = new Constr({
+            provider: 'provName',
+            name: '',
+            index: ''
+        });
+
         window.FORM_KEY = 'magentoFormKey';
         registry.set('provName', {
             on: function () {
@@ -21,18 +32,12 @@ define([
             }
         });
 
-        var obj = new constr({
-            provider: 'provName',
-            name: '',
-            index: ''
-        });
-
         describe('"initObservable" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initObservable')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.initObservable);
+                var type = typeof obj.initObservable;
 
                 expect(type).toEqual('function');
             });
@@ -40,7 +45,7 @@ define([
                 expect(obj.initObservable()).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof(obj.initObservable());
+                var type = typeof obj.initObservable();
 
                 expect(type).toEqual('object');
             });
@@ -57,7 +62,7 @@ define([
                 expect(obj.hasOwnProperty('initContainer')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.initContainer);
+                var type = typeof obj.initContainer;
 
                 expect(type).toEqual('function');
             });
@@ -72,7 +77,7 @@ define([
                 var parent = {
                         on: jasmine.createSpy()
                     },
-                    type = typeof(obj.initContainer(parent));
+                    type = typeof obj.initContainer(parent);
 
                 expect(type).toEqual('object');
             });
@@ -90,7 +95,7 @@ define([
                 expect(obj.hasOwnProperty('initAjaxConfig')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.initAjaxConfig);
+                var type = typeof obj.initAjaxConfig;
 
                 expect(type).toEqual('function');
             });
@@ -98,7 +103,7 @@ define([
                 expect(obj.initAjaxConfig()).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof(obj.initAjaxConfig());
+                var type = typeof obj.initAjaxConfig();
 
                 expect(type).toEqual('object');
             });
@@ -119,7 +124,7 @@ define([
                 obj.ajaxConfig = null;
 
                 obj.initAjaxConfig();
-                expect(typeof(obj.ajaxConfig.success)).toEqual('function');
+                expect(typeof obj.ajaxConfig.success).toEqual('function');
             });
         });
         describe('"onContainerToggle" method', function () {
@@ -127,7 +132,7 @@ define([
                 expect(obj.hasOwnProperty('onContainerToggle')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.onContainerToggle);
+                var type = typeof obj.onContainerToggle;
 
                 expect(type).toEqual('function');
             });
@@ -156,12 +161,12 @@ define([
                 expect(obj.hasOwnProperty('hasData')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.hasData);
+                var type = typeof obj.hasData;
 
                 expect(type).toEqual('function');
             });
             it('Check returned type', function () {
-                var type = typeof(obj.hasData());
+                var type = typeof obj.hasData();
 
                 expect(type).toEqual('boolean');
             });
@@ -171,12 +176,12 @@ define([
                 expect(obj.hasOwnProperty('shouldLoad')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.shouldLoad);
+                var type = typeof obj.shouldLoad;
 
                 expect(type).toEqual('function');
             });
             it('Check returned type', function () {
-                var type = typeof(obj.shouldLoad());
+                var type = typeof obj.shouldLoad();
 
                 expect(type).toEqual('boolean');
             });
@@ -186,7 +191,7 @@ define([
                 expect(obj.hasOwnProperty('loadData')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.loadData);
+                var type = typeof obj.loadData;
 
                 expect(type).toEqual('function');
             });
@@ -199,7 +204,7 @@ define([
                 expect(obj.hasOwnProperty('onDataLoaded')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.onDataLoaded);
+                var type = typeof obj.onDataLoaded;
 
                 expect(type).toEqual('function');
             });
@@ -218,7 +223,7 @@ define([
                 expect(obj.hasOwnProperty('updateContent')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.updateContent);
+                var type = typeof obj.updateContent;
 
                 expect(type).toEqual('function');
             });
@@ -226,7 +231,7 @@ define([
                 expect(obj.updateContent()).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                expect(typeof(obj.updateContent())).toEqual('object');
+                expect(typeof obj.updateContent()).toEqual('object');
             });
         });
     });

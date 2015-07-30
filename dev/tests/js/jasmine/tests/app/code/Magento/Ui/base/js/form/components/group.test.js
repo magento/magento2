@@ -3,14 +3,24 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
+/*jscs:disable requirePaddingNewLinesInObjects*/
+/*jscs:disable jsDoc*/
+
 define([
     'underscore',
     'uiRegistry',
     'Magento_Ui/js/form/components/group'
-], function (_, registry, constr) {
+], function (_, registry, Constr) {
     'use strict';
 
     describe('Magento_Ui/js/form/components/group', function () {
+
+        var obj = new Constr({
+            provider: 'provName',
+            name: '',
+            index: ''
+        });
 
         registry.set('provName', {
             on: function () {
@@ -21,18 +31,12 @@ define([
             }
         });
 
-        var obj = new constr({
-            provider: 'provName',
-            name: '',
-            index: ''
-        });
-
         describe('"initObservable" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initObservable')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.initObservable);
+                var type = typeof obj.initObservable;
 
                 expect(type).toEqual('function');
             });
@@ -40,7 +44,7 @@ define([
                 expect(obj.initObservable()).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof(obj.initObservable());
+                var type = typeof obj.initObservable();
 
                 expect(type).toEqual('object');
             });
@@ -57,7 +61,7 @@ define([
                 expect(obj.hasOwnProperty('isSingle')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.isSingle);
+                var type = typeof obj.isSingle;
 
                 expect(type).toEqual('function');
             });
@@ -76,7 +80,7 @@ define([
                 expect(obj.isSingle()).toEqual(false);
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof(obj.isSingle());
+                var type = typeof obj.isSingle();
 
                 expect(type).toEqual('boolean');
             });
@@ -93,7 +97,7 @@ define([
                 expect(obj.hasOwnProperty('isMultiple')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof(obj.isMultiple);
+                var type = typeof obj.isMultiple;
 
                 expect(type).toEqual('function');
             });
@@ -112,7 +116,7 @@ define([
                 expect(obj.isMultiple()).toEqual(false);
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof(obj.isMultiple());
+                var type = typeof obj.isMultiple();
 
                 expect(type).toEqual('boolean');
             });
