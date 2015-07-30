@@ -5,8 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
-use Magento\Sales\Api\CreditmemoRepositoryInterface;
-
 /**
  * Class Email
  *
@@ -14,23 +12,6 @@ use Magento\Sales\Api\CreditmemoRepositoryInterface;
  */
 class Email extends \Magento\Backend\App\Action
 {
-    /**
-     * @var CreditmemoRepositoryInterface
-     */
-    protected $creditmemoRepository;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param CreditmemoRepositoryInterface $creditmemoRepository
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        CreditmemoRepositoryInterface $creditmemoRepository
-    ) {
-        $this->creditmemoRepository = $creditmemoRepository;
-        parent::__construct($context);
-    }
-
     /**
      * @return bool
      */
@@ -50,12 +31,8 @@ class Email extends \Magento\Backend\App\Action
         if (!$creditmemoId) {
             return;
         }
-        $creditmemo = $this->creditmemoRepository->get($creditmemoId);
-        if (!$creditmemo) {
-            return;
-        }
-        $this->_objectManager->create('Magento\Sales\Model\Order\CreditmemoNotifier')
-            ->notify($creditmemo);
+        $this->_objectManager->create('Magento\Sales\Api\CreditmemoManagementInterface')
+            ->notify($creditmemoId);
 
         $this->messageManager->addSuccess(__('You sent the message.'));
         $resultRedirect = $this->resultRedirectFactory->create();
