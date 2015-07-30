@@ -5,9 +5,6 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\Service;
 
-use Magento\SalesRule\Model\Service\CouponManagementService;
-use \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface;
-
 /**
  * Class CouponManagementServiceTest
  */

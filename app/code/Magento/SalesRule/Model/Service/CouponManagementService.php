@@ -3,14 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Model\Service;
 
-use Magento\SalesRule\Api\Data\RuleInterface;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use \Magento\SalesRule\Model\Resource\Rule\Collection;
-use \Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\Coupon;
 
 /**
  * Coupon management service class
