@@ -601,8 +601,8 @@
     </virtualType>
     <virtualType name="paymentMetaData" type="Magento\Sales\Model\Resource\Metadata">
         <arguments>
-            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Payment</argument>
-            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Payment</argument>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order\Payment</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Payment</argument>
         </arguments>
     </virtualType>
     <virtualType name="orderAddressMetadata" type="Magento\Sales\Model\Resource\Metadata">
