@@ -18,6 +18,12 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', '$win
         }
     };
 }])
+.controller('headerController', ['$rootScope', 'navigationService',
+        function ($rootScope, navigationService) {
+            $rootScope.titles = navigationService.titles;
+        }
+    ]
+)
 .controller('mainController', [
     '$scope', '$state', 'navigationService',
     function ($scope, $state, navigationService) {
@@ -60,6 +66,7 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', '$win
         mainState: {},
         states: [],
         menu: [],
+        titles: [],
         load: function () {
             var self = this;
             $http.get('index.php/navigation').success(function (data) {
@@ -67,6 +74,7 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', '$win
                 var isCurrentStateFound = false;
                 self.states = data.nav;
                 self.menu = data.menu;
+                self.titles = data.titles;
                 data.nav.forEach(function (item) {
                     app.stateProvider.state(item.id, item);
                     if (item.default) {

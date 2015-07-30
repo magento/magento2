@@ -54,6 +54,7 @@ class Navigation extends AbstractActionController
         $json->setVariable('nav', $this->navigation->getData());
         $json->setVariable('menu', $this->navigation->getMenuItems());
         $json->setVariable('main', $this->navigation->getMainItems());
+        $json->setVariable('titles', $this->navigation->getTitles());
         return $json;
     }
 
@@ -86,13 +87,10 @@ class Navigation extends AbstractActionController
      */
     public function headerBarAction()
     {
-        if ($this->navigation->getType() === NavModel::NAV_INSTALLER) {
-            $this->view->setVariable('headerTitle', 'Magento Installation');
-        } else {
+        if ($this->navigation->getType() === NavModel::NAV_UPDATER) {
             if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
                 $this->view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
             }
-            $this->view->setVariable('headerTitle', 'Magento Component Manager');
         }
         $this->view->setTemplate('/magento/setup/navigation/header-bar.phtml');
         $this->view->setTerminal(true);
