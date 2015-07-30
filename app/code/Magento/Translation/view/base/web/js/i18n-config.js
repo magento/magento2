@@ -5,12 +5,11 @@
 'use strict';
 
 (function () {
-    var config = {
+    require.config({
         config: {
             'Magento_Ui/js/lib/ko/bind/i18n': {
                 inlineTranslation: true
             }
         }
-    };
-    require.config(config);
+    });
 })();
