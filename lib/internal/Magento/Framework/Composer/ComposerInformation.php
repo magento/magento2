@@ -8,7 +8,7 @@ namespace Magento\Framework\Composer;
 
 use Composer\Factory as ComposerFactory;
 use Composer\Package\Link;
-use Composer\Package\PackageInterface;
+use Composer\Package\CompletePackageInterface;
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -114,9 +114,9 @@ class ComposerInformation
             $requiredPhpVersion = $allPlatformReqs['php']->getPrettyConstraint();
         } else {
             $packages = $this->locker->getLockedRepository()->getPackages();
-            /** @var PackageInterface $package */
+            /** @var CompletePackageInterface $package */
             foreach ($packages as $package) {
-                if ($package instanceof PackageInterface) {
+                if ($package instanceof CompletePackageInterface) {
                     $packageName = $package->getPrettyName();
                     if ($packageName === 'magento/product-community-edition') {
                         $phpRequirementLink = $package->getRequires()['php'];
@@ -148,7 +148,7 @@ class ComposerInformation
         $allPlatformReqs = array_keys($this->locker->getPlatformRequirements(true));
 
         if (!$this->isMagentoRoot()) {
-            /** @var \Composer\Package\CompletePackage $package */
+            /** @var CompletePackageInterface $package */
             foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
                 $requires = array_merge($requires, array_keys($package->getDevRequires()));
@@ -171,7 +171,7 @@ class ComposerInformation
     public function getRootRequiredPackages()
     {
         $packages = [];
-        /** @var PackageInterface $package */
+        /** @var CompletePackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             $packages[] = $package->getName();
         }
@@ -186,7 +186,7 @@ class ComposerInformation
     public function getRootRequiredPackageTypesByName()
     {
         $packages = [];
-        /** @var PackageInterface $package */
+        /** @var CompletePackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             $packages[$package->getName()] = $package->getType();
         }
@@ -201,13 +201,14 @@ class ComposerInformation
     public function getRootRequiredPackageTypesByNameVersion()
     {
         $packages = [];
-        /** @var PackageInterface $package */
+        /** @var CompletePackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             if (in_array($package->getType(), self::$availableComponentTypesList)) {
                 $packages[$package->getName()] = [
                     'name' => $package->getName(),
                     'type' => $package->getType(),
-                    'version' => $package->getVersion()
+                    'version' => $package->getVersion(),
+                    'author' => $this->getAuthors($package)
                 ];
             }
         }
@@ -352,5 +353,18 @@ class ComposerInformation
             }
         }
         return false;
+    }
+
+    /**
+     * Return authors
+     *
+     * @param CompletePackageInterface $package
+     * @return string
+     */
+    private function getAuthors(CompletePackageInterface $package)
+    {
+        return $package->getAuthors()
+            ? implode(', ', array_column($package->getAuthors(), 'name'))
+            : strtok($package->getName(), '/');
     }
 }
