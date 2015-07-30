@@ -160,12 +160,14 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function saveExceptionsDataProvider()
     {
-        $anyExistingMessageFromOurCsv = 'Cannot acquire coupon.';
+        $msg = 'kiwis';
+        $phrase = new \Magento\Framework\Phrase($msg);
+
         return [
             [
-                new \Magento\Framework\Exception\LocalizedException(__($anyExistingMessageFromOurCsv)),
+                new \Magento\Framework\Exception\LocalizedException($phrase),
                 '\Magento\Framework\Exception\LocalizedException',
-                $anyExistingMessageFromOurCsv,
+                $msg,
                 1
             ],
             [
