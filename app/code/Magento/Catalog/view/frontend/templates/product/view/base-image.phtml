@@ -27,6 +27,7 @@ $whiteBorders =  $block->getVar("product_image_white_borders");
 $thumbWidth =  $block->getVar("product_page_more_views:width");
 $thumbHeight =  $block->getVar("product_page_more_views:height") ?: $thumbWidth;
 ?>
+<!--
 <div data-role="media-gallery">
     <div class="product photo main">
         <div data-role="gallery-base-image-container">
@@ -73,6 +74,32 @@ $thumbHeight =  $block->getVar("product_page_more_views:height") ?: $thumbWidth;
             </ul>
         </div>
     <?php endif; ?>
+</div>
+-->
+<div class="fotorama-wrapper">
+    <div class="fotorama-item">
+        <div class="fotorama__wrap fotorama__wrap--css3 fotorama__wrap--slide fotorama__wrap--toggle-arrows">
+            <div class="fotorama__stage">
+                <div class="fotorama__stage__shaft">
+                </div>
+                <div class="fotorama__arr fotorama__arr--prev" tabindex="0" role="button">
+                    <div class="fotorama__arr__arr"></div>
+                </div>
+                <div class="fotorama__arr fotorama__arr--next fotorama__arr--disabled" tabindex="-1" role="button">
+                    <div class="fotorama__arr__arr"></div>
+                </div>
+                <div class="fotorama__video-close"></div>
+            </div>
+            <div class="fotorama__nav-wrap">
+                <div class="fotorama__nav fotorama__nav--thumbs">
+                    <div class="fotorama__fullscreen-icon" tabindex="0" role="button"></div>
+                    <div class="fotorama__nav__shaft">
+                        <div class="fotorama__thumb-border"></div> <!--highlight active item(also work when use TAB for select any item) -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <?php if ($_hasImage): ?>
     <script data-template="gallery-wrapper" type="text/x-magento-template">
@@ -174,3 +201,35 @@ $thumbHeight =  $block->getVar("product_page_more_views:height") ?: $thumbWidth;
         }
     </script>
 <?php endif; ?>
+
+<?php $imagesItems = array(); ?>
+<?php foreach ($block->getGalleryImages() as $_image): ?>
+<?php
+        $imageSmall = $block->getImageUrl($_image, 'thumbnail', $whiteBorders, $thumbWidth, $thumbHeight);
+$imageMedium = $block->getImageUrl($_image, 'image', $whiteBorders, $_resizedWidth, $_resizedHeight);
+$imageItem = ('{"img": "' . (string)$imageMedium . '", "thumb": "' . (string)$imageSmall . '"}');
+array_push($imagesItems, $imageItem);
+?>
+<?php endforeach; ?>
+<?php $imagesItemsJson = '[' . implode(',', $imagesItems) . ']'; ?>
+
+<?php
+    $nav = $block->getVar("gallery_nav");
+    $loop = $block->getVar("gallery_loop");
+?>
+
+<script type="text/x-magento-init">
+    {
+        ".fotorama-item": {
+            "mage/new-gallery": {
+                 "nav": "<?php echo $nav; ?>",
+                 "width": "100%",
+                 "height": 400,
+                 "loop": <?php echo $loop; ?>,
+                 "keyboard": true,
+                 "allowfullscreen": true,
+                 "data": <?php echo $imagesItemsJson; ?>
+            }
+        }
+    }
+</script>
