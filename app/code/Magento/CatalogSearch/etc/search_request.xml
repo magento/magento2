@@ -86,14 +86,9 @@
         </dimensions>
         <queries>
             <query xsi:type="boolQuery" name="catalog_view_container" boost="1">
-                <queryReference clause="should" ref="search" />
                 <queryReference clause="must" ref="category"/>
                 <queryReference clause="must" ref="price"/>
                 <queryReference clause="must" ref="visibility"/>
-            </query>
-            <query xsi:type="matchQuery" value="$search_term$" name="search">
-                <match field="sku"/>
-                <match field="*"/>
             </query>
             <query xsi:type="filteredQuery" name="category">
                 <filterReference clause="must" ref="category_filter"/>
