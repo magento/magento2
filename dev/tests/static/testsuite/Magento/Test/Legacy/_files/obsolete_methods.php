@@ -265,7 +265,6 @@ return [
         '\Magento\Sales\Model\Observer',
         '\Magento\Shipping\Model\Observer::aggregateSalesReportShipmentData',
     ],
-    ['appendBundleSelectionData', 'Magento\Bundle\Model\Observer'],
     ['applyAllDataUpdates', 'Magento\Core\Model\Resource\Setup'],
     ['applyAllUpdates', 'Magento\Core\Model\Resource\Setup'],
     ['applyDesign', 'Magento\Catalog\Model\Design'],
@@ -289,7 +288,6 @@ return [
     ['catalogCategoryChangeProducts', 'Magento\Catalog\Model\Product\Flat\Observer'],
     ['catalog' . 'EventProductCollectionAfterLoad', 'Magento\GiftMessage\Model\Observer'],
     ['catalogProductCompareClean', 'Magento\Catalog\Model\Observer'],
-    ['catalogProductLoadAfter', 'Magento\Bundle\Model\Observer'],
     ['changeLocaleAction', 'Magento\Backend\Controller\Adminhtml\Index'],
     ['chechAllowedExtension'],
     ['checkConfigurableProducts', 'Magento\Eav\Model\Resource\Entity\Attribute\Collection'],
@@ -1378,16 +1376,6 @@ return [
     ],
     [
         'prepareProductSave',
-        '\Magento\Bundle\Model\Observer',
-        '\Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle::afterInitialize',
-    ],
-    [
-        'duplicateProduct',
-        'Magento\Bundle\Model\Observer',
-        'Magento\Bundle\Model\Product\CopyConstructor\Bundle::build',
-    ],
-    [
-        'prepareProductSave',
         '\Magento\Downloadable\Model\Observer',
         '\Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable::afterInitialize',
     ],
@@ -2359,4 +2347,8 @@ return [
         'Magento\Sales\Model\Order\Address\Validator',
         'Magento\Sales\Model\Order\Address\Validator::validateForCustomer'
     ],
+    ['loadProductOptions', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\LoadProductOptions::invoke'],
+    ['initOptionRenderer', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\InitOptionRenderer::invoke'],
+    ['setAttributeTabBlock', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\SetAttributeTabBlock::invoke'],
+    ['appendUpsellProducts', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\AppendUpsellProducts::invoke'],
 ];
