@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Test\Unit\Model\Indexer;
+namespace Magento\Customer\Test\Unit\Model\Indexer\Address;
 
 use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\Indexer\AttributeProvider;
+use Magento\Customer\Model\Indexer\Address\AttributeProvider;
 
 class AttributeProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +16,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
     protected $eavConfig;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Resource\Address\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collection;
 
@@ -30,7 +30,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $this->eavConfig = $this->getMockBuilder('Magento\Eav\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Customer\Model\Resource\Attribute\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Customer\Model\Resource\Address\Attribute\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->object = new AttributeProvider(
@@ -72,7 +72,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$attribute]);
         $this->eavConfig->expects($this->once())
             ->method('getEntityType')
-            ->with(Customer::ENTITY)
+            ->with('customer_address')
             ->willReturn($entityType);
         $entityType->expects($this->once())
             ->method('getEntity')
@@ -139,7 +139,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$attribute]);
         $this->eavConfig->expects($this->once())
             ->method('getEntityType')
-            ->with(Customer::ENTITY)
+            ->with('customer_address')
             ->willReturn($entityType);
         $entityType->expects($this->once())
             ->method('getEntity')
@@ -209,7 +209,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$attribute]);
         $this->eavConfig->expects($this->once())
             ->method('getEntityType')
-            ->with(Customer::ENTITY)
+            ->with('customer_address')
             ->willReturn($entityType);
         $entityType->expects($this->once())
             ->method('getEntity')

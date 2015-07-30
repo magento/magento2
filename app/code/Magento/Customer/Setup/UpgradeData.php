@@ -104,46 +104,55 @@ class UpgradeData implements UpgradeDataInterface
                 ],
                 'customer_address' => [
                     'company' => [
+                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'street' => [
+                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'city' => [
+                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'country_id' => [
+                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
                         'is_filterable_in_grid' => true,
                         'is_searchable_in_grid' => false,
                     ],
                     'region' => [
+                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
                         'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'region_id' => [
+                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => true,
                         'is_searchable_in_grid' => false,
                     ],
                     'postcode' => [
+                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
                         'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'telephone' => [
+                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
                         'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,
                     ],
                     'fax' => [
+                        'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => true,

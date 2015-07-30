@@ -7,12 +7,17 @@ namespace Magento\Customer\Model\Indexer;
 
 use Magento\Customer\Model\Customer;
 use Magento\Indexer\Model\FieldsetInterface;
-use Magento\Customer\Model\Resource\Attribute\CollectionFactory;
+use Magento\Customer\Model\Resource\Attribute\Collection;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 
 class AttributeProvider implements FieldsetInterface
 {
+    /**
+     * EAV entity
+     */
+    const ENTITY = Customer::ENTITY;
+
     /**
      * @var Attribute[]
      */
@@ -20,14 +25,14 @@ class AttributeProvider implements FieldsetInterface
 
     /**
      * @param Config $eavConfig
-     * @param CollectionFactory $collectionFactory
+     * @param Collection $collection
      */
     public function __construct(
         Config $eavConfig,
-        CollectionFactory $collectionFactory
+        Collection $collection
     ) {
         $this->eavConfig = $eavConfig;
-        $this->collectionFactory = $collectionFactory;
+        $this->collection = $collection;
     }
 
     /**
@@ -50,13 +55,11 @@ class AttributeProvider implements FieldsetInterface
     {
         if ($this->searchableAttributes === null) {
             $this->searchableAttributes = [];
-            /** @var \Magento\Customer\Model\Resource\Attribute\Collection $customerAttributes */
-            $customerAttributes = $this->collectionFactory->create();
-            $customerAttributes->addFieldToFilter('is_used_in_grid', true);
+            $this->collection->addFieldToFilter('is_used_in_grid', true);
             /** @var \Magento\Eav\Model\Entity\Attribute[] $attributes */
-            $attributes = $customerAttributes->getItems();
+            $attributes = $this->collection->getItems();
             /** @var \Magento\Eav\Model\Entity\AbstractEntity $entity */
-            $entity = $this->eavConfig->getEntityType(Customer::ENTITY)->getEntity();
+            $entity = $this->eavConfig->getEntityType(static::ENTITY)->getEntity();
 
             foreach ($attributes as $attribute) {
                 $attribute->setEntity($entity);
@@ -75,7 +78,7 @@ class AttributeProvider implements FieldsetInterface
     {
         $fields = [];
         foreach ($attributes as $attribute) {
-            $fields[] = [
+            $field = [
                 'name'     => $attribute->getName(),
                 'handler'  => null,
                 'origin'   => $attribute->getName(),
@@ -83,8 +86,9 @@ class AttributeProvider implements FieldsetInterface
                 'filters'  => [],
             ];
             if ($attribute->getBackendType() != 'static') {
-                $fields['dataType'] = $attribute->getBackendType();
+                $field['dataType'] = $attribute->getBackendType();
             }
+            $fields[] = $field;
         }
 
         return $fields;
