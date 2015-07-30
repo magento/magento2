@@ -360,7 +360,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->any())
             ->method('addStatusHistoryComment')
             ->withConsecutive(
-                [(string)__('Ordered amount of %1 Transaction ID: "%2"', $sum, $this->transactionId)],
+                [__('Ordered amount of %1 Transaction ID: "%2"', $sum, $this->transactionId)],
                 [$customerNote]
             )
             ->willReturn($statusHistory);
@@ -460,7 +460,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('addStatusHistoryComment')
             ->withConsecutive(
                 [
-                    (string)__('Order is suspended as its authorizing amount %1 is suspected to be fraudulent.', $sum)
+                    __('Order is suspended as its authorizing amount %1 is suspected to be fraudulent.', $sum)
                     . $this->getTransactionIdComment()
                 ]
             )
@@ -1760,6 +1760,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTransactionIdComment()
     {
-        return (string)__(' Transaction ID: "%1"', $this->transactionId);
+        return __(' Transaction ID: "%1"', $this->transactionId);
     }
 }
