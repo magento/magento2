@@ -47,6 +47,10 @@ class Filter
         $this->request = $request;
     }
 
+    /**
+     * @return UiComponentInterface
+     * @throws LocalizedException
+     */
     protected function getComponent()
     {
         $namespace = $this->request->getParam('namespace');
