@@ -19,7 +19,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * @var \Magento\Sales\Api\CreditmemoCommentRepositoryInterface
      */
-    protected $creditmemoCommentRepository;
+    protected $commentRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
@@ -51,7 +51,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
         \Magento\Sales\Model\Order\CreditmemoNotifier $creditmemoNotifier
     ) {
         $this->creditmemoRepository = $creditmemoRepository;
-        $this->creditmemoCommentRepository = $creditmemoCommentRepository;
+        $this->commentRepository = $creditmemoCommentRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->creditmemoNotifier = $creditmemoNotifier;
@@ -79,7 +79,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             [$this->filterBuilder->setField('parent_id')->setValue($id)->setConditionType('eq')->create()]
         );
         $criteria = $this->searchCriteriaBuilder->create();
-        return $this->creditmemoCommentRepository->getList($criteria);
+        return $this->commentRepository->getList($criteria);
     }
 
     /**
@@ -90,6 +90,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      */
     public function notify($id)
     {
-        return $this->creditmemoNotifier->notify($this->creditmemoRepository->get($id));
+        $creditmemo = $this->creditmemoRepository->get($id);
+        return $this->creditmemoNotifier->notify($creditmemo);
     }
 }
