@@ -66,15 +66,21 @@ class MessageEncoder
     /**
      * Encode message content based on current topic.
      *
-     * @param mixed $message
      * @param string $topic
+     * @param mixed $message
      * @return string
      * @throws LocalizedException
      */
-    public function encode($message, $topic)
+    public function encode($topic, $message)
     {
         $messageDataType = $this->getTopicSchema($topic);
-        if (!($message instanceof $messageDataType)) {
+        if (!is_array($message)) {
+            $isMessageValid = $message instanceof $messageDataType;
+        } else {
+            $messageItemDataType = substr($messageDataType, 0, -2);
+            $isMessageValid = empty($message) || (reset($message) instanceof $messageItemDataType);
+        }
+        if (!$isMessageValid) {
             throw new LocalizedException(
                 new Phrase(
                     'Message with topic "%topic" must be an instance of "%class".',

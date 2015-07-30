@@ -39,7 +39,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncodeInvalidTopic()
     {
-        $this->encoder->encode('Some message', 'customer.created');
+        $this->encoder->encode('customer.created', 'Some message');
     }
 
     /**
@@ -69,6 +69,27 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             );
-        $this->encoder->encode(new Object(), 'customer.created');
+        $this->encoder->encode('customer.created', new Object());
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Message with topic "customer.created" must be an instance of "SomeType[]"
+     */
+    public function testEncodeInvalidMessageArray()
+    {
+        $this->configMock
+            ->expects($this->any())
+            ->method('get')
+            ->willReturn(
+                [
+                    'topics' => [
+                        'customer.created' => [
+                            'schema' => 'SomeType[]'
+                        ]
+                    ]
+                ]
+            );
+        $this->encoder->encode('customer.created', [new Object()]);
     }
 }
