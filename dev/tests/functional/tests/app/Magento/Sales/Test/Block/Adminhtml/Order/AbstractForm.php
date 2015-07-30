@@ -42,7 +42,8 @@ abstract class AbstractForm extends Form
         );
     }
 
-     /** Fill form data.
+    /**
+     * Fill form data.
      *
      * @param array $data
      * @return void
