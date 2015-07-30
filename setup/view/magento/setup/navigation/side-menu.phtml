@@ -36,16 +36,16 @@
             <span>Home</span>
             </a>
         </li>
-        <li class="item-component level-0"   ng-class="{_active: state.current.name === 'root.cm'}">
+        <li class="item-component level-0"   ng-class="{_active: state.current.type === 'cm'}">
             <a
-                ng-class="{_active: state.current.name === 'root.cm'}"
+                ng-class="{_active: state.current.type === 'cm'}"
                 ui-sref="root.cm">
             <span>Component Manager</span>
             </a>
         </li>
-        <li class="item-upgrade level-0" ng-class="{_active: state.current.name === 'root.su'}">
+        <li class="item-upgrade level-0" ng-class="{_active: state.current.type === 'su'}">
             <a
-                ng-class="{_active: state.current.name === 'root.su'}"
+                ng-class="{_active: state.current.type === 'su'}"
                 ui-sref="root.su">
                 <span>System Upgrade</span>
             </a>

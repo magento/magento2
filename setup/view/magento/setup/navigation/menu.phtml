@@ -21,7 +21,7 @@
     <nav ng-controller="navigationController" id="menu" class="nav ng-scope show"
          ng-hide="$state.current.noMenu || $state.current.main">
     <ul class="nav-bar">
-        <li ng-repeat="menuState in menu | filter : {type : $state.current.type}"
+        <li ng-repeat="menuState in menu | filter: {type: $state.current.type}"
             ng-class="{active: $state.includes(menuState.id), disabled: itemStatus(menuState.order)}">
             <a
                class="white-space-pre-line" ui-sref="{{menuState.id}}"
