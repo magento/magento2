@@ -10,6 +10,7 @@
 namespace Magento\ImportExport\Test\Unit\Model\Import\Entity;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -102,7 +103,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->_createSourceAdapterMock(['']);
         $errorAggregator = $this->_model->validateData();
-        $this->assertEquals(1, $errorAggregator->getErrorsCount());
+        $this->assertArrayHasKey(
+            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER, $errorAggregator->getRowsGroupedByCode()
+        );
     }
 
     /**
@@ -140,7 +143,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->_createSourceAdapterMock(['  ']);
         $errorAggregator = $this->_model->validateData();
-        $this->assertEquals(1, $errorAggregator->getErrorsCount());
+        $this->assertArrayHasKey(
+            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER, $errorAggregator->getRowsGroupedByCode()
+        );
     }
 
     /**
@@ -152,7 +157,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->_createSourceAdapterMock(['_test1']);
         $errorAggregator = $this->_model->validateData();
-        $this->assertEquals(1, $errorAggregator->getErrorsCount());
+        $this->assertArrayHasKey(
+            AbstractEntity::ERROR_CODE_COLUMN_NAME_INVALID, $errorAggregator->getRowsGroupedByCode()
+        );
     }
 
     /**

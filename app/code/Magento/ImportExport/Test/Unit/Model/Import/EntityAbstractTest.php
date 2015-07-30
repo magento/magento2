@@ -532,7 +532,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataPermanentAttributes()
     {
@@ -544,43 +543,45 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
         $property->setValue($this->_model, $permanentAttributes);
 
-        $this->_model->validateData();
+        $errorAggregator = $this->_model->validateData();
+        $this->assertEquals(1, $errorAggregator->getErrorsCount());
     }
 
     /**
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataEmptyColumnName()
     {
         $this->_createSourceAdapterMock(['']);
-        $this->_model->validateData();
+        $errorAggregator = $this->_model->validateData();
+        $this->assertEquals(1, $errorAggregator->getErrorsCount());
     }
 
     /**
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataColumnNameWithWhitespaces()
     {
         $this->_createSourceAdapterMock(['  ']);
         $this->_model->validateData();
+        $errorAggregator = $this->_model->validateData();
+        $this->assertEquals(1, $errorAggregator->getErrorsCount());
     }
 
     /**
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataAttributeNames()
     {
         $this->_createSourceAdapterMock(['_test1']);
-        $this->_model->validateData();
+        $errorAggregator = $this->_model->validateData();
+        $this->assertEquals(1, $errorAggregator->getErrorsCount());
     }
 
     /**
