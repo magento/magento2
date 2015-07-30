@@ -51,14 +51,6 @@ class Payment extends Info implements OrderPaymentInterface
     protected $_canVoidLookup = null;
 
     /**
-     * Transactions registry to spare resource calls
-     * array(txn_id => sales/order_payment_transaction)
-     *
-     * @var array
-     */
-    protected $_transactionsLookup = [];
-
-    /**
      * @var string
      */
     protected $_eventPrefix = 'sales_order_payment';
@@ -73,17 +65,12 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @var array
      */
-    protected $_transactionAdditionalInfo = [];
+    protected $transactionAdditionalInfo = [];
 
     /**
      * @var \Magento\Sales\Model\Service\Order
      */
     protected $_serviceOrderFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
 
     /**
      * @var PriceCurrencyInterface
@@ -610,11 +597,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function registerAuthorizationNotification($amount)
     {
-        return $this->transactionManager->isTransactionExists(
-            $this->getTransactionId(),
-            $this->getId(),
-            $this->getOrder()->getId()
-        ) ? $this : $this->authorize(false, $amount);
+        return $this->checkIfTransactionExists() ? $this : $this->authorize(false, $amount);
     }
 
     /**
@@ -872,23 +855,16 @@ class Payment extends Info implements OrderPaymentInterface
                 )
             )
         );
-        if ($this->transactionManager->isTransactionExists(
-            $this->getTransactionId(),
-            $this->getId(),
-            $this->getOrder()->getId())
-        ) {
+        if ($this->checkIfTransactionExists()) {
             return $this;
         }
         $order = $this->getOrder();
         $invoice = $this->_getInvoiceForTransactionId($this->getParentTransactionId());
 
-        if ($invoice) {
-            $baseGrandTotal = $invoice->getBaseGrandTotal();
-            $amountRefundLeft = $baseGrandTotal - $invoice->getBaseTotalRefunded();
-        } else {
-            $baseGrandTotal = $order->getBaseGrandTotal();
-            $amountRefundLeft = $baseGrandTotal - $order->getBaseTotalRefunded();
-        }
+        //choose where we get totals
+        $salesEntity = $invoice ?: $order;
+        $baseGrandTotal = $salesEntity->getBaseGrandTotal();
+        $amountRefundLeft = $baseGrandTotal - $salesEntity->getBaseTotalRefunded();
 
         if ($amountRefundLeft < $amount) {
             $amount = $amountRefundLeft;
@@ -906,31 +882,7 @@ class Payment extends Info implements OrderPaymentInterface
             return $this;
         }
 
-        $serviceModel = $this->_serviceOrderFactory->create(['order' => $order]);
-        if ($invoice) {
-            if ($invoice->getBaseTotalRefunded() > 0) {
-                $adjustment = ['adjustment_positive' => $amount];
-            } else {
-                $adjustment = ['adjustment_negative' => $baseGrandTotal - $amount];
-            }
-            $creditmemo = $serviceModel->prepareInvoiceCreditmemo($invoice, $adjustment);
-            if ($creditmemo) {
-                $totalRefunded = $invoice->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal();
-                $this->setShouldCloseParentTransaction($invoice->getBaseGrandTotal() <= $totalRefunded);
-            }
-        } else {
-            if ($order->getBaseTotalRefunded() > 0) {
-                $adjustment = ['adjustment_positive' => $amount];
-            } else {
-                $adjustment = ['adjustment_negative' => $baseGrandTotal - $amount];
-            }
-            $creditmemo = $serviceModel->prepareCreditmemo($adjustment);
-            if ($creditmemo) {
-                $totalRefunded = $order->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal();
-                $this->setShouldCloseParentTransaction($order->getBaseGrandTotal() <= $totalRefunded);
-            }
-        }
-
+        $creditmemo = $this->prepareCreditMemo($amount, $baseGrandTotal, $invoice);
         $creditmemo->setPaymentRefundDisallowed(
             true
         )->setAutomaticallyCreated(
@@ -1353,11 +1305,7 @@ class Payment extends Info implements OrderPaymentInterface
             $method->setStore($order->getStoreId());
             $method->{$gatewayCallback}($this);
         }
-        if ($this->transactionManager->isTransactionExists(
-            $this->getTransactionId(),
-            $this->getId(),
-            $this->getOrder()->getId())
-        ) {
+        if ($this->checkIfTransactionExists()) {
             return $this;
         }
 
@@ -1403,7 +1351,7 @@ class Payment extends Info implements OrderPaymentInterface
             ->setOrder($this->getOrder())
             ->setFailSafe($failSafe)
             ->setTransactionId($this->getTransactionId())
-            ->setAdditionalInformation($this->_transactionAdditionalInfo);
+            ->setAdditionalInformation($this->transactionAdditionalInfo);
         if ($salesDocument) {
             $builder->setSalesDocument($salesDocument);
         }
@@ -1578,7 +1526,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function setTransactionAdditionalInfo($key, $value)
     {
-        $this->_transactionAdditionalInfo[$key] = $value;
+        $this->transactionAdditionalInfo[$key] = $value;
     }
 
     /**
@@ -1588,8 +1536,51 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function resetTransactionAdditionalInfo()
     {
-        $this->_transactionAdditionalInfo = [];
+        $this->transactionAdditionalInfo = [];
         return $this;
+    }
+
+    /**
+     * Prepare credit memo
+     *
+     * @param $amount
+     * @param $baseGrandTotal
+     * @param false|Invoice $invoice
+     * @return mixed
+     */
+    protected function prepareCreditMemo($amount, $baseGrandTotal, $invoice)
+    {
+        $entity = $invoice ?: $this->getOrder();
+        $serviceModel =  $this->_serviceOrderFactory->create(['order' => $this->getOrder()]);
+        if ($entity->getBaseTotalRefunded() > 0) {
+            $adjustment = ['adjustment_positive' => $amount];
+        } else {
+            $adjustment = ['adjustment_negative' => $baseGrandTotal - $amount];
+        }
+        if ($invoice) {
+            $creditMemo = $serviceModel->prepareInvoiceCreditmemo($invoice, $adjustment);
+        } else {
+            $creditMemo = $serviceModel->prepareCreditmemo($adjustment);
+        }
+        if ($creditMemo) {
+            $totalRefunded = $entity->getBaseTotalRefunded() + $creditMemo->getBaseGrandTotal();
+            $this->setShouldCloseParentTransaction($entity->getBaseGrandTotal() <= $totalRefunded);
+        }
+
+        return $creditMemo;
+    }
+
+    /**
+     * Checks if transaction exists
+     *
+     * @return bool
+     */
+    protected function checkIfTransactionExists()
+    {
+        return $this->transactionManager->isTransactionExists(
+            $this->getTransactionId(),
+            $this->getId(),
+            $this->getOrder()->getId());
     }
 
     /**

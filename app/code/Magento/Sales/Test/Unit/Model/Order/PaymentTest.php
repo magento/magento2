@@ -360,7 +360,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->any())
             ->method('addStatusHistoryComment')
             ->withConsecutive(
-                [(string)__('Ordered amount of %1 Transaction ID: "%2"', $sum, $this->transactionId)],
+                [__('Ordered amount of %1 Transaction ID: "%2"', $sum, $this->transactionId)],
                 [$customerNote]
             )
             ->willReturn($statusHistory);
@@ -460,7 +460,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('addStatusHistoryComment')
             ->withConsecutive(
                 [
-                    (string)__('Order is suspended as its authorizing amount %1 is suspected to be fraudulent.', $sum)
+                    __('Order is suspended as its authorizing amount %1 is suspected to be fraudulent.', $sum)
                     . $this->getTransactionIdComment()
                 ]
             )
@@ -1511,7 +1511,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $parentTransaction = $this->getMock(
             'Magento\Sales\Model\Order\Payment\Transaction',
-            ['setOrderPaymentObject', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType'],
+            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType'],
             [],
             '',
             false
@@ -1566,7 +1566,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
         $parentTransaction = $this->getMock(
             'Magento\Sales\Model\Order\Payment\Transaction',
-            ['setOrderPaymentObject', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType'],
+            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType'],
             [],
             '',
             false
@@ -1692,7 +1692,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Order\Payment\Transaction',
             [
                 'getId',
-                'setOrderPaymentObject',
+                'setOrderId',
+                'setPaymentId',
                 'loadByTxnId',
                 'setTxnId',
                 'getTransactionId',
@@ -1759,6 +1760,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTransactionIdComment()
     {
-        return (string)__(' Transaction ID: "%1"', $this->transactionId);
+        return __(' Transaction ID: "%1"', $this->transactionId);
     }
 }
