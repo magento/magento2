@@ -5,8 +5,7 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model;
 
-use \Magento\SalesRule\Model\CouponRepository;
-use Magento\Framework\Api\SearchCriteria as SearchCriteria;
+use Magento\Framework\Api\SortOrder;
 
 class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -240,7 +239,7 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
         $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
         $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SearchCriteria::SORT_ASC);
+        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
         $collectionMock->expects($this->once())->method('addOrder')->with('sort_order', 'ASC');
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
         $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
