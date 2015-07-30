@@ -31,7 +31,7 @@ class Config
     /**
      * File name of RequireJs inline translation config
      */
-    const TRANSLATION_CONFIG_FILE_NAME = 'mage/translation/translation-config.js';
+    const TRANSLATION_CONFIG_FILE_NAME = 'Magento_Translation/js/i18n-config.js';
 
     /**
      * File name of RequireJs
@@ -92,11 +92,6 @@ config;
     private $baseDir;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     */
-    private $libDir;
-
-    /**
      * @var \Magento\Framework\View\Asset\ContextInterface
      */
     private $staticContext;
@@ -130,7 +125,6 @@ config;
         $this->fileSource = $fileSource;
         $this->design = $design;
         $this->baseDir = $appFilesystem->getDirectoryRead(DirectoryList::ROOT);
-        $this->libDir = $appFilesystem->getDirectoryRead(DirectoryList::LIB_WEB);
         $this->staticContext = $assetRepo->getStaticViewFileContext();
         $this->minifyAdapter = $minifyAdapter;
         $this->minification = $minification;
@@ -272,17 +266,5 @@ code;
             $result = $this->minifyAdapter->minify($result);
         }
         return $result;
-    }
-
-    /**
-     * Get inline translation configuration
-     *
-     * @return string
-     */
-    public function getTranslationConfig()
-    {
-        return $this->libDir->isExist(self::TRANSLATION_CONFIG_FILE_NAME)
-            ? $this->libDir->readFile(self::TRANSLATION_CONFIG_FILE_NAME)
-            : '';
     }
 }
