@@ -35,9 +35,9 @@ class Curl extends AbstractCurl implements CustomerInterface
             'United Kingdom' => 'GB'
         ],
         'gender' => [
-            'Not Specified' => 1,
-            'Male' => 2,
-            'Female' => 3
+            'Male' => 1,
+            'Female' => 2,
+            'Not Specified' => 3
         ],
         'region_id' => [
             'California' => 12,
