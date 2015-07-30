@@ -370,7 +370,7 @@
                 </item>
             </argument>
         </column>
-        <column name="group_id" class="Magento\Sales\Ui\Component\Listing\Column\CustomerGroup">
+        <column name="group_id" class="CustomerAttributeColumn">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -411,7 +411,7 @@
                 </item>
             </argument>
         </column>
-        <column name="country_id" class="Magento\Customer\Ui\Component\Listing\Column\Country">
+        <column name="country_id" class="CustomerAddressAttributeColumn">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -451,7 +451,7 @@
                 </item>
             </argument>
         </column>
-        <column name="website_id" class="Magento\Customer\Ui\Component\Listing\Column\Website">
+        <column name="website_id" class="CustomerAttributeColumn">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
@@ -562,7 +562,7 @@
                 </item>
             </argument>
         </column>
-        <column name="gender" class="Magento\Customer\Ui\Component\Listing\Column\Gender">
+        <column name="gender" class="CustomerAttributeColumn">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>

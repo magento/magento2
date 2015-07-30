@@ -297,4 +297,14 @@
             <argument name="collection" xsi:type="object" shared="false">Magento\Customer\Model\Resource\Address\Attribute\Collection</argument>
         </arguments>
     </type>
+    <virtualType name="CustomerAttributeColumn" type="Magento\Customer\Ui\Component\Listing\Column\AttributeColumn">
+        <arguments>
+            <argument name="metadata" xsi:type="object">Magento\Customer\Model\Metadata\CustomerMetadata</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CustomerAddressAttributeColumn" type="Magento\Customer\Ui\Component\Listing\Column\AttributeColumn">
+        <arguments>
+            <argument name="metadata" xsi:type="object">Magento\Customer\Model\Metadata\AddressMetadata</argument>
+        </arguments>
+    </virtualType>
 </config>
