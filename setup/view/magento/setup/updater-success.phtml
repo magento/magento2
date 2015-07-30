@@ -11,7 +11,7 @@
     </h1>
     <p>Your store is no longer in maintenance mode.</p>
     <div ng-hide="rollbackStarted">
-        <p>You updated:</p>
+        <p>You {{successPageAction}}:</p>
         <br/>
         <ul ng-repeat="package in packages">
             <li>{{package.name}}</li>
@@ -25,5 +25,5 @@
         class="btn btn-large btn-prime"
         ng-click="back()"
         type="button"
-        >Back to New Extensions</button>
+        >Back to Setup Tool</button>
 </div>

@@ -4,10 +4,19 @@
  */
 
 'use strict';
-angular.module('component-update', ['ngStorage'])
-    .controller('componentUpdateController', ['$scope', '$state', '$localStorage', '$http', '$window', function ($scope, $state, $localStorage, $http, $window) {
+angular.module('start-updater', ['ngStorage'])
+    .controller('startUpdaterController', ['$scope', '$state', '$localStorage', '$http', '$window', function ($scope, $state, $localStorage, $http, $window) {
         $scope.maintenanceCalled = false;
         $scope.maintenanceStatus = false;
+        if ($state.current.type === 'cm') {
+            $scope.type = 'update';
+            $scope.buttonText = 'Update';
+            $localStorage.successPageAction = 'updated';
+        } else if ($state.current.type === 'su') {
+            $scope.type = 'upgrade';
+            $scope.buttonText = 'Upgrade';
+            $localStorage.successPageAction = 'upgraded';
+        }
         if ($localStorage.packages) {
             $scope.packages = $localStorage.packages;
         }
@@ -33,7 +42,7 @@ angular.module('component-update', ['ngStorage'])
         $scope.errorMessage = '';
         $scope.update = function() {
             $scope.started = true;
-            $http.post('index.php/component-update/update', $scope.packages)
+            $http.post('index.php/start-updater/update', $scope.packages)
                 .success(function (data) {
                     if (data['success']) {
                         $window.location.href = '../update/index.php';
