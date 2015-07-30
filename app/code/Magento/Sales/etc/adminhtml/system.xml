@@ -137,12 +137,14 @@
                     <label>New Order Confirmation Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>New Order Confirmation Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="guest_template" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="guest_template" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>New Order Confirmation Template for Guest</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -164,12 +166,14 @@
                     <label>Order Comment Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Order Comment Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="guest_template" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="guest_template" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Order Comment Email Template for Guest</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -191,12 +195,14 @@
                     <label>Invoice Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Invoice Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="guest_template" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="guest_template" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Invoice Email Template for Guest</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -218,12 +224,14 @@
                     <label>Invoice Comment Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Invoice Comment Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="guest_template" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="guest_template" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Invoice Comment Email Template for Guest</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -245,12 +253,14 @@
                     <label>Shipment Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Shipment Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="guest_template" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="guest_template" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Shipment Email Template for Guest</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -272,12 +282,14 @@
                     <label>Shipment Comment Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Shipment Comment Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="guest_template" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="guest_template" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Shipment Comment Email Template for Guest</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -299,12 +311,14 @@
                     <label>Credit Memo Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credit Memo Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="guest_template" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="guest_template" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credit Memo Email Template for Guest</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -326,12 +340,14 @@
                     <label>Credit Memo Comment Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credit Memo Comment Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="guest_template" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="guest_template" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credit Memo Comment Email Template for Guest</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">

@@ -10,7 +10,7 @@
     <variation name="CreateProductUrlRewriteEntityTestVariation1">
       <data name="description" xsi:type="string">MAGETWO-12409: Add Temporary Redirect for Product</data>
       <data name="urlRewrite/data/entity_type" xsi:type="string">For product</data>
-      <data name="product/dataSet" xsi:type="string">product_with_category</data>
+      <data name="product/dataset" xsi:type="string">product_with_category</data>
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="urlRewrite/data/request_path" xsi:type="string">cat%isolation%/simp_redirect%isolation%.html</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
@@ -22,7 +22,7 @@
     <variation name="CreateProductUrlRewriteEntityTestVariation2">
       <data name="description" xsi:type="string">Create Product URL Rewrites with no redirect</data>
       <data name="urlRewrite/data/entity_type" xsi:type="string">For product</data>
-      <data name="product/dataSet" xsi:type="string">default</data>
+      <data name="product/dataset" xsi:type="string">default</data>
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">No</data>
@@ -32,7 +32,7 @@
     <variation name="CreateProductUrlRewriteEntityTestVariation3">
       <data name="description" xsi:type="string">Create Product URL Rewrites with Temporary redirect</data>
       <data name="urlRewrite/data/entity_type" xsi:type="string">For product</data>
-      <data name="product/dataSet" xsi:type="string">default</data>
+      <data name="product/dataset" xsi:type="string">default</data>
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
@@ -43,7 +43,7 @@
     <variation name="CreateProductUrlRewriteEntityTestVariation4">
       <data name="description" xsi:type="string">Create Product URL Rewrites with Permanent redirect</data>
       <data name="urlRewrite/data/entity_type" xsi:type="string">For product</data>
-      <data name="product/dataSet" xsi:type="string">default</data>
+      <data name="product/dataset" xsi:type="string">default</data>
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>

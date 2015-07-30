@@ -84,7 +84,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
 
-        $this->scopeResolver = $this->getMockBuilder('\Magento\Search\Model\ScopeResolver\IndexScopeResolver')
+        $this->scopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
             ->disableOriginalConstructor()
             ->getMock();
 

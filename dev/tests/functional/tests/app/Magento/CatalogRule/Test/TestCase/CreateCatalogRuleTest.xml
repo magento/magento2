@@ -29,7 +29,7 @@
         </variation>
         <variation name="CreateCatalogRuleTestVariation2">
             <data name="description" xsi:type="string">MAGETWO-12908: Apply Catalog Price Rules to Specific Customer Group.</data>
-            <data name="customer/dataSet" xsi:type="string">customer_with_new_customer_group</data>
+            <data name="customer/dataset" xsi:type="string">customer_with_new_customer_group</data>
             <data name="product" xsi:type="string">simple_10_dollar</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>

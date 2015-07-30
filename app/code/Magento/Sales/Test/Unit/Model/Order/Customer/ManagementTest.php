@@ -36,6 +36,11 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     protected $orderRepository;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $regionFactory;
+
+    /**
      * @var \Magento\Sales\Model\Order\Customer\Management
      */
     protected $service;
@@ -58,6 +63,13 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->regionFactory = $this->getMock(
+            'Magento\Customer\Api\Data\RegionInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->orderRepository = $this->getMock('\Magento\Sales\Api\OrderRepositoryInterface');
 
         $this->service = new \Magento\Sales\Model\Order\Customer\Management(
@@ -65,6 +77,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             $this->accountManagement,
             $this->customerFactory,
             $this->addressFactory,
+            $this->regionFactory,
             $this->orderRepository
         );
     }
@@ -85,14 +98,15 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $orderMock = $this->getMock('\Magento\Sales\Api\Data\OrderInterface');
         $orderMock->expects($this->once())->method('getCustomerId')->will($this->returnValue(null));
         $orderMock->expects($this->any())->method('getBillingAddress')->will($this->returnValue('billing_address'));
-        $addresses = ['order_address_data', 'order_address_data'];
+        $orderAddress = $this->getMock('\Magento\Sales\Api\Data\OrderAddressInterface');
+        $addresses = [$orderAddress, $orderAddress];
 
         $orderMock->expects($this->any())->method('getAddresses')->will($this->returnValue($addresses));
         $this->orderRepository->expects($this->once())->method('get')->with(1)->will($this->returnValue($orderMock));
         $this->objectCopyService->expects($this->any())->method('copyFieldsetToTarget')->will($this->returnValueMap(
             [
                 ['order_address', 'to_customer', 'billing_address', [], 'global', ['customer_data' => []]],
-                ['order_address', 'to_customer_address', 'order_address_data', [], 'global', 'address_data']
+                ['order_address', 'to_customer_address', $orderAddress, [], 'global', 'address_data']
             ]
         ));
         $addressMock = $this->getMock('\Magento\Customer\Api\Data\CustomerAddressInterface');

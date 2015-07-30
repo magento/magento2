@@ -8,17 +8,17 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\SalesRule\Test\TestCase\DeleteSalesRuleEntityTest">
         <variation name="DeleteSalesRuleEntityTestVariation1">
-            <data name="salesRule/dataSet" xsi:type="string">active_sales_rule_with_percent_price_discount_coupon</data>
+            <data name="salesRule/dataset" xsi:type="string">active_sales_rule_with_percent_price_discount_coupon</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />
         </variation>
         <variation name="DeleteSalesRuleEntityTestVariation2">
-            <data name="salesRule/dataSet" xsi:type="string">active_sales_rule_with_complex_conditions</data>
+            <data name="salesRule/dataset" xsi:type="string">active_sales_rule_with_complex_conditions</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />
         </variation>
         <variation name="DeleteSalesRuleEntityTestVariation3">
-            <data name="salesRule/dataSet" xsi:type="string">inactive_sales_rule</data>
+            <data name="salesRule/dataset" xsi:type="string">inactive_sales_rule</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />
         </variation>

@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\Store\Test\TestCase\UpdateStoreEntityTest">
     <variation name="UpdateStoreEntityTestVariation1">
-      <data name="storeInitial/dataSet" xsi:type="string">custom</data>
-      <data name="store/data/group_id/dataSet" xsi:type="string">default</data>
+      <data name="storeInitial/dataset" xsi:type="string">custom</data>
+      <data name="store/data/group_id/dataset" xsi:type="string">default</data>
       <data name="store/data/name" xsi:type="string">storename_updated%isolation%</data>
       <data name="store/data/code" xsi:type="string">storecode_updated%isolation%</data>
       <data name="store/data/is_active" xsi:type="string">Enabled</data>

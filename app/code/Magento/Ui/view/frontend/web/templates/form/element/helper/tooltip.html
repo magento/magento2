@@ -5,9 +5,23 @@
  */
 -->
  <div class="field-tooltip toggle">
-    <a class="field-tooltip-action action-help" target="_blank" data-bind="attr: {href: tooltip.link}">
-    </a>
-    <div class="field-tooltip-content">
+
+    <!-- ko if: (tooltip.link)-->
+    <a class="field-tooltip-action action-help"
+       target="_blank"
+       data-toggle="dropdown"
+       data-bind="attr: {href: tooltip.link}, mageInit: {'dropdown':{'activeClass': '_active'}}"></a>
+     <!-- /ko -->
+
+     <!-- ko if: (!tooltip.link)-->
+     <span class="field-tooltip-action action-help"
+        tabindex="0"
+        data-toggle="dropdown"
+        data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"></span>
+     <!-- /ko -->
+
+    <div class="field-tooltip-content"
+         data-target="dropdown">
         <!-- ko text: tooltip.description --><!-- /ko -->
     </div>
 </div>

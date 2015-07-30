@@ -58,6 +58,13 @@ abstract class AbstractResource
     abstract protected function _getWriteAdapter();
 
     /**
+     * Get connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    abstract protected function getConnection();
+
+    /**
      * Start resource transaction
      *
      * @return $this

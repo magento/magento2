@@ -25,6 +25,21 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
+        $this->themeFactory = Bootstrap::getObjectManager()
+            ->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
+    }
+
+    /**
+     * Reinitialize environment with test directories
+     *
+     * Since the testGetEmailTemplateFile test uses a @magentoDataFixture that reinitializes the environment, we
+     * must reinitialize the environment only when a test specifically requests it
+     *
+     * @return void
+     */
+    protected function reinitializeEnvironment()
+    {
         Bootstrap::getInstance()->reinitialize([
             AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
                 DirectoryList::THEMES => [
@@ -35,9 +50,6 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
-        /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
-        $this->themeFactory = Bootstrap::getObjectManager()
-            ->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
     }
 
     /**
@@ -50,6 +62,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTemplateFile($file, $themePath, $module, $expectedFilename)
     {
+        $this->reinitializeEnvironment();
         /** @var \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile $model */
         $model = Bootstrap::getObjectManager()
             ->create('Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile');
@@ -111,6 +124,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetI18nCsvFile($themePath, $locale, $expectedFilename)
     {
+        $this->reinitializeEnvironment();
         /** @var \Magento\Framework\View\Design\FileResolution\Fallback\File $model */
         $model = Bootstrap::getObjectManager()->create('Magento\Framework\View\Design\FileResolution\Fallback\File');
         $themeModel = $this->themeFactory->create($themePath);
@@ -157,6 +171,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetViewFile($file, $themePath, $locale, $module, $expectedFilename)
     {
+        $this->reinitializeEnvironment();
         /** @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $model */
         $model = Bootstrap::getObjectManager()
             ->create('Magento\Framework\View\Design\FileResolution\Fallback\StaticFile');
@@ -234,6 +249,67 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
             'modular: localized file' => [
                 'fixture_script.js', 'Vendor/custom_theme2', 'ru_RU', 'Fixture_Module',
                 '%s/frontend/Vendor/default/Fixture_Module/web/i18n/ru_RU/fixture_script.js',
+            ],
+        ];
+    }
+
+    /**
+     * Test for the email template files fallback according to the themes inheritance
+     *
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     *
+     * @param string $file
+     * @param string $themePath
+     * @param string $module
+     * @param string|null $expectedFilename
+     *
+     * @dataProvider getEmailTemplateFileDataProvider
+     */
+    public function testGetEmailTemplateFile($file, $themePath, $module, $expectedFilename)
+    {
+        $area = \Magento\Framework\App\Area::AREA_FRONTEND;
+
+        /** @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile $model */
+        $model = Bootstrap::getObjectManager()
+            ->create('Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile');
+
+        $themeModel = $this->themeFactory->create($themePath);
+        $locale = \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE;
+
+        $actualFilename = $model->getFile($area, $themeModel, $locale, $file, $module);
+        if ($expectedFilename) {
+            $this->assertInternalType('string', $actualFilename);
+            $this->assertStringMatchesFormat($expectedFilename, $actualFilename);
+            $this->assertFileExists($actualFilename);
+        } else {
+            $this->assertFalse($actualFilename);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getEmailTemplateFileDataProvider()
+    {
+        return [
+            'no fallback' => [
+                'account_new.html',
+                'Vendor/custom_theme',
+                'Magento_Customer',
+                '%s/frontend/Vendor/custom_theme/Magento_Customer/email/account_new.html',
+            ],
+            'inherit same package & parent theme' => [
+                'account_new_confirmation.html',
+                'Vendor/custom_theme',
+                'Magento_Customer',
+                '%s/frontend/Vendor/default/Magento_Customer/email/account_new_confirmation.html',
+            ],
+            'inherit parent package & grandparent theme' => [
+                'account_new_confirmed.html',
+                'Vendor/custom_theme',
+                'Magento_Customer',
+                '%s/frontend/Magento/default/Magento_Customer/email/account_new_confirmed.html',
             ],
         ];
     }

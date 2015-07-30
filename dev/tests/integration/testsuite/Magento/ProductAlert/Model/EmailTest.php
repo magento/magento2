@@ -80,8 +80,8 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
         $transportBuilder = $this->_objectManager->get('Magento\TestFramework\Mail\Template\TransportBuilderMock');
         $this->assertContains(
-            'Hello John Smi=' . PHP_EOL . 'th',
-            $transportBuilder->getSentMessage()->getBodyHtml()->getContent()
+            'John Smith,',
+            $transportBuilder->getSentMessage()->getBodyHtml()->getRawContent()
         );
     }
 
@@ -89,7 +89,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [true],
-            [false]
+            [false],
         ];
     }
 }

@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\Customer\Test\TestCase\UpdateCustomerBackendEntityTest">
     <variation name="UpdateCustomerBackendEntityTestVariation1">
-      <data name="initialCustomer/dataSet" xsi:type="string">default</data>
-      <data name="customer/data/group_id/dataSet" xsi:type="string">Wholesale</data>
+      <data name="initialCustomer/dataset" xsi:type="string">default</data>
+      <data name="customer/data/group_id/dataset" xsi:type="string">Wholesale</data>
       <data name="customer/data/prefix" xsi:type="string">%isolation%Prefix_</data>
       <data name="customer/data/firstname" xsi:type="string">John_%isolation%</data>
       <data name="customer/data/middlename" xsi:type="string">Middle Name %isolation%</data>
@@ -39,8 +39,8 @@
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
     </variation>
     <variation name="UpdateCustomerBackendEntityTestVariation2">
-      <data name="initialCustomer/dataSet" xsi:type="string">default</data>
-      <data name="customer/data/group_id/dataSet" xsi:type="string">-</data>
+      <data name="initialCustomer/dataset" xsi:type="string">default</data>
+      <data name="customer/data/group_id/dataset" xsi:type="string">-</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
       <data name="customer/data/firstname" xsi:type="string">-</data>
       <data name="customer/data/middlename" xsi:type="string">-</data>
@@ -70,8 +70,8 @@
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
     </variation>
     <variation name="UpdateCustomerBackendEntityTestVariation3">
-      <data name="initialCustomer/dataSet" xsi:type="string">default</data>
-      <data name="customer/data/group_id/dataSet" xsi:type="string">Retailer</data>
+      <data name="initialCustomer/dataset" xsi:type="string">default</data>
+      <data name="customer/data/group_id/dataset" xsi:type="string">Retailer</data>
       <data name="customer/data/prefix" xsi:type="string">%isolation%Prefix_</data>
       <data name="customer/data/firstname" xsi:type="string">Jane_%isolation%</data>
       <data name="customer/data/middlename" xsi:type="string">Jane Middle Name %isolation%</data>

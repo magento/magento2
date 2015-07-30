@@ -14,10 +14,12 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
 use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Metadata\Validator;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Event\ManagerInterface;
@@ -30,6 +32,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\ObjectFactory;
+use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;
@@ -127,11 +131,6 @@ class AccountManagement implements AccountManagementInterface
     private $customerMetadataService;
 
     /**
-     * @var \Magento\Framework\Url
-     */
-    private $url;
-
-    /**
      * @var PsrLogger
      */
     protected $logger;
@@ -210,11 +209,10 @@ class AccountManagement implements AccountManagementInterface
      * @param StoreManagerInterface $storeManager
      * @param Random $mathRandom
      * @param Validator $validator
-     * @param \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory $validationResultsDataFactory
+     * @param ValidationResultsInterfaceFactory $validationResultsDataFactory
      * @param AddressRepositoryInterface $addressRepository
      * @param CustomerMetadataInterface $customerMetadataService
      * @param CustomerRegistry $customerRegistry
-     * @param \Magento\Framework\Url $url
      * @param PsrLogger $logger
      * @param Encryptor $encryptor
      * @param ConfigShare $configShare
@@ -223,12 +221,12 @@ class AccountManagement implements AccountManagementInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param TransportBuilder $transportBuilder
      * @param DataObjectProcessor $dataProcessor
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
      * @param CustomerViewHelper $customerViewHelper
      * @param DateTime $dateTime
      * @param CustomerModel $customerModel
-     * @param \Magento\Framework\ObjectFactory $objectFactory
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param ObjectFactory $objectFactory
+     * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -238,11 +236,10 @@ class AccountManagement implements AccountManagementInterface
         StoreManagerInterface $storeManager,
         Random $mathRandom,
         Validator $validator,
-        \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory $validationResultsDataFactory,
+        ValidationResultsInterfaceFactory $validationResultsDataFactory,
         AddressRepositoryInterface $addressRepository,
         CustomerMetadataInterface $customerMetadataService,
         CustomerRegistry $customerRegistry,
-        \Magento\Framework\Url $url,
         PsrLogger $logger,
         Encryptor $encryptor,
         ConfigShare $configShare,
@@ -251,12 +248,12 @@ class AccountManagement implements AccountManagementInterface
         ScopeConfigInterface $scopeConfig,
         TransportBuilder $transportBuilder,
         DataObjectProcessor $dataProcessor,
-        \Magento\Framework\Registry $registry,
+        Registry $registry,
         CustomerViewHelper $customerViewHelper,
         DateTime $dateTime,
         CustomerModel $customerModel,
-        \Magento\Framework\ObjectFactory $objectFactory,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        ObjectFactory $objectFactory,
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -267,7 +264,6 @@ class AccountManagement implements AccountManagementInterface
         $this->addressRepository = $addressRepository;
         $this->customerMetadataService = $customerMetadataService;
         $this->customerRegistry = $customerRegistry;
-        $this->url = $url;
         $this->logger = $logger;
         $this->encryptor = $encryptor;
         $this->configShare = $configShare;
@@ -409,7 +405,7 @@ class AccountManagement implements AccountManagementInterface
         try {
             switch ($template) {
                 case AccountManagement::EMAIL_REMINDER:
-                    $this->sendPasswordReminderEmail($customer, $newPasswordToken);
+                    $this->sendPasswordReminderEmail($customer);
                     break;
                 case AccountManagement::EMAIL_RESET:
                     $this->sendPasswordResetConfirmationEmail($customer);
@@ -620,18 +616,19 @@ class AccountManagement implements AccountManagementInterface
     /**
      * Change customer password.
      *
-     * @param string $email
+     * @param CustomerModel $customer
      * @param string $currentPassword
      * @param string $newPassword
      * @return bool true on success
+     * @throws InputException
+     * @throws InvalidEmailOrPasswordException
      */
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $hash = $customerSecure->getPasswordHash();
         if (!$this->encryptor->validateHash($currentPassword, $hash)) {
-            throw new InvalidEmailOrPasswordException(
-                __('The password doesn\'t match this account.'));
+            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
         }
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
@@ -1053,34 +1050,23 @@ class AccountManagement implements AccountManagementInterface
      * Send email with new customer password
      *
      * @param CustomerInterface $customer
-     * @param string $newPasswordToken
      * @return $this
      */
-    public function sendPasswordReminderEmail($customer, $newPasswordToken)
+    public function sendPasswordReminderEmail($customer)
     {
-        $this->url->setScope($customer->getStoreId());
-        //TODO : Fix how template is built. Maybe Framework Object or create new Email template data model?
-        // Check template to see what values need to be set in the data model to be passed
-        // Need to set the reset_password_url property of the object
-        $store = $this->storeManager->getStore($customer->getStoreId());
-        $resetUrl = $this->url->getUrl(
-            'customer/account/createPassword',
-            [
-                '_query' => ['id' => $customer->getId(), 'token' => $newPasswordToken],
-                '_store' => $customer->getStoreId(),
-                '_secure' => $store->isFrontUrlSecure(),
-            ]
-        );
+        $storeId = $this->storeManager->getStore()->getId();
+        if (!$storeId) {
+            $storeId = $this->getWebsiteStoreId($customer);
+        }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
-        $customerEmailData->setResetPasswordUrl($resetUrl);
 
         $this->sendEmailTemplate(
             $customer,
             self::XML_PATH_REMIND_EMAIL_TEMPLATE,
             self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            ['customer' => $customerEmailData, 'store' => $store],
-            $customer->getStoreId()
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
+            $storeId
         );
 
         return $this;

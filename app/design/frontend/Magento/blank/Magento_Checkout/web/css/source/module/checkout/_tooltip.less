@@ -37,13 +37,14 @@
 & when (@media-common = true) {
 
     .field-tooltip {
+        cursor: pointer;
         position: absolute;
         right: 0;
         top: 1px;
 
-        &:hover {
+        &._active {
             .css(z-index, @checkout-tooltip__hover__z-index);
-            cursor: pointer;
+
             .field-tooltip-content {
                 display: block;
             }
@@ -56,19 +57,23 @@
 
         .field-tooltip-action {
             .icon-font(
-            @checkout-tooltip-icon__content,
-            @_icon-font-size: @checkout-tooltip-icon__font-size,
-            @_icon-font-text-hide: true,
-            @_icon-font-color: @checkout-tooltip-icon__color,
-            @_icon-font-color-hover: @checkout-tooltip-icon__hover__color,
-            @_icon-font-color-active: false
+                @checkout-tooltip-icon__content,
+                @_icon-font-size: @checkout-tooltip-icon__font-size,
+                @_icon-font-text-hide: true,
+                @_icon-font-color: @checkout-tooltip-icon__color,
+                @_icon-font-color-hover: @checkout-tooltip-icon__hover__color,
+                @_icon-font-color-active: false
             );
+
             &:focus {
-                &:before {
-                    .css(color, @checkout-tooltip-icon__hover__color);
-                }
-                + .field-tooltip-content {
-                    display: block;
+                ._keyfocus & {
+                    .css(z-index, @checkout-tooltip__hover__z-index);
+                    + .field-tooltip-content {
+                        display: block;
+                    }
+                    &:before {
+                        .css(color, @checkout-tooltip-icon__hover__color);
+                    }
                 }
             }
         }

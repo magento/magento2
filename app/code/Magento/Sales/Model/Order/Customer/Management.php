@@ -25,6 +25,11 @@ class Management implements \Magento\Sales\Api\OrderCustomerManagementInterface
     protected $addressFactory;
 
     /**
+     * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
+     */
+    protected $regionFactory;
+
+    /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
     protected $orderRepository;
@@ -39,6 +44,7 @@ class Management implements \Magento\Sales\Api\OrderCustomerManagementInterface
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory
+     * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      */
     public function __construct(
@@ -46,6 +52,7 @@ class Management implements \Magento\Sales\Api\OrderCustomerManagementInterface
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory,
+        \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
     ) {
         $this->objectCopyService = $objectCopyService;
@@ -53,6 +60,7 @@ class Management implements \Magento\Sales\Api\OrderCustomerManagementInterface
         $this->orderRepository = $orderRepository;
         $this->customerFactory = $customerFactory;
         $this->addressFactory = $addressFactory;
+        $this->regionFactory = $regionFactory;
     }
 
     /**
@@ -78,7 +86,17 @@ class Management implements \Magento\Sales\Api\OrderCustomerManagementInterface
                 $address,
                 []
             );
-            $customerData['addresses'][] = $this->addressFactory->create(['data' => $addressData]);
+            /** @var \Magento\Customer\Api\Data\AddressInterface $customerAddress */
+            $customerAddress = $this->addressFactory->create(['data' => $addressData]);
+            if (is_string($address->getRegion())) {
+                /** @var \Magento\Customer\Api\Data\RegionInterface $region */
+                $region = $this->regionFactory->create();
+                $region->setRegion($address->getRegion());
+                $region->setRegionCode($address->getRegionCode());
+                $region->setRegionId($address->getRegionId());
+                $customerAddress->setRegion($region);
+            }
+            $customerData['addresses'][] = $customerAddress;
         }
 
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */

@@ -6,35 +6,21 @@
 
 namespace Magento\Catalog\Test\Fixture\Category;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Cms\Test\Fixture\CmsBlock;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Prepare landing page.
  */
-class LandingPage implements FixtureInterface
+class LandingPage extends DataSource
 {
-    /**
-     * Prepared dataSet data.
-     *
-     * @var string
-     */
-    protected $data;
-
     /**
      * Source Cms Block.
      *
      * @var CmsBlock
      */
     protected $cmsBlock = null;
-
-    /**
-     * Fixture params.
-     *
-     * @var array
-     */
-    protected $params;
 
     /**
      * @constructor
@@ -47,9 +33,9 @@ class LandingPage implements FixtureInterface
         $this->params = $params;
         $this->data = $data;
 
-        if (isset($data['preset'])) {
+        if (isset($data['dataset'])) {
             /** @var CmsBlock $cmsBlock */
-            $cmsBlock = $fixtureFactory->createByCode('cmsBlock', ['dataSet' => $data['preset']]);
+            $cmsBlock = $fixtureFactory->createByCode('cmsBlock', ['dataset' => $data['dataset']]);
             if (!$cmsBlock->getBlockId()) {
                 $cmsBlock->persist();
             }
@@ -57,39 +43,6 @@ class LandingPage implements FixtureInterface
             $this->data = $cmsBlock->getTitle();
             $this->cmsBlock = $cmsBlock;
         }
-    }
-
-    /**
-     * Persist source.
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set.
-     *
-     * @param string|null $key [optional]
-     * @return array|null
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings.
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 
     /**

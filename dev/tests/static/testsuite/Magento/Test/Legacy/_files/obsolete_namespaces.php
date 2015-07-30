@@ -85,5 +85,6 @@ return [
     ['Magento\Framework\Test\Utility', 'Magento\Framework\App\Utility'],
     ['Magento\GoogleShopping'],
     ['Magento\Paypal\Block\Standard'],
-    ['Magento\Paypal\Controller\Standard']
+    ['Magento\Paypal\Controller\Standard'],
+    ['Magento\Framework\View\Asset\ModuleNotation']
 ];

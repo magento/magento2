@@ -9,7 +9,7 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
-class Instance extends \Magento\Backend\App\Action
+abstract class Instance extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

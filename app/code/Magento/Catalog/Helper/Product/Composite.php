@@ -12,7 +12,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Helper\Product;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Registry;
 
 /**
@@ -53,18 +52,12 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     protected $productRepository;
 
     /**
-     * @var CustomerRepositoryInterface
-     */
-    protected $customerRepository;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Product $catalogProduct
      * @param Registry $coreRegistry
      * @param LayoutFactory $resultLayoutFactory
      * @param ProductRepositoryInterface $productRepository
-     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         Context $context,
@@ -72,15 +65,13 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
         Product $catalogProduct,
         Registry $coreRegistry,
         LayoutFactory $resultLayoutFactory,
-        ProductRepositoryInterface $productRepository,
-        CustomerRepositoryInterface $customerRepository
+        ProductRepositoryInterface $productRepository
     ) {
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
         $this->_catalogProduct = $catalogProduct;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->productRepository = $productRepository;
-        $this->customerRepository = $customerRepository;
         parent::__construct($context);
     }
 
@@ -160,11 +151,6 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
 
             // Register customer we're working with
             $customerId = (int)$configureResult->getCurrentCustomerId();
-            // TODO: Remove the customer model from the registry once all readers are refactored
-            if ($customerId) {
-                $customerData = $this->customerRepository->getById($customerId);
-                $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $customerData);
-            }
             $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
 
             // Prepare buy request values

@@ -8,13 +8,17 @@
 //  _____________________________________________
 
 //
-//  Convert to rem
+//  Convert values to unit specified in typography variables
 //  ---------------------------------------------
-
-.to-rem(
+.font-size-value(
     @_value
-) when not (@_value = false) and not (@_value = '') {
-    @valueRem: (unit(@_value) * 1rem) / @font-rem-ratio;
+) when not (@_value = false) and not (@_value = '') and (@font-size-unit-convert) {
+    @fontValue: unit(((@_value) * 1), @font-size-unit) / @font-size-unit-ratio;
+}
+.font-size-value(
+    @_value
+) when (@font-size-unit-convert = false) {
+    @fontValue: @_value;
 }
 
 .visibility-hidden() {

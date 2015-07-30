@@ -11,8 +11,8 @@
             <data name="description" xsi:type="string">MAGETWO-12413 - Check Out as a Guest Using PayPal Express Checkout Method and Offline Shipping Method</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="sandboxCustomer/dataSet" xsi:type="string">sandbox_us_default</data>
-            <data name="customer/dataSet" xsi:type="string">default</data>
+            <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping" xsi:type="array">
                 <item name="shipping_method" xsi:type="string">Fixed</item>
@@ -38,8 +38,8 @@
             <data name="description" xsi:type="string">MAGETWO-14359 - Check Out as a Guest using Payflow Link - PayPal Express Checkout Payflow Edition and Offline Shipping</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="sandboxCustomer/dataSet" xsi:type="string">sandbox_us_default</data>
-            <data name="customer/dataSet" xsi:type="string">default</data>
+            <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping" xsi:type="array">
                 <item name="shipping_method" xsi:type="string">Fixed</item>
@@ -66,8 +66,8 @@
             <data name="description" xsi:type="string">MAGETWO-12996 - Check Out as Guest User using PayPal Express and Offline Shipping Method</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="sandboxCustomer/dataSet" xsi:type="string">sandbox_us_default</data>
-            <data name="customer/dataSet" xsi:type="string">default</data>
+            <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping" xsi:type="array">
                 <item name="shipping_method" xsi:type="string">Fixed</item>

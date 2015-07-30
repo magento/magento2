@@ -80,6 +80,36 @@ class StateTest extends \PHPUnit_Framework_TestCase
         return $this->model->getAreaCode();
     }
 
+    public function testIsAreaCodeEmulated()
+    {
+        $areaCode = 'original code';
+        $emulatedCode = 'emulated code';
+        $this->scopeMock->expects($this->once())->method('setCurrentScope')->with($areaCode);
+        $this->model->setAreaCode($areaCode);
+        $this->assertFalse(
+            $this->model->isAreaCodeEmulated(),
+            'By default, area code is not emulated'
+        );
+        $this->assertTrue(
+            $this->model->emulateAreaCode($emulatedCode, [$this, 'isAreaCodeEmulatedCallback']),
+            'isAreaCodeEmulated should return true when being called within the context of an emulated method'
+        );
+        $this->assertFalse(
+            $this->model->isAreaCodeEmulated(),
+            'Now that emulateAreaCode execution has finished, this should return false again'
+        );
+    }
+
+    /**
+     * Used to test whether the isAreaCodeEmulated method returns true within an emulated context
+     *
+     * @return bool
+     */
+    public function isAreaCodeEmulatedCallback()
+    {
+        return $this->model->isAreaCodeEmulated();
+    }
+
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Some error

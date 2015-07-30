@@ -10,7 +10,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Customers newsletter subscription controller
  */
-class Manage extends \Magento\Framework\App\Action\Action
+abstract class Manage extends \Magento\Framework\App\Action\Action
 {
     /**
      * Customer session

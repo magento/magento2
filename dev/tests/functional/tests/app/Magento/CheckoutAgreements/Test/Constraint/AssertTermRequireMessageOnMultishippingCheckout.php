@@ -42,7 +42,7 @@ class AssertTermRequireMessageOnMultishippingCheckout extends AbstractConstraint
         $payment,
         $shipping
     ) {
-        $customer = ['customer' => ['dataSet' => 'johndoe_with_multiple_addresses']];
+        $customer = ['customer' => ['dataset' => 'johndoe_with_multiple_addresses']];
         $customer = $stepFactory->create('\Magento\Customer\Test\TestStep\CreateCustomerStep', $customer)->run();
         $product = $stepFactory->create('\Magento\Catalog\Test\TestStep\CreateProductsStep', ['products' => $product])
             ->run();
