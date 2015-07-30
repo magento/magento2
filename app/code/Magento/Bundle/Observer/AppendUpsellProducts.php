@@ -3,63 +3,46 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Bundle\Model;
+namespace Magento\Bundle\Observer;
 
-/**
- * Bundle Products Observer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-class Observer
+class AppendUpsellProducts
 {
     /**
      * Bundle data
      *
      * @var \Magento\Bundle\Helper\Data
      */
-    protected $_bundleData = null;
-
-    /**
-     * Catalog helper
-     *
-     * @var \Magento\Catalog\Helper\Catalog
-     */
-    protected $_helperCatalog = null;
+    protected $bundleData;
 
     /**
      * @var \Magento\Bundle\Model\Resource\Selection
      */
-    protected $_bundleSelection;
+    protected $bundleSelection;
 
     /**
      * @var \Magento\Catalog\Model\Config
      */
-    protected $_config;
+    protected $config;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
      */
-    protected $_productVisibility;
+    protected $productVisibility;
 
     /**
-     * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Catalog\Model\Config $config
-     * @param \Magento\Bundle\Model\Resource\Selection $bundleSelection
-     * @param \Magento\Catalog\Helper\Catalog $helperCatalog
      * @param \Magento\Bundle\Helper\Data $bundleData
      */
     public function __construct(
+        \Magento\Bundle\Helper\Data $bundleData,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Config $config,
-        \Magento\Bundle\Model\Resource\Selection $bundleSelection,
-        \Magento\Catalog\Helper\Catalog $helperCatalog,
-        \Magento\Bundle\Helper\Data $bundleData
+        \Magento\Bundle\Model\Resource\Selection $bundleSelection
+
     ) {
-        $this->_helperCatalog = $helperCatalog;
-        $this->_bundleData = $bundleData;
-        $this->_bundleSelection = $bundleSelection;
-        $this->_config = $config;
-        $this->_productVisibility = $productVisibility;
+        $this->bundleData = $bundleData;
+        $this->productVisibility = $productVisibility;
+        $this->config = $config;
+        $this->bundleSelection = $bundleSelection;
     }
 
     /**
@@ -70,7 +53,7 @@ class Observer
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function appendUpsellProducts($observer)
+    public function invoke($observer)
     {
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $observer->getEvent()->getProduct();
@@ -78,7 +61,7 @@ class Observer
         /**
          * Check is current product type is allowed for bundle selection product type
          */
-        if (!in_array($product->getTypeId(), $this->_bundleData->getAllowedSelectionTypes())) {
+        if (!in_array($product->getTypeId(), $this->bundleData->getAllowedSelectionTypes())) {
             return $this;
         }
 
@@ -94,7 +77,7 @@ class Observer
         }
 
         /* @var $resource \Magento\Bundle\Model\Resource\Selection */
-        $resource = $this->_bundleSelection;
+        $resource = $this->bundleSelection;
 
         $productIds = array_keys($collection->getItems());
         if ($limit !== null && $limit <= count($productIds)) {
@@ -112,9 +95,9 @@ class Observer
 
         /* @var $bundleCollection \Magento\Catalog\Model\Resource\Product\Collection */
         $bundleCollection = $product->getCollection()->addAttributeToSelect(
-            $this->_config->getProductAttributes()
+            $this->config->getProductAttributes()
         )->addStoreFilter()->addMinimalPrice()->addFinalPrice()->addTaxPercents()->setVisibility(
-            $this->_productVisibility->getVisibleInCatalogIds()
+            $this->productVisibility->getVisibleInCatalogIds()
         );
 
         if ($limit !== null) {
@@ -140,52 +123,6 @@ class Observer
             $collection->setItems($items);
         }
 
-        return $this;
-    }
-
-    /**
-     * Add price index data for catalog product collection
-     * only for front end
-     *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
-     */
-    public function loadProductOptions($observer)
-    {
-        $collection = $observer->getEvent()->getCollection();
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
-        $collection->addPriceData();
-
-        return $this;
-    }
-
-    /**
-     * Setting attribute tab block for bundle
-     *
-     * @param \Magento\Framework\Object $observer
-     * @return $this
-     */
-    public function setAttributeTabBlock($observer)
-    {
-        $product = $observer->getEvent()->getProduct();
-        if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            $this->_helperCatalog->setAttributeTabBlock(
-                'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes'
-            );
-        }
-        return $this;
-    }
-
-    /**
-     * Initialize product options renderer with bundle specific params
-     *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
-     */
-    public function initOptionRenderer(\Magento\Framework\Event\Observer $observer)
-    {
-        $block = $observer->getBlock();
-        $block->addOptionsRenderCfg('bundle', 'Magento\Bundle\Helper\Catalog\Product\Configuration');
         return $this;
     }
 }

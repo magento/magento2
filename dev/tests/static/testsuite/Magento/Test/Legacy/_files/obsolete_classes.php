@@ -3809,4 +3809,5 @@ return [
         'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
         . '\Configurable'
     ],
+    ['Magento\Bundle\Model\Observer', 'corresponding classes in Magento\Bundle\Observer\*'],
 ];
