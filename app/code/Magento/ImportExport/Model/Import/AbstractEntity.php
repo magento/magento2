@@ -263,8 +263,16 @@ abstract class AbstractEntity
         $this->errorAggregator = $errorAggregator;
 
         foreach ($this->errorMessageTemplates as $errorCode => $message) {
-            $this->errorAggregator->addErrorMessageTemplate($errorCode, $message);
+            $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
         }
+    }
+
+    /**
+     * @return ProcessingErrorAggregatorInterface
+     */
+    public function getErrorAggregator()
+    {
+        return $this->errorAggregator;
     }
 
     /**
@@ -390,7 +398,7 @@ abstract class AbstractEntity
         $errorDescription = null
     ) {
         $errorCode = (string)$errorCode;
-        $this->errorAggregator->addError(
+        $this->getErrorAggregator()->addError(
             $errorCode,
             $errorLevel,
             $errorRowNum,
@@ -411,7 +419,7 @@ abstract class AbstractEntity
      */
     public function addMessageTemplate($errorCode, $message)
     {
-        $this->errorAggregator->addErrorMessageTemplate($errorCode, $message);
+        $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
 
         return $this;
     }
@@ -659,11 +667,11 @@ abstract class AbstractEntity
     public function validateData()
     {
         if (!$this->_dataValidated) {
-            $this->errorAggregator->clear();
+            $this->getErrorAggregator()->clear();
             // do all permanent columns exist?
             $absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames());
             if ($absentColumns) {
-                $this->errorAggregator->addError(
+                $this->getErrorAggregator()->addError(
                     self::ERROR_CODE_COLUMN_NOT_FOUND,
                     ProcessingError::ERROR_LEVEL_CRITICAL,
                     null,
@@ -687,7 +695,7 @@ abstract class AbstractEntity
             }
 
             if ($emptyHeaderColumns) {
-                $this->errorAggregator->addError(
+                $this->getErrorAggregator()->addError(
                     self::ERROR_CODE_COLUMN_EMPTY_HEADER,
                     ProcessingError::ERROR_LEVEL_CRITICAL,
                     null,
@@ -695,7 +703,7 @@ abstract class AbstractEntity
                 );
             }
             if ($invalidColumns) {
-                $this->errorAggregator->addError(
+                $this->getErrorAggregator()->addError(
                     self::ERROR_CODE_COLUMN_NAME_INVALID,
                     ProcessingError::ERROR_LEVEL_CRITICAL,
                     null,
@@ -703,11 +711,11 @@ abstract class AbstractEntity
                 );
             }
 
-            if (!$this->errorAggregator->getErrorsCount()) {
+            if (!$this->getErrorAggregator()->getErrorsCount()) {
                 $this->_saveValidatedBunches();
                 $this->_dataValidated = true;
             }
         }
-        return $this->errorAggregator;
+        return $this->getErrorAggregator();
     }
 }

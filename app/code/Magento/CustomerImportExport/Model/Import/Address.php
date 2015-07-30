@@ -393,7 +393,7 @@ class Address extends AbstractCustomer
             foreach ($bunch as $rowNumber => $rowData) {
                 // check row data
                 if (!$this->validateRow($rowData, $rowNumber)) {
-                    if (!$this->errorAggregator->hasToBeTerminated()) {
+                    if (!$this->getErrorAggregator()->hasToBeTerminated()) {
                         continue;
                     }
                     break 2;

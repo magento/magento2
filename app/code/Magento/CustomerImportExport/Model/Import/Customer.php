@@ -411,7 +411,7 @@ class Customer extends AbstractCustomer
 
             foreach ($bunch as $rowNumber => $rowData) {
                 if (!$this->validateRow($rowData, $rowNumber)) {
-                    if (!$this->errorAggregator->hasToBeTerminated()) {
+                    if (!$this->getErrorAggregator()->hasToBeTerminated()) {
                         continue;
                     }
                     break 2;
