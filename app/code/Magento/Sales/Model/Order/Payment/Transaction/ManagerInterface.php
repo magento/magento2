@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Sales\Model\Order\Payment\Transaction;
+
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
@@ -16,9 +17,9 @@ interface ManagerInterface
     /**
      * Lookup an authorization transaction using parent transaction id, if set
      *
-     * @param $parentTransactionId
-     * @param $paymentId
-     * @param $orderId
+     * @param string $parentTransactionId
+     * @param int $paymentId
+     * @param int $orderId
      * @return false|Transaction
      */
     public function getAuthorizationTransaction($parentTransactionId, $paymentId, $orderId);
