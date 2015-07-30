@@ -204,11 +204,18 @@ class ComposerInformation
         /** @var CompletePackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             if (in_array($package->getType(), self::$availableComponentTypesList)) {
+                $moduleName = '';
+                $extra = $package->getExtra();
+                if (isset($extra['map'])) {
+                    $modulePath = $extra['map'][0][1];
+                    $moduleName = substr($modulePath, strpos($modulePath, '/')+1);
+                }
                 $packages[$package->getName()] = [
                     'name' => $package->getName(),
-                    'type' => $package->getType(),
+                    'type' => str_replace('magento2-', '', $package->getType()),
                     'version' => $package->getVersion(),
-                    'author' => $this->getAuthors($package)
+                    'author' => $this->getAuthors($package),
+                    'moduleName' => $moduleName
                 ];
             }
         }
