@@ -7,11 +7,11 @@
 /**
  * Test class for \Magento\Weee\Model\Observer
  */
-namespace Magento\Tax\Test\Unit\Model;
+namespace Magento\Tax\Test\Unit\Observer;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class UpdateProductOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
@@ -69,14 +69,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
          $objectManager = new ObjectManager($this);
          $taxObserverObject = $objectManager->getObject(
-             'Magento\Tax\Model\Observer',
+             'Magento\Tax\Observer\UpdateProductOptions',
              [
                  'taxData' => $taxData,
                  'registry' => $registry,
              ]
          );
 
-         $taxObserverObject->updateProductOptions($observerObject);
+         $taxObserverObject->invoke($observerObject);
 
          $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
     }

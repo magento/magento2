@@ -3811,4 +3811,5 @@ return [
     ],
     ['Magento\Bundle\Model\Observer', 'corresponding classes in Magento\Bundle\Observer\*'],
     ['Magento\CatalogRule\Model\Observer', 'corresponding classes in Magento\CatalogRule\Observer\*'],
+    ['Magento\Tax\Model\Observer', 'corresponding classes in Magento\Tax\Observer\*'],
 ];
