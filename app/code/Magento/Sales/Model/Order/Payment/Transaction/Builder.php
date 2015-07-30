@@ -139,6 +139,9 @@ class Builder implements BuilderInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function reset()
     {
         unset($this->payment);
@@ -151,6 +154,11 @@ class Builder implements BuilderInterface
         return $this;
     }
 
+    /**
+     * Checks if payment was set
+     *
+     * @return bool
+     */
     protected function isPaymentExists()
     {
         if ($this->payment) {
