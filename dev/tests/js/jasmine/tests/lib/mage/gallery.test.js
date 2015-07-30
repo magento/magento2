@@ -5,16 +5,11 @@
 define([
     'jquery',
     'text!tests/assets/gallery/config.json',
-    'text!tests/assets/gallery/templates/gallery.html',
     'mage/new-gallery'
-], function ($, config, template, gallery) {
+], function ($, config, gallery) {
     'use strict';
 
     var body = $('body');
-    body.append(template);
-    var $element = $('.fotorama-item');
-    var loaded = false;
-
     var galleryAPI;
 
     var conf = JSON.parse(config);
@@ -31,20 +26,10 @@ define([
         }
     ];
 
-    function waitsFor(test, fn) {
-        if (test()) {
-            fn();
-        } else {
-            setTimeout(function () {
-                waitsFor(test, fn);
-            }, 10);
-        }
-    }
+    gallery(conf, body);
 
     beforeEach(function (done) {
-
-        gallery(conf, $element);
-        galleryAPI = $element.data('gallery');
+        galleryAPI = $('.fotorama-item').data('gallery');
         done();
     });
 
