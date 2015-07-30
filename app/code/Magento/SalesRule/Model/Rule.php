@@ -492,7 +492,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             }
         }
         if (!$ok) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t acquire coupon.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Cannot acquire coupon.'));
         }
 
         return $coupon;

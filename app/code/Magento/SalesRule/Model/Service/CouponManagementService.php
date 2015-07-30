@@ -161,7 +161,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
         if (!$ignoreInvalid) {
             if ($couponsCollection->getSize() != count($fieldValues)) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Some inputs are invalid'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Some coupons are invalid.'));
             }
         }
         try {
