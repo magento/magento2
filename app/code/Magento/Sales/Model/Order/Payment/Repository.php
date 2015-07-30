@@ -30,18 +30,18 @@ class Repository implements OrderPaymentRepositoryInterface
     protected $metaData;
 
     /**
-     * @var Collection
+     * @var SearchResultFactory
      */
     protected $searchResultFactory;
 
     /**
      * @param Metadata $metaData
-     * @param SearchResultFactory $collection
+     * @param SearchResultFactory $searchResultFactory
      */
-    function __construct(Metadata $metaData, SearchResultFactory $collection)
+    function __construct(Metadata $metaData, SearchResultFactory $searchResultFactory)
     {
         $this->metaData = $metaData;
-        $this->searchResultFactory = $collection;
+        $this->searchResultFactory = $searchResultFactory;
     }
 
     /**
