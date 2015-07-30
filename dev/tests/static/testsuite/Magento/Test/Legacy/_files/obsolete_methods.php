@@ -2351,4 +2351,7 @@ return [
     ['initOptionRenderer', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\InitOptionRenderer::invoke'],
     ['setAttributeTabBlock', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\SetAttributeTabBlock::invoke'],
     ['appendUpsellProducts', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\AppendUpsellProducts::invoke'],
+    ['prepareCatalogProductCollectionPrices', 'Magento\CatalogRule\Model\Observer', 'Magento\CatalogRule\Observer\PrepareCatalogProductCollectionPrices::invoke'],
+    ['processAdminFinalPrice', 'Magento\CatalogRule\Model\Observer', 'Magento\CatalogRule\Observer\ProcessAdminFinalPrice::invoke'],
+    ['processFrontFinalPrice', 'Magento\CatalogRule\Model\Observer', 'Magento\CatalogRule\Observer\ProcessFrontFinalPrice::invoke'],
 ];
