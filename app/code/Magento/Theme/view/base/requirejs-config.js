@@ -18,6 +18,7 @@ var config = {
         "mage/adminhtml/backup": ["prototype"],
         "mage/captcha": ["prototype"],
         "mage/common": ["jquery"],
+        "mage/new-gallery": ["jquery"],
         "mage/requirejs/plugin/id-normalizer": ["jquery"],
         "mage/webapi": ["jquery"],
         "jquery/ui": ["jquery"],
