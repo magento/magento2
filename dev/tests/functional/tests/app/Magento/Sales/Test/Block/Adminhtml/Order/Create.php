@@ -234,8 +234,7 @@ class Create extends Block
             ['element' => $this->_rootElement->find($this->itemsBlock)]
         );
         foreach ($products as $product) {
-            $items->getItemProductByName($product->getName())
-                ->fill($product->getDataFieldConfig('checkout_data')['source']);
+            $items->getItemProductByName($product->getName())->fillCheckoutData($product->getCheckoutData());
         }
         $this->updateItems();
     }

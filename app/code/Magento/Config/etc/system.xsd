@@ -414,7 +414,7 @@
         </xs:annotation>
 
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}" />
+            <xs:pattern value="([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}" />
             <xs:minLength value="8" />
         </xs:restriction>
     </xs:simpleType>
@@ -422,11 +422,11 @@
     <xs:simpleType name="typeModule">
         <xs:annotation>
             <xs:documentation>
-                Item module attribute can has only [a-z0-9_\]. Minimal length 5 symbol. Case insensitive.
+                Item module attribute can have only [a-zA-Z0-9_\]. Minimal length 5 symbol. Case insensitive.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z]+[a-z0-9]{1,}[_\\\\][A-Z]+[A-Z0-9a-z]{1,}" />
+            <xs:pattern value="[A-Z]+[a-zA-Z0-9]{1,}[_\\\\][A-Z]+[A-Z0-9a-z]{1,}" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
@@ -434,7 +434,7 @@
     <xs:simpleType name="typeModel">
         <xs:annotation>
             <xs:documentation>
-                Item model attribute can has only [a-zA-Z0-9_]. Minimal length 5 symbol. Case insensitive.
+                Item model attribute can have only [a-zA-Z0-9_]. Minimal length 5 symbol. Case insensitive.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">

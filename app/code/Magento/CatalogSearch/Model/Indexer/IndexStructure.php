@@ -10,7 +10,7 @@ use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
 
 class IndexStructure
 {

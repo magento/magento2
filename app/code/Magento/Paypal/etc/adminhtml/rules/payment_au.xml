@@ -10,11 +10,11 @@
     <!--PayPal Website Payments Standard-->
     <payment id="wps_other">
         <events selector="[data-enable='payment']">
-            <event value="0" name="deactivate"/>
-            <event value="1" name="activate">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate"
+                           event="deactivate-rule"
                         >
                     <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
                     <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
@@ -23,17 +23,17 @@
             </event>
         </events>
         <relation target="paypal_payflowpro_au">
-            <rule type="disable" event="activate"/>
+            <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target="payments_pro_hosted_solution_au">
-            <rule type="disable" event="activate"/>
+            <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target="express_checkout_other">
-            <rule type="disable" event="activate"/>
+            <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate"/>
-            <rule type="simple/disable" event="deactivate"/>
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
                 <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
@@ -44,11 +44,11 @@
     <!--PayPal Payflow Pro-->
     <payment id="paypal_payflowpro_au">
         <events selector="[data-enable='payment']">
-            <event value="0" name="deactivate"/>
-            <event value="1" name="activate">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate"
+                           event="deactivate-rule"
                         >
                     <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
                     <argument name="wps_other">wps_other</argument>
@@ -56,14 +56,14 @@
             </event>
         </events>
         <relation target="wps_other">
-            <rule type="disable" event="activate"/>
+            <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target="payments_pro_hosted_solution_au">
-            <rule type="disable" event="activate"/>
+            <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate"/>
-            <rule type="simple/disable" event="deactivate"/>
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
                 <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
@@ -73,11 +73,11 @@
     <!--PayPal Website Payments Pro Hosted Solution-->
     <payment id="payments_pro_hosted_solution_au">
         <events selector="[data-enable='payment']">
-            <event value="0" name="deactivate"/>
-            <event value="1" name="activate">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate"
+                           event="deactivate-rule"
                         >
                     <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
                     <argument name="wps_other">wps_other</argument>
@@ -85,14 +85,14 @@
             </event>
         </events>
         <relation target="paypal_payflowpro_au">
-            <rule type="disable" event="activate"/>
+            <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target="wps_other">
-            <rule type="disable" event="activate"/>
+            <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate"/>
-            <rule type="simple/disable" event="deactivate"/>
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
                 <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
@@ -102,22 +102,22 @@
     <!--PayPal Express Checkout-->
     <payment id="express_checkout_other">
         <events selector="[data-enable='payment']">
-            <event value="0" name="deactivate"/>
-            <event value="1" name="activate">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate"
+                           event="deactivate-rule"
                         >
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
             </event>
         </events>
         <relation target="wps_other">
-            <rule type="disable" event="activate"/>
+            <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate"/>
-            <rule type="simple/disable" event="deactivate"/>
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
             </rule>

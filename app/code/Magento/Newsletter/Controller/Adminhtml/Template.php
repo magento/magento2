@@ -10,7 +10,7 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
-class Template extends \Magento\Backend\App\Action
+abstract class Template extends \Magento\Backend\App\Action
 {
     /**
      * Check is allowed access

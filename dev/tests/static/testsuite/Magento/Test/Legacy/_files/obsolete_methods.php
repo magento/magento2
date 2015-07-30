@@ -1711,7 +1711,7 @@ return [
     [
         'convertModuleNotationToPath',
         'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
-        'Magento\Framework\View\Asset\ModuleNotation\Resolver::convertModuleNotationToPath',
+        'Magento\Framework\View\Asset\NotationResolver\Module::convertModuleNotationToPath',
     ],
     ['getViewFile', 'Magento\Framework\View\FileSystem', 'Magento\Framework\View\Asset\File::getSourceFile()'],
     [
@@ -2262,9 +2262,22 @@ return [
     [
         'getConfigureUrl',
         'Magento\Checkout\Block\Cart\Item\Renderer',
-        '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
+        'Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl',
     ],
     ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
+    ['getUsedDefaultForPaths', 'Magento\Email\Block\Adminhtml\Template\Edit'],
+    ['getSystemConfigPathsWhereUsedAsDefault', 'Magento\Email\Model\BackendTemplate'],
+    ['_findEmailTemplateUsages', 'Magento\Email\Model\BackendTemplate'],
+    [
+        'getSystemConfigPathsWhereUsedCurrently',
+        'Magento\Email\Model\BackendTemplate',
+        'Magento\Email\Model\BackendTemplate::getSystemConfigPathsWhereCurrentlyUsed',
+    ],
+    [
+        'getUsedCurrentlyForPaths',
+        'Magento\Email\Block\Adminhtml\Template\Edit',
+        'Magento\Email\Block\Adminhtml\Template\Edit::getCurrentlyUsedForPaths',
+    ],
     ['_implodeStreetValue', 'Magento\Customer\Model\Address\AbstractAddress', '_implodeArrayValues',],
     ['_implodeStreetField', 'Magento\Customer\Model\Address\AbstractAddress', '_implodeArrayField',],
     ['_applyDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'applyDesignConfig'],
@@ -2278,6 +2291,16 @@ return [
     ['_getCentinelEciLabel', 'Magento\Paypal\Model\Info'],
     ['_getPayPalPayflowPro3dSecure', 'Magento\Config\Test\Repository\Config'],
     ['_getPayPalPaymentsPro3dSecure', 'Magento\Config\Test\Repository\Config'],
+    [
+        'getCreatedAtFormated',
+        'Magento\Sales\Model\Order',
+        'Magento\Sales\Model\Order::getCreatedAtFormatted',
+    ],
+    [
+        '_getConfig',
+        'Magento\Store\Model\Store',
+        'Magento\Store\Model\Store::getConfig',
+    ],
     ['addAdditionalFieldsToResponseFrontend', 'Magento\Authorizenet\Model\Directpost\Observer'],
     ['_getAuthorizeNet3dSecure', 'Magento\Config\Test\Repository\Config'],
     [
@@ -2301,7 +2324,22 @@ return [
         'Magento\Authorizenet\Model\Directpost',
         'Magento\Authorizenet\Model\Directpost::setDataHelper()'
     ],
+    [
+        '_initCustomer',
+        'Magento\Paypal\Controller\Adminhtml\Billing\Agreement\CustomerGrid',
+        'Magento\Paypal\Controller\Adminhtml\Billing\Agreement\CustomerGrid::initCurrentCustomer'
+    ],
+    [
+        '_initCustomer',
+        'Magento\Customer\Controller\Adminhtml\Index',
+        'Magento\Customer\Controller\Adminhtml\Index::initCurrentCustomer',
+    ],
+    ['getChilds', 'Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer', 'getChildren'],
+    ['getChilds', 'Magento\Bundle\Block\Sales\Order\Items\Renderer', 'getChildren'],
+    ['getChilds', 'Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems', 'getChildren'],
     ['prepareIndexdata', 'Magento\Search\Helper\Data'],
+    ['isAssetMinification', 'Magento\Framework\View\Asset\ConfigInterface', 'Magento\Framework\View\Asset\Minification::isEnabled'],
+    ['isAssetMinification', 'Magento\Framework\View\Asset\Config', 'Magento\Framework\View\Asset\Minification::isEnabled'],
     ['getPriceValues', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'],
     ['getPricingValue', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue'],
     ['getIsPercent', 'Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue'],
@@ -2316,4 +2354,9 @@ return [
     ['loadPrices', 'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'],
     ['_parseVariationPrices', '\Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
     ['_collectSuperDataPrice', '\Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
+    [
+        'validateForPayment',
+        'Magento\Sales\Model\Order\Address\Validator',
+        'Magento\Sales\Model\Order\Address\Validator::validateForCustomer'
+    ],
 ];

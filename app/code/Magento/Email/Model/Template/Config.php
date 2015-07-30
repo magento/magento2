@@ -1,14 +1,15 @@
 <?php
 /**
+ * High-level interface for email templates data that hides format from the client code
+ *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
-/**
- * High-level interface for email templates data that hides format from the client code
- */
-class Config
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
     /**
      * @var \Magento\Email\Model\Template\Config\Data
@@ -21,25 +22,122 @@ class Config
     protected $_moduleReader;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $fileSystem;
+
+    /**
+     * Themes directory
+     *
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
+    protected $themesDirectory;
+
+    /**
+     * @var \Magento\Framework\View\FileSystem
+     */
+    protected $viewFileSystem;
+
+    /**
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
+     * @param \Magento\Framework\Filesystem $fileSystem
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\View\FileSystem $viewFileSystem
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
-        \Magento\Framework\Module\Dir\Reader $moduleReader
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
+        \Magento\Framework\Filesystem $fileSystem,
+        \Magento\Framework\View\FileSystem $viewFileSystem
     ) {
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;
+        $this->themesDirectory = $fileSystem->getDirectoryRead(DirectoryList::THEMES);
+        $this->viewFileSystem = $viewFileSystem;
     }
 
     /**
-     * Retrieve unique identifiers of all available email templates
+     * Return list of all email templates, both default module and theme-specific templates
      *
-     * @return string[]
+     * @return array[]
      */
     public function getAvailableTemplates()
     {
-        return array_keys($this->_dataStorage->get());
+        $templates = [];
+        foreach (array_keys($this->_dataStorage->get()) as $templateId) {
+            $templates[] = [
+                'value' => $templateId,
+                'label' => $this->getTemplateLabel($templateId),
+                'group' => $this->getTemplateModule($templateId),
+            ];
+            $themeTemplates = $this->getThemeTemplates($templateId);
+            $templates = array_merge($templates, $themeTemplates);
+        }
+        return $templates;
+    }
+
+    /**
+     * Find all theme-based email templates for a given template ID
+     *
+     * @param string $templateId
+     * @return array[]
+     */
+    public function getThemeTemplates($templateId)
+    {
+        $templates = [];
+
+        $area = $this->getTemplateArea($templateId);
+        $themePath = '*/*';
+        $module = $this->getTemplateModule($templateId);
+        $filename = $this->_getInfo($templateId, 'file');
+        $searchPattern = "{$area}/{$themePath}/{$module}/email/{$filename}";
+        $files = $this->themesDirectory->search($searchPattern);
+
+        $pattern = "#^(?<area>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)/#i";
+        foreach ($files as $file) {
+            if (!preg_match($pattern, $file, $matches)) {
+                continue;
+            }
+            $themeVendor = $matches['themeVendor'];
+            $themeName = $matches['themeName'];
+
+            $templates[] = [
+                'value' => sprintf(
+                    '%s/%s/%s',
+                    $templateId,
+                    $themeVendor,
+                    $themeName
+                ),
+                'label' => sprintf(
+                    '%s (%s/%s)',
+                    $this->getTemplateLabel($templateId),
+                    $themeVendor,
+                    $themeName
+                ),
+                'group' => $this->getTemplateModule($templateId),
+            ];
+        }
+        return $templates;
+    }
+
+    /**
+     * Parses a template ID and returns an array of templateId and theme
+     *
+     * @param string $templateId
+     * @return array an array of array('templateId' => '...', 'theme' => '...')
+     */
+    public function parseTemplateIdParts($templateId)
+    {
+        $parts = [
+            'templateId' => $templateId,
+            'theme' => null
+        ];
+        $pattern = "#^(?<templateId>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)#i";
+        if (preg_match($pattern, $templateId, $matches)) {
+            $parts['templateId'] = $matches['templateId'];
+            $parts['theme'] = $matches['themeVendor'] . '/' . $matches['themeName'];
+        }
+        return $parts;
     }
 
     /**
@@ -76,16 +174,35 @@ class Config
     }
 
     /**
-     * Retrieve full path to an email template file
+     * Retrieve the area an email template belongs to
      *
      * @param string $templateId
      * @return string
      */
-    public function getTemplateFilename($templateId)
+    public function getTemplateArea($templateId)
     {
+        return $this->_getInfo($templateId, 'area');
+    }
+
+    /**
+     * Retrieve full path to an email template file
+     *
+     * @param string $templateId
+     * @param array|null $designParams
+     * @return string
+     */
+    public function getTemplateFilename($templateId, $designParams = [])
+    {
+        // If design params aren't passed, then use area/module defined in email_templates.xml
+        if (!isset($designParams['area'])) {
+            $designParams['area'] = $this->getTemplateArea($templateId);
+        }
         $module = $this->getTemplateModule($templateId);
+        $designParams['module'] = $module;
+
         $file = $this->_getInfo($templateId, 'file');
-        return $this->_moduleReader->getModuleDir('view', $module) . '/email/' . $file;
+
+        return $this->viewFileSystem->getEmailTemplateFileName($file, $designParams, $module);
     }
 
     /**

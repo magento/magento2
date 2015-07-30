@@ -91,6 +91,19 @@
         right: 0;
         top: 0;
     }
+
+    body {
+        &._has-modal-custom {
+            .modal-custom-overlay {
+                height: 100vh;
+                left: 0;
+                position: fixed;
+                top: 0;
+                width: 100vw;
+                z-index: @overlay__z-index;
+            }
+        }
+    }
 }
 
 //
@@ -113,18 +126,14 @@
             min-height: 100%;
         }
     }
-    body._has-modal-custom {
-        height: 100vh;
-        overflow: hidden;
-        width: 100vw;
-        .modal-custom-overlay {
-            .css(background-color, @modal-overlay__background-color);
+    body {
+        &._has-modal-custom {
             height: 100vh;
-            left: 0;
-            position: fixed;
-            top: 0;
+            overflow: hidden;
             width: 100vw;
-            z-index: @overlay__z-index;
+            .modal-custom-overlay {
+                .css(background-color, @modal-overlay__background-color);
+            }
         }
     }
 }

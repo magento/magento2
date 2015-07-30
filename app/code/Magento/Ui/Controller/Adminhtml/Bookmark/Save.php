@@ -87,7 +87,7 @@ class Save extends AbstractAction
      *
      * @return void
      */
-    public function execute()
+    protected function execute()
     {
         $bookmark = $this->bookmarkFactory->create();
         $jsonData = $this->_request->getParam('data');

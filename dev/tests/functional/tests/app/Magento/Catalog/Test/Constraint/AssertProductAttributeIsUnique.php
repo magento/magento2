@@ -95,7 +95,7 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
         return $this->fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => 'product_with_category_with_anchor',
+                'dataset' => 'product_with_category_with_anchor',
                 'data' => [
                     'attribute_set_id' => [
                         'attribute_set' => $product->getDataFieldConfig('attribute_set_id')['source']->getAttributeSet()

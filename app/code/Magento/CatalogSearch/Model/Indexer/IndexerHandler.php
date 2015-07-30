@@ -12,7 +12,7 @@ use Magento\Framework\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Indexer\Model\SaveHandler\Batch;
-use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -61,7 +61,7 @@ class IndexerHandler implements IndexerInterface
      * @param Resource|Resource $resource
      * @param Config $eavConfig
      * @param Batch $batch
-     * @param IndexScopeResolver $indexScopeResolver
+     * @param \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
      * @param array $data
      * @param int $batchSize
      */

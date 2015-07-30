@@ -9,6 +9,7 @@ namespace Magento\Downloadable\Test\Constraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Sales\Test\Page\CustomerOrderView;
 use Magento\Mtf\Fixture\InjectableFixture;
@@ -43,24 +44,24 @@ abstract class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends Abs
         CheckoutCart $checkoutCart,
         CheckoutOnepage $checkoutOnepage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
-        CustomerOrderView $customerOrderView
+        CustomerOrderView $customerOrderView,
+        CmsIndex $cmsIndex
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->customerOrderView = $customerOrderView;
 
         $checkoutCart->getProceedToCheckoutBlock()->proceedToCheckout();
-        $checkoutOnepage->getBillingBlock()->clickContinue();
-        $checkoutOnepage->getPaymentMethodsBlock()->selectPaymentMethod(['method' => 'check_money_order']);
-        $checkoutOnepage->getPaymentMethodsBlock()->clickContinue();
+        $cmsIndex->getCmsPageBlock()->waitPageInit();
+        $checkoutOnepage->getPaymentBlock()->selectPaymentMethod(['method' => 'checkmo']);
         $actualPrices = [];
         $actualPrices = $this->getReviewPrices($actualPrices, $product);
         $actualPrices = $this->getReviewTotals($actualPrices);
         $prices = $this->preparePrices($prices);
         //Order review prices verification
         $message = 'Prices on order review should be equal to defined in dataset.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, $actualPrices, $message);
+        \PHPUnit_Framework_Assert::assertEquals($prices, array_filter($actualPrices), $message);
 
-        $checkoutOnepage->getReviewBlock()->placeOrder();
+        $checkoutOnepage->getPaymentBlock()->placeOrder();
         $checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         $checkoutOnepageSuccess->getSuccessBlock()->openOrder();
         $actualPrices = [];
@@ -69,6 +70,6 @@ abstract class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends Abs
 
         //Frontend order prices verification
         $message = 'Prices on order view page should be equal to defined in dataset.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, $actualPrices, $message);
+        \PHPUnit_Framework_Assert::assertEquals($prices, array_filter($actualPrices), $message);
     }
 }

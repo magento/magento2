@@ -148,7 +148,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMock('Magento\Framework\Pricing\PriceCurrencyInterface');
         $this->dateFormat = $this->getMock('Magento\Framework\Stdlib\DateTime', [], [], '', false);
         $this->dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
-        $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', ['getAttribute'], [], '', false);
         $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
 
@@ -182,7 +182,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->combine->expects($this->any())->method('validate')->will($this->returnValue(true));
         $this->attribute->expects($this->any())->method('getBackend')->will($this->returnValue($this->backend));
-        $this->eavConfig->expects($this->any())->method('getAttribute')->will($this->returnValue($this->attribute));
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
 
         $this->indexBuilder = new \Magento\CatalogRule\Model\Indexer\IndexBuilder(
@@ -206,6 +205,45 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateCatalogRuleGroupWebsiteData()
     {
+        $groupPriceAttrMock = $this->getMock(
+            'Magento\Catalog\Model\Entity\Attribute',
+            ['getBackend'],
+            [],
+            '',
+            false
+        );
+        $backendModelMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice',
+            ['getResource'],
+            [],
+            '',
+            false
+        );
+        $resourceMock = $this->getMock(
+            'Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice',
+            ['getMainTable'],
+            [],
+            '',
+            false
+        );
+        $resourceMock->expects($this->once())
+            ->method('getMainTable')
+            ->will($this->returnValue('catalog_product_entity_group_price'));
+        $backendModelMock->expects($this->once())
+            ->method('getResource')
+            ->will($this->returnValue($resourceMock));
+        $groupPriceAttrMock->expects($this->once())
+            ->method('getBackend')
+            ->will($this->returnValue($backendModelMock));
+        $this->eavConfig->expects($this->at(0))
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, 'group_price')
+            ->will($this->returnValue($groupPriceAttrMock));
+        $this->eavConfig->expects($this->at(1))
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, 'price')
+            ->will($this->returnValue($this->attribute));
+
         $this->select->expects($this->once())->method('insertFromSelect')->with('catalogrule_group_website');
         
         $this->indexBuilder->reindexByIds([1]);

@@ -44,7 +44,7 @@ class AssertGroupedProductForm extends AssertProductForm
     }
 
     /**
-     * Prepare Grouped Options array from preset
+     * Prepare Grouped Options array from dataset
      *
      * @param array $fields
      * @return array

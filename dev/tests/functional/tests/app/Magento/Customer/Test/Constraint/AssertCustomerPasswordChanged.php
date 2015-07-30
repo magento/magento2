@@ -38,7 +38,7 @@ class AssertCustomerPasswordChanged extends AbstractConstraint
         $customer = $fixtureFactory->createByCode(
             'customer',
             [
-                'dataSet' => 'default',
+                'dataset' => 'default',
                 'data' => [
                     'email' => $initialCustomer->getEmail(),
                     'password' => $customer->getPassword(),

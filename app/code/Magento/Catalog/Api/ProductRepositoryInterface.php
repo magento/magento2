@@ -72,10 +72,4 @@ interface ProductRepositoryInterface
      * @return \Magento\Catalog\Api\Data\ProductSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
-
-    /**
-     * @param \Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\Search\SearchResultInterface
-     */
-    public function search(\Magento\Framework\Api\Search\SearchCriteriaInterface $searchCriteria);
 }

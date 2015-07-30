@@ -28,6 +28,7 @@ class RulePool
     const TYPE_LOCALE_FILE = 'locale';
     const TYPE_TEMPLATE_FILE = 'template';
     const TYPE_STATIC_FILE = 'static';
+    const TYPE_EMAIL_TEMPLATE = 'email';
     /**#@-*/
 
     /**
@@ -162,6 +163,25 @@ class RulePool
     }
 
     /**
+     * Retrieve newly created fallback rule for email templates.
+     *
+     * Emails are only loaded in a modular context, so a non-modular rule is not specified.
+     *
+     * @return RuleInterface
+     */
+    protected function createEmailTemplateFileRule()
+    {
+        $themesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath(), '/');
+        $modulesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath(), '/');
+        return new Composite(
+            [
+                new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/email")),
+                new Simple("$modulesDir/<namespace>/<module>/view/<area>/email"),
+            ]
+        );
+    }
+
+    /**
      * @param string $type
      * @return RuleInterface
      * @throws \InvalidArgumentException
@@ -183,6 +203,9 @@ class RulePool
                 break;
             case self::TYPE_STATIC_FILE:
                 $rule = $this->createViewFileRule();
+                break;
+            case self::TYPE_EMAIL_TEMPLATE:
+                $rule = $this->createEmailTemplateFileRule();
                 break;
             default:
                 throw new \InvalidArgumentException("Fallback rule '$type' is not supported");

@@ -6,6 +6,8 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
 
+use Magento\Customer\Controller\RegistryConstants;
+
 class CustomerGrid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
 {
     /**
@@ -13,11 +15,11 @@ class CustomerGrid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreemen
      *
      * @return $this
      */
-    protected function _initCustomer()
+    protected function initCurrentCustomer()
     {
         $customerId = (int)$this->getRequest()->getParam('id');
         if ($customerId) {
-            $this->_coreRegistry->register('current_customer_id', $customerId);
+            $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
         }
         return $this;
     }
@@ -29,7 +31,7 @@ class CustomerGrid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreemen
      */
     public function execute()
     {
-        $this->_initCustomer();
+        $this->initCurrentCustomer();
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();
     }

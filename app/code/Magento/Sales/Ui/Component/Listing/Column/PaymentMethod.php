@@ -50,8 +50,13 @@ class PaymentMethod extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->paymentHelper->getMethodInstance($item[$this->getData('name')])
-                    ->getTitle();
+                try {
+                    $item[$this->getData('name')] = $this->paymentHelper
+                        ->getMethodInstance($item[$this->getData('name')])
+                        ->getTitle();
+                } catch (\UnexpectedValueException $exception) {
+                    //Displaying payment code (with no changes) if payment method is not available in system
+                }
             }
         }
     }

@@ -89,7 +89,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock = $this->getMock(
             'Magento\Framework\Model\Resource\AbstractResource',
-            ['_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName',
+            ['_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName', 'getConnection',
                 'save', 'saveInSetIncluding', 'isUsedBySuperProducts', 'delete'],
             [], '', false
         );

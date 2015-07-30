@@ -44,7 +44,7 @@ class CreateProductAttributeEntityFromProductPageTest extends Scenario
     {
         $product = $fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'product_with_category_with_anchor']
+            ['dataset' => 'product_with_category_with_anchor']
         );
         $product->persist();
         return ['product' => $product];

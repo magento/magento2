@@ -16,12 +16,12 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class IndexStructureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Search\Model\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $indexScopeResolver;
 
     /**
-     * @var \Magento\Search\Model\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $flatScopeResolver;
 
@@ -53,11 +53,11 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->with('write')
             ->willReturn($this->adapter);
-        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Search\Model\ScopeResolver\IndexScopeResolver')
+        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
             ->setMethods(['resolve'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->flatScopeResolver = $this->getMockBuilder('\Magento\Search\Model\ScopeResolver\FlatScopeResolver')
+        $this->flatScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\FlatScopeResolver')
             ->setMethods(['resolve'])
             ->disableOriginalConstructor()
             ->getMock();

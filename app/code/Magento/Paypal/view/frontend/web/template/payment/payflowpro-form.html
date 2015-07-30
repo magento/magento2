@@ -16,7 +16,6 @@
     </div>
 
     <div class="payment-method-content">
-        <div class="payment-method-note"><!-- ko text: $t('We\'ll ask for your payment details before you place an order.') --><!-- /ko --></div>
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
             <!-- ko template: getTemplate() --><!-- /ko -->
@@ -54,14 +53,14 @@
                     <button data-role="review-save"
                             type="submit"
                             data-bind="
-                            attr: {title: $t('Place order')},
+                            attr: {title: $t('Place Order')},
                             enable: (getCode() == isChecked()),
                             click: placeOrder,
                             css: {disabled: !isPlaceOrderActionAllowed()}
                             "
                             class="action primary checkout"
                             disabled>
-                        <span data-bind="text: $t('Place order')"></span>
+                        <span data-bind="text: $t('Place Order')"></span>
                     </button>
                 </div>
             </div>

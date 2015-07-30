@@ -98,8 +98,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     protected $_sendingException = null;
 
     /**
-     * Constructor
-     *
      * Email filter factory
      *
      * @var \Magento\Email\Model\Template\FilterFactory
@@ -107,6 +105,8 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     private $filterFactory;
 
     /**
+     * Initialize dependencies
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
@@ -117,6 +117,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param array $data
      *
@@ -133,6 +134,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Framework\UrlInterface $urlModel,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
         array $data = []
     ) {
@@ -148,6 +150,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
             $scopeConfig,
             $emailConfig,
             $templateFactory,
+            $urlModel,
             $data
         );
     }
@@ -351,7 +354,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     public function processTemplate()
     {
-        // Necessary to support theme fallback for email templates
+        // Support theme fallback for email templates
         $isDesignApplied = $this->applyDesignConfig();
 
         $templateId = $this->getId();
