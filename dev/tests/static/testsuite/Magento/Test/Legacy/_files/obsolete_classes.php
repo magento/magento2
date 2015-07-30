@@ -3810,4 +3810,5 @@ return [
         . '\Configurable'
     ],
     ['Magento\Bundle\Model\Observer', 'corresponding classes in Magento\Bundle\Observer\*'],
+    ['Magento\CatalogRule\Model\Observer', 'corresponding classes in Magento\CatalogRule\Observer\*'],
 ];
