@@ -139,3 +139,5 @@ FOUND,FOUND
 "Item totals are not set for the rule.","Item totals are not set for the rule."
 "Auto Generated Specific Coupon Codes","Auto Generated Specific Coupon Codes"
 "Usage limit enforced for logged in customers only.","Usage limit enforced for logged in customers only."
+"Error occurred when saving coupon: %1","Error occurred when saving coupon: %1"
+"Error occurred when generating coupons: %1","Error occurred when generating coupons: %1"
