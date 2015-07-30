@@ -35,7 +35,8 @@ $thumbHeight =  $block->getVar("product_page_more_views:height") ?: $thumbWidth;
 <?php
         $imageSmall = $block->getImageUrl($_image, 'thumbnail', $whiteBorders, $thumbWidth, $thumbHeight);
 $imageMedium = $block->getImageUrl($_image, 'image', $whiteBorders, $_resizedWidth, $_resizedHeight);
-$imageItem = ('{"img": "' . (string)$imageMedium . '", "thumb": "' . (string)$imageSmall . '"}');
+$imgCaption = $block->escapeHtml($_image->getLabel());
+$imageItem = ('{"img": "' . (string)$imageMedium . '", "thumb": "' . (string)$imageSmall . '", "caption": "' . (string)$imgCaption . '"}');
 array_push($imagesItems, $imageItem);
 ?>
 <?php endforeach; ?>
@@ -55,7 +56,8 @@ array_push($imagesItems, $imageItem);
                  "height": 400,
                  "loop": <?php echo $loop; ?>,
                  "keyboard": true,
-                 "allowfullscreen": true,
+                 "allowfullscreen": false,
+                 "showCaption": false,
                  "data": <?php echo $imagesItemsJson; ?>
             }
         }
