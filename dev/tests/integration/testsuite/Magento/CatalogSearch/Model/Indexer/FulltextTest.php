@@ -198,7 +198,12 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $query = $this->queryFactory->get();
         $query->unsetData()->setQueryText($text)->prepare();
         $products = [];
-        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection = Bootstrap::getObjectManager()->create(
+            Collection::class,
+            [
+                'searchRequestName' => 'quick_search_container'
+            ]
+        );
         $collection->addSearchFilter($text);
         foreach ($collection as $product) {
             $products[] = $product;
