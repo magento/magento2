@@ -287,4 +287,14 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Customer\Model\Indexer\AttributeProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Customer\Model\Resource\Attribute\Collection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Indexer\Address\AttributeProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Customer\Model\Resource\Address\Attribute\Collection</argument>
+        </arguments>
+    </type>
 </config>
