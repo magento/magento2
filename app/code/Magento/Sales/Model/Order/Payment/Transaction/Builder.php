@@ -164,35 +164,6 @@ class Builder implements BuilderInterface
     }
 
     /**
-     * Links transaction with parent transaction
-     *
-     * @param TransactionInterface $transaction
-     * @return TransactionInterface
-     */
-    protected function linkWithParentTransaction(TransactionInterface $transaction)
-    {
-        $parentTransactionId = $this->payment->getParentTransactionId();
-
-        if ($parentTransactionId) {
-            $transaction->setParentTxnId($parentTransactionId);
-            if ($this->payment->getShouldCloseParentTransaction()) {
-                $parentTransaction = $this->transactionRepository->getByTransactionId(
-                    $parentTransactionId,
-                    $this->payment->getid(),
-                    $this->order->getId()
-                );
-                if ($parentTransaction) {
-                    if (!$parentTransaction->getIsClosed()) {
-                        $parentTransaction->isFailsafe($this->failSafe)->close(false);
-                    }
-                    $this->order->addRelatedObject($parentTransaction);
-                }
-            }
-        }
-        return $transaction;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function build($type)
@@ -231,5 +202,34 @@ class Builder implements BuilderInterface
             return $this->linkWithParentTransaction($transaction);
         }
         return null;
+    }
+
+    /**
+     * Links transaction with parent transaction
+     *
+     * @param TransactionInterface $transaction
+     * @return TransactionInterface
+     */
+    protected function linkWithParentTransaction(TransactionInterface $transaction)
+    {
+        $parentTransactionId = $this->payment->getParentTransactionId();
+
+        if ($parentTransactionId) {
+            $transaction->setParentTxnId($parentTransactionId);
+            if ($this->payment->getShouldCloseParentTransaction()) {
+                $parentTransaction = $this->transactionRepository->getByTransactionId(
+                    $parentTransactionId,
+                    $this->payment->getid(),
+                    $this->order->getId()
+                );
+                if ($parentTransaction) {
+                    if (!$parentTransaction->getIsClosed()) {
+                        $parentTransaction->isFailsafe($this->failSafe)->close(false);
+                    }
+                    $this->order->addRelatedObject($parentTransaction);
+                }
+            }
+        }
+        return $transaction;
     }
 }
