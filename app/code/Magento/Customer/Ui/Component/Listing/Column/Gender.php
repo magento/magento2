@@ -8,29 +8,29 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Store\Model\WebsiteFactory;
+use Magento\Customer\Api\CustomerMetadataInterface;
 
-class Website extends Column
+class Gender extends Column
 {
-    /** @var WebsiteFactory */
-    protected $websiteFactory;
+    /** @var CustomerMetadataInterface */
+    protected $customerMetadata;
 
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param WebsiteFactory $websiteFactory
+     * @param CustomerMetadataInterface $customerMetadata
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        WebsiteFactory $websiteFactory,
+        CustomerMetadataInterface $customerMetadata,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-        $this->websiteFactory = $websiteFactory;
+        $this->customerMetadata = $customerMetadata;
     }
 
     /**
@@ -41,11 +41,18 @@ class Website extends Column
      */
     public function prepareDataSource(array & $dataSource)
     {
-        if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
-                if (isset($item[$this->getData('name')])) {
-                    $item[$this->getData('name')] = $this->websiteFactory->create()->load($item[$this->getData('name')])
-                        ->getName();
+        if (!isset($dataSource['data']['items'])) {
+            return;
+        }
+        $genderOptions = $this->customerMetadata->getAttributeMetadata('gender')->getOptions();
+        foreach ($dataSource['data']['items'] as & $item) {
+            if (!isset($item[$this->getData('name')])) {
+                continue;
+            }
+            foreach ($genderOptions as $option) {
+                if ($option->getValue() == $item[$this->getData('name')]) {
+                    $item[$this->getData('name')] = $option->getLabel();
+                    break;
                 }
             }
         }

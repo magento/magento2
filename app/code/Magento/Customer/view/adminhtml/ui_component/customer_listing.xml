@@ -467,7 +467,7 @@
         <column name="last_visit_at" >
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">>Magento_Ui/js/grid/columns/date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="visible" xsi:type="boolean">false</item>
@@ -534,10 +534,10 @@
                 </item>
             </argument>
         </column>
-        <column name="dob" >
+        <column name="dob">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">>Magento_Ui/js/grid/columns/date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="visible" xsi:type="boolean">false</item>
@@ -562,7 +562,7 @@
                 </item>
             </argument>
         </column>
-        <column name="gender">
+        <column name="gender" class="Magento\Customer\Ui\Component\Listing\Column\Gender">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
