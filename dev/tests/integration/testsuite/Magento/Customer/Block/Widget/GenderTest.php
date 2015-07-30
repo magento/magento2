@@ -47,8 +47,8 @@ class GenderTest extends \PHPUnit_Framework_TestCase
     {
         $html = $this->_block->toHtml();
         $this->assertContains('<span>Gender</span>', $html);
-        $this->assertContains('<option value="1">Not Specified</option>', $html);
-        $this->assertContains('<option value="2">Male</option>', $html);
-        $this->assertContains('<option value="3">Female</option>', $html);
+        $this->assertContains('<option value="1">Male</option>', $html);
+        $this->assertContains('<option value="2">Female</option>', $html);
+        $this->assertContains('<option value="3">Not Specified</option>', $html);
     }
 }

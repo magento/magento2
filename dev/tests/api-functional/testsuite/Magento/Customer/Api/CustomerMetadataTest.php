@@ -98,9 +98,9 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::DATA_MODEL       => '',
                     AttributeMetadata::OPTIONS          => [
                         ['label' => '', 'value' => ''],
-                        ['label' => 'Not Specified', 'value' => '1'],
-                        ['label' => 'Male', 'value' => '2'],
-                        ['label' => 'Female', 'value' => '3']
+                        ['label' => 'Male', 'value' => '1'],
+                        ['label' => 'Female', 'value' => '2'],
+                        ['label' => 'Not Specified', 'value' => '3']
                     ],
                     AttributeMetadata::FRONTEND_CLASS   => '',
                     AttributeMetadata::FRONTEND_LABEL   => 'Gender',
