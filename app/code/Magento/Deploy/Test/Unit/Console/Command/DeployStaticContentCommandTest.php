@@ -12,11 +12,6 @@ use Magento\Framework\Validator\Locale;
 class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfig;
-
-    /**
      * @var \Magento\Deploy\Model\Deployer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $deployer;
@@ -51,12 +46,10 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->deployer = $this->getMock('Magento\Deploy\Model\Deployer', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->filesUtil = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
         $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
         $this->command = new DeployStaticContentCommand(
             $this->objectManagerFactory,
-            $this->deploymentConfig,
             $this->validator
         );
     }
@@ -79,25 +72,8 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->validator->expects($this->once())->method('isValid')->with('en_US')->willReturn(true);
 
-        $this->deploymentConfig->expects($this->once())
-            ->method('isAvailable')
-            ->will($this->returnValue(true));
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-    }
-
-    public function testExecuteNotInstalled()
-    {
-        $this->deploymentConfig->expects($this->once())
-            ->method('isAvailable')
-            ->will($this->returnValue(false));
-        $this->objectManagerFactory->expects($this->never())->method('get');
-        $tester = new CommandTester($this->command);
-        $tester->execute([]);
-        $this->assertStringMatchesFormat(
-            'You need to install the Magento application before running this utility.%w',
-            $tester->getDisplay()
-        );
     }
 
     /**
@@ -106,9 +82,6 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInvalidLanguageArgument()
     {
-        $this->deploymentConfig->expects($this->once())
-            ->method('isAvailable')
-            ->will($this->returnValue(true));
         $wrongParam = ['languages' => ['ARG_IS_WRONG']];
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($wrongParam);

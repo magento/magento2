@@ -10,7 +10,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\DeploymentConfig;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Validator\Locale;
@@ -31,13 +30,6 @@ class DeployStaticContentCommand extends Command
     const LANGUAGE_OPTION = 'languages';
 
     /**
-     * Deployment configuration
-     *
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
      * @var Locale
      */
     private $validator;
@@ -53,16 +45,13 @@ class DeployStaticContentCommand extends Command
      * Inject dependencies
      *
      * @param ObjectManagerFactory $objectManagerFactory
-     * @param DeploymentConfig $deploymentConfig
      * @param Locale $validator
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        DeploymentConfig $deploymentConfig,
         Locale $validator
     ) {
         $this->objectManagerFactory = $objectManagerFactory;
-        $this->deploymentConfig = $deploymentConfig;
         $this->validator = $validator;
         parent::__construct();
     }
