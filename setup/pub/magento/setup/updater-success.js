@@ -4,8 +4,11 @@
  */
 
 'use strict';
-angular.module('component-update-success', ['ngStorage'])
-    .controller('componentUpdateSuccessController', ['$scope', '$state', '$localStorage', '$window', function ($scope, $state, $localStorage, $window) {
+angular.module('updater-success', ['ngStorage'])
+    .controller('updaterSuccessController', ['$scope', '$state', '$localStorage', '$window', function ($scope, $state, $localStorage, $window) {
+        if ($localStorage.successPageAction) {
+            $scope.successPageAction = $localStorage.successPageAction;
+        }
         if ($localStorage.packages) {
             $scope.packages = $localStorage.packages;
         }

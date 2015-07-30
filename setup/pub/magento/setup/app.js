@@ -21,9 +21,9 @@ var app = angular.module(
         'component-grid',        
         'create-backup',
         'complete-backup',
-        'component-update',
+        'start-updater',
         'select-version',
-        'component-update-success'
+        'updater-success'
     ]);
 
 app.config(function ($stateProvider) {

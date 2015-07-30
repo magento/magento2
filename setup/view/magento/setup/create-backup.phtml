@@ -13,7 +13,7 @@
             <button
                 type="button"
                 class="btn btn-prime"
-                ng-click="$state.go('root.component-update')"
+                ng-click="goToStartUpdater()"
                 ng-disabled="checkingInProgress() || (hasErrors && ($state.is('root.create-backup-cm.progress') || $state.is('root.create-backup-su.progress')))
                 || (!nextButtonStatus && ($state.is('root.create-backup-cm') || $state.is('root.create-backup-su')))"
                 >Next</button>
@@ -48,8 +48,8 @@
         <fieldset class="form-fieldset">
             <div class="message message-warning">
                 <span class="message-text">
-                    <strong>We’ll put your store in maintenance mode to protect your shoppers during the upgrade.
-                        You cannot cancel this upgrade process.</strong>
+                    <strong>We’ll put your store in maintenance mode to protect your shoppers during the {{type}}.
+                        You cannot cancel this {{type}} process.</strong>
                 </span>
             </div>
             <div class="row form-row">
