@@ -18,10 +18,6 @@
         <plugin name="checkout-session-depersonalize"
                 type="Magento\Checkout\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
     </type>
-    <type name="Magento\Customer\Block\Account\AuthenticationPopup">
-        <plugin name="authentication-popup-checkout-url"
-                type="Magento\Checkout\Model\Customer\Autentication\ConfigPlugin" sortOrder="20"/>
-    </type>
     <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
