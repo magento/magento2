@@ -2370,4 +2370,5 @@ return [
         'Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save::registerShipment'
     ],
     ['register', 'Magento\Sales\Model\Order\Shipment\Item'],
+    ['prepareInvoice', 'Magento\Sales\Model\Service\Order'],
 ];
