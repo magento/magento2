@@ -63,6 +63,15 @@ define(['jquery', 'ko', 'module', 'mage/translate'], function ($, ko, module) {
         },
 
         /**
+         * Sets text for the element
+         * @param {Object} el
+         * @param {String} text
+         */
+        setText = function (el, text) {
+            $(el).text(text);
+        },
+
+        /**
          * Sets [data-translate] attribute for the element
          * @param {Object} el - The element which is binded
          * @param {String} original - The original value of the element
@@ -74,20 +83,42 @@ define(['jquery', 'ko', 'module', 'mage/translate'], function ($, ko, module) {
 
             $(el).attr('data-translate', translateObj);
 
-            $(el).text(translated);
+            setText(el, translated);
         },
 
         /**
-         * Sets text for the element
-         * @param {Object} el - The element which is binded
+        * Checks if it's real DOM element
+        * in case of virtual element, returns span wrapper
+        * @param {Object} el
+        * @param {bool} isUpdate
+        * @return {Object} el
+        */
+        getRealElement = function (el, isUpdate) {
+            if (el.nodeName && el.nodeName === '#comment') {
+                if (isUpdate) {
+                    return $(el).next('span');
+                }
+
+                return $('<span/>').insertAfter(el);
+            }
+
+            return el;
+        },
+
+        /**
+         * execute i18n binding
+         * @param {Object} element
          * @param {Function} valueAccessor
+         * @param {bool} isUpdate
          */
-        setText = function (el, valueAccessor) {
-            var original = ko.unwrap(valueAccessor() || '');
-            $(el).text(original);
+        execute = function (element, valueAccessor, isUpdate) {
+            var original = ko.unwrap(valueAccessor() || ''),
+                el = getRealElement(element, isUpdate);
 
             if (inlineTranslation) {
                 setTranslateProp(el, original);
+            } else {
+                setText(el, original);
             }
         };
 
@@ -97,11 +128,13 @@ define(['jquery', 'ko', 'module', 'mage/translate'], function ($, ko, module) {
      * @property {Function}  update
      */
     ko.bindingHandlers.i18n = {
-        init: function (el, valueAccessor) {
-            setText(el, valueAccessor);
+        init: function (element, valueAccessor) {
+            execute(element, valueAccessor);
         },
-        update: function (el, valueAccessor) {
-            setText(el, valueAccessor);
+        update: function (element, valueAccessor) {
+            execute(element, valueAccessor, true);
         }
     };
+
+    ko.virtualElements.allowedBindings.i18n = true;
 });
