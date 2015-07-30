@@ -7,6 +7,10 @@
 $base = basename($_SERVER['SCRIPT_FILENAME']);
 
 return [
+    'navUpdaterTitles' => [
+        'cm'    => 'Component Manager',
+        'su'    => 'System Upgrade',
+    ],
     'navUpdater' => [
         [
             'id'          => 'root',
