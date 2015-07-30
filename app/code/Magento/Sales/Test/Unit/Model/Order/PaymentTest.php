@@ -1511,7 +1511,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $parentTransaction = $this->getMock(
             'Magento\Sales\Model\Order\Payment\Transaction',
-            ['setOrderPaymentObject', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType'],
+            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType'],
             [],
             '',
             false
@@ -1566,7 +1566,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
         $parentTransaction = $this->getMock(
             'Magento\Sales\Model\Order\Payment\Transaction',
-            ['setOrderPaymentObject', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType'],
+            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType'],
             [],
             '',
             false
@@ -1692,7 +1692,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Order\Payment\Transaction',
             [
                 'getId',
-                'setOrderPaymentObject',
+                'setOrderId',
+                'setPaymentId',
                 'loadByTxnId',
                 'setTxnId',
                 'getTransactionId',

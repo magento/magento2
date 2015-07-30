@@ -206,7 +206,10 @@ class Builder implements BuilderInterface
             if (!$transaction) {
                 $transaction = $this->transactionRepository->create()->setTxnId($this->transactionId);
             }
-            $transaction->setOrderPaymentObject($this->payment)->setTxnType($type)->isFailsafe($this->failSafe);
+            $transaction->setPaymentId($this->payment->getId())
+                ->setOrderId($this->order->getId())
+                ->setTxnType($type)
+                ->isFailsafe($this->failSafe);
 
             if ($this->payment->hasIsTransactionClosed()) {
                 $transaction->setIsClosed((int)$this->payment->getIsTransactionClosed());

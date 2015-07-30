@@ -199,7 +199,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Order\Payment\Transaction',
             [
                 'getId',
-                'setOrderPaymentObject',
+                'setOrderId',
+                'setPaymentId',
                 'loadByTxnId',
                 'setTxnId',
                 'setTxnType',
@@ -249,8 +250,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function expectSetPaymentObject($newTransaction, $type, $failSafe)
     {
-        $newTransaction->expects($this->once())->method('setOrderPaymentObject')
-            ->with($this->paymentMock)
+        $newTransaction->expects($this->once())->method('setOrderId')
+            ->willReturnSelf();
+        $newTransaction->expects($this->once())->method('setPaymentId')
             ->willReturnSelf();
         $newTransaction->expects($this->once())->method('setTxnType')
             ->with($type)

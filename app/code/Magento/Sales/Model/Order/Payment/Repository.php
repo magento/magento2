@@ -94,4 +94,14 @@ class Repository implements OrderPaymentRepositoryInterface
         $this->metaData->getMapper()->save($entity);
         return $entity;
     }
+
+    /**
+     * Creates new Order Payment instance.
+     *
+     * @return \Magento\Sales\Api\Data\OrderPaymentInterface Transaction interface.
+     */
+    public function create()
+    {
+        return $this->metaData->getNewInstance();
+    }
 }
