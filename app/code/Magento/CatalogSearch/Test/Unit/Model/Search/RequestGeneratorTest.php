@@ -123,7 +123,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
         $result = $this->object->generate();
 
         $this->assertEquals(
-            $countResult['quick_search']['queries'],
+            $countResult['quick_search_container']['queries'],
             $this->countVal($result['quick_search_container']['queries'])
         );
         $this->assertEquals(
