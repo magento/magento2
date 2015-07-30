@@ -215,6 +215,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Sales\Api\OrderManagementInterface
+     */
+    protected $orderManagement;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -240,6 +245,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -269,6 +275,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Quote\Model\QuoteManagement $quoteManagement,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         array $data = []
     ) {
         $this->_objectManager = $objectManager;
@@ -296,6 +303,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $this->customerMapper = $customerMapper;
         $this->quoteManagement = $quoteManagement;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->orderManagement = $orderManagement;
         parent::__construct($data);
     }
 
@@ -1858,7 +1866,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             $oldOrder = $this->getSession()->getOrder();
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
-            $oldOrder->cancel()->save();
+            $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
         if ($this->getSendConfirmation()) {
