@@ -2,9 +2,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-'use strict';
 
-define(['jquery', 'ko', 'module', 'mage/translate'], function ($, ko, module) {
+define([
+    'jquery',
+    'ko',
+    'module',
+    'mage/translate'
+], function ($, ko, module) {
+    'use strict';
+
     var inlineTranslation = (module.config() || {}).inlineTranslation,
         locations = {
             'legend': 'Caption for the fieldset element',
@@ -128,9 +134,21 @@ define(['jquery', 'ko', 'module', 'mage/translate'], function ($, ko, module) {
      * @property {Function}  update
      */
     ko.bindingHandlers.i18n = {
+
+        /**
+         * init i18n binding
+         * @param {Object} element
+         * @param {Function} valueAccessor
+         */
         init: function (element, valueAccessor) {
             execute(element, valueAccessor);
         },
+
+        /**
+         * update i18n binding
+         * @param {Object} element
+         * @param {Function} valueAccessor
+         */
         update: function (element, valueAccessor) {
             execute(element, valueAccessor, true);
         }
