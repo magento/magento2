@@ -56,8 +56,7 @@ abstract class Email extends \Magento\Backend\App\Action
             return $this->resultForwardFactory->create()->forward('noroute');
         }
 
-        $this->_objectManager->create('Magento\Sales\Model\Order\InvoiceNotifier')
-            ->notify($invoice);
+        $this->_objectManager->create('Magento\Sales\Api\InvoiceManagementInterface')->notify($invoice->getEntityId());
 
         $this->messageManager->addSuccess(__('You sent the message.'));
         return $this->resultRedirectFactory->create()->setPath(

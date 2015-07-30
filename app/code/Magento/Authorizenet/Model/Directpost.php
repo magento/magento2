@@ -803,7 +803,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      */
     protected function getRealParentTransactionId($payment)
     {
-        $transaction = $this->transactionRepository->getByTxnId(
+        $transaction = $this->transactionRepository->getByTransactionId(
             $payment->getParentTransactionId(),
             $payment->getId(),
             $payment->getOrder()->getId()
@@ -863,7 +863,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
-        $transaction = $this->transactionRepository->getByTxnId(
+        $transaction = $this->transactionRepository->getByTransactionId(
             $transactionId,
             $payment->getId(),
             $payment->getOrder()->getId()

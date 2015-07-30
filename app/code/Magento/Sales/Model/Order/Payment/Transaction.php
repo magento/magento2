@@ -563,29 +563,6 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Order Payment instance getter
-     * Will attempt to load by payment_id if it is set in data
-     *
-     * @param bool $shouldLoad
-     * @return \Magento\Sales\Model\Order\Payment
-     */
-    public function getOrderPaymentObject($shouldLoad = true)
-    {
-        $this->_verifyThisTransactionExists();
-        if (null === $this->_paymentObject && $shouldLoad) {
-            /** @var \Magento\Sales\Model\Order\Payment $payment */
-            $payment = $this->_paymentFactory->create()->load($this->getPaymentId());
-            if ($payment->getId()) {
-                if (!$payment->getOrder()) {
-                    $payment->setOrder($this->getOrder());
-                }
-                $this->setOrderPaymentObject($payment);
-            }
-        }
-        return $this->_paymentObject;
-    }
-
-    /**
      * Order ID getter
      * Attempts to get ID from set order payment object, if any, or from data by key 'order_id'
      *
