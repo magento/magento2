@@ -67,7 +67,7 @@ class Pro extends \Magento\Paypal\Model\Pro
     protected function _getParentTransactionId(\Magento\Framework\Object $payment)
     {
         if ($payment->getParentTransactionId()) {
-            return $this->transactionRepository->getByTxnId(
+            return $this->transactionRepository->getByTransactionId(
                 $payment->getParentTransactionId(),
                 $payment->getId(),
                 $payment->getOrder()->getId()
