@@ -8,6 +8,7 @@ namespace Magento\Paypal\Model;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 use Magento\Paypal\Model\Express\Checkout as ExpressCheckout;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Quote\Model\Quote;
@@ -461,11 +462,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             $this->_isOrderPaymentActionKey
         ) && !$payment->getVoidOnlyAuthorization()
         ) {
-            $orderTransaction = $this->transactionRepository->getByTransactionType(
-                Transaction::TYPE_ORDER,
-                $payment->getId(),
-                $payment->getOrder()->getId()
-            );
+            $orderTransaction = $this->getOrderTransaction($payment);
             if ($orderTransaction) {
                 $payment->setParentTransactionId($orderTransaction->getTxnId());
                 $payment->setTransactionId($orderTransaction->getTxnId() . '-void');
@@ -551,11 +548,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             }
             //close order transaction if needed
             if ($payment->getShouldCloseParentTransaction()) {
-                $orderTransaction = $this->transactionRepository->getByTransactionType(
-                    Transaction::TYPE_ORDER,
-                    $payment->getId(),
-                    $payment->getOrder()->getId()
-                );
+                $orderTransaction = $this->getOrderTransaction($payment);
 
                 if ($orderTransaction) {
                     $orderTransaction->setIsClosed(true);
@@ -774,11 +767,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     {
         $info = $this->getInfoInstance();
         if ($info->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $this->transactionRepository->getByTransactionType(
-                Transaction::TYPE_ORDER,
-                $info->getId(),
-                $info->getOrder()->getId()
-            );
+            $orderTransaction = $this->getOrderTransaction($info);
             if ($orderTransaction) {
                 $info->setParentTransactionId($orderTransaction->getTxnId());
             }
@@ -798,11 +787,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_pro->getConfig()->setStoreId($payment->getOrder()->getStore()->getId());
 
         if ($payment->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $this->transactionRepository->getByTransactionType(
-                Transaction::TYPE_ORDER,
-                $payment->getId(),
-                $payment->getOrder()->getId()
-            );
+            $orderTransaction = $this->getOrderTransaction($payment);
             if ($orderTransaction->getIsClosed()) {
                 return false;
             }
@@ -817,6 +802,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                 return false;
             }
         }
+
         return $this->_canCapture;
     }
 
@@ -897,5 +883,20 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         return parent::isActive($storeId)
         || (bool)(int)$this->_scopeConfig->getValue($pathStandardExpress, ScopeInterface::SCOPE_STORE, $storeId)
         || (bool)(int)$this->_scopeConfig->getValue($pathPaypalExpress, ScopeInterface::SCOPE_STORE, $storeId);
+    }
+
+    /**
+     * Get transaction with type order
+     *
+     * @param OrderPaymentInterface $payment
+     * @return false|\Magento\Sales\Api\Data\TransactionInterface
+     */
+    protected function getOrderTransaction($payment)
+    {
+        return $this->transactionRepository->getByTransactionType(
+            Transaction::TYPE_ORDER,
+            $payment->getId(),
+            $payment->getOrder()->getId()
+        );
     }
 }
