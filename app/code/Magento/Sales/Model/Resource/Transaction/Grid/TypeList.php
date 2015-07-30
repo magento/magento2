@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource\Transaction\Grid;
+
 use Magento\Sales\Api\TransactionRepositoryInterface;
 
 /**
