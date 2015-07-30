@@ -281,8 +281,11 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         if (null === $errorMessage && isset($this->messageTemplate[$errorCode])) {
             $errorMessage = (string)__($this->messageTemplate[$errorCode]);
         }
-        if ($columnName) {
+        if ($columnName && $errorMessage) {
             $errorMessage = sprintf($errorMessage, $columnName);
+        }
+        if (!$errorMessage) {
+            $errorMessage = $errorCode;
         }
 
         return $errorMessage;

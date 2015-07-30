@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
 /**
  * Class ImportTest
  * @package Magento\ImportExport\Test\Unit\Model
@@ -104,12 +106,19 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected $_driver;
 
     /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
+
+    /**
      * Set up
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -126,16 +135,24 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getEntityTypeCode', 'getBehavior', 'getEntities'])
             ->getMockForAbstractClass();
-        $this->_entityFactory = $this->getMock(
-            '\Magento\ImportExport\Model\Import\Entity\Factory',
-            ['create', 'isNeedToLogInHistory'],
-            [],
-            '',
-            false
-        );
-            $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\Factory')
+        $this->_entityFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\Factory')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $entityAdapter = $this->getMockForAbstractClass(
+            'Magento\ImportExport\Model\Import\Entity\AbstractEntity',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['_saveValidatedBunches', 'getErrorAggregator']
+        );
+        $entityAdapter->method('getErrorAggregator')->willReturn(
+            $this->getErrorAggregatorObject()
+        );
+        $this->_entityFactory->method('create')->willReturn($entityAdapter);
+
         $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\Resource\Import\Data')
             ->disableOriginalConstructor()
             ->getMock();
@@ -195,7 +212,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ])
             ->setMethods([
                 'getDataSourceModel',
-                '_getEntityAdapter',
                 'setData',
                 'getProcessedEntitiesCount',
                 'getProcessedRowsCount',
@@ -211,6 +227,27 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['importData'])
             ->getMockForAbstractClass();
+    }
+
+    /**
+     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected function getErrorAggregatorObject()
+    {
+        $errorFactory = $this->getMockBuilder(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $errorFactory->method('create')->willReturn(
+            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+        );
+        return $this->objectManagerHelper->getObject(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            [
+                'errorFactory' => $errorFactory
+            ]
+        );
     }
 
     /**
@@ -246,7 +283,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                     ->will($this->returnValue($this->_entityAdapter));
 
         $importOnceMethodsReturnNull = [
-            'getEntity',
             'getBehavior',
             'getProcessedRowsCount',
             'getProcessedEntitiesCount',
@@ -298,7 +334,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->method('_getEntityAdapter')
             ->will($this->returnValue($this->_entityAdapter));
         $importOnceMethodsReturnNull = [
-            'getEntity',
             'getBehavior',
         ];
 
