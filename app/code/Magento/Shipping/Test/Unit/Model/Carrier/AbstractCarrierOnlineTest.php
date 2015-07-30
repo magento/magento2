@@ -52,7 +52,10 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
         $carrierArgs = $objectManagerHelper->getConstructArguments(
             'Magento\Shipping\Model\Carrier\AbstractCarrierOnline',
-            ['stockRegistry' => $this->stockRegistry]
+            [
+                'stockRegistry' => $this->stockRegistry,
+                'xmlSecurity' => new \Magento\Framework\Xml\Security(),
+            ]
         );
         $this->carrier = $this->getMockBuilder('Magento\Shipping\Model\Carrier\AbstractCarrierOnline')
             ->setConstructorArgs($carrierArgs)
@@ -114,5 +117,37 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('SimpleXMLElement', $simpleXmlElement);
         $customSimpleXmlElement = $this->carrier->parseXml($xmlString, 'Magento\Shipping\Model\Simplexml\Element');
         $this->assertInstanceOf('Magento\Shipping\Model\Simplexml\Element', $customSimpleXmlElement);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Security validation of XML document has been failed.
+     */
+    public function testParseXmlXXEXml()
+    {
+        $xmlString = '<!DOCTYPE scan [
+            <!ENTITY test SYSTEM "php://filter/read=convert.base64-encode/resource='
+            . __DIR__ . '/AbstractCarrierOnline/xxe-xml.txt">]><scan>&test;</scan>';
+
+        $xmlElement = $this->carrier->parseXml($xmlString);
+
+        echo $xmlElement->asXML();
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Security validation of XML document has been failed.
+     */
+    public function testParseXmlXQBXml()
+    {
+        $xmlString = '<?xml version="1.0"?>
+            <!DOCTYPE test [
+              <!ENTITY value "value">
+              <!ENTITY value1 "&value;&value;&value;&value;&value;&value;&value;&value;&value;&value;">
+              <!ENTITY value2 "&value1;&value1;&value1;&value1;&value1;&value1;&value1;&value1;&value1;&value1;">
+            ]>
+            <test>&value2;</test>';
+
+        $this->carrier->parseXml($xmlString);
     }
 }
