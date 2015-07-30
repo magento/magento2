@@ -14,6 +14,12 @@ angular.module('create-backup', ['ngStorage'])
             }
         };
 
+        if ($state.current.type === 'cm') {
+            $scope.type = 'update';
+        } else if ($state.current.type == 'su') {
+            $scope.type = 'upgrade';
+        }
+
         if ($localStorage.backupInfo) {
             $scope.backupInfo = $localStorage.backupInfo;
         }
@@ -29,6 +35,14 @@ angular.module('create-backup', ['ngStorage'])
                 return false;
             }
         };
+
+        $scope.goToStartUpdater = function () {
+            if ($state.current.type === 'cm') {
+                $state.go('root.start-updater-cm');
+            } else if ($state.current.type === 'su') {
+                $state.go('root.start-updater-su');
+            }
+        }
 
         $scope.$on('nextState', function () {
             $localStorage.backupInfo = $scope.backupInfo;

@@ -24,7 +24,7 @@
     <div class="readiness-check-content">
         <h3 class="readiness-check-title">Store in maintenance mode</h3>
         <p>
-            Your store will be in maintenance mode until you complete the update
+            Your store will be in maintenance mode until you complete the {{type}}
             and maintenance mode is automatically lifted.
         </p>
     </div>
@@ -46,7 +46,7 @@
 
 <form
     novalidate
-    name="component-update"
+    name="start-updater"
     ng-show="maintenanceCalled == maintenanceStatus"
     >
     <div ng-repeat="package in packages">
@@ -57,7 +57,7 @@
         class="btn btn-large btn-prime"
         ng-click="update()"
         type="button"
-        >Update</button>
+        >{{buttonText}}</button>
     <br/>
     <div ng-show="started">{{errorMessage}}</div>
 </form>

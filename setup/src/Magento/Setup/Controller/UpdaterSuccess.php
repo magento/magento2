@@ -9,7 +9,7 @@ use Magento\Framework\App\MaintenanceMode;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class ComponentUpdateSuccess extends AbstractActionController
+class UpdaterSuccess extends AbstractActionController
 {
     /**
      * @var MaintenanceMode

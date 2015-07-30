@@ -91,23 +91,14 @@ return [
             'type'        => 'cm'
         ],
         [
-            'id'          => 'root.component-update',
-            'url'         => 'component-update',
-            'templateUrl' => "$base/component-update",
-            'controller'  => 'componentUpdateController',
+            'id'          => 'root.start-updater-cm',
+            'url'         => 'start-updater',
+            'templateUrl' => "$base/start-updater",
+            'controller'  => 'startUpdaterController',
             'title'       => "Component \n Update",
             'header'      => 'Step 3: Component Update',
             'nav'         => true,
             'order'       => 6,
-            'type'        => 'cm'
-        ],
-        [
-            'id'          => 'root.component-update-success',
-            'url'         => 'component-update-success',
-            'templateUrl' => "$base/component-update-success",
-            'controller'  => 'componentUpdateSuccessController',
-            'order'       => 7,
-            'main'        => true,
             'type'        => 'cm'
         ],
         [
@@ -154,15 +145,23 @@ return [
             'type'        => 'su'
         ],
         [
-            'id'          => 'root.system-upgrade',
-            'url'         => 'system-upgrade',
-            'templateUrl' => "$base/system-upgrade",
+            'id'          => 'root.start-updater-su',
+            'url'         => 'start-updater',
+            'templateUrl' => "$base/start-updater",
             'title'       => "System \n Upgrade",
-            'controller'  => 'systemUpgradeController',
+            'controller'  => 'startUpdaterController',
             'header'      => 'Step 4: System Upgrade',
             'order'       => 6,
             'nav'         => true,
             'type'        => 'su'
+        ],
+        [
+            'id'          => 'root.updater-success',
+            'url'         => 'updater-success',
+            'templateUrl' => "$base/updater-success",
+            'controller'  => 'updaterSuccessController',
+            'order'       => 7,
+            'main'        => true,
         ],
     ],
 ];
