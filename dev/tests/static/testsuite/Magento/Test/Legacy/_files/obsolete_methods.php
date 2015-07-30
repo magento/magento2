@@ -2354,4 +2354,8 @@ return [
     ['prepareCatalogProductCollectionPrices', 'Magento\CatalogRule\Model\Observer', 'Magento\CatalogRule\Observer\PrepareCatalogProductCollectionPrices::invoke'],
     ['processAdminFinalPrice', 'Magento\CatalogRule\Model\Observer', 'Magento\CatalogRule\Observer\ProcessAdminFinalPrice::invoke'],
     ['processFrontFinalPrice', 'Magento\CatalogRule\Model\Observer', 'Magento\CatalogRule\Observer\ProcessFrontFinalPrice::invoke'],
+    ['salesEventConvertQuoteAddressToOrder', 'Magento\Tax\Model\Observer'],
+    ['aggregateSalesReportTaxData', 'Magento\Tax\Model\Observer', 'Magento\Tax\Observer\AggregateSalesReportTaxData::invoke'],
+    ['quoteCollectTotalsBefore', 'Magento\Tax\Model\Observer', 'Magento\Tax\Observer\QuoteCollectTotalsBefore::invoke'],
+    ['updateProductOptions', 'Magento\Tax\Model\Observer', 'Magento\Tax\Observer\UpdateProductOptions::invoke'],
 ];
