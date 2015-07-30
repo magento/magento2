@@ -5,8 +5,7 @@
  */
 namespace Magento\Indexer\Model\Action;
 
-use Magento\Framework\DB\Select;
-use Magento\Indexer\Model\HandlerInterface;
+use Magento\Framework\App\Resource\SourceProviderInterface;
 
 class Entity extends Base
 {
@@ -14,4 +13,17 @@ class Entity extends Base
      * @var string
      */
     protected $tableAlias = 'e';
+
+    /**
+     * Prepare select query
+     *
+     * @param array|int|null $ids
+     * @return SourceProviderInterface
+     */
+    protected function prepareDataSource(array $ids = [])
+    {
+        return !count($ids)
+            ? $this->createResultCollection()
+            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getRowIdFieldName(), $ids);
+    }
 }

@@ -90,7 +90,7 @@ class GridStructure implements IndexStructureInterface
             'entity_id',
             Table::TYPE_INTEGER,
             10,
-            ['unsigned' => true, 'nullable' => false],
+            ['unsigned' => true, 'nullable' => false, 'primary' => true],
             'Entity ID'
         );
         $searchableFields = [];

@@ -16,7 +16,7 @@ use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
 use Magento\Indexer\Model\IndexStructureInterface;
 use Magento\Indexer\Model\SaveHandlerFactory;
-use Magento\Framework\App\Resource\SourcePool;
+use Magento\Framework\App\Resource\SourceFactory;
 use Magento\Indexer\Model\HandlerInterface;
 
 /**
@@ -80,9 +80,9 @@ class Base implements ActionInterface
     protected $searchColumns;
 
     /**
-     * @var SourcePool
+     * @var SourceFactory
      */
-    protected $sourcePool;
+    protected $sourceFactory;
 
     /**
      * @var HandlerPool
@@ -126,7 +126,7 @@ class Base implements ActionInterface
 
     /**
      * @param AppResource $resource
-     * @param SourcePool $sourcePool
+     * @param SourceFactory $sourceFactory
      * @param HandlerPool $handlerPool
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param FieldsetPool $fieldsetPool
@@ -136,7 +136,7 @@ class Base implements ActionInterface
      */
     public function __construct(
         AppResource $resource,
-        SourcePool $sourcePool,
+        SourceFactory $sourceFactory,
         HandlerPool $handlerPool,
         SaveHandlerFactory $saveHandlerFactory,
         FieldsetPool $fieldsetPool,
@@ -147,7 +147,7 @@ class Base implements ActionInterface
         $this->connection = $resource->getConnection('write');
         $this->fieldsetPool = $fieldsetPool;
         $this->data = $data;
-        $this->sourcePool = $sourcePool;
+        $this->sourceFactory = $sourceFactory;
         $this->handlerPool = $handlerPool;
         $this->saveHandlerFactory = $saveHandlerFactory;
         $this->string = $string;
@@ -160,12 +160,13 @@ class Base implements ActionInterface
      * @param null|int|array $ids
      * @return void
      */
-    protected function execute($ids = null)
+    protected function execute(array $ids = [])
     {
         $this->prepareFields();
-        $this->indexStructure->delete($this->getTableName());
-        $this->indexStructure->create($this->getTableName(), array_merge($this->filterable, $this->searchable));
-        $this->getSaveHandler()->cleanIndex([]);
+        if (!count($ids)) {
+            $this->getSaveHandler()->cleanIndex([]);
+        }
+        $this->getSaveHandler()->deleteIndex([], new \ArrayObject($ids));
         $this->getSaveHandler()->saveIndex([], $this->prepareDataSource($ids));
     }
 
@@ -198,7 +199,7 @@ class Base implements ActionInterface
      */
     public function executeRow($id)
     {
-        $this->execute($id);
+         $this->execute([$id]);
     }
 
     /**
@@ -207,9 +208,9 @@ class Base implements ActionInterface
      * @param array|int|null $ids
      * @return SourceProviderInterface
      */
-    protected function prepareDataSource($ids = null)
+    protected function prepareDataSource(array $ids = [])
     {
-        return $ids === null
+        return !count($ids)
             ? $this->createResultCollection()
             : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldname(), $ids);
     }
@@ -312,7 +313,7 @@ class Base implements ActionInterface
     protected function prepareFields()
     {
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
-            $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourcePool->get($fieldset['source']);
+            $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourceFactory->create($fieldset['source']);
             if (isset($fieldset['provider'])) {
                 $fieldsetObject = $this->fieldsetPool->get($fieldset['provider']);
                 $this->data['fieldsets'][$fieldsetName] =

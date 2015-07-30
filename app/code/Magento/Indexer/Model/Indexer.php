@@ -425,7 +425,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
 
     /**
      * Regenerate rows in index by ID list
-     *
+     *5
      * @param int[] $ids
      * @return void
      */

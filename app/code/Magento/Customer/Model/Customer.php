@@ -69,6 +69,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
     const ENTITY = 'customer';
 
+    const CUSTOMER_GRID_INDEXER_ID = 'customer_grid';
+
     /**
      * Configuration path to expiration period of reset password link
      */
@@ -199,6 +201,11 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected $metadataService;
 
     /**
+     * @var \Magento\Indexer\Model\IndexerRegistry
+     */
+    protected $indexerRegistry;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -239,6 +246,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -256,6 +264,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->customerDataFactory = $customerDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->indexerRegistry = $indexerRegistry;
         parent::__construct(
             $context,
             $registry,
@@ -1067,6 +1076,40 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
         return parent::beforeDelete();
+    }
+
+    /**
+     * Processing object after save data
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        $this->_getResource()->addCommitCallback([$this, 'reindex']);
+        return parent::afterSave();
+    }
+
+    /**
+     * Init indexing process after customer delete
+     *
+     * @return \Magento\Framework\Model\AbstractModel
+     */
+    public function afterDeleteCommit()
+    {
+        $this->reindex();
+        return parent::afterDeleteCommit();
+    }
+
+    /**
+     * Init indexing process after customer save
+     *
+     * @return void
+     */
+    public function reindex()
+    {
+        /** @var \Magento\Indexer\Model\Indexer $indexer */
+        $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexRow($this->getId());
     }
 
     /**

@@ -8,7 +8,6 @@ namespace Magento\Indexer\Model\SaveHandler;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\IndexerInterface;
-use Magento\Indexer\Model\IndexStructure;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Indexer\Model\IndexStructureInterface;
@@ -23,7 +22,7 @@ class IndexerHandler implements IndexerInterface
     protected $dataTypes = ['searchable', 'filterable'];
 
     /**
-     * @var IndexStructure
+     * @var IndexStructureInterface
      */
     private $indexStructure;
 
@@ -133,7 +132,7 @@ class IndexerHandler implements IndexerInterface
      * @param Dimension[] $dimensions
      * @return string
      */
-    private function getTableName($dataType, $dimensions)
+    protected function getTableName($dataType, $dimensions)
     {
         return $this->scopeResolvers[$dataType]->resolve($this->getIndexName(), $dimensions);
     }
@@ -141,7 +140,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @return string
      */
-    private function getIndexName()
+    protected function getIndexName()
     {
         return $this->data['indexer_id'];
     }
@@ -149,7 +148,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @return AdapterInterface
      */
-    private function getAdapter()
+    protected function getAdapter()
     {
         return $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
     }
