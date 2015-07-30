@@ -160,8 +160,9 @@ class Repository implements TransactionRepositoryInterface
         $cacheStorage = 'txn_id';
         $entity = $this->entityStorage->getByIdentifyingFields($identityFieldsForCache, $cacheStorage);
         if (!$entity) {
-            $entity = $this->metaData->getMapper()->loadObjectByTxnId(
-                $this->metaData->getNewInstance(),
+            $entity = $this->metaData->getNewInstance();
+            $this->metaData->getMapper()->loadObjectByTxnId(
+                $entity,
                 $orderId,
                 $paymentId,
                 $transactionId

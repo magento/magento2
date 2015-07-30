@@ -10,6 +10,7 @@ namespace Magento\Sales\Model\Order\Payment;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory as SearchResultFactory;
 
 /**
  * Class Repository
@@ -29,11 +30,18 @@ class Repository implements OrderPaymentRepositoryInterface
     protected $metaData;
 
     /**
-     * @param Metadata $metaData
+     * @var Collection
      */
-    function __construct(Metadata $metaData)
+    protected $searchResultFactory;
+
+    /**
+     * @param Metadata $metaData
+     * @param SearchResultFactory $collection
+     */
+    function __construct(Metadata $metaData, SearchResultFactory $collection)
     {
         $this->metaData = $metaData;
+        $this->searchResultFactory = $collection;
     }
 
     /**
@@ -44,7 +52,17 @@ class Repository implements OrderPaymentRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
     {
-
+        /** @var \Magento\Sales\Model\Resource\Order\Payment\Collection $collection */
+        $collection = $this->searchResultFactory->create();
+        foreach ($criteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
+            }
+        }
+        $collection->setCurPage($criteria->getCurrentPage());
+        $collection->setPageSize($criteria->getPageSize());
+        return $collection;
     }
 
     /**
@@ -61,8 +79,8 @@ class Repository implements OrderPaymentRepositoryInterface
             throw new \Magento\Framework\Exception\InputException(__('ID required'));
         }
         if (!isset($this->registry[$id])) {
-
-            $entity = $this->metaData->getMapper()->load($this->metaData->getNewInstance(), $id);
+            $entity = $this->metaData->getNewInstance();
+            $this->metaData->getMapper()->load($entity, $id);
             if (!$entity->getId()) {
                 throw new NoSuchEntityException('Requested entity doesn\'t exist');
             }
