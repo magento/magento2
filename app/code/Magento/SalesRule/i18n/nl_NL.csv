@@ -139,3 +139,5 @@ FOUND,GEVONDEN
 "If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:","If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:"
 "Item totals are not set for the rule.","Item totals are not set for the rule."
 "Auto Generated Specific Coupon Codes","Auto Generated Specific Coupon Codes"
+"Error occurred when saving coupon: %1","Error occurred when saving coupon: %1"
+"Error occurred when generating coupons: %1","Error occurred when generating coupons: %1"
