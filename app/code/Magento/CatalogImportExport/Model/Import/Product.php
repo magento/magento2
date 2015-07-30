@@ -1333,7 +1333,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
-                    if (!$this->errorAggregator->hasToBeTerminated()) {
+                    if (!$this->getErrorAggregator()->hasToBeTerminated()) {
                         continue;
                     }
                     break 2;
@@ -2103,7 +2103,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         if (isset($this->_validatedRows[$rowNum])) {
             // check that row is already validated
-            return !$this->errorAggregator->isRowInvalid($rowNum);
+            return !$this->getErrorAggregator()->isRowInvalid($rowNum);
         }
         $this->_validatedRows[$rowNum] = true;
 
@@ -2180,13 +2180,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ]
                 );
             }
-            if ($this->errorAggregator->isRowInvalid($rowNum)) {
+            if ($this->getErrorAggregator()->isRowInvalid($rowNum)) {
                 // mark SCOPE_DEFAULT row as invalid for future child rows if product not in DB already
                 $sku = false;
             }
         }
 
-        if (!$this->errorAggregator->isRowInvalid($rowNum)) {
+        if (!$this->getErrorAggregator()->isRowInvalid($rowNum)) {
             $newSku = $this->skuProcessor->getNewSku($sku);
             // set attribute set code into row data for followed attribute validation in type model
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
@@ -2204,7 +2204,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // validate custom options
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
 
-        return !$this->errorAggregator->isRowInvalid($rowNum);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNum);
     }
 
     /**
