@@ -1692,6 +1692,7 @@ return [
     ['getTransaction', 'Magento\Sales\Model\Order\Payment'],
     ['loadByTxnId', 'Magento\Sales\Model\Order\Payment\Transaction'],
     ['getOrderPaymentObject', 'Magento\Sales\Model\Order\Payment\Transaction'],
+    ['setOrderPaymentObject', 'Magento\Sales\Model\Order\Payment\Transaction'],
     ['_shouldBeConverted', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_beforeSave', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_afterSave', 'Magento\Sales\Model\Resource\AbstractResource'],
