@@ -26,7 +26,7 @@ class Template
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
-     * @param string $content
+     * @param $content
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,

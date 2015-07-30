@@ -32,6 +32,21 @@ class Columns extends AbstractComponent
      */
     public function prepare()
     {
+        foreach ($this->getChildComponents() as $name => $child) {
+            if ($child instanceof Container) {
+                $this->fieldsInContainers += $child->getChildComponents();
+            }
+        }
+        $fieldsMeta = $this->getContext()->getDataProvider()->getFieldsMetaInfo($this->getName());
+        foreach ($fieldsMeta as $name => $fieldData) {
+            if (empty($fieldData)) {
+                continue;
+            }
+            $fieldComponent = $this->getComponent($name);
+            $this->prepareField($fieldData, $name, $fieldComponent);
+        }
+        parent::prepare();
+
         foreach ($this->getChildComponents() as $column) {
             if ($column instanceof Column) {
                 $meta = $this->getContext()->getDataProvider()->getFieldMetaInfo($this->getName(), $column->getName());
