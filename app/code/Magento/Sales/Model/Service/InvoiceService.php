@@ -197,12 +197,12 @@ class InvoiceService implements InvoiceManagementInterface
     /**
      * Set quantity to invoice item
      *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $item
+     * @param \Magento\Sales\Api\Data\InvoiceItemInterface $item
      * @param float $qty
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function setInvoiceItemQuantity(\Magento\Sales\Api\Data\OrderItemInterface $item, $qty)
+    protected function setInvoiceItemQuantity(\Magento\Sales\Api\Data\InvoiceItemInterface $item, $qty)
     {
         $qty = ($item->getOrderItem()->getIsQtyDecimal()) ? (double) $qty : (int) $qty;
         $qty = $qty > 0 ? $qty : 0;
