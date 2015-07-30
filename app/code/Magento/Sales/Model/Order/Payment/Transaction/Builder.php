@@ -176,7 +176,7 @@ class Builder implements BuilderInterface
         if ($parentTransactionId) {
             $transaction->setParentTxnId($parentTransactionId);
             if ($this->payment->getShouldCloseParentTransaction()) {
-                $parentTransaction = $this->transactionRepository->getByTxnId(
+                $parentTransaction = $this->transactionRepository->getByTransactionId(
                     $parentTransactionId,
                     $this->payment->getid(),
                     $this->order->getId()
@@ -198,7 +198,7 @@ class Builder implements BuilderInterface
     public function build($type)
     {
         if ($this->isPaymentExists() && $this->transactionId !== null) {
-            $transaction = $this->transactionRepository->getByTxnId(
+            $transaction = $this->transactionRepository->getByTransactionId(
                 $this->transactionId,
                 $this->payment->getId(),
                 $this->order->getId()

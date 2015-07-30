@@ -390,7 +390,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         //ToDo: fill data provider and uncomment assertings totals in testPay
         return [
-            [10.99, 1.00, 10.99, 1.00, 'payment_state']
+            [10.99, 1.00, 10.99, 1.00, Invoice::STATE_PAID]
         ];
     }
 }
