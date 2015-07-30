@@ -6,16 +6,16 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\ComponentUpdateSuccess;
+use \Magento\Setup\Controller\UpdaterSuccess;
 
-class ComponentUpdateSuccessTest extends \PHPUnit_Framework_TestCase
+class UpdaterSuccessTest extends \PHPUnit_Framework_TestCase
 {
     public function testIndexAction()
     {
         $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $maintenanceMode->expects($this->once())->method('set')->with(false);
-        /** @var $controller ComponentUpdateSuccess */
-        $controller = new ComponentUpdateSuccess($maintenanceMode);
+        /** @var $controller UpdaterSuccess */
+        $controller = new UpdaterSuccess($maintenanceMode);
         $viewModel = $controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());

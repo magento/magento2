@@ -6,15 +6,15 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\ComponentUpdate;
+use \Magento\Setup\Controller\StartUpdater;
 
-class ComponentUpdateTest extends \PHPUnit_Framework_TestCase
+class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 {
     public function testIndexAction()
     {
         $updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
-        /** @var $controller ComponentUpdate */
-        $controller = new ComponentUpdate($updater);
+        /** @var $controller StartUpdater */
+        $controller = new StartUpdater($updater);
         $viewModel = $controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());
@@ -23,8 +23,8 @@ class ComponentUpdateTest extends \PHPUnit_Framework_TestCase
     public function testUpdateActionSuccess()
     {
         $updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
-        /** @var $controller ComponentUpdate */
-        $controller = new ComponentUpdate($updater);
+        /** @var $controller StartUpdater */
+        $controller = new StartUpdater($updater);
         $jsonModel = $controller->updateAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
         $this->assertTrue($jsonModel->terminate());
