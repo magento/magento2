@@ -86,7 +86,9 @@ define([
                     var get = t._get(),
                         columnId = get.columnId(event),
                         depElement = get.depElement(columnId);
-                    console.log(depElement)
+
+                    console.log(columnId);
+                    console.log(depElement);
 
                     curElement = $(event.target).parent();
                     cfg.resizable = true;
@@ -285,7 +287,7 @@ define([
                     return Boolean(obj.rows);
                 },
                 columnVisible: function(num) {
-                    return cfg.resizeColumnsVisibility[num];
+                    return cfg.columnsVisibility[num];
                 }
             };
         },
