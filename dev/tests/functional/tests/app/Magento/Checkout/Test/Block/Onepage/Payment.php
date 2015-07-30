@@ -122,7 +122,7 @@ class Payment extends Block
      * Press "Place Order" button.
      *
      * @return void
-    */
+     */
     public function placeOrder()
     {
         $this->_rootElement->find($this->placeOrder)->click();
