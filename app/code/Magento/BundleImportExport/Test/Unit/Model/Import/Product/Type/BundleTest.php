@@ -57,12 +57,25 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->entityModel = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
-            ['getBehavior', 'getNewSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope', 'getConnection'],
+            [
+                'getErrorAggregator',
+                'getBehavior',
+                'getNewSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getRowScope',
+                'getConnection'
+            ],
             [],
             '',
             false
+        );
+        $this->entityModel->method('getErrorAggregator')->willReturn(
+            $this->getErrorAggregatorObject()
         );
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
@@ -136,7 +149,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             0 => $this->entityModel,
             1 => 'bundle'
         ];
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->bundle = $this->objectManagerHelper->getObject(
             'Magento\BundleImportExport\Model\Import\Product\Type\Bundle',
@@ -145,6 +157,27 @@ class BundleTest extends \PHPUnit_Framework_TestCase
                 'prodAttrColFac' => $this->prodAttrColFac,
                 'resource' => $this->resource,
                 'params' => $this->params
+            ]
+        );
+    }
+
+    /**
+     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected function getErrorAggregatorObject()
+    {
+        $errorFactory = $this->getMockBuilder(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $errorFactory->method('create')->willReturn(
+            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+        );
+        return $this->objectManagerHelper->getObject(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            [
+                'errorFactory' => $errorFactory
             ]
         );
     }
