@@ -27,6 +27,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $asset;
 
+    /** @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject */
+    private $minificationMock;
+
     public function setUp()
     {
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
@@ -52,7 +55,17 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ['getContentType']
         );
 
-        $this->manager = new Manager($this->filesystem, $this->bundle, $this->bundleConfig, $this->assetConfig);
+        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->manager = new Manager(
+            $this->filesystem,
+            $this->bundle,
+            $this->bundleConfig,
+            $this->assetConfig,
+            $this->minificationMock
+        );
     }
 
     public function testAddAssetWithInvalidType()
@@ -97,9 +110,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('file/path.js');
-        $this->assetConfig->expects($this->once())
-            ->method('isAssetMinification')
-            ->willReturn(false);
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
@@ -136,9 +146,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('file/path.js');
-        $this->assetConfig->expects($this->once())
-            ->method('isAssetMinification')
-            ->willReturn(false);
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
@@ -175,9 +182,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('file/path.js');
-        $this->assetConfig->expects($this->once())
-            ->method('isAssetMinification')
-            ->willReturn(false);
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
