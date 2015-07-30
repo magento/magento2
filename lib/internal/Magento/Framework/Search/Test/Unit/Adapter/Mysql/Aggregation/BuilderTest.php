@@ -150,20 +150,18 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         $fetchResult = ['name' => ['some', 'result']];
-        $documents = [
-            [
-                'product_id' => 1,
-                'sku' => 'Product',
-            ],
-        ];
+
+        /** @var \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject $table */
+        $table = $this->getMockBuilder('Magento\Framework\DB\Ddl\Table')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->bucket->expects($this->once())->method('getName')->willReturn('name');
-        $this->entityMetadata->expects($this->once())->method('getEntityId')->willReturn('product_id');
         $this->request->expects($this->once())->method('getAggregation')->willReturn([$this->bucket]);
         $this->request->expects($this->once())->method('getDimensions')->willReturn([]);
         $this->bucketBuilder->expects($this->once())->method('build')->willReturn($fetchResult['name']);
 
-        $result = $this->builder->build($this->request, $documents);
+        $result = $this->builder->build($this->request, $table);
 
         $this->assertEquals($result, $fetchResult);
     }
