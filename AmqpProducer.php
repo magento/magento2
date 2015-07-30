@@ -6,9 +6,13 @@
 
 namespace Magento\Framework\Amqp;
 
+use Magento\Framework\Amqp\Config\Converter;
+use Magento\Framework\Amqp\Config\Data as AmqpConfig;
+use Magento\Framework\Amqp\RabbitMqConfig;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use Magento\Framework\Amqp\RabbitMqConfig;
 
 /**
  * An AMQP Producer to handle publishing a message.
@@ -18,16 +22,23 @@ class AmqpProducer implements ProducerInterface
     /**
      * @var RabbitMqConfig
      */
-    private $config;
+    private $rabbitMqConfig;
+
+    /**
+     * @var AmqpConfig
+     */
+    private $amqpConfig;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Amqp\RabbitMqConfig $config
+     * @param RabbitMqConfig $rabbitMqConfig
+     * @param AmqpConfig $amqpConfig
      */
-    public function __construct(RabbitMqConfig $config)
+    public function __construct(RabbitMqConfig $rabbitMqConfig, AmqpConfig $amqpConfig)
     {
-        $this->config = $config;
+        $this->rabbitMqConfig = $rabbitMqConfig;
+        $this->amqpConfig = $amqpConfig;
     }
 
     /**
@@ -35,16 +46,15 @@ class AmqpProducer implements ProducerInterface
      */
     public function publish($topicName, $data)
     {
-        $exchange = 'magento';
-
         $connection = new AMQPStreamConnection(
-            $this->config->getValue(RabbitMqConfig::HOST),
-            $this->config->getValue(RabbitMqConfig::PORT),
-            $this->config->getValue(RabbitMqConfig::USERNAME),
-            $this->config->getValue(RabbitMqConfig::PASSWORD),
-            $this->config->getValue(RabbitMqConfig::VIRTUALHOST)
+            $this->rabbitMqConfig->getValue(RabbitMqConfig::HOST),
+            $this->rabbitMqConfig->getValue(RabbitMqConfig::PORT),
+            $this->rabbitMqConfig->getValue(RabbitMqConfig::USERNAME),
+            $this->rabbitMqConfig->getValue(RabbitMqConfig::PASSWORD),
+            $this->rabbitMqConfig->getValue(RabbitMqConfig::VIRTUALHOST)
         );
         $channel = $connection->channel();
+        $exchange = $this->getExchangeName($topicName);
         $channel->queue_declare($topicName, false, true, false, false);
         $channel->exchange_declare($exchange, 'direct', false, true, false);
         $channel->queue_bind($topicName, $exchange);
@@ -54,5 +64,34 @@ class AmqpProducer implements ProducerInterface
 
         $channel->close();
         $connection->close();
+    }
+
+    /**
+     * Identify configured exchange for the provided topic.
+     *
+     * @param string $topicName
+     * @return string
+     * @throws LocalizedException
+     */
+    protected function getExchangeName($topicName)
+    {
+        $configData = $this->amqpConfig->get();
+        if (isset($configData[Converter::TOPICS][$topicName])) {
+            $publisherName = $configData[Converter::TOPICS][$topicName][Converter::TOPIC_PUBLISHER];
+            if (isset($configData[Converter::PUBLISHERS][$publisherName])) {
+                return $configData[Converter::PUBLISHERS][$publisherName][Converter::PUBLISHER_EXCHANGE];
+            } else {
+                throw new LocalizedException(
+                    new Phrase(
+                        'Message queue publisher "%publisher" is not configured.',
+                        ['publisher' => $publisherName]
+                    )
+                );
+            }
+        } else {
+            throw new LocalizedException(
+                new Phrase('Message queue topic "%topic" is not configured.', ['topic' => $topicName])
+            );
+        }
     }
 }
