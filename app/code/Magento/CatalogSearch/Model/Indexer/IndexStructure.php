@@ -10,9 +10,10 @@ use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Indexer\Model\IndexStructureInterface;
 use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
 
-class IndexStructure
+class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
@@ -40,7 +41,7 @@ class IndexStructure
      * @param Dimension[] $dimensions
      * @return void
      */
-    public function delete($index, array $dimensions)
+    public function delete($index, array $dimensions = [])
     {
         $adapter = $this->getAdapter();
         $tableName = $this->indexScopeResolver->resolve($index, $dimensions);
@@ -51,10 +52,12 @@ class IndexStructure
 
     /**
      * @param string $index
-     * @param Dimension[] $dimensions
+     * @param array $fields
+     * @param array $dimensions
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
      */
-    public function create($index, array $dimensions)
+    public function create($index, array $fields, array $dimensions = [])
     {
         $this->createFulltextIndex($this->indexScopeResolver->resolve($index, $dimensions));
     }
