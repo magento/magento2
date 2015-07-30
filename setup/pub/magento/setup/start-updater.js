@@ -42,7 +42,7 @@ angular.module('start-updater', ['ngStorage'])
         $scope.errorMessage = '';
         $scope.update = function() {
             $scope.started = true;
-            $http.post('index.php/start-updater/update', $scope.packages)
+            $http.post('index.php/start-updater/update', {'packages': $scope.packages, 'type': $state.current.type})
                 .success(function (data) {
                     if (data['success']) {
                         $window.location.href = '../update/index.php';
