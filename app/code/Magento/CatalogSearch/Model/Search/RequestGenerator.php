@@ -42,9 +42,9 @@ class RequestGenerator
     {
         $requests = [];
         $requests['catalog_view_container'] =
-            $this->generateRequest(EavAttributeInterface::IS_FILTERABLE, 'catalog_view_container');
+            $this->generateRequest(EavAttributeInterface::IS_FILTERABLE, 'catalog_view_container', false);
         $requests['quick_search_container'] =
-            $this->generateRequest(EavAttributeInterface::IS_FILTERABLE_IN_SEARCH, 'quick_search_container');
+            $this->generateRequest(EavAttributeInterface::IS_FILTERABLE_IN_SEARCH, 'quick_search_container', true);
         $requests['advanced_search_container'] = $this->generateAdvancedSearchRequest();
         return $requests;
     }
@@ -56,7 +56,7 @@ class RequestGenerator
      * @param string $container
      * @return array
      */
-    private function generateRequest($attributeType, $container)
+    private function generateRequest($attributeType, $container, $useFulltext)
     {
         $request = [];
         foreach ($this->getSearchableAttributes() as $attribute) {
@@ -113,10 +113,12 @@ class RequestGenerator
                 //same fields have special semantics
                 continue;
             }
-            $request['queries']['search']['match'][] = [
-                'field' => $attribute->getAttributeCode(),
-                'boost' => $attribute->getSearchWeight() ?: 1,
-            ];
+            if ($useFulltext) {
+                $request['queries']['search']['match'][] = [
+                    'field' => $attribute->getAttributeCode(),
+                    'boost' => $attribute->getSearchWeight() ?: 1,
+                ];
+            }
         }
         return $request;
     }
