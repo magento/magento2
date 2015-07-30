@@ -67,68 +67,6 @@ class Order
     }
 
     /**
-     * Prepare order invoice based on order data and requested items qtys. If $qtys is not empty - the function will
-     * prepare only specified items, otherwise all containing in the order.
-     *
-     * @param array $qtys
-     * @return \Magento\Sales\Model\Order\Invoice
-     */
-    public function prepareInvoice($qtys = [])
-    {
-        $invoice = $this->_convertor->toInvoice($this->_order);
-        $totalQty = 0;
-        foreach ($this->_order->getAllItems() as $orderItem) {
-            if (!$this->_canInvoiceItem($orderItem, [])) {
-                continue;
-            }
-            $item = $this->_convertor->itemToInvoiceItem($orderItem);
-            if ($orderItem->isDummy()) {
-                $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
-            } elseif (isset($qtys[$orderItem->getId()])) {
-                $qty = (double) $qtys[$orderItem->getId()];
-            } else {
-                $qty = $orderItem->getQtyToInvoice();
-            }
-            $totalQty += $qty;
-            $this->setInvoiceItemQuantity($item, $qty);
-            $invoice->addItem($item);
-        }
-        $invoice->setTotalQty($totalQty);
-        $invoice->collectTotals();
-        $this->_order->getInvoiceCollection()->addItem($invoice);
-        return $invoice;
-    }
-
-    /**
-     * Set quantity to invoice item
-     *
-     * @param \Magento\Sales\Model\Order\Invoice\Item $item
-     * @param float $qty
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function setInvoiceItemQuantity(\Magento\Sales\Model\Order\Invoice\Item $item, $qty)
-    {
-        $qty = ($item->getOrderItem()->getIsQtyDecimal()) ? (double) $qty : (int) $qty;
-        $qty = $qty > 0 ? $qty : 0;
-
-        /**
-         * Check qty availability
-         */
-        $qtyToInvoice = sprintf("%F", $item->getOrderItem()->getQtyToInvoice());
-        $qty = sprintf("%F", $qty);
-        if ($qty > $qtyToInvoice && !$item->getOrderItem()->isDummy()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We found an invalid quantity to invoice item "%1".', $item->getName())
-            );
-        }
-
-        $item->setQty($qty);
-
-        return $this;
-    }
-
-    /**
      * Prepare order creditmemo based on order items and requested params
      *
      * @param array $data
@@ -333,47 +271,6 @@ class Order
         }
         if (isset($data['adjustment_negative'])) {
             $creditmemo->setAdjustmentNegative($data['adjustment_negative']);
-        }
-    }
-
-    /**
-     * Check if order item can be invoiced. Dummy item can be invoiced or with his children or
-     * with parent item which is included to invoice
-     *
-     * @param \Magento\Sales\Model\Order\Item $item
-     * @param array $qtys
-     * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _canInvoiceItem($item, $qtys = [])
-    {
-        if ($item->getLockedDoInvoice()) {
-            return false;
-        }
-        if ($item->isDummy()) {
-            if ($item->getHasChildren()) {
-                foreach ($item->getChildrenItems() as $child) {
-                    if (empty($qtys)) {
-                        if ($child->getQtyToInvoice() > 0) {
-                            return true;
-                        }
-                    } else {
-                        if (isset($qtys[$child->getId()]) && $qtys[$child->getId()] > 0) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            } elseif ($item->getParentItem()) {
-                $parent = $item->getParentItem();
-                if (empty($qtys)) {
-                    return $parent->getQtyToInvoice() > 0;
-                } else {
-                    return isset($qtys[$parent->getId()]) && $qtys[$parent->getId()] > 0;
-                }
-            }
-        } else {
-            return $item->getQtyToInvoice() > 0;
         }
     }
 }

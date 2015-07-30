@@ -187,7 +187,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $this->getInfoInstance();
         // we need the last capture transaction was made
-        $captureTransaction = $this->transactionRepository->getByTxnType(
+        $captureTransaction = $this->transactionRepository->getByTransactionType(
             Transaction::TYPE_CAPTURE,
             $payment->getId(),
             $payment->getOrder()->getId()
