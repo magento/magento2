@@ -139,6 +139,9 @@ class Builder implements BuilderInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function reset()
     {
         unset($this->payment);
@@ -151,6 +154,11 @@ class Builder implements BuilderInterface
         return $this;
     }
 
+    /**
+     * Checks if payment was set
+     *
+     * @return bool
+     */
     protected function isPaymentExists()
     {
         if ($this->payment) {
@@ -161,6 +169,47 @@ class Builder implements BuilderInterface
             return true;
         }
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function build($type)
+    {
+        if ($this->isPaymentExists() && $this->transactionId !== null) {
+            $transaction = $this->transactionRepository->getByTransactionId(
+                $this->transactionId,
+                $this->payment->getId(),
+                $this->order->getId()
+            );
+            if (!$transaction) {
+                $transaction = $this->transactionRepository->create()->setTxnId($this->transactionId);
+            }
+            $transaction->setPaymentId($this->payment->getId())
+                ->setOrderId($this->order->getId())
+                ->setTxnType($type)
+                ->isFailsafe($this->failSafe);
+
+            if ($this->payment->hasIsTransactionClosed()) {
+                $transaction->setIsClosed((int)$this->payment->getIsTransactionClosed());
+            }
+            if ($this->transactionAdditionalInfo) {
+                foreach ($this->transactionAdditionalInfo as $key => $value) {
+                    $transaction->setAdditionalInformation($key, $value);
+                }
+            }
+            $this->transactionAdditionalInfo = [];
+
+            $this->payment->setLastTransId($transaction->getTxnId());
+            $this->payment->setCreatedTransaction($transaction);
+            $this->order->addRelatedObject($transaction);
+            if ($this->document && $this->document instanceof AbstractModel) {
+                $this->document->setTransactionId($transaction->getTxnId());
+            }
+
+            return $this->linkWithParentTransaction($transaction);
+        }
+        return null;
     }
 
     /**
@@ -190,43 +239,5 @@ class Builder implements BuilderInterface
             }
         }
         return $transaction;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function build($type)
-    {
-        if ($this->isPaymentExists() && $this->transactionId !== null) {
-            $transaction = $this->transactionRepository->getByTransactionId(
-                $this->transactionId,
-                $this->payment->getId(),
-                $this->order->getId()
-            );
-            if (!$transaction) {
-                $transaction = $this->transactionRepository->create()->setTxnId($this->transactionId);
-            }
-            $transaction->setOrderPaymentObject($this->payment)->setTxnType($type)->isFailsafe($this->failSafe);
-
-            if ($this->payment->hasIsTransactionClosed()) {
-                $transaction->setIsClosed((int)$this->payment->getIsTransactionClosed());
-            }
-            if ($this->transactionAdditionalInfo) {
-                foreach ($this->transactionAdditionalInfo as $key => $value) {
-                    $transaction->setAdditionalInformation($key, $value);
-                }
-            }
-            $this->transactionAdditionalInfo = [];
-
-            $this->payment->setLastTransId($transaction->getTxnId());
-            $this->payment->setCreatedTransaction($transaction);
-            $this->order->addRelatedObject($transaction);
-            if ($this->document && $this->document instanceof AbstractModel) {
-                $this->document->setTransactionId($transaction->getTxnId());
-            }
-
-            return $this->linkWithParentTransaction($transaction);
-        }
-        return null;
     }
 }
