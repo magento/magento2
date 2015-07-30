@@ -44,7 +44,7 @@ class Publisher
     public function publish($topicName, $data)
     {
         $producer = $this->producerFactory->create($topicName);
-        $message = $this->messageEncoder->encode($data, $topicName);
+        $message = $this->messageEncoder->encode($topicName, $data);
         $producer->publish($topicName, $message);
     }
 }

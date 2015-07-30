@@ -95,6 +95,7 @@ class ProducerFactory
      *
      * @param string $connectionName
      * @return ProducerInterface
+     * @throws LocalizedException
      */
     private function getPublisherForConnectionName($connectionName)
     {
@@ -111,6 +112,7 @@ class ProducerFactory
      *
      * @param string $publisherName
      * @return array
+     * @throws LocalizedException
      */
     private function getPublisherConfigForName($publisherName)
     {

@@ -6,10 +6,9 @@
 
 namespace Magento\Framework\Amqp;
 
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\Amqp\RabbitMqConfig;
-use Magento\Framework\Amqp\MessageEncoder;
 
 /**
  * An AMQP Producer to handle publishing a message.
@@ -21,9 +20,13 @@ class AmqpProducer implements ProducerInterface
      */
     private $config;
 
-    public function __construct(
-        RabbitMqConfig $config
-    ) {
+    /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Framework\Amqp\RabbitMqConfig $config
+     */
+    public function __construct(RabbitMqConfig $config)
+    {
         $this->config = $config;
     }
 
@@ -34,7 +37,7 @@ class AmqpProducer implements ProducerInterface
     {
         $exchange = 'magento';
 
-        $connection = new AMQPConnection(
+        $connection = new AMQPStreamConnection(
             $this->config->getValue(RabbitMqConfig::HOST),
             $this->config->getValue(RabbitMqConfig::PORT),
             $this->config->getValue(RabbitMqConfig::USERNAME),
@@ -46,7 +49,7 @@ class AmqpProducer implements ProducerInterface
         $channel->exchange_declare($exchange, 'direct', false, true, false);
         $channel->queue_bind($topicName, $exchange);
 
-        $msg = new AMQPMessage($data, array('content_type' => 'text/plain', 'delivery_mode' => 2));
+        $msg = new AMQPMessage($data, ['content_type' => 'text/plain', 'delivery_mode' => 2]);
         $channel->basic_publish($msg, $exchange);
 
         $channel->close();
