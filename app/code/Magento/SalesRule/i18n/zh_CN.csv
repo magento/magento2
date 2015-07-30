@@ -141,3 +141,6 @@ FOUND,找到
 "Auto Generated Specific Coupon Codes","Auto Generated Specific Coupon Codes"
 "Error occurred when saving coupon: %1","Error occurred when saving coupon: %1"
 "Error occurred when generating coupons: %1","Error occurred when generating coupons: %1"
+"Error occurred when deleting coupons: %1.","Error occurred when deleting coupons: %1."
+"Some coupons are invalid.","Some coupons are invalid."
+"Cannot acquire coupon.","Cannot acquire coupon."
