@@ -59,7 +59,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                 [
                     'quick_search_container' => ['queries' => 1, 'filters' => 0, 'aggregations' => 0],
                     'advanced_search_container' => ['queries' => 2, 'filters' => 0, 'aggregations' => 0],
-                    'catalog_view_container' => ['queries' => 1, 'filters' => 0, 'aggregations' => 0]
+                    'catalog_view_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0]
                 ],
                 ['name', 'text', 0, 0, 1]
             ],
@@ -67,7 +67,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                 [
                     'quick_search_container' => ['queries' => 1, 'filters' => 0, 'aggregations' => 0],
                     'advanced_search_container' => ['queries' => 2, 'filters' => 0, 'aggregations' => 0],
-                    'catalog_view_container' => ['queries' => 1, 'filters' => 0, 'aggregations' => 0]
+                    'catalog_view_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0]
                 ],
                 ['name2', 'text', 0, 0, 1]
             ],
@@ -75,7 +75,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                 [
                     'quick_search_container' => ['queries' => 3, 'filters' => 1, 'aggregations' => 1],
                     'advanced_search_container' => ['queries' => 2, 'filters' => 1, 'aggregations' => 0],
-                    'catalog_view_container' => ['queries' => 3, 'filters' => 1, 'aggregations' => 1]
+                    'catalog_view_container' => ['queries' => 2, 'filters' => 1, 'aggregations' => 1]
                 ],
                 ['date', 'decimal', 1, 1, 1]
             ],
@@ -83,7 +83,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                 [
                     'quick_search_container' => ['queries' => 3, 'filters' => 1, 'aggregations' => 1],
                     'advanced_search_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0],
-                    'catalog_view_container' => ['queries' => 1, 'filters' => 0, 'aggregations' => 0]
+                    'catalog_view_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0]
                 ],
                 ['attr_int', 'int', 0, 1, 0]
             ],
