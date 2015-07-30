@@ -75,6 +75,11 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderCollectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderManagement;
+
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -114,7 +119,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->objectManagerMock = $this->getMock(
             'Magento\Framework\ObjectManager\ObjectManager',
-            ['create'],
+            [],
             [],
             '',
             false
@@ -164,6 +169,15 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($resultFactoryMock);
 
+        $this->orderManagement = $this->getMockBuilder('Magento\Sales\Api\OrderManagementInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with('Magento\Sales\Api\OrderManagementInterface')
+            ->willReturn($this->orderManagement);
+
         $this->massAction = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\MassUnhold',
             [
@@ -205,13 +219,16 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->willReturn([$order1, $order2]);
 
+        $this->orderManagement->expects($this->once())
+            ->method('unHold')
+            ->with(1);
+
         $order1->expects($this->once())
             ->method('canUnhold')
             ->willReturn(true);
         $order1->expects($this->once())
-            ->method('unhold');
-        $order1->expects($this->once())
-            ->method('save');
+            ->method('getEntityId')
+            ->willReturn(1);
 
         $this->orderCollectionMock->expects($this->once())
             ->method('count')

@@ -18,12 +18,14 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
     protected function massAction(AbstractCollection $collection)
     {
         $countCancelOrder = 0;
+
+        /** @var \Magento\Sales\Api\OrderManagementInterface $orderManagement */
+        $orderManagement = $this->_objectManager->get('Magento\Sales\Api\OrderManagementInterface');
         foreach ($collection->getItems() as $order) {
             if (!$order->canCancel()) {
                 continue;
             }
-            $order->cancel();
-            $order->save();
+            $orderManagement->cancel($order->getEntityId());
             $countCancelOrder++;
         }
         $countNonCancelOrder = $collection->count() - $countCancelOrder;
