@@ -119,7 +119,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
-     * @param array $data
+     * @param array $data optional generic object data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
