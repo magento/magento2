@@ -41,7 +41,7 @@ class ConcatExpression extends \Zend_Db_Expr
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param array $columns
-     * @param $tableName
+     * @param string $tableName
      * @param bool|false $isTableAlias
      * @param string $separator
      */

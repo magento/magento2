@@ -69,13 +69,11 @@ class CustomerHandler extends IndexerHandler
      */
     public function deleteIndex($dimensions, \Traversable $ids)
     {
-        foreach ($this->dataTypes as $dataType) {
-            foreach ($this->batch->getItems($ids, $this->batchSize) as $batchIds) {
-                $this->getAdapter()->delete(
-                    $this->getTableName('filterable', $dimensions),
-                    ['entity_id IN(?)' => $batchIds]
-                );
-            }
+        foreach ($this->batch->getItems($ids, $this->batchSize) as $batchIds) {
+            $this->getAdapter()->delete(
+                $this->getTableName('filterable', $dimensions),
+                ['entity_id IN(?)' => $batchIds]
+            );
         }
     }
 }

@@ -62,9 +62,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param CustomerFactory $customerFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
