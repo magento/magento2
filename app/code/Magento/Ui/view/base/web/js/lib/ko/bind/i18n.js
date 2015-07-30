@@ -93,6 +93,16 @@ define([
         },
 
         /**
+         * Checks if node represents ko virtual node (nodeType === 8, nodeName === '#comment').
+         *
+         * @param {HTMLElement} node
+         * @returns {Boolean}
+         */
+        isVirtualElement = function (node) {
+            return node.nodeType === 8;
+        },
+
+        /**
         * Checks if it's real DOM element
         * in case of virtual element, returns span wrapper
         * @param {Object} el
@@ -100,7 +110,7 @@ define([
         * @return {Object} el
         */
         getRealElement = function (el, isUpdate) {
-            if (el.nodeName && el.nodeName === '#comment') {
+            if (isVirtualElement(el)) {
                 if (isUpdate) {
                     return $(el).next('span');
                 }
