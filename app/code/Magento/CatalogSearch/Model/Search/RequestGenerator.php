@@ -54,6 +54,7 @@ class RequestGenerator
      *
      * @param string $attributeType
      * @param string $container
+     * @param bool $useFulltext
      * @return array
      */
     private function generateRequest($attributeType, $container, $useFulltext)
