@@ -11,6 +11,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
@@ -602,7 +603,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
         $sortOrderMock->expects($this->once())->method('getField')->willReturn('field');
         $sortOrderMock->expects($this->once())->method('getDirection')
-            ->willReturn(\Magento\Framework\Api\SearchCriteriaInterface::SORT_ASC);
+            ->willReturn(SortOrder::SORT_ASC);
         $collectionMock->expects($this->once())->method('addOrder')->with('field', 'ASC');
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn(4);
         $collectionMock->expects($this->once())->method('setCurPage')->with(4);
