@@ -35,27 +35,32 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Verify that Admin Navigation Menu has valid structure format:
-     *  - navigation menu wrapper contains id & role;
-     *  - 1st level item is located on the nex level, contains link & title;
-     *  - 2nd level item is located on the next level, contains title;
-     *  - 3rd level items are located on the next level, contain links & titles, have valid sort order against
-     *      each other;
-     *  - mentioned above points are specified in valid order in scope of all html block.
+     * Verify that Admin Navigation Menu elements have correct titles & are located on correct levels
      */
     public function testRenderNavigation()
     {
         $menuConfig = $this->prepareMenuConfig();
         $menuHtml = $this->blockMenu->renderNavigation($menuConfig->getMenu());
+        $menu = new \SimpleXMLElement($menuHtml);
 
-        $this->assertRegExp(
-            '~.*id="nav".*role="menubar".*' .
-                'role="menu-item".*a href=".*System.*' .
-                'class="submenu".*role="menu".*Report.*' .
-                'class="submenu".*role="menu".*a href=".*Private Sales.*a href=".*Invite.*a href=".*Invited Customers~',
-            $menuHtml,
-            'Admin Navigation Menu structure is invalid.'
-        );
+        $item = $menu->xpath('/ul/li/a/span')[0];
+        $this->assertEquals('System', (string)$item, '"System" item is absent or located on wrong menu level.');
+
+        $item = $menu->xpath('/ul//ul/li/strong/span')[0];
+        $this->assertEquals('Report', (string)$item, '"Report" item is absent or located on wrong menu level.');
+
+        $liTitles = [
+            'Private Sales',
+            'Invite',
+            'Invited Customers',
+        ];
+        foreach ($menu->xpath('/ul//ul//ul/li/a/span') as $sortOrder => $item) {
+            $this->assertEquals(
+                $liTitles[$sortOrder],
+                (string)$item,
+                '"' . $liTitles[$sortOrder] . '" item is absent or located on wrong menu level.'
+            );
+        }
     }
 
     /**
