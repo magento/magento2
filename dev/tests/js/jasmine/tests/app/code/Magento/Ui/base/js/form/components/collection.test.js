@@ -3,14 +3,24 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
+/*jscs:disable requirePaddingNewLinesInObjects*/
+/*jscs:disable jsDoc*/
+
 define([
     'underscore',
     'uiRegistry',
     'Magento_Ui/js/form/components/collection'
-], function (_, registry, constr) {
+], function (_, registry, Constr) {
     'use strict';
 
     describe('Magento_Ui/js/form/components/collection', function () {
+
+        var obj = new Constr({
+            provider: 'provName',
+            name: '',
+            index: ''
+        });
 
         registry.set('provName', {
             on: function () {
@@ -21,18 +31,12 @@ define([
             }
         });
 
-        var obj = new constr({
-            provider: 'provName',
-            name: '',
-            index: ''
-        });
-
         describe('"initElement" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initElement')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.initElement);
+                var type = typeof obj.initElement;
 
                 expect(type).toEqual('function');
             });
@@ -54,7 +58,7 @@ define([
                         activate: function () {
                         }
                     },
-                    type = typeof(obj.initElement(arg));
+                    type = typeof obj.initElement(arg);
 
                 expect(type).toEqual('object');
             });
@@ -75,7 +79,7 @@ define([
                 expect(obj.hasOwnProperty('initChildren')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.initChildren);
+                var type = typeof obj.initChildren;
 
                 expect(type).toEqual('function');
             });
@@ -83,7 +87,7 @@ define([
                 expect(obj.initChildren()).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof(obj.initChildren());
+                var type = typeof obj.initChildren();
 
                 expect(type).toEqual('object');
             });
@@ -103,7 +107,7 @@ define([
                 expect(obj.hasOwnProperty('addChild')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.addChild);
+                var type = typeof obj.addChild;
 
                 expect(type).toEqual('function');
             });
@@ -111,7 +115,7 @@ define([
                 expect(obj.addChild()).toBeDefined();
             });
             it('Check returned value type if method called with arguments', function () {
-                var type = typeof(obj.addChild());
+                var type = typeof obj.addChild();
 
                 expect(type).toEqual('object');
             });
@@ -126,7 +130,7 @@ define([
                 expect(obj.hasOwnProperty('hasChanged')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.hasChanged);
+                var type = typeof obj.hasChanged;
 
                 expect(type).toEqual('function');
             });
@@ -134,7 +138,7 @@ define([
                 expect(obj.hasChanged()).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof(obj.hasChanged());
+                var type = typeof obj.hasChanged();
 
                 expect(type).toEqual('boolean');
             });
@@ -144,7 +148,7 @@ define([
                 expect(obj.hasOwnProperty('validate')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.validate);
+                var type = typeof obj.validate;
 
                 expect(type).toEqual('function');
             });
@@ -160,7 +164,7 @@ define([
                 expect(obj.hasOwnProperty('removeAddress')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.removeAddress);
+                var type = typeof obj.removeAddress;
 
                 expect(type).toEqual('function');
             });

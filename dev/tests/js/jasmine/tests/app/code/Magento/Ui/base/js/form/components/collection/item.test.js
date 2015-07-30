@@ -3,14 +3,23 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
+/*jscs:disable requirePaddingNewLinesInObjects*/
+/*jscs:disable jsDoc*/
+
 define([
     'underscore',
     'uiRegistry',
     'Magento_Ui/js/form/components/collection/item'
-], function (_, registry, constr) {
+], function (_, registry, Constr) {
     'use strict';
 
     describe('Magento_Ui/js/form/components/collection/item', function () {
+        var obj = new Constr({
+            provider: 'provName',
+            name: '',
+            index: ''
+        });
 
         registry.set('provName', {
             on: function () {
@@ -21,18 +30,12 @@ define([
             }
         });
 
-        var obj = new constr({
-            provider: 'provName',
-            name: '',
-            index: ''
-        });
-
         describe('"initProperties" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initProperties')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.initProperties);
+                var type = typeof obj.initProperties;
 
                 expect(type).toEqual('function');
             });
@@ -40,7 +43,7 @@ define([
                 expect(obj.initProperties()).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof(obj.initProperties());
+                var type = typeof obj.initProperties();
 
                 expect(type).toEqual('object');
             });
@@ -55,7 +58,7 @@ define([
                 expect(obj.hasOwnProperty('initObservable')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.initObservable);
+                var type = typeof obj.initObservable;
 
                 expect(type).toEqual('function');
             });
@@ -63,7 +66,7 @@ define([
                 expect(obj.initObservable()).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof(obj.initObservable());
+                var type = typeof obj.initObservable();
 
                 expect(type).toEqual('object');
             });
@@ -78,7 +81,7 @@ define([
                 expect(obj.hasOwnProperty('initElement')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.initElement);
+                var type = typeof obj.initElement;
 
                 expect(type).toEqual('function');
             });
@@ -95,7 +98,7 @@ define([
                         initContainer: function () {
                         }
                     },
-                    type = typeof(obj.initElement(arg));
+                    type = typeof obj.initElement(arg);
 
                 expect(type).toEqual('object');
             });
@@ -115,7 +118,7 @@ define([
                 expect(obj.hasOwnProperty('insertToIndexed')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.insertToIndexed);
+                var type = typeof obj.insertToIndexed;
 
                 expect(type).toEqual('function');
             });
@@ -134,20 +137,29 @@ define([
                 expect(obj.hasOwnProperty('formatPreviews')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.formatPreviews);
+                var type = typeof obj.formatPreviews;
 
                 expect(type).toEqual('function');
             });
             it('Check returned value if call method with array arguments', function () {
-                expect(obj.formatPreviews(['1', '2', '3'])).toEqual([{
-                        "items": ["1"],
-                        "separator": " ",
-                        "prefix": ""
-                    }, {"items": ["2"], "separator": " ", "prefix": ""}, {
-                        "items": ["3"],
-                        "separator": " ",
-                        "prefix": ""
-                    }]
+                expect(obj.formatPreviews(['1', '2', '3'])).toEqual(
+                    [
+                        {
+                            'items': ['1'],
+                            'separator': '',
+                            'prefix': ''
+                        },
+                        {
+                            'items': ['2'],
+                            'separator': '',
+                            'prefix': ''
+                        },
+                        {
+                            'items': ['3'],
+                            'separator': '',
+                            'prefix': ''
+                        }
+                    ]
                 );
             });
         });
@@ -156,7 +168,7 @@ define([
                 expect(obj.hasOwnProperty('buildPreview')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.buildPreview);
+                var type = typeof obj.buildPreview;
 
                 expect(type).toEqual('function');
             });
@@ -173,7 +185,7 @@ define([
                         items: [],
                         prefix: 'magento'
                     },
-                    type = typeof(obj.buildPreview(arg));
+                    type = typeof obj.buildPreview(arg);
 
                 expect(type).toEqual('string');
             });
@@ -195,7 +207,7 @@ define([
                 expect(obj.hasOwnProperty('hasPreview')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.hasPreview);
+                var type = typeof obj.hasPreview;
 
                 expect(type).toEqual('function');
             });
@@ -204,7 +216,7 @@ define([
                         items: [],
                         prefix: 'magento'
                     },
-                    type = typeof(obj.hasPreview(arg));
+                    type = typeof obj.hasPreview(arg);
 
                 expect(type).toEqual('boolean');
             });
@@ -226,7 +238,7 @@ define([
                 expect(obj.hasOwnProperty('getPreview')).toBeDefined();
             });
             it('Check answer type', function () {
-                var type = typeof(obj.getPreview);
+                var type = typeof obj.getPreview;
 
                 expect(type).toEqual('function');
             });
@@ -235,7 +247,7 @@ define([
                         items: [],
                         prefix: 'magento'
                     },
-                    type = typeof(obj.getPreview(arg));
+                    type = typeof obj.getPreview(arg);
 
                 expect(type).toEqual('object');
             });
