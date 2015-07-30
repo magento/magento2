@@ -30,6 +30,7 @@ class StartUpdater extends AbstractActionController
     private $updater;
 
     /**
+     * @param Filesystem $filesystem
      * @param ModelUpdater $updater
      */
     public function __construct(Filesystem $filesystem, ModelUpdater $updater)
