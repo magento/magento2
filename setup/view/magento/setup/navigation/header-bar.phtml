@@ -7,18 +7,12 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $expressions = []; foreach ( $this->main as $item ): ?>
-    <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')';
-    ?>
-<?php endforeach; ?>
-<?php  $expressions[] = '!$state.is(\'\')'; ?>
-
-<header class="page-header row"
-        ng-show="<?php echo implode( '&&', $expressions); ?>"
-    >
+<header class="page-header row" ng-hide="$state.current.main">
     <div class="page-header-hgroup col-l-8 col-m-6">
-        <div class="page-title-wrapper">
-            <h1 class="page-title"><?php echo $this->headerTitle?></h1>
+        <div class="page-title-wrapper" ng-switch=$state.current.type>
+            <h1 class="page-title" ng-switch-when="cm">Component Manager</h1>
+            <h1 class="page-title" ng-switch-when="su">System Upgrade</h1>
+            <h1 class="page-title" ng-switch-when="install">Magento Installation</h1>
         </div>
     </div>
     <div class="page-header-actions col-l-4 col-m-6" style="display: none">

@@ -10,9 +10,9 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
- * Controller for system upgrade
+ * Controller for selecting version
  */
-class SystemUpgrade extends AbstractActionController
+class SelectVersion extends AbstractActionController
 {
     /**
      * @return ViewModel|\Zend\Http\Response
@@ -21,7 +21,7 @@ class SystemUpgrade extends AbstractActionController
     {
         $view = new ViewModel;
         $view->setTerminal(true);
-        $view->setTemplate('/magento/setup/system-upgrade.phtml');
+        $view->setTemplate('/magento/setup/select-version.phtml');
         return $view;
     }
 }
