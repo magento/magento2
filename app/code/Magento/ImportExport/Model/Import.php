@@ -434,13 +434,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected function processImport()
     {
         $errorAggregator = $this->_getEntityAdapter()->getErrorAggregator();
+        $errorAggregator->initValidationStrategy(
+            $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
+            $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
+        );
         try {
-            $this->_getEntityAdapter()
-                ->getErrorAggregator()
-                ->initValidationStrategy(
-                    $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
-                    $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
-                );
             $this->_getEntityAdapter()->importData();
         } catch (\Exception $e) {
             $errorAggregator->addError(

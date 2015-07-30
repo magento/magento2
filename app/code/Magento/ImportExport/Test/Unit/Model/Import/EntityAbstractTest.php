@@ -12,6 +12,7 @@
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
 use Magento\ImportExport\Model\Import\AbstractEntity;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,6 +22,11 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
 
     /**
      * List of available behaviors
@@ -35,10 +41,11 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractEntity',
-            $this->_getModelDependencies()
-        );
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->_model = $this->getMockBuilder('Magento\ImportExport\Model\Import\AbstractEntity')
+            ->setConstructorArgs($this->_getModelDependencies())
+            ->setMethods(['_saveValidatedBunches'])
+            ->getMockForAbstractClass();
     }
 
     protected function tearDown()
@@ -65,6 +72,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             'importFactory' => $importFactory,
             'resourceHelper' => $resourceHelper,
             'resource' => $resource,
+            'errorAggregator' => $this->getErrorAggregatorObject(),
             'data' => [
                 'data_source_model' => 'not_used',
                 'connection' => 'not_used',
@@ -77,6 +85,27 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         ];
 
         return $data;
+    }
+
+    /**
+     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected function getErrorAggregatorObject()
+    {
+        $errorFactory = $this->getMockBuilder(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $errorFactory->method('create')->willReturn(
+            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+        );
+        return $this->objectManagerHelper->getObject(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            [
+                'errorFactory' => $errorFactory
+            ]
+        );
     }
 
     /**
@@ -109,14 +138,14 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddRowError()
     {
-        $errorCode = 'error_code ';
+        $errorCode = 'error_code';
         $errorColumnName = 'error_column';
-        $this->_model->addRowError($errorCode . '%s', 0, $errorColumnName);
+        $this->_model->addRowError($errorCode . '%s', 0, $errorColumnName, $errorCode . ' %s');
 
-        $this->assertGreaterThan(0, $this->_model->getErrorsCount());
+        $this->assertGreaterThan(0, $this->_model->getErrorAggregator()->getErrorsCount());
 
-        $errors = $this->_model->getErrorMessages();
-        $this->assertArrayHasKey($errorCode . $errorColumnName, $errors);
+        $errors = $this->_model->getErrorAggregator()->getRowsGroupedByCode();
+        $this->assertArrayHasKey($errorCode . ' ' . $errorColumnName, $errors);
     }
 
     /**
@@ -152,30 +181,9 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model->addMessageTemplate($errorCode, $message);
 
         $this->_model->addRowError($errorCode, 0);
-        $errors = $this->_model->getErrorMessages();
+        $errors = $this->_model->getErrorAggregator()->getRowsGroupedByCode();
 
         $this->assertArrayHasKey($message, $errors);
-    }
-
-    /**
-     * Test for method isDataValid()
-     */
-    public function testIsDataValid()
-    {
-        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
-        $model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractEntity',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['validateData']
-        );
-        $model->expects($this->any())->method('validateData');
-        $this->assertTrue($model->isDataValid());
-        $model->addRowError('test', 1);
-        $this->assertFalse($model->isDataValid());
     }
 
     /**
@@ -417,8 +425,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 
         $rowData[$attributeCode] = $data['invalid_value'];
         $this->assertFalse($this->_model->isAttributeValid($attributeCode, $attributeParams, $rowData, 0));
-
-        $this->assertEquals(1, $this->_model->getErrorsCount(), 'Wrong count of errors');
+        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount(), 'Wrong count of errors');
     }
 
     /**

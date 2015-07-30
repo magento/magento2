@@ -9,6 +9,8 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Entity;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
 class EavAbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,8 +60,14 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected $_eavConfig;
 
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
+
     protected function setUp()
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->_string = new \Magento\Framework\Stdlib\String();
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
@@ -99,7 +107,29 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
                 $this->_storeManager,
                 $this->_collectionFactory,
                 $this->_eavConfig,
+                $this->getErrorAggregatorObject(),
                 $this->_getModelDependencies()
+            ]
+        );
+    }
+
+    /**
+     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected function getErrorAggregatorObject()
+    {
+        $errorFactory = $this->getMockBuilder(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $errorFactory->method('create')->willReturn(
+            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+        );
+        return $this->objectManagerHelper->getObject(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            [
+                'errorFactory' => $errorFactory
             ]
         );
     }
