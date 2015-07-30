@@ -104,9 +104,9 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('resolve')
             ->with($index, $dimensions)
             ->willReturn($expectedTable);
-        $position = $this->mockFulltextTable($position, $expectedTable, true);
+        $this->mockFulltextTable($position, $expectedTable, true);
 
-        $this->target->create($index, $dimensions);
+        $this->target->create($index, [], $dimensions);
     }
 
     /**
