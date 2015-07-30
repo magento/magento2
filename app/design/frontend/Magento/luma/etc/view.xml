@@ -182,6 +182,19 @@
         </image>
     </images>
     <vars module="Magento_Catalog">
+
+        <!-- New gallery theme settings -->
+        <var name="gallery_nav">dots</var> <!-- Gallery navigation style (false/thumbs/dots) -->
+        <var name="gallery_loop">false</var> <!-- Gallery navigation loop (true/false) -->
+        <!-- end -->
+
+        <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->
+        <var name="product_base_image_size">275</var>           <!-- Override for base product image -->
+        <var name="product_base_image_icon_size">48</var>       <!-- Base product image icon size -->
+
+        <var name="product_list_image_size">166</var>           <!-- New Product image size used in product list -->
+        <var name="product_zoom_image_size">370</var>           <!-- New Product image size used for zooming -->
+
         <var name="product_image_white_borders">0</var>
     </vars>
     <vars module="Magento_Bundle">
