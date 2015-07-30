@@ -19,8 +19,9 @@ return [
             'templateUrl' => "$base/license",
             'title'       => 'License',
             'main'        => true,
-            'nav-bar'     => false,
+            'nav'         => false,
             'order'       => -1,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.landing-installer',
@@ -31,6 +32,7 @@ return [
             'main'        => true,
             'default'     => true,
             'order'       => 0,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.readiness-check-installer',
@@ -38,8 +40,9 @@ return [
             'templateUrl' => "{$base}/readiness-check-installer",
             'title'       => "Readiness \n Check",
             'header'      => 'Step 1: Readiness Check',
-            'nav-bar'     => true,
+            'nav'         => true,
             'order'       => 1,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.readiness-check-installer.progress',
@@ -48,8 +51,9 @@ return [
             'title'       => 'Readiness Check',
             'header'      => 'Step 1: Readiness Check',
             'controller'  => 'readinessCheckController',
-            'nav-bar'     => false,
+            'nav'         => false,
             'order'       => 2,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.add-database',
@@ -58,9 +62,10 @@ return [
             'title'       => "Add \n a Database",
             'header'      => 'Step 2: Add a Database',
             'controller'  => 'addDatabaseController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'validate'    => true,
             'order'       => 3,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.web-configuration',
@@ -69,9 +74,10 @@ return [
             'title'       => "Web \n Configuration",
             'header'      => 'Step 3: Web Configuration',
             'controller'  => 'webConfigurationController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'validate'    => true,
             'order'       => 4,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.customize-your-store',
@@ -80,8 +86,9 @@ return [
             'title'       => "Customize \n Your Store",
             'header'      => 'Step 4: Customize Your Store',
             'controller'  => 'customizeYourStoreController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'order'       => 5,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.create-admin-account',
@@ -90,9 +97,10 @@ return [
             'title'       => "Create \n Admin Account",
             'header'      => 'Step 5: Create Admin Account',
             'controller'  => 'createAdminAccountController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'validate'    => true,
             'order'       => 6,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.install',
@@ -101,8 +109,9 @@ return [
             'title'       => 'Install',
             'header'      => 'Step 6: Install',
             'controller'  => 'installController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'order'       => 7,
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.success',
@@ -111,6 +120,7 @@ return [
             'controller'  => 'successController',
             'main'        => true,
             'order'       => 8,
+            'type'        => 'install'
         ],
     ],
 ];

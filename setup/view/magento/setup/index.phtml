@@ -3,13 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 ?>
 
 <div ng-include="'index.php/navigation/side-menu'" style="display: inline-block"></div>
 <div class="page-wrapper">
     <div ng-include="'index.php/navigation/header-bar'"></div>
     <main id="anchor-content" class="page-content">
-        <div ng-include="'index.php/navigation/menu'"></div>
+        <div style="display: inline-block"><?=$this->render('navigation/menu.phtml')?></div>
         <div
             id="main"
             class="main {{class}}"

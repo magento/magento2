@@ -62,18 +62,18 @@ class Navigation
     /**
      * Retrieve array of menu items
      *
-     * Returns only items with 'nav-bar' equal to TRUE
+     * Returns only items with 'nav' equal to TRUE
      *
      * @return array
      */
     public function getMenuItems()
     {
-        return array_filter(
+        return array_values(array_filter(
             $this->navStates,
             function ($value) {
-                return isset($value['nav-bar']) && (bool)$value['nav-bar'];
+                return isset($value['nav']) && (bool)$value['nav'];
             }
-        );
+        ));
     }
 
     /**
@@ -85,12 +85,12 @@ class Navigation
      */
     public function getMainItems()
     {
-        $result = array_filter(
+        $result = array_values(array_filter(
             $this->navStates,
             function ($value) {
                 return isset($value['main']) && (bool)$value['main'];
             }
-        );
+        ));
         return $result;
     }
 }

@@ -7,6 +7,7 @@
 var main = angular.module('main', ['ngStorage']);
 main.controller('navigationController', ['$scope', '$state', '$rootScope', '$window', 'navigationService', function ($scope, $state, $rootScope, $window, navigationService) {
     navigationService.load();
+    $rootScope.navService = navigationService;
     $rootScope.isMenuEnabled = true;
     $scope.itemStatus = function (order) {
         return $state.$current.order <= order || !$rootScope.isMenuEnabled;
@@ -30,10 +31,6 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', '$win
                 $state.go(navigationService.getNextState().id);
             }
         };
-
-        $scope.goToState = function (stateId) {
-            $state.go(stateId)
-        }
 
         $scope.previousState = function () {
                 $scope.valid = true;
@@ -62,12 +59,14 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', '$win
     return {
         mainState: {},
         states: [],
+        menu: [],
         load: function () {
             var self = this;
             $http.get('index.php/navigation').success(function (data) {
                 var currentState = $location.path().replace('/', '');
                 var isCurrentStateFound = false;
                 self.states = data.nav;
+                self.menu = data.menu;
                 data.nav.forEach(function (item) {
                     app.stateProvider.state(item.id, item);
                     if (item.default) {
@@ -87,7 +86,7 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', '$win
         getNextState: function () {
             var nItem = {};
             this.states.forEach(function (item) {
-                if (item.order == $state.$current.order + 1) {
+                if (item.order == $state.$current.order + 1 && item.type == $state.$current.type) {
                     nItem = item;
                 }
             });
@@ -96,7 +95,7 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', '$win
         getPreviousState: function () {
             var nItem = {};
             this.states.forEach(function (item) {
-                if (item.order == $state.$current.order - 1) {
+                if (item.order == $state.$current.order - 1 && item.type == $state.$current.type) {
                     nItem = item;
                 }
             });

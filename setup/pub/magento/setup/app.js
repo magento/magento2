@@ -22,7 +22,7 @@ var app = angular.module(
         'create-backup',
         'complete-backup',
         'component-update',
-        'system-upgrade',
+        'select-version',
         'component-update-success'
     ]);
 

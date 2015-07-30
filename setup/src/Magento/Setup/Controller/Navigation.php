@@ -51,7 +51,10 @@ class Navigation extends AbstractActionController
     public function indexAction()
     {
         $json = new JsonModel;
-        return $json->setVariable('nav', $this->navigation->getData());
+        $json->setVariable('nav', $this->navigation->getData());
+        $json->setVariable('menu', $this->navigation->getMenuItems());
+        $json->setVariable('main', $this->navigation->getMainItems());
+        return $json;
     }
 
     /**
@@ -59,6 +62,8 @@ class Navigation extends AbstractActionController
      */
     public function menuAction()
     {
+        $this->view->setVariable('menu', $this->navigation->getMenuItems());
+        $this->view->setVariable('main', $this->navigation->getMainItems());
         $this->view->setTemplate('/magento/setup/navigation/menu.phtml');
         $this->view->setTerminal(true);
         return $this->view;
