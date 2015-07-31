@@ -77,7 +77,6 @@ class Navigation extends AbstractActionController
     {
         $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
         $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
-        $this->view->setVariable('homePageUrl', '..');
         $this->view->setTerminal(true);
         return $this->view;
     }
