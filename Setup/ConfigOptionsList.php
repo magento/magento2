@@ -39,6 +39,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const CONFIG_PATH_QUEUE_RABBITMQ_SSL = 'queue/rabbit/ssl';
 
     /**
+     * Default values
+     */
+    const DEFAULT_RABBITMQ_HOST = 'localhost';
+    const DEFAULT_RABBITMQ_PORT = '5672';
+    const DEFAULT_RABBITMQ_USER = 'guest';
+    const DEFAULT_RABBITMQ_PASSWORD = 'guest';
+    const DEFAULT_RABBITMQ_VIRTUAL_HOST = '/';
+    const DEFAULT_RABBITMQ_SSL = '';
+
+    /**
      * Generate config data for individual segments
      *
      * @var ConfigGenerator
@@ -66,48 +76,49 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_QUEUE_RABBITMQ_HOST,
                 'RabbitMQ server host',
-                'localhost'
+                self::DEFAULT_RABBITMQ_HOST
             ),
             new TextConfigOption(
                 self::INPUT_KEY_QUEUE_RABBITMQ_PORT,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_QUEUE_RABBITMQ_PORT,
                 'RabbitMQ server port',
-                '5672'
+                self::DEFAULT_RABBITMQ_PORT
             ),
             new TextConfigOption(
                 self::INPUT_KEY_QUEUE_RABBITMQ_USER,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_QUEUE_RABBITMQ_USER,
                 'RabbitMQ server username',
-                'root'
+                self::DEFAULT_RABBITMQ_USER
             ),
             new TextConfigOption(
                 self::INPUT_KEY_QUEUE_RABBITMQ_PASSWORD,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_QUEUE_RABBITMQ_PASSWORD,
                 'RabbitMQ server password',
-                ''
+                self::DEFAULT_RABBITMQ_PASSWORD
             ),
             new TextConfigOption(
                 self::INPUT_KEY_QUEUE_RABBITMQ_VIRTUAL_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_QUEUE_RABBITMQ_VIRTUAL_HOST,
                 'RabbitMQ virtualhost',
-                ''
+                self::DEFAULT_RABBITMQ_VIRTUAL_HOST
             ),
             new TextConfigOption(
                 self::INPUT_KEY_QUEUE_RABBITMQ_SSL,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_QUEUE_RABBITMQ_SSL,
                 'RabbitMQ SSL',
-                ''
+                self::DEFAULT_RABBITMQ_SSL
             ),
         ];
     }
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
@@ -150,10 +161,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
-        $errors = [];
-
-        /* TODO: should validate that the options are set correctly like the database validator */
-
-        return $errors;
+        return [];
     }
 }
