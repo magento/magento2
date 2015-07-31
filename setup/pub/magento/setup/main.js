@@ -8,8 +8,15 @@ var main = angular.module('main', ['ngStorage']);
 main.controller('navigationController',
         ['$scope', '$state', '$rootScope', '$window', 'navigationService', '$localStorage',
             function ($scope, $state, $rootScope, $window, navigationService, $localStorage) {
-    navigationService.load();
-    $scope.menu = $localStorage.menu;
+
+    function loadMenu() {
+        angular.element(document).ready(function() {
+            $scope.menu = $localStorage.menu;
+        });
+    }
+
+    navigationService.load().then(loadMenu);
+
     $rootScope.isMenuEnabled = true;
     $scope.itemStatus = function (order) {
         return $state.$current.order <= order || !$rootScope.isMenuEnabled;
@@ -70,7 +77,7 @@ main.controller('navigationController',
         states: [],
         load: function () {
             var self = this;
-            $http.get('index.php/navigation').success(function (data) {
+            var returnValue = $http.get('index.php/navigation').success(function (data) {
                 var currentState = $location.path().replace('/', '');
                 var isCurrentStateFound = false;
                 self.states = data.nav;
@@ -91,6 +98,7 @@ main.controller('navigationController',
                     $state.go(self.mainState.id);
                 }
             });
+            return returnValue;
         },
         getNextState: function () {
             var nItem = {};
