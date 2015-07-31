@@ -11,6 +11,25 @@ namespace Magento\Eav\Test\Unit\Model\Resource\Entity;
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contextMock;
+
+    protected function setUp()
+    {
+        $this->contextMock = $this->getMock(
+            '\Magento\Framework\Model\Context',
+            ['getCacheManager', 'getEventDispatcher', 'getLogger', 'getAppState', 'getActionValidator'],
+            [],
+            '',
+            false
+        );
+        $eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
+        $eventManagerMock->expects($this->any())->method('dispatch');
+        $this->contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
+    }
+
+    /**
      * @covers \Magento\Eav\Model\Resource\Entity\Attribute::_saveOption
      */
     public function testSaveOptionSystemAttribute()
@@ -38,6 +57,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Framework\Model\AbstractModel */
         $arguments = $objectManagerHelper->getConstructArguments('Magento\Framework\Model\AbstractModel');
         $arguments['data'] = $attributeData;
+        $arguments['context'] = $this->contextMock;
+
         $model = $this->getMock('Magento\Framework\Model\AbstractModel', null, $arguments);
         $model->setDefault(['2']);
         $model->setOption(['delete' => [1 => '', 2 => '']]);
@@ -106,6 +127,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Framework\Model\AbstractModel */
         $arguments = $objectManagerHelper->getConstructArguments('Magento\Framework\Model\AbstractModel');
         $arguments['data'] = $attributeData;
+        $arguments['context'] = $this->contextMock;
         $model = $this->getMock('Magento\Framework\Model\AbstractModel', null, $arguments);
         $model->setOption(['value' => ['option_1' => ['Backend Label', 'Frontend Label']]]);
 
@@ -185,6 +207,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var $model \Magento\Framework\Model\AbstractModel */
         $arguments = $objectManagerHelper->getConstructArguments('Magento\Framework\Model\AbstractModel');
+        $arguments['context'] = $this->contextMock;
         $model = $this->getMock('Magento\Framework\Model\AbstractModel', null, $arguments);
         $model->setOption('not-an-array');
 
