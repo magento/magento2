@@ -61,7 +61,7 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
             ->method('createInfoCommand')
             ->willReturn($this->infoCommand);
         $this->controller = new SelectVersion(
-            $this->systemPackage ,
+            $this->systemPackage,
             $this->composerInformation,
             $magentoComposerApplicationFactory,
             $this->directoryList
