@@ -5,7 +5,7 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class PurgeCacheTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
     protected $model;

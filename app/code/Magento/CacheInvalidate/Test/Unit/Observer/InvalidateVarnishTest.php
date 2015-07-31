@@ -75,5 +75,4 @@ class InvalidateVarnishTest extends \PHPUnit_Framework_TestCase
 
         $this->model->invoke($this->observerMock);
     }
-
 }
