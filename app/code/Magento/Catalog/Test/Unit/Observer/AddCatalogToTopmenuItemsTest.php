@@ -33,6 +33,11 @@ class AddCatalogToTopmenuItemsTest extends \PHPUnit_Framework_TestCase
     protected $_category;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $menuCategoryData;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
      */
     protected $_categoryFlatState;
@@ -55,14 +60,18 @@ class AddCatalogToTopmenuItemsTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $layerResolver = $this->_getCleanMock('Magento\Catalog\Model\Layer\Resolver');
-        $layerResolver->expects($this->once())->method('get')->willReturn(null);
+        $this->menuCategoryData = $this->getMock(
+            'Magento\Catalog\Observer\MenuCategoryData',
+            ['getMenuCategoryData'],
+            [],
+            '',
+            false
+        );
         $this->_observer = (new ObjectManager($this))->getObject(
             'Magento\Catalog\Observer\AddCatalogToTopmenuItems',
             [
-                'layerResolver' => $layerResolver,
                 'catalogCategory' => $this->_catalogCategory,
-                'catalogData' => $this->_getCleanMock('\Magento\Catalog\Helper\Data'),
+                'menuCategoryData' => $this->menuCategoryData,
                 'categoryFlatState' => $this->_categoryFlatState,
             ]
         );
@@ -102,16 +111,13 @@ class AddCatalogToTopmenuItemsTest extends \PHPUnit_Framework_TestCase
         $this->_category->expects($this->once())
             ->method('getIsActive')
             ->will($this->returnValue(true));
-        $this->_category->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('Name'));
 
         $this->_catalogCategory->expects($this->once())
             ->method('getStoreCategories')
             ->will($this->returnValue([$this->_category]));
-        $this->_catalogCategory->expects($this->once())
-            ->method('getCategoryUrl')
-            ->will($this->returnValue('url'));
+        $this->menuCategoryData->expects($this->once())
+            ->method('getMenuCategoryData')
+            ->with($this->_category);
 
         $blockMock = $this->_getCleanMock('\Magento\Theme\Block\Html\Topmenu');
 
@@ -166,24 +172,5 @@ class AddCatalogToTopmenuItemsTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->_observer->invoke($observer);
-    }
-
-    public function testGetMenuCategoryData()
-    {
-        $category = $this->getMock('Magento\Catalog\Model\Category', ['getId', 'getName'], [], '', false);
-        $category->expects($this->once())->method('getId')->willReturn('id');
-        $category->expects($this->once())->method('getName')->willReturn('name');
-        $this->_catalogCategory->expects($this->once())->method('getCategoryUrl')->willReturn('url');
-
-        $this->assertEquals(
-            [
-                'name' => 'name',
-                'id' => 'category-node-id',
-                'url' => 'url',
-                'is_active' => false,
-                'has_active' => false,
-            ],
-            $this->_observer->getMenuCategoryData($category)
-        );
     }
 }
