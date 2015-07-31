@@ -102,7 +102,8 @@ class Attribute extends \Magento\Eav\Model\Attribute
             $reservedAttributeList,
             $localeResolver,
             $resource,
-            $resourceCollection
+            $resourceCollection,
+            $data
         );
     }
 
