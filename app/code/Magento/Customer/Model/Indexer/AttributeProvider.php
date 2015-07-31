@@ -21,7 +21,7 @@ class AttributeProvider implements FieldsetInterface
     /**
      * @var Attribute[]
      */
-    protected $searchableAttributes;
+    protected $attributes;
 
     /**
      * @param Config $eavConfig
@@ -41,21 +41,20 @@ class AttributeProvider implements FieldsetInterface
      */
     public function addDynamicData(array $data)
     {
-        $additionalFields = $this->convert($this->getSearchableAttributes());
+        $additionalFields = $this->convert($this->getAttributes());
         $data['fields'] = $this->merge($data['fields'], $additionalFields);
         return $data;
     }
 
     /**
-     * Retrieve searchable attributes
+     * Retrieve all attributes
      *
      * @return Attribute[]
      */
-    private function getSearchableAttributes()
+    private function getAttributes()
     {
-        if ($this->searchableAttributes === null) {
-            $this->searchableAttributes = [];
-            $this->collection->addFieldToFilter('is_used_in_grid', true);
+        if ($this->attributes === null) {
+            $this->attributes = [];
             /** @var \Magento\Eav\Model\Entity\Attribute[] $attributes */
             $attributes = $this->collection->getItems();
             /** @var \Magento\Eav\Model\Entity\AbstractEntity $entity */
@@ -64,10 +63,10 @@ class AttributeProvider implements FieldsetInterface
             foreach ($attributes as $attribute) {
                 $attribute->setEntity($entity);
             }
-            $this->searchableAttributes = $attributes;
+            $this->attributes = $attributes;
         }
 
-        return $this->searchableAttributes;
+        return $this->attributes;
     }
 
     /**
@@ -78,17 +77,22 @@ class AttributeProvider implements FieldsetInterface
     {
         $fields = [];
         foreach ($attributes as $attribute) {
-            $field = [
-                'name'     => $attribute->getName(),
-                'handler'  => null,
-                'origin'   => $attribute->getName(),
-                'type'     => $this->getType($attribute),
-                'filters'  => [],
-            ];
             if ($attribute->getBackendType() != 'static') {
-                $field['dataType'] = $attribute->getBackendType();
+                if ($attribute->getData('is_used_in_grid')) {
+                    $fields[$attribute->getName()] = [
+                        'name' => $attribute->getName(),
+                        'handler' => null,
+                        'origin' => $attribute->getName(),
+                        'type' => $this->getType($attribute),
+                        'dataType' => $attribute->getBackendType(),
+                        'filters' => [],
+                    ];
+                }
+            } else {
+                $fields[$attribute->getName()] = [
+                    'type' => $this->getType($attribute),
+                ];
             }
-            $fields[] = $field;
         }
 
         return $fields;
@@ -118,12 +122,15 @@ class AttributeProvider implements FieldsetInterface
      */
     protected function merge(array $dataFields, array $searchableFields)
     {
-        foreach ($searchableFields as $field) {
-            if (!isset($dataFields[$field['name']])) {
-                $dataFields[$field['name']] = [];
+        foreach ($searchableFields as $name => $field) {
+            if (!isset($field['name']) && !isset($dataFields[$name])) {
+                continue;
+            }
+            if (!isset($dataFields[$name])) {
+                $dataFields[$name] = [];
             }
             foreach ($field as $key => $value) {
-                $dataFields[$field['name']][$key] = $value;
+                $dataFields[$name][$key] = $value;
             }
         }
 

@@ -27,7 +27,17 @@
 
     <xs:group name="fieldset">
         <xs:choice>
-            <xs:element name="fieldset" type="fieldsetType"/>
+            <xs:element name="fieldset" type="fieldsetType">
+                <xs:unique name="uniqueField">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Field name must be unique in one fieldset.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath=".//fieldset/field"/>
+                    <xs:field xpath="@name"/>
+                </xs:unique>
+            </xs:element>
         </xs:choice>
     </xs:group>
 
@@ -129,6 +139,7 @@
         <xs:attribute name="source" type="classType" use="optional"/>
         <xs:attribute name="provider" type="classType" use="optional"/>
         <xs:attribute name="name" type="nameType" use="required"/>
+        <xs:attribute name="prefix" type="nameType" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="fieldType">
@@ -240,15 +251,6 @@
                 </xs:documentation>
             </xs:annotation>
             <xs:selector xpath=".//fieldset"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
-        <xs:unique name="uniqueField">
-            <xs:annotation>
-                <xs:documentation>
-                    Field name must be unique in one fieldset.
-                </xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath=".//fieldset/field"/>
             <xs:field xpath="@name"/>
         </xs:unique>
     </xs:element>
