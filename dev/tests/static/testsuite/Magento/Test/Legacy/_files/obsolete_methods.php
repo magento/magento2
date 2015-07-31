@@ -2353,7 +2353,7 @@ return [
     ['addCatalogToTopmenuItems', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::invoke'],
     ['catalogCheckIsUsingStaticUrlsAllowed', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowed::invoke'],
     ['_addCategoriesToMenu', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::_addCategoriesToMenu'],
-    ['getMenuCategoryData', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::getMenuCategoryData'],
     ['hasActive', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::hasActive'],
     ['getCatalogLayer', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::getCatalogLayer'],
+    ['getMenuCategoryData', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\MenuCategoryData::getMenuCategoryData'],
 ];

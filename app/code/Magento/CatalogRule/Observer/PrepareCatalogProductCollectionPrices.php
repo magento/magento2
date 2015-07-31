@@ -17,9 +17,6 @@ use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Customer\Api\GroupManagementInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class PrepareCatalogProductCollectionPrices
 {
     /**
