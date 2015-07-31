@@ -20,6 +20,7 @@ define(
              * @param {Object} address
              */
             getRates: function (address) {
+                shippingService.isLoading(true);
                 var cache = rateRegistry.get(address.getCacheKey()),
                     serviceUrl = resourceUrlManager.getUrlForEstimationShippingMethodsForNewAddress(quote),
                     payload = JSON.stringify({
@@ -34,8 +35,8 @@ define(
 
                 if (cache) {
                     shippingService.setShippingRates(cache);
+                    shippingService.isLoading(false);
                 } else {
-                    shippingService.isLoading(true);
                     storage.post(
                         serviceUrl, payload, false
                     ).done(
