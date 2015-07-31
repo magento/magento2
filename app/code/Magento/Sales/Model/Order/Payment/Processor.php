@@ -11,10 +11,10 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Order\Payment\Operations\Authorize;
-use Magento\Sales\Model\Order\Payment\Operations\Capture;
-use Magento\Sales\Model\Order\Payment\Operations\Order as OrderOperation;
-use Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotification;
+use Magento\Sales\Model\Order\Payment\Operations\AuthorizeOperation;
+use Magento\Sales\Model\Order\Payment\Operations\CaptureOperation;
+use Magento\Sales\Model\Order\Payment\Operations\OrderOperation as OrderOperation;
+use Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotificationOperation;
 
 /**
  * Class Processor using for process payment
@@ -22,12 +22,12 @@ use Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotification;
 class Processor
 {
     /**
-     * @var Authorize
+     * @var AuthorizeOperation
      */
     protected $authorizeOperation;
 
     /**
-     * @var Capture
+     * @var CaptureOperation
      */
     protected $captureOperation;
 
@@ -37,22 +37,22 @@ class Processor
     protected $orderOperation;
 
     /**
-     * @var RegisterCaptureNotification
+     * @var RegisterCaptureNotificationOperation
      */
     protected $registerCaptureNotification;
 
     /**
      * Set operations
      *
-     * @param Authorize $authorizeOperation
-     * @param Capture $captureOperation
+     * @param AuthorizeOperation $authorizeOperation
+     * @param CaptureOperation $captureOperation
      * @param OrderOperation $orderOperation
      */
     public function __construct(
-        Authorize $authorizeOperation,
-        Capture $captureOperation,
+        AuthorizeOperation $authorizeOperation,
+        CaptureOperation $captureOperation,
         OrderOperation $orderOperation,
-        RegisterCaptureNotification $registerCaptureNotification
+        RegisterCaptureNotificationOperation $registerCaptureNotification
     ) {
         $this->authorizeOperation = $authorizeOperation;
         $this->captureOperation = $captureOperation;
