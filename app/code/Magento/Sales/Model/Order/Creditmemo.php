@@ -433,73 +433,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function refund()
-    {
-        $this->setState(self::STATE_REFUNDED);
-        $orderRefund = $this->priceCurrency->round(
-            $this->getOrder()->getTotalRefunded() + $this->getGrandTotal()
-        );
-        $baseOrderRefund = $this->priceCurrency->round(
-            $this->getOrder()->getBaseTotalRefunded() + $this->getBaseGrandTotal()
-        );
-
-        if ($baseOrderRefund > $this->priceCurrency->round($this->getOrder()->getBaseTotalPaid())) {
-            $baseAvailableRefund = $this->getOrder()->getBaseTotalPaid() - $this->getOrder()->getBaseTotalRefunded();
-
-            throw new LocalizedException(
-                __(
-                    'The most money available to refund is %1.',
-                    $this->getOrder()->formatBasePrice($baseAvailableRefund)
-                )
-            );
-        }
-        $order = $this->getOrder();
-        $order->setBaseTotalRefunded($baseOrderRefund);
-        $order->setTotalRefunded($orderRefund);
-
-        $order->setBaseSubtotalRefunded($order->getBaseSubtotalRefunded() + $this->getBaseSubtotal());
-        $order->setSubtotalRefunded($order->getSubtotalRefunded() + $this->getSubtotal());
-
-        $order->setBaseTaxRefunded($order->getBaseTaxRefunded() + $this->getBaseTaxAmount());
-        $order->setTaxRefunded($order->getTaxRefunded() + $this->getTaxAmount());
-        $order->setBaseDiscountTaxCompensationRefunded($order->getBaseDiscountTaxCompensationRefunded() + $this->getBaseDiscountTaxCompensationAmount());
-        $order->setDiscountTaxCompensationRefunded($order->getDiscountTaxCompensationRefunded() + $this->getDiscountTaxCompensationAmount());
-
-        $order->setBaseShippingRefunded($order->getBaseShippingRefunded() + $this->getBaseShippingAmount());
-        $order->setShippingRefunded($order->getShippingRefunded() + $this->getShippingAmount());
-
-        $order->setBaseShippingTaxRefunded($order->getBaseShippingTaxRefunded() + $this->getBaseShippingTaxAmount());
-        $order->setShippingTaxRefunded($order->getShippingTaxRefunded() + $this->getShippingTaxAmount());
-
-        $order->setAdjustmentPositive($order->getAdjustmentPositive() + $this->getAdjustmentPositive());
-        $order->setBaseAdjustmentPositive($order->getBaseAdjustmentPositive() + $this->getBaseAdjustmentPositive());
-
-        $order->setAdjustmentNegative($order->getAdjustmentNegative() + $this->getAdjustmentNegative());
-        $order->setBaseAdjustmentNegative($order->getBaseAdjustmentNegative() + $this->getBaseAdjustmentNegative());
-
-        $order->setDiscountRefunded($order->getDiscountRefunded() + $this->getDiscountAmount());
-        $order->setBaseDiscountRefunded($order->getBaseDiscountRefunded() + $this->getBaseDiscountAmount());
-
-        if ($this->getInvoice()) {
-            $this->getInvoice()->setIsUsedForRefund(true);
-            $this->getInvoice()->setBaseTotalRefunded(
-                $this->getInvoice()->getBaseTotalRefunded() + $this->getBaseGrandTotal()
-            );
-            $this->setInvoiceId($this->getInvoice()->getId());
-        }
-
-        if (!$this->getPaymentRefundDisallowed()) {
-            $order->getPayment()->refund($this);
-        }
-
-        $this->_eventManager->dispatch('sales_order_creditmemo_refund', [$this->_eventObject => $this]);
-        return $this;
-    }
-
-    /**
      * Cancel Creditmemo action
      *
      * @return $this
@@ -542,61 +475,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->getOrder()->setShippingRefunded($this->getOrder()->getShippingRefunded() - $this->getShippingAmount());
 
         $this->_eventManager->dispatch('sales_order_creditmemo_cancel', [$this->_eventObject => $this]);
-        return $this;
-    }
-
-    /**
-     * Register creditmemo
-     *
-     * Apply to order, order items etc.
-     *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function register()
-    {
-        if ($this->getId()) {
-            throw new LocalizedException(__('We cannot register an existing credit memo.'));
-        }
-
-        foreach ($this->getAllItems() as $item) {
-            if ($item->getQty() > 0) {
-                $item->register();
-            } else {
-                $item->isDeleted(true);
-            }
-        }
-
-        $this->setDoTransaction(true);
-        if ($this->getOfflineRequested()) {
-            $this->setDoTransaction(false);
-        }
-        $this->refund();
-
-        if ($this->getDoTransaction()) {
-            $this->getOrder()->setTotalOnlineRefunded(
-                $this->getOrder()->getTotalOnlineRefunded() + $this->getGrandTotal()
-            );
-            $this->getOrder()->setBaseTotalOnlineRefunded(
-                $this->getOrder()->getBaseTotalOnlineRefunded() + $this->getBaseGrandTotal()
-            );
-        } else {
-            $this->getOrder()->setTotalOfflineRefunded(
-                $this->getOrder()->getTotalOfflineRefunded() + $this->getGrandTotal()
-            );
-            $this->getOrder()->setBaseTotalOfflineRefunded(
-                $this->getOrder()->getBaseTotalOfflineRefunded() + $this->getBaseGrandTotal()
-            );
-        }
-
-        $this->getOrder()->setBaseTotalInvoicedCost(
-            $this->getOrder()->getBaseTotalInvoicedCost() - $this->getBaseCost()
-        );
-
-        $state = $this->getState();
-        if (is_null($state)) {
-            $this->setState(self::STATE_OPEN);
-        }
         return $this;
     }
 
