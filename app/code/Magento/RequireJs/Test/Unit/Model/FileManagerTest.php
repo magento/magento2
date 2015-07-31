@@ -207,4 +207,18 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->object->createMinResolverAsset();
     }
+
+    public function testCreateTranslateConfigAsset()
+    {
+        $this->configMock
+            ->expects($this->once())
+            ->method('getTranslationConfigRelativePath')
+            ->will($this->returnValue('relative path'));
+        $this->assetRepoMock
+            ->expects($this->once())
+            ->method('createArbitrary')
+            ->with('relative path');
+
+        $this->object->createTranslateConfigAsset();
+    }
 }
