@@ -2358,4 +2358,7 @@ return [
     ['aggregateSalesReportTaxData', 'Magento\Tax\Model\Observer', 'Magento\Tax\Observer\AggregateSalesReportTaxData::invoke'],
     ['quoteCollectTotalsBefore', 'Magento\Tax\Model\Observer', 'Magento\Tax\Observer\QuoteCollectTotalsBefore::invoke'],
     ['updateProductOptions', 'Magento\Tax\Model\Observer', 'Magento\Tax\Observer\UpdateProductOptions::invoke'],
+    ['invalidateVarnish', 'Magento\CacheInvalidate\Model\Observer', 'Magento\CacheInvalidate\Observer\InvalidateVarnish::invoke'],
+    ['flushAllCache', 'Magento\CacheInvalidate\Model\Observer', 'Magento\CacheInvalidate\Observer\FlushAllCache::invoke'],
+    ['sendPurgeRequest', 'Magento\CacheInvalidate\Model\Observer', 'Magento\CacheInvalidate\Model\PurgeCache::sendPurgeRequest'],
 ];
