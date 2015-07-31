@@ -28,6 +28,11 @@ class Navigation
     private $navType;
 
     /**
+     * @var string
+     */
+    private $titles;
+
+    /**
      * @param ServiceLocatorInterface $serviceLocator
      * @param ObjectManagerProvider $objectManagerProvider
      */
@@ -37,9 +42,11 @@ class Navigation
         if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
             $this->navStates = $serviceLocator->get('config')[self::NAV_UPDATER];
             $this->navType = self::NAV_UPDATER;
+            $this->titles = $serviceLocator->get('config')[self::NAV_UPDATER . 'Titles'];
         } else {
             $this->navStates = $serviceLocator->get('config')[self::NAV_INSTALLER];
             $this->navType = self::NAV_INSTALLER;
+            $this->titles = $serviceLocator->get('config')[self::NAV_INSTALLER . 'Titles'];
         }
     }
 
@@ -92,5 +99,15 @@ class Navigation
             }
         ));
         return $result;
+    }
+
+    /**
+     * Returns titles of the navigation pages
+     *
+     * @return array
+     */
+    public function getTitles()
+    {
+        return $this->titles;
     }
 }

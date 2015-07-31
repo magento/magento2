@@ -7,6 +7,9 @@
 $base = basename($_SERVER['SCRIPT_FILENAME']);
 
 return [
+    'navInstallerTitles' => [
+        'install'    => 'Magento Installer',
+    ],
     'navInstaller' => [
         [
             'id'          => 'root',

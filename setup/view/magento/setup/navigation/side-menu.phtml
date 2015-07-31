@@ -29,24 +29,18 @@
              alt="Magento Admin Panel">
     </a>
     <ul id="nav" role="menubar">
-        <li class="item-home level-0" ng-class="{_active: state.current.name === 'root.home'}">
-            <a
-            ng-class="{_active: state.current.name === 'root.home'}"
-            ui-sref="root.home">
+        <li class="item-home level-0" ng-class="{_active: $state.current.name === 'root.home'}">
+            <a ui-sref="root.home">
             <span>Home</span>
             </a>
         </li>
-        <li class="item-component level-0"   ng-class="{_active: state.current.name === 'root.cm'}">
-            <a
-                ng-class="{_active: state.current.name === 'root.cm'}"
-                ui-sref="root.cm">
+        <li class="item-component level-0"   ng-class="{_active: $state.current.type === 'cm'}">
+            <a ui-sref="root.cm">
             <span>Component Manager</span>
             </a>
         </li>
-        <li class="item-upgrade level-0" ng-class="{_active: state.current.name === 'root.su'}">
-            <a
-                ng-class="{_active: state.current.name === 'root.su'}"
-                ui-sref="root.su">
+        <li class="item-upgrade level-0" ng-class="{_active: $state.current.type === 'su'}">
+            <a ui-sref="root.su">
                 <span>System Upgrade</span>
             </a>
         </li>

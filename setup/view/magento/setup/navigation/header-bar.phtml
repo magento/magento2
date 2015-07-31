@@ -7,12 +7,12 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<header class="page-header row" ng-hide="$state.current.main">
+<header ng-controller="headerController" class="page-header row"
+        data-ng-init="redirectTo('<?php echo $this->redirect?>')"
+        ng-hide="$state.current.main">
     <div class="page-header-hgroup col-l-8 col-m-6">
-        <div class="page-title-wrapper" ng-switch=$state.current.type>
-            <h1 class="page-title" ng-switch-when="cm">Component Manager</h1>
-            <h1 class="page-title" ng-switch-when="su">System Upgrade</h1>
-            <h1 class="page-title" ng-switch-when="install">Magento Installation</h1>
+        <div class="page-title-wrapper">
+            <h1 class="page-title">{{titles[$state.current.type]}}</h1>
         </div>
     </div>
     <div class="page-header-actions col-l-4 col-m-6" style="display: none">
