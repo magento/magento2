@@ -57,11 +57,7 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $this->objectManagerFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->objectManager));
-
-        $this->deployer->expects($this->once())->method('deploy');
+       $this->deployer->expects($this->once())->method('deploy');
 
         $this->objectManager->expects($this->at(0))
             ->method('create')
