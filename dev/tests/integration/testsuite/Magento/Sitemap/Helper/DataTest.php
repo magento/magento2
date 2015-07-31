@@ -20,7 +20,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION),
             '>'
         );
-        if ($isSupported) {
+        if (!$isSupported) {
             $this->markTestSkipped('MAGETWO-40822: PHP7 incompatible');
         }
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
