@@ -11,7 +11,10 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 
-class Capture implements CommandInterface
+/**
+ * Class Order
+ */
+class OrderCommand implements CommandInterface
 {
     /**
      * Run command
@@ -28,7 +31,7 @@ class Capture implements CommandInterface
         $formattedAmount = $order->getBaseCurrency()->formatTxt($amount);
         if ($payment->getIsTransactionPending()) {
             $message = __(
-                'An amount of %1 will be captured after being approved at the payment gateway.',
+                'The order amount of %1 is pending approval on the payment gateway.',
                 $formattedAmount
             );
             $state = Order::STATE_PAYMENT_REVIEW;
@@ -36,8 +39,7 @@ class Capture implements CommandInterface
                 $status = Order::STATUS_FRAUD;
             }
         } else {
-            // normal online capture: invoice is marked as "paid"
-            $message = __('Captured amount of %1 online', $formattedAmount);
+            $message = __('Ordered amount of %1', $formattedAmount);
         }
         $this->setOrderStateAndStatus($order, $status, $state);
 

@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
-class Authorize extends AbstractOperation
+class AuthorizeOperation extends AbstractOperation
 {
     public function authorize(OrderPaymentInterface $payment, $isOnline, $amount)
     {

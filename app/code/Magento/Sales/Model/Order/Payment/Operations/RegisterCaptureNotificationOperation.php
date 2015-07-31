@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
-class RegisterCaptureNotification extends AbstractOperation
+class RegisterCaptureNotificationOperation extends AbstractOperation
 {
     public function registerCaptureNotification(OrderPaymentInterface $payment, $amount, $skipFraudDetection = false)
     {
