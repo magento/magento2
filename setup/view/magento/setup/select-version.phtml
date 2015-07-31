@@ -12,7 +12,7 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="update()"
-                ng-disabled="!readyToNext"
+                ng-disabled="!readyForNext"
                 >Next</button>
         </div>
     </div>
@@ -36,14 +36,13 @@
             </span>
     </div>
 
-    <div class="row" ng-hide="!readyToNext">
+    <div class="row" ng-hide="!readyForNext">
         <div class="col-m-4">
             <select
                 id="selectVersion"
                 class="form-el-select"
                 ng-model="selectedOption"
-                ng-options="item.id as item.name for item in versions"
-                ng->
+                ng-options="item.id as item.name for item in versions">
             </select>
         </div>
     </div>
