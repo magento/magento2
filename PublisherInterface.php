@@ -9,7 +9,7 @@ namespace Magento\Framework\Amqp;
 /**
  * Producer to publish messages via a specific transport to a specific queue or exchange.
  */
-interface ProducerInterface
+interface PublisherInterface
 {
     /**
      * Publishes a message to a specific queue or exchange.

@@ -8,14 +8,14 @@ namespace Magento\Framework\Amqp\Test\Unit;
 
 use Magento\Framework\Amqp\Config\Data as QueueConfig;
 use Magento\Framework\Amqp\Config\Converter as QueueConfigConverter;
-use Magento\Framework\Amqp\ProducerFactory;
+use Magento\Framework\Amqp\PublisherFactory;
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ProducerFactoryTest extends \PHPUnit_Framework_TestCase
+class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProducerFactory
+     * @var PublisherFactory
      */
     private $producerFactory;
 
@@ -65,7 +65,7 @@ class ProducerFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('filterAndSortDeclaredComponents')
             ->will($this->returnArgument(0));
         $this->producerFactory = $this->objectManager->getObject(
-            'Magento\Framework\Amqp\ProducerFactory',
+            'Magento\Framework\Amqp\PublisherFactory',
             [
                 'queueConfig' => $this->queueConfigMock,
                 'compositeHelper' => $this->compositeHelperMock
@@ -151,11 +151,11 @@ class ProducerFactoryTest extends \PHPUnit_Framework_TestCase
             ]));
 
 
-        $publisherMock = $this->getMockBuilder('Magento\Framework\Amqp\ProducerInterface')
+        $publisherMock = $this->getMockBuilder('Magento\Framework\Amqp\PublisherInterface')
             ->getMockForAbstractClass();
 
         $this->producerFactory = $this->objectManager->getObject(
-            'Magento\Framework\Amqp\ProducerFactory',
+            'Magento\Framework\Amqp\PublisherFactory',
             [
                 'queueConfig' => $this->queueConfigMock,
                 'compositeHelper' => $this->compositeHelperMock,
@@ -190,11 +190,11 @@ class ProducerFactoryTest extends \PHPUnit_Framework_TestCase
             ]));
 
 
-        $publisherMock = $this->getMockBuilder('Magento\Framework\Amqp\ProducerInterface')
+        $publisherMock = $this->getMockBuilder('Magento\Framework\Amqp\PublisherInterface')
             ->getMockForAbstractClass();
 
         $this->producerFactory = $this->objectManager->getObject(
-            'Magento\Framework\Amqp\ProducerFactory',
+            'Magento\Framework\Amqp\PublisherFactory',
             [
                 'queueConfig' => $this->queueConfigMock,
                 'compositeHelper' => $this->compositeHelperMock,

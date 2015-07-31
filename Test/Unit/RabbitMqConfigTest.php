@@ -53,7 +53,7 @@ class RabbitMqConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::PORT));
         $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::USERNAME));
         $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::PASSWORD));
-        $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::VIRTUAL_HOST));
+        $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::VIRTUALHOST));
         $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::SSL));
     }
 
@@ -68,7 +68,7 @@ class RabbitMqConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::PORT));
         $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::USERNAME));
         $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::PASSWORD));
-        $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::VIRTUAL_HOST));
+        $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::VIRTUALHOST));
         $this->assertNull($this->rabbitMqConfig->getValue(RabbitMqConfig::SSL));
     }
 
@@ -89,9 +89,9 @@ class RabbitMqConfigTest extends \PHPUnit_Framework_TestCase
                     RabbitMqConfig::RABBITMQ_CONFIG => [
                         'host' => $expectedHost,
                         'port' => $expectedPort,
-                        'username' => $expectedUsername,
+                        'user' => $expectedUsername,
                         'password' => $expectedPassword,
-                        'virtual_host' => $expectedVirtualHost,
+                        'virtualhost' => $expectedVirtualHost,
                         'ssl' => $expectedSsl,
                         'randomKey' => 'randomValue',
                     ]
@@ -102,7 +102,7 @@ class RabbitMqConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPort, $this->rabbitMqConfig->getValue(RabbitMqConfig::PORT));
         $this->assertEquals($expectedUsername, $this->rabbitMqConfig->getValue(RabbitMqConfig::USERNAME));
         $this->assertEquals($expectedPassword, $this->rabbitMqConfig->getValue(RabbitMqConfig::PASSWORD));
-        $this->assertEquals($expectedVirtualHost, $this->rabbitMqConfig->getValue(RabbitMqConfig::VIRTUAL_HOST));
+        $this->assertEquals($expectedVirtualHost, $this->rabbitMqConfig->getValue(RabbitMqConfig::VIRTUALHOST));
         $this->assertEquals($expectedSsl, $this->rabbitMqConfig->getValue(RabbitMqConfig::SSL));
         $this->assertEquals('randomValue', $this->rabbitMqConfig->getValue('randomKey'));
     }

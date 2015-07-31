@@ -14,7 +14,7 @@ use Magento\Framework\Phrase;
 /**
  * Class which creates Publishers
  */
-class ProducerFactory
+class PublisherFactory
 {
     /**
      * All of the merged queue config information
@@ -24,7 +24,7 @@ class ProducerFactory
     private $queueConfig;
 
     /**
-     * @var ProducerInterface[]
+     * @var PublisherInterface[]
      */
     private $publishers;
 
@@ -45,7 +45,7 @@ class ProducerFactory
      *
      * @param QueueConfig $queueConfig
      * @param CompositeHelper $compositeHelper
-     * @param ProducerInterface[] $publishers
+     * @param PublisherInterface[] $publishers
      */
     public function __construct(
         QueueConfig $queueConfig,
@@ -65,10 +65,10 @@ class ProducerFactory
      * Add publisher.
      *
      * @param string $name
-     * @param ProducerInterface $publisher
+     * @param PublisherInterface $publisher
      * @return $this
      */
-    private function add($name, ProducerInterface $publisher)
+    private function add($name, PublisherInterface $publisher)
     {
         $this->publishers[$name] = $publisher;
         return $this;
@@ -78,7 +78,7 @@ class ProducerFactory
      * Retrieves the queue configuration and returns a concrete publisher.
      *
      * @param string $topicName
-     * @return ProducerInterface
+     * @return PublisherInterface
      */
     public function create($topicName)
     {
@@ -94,7 +94,7 @@ class ProducerFactory
      * Return the class type of publisher to create.
      *
      * @param string $connectionName
-     * @return ProducerInterface
+     * @return PublisherInterface
      * @throws LocalizedException
      */
     private function getPublisherForConnectionName($connectionName)

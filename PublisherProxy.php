@@ -8,10 +8,10 @@ namespace Magento\Framework\Amqp;
 /**
  * Client class which will publish any message
  */
-class Publisher
+class PublisherProxy implements PublisherInterface
 {
     /**
-     * @var ProducerFactory
+     * @var PublisherFactory
      */
     private $producerFactory;
 
@@ -23,11 +23,11 @@ class Publisher
     /**
      * Initialize dependencies.
      *
-     * @param ProducerFactory $producerFactory
+     * @param PublisherFactory $producerFactory
      * @param MessageEncoder $messageEncoder
      */
     public function __construct(
-        ProducerFactory $producerFactory,
+        PublisherFactory $producerFactory,
         MessageEncoder $messageEncoder
     ) {
         $this->producerFactory = $producerFactory;

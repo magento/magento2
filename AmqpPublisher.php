@@ -17,7 +17,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 /**
  * An AMQP Producer to handle publishing a message.
  */
-class AmqpProducer implements ProducerInterface
+class AmqpPublisher implements PublisherInterface
 {
     /**
      * @var RabbitMqConfig
