@@ -244,39 +244,39 @@
 
     <!-- Managing my Cart Items -->
     <route url="/V1/carts/mine/items" method="GET">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="getListForCustomer"/>
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cartId%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items" method="POST">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="saveForCustomer"/>
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
         <resources>
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cartId%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="PUT">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="saveForCustomer"/>
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
         <resources>
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cartId%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="DELETE">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="deleteByIdForCustomer"/>
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="deleteById"/>
         <resources>
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cartId%</parameter>
         </data>
     </route>
 
