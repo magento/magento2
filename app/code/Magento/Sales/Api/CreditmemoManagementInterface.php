@@ -23,6 +23,7 @@ interface CreditmemoManagementInterface
      *
      * @param int $id The credit memo ID.
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function cancel($id);
 

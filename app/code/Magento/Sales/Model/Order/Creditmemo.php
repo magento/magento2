@@ -433,52 +433,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Cancel Creditmemo action
-     *
-     * @return $this
-     */
-    public function cancel()
-    {
-        $this->setState(self::STATE_CANCELED);
-        foreach ($this->getAllItems() as $item) {
-            $item->cancel();
-        }
-        $this->getOrder()->getPayment()->cancelCreditmemo($this);
-
-        if ($this->getTransactionId()) {
-            $this->getOrder()->setTotalOnlineRefunded(
-                $this->getOrder()->getTotalOnlineRefunded() - $this->getGrandTotal()
-            );
-            $this->getOrder()->setBaseTotalOnlineRefunded(
-                $this->getOrder()->getBaseTotalOnlineRefunded() - $this->getBaseGrandTotal()
-            );
-        } else {
-            $this->getOrder()->setTotalOfflineRefunded(
-                $this->getOrder()->getTotalOfflineRefunded() - $this->getGrandTotal()
-            );
-            $this->getOrder()->setBaseTotalOfflineRefunded(
-                $this->getOrder()->getBaseTotalOfflineRefunded() - $this->getBaseGrandTotal()
-            );
-        }
-
-        $this->getOrder()->setBaseSubtotalRefunded(
-            $this->getOrder()->getBaseSubtotalRefunded() - $this->getBaseSubtotal()
-        );
-        $this->getOrder()->setSubtotalRefunded($this->getOrder()->getSubtotalRefunded() - $this->getSubtotal());
-
-        $this->getOrder()->setBaseTaxRefunded($this->getOrder()->getBaseTaxRefunded() - $this->getBaseTaxAmount());
-        $this->getOrder()->setTaxRefunded($this->getOrder()->getTaxRefunded() - $this->getTaxAmount());
-
-        $this->getOrder()->setBaseShippingRefunded(
-            $this->getOrder()->getBaseShippingRefunded() - $this->getBaseShippingAmount()
-        );
-        $this->getOrder()->setShippingRefunded($this->getOrder()->getShippingRefunded() - $this->getShippingAmount());
-
-        $this->_eventManager->dispatch('sales_order_creditmemo_cancel', [$this->_eventObject => $this]);
-        return $this;
-    }
-
-    /**
      * Retrieve Creditmemo states array
      *
      * @return array
