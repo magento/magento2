@@ -35,7 +35,8 @@ class EntityStorage
      *
      * @param FrameworkAbstractModel $object
      * @param array $identifyingFields
-     * @param $storageName
+     * @param string $storageName
+     * @return void
      * @throws \Magento\Framework\Exception\InputException
      */
     public function addByIdentifyingFields(FrameworkAbstractModel $object, array $identifyingFields, $storageName)
@@ -64,7 +65,7 @@ class EntityStorage
     /**
      * Retrieve entity from registry if entity in it
      *
-     * @param $id
+     * @param int $id
      * @return bool|FrameworkAbstractModel
      */
     public function get($id)
@@ -79,7 +80,7 @@ class EntityStorage
      * Gets entity by identifying fields
      *
      * @param array $identifyingFields
-     * @param $storageName
+     * @param string $storageName
      * @return bool|FrameworkAbstractModel
      */
     public function getByIdentifyingFields(array $identifyingFields, $storageName)
@@ -94,7 +95,8 @@ class EntityStorage
     /**
      * Remove entity from storage
      *
-     * @param $id
+     * @param int $id
+     * @return void
      */
     public function remove($id)
     {
@@ -106,7 +108,7 @@ class EntityStorage
     /**
      * Checks if entity is in storage
      *
-     * @param $id
+     * @param int $id
      * @return bool
      */
     public function has($id)

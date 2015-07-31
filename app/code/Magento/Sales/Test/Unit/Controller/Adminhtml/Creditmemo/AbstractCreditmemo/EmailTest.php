@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class EmailTest
  *
  * @package Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailTest extends \PHPUnit_Framework_TestCase
 {
