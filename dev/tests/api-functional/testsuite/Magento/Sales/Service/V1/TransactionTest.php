@@ -53,7 +53,8 @@ class TransactionTest extends WebapiAbstract
         /**
          * @var $transactionRepository \Magento\Sales\Model\Order\Payment\Transaction\Repository
          */
-        $transactionRepository = $this->objectManager->create('Magento\Sales\Model\Order\Payment\Transaction\Repository');
+        $transactionRepository = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $transactionRepository = $this->objectManager->create($transactionRepository);
         $order->loadByIncrementId('100000006');
 
         /** @var Payment $payment */
@@ -96,7 +97,8 @@ class TransactionTest extends WebapiAbstract
         /**
          * @var $transactionRepository \Magento\Sales\Model\Order\Payment\Transaction\Repository
          */
-        $transactionRepository = $this->objectManager->create('Magento\Sales\Model\Order\Payment\Transaction\Repository');
+        $transactionRepository = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $transactionRepository = $this->objectManager->create($transactionRepository);
         $order->loadByIncrementId('100000006');
 
         /** @var Payment $payment */

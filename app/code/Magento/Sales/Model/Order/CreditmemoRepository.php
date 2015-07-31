@@ -16,6 +16,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Repository class for @see \Magento\Sales\Api\Data\CreditmemoInterface
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInterface
 {

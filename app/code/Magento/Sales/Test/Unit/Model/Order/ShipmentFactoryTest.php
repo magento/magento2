@@ -33,6 +33,10 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $trackFactory;
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -117,7 +121,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $shipment = $this->getMock(
             'Magento\Sales\Model\Order\Shipment',
-            ['addItem','setTotalQty', 'addTrack'],
+            ['addItem', 'setTotalQty', 'addTrack'],
             [],
             '',
             false

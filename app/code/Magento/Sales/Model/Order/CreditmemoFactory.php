@@ -86,6 +86,8 @@ class CreditmemoFactory
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @param array $data
      * @return Creditmemo
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function createByInvoice(\Magento\Sales\Model\Order\Invoice $invoice, array $data = [])
     {
