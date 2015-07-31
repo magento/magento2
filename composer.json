@@ -15,6 +15,7 @@
         "zendframework/zend-soap": "2.4.0",
         "zendframework/zend-uri": "2.4.0",
         "zendframework/zend-validator": "2.4.0",
+        "zendframework/zend-crypt": "2.4.0",
         "zendframework/zend-console": "2.4.0",
         "zendframework/zend-modulemanager": "2.4.0",
         "zendframework/zend-mvc": "2.4.0",
