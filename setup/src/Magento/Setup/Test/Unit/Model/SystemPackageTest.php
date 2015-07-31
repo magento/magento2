@@ -72,16 +72,12 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
     public function testGetPackageVersions()
     {
         $package = $this->getMock('\Composer\Package\Package', [], [], '', false);
-
         $package->expects($this->once())->method('getName')->willReturn('magento/product-community-edition');
-
         $this->repository->expects($this->once())->method('getPackages')->willReturn([$package]);
-
         $this->locker->expects($this->once())->method('getLockedRepository')->willReturn($this->repository);
 
         $this->composer->expects($this->once())->method('getLocker')->willReturn($this->locker);
         $this->magentoComposerApp->expects($this->once())->method('createComposer')->willReturn($this->composer);
-
 
         $this->composerAppFactory->expects($this->once())
             ->method('createInfoCommand')
@@ -151,7 +147,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
         $this->composer->expects($this->once())->method('getLocker')->willReturn($this->locker);
         $this->magentoComposerApp->expects($this->once())->method('createComposer')->willReturn($this->composer);
 
-
         $this->composerAppFactory->expects($this->once())
             ->method('createInfoCommand')
             ->willReturn($this->infoCommand);
@@ -165,8 +160,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->infoCommand);
 
         $this->systemPackage = new SystemPackage($this->composerAppFactory);
-
-
 
         $this->infoCommand->expects($this->once())
             ->method('run')
