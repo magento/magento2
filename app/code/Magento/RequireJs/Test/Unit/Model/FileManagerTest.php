@@ -210,15 +210,17 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateTranslateConfigAsset()
     {
+        $path = 'relative path';
         $this->configMock
             ->expects($this->once())
             ->method('getTranslationConfigRelativePath')
-            ->will($this->returnValue('relative path'));
+            ->will($this->returnValue($path, ''));
         $this->assetRepoMock
             ->expects($this->once())
             ->method('createArbitrary')
-            ->with('relative path');
+            ->with($path, '')
+            ->willReturn($this->asset);
 
-        $this->object->createTranslateConfigAsset();
+        $this->assertSame($this->asset, $this->object->createTranslateConfigAsset());
     }
 }
