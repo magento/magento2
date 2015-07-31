@@ -95,16 +95,7 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
          */
         $couponSpec = $this->getMock(
             $className,
-            [
-            'getRuleId',
-            'getQuantity',
-            'getFormat',
-            'getLength',
-            'getExpirationDate',
-            'getUsagePerCoupon',
-            'getUsagePerCustomer',
-            'setData'
-            ],
+            ['getRuleId', 'getQuantity', 'getFormat', 'getLength', 'setData'],
             [],
             '',
             false
@@ -114,34 +105,28 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $couponSpec->expects($this->once())->method('getQuantity')->willReturn(1);
         $couponSpec->expects($this->once())->method('getFormat')->willReturn('num');
         $couponSpec->expects($this->once())->method('getLength')->willReturn(1);
-        $couponSpec->expects($this->once())->method('getExpirationDate')->willReturn('2015-07-31 00:00:00');
-        $couponSpec->expects($this->once())->method('getUsagePerCoupon')->willReturn(1);
-        $couponSpec->expects($this->once())->method('getUsagePerCustomer')->willReturn(1);
 
-        $this->couponGenerator->expects($this->once())->method('validateData')->with([
-            'rule_id' => 1,
-            'qty' => 1,
-            'format' => 'num',
-            'length' => 1,
-            'to_date' => '2015-07-31 00:00:00',
-            'uses_per_coupon' => 1,
-            'uses_per_customer' => 1,
-            'prefix' => null,
-            'suffix' => null,
-            'dash' => null
-        ])->willReturn(true);
-
-        $this->couponGenerator->expects($this->once())->method('setData');
+        $this->couponGenerator->expects($this->any())->method('setData');
+        $this->couponGenerator->expects($this->once())->method('validateData')->willReturn(true);
         $this->couponGenerator->expects($this->once())->method('generatePool');
         $this->couponGenerator->expects($this->once())->method('getGeneratedCodes')->willReturn([]);
 
         /**
          * @var \Magento\SalesRule\Model\Rule $rule
          */
-        $rule = $this->getMock('\Magento\SalesRule\Model\Rule', ['load', 'getRuleId'], [], '', false);
+        $rule = $this->getMock(
+            '\Magento\SalesRule\Model\Rule',
+            ['load', 'getRuleId', 'getToDate', 'getUsesPerCoupon', 'getUsesPerCustomer'],
+            [],
+            '',
+            false
+        );
 
         $rule->expects($this->any())->method('load')->willReturnSelf();
         $rule->expects($this->any())->method('getRuleId')->willReturn(1);
+        $rule->expects($this->any())->method('getToDate')->willReturn('2015-07-31 00:00:00');
+        $rule->expects($this->any())->method('getUsesPerCoupon')->willReturn(20);
+        $rule->expects($this->any())->method('getUsesPerCustomer')->willReturn(5);
 
         $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
 

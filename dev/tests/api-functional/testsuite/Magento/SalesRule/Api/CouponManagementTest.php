@@ -19,22 +19,6 @@ class CouponManagementTest extends WebapiAbstract
     const RESOURCE_PATH_COUPON = '/V1/coupons';
     const SERVICE_VERSION_COUPON = "V1";
 
-    protected function getCouponData()
-    {
-        $data = [
-                'rule_id' => '1',
-                'code' => 'mycouponcode1',
-                'usage_limit' => 0,
-                'usage_per_customer' => 0,
-                'times_used' => 0,
-                'expiration_date' => '2015-09-09 00:00:00',
-                'is_primary' => null,
-                'created_at' => '2015-07-20 00:00:00',
-                'type' => 1,
-        ];
-        return $data;
-    }
-
     /**
      * @param int $count
      * @param int $length
@@ -142,10 +126,7 @@ class CouponManagementTest extends WebapiAbstract
                 "rule_id" => $ruleId,
                 "quantity"  => $count,
                 "length" => $length,
-                "usage_per_coupon"  => 4,
-                "usage_per_customer" => 3,
-                "format"  => $format,
-                "expiration_date"  => "2015-07-31 00:00:00"
+                "format"  => $format
             ]
         ];
         $result = $this->_webApiCall($serviceInfo, $requestData);

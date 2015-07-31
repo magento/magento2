@@ -77,51 +77,6 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
     public function setLength($length);
 
     /**
-     * Get usage limit per coupon
-     *
-     * @return int|null
-     */
-    public function getUsagePerCoupon();
-
-    /**
-     * Set usage limit per coupon
-     *
-     * @param int $usesPerCoupon
-     * @return $this
-     */
-    public function setUsagePerCoupon($usesPerCoupon);
-
-    /**
-     * Get usage limit per customer
-     *
-     * @return int|null
-     */
-    public function getUsagePerCustomer();
-
-    /**
-     * Set usage limit per customer
-     *
-     * @param int $usesPerCustomer
-     * @return $this
-     */
-    public function setUsagePerCustomer($usesPerCustomer);
-
-    /**
-     * Get expiration date
-     *
-     * @return string|null
-     */
-    public function getExpirationDate();
-
-    /**
-     * Set expiration date
-     *
-     * @param string $expirationDate
-     * @return $this
-     */
-    public function setExpirationDate($expirationDate);
-
-    /**
      * Get the prefix
      *
      * @return string|null

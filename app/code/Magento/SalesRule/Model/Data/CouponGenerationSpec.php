@@ -18,9 +18,6 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
     const KEY_RULE_ID = 'rule_id';
     const KEY_FORMAT = 'format';
     const KEY_LENGTH = 'length';
-    const KEY_USAGE_PER_COUPON = 'usage_per_coupon';
-    const KEY_USAGE_PER_CUSTOMER = 'usage_per_customer';
-    const KEY_EXPIRATION_DATE = 'expiration_date';
     const KEY_QUANTITY = 'quantity';
     const KEY_PREFIX = 'prefix';
     const KEY_SUFFIX = 'suffix';
@@ -109,69 +106,6 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
     public function setLength($length)
     {
         return $this->setData(self::KEY_LENGTH, $length);
-    }
-
-    /**
-     * Get usage limit per coupon
-     *
-     * @return int|null
-     */
-    public function getUsagePerCoupon()
-    {
-        return $this->_get(self::KEY_USAGE_PER_COUPON);
-    }
-
-    /**
-     * Set usage limit per coupon
-     *
-     * @param int $usagePerCoupon
-     * @return $this
-     */
-    public function setUsagePerCoupon($usagePerCoupon)
-    {
-        return $this->setData(self::KEY_USAGE_PER_COUPON, $usagePerCoupon);
-    }
-
-    /**
-     * Get usage limit per customer
-     *
-     * @return int|null
-     */
-    public function getUsagePerCustomer()
-    {
-        return $this->_get(self::KEY_USAGE_PER_CUSTOMER);
-    }
-
-    /**
-     * Set usage limit per customer
-     *
-     * @param int $usagePerCustomer
-     * @return $this
-     */
-    public function setUsagePerCustomer($usagePerCustomer)
-    {
-        return $this->setData(self::KEY_USAGE_PER_CUSTOMER, $usagePerCustomer);
-    }
-
-    /**
-     * Get expiration date
-     *
-     * @return string|null
-     */
-    public function getExpirationDate()
-    {
-        return $this->_get(self::KEY_EXPIRATION_DATE);
-    }
-
-    /**
-     * Set expiration date
-     *
-     * @param string $expirationDate
-     * @return $this
-     */
-    public function setExpirationDate($expirationDate)
-    {
-        return $this->setData(self::KEY_EXPIRATION_DATE, $expirationDate);
     }
 
     /**
