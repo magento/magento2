@@ -199,8 +199,11 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->couponGenerator->expects($this->once())->method('validateData')->willReturn(true);
         $this->couponGenerator->expects($this->once())->method('generatePool')
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('')));
-
+            ->willThrowException(
+                new \Magento\Framework\Exception\LocalizedException(
+                    __('Error occurred when generating coupons: %1', '1')
+                )
+            );
         $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
 
         $this->model->generate($couponSpec);
@@ -297,8 +300,11 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
          */
         $coupon = $this->getMock($className, [], [], '', false);
         $coupon->expects($this->any())->method('delete')
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('')));
-
+            ->willThrowException(
+                new \Magento\Framework\Exception\LocalizedException(
+                    __('Error occurred when deleting coupons: %1.', '1')
+                )
+            );
         $className = '\Magento\SalesRule\Model\Resource\Coupon\Collection';
         /**
          * @var  \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
