@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Sales\Block\Adminhtml\Transactions;
+
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 
 /**

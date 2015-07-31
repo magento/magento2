@@ -80,6 +80,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array|null $tracks
      * @dataProvider createDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCreate($tracks)
     {

@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Payment\Transaction;
  * Class PaymentTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
