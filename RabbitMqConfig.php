@@ -35,14 +35,14 @@ class RabbitMqConfig
      *
      * @var DeploymentConfig
      */
-    private $config;
+    private $deploymentConfig;
 
     /**
      * Associative array of RabbitMQ configuration
      *
      * @var array
      */
-    private $rabbitConfig;
+    private $data;
 
     /**
      * Constructor
@@ -66,7 +66,7 @@ class RabbitMqConfig
      */
     public function __construct(DeploymentConfig $config)
     {
-        $this->config = $config;
+        $this->deploymentConfig = $config;
     }
 
     /**
@@ -78,7 +78,7 @@ class RabbitMqConfig
     public function getValue($key)
     {
         $this->load();
-        return isset($this->rabbitConfig[$key]) ? $this->rabbitConfig[$key] : null; 
+        return isset($this->data[$key]) ? $this->data[$key] : null;
     }
 
     /**
@@ -88,9 +88,9 @@ class RabbitMqConfig
      */
     private function load()
     {
-        if (null === $this->rabbitConfig) {
-            $queueConfig = $this->config->getConfigData(self::QUEUE_CONFIG);
-            $this->rabbitConfig = isset($queueConfig[self::RABBITMQ_CONFIG]) ? $queueConfig[self::RABBITMQ_CONFIG] : [];
+        if (null === $this->data) {
+            $queueConfig = $this->deploymentConfig->getConfigData(self::QUEUE_CONFIG);
+            $this->data = isset($queueConfig[self::RABBITMQ_CONFIG]) ? $queueConfig[self::RABBITMQ_CONFIG] : [];
         }
     }
 }
