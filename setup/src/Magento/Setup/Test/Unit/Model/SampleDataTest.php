@@ -19,12 +19,12 @@ class SampleDataTest extends \PHPUnit_Framework_TestCase
     protected $sampleDataInstall;
 
     /**
-     * @var \Magento\Framework\Setup\LoggerInterface
+     * @var \Magento\Framework\Setup\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerInterface;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $directoryList;
 
@@ -47,6 +47,12 @@ class SampleDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsInstalledSuccessfully()
     {
+        $this->assertFalse($this->sampleDataInstall->isInstalledSuccessfully());
+    }
+
+    public function testIsInstallationError()
+    {
+        $this->directoryList->expects($this->once())->method('getPath')->with('code')->willReturn(null);
         $this->assertFalse($this->sampleDataInstall->isInstalledSuccessfully());
     }
 }
