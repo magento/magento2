@@ -86,8 +86,8 @@ class PublisherFactory
         $publisherName = $this->getPublisherNameForTopic($topicName);
 
         $publisherConfig = $this->getPublisherConfigForName($publisherName);
-        $producer = $this->getPublisherForConnectionName($publisherConfig[QueueConfigConverter::PUBLISHER_CONNECTION]);
-        return $producer;
+        $publisher = $this->getPublisherForConnectionName($publisherConfig[QueueConfigConverter::PUBLISHER_CONNECTION]);
+        return $publisher;
     }
 
     /**

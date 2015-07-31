@@ -17,7 +17,7 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var PublisherFactory
      */
-    private $producerFactory;
+    private $publisherFactory;
 
     /**
      * @var CompositeHelper
@@ -64,7 +64,7 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('filterAndSortDeclaredComponents')
             ->will($this->returnArgument(0));
-        $this->producerFactory = $this->objectManager->getObject(
+        $this->publisherFactory = $this->objectManager->getObject(
             'Magento\Framework\Amqp\PublisherFactory',
             [
                 'queueConfig' => $this->queueConfigMock,
@@ -84,7 +84,7 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([
                 QueueConfigConverter::TOPICS => []
             ]));
-        $this->producerFactory->create(self::TEST_TOPIC);
+        $this->publisherFactory->create(self::TEST_TOPIC);
     }
 
     /**
@@ -103,7 +103,7 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
                 ],
                 QueueConfigConverter::PUBLISHERS => []
             ]));
-        $this->producerFactory->create(self::TEST_TOPIC);
+        $this->publisherFactory->create(self::TEST_TOPIC);
     }
 
     /**
@@ -126,7 +126,7 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ]));
-        $this->producerFactory->create(self::TEST_TOPIC);
+        $this->publisherFactory->create(self::TEST_TOPIC);
     }
 
     /**
@@ -154,7 +154,7 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
         $publisherMock = $this->getMockBuilder('Magento\Framework\Amqp\PublisherInterface')
             ->getMockForAbstractClass();
 
-        $this->producerFactory = $this->objectManager->getObject(
+        $this->publisherFactory = $this->objectManager->getObject(
             'Magento\Framework\Amqp\PublisherFactory',
             [
                 'queueConfig' => $this->queueConfigMock,
@@ -169,7 +169,7 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($publisherMock, $this->producerFactory->create(self::TEST_TOPIC));
+        $this->assertSame($publisherMock, $this->publisherFactory->create(self::TEST_TOPIC));
     }
 
     public function testPublisherReturned()
@@ -193,7 +193,7 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
         $publisherMock = $this->getMockBuilder('Magento\Framework\Amqp\PublisherInterface')
             ->getMockForAbstractClass();
 
-        $this->producerFactory = $this->objectManager->getObject(
+        $this->publisherFactory = $this->objectManager->getObject(
             'Magento\Framework\Amqp\PublisherFactory',
             [
                 'queueConfig' => $this->queueConfigMock,
@@ -208,6 +208,6 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($publisherMock, $this->producerFactory->create(self::TEST_TOPIC));
+        $this->assertSame($publisherMock, $this->publisherFactory->create(self::TEST_TOPIC));
     }
 }

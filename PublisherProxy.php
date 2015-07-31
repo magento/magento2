@@ -13,7 +13,7 @@ class PublisherProxy implements PublisherInterface
     /**
      * @var PublisherFactory
      */
-    private $producerFactory;
+    private $publisherFactory;
 
     /**
      * @var MessageEncoder
@@ -23,14 +23,14 @@ class PublisherProxy implements PublisherInterface
     /**
      * Initialize dependencies.
      *
-     * @param PublisherFactory $producerFactory
+     * @param PublisherFactory $publisherFactory
      * @param MessageEncoder $messageEncoder
      */
     public function __construct(
-        PublisherFactory $producerFactory,
+        PublisherFactory $publisherFactory,
         MessageEncoder $messageEncoder
     ) {
-        $this->producerFactory = $producerFactory;
+        $this->publisherFactory = $publisherFactory;
         $this->messageEncoder = $messageEncoder;
     }
 
@@ -43,8 +43,8 @@ class PublisherProxy implements PublisherInterface
      */
     public function publish($topicName, $data)
     {
-        $producer = $this->producerFactory->create($topicName);
+        $publisher = $this->publisherFactory->create($topicName);
         $message = $this->messageEncoder->encode($topicName, $data);
-        $producer->publish($topicName, $message);
+        $publisher->publish($topicName, $message);
     }
 }
