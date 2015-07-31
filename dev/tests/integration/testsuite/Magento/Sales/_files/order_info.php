@@ -89,15 +89,5 @@ foreach ($creditmemo->getAllItems() as $creditmemoItem) {
     $creditmemoItem->setBackToStock(true);
 }
 
-$creditmemo->register();
-$creditmemo->save();
-
-/** @var \Magento\Framework\DB\Transaction $transactionSave */
-$transactionSave = $objectManager->create('Magento\Framework\DB\Transaction')
-    ->addObject($creditmemo)
-    ->addObject($creditmemo->getOrder());
-if ($creditmemo->getInvoice()) {
-    $transactionSave->addObject($creditmemo->getInvoice());
-}
-
-$transactionSave->save();
+$creditmemoManagement = $objectManager->create('Magento\Sales\Api\CreditmemoManagementInterface');
+$creditmemoManagement->refund();
