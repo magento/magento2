@@ -134,7 +134,7 @@ define([
             if (inlineTranslation) {
                 setTranslateProp(el, original);
             } else {
-                setText(el, original);
+                setText(el, $.mage.__(original));
             }
         };
 
