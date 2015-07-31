@@ -76,13 +76,13 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * Cancel an existing creditmemo
      *
-     * @param int $id
+     * @param int $id Credit Memo Id
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function cancel($id)
     {
-        //TODO: do not allow to cancel credit memo
-        return false;
+        throw new \Magento\Framework\Exception\LocalizedException(__('You can not cancel Credit Memo'));
         try {
             $creditmemo = $this->creditmemoRepository->get($id);
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_CANCELED);
@@ -92,8 +92,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             $this->eventManager->dispatch('sales_order_creditmemo_cancel', ['creditmemo' => $creditmemo]);
             $this->creditmemoRepository->save($creditmemo);
         } catch (\Exception $e) {
-            return false;
-            //throw new \Magento\Framework\Exception\LocalizedException(__('Could not cancel creditmemo'), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__('Could not cancel creditmemo'), $e);
         }
         return true;
     }
