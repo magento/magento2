@@ -37,7 +37,7 @@ angular.module('select-version', ['ngStorage'])
             $localStorage.packages = [
                 $scope.package
             ];
-            //$scope.nextState();
+            $scope.nextState();
         };
 
     }]);
