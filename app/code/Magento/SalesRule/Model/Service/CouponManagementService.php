@@ -75,14 +75,20 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         }
 
         try {
-            $this->couponGenerator->setData($data);
-            $rule = $this->ruleFactory->create()->load($this->couponGenerator->getRuleId());
+            $rule = $this->ruleFactory->create()->load($couponSpec->getRuleId());
             if (!$rule->getRuleId()) {
                 throw \Magento\Framework\Exception\NoSuchEntityException::singleField(
                     \Magento\SalesRule\Model\Coupon::KEY_RULE_ID,
-                    $this->couponGenerator->getRuleId()
+                    $couponSpec->getRuleId()
                 );
             }
+            if (!$rule->getUseAutoGeneration()) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Specified rule does not allow automatic coupon generation')
+                );
+            }
+
+            $this->couponGenerator->setData($data);
             $this->couponGenerator->setData('to_date', $rule->getToDate());
             $this->couponGenerator->setData('uses_per_coupon', $rule->getUsesPerCoupon());
             $this->couponGenerator->setData('usage_per_customer', $rule->getUsesPerCustomer());
