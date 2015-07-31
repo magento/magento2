@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Block\Adminhtml\Transactions;
+
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 
 /**
@@ -32,6 +34,9 @@ class Detail extends \Magento\Backend\Block\Widget\Container
      */
     private $adminHelper;
 
+    /**
+     * @var OrderPaymentRepositoryInterface
+     */
     protected $orderPaymentRepository;
 
     /**

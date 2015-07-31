@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Payment\Transaction;
  * Class PaymentTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
@@ -91,8 +92,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
 
     protected $transactionBuilderMock;
+
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.TooManyFields)
      */
     protected function setUp()
     {
@@ -121,7 +125,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['formatTxt'])
             ->getMock();
-        $this->transactionRepositoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\Transaction\Repository')
+        $transaction = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $this->transactionRepositoryMock = $this->getMockBuilder($transaction)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'getByTransactionType', 'getByTransactionId'])
             ->getMock();

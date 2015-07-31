@@ -80,6 +80,10 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderManagement;
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);

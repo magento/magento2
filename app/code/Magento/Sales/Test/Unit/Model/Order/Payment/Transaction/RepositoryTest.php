@@ -39,16 +39,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderRepository;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderPaymentRepository;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $entityStorage;
 
     /**
@@ -81,6 +71,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $repository;
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -114,20 +108,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->metaData = $this->getMock(
             'Magento\Sales\Model\Resource\Metadata',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderPaymentRepository = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Repository',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderRepository = $this->getMock(
-            'Magento\Sales\Model\OrderRepository',
             [],
             [],
             '',
@@ -192,8 +172,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 'sortOrderBuilder' => $this->sortOrderBuilder,
                 'metaData' => $this->metaData,
                 'entityStorageFactory' => $entityStorageFactory,
-                'paymentRepository' => $this->orderPaymentRepository,
-                'orderRepository' => $this->orderRepository,
             ]
         );
     }
@@ -315,9 +293,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $transactionId
         )->willReturn($transaction);
         $transaction->expects($this->once())->method('getId')->willReturn($transactionId);
-        $this->entityStorage->expects($this->once())->method('addByIdentifyingFields')->with(
-            $transaction, $identityFieldsForCache, $cacheStorage
-        );
+        $this->entityStorage->expects($this->once())
+            ->method('addByIdentifyingFields')
+            ->with($transaction, $identityFieldsForCache, $cacheStorage);
         $this->assertEquals($transaction, $this->repository->getByTransactionId($transactionId, $paymentId, $orderId));
     }
 
@@ -341,7 +319,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $transactionId
         )->willReturn(false);
         $transaction->expects($this->never())->method('getId')->willReturn($transactionId);
-        $this->assertEquals(false, $this->repository->getByTransactionId($transactionId, $paymentId, $orderId));
+        $this->assertEquals(
+            false,
+            $this->repository->getByTransactionId($transactionId, $paymentId, $orderId)
+        );
     }
 
     public function testGetByTransactionIdFromStorage()
@@ -355,7 +336,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->entityStorage->method('getByIdentifyingFields')
             ->with($identityFieldsForCache, $cacheStorage)
             ->willReturn($transaction);
-        $this->assertEquals($transaction, $this->repository->getByTransactionId($transactionId, $paymentId, $orderId));
+        $this->assertEquals(
+            $transaction,
+            $this->repository->getByTransactionId($transactionId, $paymentId, $orderId)
+        );
     }
 
     public function testGetByTransactionType()

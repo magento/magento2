@@ -24,6 +24,7 @@ use Magento\Sales\Model\Resource\Order\Payment\Transaction as TransactionResourc
 
 /**
  * Repository class for \Magento\Sales\Model\Order\Payment\Transaction
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Repository implements TransactionRepositoryInterface
 {
@@ -68,8 +69,6 @@ class Repository implements TransactionRepositoryInterface
      * @param SortOrderBuilder $sortOrderBuilder
      * @param Metadata $metaData
      * @param EntityStorageFactory $entityStorageFactory
-     * @param OrderPaymentRepositoryInterface $paymentRepository
-     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         SearchResultFactory $searchResultFactory,
@@ -77,9 +76,7 @@ class Repository implements TransactionRepositoryInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
         Metadata $metaData,
-        EntityStorageFactory $entityStorageFactory,
-        OrderPaymentRepositoryInterface $paymentRepository,
-        OrderRepositoryInterface $orderRepository
+        EntityStorageFactory $entityStorageFactory
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->filterBuilder = $filterBuilder;

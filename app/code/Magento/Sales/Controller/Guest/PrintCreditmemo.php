@@ -27,16 +27,16 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
      * @param OrderViewAuthorization $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
-     * @param OrderLoader $orderLoader
      * @param CreditmemoRepositoryInterface $creditmemoRepository
+     * @param OrderLoader $orderLoader
      */
     public function __construct(
         Context $context,
         OrderViewAuthorization $orderAuthorization,
         \Magento\Framework\Registry $registry,
         PageFactory $resultPageFactory,
-        OrderLoader $orderLoader,
-        CreditmemoRepositoryInterface $creditmemoRepository
+        CreditmemoRepositoryInterface $creditmemoRepository,
+        OrderLoader $orderLoader
     ) {
         $this->orderLoader = $orderLoader;
         $this->creditmemoRepository = $creditmemoRepository;

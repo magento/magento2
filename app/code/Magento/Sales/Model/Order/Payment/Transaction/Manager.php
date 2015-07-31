@@ -50,6 +50,8 @@ class Manager implements ManagerInterface
      * Checks if transaction exists by txt id
      *
      * @param string $transactionId
+     * @param int $paymentId
+     * @param int $orderId
      * @return bool
      */
     public function isTransactionExists($transactionId, $paymentId, $orderId)
