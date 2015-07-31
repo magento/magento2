@@ -51,7 +51,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * Test converting valid configuration with publisher for topic overridden in env.php
      */
-    public function testConvertWithEnvOverride()
+    public function testConvertWithTopicsEnvOverride()
     {
         $customizedTopic = 'customer.deleted';
         $customPublisher = 'test-queue';
@@ -61,7 +61,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 $customizedTopic => $customPublisher,
             ]
         ];
-        $this->deploymentConfigMock->expects($this->once())
+        $this->deploymentConfigMock->expects($this->any())
             ->method('getConfigData')
             ->with(Converter::ENV_QUEUE)
             ->willReturn($envTopicsConfig);
@@ -80,7 +80,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Publisher "invalid_publisher_name", specified in env.php for topic "customer.deleted" i
      */
-    public function testConvertWithEnvOverrideException()
+    public function testConvertWithTopicsEnvOverrideException()
     {
         $customizedTopic = 'customer.deleted';
         $envTopicsConfig = [
@@ -89,7 +89,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 $customizedTopic => 'invalid_publisher_name',
             ]
         ];
-        $this->deploymentConfigMock->expects($this->once())
+        $this->deploymentConfigMock->expects($this->any())
             ->method('getConfigData')
             ->with(Converter::ENV_QUEUE)
             ->willReturn($envTopicsConfig);
@@ -97,6 +97,60 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
         $this->converter->convert($dom);
+    }
+
+    /**
+     * Test converting valid configuration with connection for consumer overridden in env.php
+     */
+    public function testConvertWithConsumersEnvOverride()
+    {
+        $customizedConsumer = 'customer_deleted_listener';
+        $customConnection = 'test-queue-5';
+        $envConsumersConfig = [
+            'consumers' => [
+                $customizedConsumer => ['connection' => $customConnection],
+            ]
+        ];
+        $this->deploymentConfigMock->expects($this->any())
+            ->method('getConfigData')
+            ->with(Converter::ENV_QUEUE)
+            ->willReturn($envConsumersConfig);
+        $expected = $this->getConvertedQueueConfig();
+        $expected[Converter::CONSUMERS][$customizedConsumer][Converter::CONSUMER_CONNECTION] = $customConnection;
+        $xmlFile = __DIR__ . '/_files/queue.xml';
+        $dom = new \DOMDocument();
+        $dom->loadXML(file_get_contents($xmlFile));
+        $result = $this->converter->convert($dom);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test converting valid configuration with invalid override configuration in env.php
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Consumer "some_random_consumer", specified in env.php is not declared.
+     */
+    public function testConvertWithConsumersEnvOverrideException()
+    {
+        $customizedConsumer = 'customer_deleted_listener';
+        $customConnection = 'test-queue-5';
+        $envConsumersConfig = [
+            'consumers' => [
+                'some_random_consumer' => ['connection' => 'db'],
+                $customizedConsumer => ['connection' => $customConnection],
+            ]
+        ];
+        $this->deploymentConfigMock->expects($this->any())
+            ->method('getConfigData')
+            ->with(Converter::ENV_QUEUE)
+            ->willReturn($envConsumersConfig);
+        $expected = $this->getConvertedQueueConfig();
+        $expected[Converter::CONSUMERS][$customizedConsumer][Converter::CONSUMER_CONNECTION] = $customConnection;
+        $xmlFile = __DIR__ . '/_files/queue.xml';
+        $dom = new \DOMDocument();
+        $dom->loadXML(file_get_contents($xmlFile));
+        $result = $this->converter->convert($dom);
+        $this->assertEquals($expected, $result);
     }
 
     /**

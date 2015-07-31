@@ -31,6 +31,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     const ENV_QUEUE = 'queue';
     const ENV_TOPICS = 'topics';
+    const ENV_CONSUMERS = 'consumers';
+    const ENV_CONNECTION = 'connection';
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
@@ -59,6 +61,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $topics = $this->extractTopics($source);
         $this->overridePublishersForTopics($topics, $publishers);
         $consumers = $this->extractConsumers($source);
+        $this->overrideConnectionsForConsumers($consumers);
         return [self::PUBLISHERS => $publishers, self::TOPICS => $topics, self::CONSUMERS => $consumers ];
     }
 
@@ -149,7 +152,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function overridePublishersForTopics(array &$topics, array $publishers)
     {
-        $queueConfig =  $this->deploymentConfig->getConfigData(self::ENV_QUEUE);
+        $queueConfig = $this->deploymentConfig->getConfigData(self::ENV_QUEUE);
         if (isset($queueConfig[self::ENV_TOPICS]) && is_array($queueConfig[self::ENV_TOPICS])) {
             foreach ($queueConfig[self::ENV_TOPICS] as $topicName => $publisherName) {
                 if (isset($topics[$topicName])) {
@@ -163,6 +166,46 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                             )
                         );
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Override connections declared for consumers in queue.xml using values specified in the etc/env.php
+     *
+     * Note that $topics argument is modified by reference.
+     *
+     * Example environment config:
+     * <code>
+     * 'queue' =>
+     *     [
+     *         'consumers' => [
+     *             'customer_created_listener' => ['connection => 'database'],
+     *         ],
+     *     ],
+     * </code>
+     *
+     * @param array &$consumers
+     * @return void
+     * @throws LocalizedException
+     */
+    protected function overrideConnectionsForConsumers(array &$consumers)
+    {
+        $queueConfig = $this->deploymentConfig->getConfigData(self::ENV_QUEUE);
+        if (isset($queueConfig[self::ENV_CONSUMERS]) && is_array($queueConfig[self::ENV_CONSUMERS])) {
+            foreach ($queueConfig[self::ENV_CONSUMERS] as $consumerName => $consumerConfig) {
+                if (isset($consumers[$consumerName])) {
+                    if (isset($consumerConfig[self::ENV_CONNECTION])) {
+                        $consumers[$consumerName][self::CONSUMER_CONNECTION] = $consumerConfig[self::ENV_CONNECTION];
+                    }
+                } else {
+                    throw new LocalizedException(
+                        __(
+                            'Consumer "%consumer", specified in env.php is not declared.',
+                            ['consumer' => $consumerName]
+                        )
+                    );
                 }
             }
         }
