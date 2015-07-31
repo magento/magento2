@@ -55,6 +55,7 @@ class DeployStaticContentCommand extends Command
      *
      * @param ObjectManagerFactory $objectManagerFactory
      * @param Locale $validator
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
