@@ -22,6 +22,10 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
     const KEY_USAGE_PER_CUSTOMER = 'usage_per_customer';
     const KEY_EXPIRATION_DATE = 'expiration_date';
     const KEY_QUANTITY = 'quantity';
+    const KEY_PREFIX = 'prefix';
+    const KEY_SUFFIX = 'suffix';
+    const KEY_DELIMITER_AT_EVERY = 'dash';
+    const KEY_DELIMITER = 'delimiter';
 
     /**
      * Get the id of the rule associated with the coupon
@@ -168,6 +172,90 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
     public function setExpirationDate($expirationDate)
     {
         return $this->setData(self::KEY_EXPIRATION_DATE, $expirationDate);
+    }
+
+    /**
+     * Get the prefix
+     *
+     * @return string|null
+     */
+    public function getPrefix()
+    {
+        return $this->_get(self::KEY_PREFIX);
+    }
+
+    /**
+     * Set the prefix
+     *
+     * @param string $prefix
+     * @return $this
+     */
+    public function setPrefix($prefix)
+    {
+        return $this->setData(self::KEY_PREFIX, $prefix);
+    }
+
+    /**
+     * Get the suffix
+     *
+     * @return string|null
+     */
+    public function getSuffix()
+    {
+        return $this->_get(self::KEY_SUFFIX);
+    }
+
+    /**
+     * Set the suffix
+     *
+     * @param string $suffix
+     * @return $this
+     */
+    public function setSuffix($suffix)
+    {
+        return $this->setData(self::KEY_SUFFIX, $suffix);
+    }
+
+    /**
+     * Get the spacing where the delimiter should exist
+     *
+     * @return int|null
+     */
+    public function getDelimiterAtEvery()
+    {
+        return $this->_get(self::KEY_DELIMITER_AT_EVERY);
+    }
+
+    /**
+     * Set the spacing where the delimiter should exist
+     *
+     * @param int $delimiterAtEvery
+     * @return $this
+     */
+    public function setDelimiterAtEvery($delimiterAtEvery)
+    {
+        return $this->setData(self::KEY_DELIMITER_AT_EVERY, $delimiterAtEvery);
+    }
+
+    /**
+     * Get the delimiter
+     *
+     * @return string|null
+     */
+    public function getDelimiter()
+    {
+        return $this->_get(self::KEY_DELIMITER);
+    }
+
+    /**
+     * Set the delimiter
+     *
+     * @param string $delimiter
+     * @return $this
+     */
+    public function setDelimiter($delimiter)
+    {
+        return $this->setData(self::KEY_DELIMITER, $delimiter);
     }
 
     /**
