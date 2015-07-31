@@ -65,6 +65,15 @@ class ComposerInformation
     /** @var array */
     private static $availableComponentTypesList = ['magento2-theme', 'magento2-language', 'magento2-module'];
 
+    /** @var array */
+    private static $componentTypesForSystemUpgrade = [
+        'magento2-theme',
+        'magento2-language',
+        'magento2-module',
+        'magento2-library',
+        'magento2-component'
+    ];
+
     /**
      * Constructor
      *
@@ -196,18 +205,24 @@ class ComposerInformation
     /**
      * Collect required packages and types from root composer.lock file
      *
+     * @param string $from
      * @return array
      */
-    public function getRootRequiredPackageTypesByNameVersion()
+    public function getRootRequiredPackageTypesByNameVersion($from='updater')
     {
         $packages = [];
+        if ($from === 'upgrader') {
+            $types = self::$componentTypesForSystemUpgrade;
+        } else {
+            $types = self::$availableComponentTypesList;
+        }
         /** @var PackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
-            if (in_array($package->getType(), self::$availableComponentTypesList)) {
+            if (in_array($package->getType(), $types)) {
                 $packages[$package->getName()] = [
                     'name' => $package->getName(),
                     'type' => $package->getType(),
-                    'version' => $package->getVersion()
+                    'version' => $package->getPrettyVersion()
                 ];
             }
         }

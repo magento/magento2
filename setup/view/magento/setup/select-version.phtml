@@ -5,6 +5,8 @@
  */
 ?>
 
+<h2 class="page-title">{{$state.current.header}}</h2>
+
 <div class="nav-bar-outer-actions">
     <div class="outer-actions-inner-wrap">
         <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next">
@@ -12,31 +14,27 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="update()"
-                ng-disabled="!readyForNext"
+                ng-disabled="(!upgradeReadyForNext && choice.no) || (!componentsReadyForNext && choice.yes)"
                 >Next</button>
         </div>
     </div>
 </div>
 
-<div class="admin__data-grid-outer-wrap">
-    <div class="admin__data-grid-header"></div>
-</div>
-
 <div class="form-wrap">
-    <div ng-hide="processed || processError">
-        <span class="spinner side">
+    <div class="message message-spinner" ng-hide="upgradeProcessed || upgradeProcessError">
+        <span class="spinner">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <h3 class="select-version-title">Checking for a new version...</h3>
+        <span class="message-text">Checking for a new version...</span>
     </div>
-    <div class="message message-error" ng-hide="!processError">
+    <div class="message message-error" ng-hide="!upgradeProcessError">
             <span class="message-text">
                 Sorry, we can't take that action right now.
             </span>
     </div>
 
-    <div class="row" ng-hide="!readyForNext">
+    <div class="row" ng-hide="!upgradeReadyForNext">
         <div class="col-m-4">
             <select
                 id="selectVersion"
@@ -46,4 +44,159 @@
             </select>
         </div>
     </div>
+</div>
+
+<div class="row form-row">
+    <div class="col-m-3">
+        <label class="form-label">
+            Other Components
+        </label>
+    </div>
+    <div class="col-m-4">
+        <div class="form-column">
+            <input
+                id="yesChoice"
+                class="form-el-radio"
+                type="radio"
+                ng-model="choice.yes"
+                ng-value="true"
+                >
+            <label class="form-label" for="yesChoice">
+                Yes
+            </label>
+        </div>
+        <div class="form-column">
+            <input
+                id="noChoice"
+                class="form-el-radio"
+                type="radio"
+                ng-model="choice.no"
+                ng-value="true"
+                checked
+                >
+            <label class="form-label" for="noChoice">
+                No
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <label class="form-label">
+        The other components below will be upgraded. <br/>
+        If you don't want some components upgraded, please de-select them.
+    </label>
+    <br/>
+    <br/>
+</div>
+
+<div ng-show="choice.yes">
+    <div class="message message-spinner" ng-show="!componentsProcessed">
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <span class="message-text">Populating information for other components...</span>
+    </div>
+    <div class="message message-error" ng-hide="!componentsProcessError">
+            <span class="message-text">
+                Sorry, we can't populate the table right now.
+            </span>
+    </div>
+    <div class="admin__data-grid-outer-wrap" ng-show="componentsProcessed">
+        <div class="admin__data-grid-header">
+            <div class="admin__data-grid-header-row row row-gutter">
+                <div class="col-xs-3">
+                    <div class="admin__control-support-text">
+                        <span>{{total}}</span> records found
+                    </div>
+                </div>
+                <div class="col-xs-9 admin__data-grid-pager-wrap">
+                    <select id="perPage" class="admin__control-select">
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                    <label class="admin__control-support-text" for="perPage">per page</label>
+                    <div class="admin__data-grid-pager">
+                        <button class="action-previous" type="button">
+                            <span>Previous page</span>
+                        </button>
+                        <input id="pageCurrent" class="admin__control-text" type="number" value="1">
+                        <label class="admin__control-support-text" for="pageCurrent">
+                            of <span>1</span>
+                        </label>
+                        <button class="action-next disabled">
+                            <span>Next page</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin__data-grid-wrap" ng-show="componentsProcessed">
+            <table class="data-grid">
+                <thead data-part="head">
+                <tr>
+                    <th class="data-grid-th _sortable _col-xs">
+                        <span>Upgrade</span>
+                    </th>
+                    <th class="data-grid-th _sortable _ascend">
+                        <span>Component Name</span>
+                    </th>
+                    <th class="data-grid-th  _sortable">
+                        <span>Type</span>
+                    </th>
+                    <th class="data-grid-th  _sortable">
+                        <span>Author</span>
+                    </th>
+                    <th class="data-grid-th  _sortable">
+                        <span>Current Version</span>
+                    </th>
+                    <th class="data-grid-actions-cell data-grid-th">
+                        <span>Upgrade Version</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="component in components">
+                    <td class="data-grid-indicator-cell">
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="onoffswitch"
+                                   class="onoffswitch-checkbox" id="myonoffswitch" checked>
+                            <label class="onoffswitch-label" for="myonoffswitch">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="data-grid-data">{{component.name}}</span>
+                    </td>
+                    <td>
+                        <span class="data-grid-data">{{component.type}}</span>
+                    </td>
+                    <td>
+                        <span class="data-grid-data">{{component.author}}</span>
+                    </td>
+                    <td>
+                        <span class="data-grid-data">{{component.version}}</span>
+                    </td>
+                    <td>
+                        <select ng-model="selectedVersion" ng-init="selectedVersion=component.upgrades[0]"
+                                ng-options="upgrade as upgrade for upgrade in component.upgrades"
+                                ng-change="updatePackages(component.name, selectedVersion)">
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- loading indicator overlay and loader -->
+<div data-role="spinner" class="admin__data-grid-loading-mask hide" ng-class="{'hide':isHiddenSpinner}">
+    <div class="grid-loader"></div>
 </div>
