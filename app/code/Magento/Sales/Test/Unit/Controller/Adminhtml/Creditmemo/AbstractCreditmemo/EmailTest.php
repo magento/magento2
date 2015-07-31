@@ -15,7 +15,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class EmailTest
  *
  * @package Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,11 +27,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
-
-    /**
-     * @var \Magento\Sales\Api\CreditmemoRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $creditmemoRepositoryMock;
 
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -99,13 +93,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->creditmemoRepositoryMock = $this->getMock(
-            'Magento\Sales\Api\CreditmemoRepositoryInterface',
-            [],
-            [],
-            '',
-            false
-        );
         $this->response = $this->getMock(
             'Magento\Framework\App\ResponseInterface',
             ['setRedirect', 'sendResponse'],
@@ -147,8 +134,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoEmail = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email',
             [
-                'context' => $this->context,
-                'creditmemoRepository' => $this->creditmemoRepositoryMock
+                'context' => $this->context
             ]
         );
     }
@@ -156,24 +142,19 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     public function testEmail()
     {
         $cmId = 10000031;
-        $cmNotifierClassName = 'Magento\Sales\Model\Order\CreditmemoNotifier';
-        $creditmemo = $this->getMock('Magento\Sales\Model\Order\Creditmemo', ['load', '__wakeup'], [], '', false);
-        $cmNotifier = $this->getMock($cmNotifierClassName, ['notify', '__wakeup'], [], '', false);
+        $cmManagement = 'Magento\Sales\Api\CreditmemoManagementInterface';
+        $cmManagementMock = $this->getMock($cmManagement, [], [], '', false);
         $this->prepareRedirect($cmId);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
             ->willReturn($cmId);
-        $this->creditmemoRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($cmId)
-            ->willReturn($creditmemo);
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with($cmNotifierClassName)
-            ->willReturn($cmNotifier);
-        $cmNotifier->expects($this->once())
+            ->with($cmManagement)
+            ->willReturn($cmManagementMock);
+        $cmManagementMock->expects($this->once())
             ->method('notify')
             ->willReturn(true);
         $this->messageManager->expects($this->once())
@@ -193,22 +174,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('creditmemo_id')
             ->will($this->returnValue(null));
-
-        $this->assertNull($this->creditmemoEmail->execute());
-    }
-
-    public function testEmailNoCreditmemo()
-    {
-        $cmId = 10000031;
-
-        $this->request->expects($this->once())
-            ->method('getParam')
-            ->with('creditmemo_id')
-            ->will($this->returnValue($cmId));
-        $this->creditmemoRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($cmId)
-            ->willReturn(null);
 
         $this->assertNull($this->creditmemoEmail->execute());
     }
