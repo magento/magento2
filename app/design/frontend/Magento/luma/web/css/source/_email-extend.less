@@ -15,13 +15,51 @@
 @import url("@{baseUrl}css/email-fonts.css");
 
 .header {
-    padding-bottom: @email-body__padding;
+    padding: @email-body__padding;
 }
 
 .footer {
     padding: @email-body__padding;
 
-    .closing {
-        font-weight: @font-weight__bold;
+    table {
+        width: 100%;
+
+        td {
+            padding-bottom: @email-body__padding;
+            width: 33%;
+
+            ul {
+                list-style: none;
+                margin-bottom: 0;
+                padding-left: 0;
+
+                li {
+                    margin-bottom: 0;
+                }
+            }
+
+            p {
+                margin-bottom: 0;
+
+                &.phone {
+                    font-size: @font-size__l;
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .header,
+    .main-content,
+    .footer {
+        padding: @email-body__padding @indent__s !important;
+    }
+
+    .footer {
+        td {
+            display: block;
+            width: auto !important;
+        }
     }
 }
