@@ -30,6 +30,21 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
      * @var StartUpdater|\PHPUnit_Framework_MockObject_MockObject
      */
     private $controller;
+
+    /**
+     * @var \Zend\Http\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $request;
+
+    /**
+     * @var \Zend\Http\PhpEnvironment\Response|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $response;
+
+    /**
+     * @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mvcEvent;
     
     public function setUp()
     {
@@ -40,6 +55,23 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->navigation->expects($this->any())
             ->method('getMenuItems')
             ->willReturn([['title' => 'A', 'type' => 'cm'], ['title' => 'B', 'type' => 'su']]);
+        $this->request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
+        $this->response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
+        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+        $this->mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $this->mvcEvent->expects($this->any())
+            ->method('setRequest')
+            ->with($this->request)
+            ->willReturn($this->mvcEvent);
+        $this->mvcEvent->expects($this->any())
+            ->method('setResponse')
+            ->with($this->response)
+            ->willReturn($this->mvcEvent);
+        $this->mvcEvent->expects($this->any())
+            ->method('setTarget')
+            ->with($this->controller)
+            ->willReturn($this->mvcEvent);
+        $this->mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
     }
     
     public function testIndexAction()
@@ -51,89 +83,49 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateInvalidRequest()
     {
-        /** @var \Zend\Http\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject $request */
-        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
-        /** @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
-        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
         $content = '{"packages":[{"name":"vendor\/package"}],"type":"cm"}';
-        $request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $this->filesystem->expects($this->never())->method('getDirectoryWrite');
-        $this->controller->setEvent($mvcEvent);
-        $this->controller->dispatch($request, $response);
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
     }
 
     public function testUpdateMissingPackageInfo()
     {
-        /** @var \Zend\Http\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject $request */
-        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
-        /** @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
-        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
         $content = '{"packages":"test","type":"cm"}';
-        $request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $this->filesystem->expects($this->never())->method('getDirectoryWrite');
-        $this->controller->setEvent($mvcEvent);
-        $this->controller->dispatch($request, $response);
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
     }
 
     public function testUpdateActionSuccessUpdate()
     {
-        /** @var \Zend\Http\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject $request */
-        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
-        /** @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
-        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
         $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"cm"}';
-        $request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')
             ->with('.type.json', '{"type":"update","titles":["A"]}');
-        $this->controller->setEvent($mvcEvent);
-        $this->controller->dispatch($request, $response);
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
     }
 
     public function testUpdateActionSuccessUpgrade()
     {
-        /** @var \Zend\Http\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject $request */
-        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
-        /** @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
-        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
         $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"su"}';
-        $request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')
             ->with('.type.json', '{"type":"upgrade","titles":["B"]}');
-        $this->controller->setEvent($mvcEvent);
-        $this->controller->dispatch($request, $response);
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
     }
 }
