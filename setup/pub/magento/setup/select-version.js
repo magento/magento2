@@ -42,6 +42,9 @@ angular.module('select-version', ['ngStorage'])
         $scope.$watch('choice.no', function() {
             if (angular.equals($scope.choice.no, true)) {
                 $scope.choice.yes = false;
+                $scope.componentsProcessed = false;
+                $scope.componentsProcessError = false;
+                $scope.componentsReadyForNext = false;
             }
         });
 
@@ -70,18 +73,27 @@ angular.module('select-version', ['ngStorage'])
         });
 
         $scope.updatePackages = function(name, upgrade) {
-            for (var i = 0; i < $scope.total + 1; i++) {
-                if ($scope.packages[i].name === name) {
-                    $scope.packages[i].version = upgrade;
+            for (var i = 0; i < $scope.total; i++) {
+                if ($scope.packages[i + 1].name === name) {
+                    $scope.packages[i + 1].version = upgrade;
                 }
             }
-
         };
 
         $scope.update = function(component) {
             $scope.packages[0].version = $scope.selectedOption;
+            if (angular.equals($scope.choice.no, true)) {
+                for (var i = 0; i < $scope.total; i++) {
+                    $scope.packages.splice(i + 1, $scope.total);
+                }
+            } else {
+                for (var i = 0; i < $scope.total; i++) {
+                    if ($scope.packages[i + 1].version.indexOf(" (latest)") > -1) {
+                        $scope.packages[i + 1].version = $scope.packages[i + 1].version.replace(" (latest)", "");
+                    }
+                }
+            }
             $localStorage.packages = $scope.packages;
             $scope.nextState();
         };
-
     }]);
