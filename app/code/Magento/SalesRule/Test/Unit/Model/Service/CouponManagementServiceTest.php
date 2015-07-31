@@ -101,12 +101,12 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $couponSpec->expects($this->once())->method('getRuleId')->willReturn(1);
+        $couponSpec->expects($this->atLeastOnce())->method('getRuleId')->willReturn(1);
         $couponSpec->expects($this->once())->method('getQuantity')->willReturn(1);
         $couponSpec->expects($this->once())->method('getFormat')->willReturn('num');
         $couponSpec->expects($this->once())->method('getLength')->willReturn(1);
 
-        $this->couponGenerator->expects($this->any())->method('setData');
+        $this->couponGenerator->expects($this->atLeastOnce())->method('setData');
         $this->couponGenerator->expects($this->once())->method('validateData')->willReturn(true);
         $this->couponGenerator->expects($this->once())->method('generatePool');
         $this->couponGenerator->expects($this->once())->method('getGeneratedCodes')->willReturn([]);
@@ -116,7 +116,7 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
          */
         $rule = $this->getMock(
             '\Magento\SalesRule\Model\Rule',
-            ['load', 'getRuleId', 'getToDate', 'getUsesPerCoupon', 'getUsesPerCustomer'],
+            ['load', 'getRuleId', 'getToDate', 'getUsesPerCoupon', 'getUsesPerCustomer', 'getUseAutoGeneration'],
             [],
             '',
             false
@@ -127,6 +127,7 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $rule->expects($this->any())->method('getToDate')->willReturn('2015-07-31 00:00:00');
         $rule->expects($this->any())->method('getUsesPerCoupon')->willReturn(20);
         $rule->expects($this->any())->method('getUsesPerCustomer')->willReturn(5);
+        $rule->expects($this->any())->method('getUseAutoGeneration')->willReturn(true);
 
         $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
 
@@ -178,20 +179,25 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\SalesRule\Model\Rule $rule
          */
-        $rule = $this->getMock('\Magento\SalesRule\Model\Rule', ['load', 'getRuleId'], [], '', false);
-
+        $rule = $this->getMock(
+            '\Magento\SalesRule\Model\Rule',
+            ['load', 'getRuleId', 'getUseAutoGeneration'],
+            [],
+            '',
+            false
+        );
         $rule->expects($this->any())->method('load')->willReturnSelf();
         $rule->expects($this->any())->method('getRuleId')->willReturn(1);
-
-        $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
-
-        $this->couponGenerator->expects($this->once())->method('validateData')->willReturn(true);
-        $this->couponGenerator->expects($this->once())->method('generatePool')
+        $rule->expects($this->once())->method('getUseAutoGeneration')
             ->willThrowException(
                 new \Magento\Framework\Exception\LocalizedException(
                     __('Error occurred when generating coupons: %1', '1')
                 )
             );
+        $this->ruleFactory->expects($this->any())->method('create')->willReturn($rule);
+
+        $this->couponGenerator->expects($this->once())->method('validateData')->willReturn(true);
+
         $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
 
         $this->model->generate($couponSpec);
