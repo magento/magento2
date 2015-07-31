@@ -245,12 +245,10 @@ define(["jquery", "jquery/ui"], function ($) {
 
                 // Aggregate options array to hash (key => value)
                 $.each(item.options, function () {
-                    if ($widget._ObjectLength(this.prices) > 0 && $widget._ObjectLength(this.products) > 0) {
-                        $widget.optionsMap[item.id][this.id] = {
-                            price: parseInt(this.prices.finalPrice.amount, 10) || 0,
-                            products: this.products
-                        };
-                    }
+                    $widget.optionsMap[item.id][this.id] = {
+                        price: parseInt($widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount, 10),
+                        products: this.products
+                    };
                 });
             });
 
@@ -593,7 +591,7 @@ define(["jquery", "jquery/ui"], function ($) {
                 var id = $(this).attr('attribute-id');
                 var option = $(this).attr('option-selected');
 
-                price += $widget.optionsMap[id][option].price;
+                price = $widget.optionsMap[id][option].price;
             });
 
             $product
