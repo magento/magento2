@@ -2361,4 +2361,10 @@ return [
     ['invalidateVarnish', 'Magento\CacheInvalidate\Model\Observer', 'Magento\CacheInvalidate\Observer\InvalidateVarnish::invoke'],
     ['flushAllCache', 'Magento\CacheInvalidate\Model\Observer', 'Magento\CacheInvalidate\Observer\FlushAllCache::invoke'],
     ['sendPurgeRequest', 'Magento\CacheInvalidate\Model\Observer', 'Magento\CacheInvalidate\Model\PurgeCache::sendPurgeRequest'],
+    ['addCatalogToTopmenuItems', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::invoke'],
+    ['catalogCheckIsUsingStaticUrlsAllowed', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowed::invoke'],
+    ['_addCategoriesToMenu', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::_addCategoriesToMenu'],
+    ['getMenuCategoryData', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::getMenuCategoryData'],
+    ['hasActive', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::hasActive'],
+    ['getCatalogLayer', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::getCatalogLayer'],
 ];

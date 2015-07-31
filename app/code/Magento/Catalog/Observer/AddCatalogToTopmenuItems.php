@@ -3,38 +3,28 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model;
+namespace Magento\Catalog\Observer;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class Observer
+class AddCatalogToTopmenuItems
 {
-    /**
-     * @var Indexer\Category\Flat\State
-     */
-    protected $categoryFlatConfig;
-
-    /**
-     * Catalog data
-     *
-     * @var \Magento\Catalog\Helper\Data
-     */
-    protected $_catalogData;
-
     /**
      * Catalog category
      *
      * @var \Magento\Catalog\Helper\Category
      */
-    protected $_catalogCategory;
+    protected $catalogCategory;
+
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State
+     */
+    protected $categoryFlatState;
 
     /**
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
      */
-    private $_catalogLayer = null;
+    private $catalogLayer = null;
 
     /**
      * Catalog layer resolver
@@ -44,69 +34,26 @@ class Observer
     protected $layerResolver;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * Catalog product
-     *
-     * @var \Magento\Catalog\Model\Resource\Product
-     */
-    protected $_catalogProduct;
-
-    /**
-     * Catalog category1
-     *
-     * @var \Magento\Catalog\Model\Resource\Category
-     */
-    protected $_categoryResource;
-
-    /**
-     * Factory for product resource
-     *
-     * @var \Magento\Catalog\Model\Resource\ProductFactory
-     */
-    protected $_productResourceFactory;
-
-    /**
      * @var \Magento\Framework\Registry
      */
-    protected $_registry;
+    protected $registry;
 
     /**
-     * @param \Magento\Framework\Registry $registry
-     * @param Resource\Category $categoryResource
-     * @param Resource\Product $catalogProduct
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param Layer\Resolver $layerResolver
      * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param Indexer\Category\Flat\State $categoryFlatState
-     * @param Resource\ProductFactory $productResourceFactory
+     * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState
+     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+     * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
-        \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Model\Resource\Category $categoryResource,
-        \Magento\Catalog\Model\Resource\Product $catalogProduct,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState,
-        \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
+        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
+        \Magento\Framework\Registry $registry
     ) {
-        $this->_registry = $registry;
-        $this->_categoryResource = $categoryResource;
-        $this->_catalogProduct = $catalogProduct;
-        $this->_storeManager = $storeManager;
+        $this->catalogCategory = $catalogCategory;
+        $this->categoryFlatState = $categoryFlatState;
         $this->layerResolver = $layerResolver;
-        $this->_catalogCategory = $catalogCategory;
-        $this->_catalogData = $catalogData;
-        $this->categoryFlatConfig = $categoryFlatState;
-        $this->_productResourceFactory = $productResourceFactory;
+        $this->registry = $registry;
     }
 
     /**
@@ -115,24 +62,11 @@ class Observer
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function catalogCheckIsUsingStaticUrlsAllowed(\Magento\Framework\Event\Observer $observer)
-    {
-        $storeId = $observer->getEvent()->getData('store_id');
-        $result = $observer->getEvent()->getData('result');
-        $result->isAllowed = $this->_catalogData->setStoreId($storeId)->isUsingStaticUrlsAllowed();
-    }
-
-    /**
-     * Adds catalog categories to top menu
-     *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return void
-     */
-    public function addCatalogToTopmenuItems(\Magento\Framework\Event\Observer $observer)
+    public function invoke(\Magento\Framework\Event\Observer $observer)
     {
         $block = $observer->getEvent()->getBlock();
         $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG);
-        $this->_addCategoriesToMenu($this->_catalogCategory->getStoreCategories(), $observer->getMenu(), $block);
+        $this->_addCategoriesToMenu($this->catalogCategory->getStoreCategories(), $observer->getMenu(), $block);
     }
 
     /**
@@ -156,7 +90,7 @@ class Observer
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
 
-            if ($this->categoryFlatConfig->isFlatEnabled() && $category->getUseFlatResource()) {
+            if ($this->categoryFlatState->isFlatEnabled() && $category->getUseFlatResource()) {
                 $subcategories = (array)$category->getChildrenNodes();
             } else {
                 $subcategories = $category->getChildren();
@@ -178,7 +112,7 @@ class Observer
 
         $isActiveCategory = false;
         /** @var \Magento\Catalog\Model\Category $currentCategory */
-        $currentCategory = $this->_registry->registry('current_category');
+        $currentCategory = $this->registry->registry('current_category');
         if ($currentCategory && $currentCategory->getId() == $category->getId()) {
             $isActiveCategory = true;
         }
@@ -186,7 +120,7 @@ class Observer
         $categoryData = [
             'name' => $category->getName(),
             'id' => $nodeId,
-            'url' => $this->_catalogCategory->getCategoryUrl($category),
+            'url' => $this->catalogCategory->getCategoryUrl($category),
             'has_active' => $this->hasActive($category),
             'is_active' => $isActiveCategory,
         ];
@@ -222,9 +156,9 @@ class Observer
      */
     private function getCatalogLayer()
     {
-        if ($this->_catalogLayer === null) {
-            $this->_catalogLayer = $this->layerResolver->get();
+        if ($this->catalogLayer === null) {
+            $this->catalogLayer = $this->layerResolver->get();
         }
-        return $this->_catalogLayer;
+        return $this->catalogLayer;
     }
 }

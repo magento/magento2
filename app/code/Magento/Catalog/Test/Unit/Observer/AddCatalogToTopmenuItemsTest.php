@@ -6,14 +6,14 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Catalog\Test\Unit\Model;
+namespace Magento\Catalog\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class AddCatalogToTopmenuItemsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Observer
+     * @var \Magento\Catalog\Observer\AddCatalogToTopmenuItems
      */
     protected $_observer;
 
@@ -25,22 +25,17 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
      */
-    protected $_category;
+    protected $_childrenCategory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
      */
-    protected $_childrenCategory;
+    protected $_category;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
      */
     protected $_categoryFlatState;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
 
     public function setUp()
     {
@@ -60,30 +55,15 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $layerResolver = $this->_getCleanMock('Magento\Catalog\Model\Layer\Resolver');
         $layerResolver->expects($this->once())->method('get')->willReturn(null);
         $this->_observer = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Model\Observer',
+            'Magento\Catalog\Observer\AddCatalogToTopmenuItems',
             [
-                'categoryResource' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Category'),
-                'catalogProduct' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Product'),
-                'storeManager' => $this->_storeManager,
                 'layerResolver' => $layerResolver,
-                'indexIndexer' => $this->_getCleanMock('\Magento\Index\Model\Indexer'),
                 'catalogCategory' => $this->_catalogCategory,
                 'catalogData' => $this->_getCleanMock('\Magento\Catalog\Helper\Data'),
                 'categoryFlatState' => $this->_categoryFlatState,
-                'productResourceFactory' => $this->getMock(
-                    'Magento\Catalog\Model\Resource\ProductFactory',
-                    ['create'],
-                    [],
-                    '',
-                    false
-                )
             ]
         );
     }
@@ -166,7 +146,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getChildren')
             ->will($this->returnValue([$this->_childrenCategory]));
 
-        $this->_observer->addCatalogToTopmenuItems($observer);
+        $this->_observer->invoke($observer);
     }
 
     public function testAddCatalogToTopMenuItemsWithFlat()
@@ -185,7 +165,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->will($this->returnValue(true));
 
-        $this->_observer->addCatalogToTopmenuItems($observer);
+        $this->_observer->invoke($observer);
     }
 
     public function testGetMenuCategoryData()
