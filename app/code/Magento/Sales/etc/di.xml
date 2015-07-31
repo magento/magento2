@@ -646,4 +646,19 @@
             <argument name="metadata" xsi:type="object">orderAddressMetadata</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\Authorize">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\Authorize</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\Capture">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\Capture</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\Order">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\Order</argument>
+        </arguments>
+    </type>
 </config>
