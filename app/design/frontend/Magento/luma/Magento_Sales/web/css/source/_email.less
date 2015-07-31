@@ -7,9 +7,17 @@
 //  Sales Module Styles
 //  _____________________________________________
 
+.email-intro {
+    td {
+        padding-bottom: @indent__base;
+    }
+}
+
 .email-summary {
     h1 {
-        margin-bottom: @indent__xs;
+        border-bottom: @border-width__base solid @border-color__base;
+        margin-bottom: @indent__s;
+        padding-bottom: @indent__s;
     }
 }
 
@@ -120,9 +128,6 @@
 
 .email-items {
     .table(@table__width, 0);
-    border: @table__border-width @table__border-style @table__border-color;
-
-    thead,
     tfoot {
         > tr {
             > th,
@@ -150,8 +155,7 @@
         }
     }
 
-    > tbody,
-    > tfoot {
+    > tbody {
         > tr {
             > th,
             > td {
