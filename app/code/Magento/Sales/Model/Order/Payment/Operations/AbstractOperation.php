@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\Order\Payment\Operations;
 
 
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment\State\CommandInterface;
@@ -27,7 +28,7 @@ abstract class AbstractOperation
     protected $transactionBuilder;
 
     /**
-     * @var TransactionManagerInterface
+     * @var ManagerInterface
      */
     protected $transactionManager;
 
@@ -85,5 +86,33 @@ abstract class AbstractOperation
                 $payment->setDataUsingMethod($key, $was + $amount);
             }
         }
+    }
+
+    /**
+     * Return invoice model for transaction
+     *
+     * @param OrderInterface $order
+     * @param string $transactionId
+     * @return false|Invoice
+     */
+    protected function getInvoiceForTransactionId(OrderInterface $order, $transactionId)
+    {
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            if ($invoice->getTransactionId() == $transactionId) {
+                $invoice->load($invoice->getId());
+                // to make sure all data will properly load (maybe not required)
+                return $invoice;
+            }
+        }
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN && $invoice->load(
+                    $invoice->getId()
+                )
+            ) {
+                $invoice->setTransactionId($transactionId);
+                return $invoice;
+            }
+        }
+        return false;
     }
 }

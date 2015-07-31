@@ -11,6 +11,9 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
+/**
+ * Class Order
+ */
 class Order extends AbstractOperation
 {
     public function order(OrderPaymentInterface $payment, $amount)

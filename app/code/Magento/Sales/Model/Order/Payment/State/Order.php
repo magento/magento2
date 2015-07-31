@@ -10,6 +10,9 @@ namespace Magento\Sales\Model\Order\Payment\State;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
+/**
+ * Class Order
+ */
 class Order implements CommandInterface
 {
     /**
