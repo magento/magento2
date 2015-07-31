@@ -8,7 +8,6 @@ namespace Magento\Framework\Amqp;
 use Magento\Framework\Amqp\Config\Data as QueueConfig;
 use Magento\Framework\Amqp\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 use Magento\Framework\Phrase;
 
 /**
@@ -37,26 +36,22 @@ class PublisherFactory
      *             <item name="rabbitmq" xsi:type="array">
      *                 <item name="type" xsi:type="object">Magento\RabbitMq\Model\RabbitMqPublisher</item>
      *                 <item name="connectionName" xsi:type="string">rabbitmq</item>
-     *                 <item name="sortOrder" xsi:type="string">10</item>
      *             </item>
      *         </argument>
      *     </arguments>
      * </type>
      *
      * @param QueueConfig $queueConfig
-     * @param CompositeHelper $compositeHelper
      * @param PublisherInterface[] $publishers
      */
     public function __construct(
         QueueConfig $queueConfig,
-        CompositeHelper $compositeHelper,
         $publishers = []
     ) {
         $this->queueConfig = $queueConfig;
         $this->publishers = [];
 
-        $publishers = $compositeHelper->filterAndSortDeclaredComponents($publishers);
-        foreach ($publishers as $name => $publisherConfig) {
+        foreach ($publishers as $publisherConfig) {
             $this->add($publisherConfig['connectionName'], $publisherConfig['type']);
         }
     }
@@ -91,7 +86,7 @@ class PublisherFactory
     }
 
     /**
-     * Return the class type of publisher to create.
+     * Return an instance of a publisher for a connection name.
      *
      * @param string $connectionName
      * @return PublisherInterface
