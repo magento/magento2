@@ -12,6 +12,7 @@ class UpdaterSuccessTest extends \PHPUnit_Framework_TestCase
 {
     public function testIndexAction()
     {
+        /** @var $maintenanceMode \Magento\Framework\App\MaintenanceMode */
         $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $maintenanceMode->expects($this->once())->method('set')->with(false);
         /** @var $controller UpdaterSuccess */

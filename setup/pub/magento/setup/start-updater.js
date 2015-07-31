@@ -54,4 +54,11 @@ angular.module('start-updater', ['ngStorage'])
                     $scope.errorMessage = 'Something went wrong. Please try again.';
                 });
         }
+        $scope.goToCreateBackup = function() {
+            if ($state.current.type === 'cm') {
+                $state.go('root.create-backup-cm');
+            } else if ($state.current.type === 'su') {
+                $state.go('root.create-backup-su');
+            }
+        }
     }]);

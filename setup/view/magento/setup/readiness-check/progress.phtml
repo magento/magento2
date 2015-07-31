@@ -30,7 +30,7 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <span class="message-text">We're making sure your server environment is ready for Magento to be installed.</span>
+        <span class="message-text">We're making sure your server environment is ready for Magento to be {{$state.current.type === 'cm' ? 'updated' : $state.current.type === 'su' ? 'upgraded' : 'installed'}}.</span>
     </div>
 
 </div>
