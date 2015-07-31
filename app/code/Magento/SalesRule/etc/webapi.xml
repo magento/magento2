@@ -72,19 +72,19 @@
     </route>
 
     <!-- Coupon Management -->
-    <route url="/V1/coupons/generate" method="PUT">
+    <route url="/V1/coupons/generate" method="POST">
         <service class="Magento\SalesRule\Api\CouponManagementInterface" method="generate"/>
         <resources>
             <resource ref="Magento_SalesRule::quote"/>
         </resources>
     </route>
-    <route url="/V1/coupons/deleteByIds" method="PUT">
+    <route url="/V1/coupons/deleteByIds" method="POST">
         <service class="Magento\SalesRule\Api\CouponManagementInterface" method="deleteByIds"/>
         <resources>
             <resource ref="Magento_SalesRule::quote"/>
         </resources>
     </route>
-    <route url="/V1/coupons/deleteByCodes" method="PUT">
+    <route url="/V1/coupons/deleteByCodes" method="POST">
         <service class="Magento\SalesRule\Api\CouponManagementInterface" method="deleteByCodes"/>
         <resources>
             <resource ref="Magento_SalesRule::quote"/>
