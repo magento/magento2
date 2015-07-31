@@ -59,21 +59,23 @@ class SystemPackage
         }
 
         $systemPackageInfo = $this->infoCommand->run($systemPackage);
-
         if (!$systemPackageInfo) {
             throw new \RuntimeException('System package not found');
         }
 
         $versions = [];
-
         $currentVersion = $systemPackageInfo['current_version'];
         foreach ($systemPackageInfo['available_versions'] as $version) {
             if (version_compare($currentVersion, $version, '<')) {
-                $versions[] = ['id' => $version, 'name' => $version];
+                $versions[] = ['id' => $version, 'name' => 'Version ' . $version];
             }
         }
 
-        $versions[] = ['id' => $currentVersion, 'name' => $currentVersion . ' (current)'];
+        $versions[] = ['id' => $currentVersion, 'name' => 'Version ' . $currentVersion . ' (current)'];
+
+        if (count($versions) > 1) {
+            $versions[0]['name'] = $versions[0]['name'] . ' (latest)';
+        }
 
         $result = [
             'package' => $systemPackageInfo['name'],

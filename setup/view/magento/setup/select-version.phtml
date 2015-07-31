@@ -20,7 +20,7 @@
     </div>
 </div>
 
-<div class="form-wrap">
+<div class="row form-row">
     <div class="message message-spinner" ng-hide="upgradeProcessed || upgradeProcessError">
         <span class="spinner">
             <span></span><span></span><span></span><span></span>
@@ -35,6 +35,11 @@
     </div>
 
     <div class="row" ng-hide="!upgradeReadyForNext">
+        <div class="col-m-3">
+            <label class="form-label">
+                Magento Core Components
+            </label>
+        </div>
         <div class="col-m-4">
             <select
                 id="selectVersion"

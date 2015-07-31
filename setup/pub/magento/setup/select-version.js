@@ -79,8 +79,10 @@ angular.module('select-version', ['ngStorage'])
         };
 
         $scope.update = function(component) {
+            $scope.packages[0].version = $scope.selectedOption;
             $localStorage.packages = $scope.packages;
-            $scope.nextState();
+            console.log($localStorage.packages);
+            //$scope.nextState();
         };
 
     }]);
