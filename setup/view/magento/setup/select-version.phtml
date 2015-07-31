@@ -5,35 +5,46 @@
  */
 ?>
 
-<h2 class="page-title">{{$state.current.header}}</h2>
+<div class="nav-bar-outer-actions">
+    <div class="outer-actions-inner-wrap">
+        <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next">
+            <button
+                type="button"
+                class="btn btn-prime"
+                ng-click="update()"
+                ng-disabled="!readyToNext"
+                >Next</button>
+        </div>
+    </div>
+</div>
 
 <div class="admin__data-grid-outer-wrap">
     <div class="admin__data-grid-header"></div>
 </div>
 
 <div class="form-wrap">
-    <div ng-hide="!processed">
+    <div ng-hide="processed || processError">
         <span class="spinner side">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
         <h3 class="select-version-title">Checking for a new version...</h3>
     </div>
-    <div class="row" ng-hide="processed">
+    <div class="message message-error" ng-hide="!processError">
+            <span class="message-text">
+                Sorry, we can't take that action right now.
+            </span>
+    </div>
+
+    <div class="row" ng-hide="!readyToNext">
         <div class="col-m-4">
             <select
                 id="selectVersion"
                 class="form-el-select"
-                ng-model="package.version"
+                ng-model="selectedOption"
                 ng-options="item.id as item.name for item in versions"
-                ng-model="selected"
                 ng->
             </select>
         </div>
     </div>
 </div>
-
-<button
-    class="btn btn-large btn-prime"
-    ng-click="update()"
-    type="button">Continue</button>
