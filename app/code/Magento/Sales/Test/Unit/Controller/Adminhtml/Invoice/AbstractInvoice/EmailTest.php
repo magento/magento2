@@ -229,9 +229,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     public function testEmailNoInvoice()
     {
         $invoiceId = 10000031;
-        $invoiceClassName = 'Magento\Sales\Model\Order\Invoice';
-        $invoice = $this->getMock($invoiceClassName, [], [], '', false);
-
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
