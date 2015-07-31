@@ -3813,4 +3813,5 @@ return [
     ['Magento\CatalogRule\Model\Observer', 'corresponding classes in Magento\CatalogRule\Observer\*'],
     ['Magento\Tax\Model\Observer', 'corresponding classes in Magento\Tax\Observer\*'],
     ['Magento\CacheInvalidate\Model\Observer', 'corresponding classes in Magento\CacheInvalidate\Observer\*'],
+    ['Magento\Catalog\Model\Observer', 'corresponding classes in Magento\Catalog\Observer\*'],
 ];
