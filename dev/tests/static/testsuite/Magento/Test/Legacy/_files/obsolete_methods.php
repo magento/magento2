@@ -2359,6 +2359,12 @@ return [
         'Magento\Sales\Model\Order\Address\Validator',
         'Magento\Sales\Model\Order\Address\Validator::validateForCustomer'
     ],
+    ['getListForCustomer', '\Magento\Quote\Api\CartItemRepositoryInterface'],
+    ['saveForCustomer', '\Magento\Quote\Api\CartItemRepositoryInterface'],
+    ['deleteByIdForCustomer', '\Magento\Quote\Api\CartItemRepositoryInterface'],
+    ['getListForCustomer', '\Magento\Quote\Model\Quote\Item\Repository'],
+    ['saveForCustomer', '\Magento\Quote\Model\Quote\Item\Repository'],
+    ['deleteByIdForCustomer', '\Magento\Quote\Model\Quote\Item\Repository'],
     ['_getAdapter', 'Magento\Framework\Cache\Backend\Database', '_getConnection'],
     ['_getReadAdapter', 'Magento\Framework\DB\Helper\AbstractHelper', 'getConnection'],
     ['_getWriteAdapter', 'Magento\Framework\DB\Helper\AbstractHelper', 'getConnection'],
