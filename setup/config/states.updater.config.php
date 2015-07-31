@@ -15,7 +15,7 @@ return [
             'id'          => 'root.readiness-check-su',
             'url'         => 'readiness-check-updater',
             'templateUrl' => "$base/readiness-check-updater",
-            'title'       => 'Readiness Check',
+            'title'       => "Readiness \n Check",
             'header'      => 'Step 2: Readiness Check',
             'order'       => 2,
             'nav'         => true,
@@ -71,7 +71,7 @@ return [
             'templateUrl' => "$base/updater-success",
             'controller'  => 'updaterSuccessController',
             'order'       => 7,
-            'main'        => true,
+            'noMenu'      => true
         ],
     ],
 ];

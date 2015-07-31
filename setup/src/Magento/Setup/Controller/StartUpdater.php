@@ -8,6 +8,7 @@ namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Setup\Model\Navigation as NavModel;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\Updater as ModelUpdater;
@@ -25,17 +26,24 @@ class StartUpdater extends AbstractActionController
     private $filesystem;
 
     /**
+     * @var NavModel
+     */
+    private $navigation;
+
+    /**
      * @var ModelUpdater
      */
     private $updater;
 
     /**
      * @param Filesystem $filesystem
+     * @param NavModel $navigation
      * @param ModelUpdater $updater
      */
-    public function __construct(Filesystem $filesystem, ModelUpdater $updater)
+    public function __construct(Filesystem $filesystem, NavModel $navigation, ModelUpdater $updater)
     {
         $this->filesystem = $filesystem;
+        $this->navigation = $navigation;
         $this->updater = $updater;
     }
 
@@ -93,6 +101,14 @@ class StartUpdater extends AbstractActionController
         } elseif ($type === 'su') {
             $data['type'] = 'upgrade';
         }
+        $menuItems = $this->navigation->getMenuItems();
+        $titles = [];
+        foreach ($menuItems as $menuItem) {
+            if (isset($menuItem['type']) && $menuItem['type'] === $type) {
+                $titles[] = str_replace("\n", '<br />', $menuItem['title']);
+            }
+        }
+        $data['titles'] = $titles;
         $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $directoryWrite->writeFile('.type.json', Json::encode($data));
     }
