@@ -74,6 +74,7 @@ class Sftp extends AbstractIo
      * No rollback is performed.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function mkdir($dir, $mode = 0777, $recursive = true)
     {
@@ -230,6 +231,7 @@ class Sftp extends AbstractIo
      * @param null $grep ignored parameter
      * @return array
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function ls($grep = null)
     {
