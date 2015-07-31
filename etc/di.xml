@@ -6,15 +6,16 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-   <type name="Magento\Framework\Amqp\ProducerFactory">
-       <arguments>
-           <argument name="publishers" xsi:type="array">
-               <item name="rabbitmq" xsi:type="array">
-                   <item name="type" xsi:type="object">Magento\Framework\Amqp\AmqpProducer</item>
-                   <item name="connectionName" xsi:type="string">rabbitmq</item>
-                   <item name="sortOrder" xsi:type="string">10</item>
-               </item>
-           </argument>
-       </arguments>
-   </type>
+    <preference for="Magento\Framework\Amqp\PublisherInterface" type="Magento\Framework\Amqp\PublisherProxy"/>
+    <type name="Magento\Framework\Amqp\PublisherFactory">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="rabbitmq" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Framework\Amqp\AmqpPublisher</item>
+                    <item name="connectionName" xsi:type="string">rabbitmq</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
