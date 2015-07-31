@@ -71,22 +71,18 @@ class SelectVersion extends AbstractActionController
     /**
      * Gets system package and versions
      *
-     * @param string $type
-     * @return array
+     * @return JsonModel
      */
     public function systemPackageAction()
     {
         $data = [];
-
         try {
             $data['package'] = $this->systemPackage->getPackageVersions();
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         } catch (\Exception $e) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
         }
-
         $data['responseType'] = $responseType;
-
         return new JsonModel($data);
     }
 
@@ -107,7 +103,9 @@ class SelectVersion extends AbstractActionController
                 $vendor = explode('/', $component['name']);
                 $allVersions = $this->infoCommand->run($component['name']);
                 $versions = explode(' ', $allVersions['versions']);
-                array_walk($versions, function(&$item) { $item = trim($item, ',');});
+                array_walk($versions, function (&$item) {
+                    $item = trim($item, ',');
+                });
                 unset($versions[0]);
                 $upgradeVersions = [];
                 $firstIndex = true;
@@ -141,7 +139,6 @@ class SelectVersion extends AbstractActionController
                 ]
             );
         }
-
     }
 
     /**
@@ -150,7 +147,7 @@ class SelectVersion extends AbstractActionController
      * @param string $name
      * @return bool
      */
-    public function checkPackageInJson($name)
+    private function checkPackageInJson($name)
     {
         $jsonFile = file_get_contents($this->directoryList->getRoot() . '/composer.json');
         $jsonArray = json_decode($jsonFile, true);

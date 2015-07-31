@@ -208,7 +208,7 @@ class ComposerInformation
      * @param string $from
      * @return array
      */
-    public function getRootRequiredPackageTypesByNameVersion($from='updater')
+    public function getRootRequiredPackageTypesByNameVersion($from = 'updater')
     {
         $packages = [];
         if ($from === 'upgrader') {
