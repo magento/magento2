@@ -96,11 +96,13 @@ angular.module('complete-backup', ['ngStorage'])
                     $scope.create.processed = true;
                     angular.extend($scope.create, data);
                     var files = '';
-                    for (var i = 0; i < $scope.create.files.length; i++) {
-                        if (i == 0) {
-                            files = files + $scope.create.files[i];
-                        } else {
-                            files = files + ", " + $scope.create.files[i];
+                    if (typeof $scope.create.files !== 'undefined') {
+                        for (var i = 0; i < $scope.create.files.length; i++) {
+                            if (i == 0) {
+                                files = files + $scope.create.files[i];
+                            } else {
+                                files = files + ", " + $scope.create.files[i];
+                            }
                         }
                     }
                     $scope.files = files;
