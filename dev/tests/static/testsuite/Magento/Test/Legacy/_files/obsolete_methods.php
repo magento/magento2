@@ -2013,7 +2013,6 @@ return [
     ],
     ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
     ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
-    ['cleanTransactions', 'Magento\Paypal\Model\Observer'],
     ['getSkinImagePlaceholderUrl', 'Magento\Cms\Model\Wysiwyg\Config'],
     ['compareIndexColumnProperties', 'Magento\Catalog\Model\Resource\Helper'],
     ['getIsNullNotNullCondition', 'Magento\Catalog\Model\Resource\Helper'],

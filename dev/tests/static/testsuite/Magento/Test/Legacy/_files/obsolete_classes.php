@@ -3815,4 +3815,5 @@ return [
     ['Magento\CacheInvalidate\Model\Observer', 'corresponding classes in Magento\CacheInvalidate\Observer\*'],
     ['Magento\Catalog\Model\Observer', 'corresponding classes in Magento\Catalog\Observer\*'],
     ['Magento\CatalogInventory\Model\Observer'],
+    ['Magento\Paypal\Model\Observer'],
 ];

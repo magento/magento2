@@ -6,8 +6,6 @@
 
 namespace Magento\CatalogInventory\Observer;
 
-use Magento\Framework\Event\Observer as EventObserver;
-
 /**
  * Catalog observer share data
  */
