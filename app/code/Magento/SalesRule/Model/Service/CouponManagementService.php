@@ -83,6 +83,10 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
                     $this->couponGenerator->getRuleId()
                 );
             }
+            $this->couponGenerator->setData('to_date', $rule->getToDate());
+            $this->couponGenerator->setData('uses_per_coupon', $rule->getUsesPerCoupon());
+            $this->couponGenerator->setData('usage_per_customer', $rule->getUsesPerCustomer());
+
             $this->couponGenerator->generatePool();
             return $this->couponGenerator->getGeneratedCodes();
         } catch (\Exception $e) {
@@ -105,9 +109,6 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         $data['qty'] = $couponSpec->getQuantity();
         $data['format'] = $couponSpec->getFormat();
         $data['length'] = $couponSpec->getLength();
-        $data['to_date'] = $couponSpec->getExpirationDate();
-        $data['uses_per_coupon'] = $couponSpec->getUsagePerCoupon();
-        $data['uses_per_customer'] = $couponSpec->getUsagePerCustomer();
         $data['prefix'] = $couponSpec->getPrefix();
         $data['suffix'] = $couponSpec->getSuffix();
         $data['dash'] = $couponSpec->getDelimiterAtEvery();
