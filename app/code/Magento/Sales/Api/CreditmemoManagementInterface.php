@@ -41,4 +41,18 @@ interface CreditmemoManagementInterface
      * @return bool
      */
     public function notify($id);
+
+    /**
+     * Prepare creditmemo to refund and save it.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
+     * @param bool $offlineRequested
+     * @param bool $notifyCustomer
+     * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     */
+    public function refund(
+        \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
+        $offlineRequested = false,
+        $notifyCustomer = false
+    );
 }
