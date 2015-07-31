@@ -49,12 +49,13 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
     public function execute()
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
-
+        $productDeleted = 0;
         foreach ($collection->getItems() as $product) {
             $product->delete();
+            $productDeleted++;
         }
         $this->messageManager->addSuccess(
-            __('A total of %1 record(s) have been deleted.', $collection->getSize())
+            __('A total of %1 record(s) have been deleted.', $productDeleted)
         );
 
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('catalog/*/index');
