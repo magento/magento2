@@ -122,6 +122,66 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
     public function setExpirationDate($expirationDate);
 
     /**
+     * Get the prefix
+     *
+     * @return string|null
+     */
+    public function getPrefix();
+
+    /**
+     * Set the prefix
+     *
+     * @param string $prefix
+     * @return $this
+     */
+    public function setPrefix($prefix);
+
+    /**
+     * Get the suffix
+     *
+     * @return string|null
+     */
+    public function getSuffix();
+
+    /**
+     * Set the suffix
+     *
+     * @param string $suffix
+     * @return $this
+     */
+    public function setSuffix($suffix);
+
+    /**
+     * Get the spacing where the delimiter should exist
+     *
+     * @return int|null
+     */
+    public function getDelimiterAtEvery();
+
+    /**
+     * Set the spacing where the delimiter should exist
+     *
+     * @param int $delimiterAtEvery
+     * @return $this
+     */
+    public function setDelimiterAtEvery($delimiterAtEvery);
+
+    /**
+     * Get the delimiter
+     *
+     * @return string|null
+     */
+    public function getDelimiter();
+
+    /**
+     * Set the delimiter
+     *
+     * @param string $delimiter
+     * @return $this
+     */
+    public function setDelimiter($delimiter);
+
+    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface|null

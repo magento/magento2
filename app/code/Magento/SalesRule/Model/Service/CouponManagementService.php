@@ -108,6 +108,14 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         $data['to_date'] = $couponSpec->getExpirationDate();
         $data['uses_per_coupon'] = $couponSpec->getUsagePerCoupon();
         $data['uses_per_customer'] = $couponSpec->getUsagePerCustomer();
+        $data['prefix'] = $couponSpec->getPrefix();
+        $data['suffix'] = $couponSpec->getSuffix();
+        $data['dash'] = $couponSpec->getDelimiterAtEvery();
+
+        //if specified, use the supplied delimiter
+        if ($couponSpec->getDelimiter()) {
+            $data['delimiter'] = $couponSpec->getDelimiter();
+        }
         return $data;
     }
 

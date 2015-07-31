@@ -125,7 +125,10 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
             'length' => 1,
             'to_date' => '2015-07-31 00:00:00',
             'uses_per_coupon' => 1,
-            'uses_per_customer' => 1
+            'uses_per_customer' => 1,
+            'prefix' => null,
+            'suffix' => null,
+            'dash' => null
         ])->willReturn(true);
 
         $this->couponGenerator->expects($this->once())->method('setData');
