@@ -14,7 +14,37 @@
                 </tr>
                 <tr>
                     <td class="footer">
-                        <p class="closing">{{trans "Thank you, %store_name" store_name=$store.getFrontendName()}}!</p>
+                        <table>
+                            <tr>
+                                <td>
+                                    <ul>
+                                        <li><a href="#">About Us</a></li>
+                                        <li><a href="#">Customer Service</a></li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    {{depend store_phone}}
+                                        <p class="phone">
+                                            {{trans '<a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}
+                                        </p>
+                                    {{/depend}}
+                                    {{depend store_hours}}
+                                        <p class="hours">
+                                            {{trans 'Hours of Operation:<br /><span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                                        </p>
+                                    {{/depend}}
+                                </td>
+                                <td>
+                                    <p class="address">
+                                        The Luma Store<br />
+                                        1234 Example St<br />
+                                        Austin, TX 66666<br />
+                                        United States
+                                    </p>
+                                    <?php /* {{config path="general/store_information/address"}} */ ?>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
