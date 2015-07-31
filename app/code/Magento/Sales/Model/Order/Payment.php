@@ -93,11 +93,6 @@ class Payment extends Info implements OrderPaymentInterface
     protected $transactionBuilder;
 
     /**
-     * @var Payment\OrderState
-     */
-    protected $orderPaymentState;
-
-    /**
      * @var Payment\Processor
      */
     protected $orderPaymentProcessor;
@@ -131,7 +126,6 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         ManagerInterface $transactionManager,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
-        \Magento\Sales\Model\Order\Payment\OrderState $orderPaymentState,
         \Magento\Sales\Model\Order\Payment\Processor $paymentProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -142,7 +136,6 @@ class Payment extends Info implements OrderPaymentInterface
         $this->transactionRepository = $transactionRepository;
         $this->transactionManager = $transactionManager;
         $this->transactionBuilder = $transactionBuilder;
-        $this->orderPaymentState = $orderPaymentState;
         $this->orderPaymentProcessor = $paymentProcessor;
         parent::__construct(
             $context,
@@ -420,8 +413,6 @@ class Payment extends Info implements OrderPaymentInterface
      * Updates transactions hierarchy, if required
      * Updates payment totals, updates order status and adds proper comments
      *
-     * TODO: eliminate logic duplication with registerCaptureNotification()
-     *
      * @param null|Invoice $invoice
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
@@ -438,55 +429,13 @@ class Payment extends Info implements OrderPaymentInterface
      * Prevents transaction double processing
      * Updates payment totals, updates order status and adds proper comments
      *
-     * TODO: eliminate logic duplication with capture()
-     *
      * @param float $amount
      * @param bool $skipFraudDetection
      * @return $this
      */
     public function registerCaptureNotification($amount, $skipFraudDetection = false)
     {
-        $this->setTransactionId(
-            $this->transactionManager->generateTransactionId(
-                $this,
-                Transaction::TYPE_CAPTURE,
-                $this->getAuthorizationTransaction()
-            )
-        );
-
-        $order = $this->getOrder();
-        $amount = (double)$amount;
-        $invoice = $this->_getInvoiceForTransactionId($this->getTransactionId());
-
-        // register new capture
-        if (!$invoice) {
-            if ($this->isSameCurrency() && $this->isCaptureFinal($amount)) {
-                $invoice = $order->prepareInvoice()->register();
-                $order->addRelatedObject($invoice);
-                $this->setCreatedInvoice($invoice);
-            } else {
-                $this->setIsFraudDetected(!$skipFraudDetection);
-                $this->_updateTotals(['base_amount_paid_online' => $amount]);
-            }
-        }
-
-        if (!$this->getIsTransactionPending()) {
-            if ($invoice && Invoice::STATE_OPEN == $invoice->getState()) {
-                $invoice->pay();
-                $this->_updateTotals(['base_amount_paid_online' => $amount]);
-                $order->addRelatedObject($invoice);
-            }
-        }
-
-        $message = $this->orderPaymentState->registerCaptureNotification($this, $amount, $order);
-        $transaction = $this->addTransaction(
-            Transaction::TYPE_CAPTURE,
-            $invoice,
-            true
-        );
-        $message = $this->prependMessage($message);
-        $this->addTransactionCommentsToOrder($transaction, $message);
-        return $this;
+        return $this->orderPaymentProcessor->registerCaptureNotification($this, $amount, $skipFraudDetection);
     }
 
     /**
