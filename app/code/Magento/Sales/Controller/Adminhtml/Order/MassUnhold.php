@@ -10,6 +10,11 @@ use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 class MassUnhold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
+     * @var string
+     */
+    protected $collection = 'Magento\Sales\Model\Resource\Order\Collection';
+
+    /**
      * Unhold selected orders
      *
      * @param AbstractCollection $collection
