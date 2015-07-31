@@ -31,11 +31,11 @@ class PublisherFactory
     /**
      * Initialize dependencies.
      *
-     * <type name="Magento\Framework\Amqp\ProducerFactory">
+     * <type name="Magento\Framework\Amqp\PublisherFactory">
      *     <arguments>
      *         <argument name="publishers" xsi:type="array">
      *             <item name="rabbitmq" xsi:type="array">
-     *                 <item name="type" xsi:type="object">Magento\Framework\Amqp\AmqpProducer</item>
+     *                 <item name="type" xsi:type="object">Magento\RabbitMq\Model\RabbitMqPublisher</item>
      *                 <item name="connectionName" xsi:type="string">rabbitmq</item>
      *                 <item name="sortOrder" xsi:type="string">10</item>
      *             </item>
