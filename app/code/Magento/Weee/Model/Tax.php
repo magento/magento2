@@ -253,11 +253,12 @@ class Tax extends \Magento\Framework\Model\AbstractModel
             $store
         );
         $defaultRateRequest = $calculator->getDefaultRateRequest($store);
-
-        $productAttributes = $product->getTypeInstance()->getSetAttributes($product);
+        
+        $productAttributes = $product->getResource()
+            ->loadAllAttributes($product)
+            ->getAttributesByCode();
         foreach ($productAttributes as $code => $attribute) {
             if (in_array($code, $allWeee)) {
-
                 $attributeSelect = $this->getResource()->getReadConnection()->select();
                 $attributeSelect->from(
                     $this->getResource()->getTable('weee_tax'),
