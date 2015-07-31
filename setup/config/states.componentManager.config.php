@@ -8,70 +8,63 @@ $base = basename($_SERVER['SCRIPT_FILENAME']);
 
 return [
     'navUpdaterTitles' => [
-        'su'    => 'System Upgrade',
+        'cm'    => 'Component Manager',
     ],
     'navUpdater' => [
         [
-            'id'          => 'root.readiness-check-su',
+            'id'          => 'root.readiness-check-cm',
             'url'         => 'readiness-check-updater',
-            'templateUrl' => "$base/readiness-check-updater",
-            'title'       => 'Readiness Check',
-            'header'      => 'Step 2: Readiness Check',
-            'order'       => 2,
+            'templateUrl' => "{$base}/readiness-check-updater",
+            'title'       => "Readiness \n Check",
+            'header'      => 'Step 1: Readiness Check',
             'nav'         => true,
-            'type'        => 'su'
+            'order'       => 2,
+            'type'        => 'cm'
         ],
         [
-            'id'          => 'root.readiness-check-su.progress',
+            'id'          => 'root.readiness-check-cm.progress',
             'url'         => 'readiness-check-updater/progress',
             'templateUrl' => "$base/readiness-check-updater/progress",
             'title'       => 'Readiness Check',
-            'header'      => 'Step 2: Readiness Check',
+            'header'      => 'Step 1: Readiness Check',
             'controller'  => 'readinessCheckController',
             'nav'         => false,
             'order'       => 3,
-            'type'        => 'su'
+            'type'        => 'cm'
         ],
         [
-            'id'          => 'root.create-backup-su',
+            'id'          => 'root.create-backup-cm',
             'url'         => 'create-backup',
             'templateUrl' => "$base/create-backup",
-            'title'       => 'Create Backup',
+            'title'       => "Create \n Backup",
+            'header'      => 'Step 2: Create Backup',
             'controller'  => 'createBackupController',
-            'header'      => 'Step 3: Create Backup',
-            'order'       => 4,
             'nav'         => true,
-            'type'        => 'su'
+            'validate'    => true,
+            'order'       => 4,
+            'type'        => 'cm'
         ],
         [
-            'id'          => 'root.create-backup-su.progress',
+            'id'          => 'root.create-backup-cm.progress',
             'url'         => 'create-backup/progress',
             'templateUrl' => "$base/complete-backup/progress",
             'title'       => "Create \n Backup",
-            'header'      => 'Step 3: Create Backup',
+            'header'      => 'Step 2: Create Backup',
             'controller'  => 'completeBackupController',
             'nav'         => false,
             'order'       => 5,
-            'type'        => 'su'
+            'type'        => 'cm'
         ],
         [
-            'id'          => 'root.start-updater-su',
+            'id'          => 'root.start-updater-cm',
             'url'         => 'start-updater',
             'templateUrl' => "$base/start-updater",
-            'title'       => "System \n Upgrade",
             'controller'  => 'startUpdaterController',
-            'header'      => 'Step 4: System Upgrade',
-            'order'       => 6,
+            'title'       => "Component \n Update",
+            'header'      => 'Step 3: Component Update',
             'nav'         => true,
-            'type'        => 'su'
-        ],
-        [
-            'id'          => 'root.updater-success',
-            'url'         => 'updater-success',
-            'templateUrl' => "$base/updater-success",
-            'controller'  => 'updaterSuccessController',
-            'order'       => 7,
-            'main'        => true,
+            'order'       => 6,
+            'type'        => 'cm'
         ],
     ],
 ];

@@ -5,19 +5,27 @@
 
 'use strict';
 var main = angular.module('main', ['ngStorage']);
-main.controller('navigationController', ['$scope', '$state', '$rootScope', '$window', 'navigationService', function ($scope, $state, $rootScope, $window, navigationService) {
+main.controller('navigationController',
+        ['$scope', '$state', '$rootScope', '$window', 'navigationService', '$localStorage',
+            function ($scope, $state, $rootScope, $window, navigationService, $localStorage) {
     navigationService.load();
-    $rootScope.navService = navigationService;
+    $scope.menu = $localStorage.menu;
     $rootScope.isMenuEnabled = true;
     $scope.itemStatus = function (order) {
         return $state.$current.order <= order || !$rootScope.isMenuEnabled;
     };
-    $scope.redirectTo = function (url) {
-        if (url) {
-            $window.location.href = url;
-        }
-    };
 }])
+.controller('headerController', ['$scope', '$localStorage', '$window',
+        function ($scope, $localStorage, $window) {
+            $scope.titles = $localStorage.titles;
+            $scope.redirectTo = function (url) {
+                if (url) {
+                    $window.location.href = url;
+                }
+            };
+        }
+    ]
+)
 .controller('mainController', [
     '$scope', '$state', 'navigationService',
     function ($scope, $state, navigationService) {
@@ -55,18 +63,19 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', '$win
         });
     }
 ])
-.service('navigationService', ['$location', '$state', '$http', function ($location, $state, $http) {
+.service('navigationService', ['$location', '$state', '$http', '$localStorage',
+    function ($location, $state, $http, $localStorage) {
     return {
         mainState: {},
         states: [],
-        menu: [],
         load: function () {
             var self = this;
             $http.get('index.php/navigation').success(function (data) {
                 var currentState = $location.path().replace('/', '');
                 var isCurrentStateFound = false;
                 self.states = data.nav;
-                self.menu = data.menu;
+                $localStorage.menu = data.menu;
+                $localStorage.titles = data.titles;
                 data.nav.forEach(function (item) {
                     app.stateProvider.state(item.id, item);
                     if (item.default) {

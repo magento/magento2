@@ -36,10 +36,13 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $this->serviceLocatorMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('get')
             ->with('config')
             ->will($this->returnValue([
+                'navInstallerTitles' => [
+                    'install' => 'SomeTitle'
+                 ],
                 'navInstaller' => [
                     ['key1' => 'value1'],
                     ['key2' => 'value2'],

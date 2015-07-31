@@ -77,8 +77,6 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $viewModel = $this->controller->headerBarAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $variables = $viewModel->getVariables();
-        $this->assertArrayHasKey('headerTitle', $variables);
-        $this->assertEquals('Magento Installation', $variables['headerTitle']);
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
         $this->assertTrue($viewModel->terminate());
@@ -91,8 +89,6 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $viewModel = $this->controller->headerBarAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $variables = $viewModel->getVariables();
-        $this->assertArrayHasKey('headerTitle', $variables);
-        $this->assertEquals('Magento Component Manager', $variables['headerTitle']);
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
         $this->assertTrue($viewModel->terminate());

@@ -11,19 +11,29 @@ angular.module('select-version', ['ngStorage'])
             version: ''
         };
 
-        $scope.processed = true;
+        $scope.processed = false;
+        $scope.processError = false;
+        $scope.readyForNext = false;
 
         $http.get('index.php/select-version/systemPackage',{'responseType' : 'json'})
             .success(function (data) {
-                $scope.package.name = data.package.package;
-                $scope.versions = data.package.versions;
-                $scope.processed = false;
+                if (data.responseType != 'error') {
+                    $scope.package.name = data.package.package;
+                    $scope.versions = data.package.versions;
+                    $scope.selectedOption = $scope.versions[0].id;
+
+                    $scope.readyForNext = true;
+                } else {
+                    $scope.processError = true;
+                }
+
+                $scope.processed = true;
             })
             .error(function (data) {
+                $scope.processError = true;
             });
 
         $scope.update = function(component) {
-            console.log($scope.package);
             $localStorage.packages = [
                 $scope.package
             ];

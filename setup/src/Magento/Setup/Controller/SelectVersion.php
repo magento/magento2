@@ -16,7 +16,6 @@ use Zend\View\Model\JsonModel;
  */
 class SelectVersion extends AbstractActionController
 {
-
     /**
      * @var SystemPackage
      */
