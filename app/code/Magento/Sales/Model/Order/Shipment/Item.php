@@ -170,6 +170,17 @@ class Item extends AbstractModel implements ShipmentItemInterface
         return $this;
     }
 
+    /**
+     * Applying qty to order item
+     *
+     * @return $this
+     */
+    public function register()
+    {
+        $this->getOrderItem()->setQtyShipped($this->getOrderItem()->getQtyShipped() + $this->getQty());
+        return $this;
+    }
+
     //@codeCoverageIgnoreStart
     /**
      * Returns additional_data
