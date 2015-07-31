@@ -22,6 +22,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const TOPIC_PUBLISHER = 'publisher';
     const TOPIC_SCHEMA = 'schema';
 
+    const CONSUMERS = 'consumers';
+    const CONSUMER_NAME = 'name';
+    const CONSUMER_QUEUE = 'queue';
+    const CONSUMER_CONNECTION = 'connection';
+    const CONSUMER_CLASS = 'class';
+    const CONSUMER_METHOD = 'method';
+
     const ENV_QUEUE = 'queue';
     const ENV_TOPICS = 'topics';
 
@@ -51,7 +58,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $publishers = $this->extractPublishers($source);
         $topics = $this->extractTopics($source);
         $this->overridePublishersForTopics($topics, $publishers);
-        return [self::PUBLISHERS => $publishers, self::TOPICS => $topics];
+        $consumers = $this->extractConsumers($source);
+        return [self::PUBLISHERS => $publishers, self::TOPICS => $topics, self::CONSUMERS => $consumers ];
     }
 
     /**
@@ -91,6 +99,29 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 self::PUBLISHER_NAME => $publisherName,
                 self::PUBLISHER_CONNECTION => $publisherNode->attributes->getNamedItem('connection')->nodeValue,
                 self::PUBLISHER_EXCHANGE => $publisherNode->attributes->getNamedItem('exchange')->nodeValue
+            ];
+        }
+        return $output;
+    }
+
+    /**
+     * Extract consumers configuration.
+     *
+     * @param \DOMDocument $config
+     * @return array
+     */
+    protected function extractConsumers($config)
+    {
+        $output = [];
+        /** @var $publisherNode \DOMNode */
+        foreach ($config->getElementsByTagName('consumer') as $consumerNode) {
+            $consumerName = $consumerNode->attributes->getNamedItem('name')->nodeValue;
+            $output[$consumerName] = [
+                self::CONSUMER_NAME => $consumerName,
+                self::CONSUMER_QUEUE => $consumerNode->attributes->getNamedItem('queue')->nodeValue,
+                self::CONSUMER_CONNECTION => $consumerNode->attributes->getNamedItem('connection')->nodeValue,
+                self::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
+                self::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
             ];
         }
         return $output;

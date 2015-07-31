@@ -11,4 +11,6 @@
     <topic name="customer.created" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-queue"/>
     <topic name="customer.updated" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-queue-2"/>
     <topic name="customer.deleted" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-queue-2"/>
+    <consumer name="customer_created_listener" queue="test-queue-3" connection="rabbitmq" class="Data\Type" method="processMessage"/>
+    <consumer name="customer_deleted_listener" queue="test-queue-4" connection="db" class="Other\Type" method="processMessage2"/>
 </config>

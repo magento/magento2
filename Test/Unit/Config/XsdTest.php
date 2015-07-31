@@ -179,6 +179,46 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 </config>',
                 ["Element 'topic': The attribute 'publisher' is required but missing."],
             ],
+            'consumer without name' => [
+                '<config>
+                    <consumer queue="test-queue" connection="rabbitmq" class="Data\Type" method="processMessage"/>
+                </config>',
+                [
+                    "Element 'consumer': The attribute 'name' is required but missing.",
+                    "Element 'consumer': Not all fields of key identity-constraint 'consumer-name' evaluate to a node.",
+                ],
+            ],
+            'consumer without queue' => [
+                '<config>
+                    <consumer name="customer_created_listener" connection="rabbitmq" class="Data\Type" method="processMessage"/>
+                </config>',
+                ["Element 'consumer': The attribute 'queue' is required but missing."],
+            ],
+            'consumer without connection' => [
+                '<config>
+                    <consumer name="customer_created_listener" queue="test-queue" class="Data\Type" method="processMessage"/>
+                </config>',
+                ["Element 'consumer': The attribute 'connection' is required but missing."],
+            ],
+            'consumer without class' => [
+                '<config>
+                    <consumer name="customer_created_listener" connection="rabbitmq" queue="test-queue" method="processMessage"/>
+                </config>',
+                ["Element 'consumer': The attribute 'class' is required but missing."],
+            ],
+            'consumer without method' => [
+                '<config>
+                    <consumer name="customer_created_listener" connection="rabbitmq" queue="test-queue" class="Data\Type"/>
+                </config>',
+                ["Element 'consumer': The attribute 'method' is required but missing."],
+            ],
+            'consumer with same name' => [
+                '<config>
+                    <consumer name="customer_created_listener" connection="rabbitmq" queue="test-queue" class="Data\Type" method="processMessage"/>
+                    <consumer name="customer_created_listener" connection="rabbitmq" queue="test-queue-2" class="Data\Type" method="processMessage"/>
+                </config>',
+                ["Element 'consumer': Duplicate key-sequence ['customer_created_listener'] in key identity-constraint 'consumer-name'."],
+            ],
         ];
     }
 }

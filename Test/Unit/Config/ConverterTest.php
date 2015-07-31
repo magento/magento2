@@ -136,6 +136,22 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'publisher' => 'test-queue-2',
                 ],
             ],
+            'consumers' => [
+                'customer_created_listener' => [
+                    'name' => 'customer_created_listener',
+                    'queue' => 'test-queue-3',
+                    'connection' => 'rabbitmq',
+                    'class' => 'Data\Type',
+                    'method' => 'processMessage'
+                ],
+                'customer_deleted_listener' => [
+                    'name' => 'customer_deleted_listener',
+                    'queue' => 'test-queue-4',
+                    'connection' => 'db',
+                    'class' => 'Other\Type',
+                    'method' => 'processMessage2'
+                ],
+            ]
         ];
     }
 }
