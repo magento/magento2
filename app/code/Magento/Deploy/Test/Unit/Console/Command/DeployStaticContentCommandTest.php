@@ -50,7 +50,8 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
         $this->command = new DeployStaticContentCommand(
             $this->objectManagerFactory,
-            $this->validator
+            $this->validator,
+            $this->objectManager
         );
     }
 
