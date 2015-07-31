@@ -134,8 +134,6 @@ class PublisherFactory
      */
     private function getPublisherNameForTopic($topicName)
     {
-        /* TODO: Probably should have the queueConfig itself figure out if there's a runtime environment configuration
-           to override a particular queue's publisher */
         $queueConfig = $this->queueConfig->get();
         if (isset($queueConfig[QueueConfigConverter::TOPICS][$topicName])) {
             return $queueConfig[QueueConfigConverter::TOPICS][$topicName][QueueConfigConverter::TOPIC_PUBLISHER];
