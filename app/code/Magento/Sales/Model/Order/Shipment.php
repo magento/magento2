@@ -234,6 +234,40 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Registers shipment.
+     *
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function register()
+    {
+        if ($this->getId()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot register an existing shipment')
+            );
+        }
+
+        $totalQty = 0;
+
+        /** @var \Magento\Sales\Model\Order\Shipment\Item $item */
+        foreach ($this->getAllItems() as $item) {
+            if ($item->getQty() > 0) {
+                $item->register();
+
+                if (!$item->getOrderItem()->isDummy(true)) {
+                    $totalQty += $item->getQty();
+                }
+            } else {
+                $item->isDeleted(true);
+            }
+        }
+
+        $this->setTotalQty($totalQty);
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getItemsCollection()
