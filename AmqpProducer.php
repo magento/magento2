@@ -59,7 +59,7 @@ class AmqpProducer implements ProducerInterface
         $channel->exchange_declare($exchange, 'direct', false, true, false);
         $channel->queue_bind($topicName, $exchange);
 
-        $msg = new AMQPMessage($data, ['content_type' => 'text/plain', 'delivery_mode' => 2]);
+        $msg = new AMQPMessage($data, ['content_type' => 'application/json', 'delivery_mode' => 2]);
         $channel->basic_publish($msg, $exchange);
 
         $channel->close();
