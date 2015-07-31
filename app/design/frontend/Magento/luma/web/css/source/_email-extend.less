@@ -15,10 +15,12 @@
 @import url("@{baseUrl}css/email-fonts.css");
 
 .header {
+    background-color: @email__background-color;
     padding: @email-body__padding;
 }
 
 .footer {
+    background-color: @email__background-color;
     padding: @email-body__padding;
 
     table {
@@ -28,21 +30,15 @@
             padding-bottom: @email-body__padding;
             width: 33%;
 
-            ul {
-                list-style: none;
-                margin-bottom: 0;
-                padding-left: 0;
-
-                li {
-                    margin-bottom: 0;
-                }
-            }
-
             p {
                 margin-bottom: 0;
 
                 &.phone {
                     font-size: @font-size__l;
+
+                    a {
+                        color: inherit;
+                    }
                 }
             }
         }
