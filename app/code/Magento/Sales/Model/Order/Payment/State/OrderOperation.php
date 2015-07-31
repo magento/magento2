@@ -9,11 +9,12 @@ namespace Magento\Sales\Model\Order\Payment\State;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Class Order
  */
-class Order implements CommandInterface
+class OrderOperation implements CommandInterface
 {
     /**
      * Run command
@@ -25,7 +26,7 @@ class Order implements CommandInterface
      */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
-        $state = \Magento\Sales\Model\Order::STATE_PROCESSING;
+        $state = Order::STATE_PROCESSING;
         $status = false;
         $formattedAmount = $order->getBaseCurrency()->formatTxt($amount);
         if ($payment->getIsTransactionPending()) {
@@ -33,9 +34,9 @@ class Order implements CommandInterface
                 'The order amount of %1 is pending approval on the payment gateway.',
                 $formattedAmount
             );
-            $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
+            $state = Order::STATE_PAYMENT_REVIEW;
             if ($payment->getIsFraudDetected()) {
-                $status = \Magento\Sales\Model\Order::STATUS_FRAUD;
+                $status = Order::STATUS_FRAUD;
             }
         } else {
             $message = __('Ordered amount of %1', $formattedAmount);
