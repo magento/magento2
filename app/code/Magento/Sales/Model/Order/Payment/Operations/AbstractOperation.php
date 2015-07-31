@@ -1,0 +1,89 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Sales\Model\Order\Payment\Operations;
+
+
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Payment\State\CommandInterface;
+use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
+use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
+
+abstract class AbstractOperation
+{
+    /**
+     * @var CommandInterface
+     */
+    protected $stateCommand;
+
+    /**
+     * @var BuilderInterface
+     */
+    protected $transactionBuilder;
+
+    /**
+     * @var TransactionManagerInterface
+     */
+    protected $transactionManager;
+
+    /**
+     * @var EventManagerInterface
+     */
+    protected $eventManager;
+
+    /**
+     * @param CommandInterface $stateCommand
+     */
+    public function __construct(
+        CommandInterface $stateCommand,
+        BuilderInterface $transactionBuilder,
+        ManagerInterface $transactionManager,
+        EventManagerInterface $eventManager
+    ) {
+        $this->stateCommand = $stateCommand;
+        $this->transactionBuilder = $transactionBuilder;
+        $this->transactionManager = $transactionManager;
+        $this->eventManager = $eventManager;
+    }
+
+    /**
+     * Create new invoice with maximum qty for invoice for each item
+     * register this invoice and capture
+     *
+     * @return Invoice
+     */
+    protected function invoice(OrderPaymentInterface $payment)
+    {
+        $invoice = $payment->getOrder()->prepareInvoice();
+
+        $invoice->register();
+        if ($payment->getMethodInstance()->canCapture()) {
+            $invoice->capture();
+        }
+
+        $payment->getOrder()->addRelatedObject($invoice);
+        return $invoice;
+    }
+
+    /**
+     * Totals updater utility method
+     * Updates self totals by keys in data array('key' => $delta)
+     *
+     * @param OrderPaymentInterface $payment
+     * @param array $data
+     */
+    protected function updateTotals(OrderPaymentInterface $payment, $data)
+    {
+        foreach ($data as $key => $amount) {
+            if (null !== $amount) {
+                $was = $payment->getDataUsingMethod($key);
+                $payment->setDataUsingMethod($key, $was + $amount);
+            }
+        }
+    }
+}

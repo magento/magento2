@@ -93,6 +93,16 @@ class Payment extends Info implements OrderPaymentInterface
     protected $transactionBuilder;
 
     /**
+     * @var Payment\OrderState
+     */
+    protected $orderPaymentState;
+
+    /**
+     * @var Payment\Processor
+     */
+    protected $orderPaymentProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -121,6 +131,8 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         ManagerInterface $transactionManager,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
+        \Magento\Sales\Model\Order\Payment\OrderState $orderPaymentState,
+        \Magento\Sales\Model\Order\Payment\Processor $paymentProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -130,6 +142,8 @@ class Payment extends Info implements OrderPaymentInterface
         $this->transactionRepository = $transactionRepository;
         $this->transactionManager = $transactionManager;
         $this->transactionBuilder = $transactionBuilder;
+        $this->orderPaymentState = $orderPaymentState;
+        $this->orderPaymentProcessor = $paymentProcessor;
         parent::__construct(
             $context,
             $registry,
@@ -414,100 +428,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function capture($invoice = null)
     {
-        if (is_null($invoice)) {
-            $invoice = $this->_invoice();
-            $this->setCreatedInvoice($invoice);
-            if ($this->getIsFraudDetected()) {
-                $this->getOrder()->setStatus(Order::STATUS_FRAUD);
-            }
-            return $this;
-        }
-        $amountToCapture = $this->_formatAmount($invoice->getBaseGrandTotal());
-        $order = $this->getOrder();
-
-        // prepare parent transaction and its amount
-        $paidWorkaround = 0;
-        if (!$invoice->wasPayCalled()) {
-            $paidWorkaround = (double)$amountToCapture;
-        }
-        $this->_isCaptureFinal($paidWorkaround);
-
-        $this->setTransactionId(
-            $this->transactionManager->generateTransactionId(
-                $this,
-                Transaction::TYPE_CAPTURE,
-                $this->getAuthorizationTransaction()
-            )
-        );
-
-        $this->_eventManager->dispatch(
-            'sales_order_payment_capture',
-            ['payment' => $this, 'invoice' => $invoice]
-        );
-
-        /**
-         * Fetch an update about existing transaction. It can determine whether the transaction can be paid
-         * Capture attempt will happen only when invoice is not yet paid and the transaction can be paid
-         */
-        if ($invoice->getTransactionId()) {
-            $method = $this->getMethodInstance();
-            $method->setStore(
-                $order->getStoreId()
-            );
-            $method->fetchTransactionInfo(
-                $this,
-                $invoice->getTransactionId()
-            );
-        }
-        $status = false;
-        if (!$invoice->getIsPaid()) {
-            // attempt to capture: this can trigger "is_transaction_pending"
-            $method = $this->getMethodInstance();
-            $method->setStore(
-                $order->getStoreId()
-            );
-            //TODO replace for sale usage
-            $method->capture($this, $amountToCapture);
-
-            $transaction = $this->addTransaction(
-                Transaction::TYPE_CAPTURE,
-                $invoice,
-                true
-            );
-
-            if ($this->getIsTransactionPending()) {
-                $message = __(
-                    'An amount of %1 will be captured after being approved at the payment gateway.',
-                    $this->_formatPrice($amountToCapture)
-                );
-                $state = Order::STATE_PAYMENT_REVIEW;
-                if ($this->getIsFraudDetected()) {
-                    $status = Order::STATUS_FRAUD;
-                }
-                $invoice->setIsPaid(false);
-            } else {
-                // normal online capture: invoice is marked as "paid"
-                $message = __('Captured amount of %1 online', $this->_formatPrice($amountToCapture));
-                $state = Order::STATE_PROCESSING;
-                $invoice->setIsPaid(true);
-                $this->_updateTotals(['base_amount_paid_online' => $amountToCapture]);
-            }
-            $message = $this->_prependMessage($message);
-            $this->addTransactionCommentsToOrder($transaction, $message);
-
-            if (!$status) {
-                $status = $order->getConfig()->getStateDefaultStatus($state);
-            }
-
-            $order->setState($state)
-                ->setStatus($status);
-
-            $invoice->setTransactionId($this->getLastTransId());
-            return $this;
-        }
-        throw new \Magento\Framework\Exception\LocalizedException(
-            __('The transaction "%1" cannot be captured yet.', $invoice->getTransactionId())
-        );
+        return $this->orderPaymentProcessor->capture($this, $invoice);
     }
 
     /**
@@ -539,7 +460,7 @@ class Payment extends Info implements OrderPaymentInterface
 
         // register new capture
         if (!$invoice) {
-            if ($this->_isSameCurrency() && $this->_isCaptureFinal($amount)) {
+            if ($this->isSameCurrency() && $this->isCaptureFinal($amount)) {
                 $invoice = $order->prepareInvoice()->register();
                 $order->addRelatedObject($invoice);
                 $this->setCreatedInvoice($invoice);
@@ -549,42 +470,22 @@ class Payment extends Info implements OrderPaymentInterface
             }
         }
 
-        if ($this->getIsTransactionPending()) {
-            $message = __(
-                'An amount of %1 will be captured after being approved at the payment gateway.',
-                $this->_formatPrice($amount)
-            );
-            $state = Order::STATE_PAYMENT_REVIEW;
-        } else {
-            $message = __('Registered notification about captured amount of %1.', $this->_formatPrice($amount));
-            $state = Order::STATE_PROCESSING;
-            // register capture for an existing invoice
+        if (!$this->getIsTransactionPending()) {
             if ($invoice && Invoice::STATE_OPEN == $invoice->getState()) {
                 $invoice->pay();
                 $this->_updateTotals(['base_amount_paid_online' => $amount]);
                 $order->addRelatedObject($invoice);
             }
         }
-        if ($this->getIsFraudDetected()) {
-            $state = Order::STATE_PAYMENT_REVIEW;
-            $message = __(
-                'Order is suspended as its capture amount %1 is suspected to be fraudulent.',
-                $this->_formatPrice($amount)
-            );
-            $status = Order::STATUS_FRAUD;
-        } else {
-            $status = $order->getConfig()->getStateDefaultStatus($state);
-        }
 
+        $message = $this->orderPaymentState->registerCaptureNotification($this, $amount, $order);
         $transaction = $this->addTransaction(
             Transaction::TYPE_CAPTURE,
             $invoice,
             true
         );
-        $message = $this->_prependMessage($message);
+        $message = $this->prependMessage($message);
         $this->addTransactionCommentsToOrder($transaction, $message);
-
-        $order->setState($state)->setStatus($status);
         return $this;
     }
 
@@ -746,7 +647,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function refund($creditmemo)
     {
-        $baseAmountToRefund = $this->_formatAmount($creditmemo->getBaseGrandTotal());
+        $baseAmountToRefund = $this->formatAmount($creditmemo->getBaseGrandTotal());
         $this->setTransactionId(
             $this->transactionManager->generateTransactionId($this, Transaction::TYPE_REFUND)
         );
@@ -811,14 +712,14 @@ class Payment extends Info implements OrderPaymentInterface
             $isOnline
         );
         if ($invoice) {
-            $message = __('We refunded %1 online.', $this->_formatPrice($baseAmountToRefund));
+            $message = __('We refunded %1 online.', $this->formatPrice($baseAmountToRefund));
         } else {
             $message = $this->hasMessage() ? $this->getMessage() : __(
                 'We refunded %1 offline.',
-                $this->_formatPrice($baseAmountToRefund)
+                $this->formatPrice($baseAmountToRefund)
             );
         }
-        $message = $message = $this->_prependMessage($message);
+        $message = $message = $this->prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
         $this->setOrderStateProcessing($message);
         $this->_eventManager->dispatch(
@@ -874,7 +775,7 @@ class Payment extends Info implements OrderPaymentInterface
             $order->addStatusHistoryComment(
                 __(
                     'IPN "Refunded". Refund issued by merchant. Registered notification about refunded amount of %1. Transaction ID: "%2". Credit Memo has not been created. Please create offline Credit Memo.',
-                    $this->_formatPrice($notificationAmount),
+                    $this->formatPrice($notificationAmount),
                     $this->getTransactionId()
                 ),
                 false
@@ -902,8 +803,8 @@ class Payment extends Info implements OrderPaymentInterface
             Transaction::TYPE_REFUND,
             $creditmemo
         );
-        $message = $this->_prependMessage(
-            __('Registered notification about refunded amount of %1.', $this->_formatPrice($amount))
+        $message = $this->prependMessage(
+            __('Registered notification about refunded amount of %1.', $this->formatPrice($amount))
         );
         $message = $this->_appendTransactionToMessage($transaction, $message);
         $this->setOrderStateProcessing($message);
@@ -993,14 +894,14 @@ class Payment extends Info implements OrderPaymentInterface
             $invoice = $this->_getInvoiceForTransactionId($transactionId);
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
-                $this->_prependMessage(__('Approved the payment online.'))
+                $this->prependMessage(__('Approved the payment online.'))
             );
             $this->updateBaseAmountPaidOnlineTotal($invoice);
             $this->setOrderStateProcessing($message);
         } else {
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
-                $this->_prependMessage(__('There is no need to approve this payment.'))
+                $this->prependMessage(__('There is no need to approve this payment.'))
             );
             $this->setOrderStatePaymentReview($message, $transactionId);
         }
@@ -1032,7 +933,7 @@ class Payment extends Info implements OrderPaymentInterface
             $invoice = $this->_getInvoiceForTransactionId($transactionId);
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
-                $this->_prependMessage(__('Denied the payment online'))
+                $this->prependMessage(__('Denied the payment online'))
             );
             $this->cancelInvoiceAndRegisterCancellation($invoice, $message);
         } else {
@@ -1040,7 +941,7 @@ class Payment extends Info implements OrderPaymentInterface
                 'There is no need to deny this payment.' : 'Registered notification about denied payment.';
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
-                $this->_prependMessage(__($txt))
+                $this->prependMessage(__($txt))
             );
             $this->setOrderStatePaymentReview($message, $transactionId);
         }
@@ -1068,20 +969,20 @@ class Payment extends Info implements OrderPaymentInterface
         if ($this->getIsTransactionApproved()) {
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
-                $this->_prependMessage(__('Registered update about approved payment.'))
+                $this->prependMessage(__('Registered update about approved payment.'))
             );
             $this->updateBaseAmountPaidOnlineTotal($invoice);
             $this->setOrderStateProcessing($message);
         } elseif ($this->getIsTransactionDenied()) {
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
-                $this->_prependMessage(__('Registered update about denied payment.'))
+                $this->prependMessage(__('Registered update about denied payment.'))
             );
             $this->cancelInvoiceAndRegisterCancellation($invoice, $message);
         } else {
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
-                $this->_prependMessage(__('There is no update for the payment.'))
+                $this->prependMessage(__('There is no update for the payment.'))
             );
             $this->setOrderStatePaymentReview($message, $transactionId);
         }
@@ -1163,47 +1064,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     protected function _order($amount)
     {
-        // update totals
-        $amount = $this->_formatAmount($amount, true);
-
-        // do ordering
-        $order = $this->getOrder();
-
-        $state = Order::STATE_PROCESSING;
-        $status = false;
-        $method = $this->getMethodInstance();
-        $method->setStore($order->getStoreId());
-        $method->order($this, $amount);
-
-        if ($this->getSkipOrderProcessing()) {
-            return $this;
-        }
-
-        // similar logic of "payment review" order as in capturing
-        if ($this->getIsTransactionPending()) {
-            $message = __(
-                'The order amount of %1 is pending approval on the payment gateway.',
-                $this->_formatPrice($amount)
-            );
-            $state = Order::STATE_PAYMENT_REVIEW;
-            if ($this->getIsFraudDetected()) {
-                $status = Order::STATUS_FRAUD;
-            }
-        } else {
-            $message = __('Ordered amount of %1', $this->_formatPrice($amount));
-        }
-
-        // update transactions, order state and add comments
-        $transaction = $this->addTransaction(Transaction::TYPE_ORDER);
-        $message = $this->_prependMessage($message);
-        $this->addTransactionCommentsToOrder($transaction, $message);
-
-        if (!$status) {
-            $status = $order->getConfig()->getStateDefaultStatus($state);
-        }
-
-        $order->setState($state)->setStatus($status);
-        return $this;
+        return $this->orderPaymentProcessor->order($this, $amount);
     }
 
     /**
@@ -1219,62 +1080,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function authorize($isOnline, $amount)
     {
-        // check for authorization amount to be equal to grand total
-        $this->setShouldCloseParentTransaction(false);
-        $isSameCurrency = $this->_isSameCurrency();
-        if (!$isSameCurrency || !$this->_isCaptureFinal($amount)) {
-            $this->setIsFraudDetected(true);
-        }
-
-        // update totals
-        $amount = $this->_formatAmount($amount, true);
-        $this->setBaseAmountAuthorized($amount);
-
-        // do authorization
-        $order = $this->getOrder();
-        $state = Order::STATE_PROCESSING;
-        $status = false;
-        if ($isOnline) {
-            // invoke authorization on gateway
-            $method = $this->getMethodInstance();
-            $method->setStore($order->getStoreId());
-            $method->authorize($this, $amount);
-        }
-
-        // similar logic of "payment review" order as in capturing
-        if ($this->getIsTransactionPending()) {
-            $state = Order::STATE_PAYMENT_REVIEW;
-            $message = __(
-                'We will authorize %1 after the payment is approved at the payment gateway.',
-                $this->_formatPrice($amount)
-            );
-        } else {
-            if ($this->getIsFraudDetected()) {
-                $state = Order::STATE_PROCESSING;
-                $message = __(
-                    'Order is suspended as its authorizing amount %1 is suspected to be fraudulent.',
-                    $this->_formatPrice($amount, $this->getCurrencyCode())
-                );
-            } else {
-                $message = __('Authorized amount of %1', $this->_formatPrice($amount));
-            }
-        }
-        if ($this->getIsFraudDetected()) {
-            $status = Order::STATUS_FRAUD;
-        }
-
-        // update transactions, order state and add comments
-        $transaction = $this->addTransaction(Transaction::TYPE_AUTH);
-        $message = $this->_prependMessage($message);
-        $this->addTransactionCommentsToOrder($transaction, $message);
-
-        if (!$status) {
-            $status = $order->getConfig()->getStateDefaultStatus($state);
-        }
-
-        $order->setState($state)->setStatus($status);
-
-        return $this;
+        return $this->orderPaymentProcessor->authorize($this, $isOnline, $amount);
     }
 
     /**
@@ -1321,15 +1127,15 @@ class Payment extends Info implements OrderPaymentInterface
         }
 
         if ($amount) {
-            $amount = $this->_formatAmount($amount);
+            $amount = $this->formatAmount($amount);
         }
 
         // update transactions, order state and add comments
         $transaction = $this->addTransaction(Transaction::TYPE_VOID, null, true);
         $message = $this->hasMessage() ? $this->getMessage() : __('Voided authorization.');
-        $message = $this->_prependMessage($message);
+        $message = $this->prependMessage($message);
         if ($amount) {
-            $message .= ' ' . __('Amount: %1.', $this->_formatPrice($amount));
+            $message .= ' ' . __('Amount: %1.', $this->formatPrice($amount));
         }
         $message = $this->_appendTransactionToMessage($transaction, $message);
         $this->setOrderStateProcessing($message);
@@ -1345,7 +1151,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param bool $failSafe
      * @return null|Transaction
      */
-    private function addTransaction($type, $salesDocument = null, $failSafe = false)
+    public function addTransaction($type, $salesDocument = null, $failSafe = false)
     {
         $builder = $this->transactionBuilder->setPayment($this)
             ->setOrder($this->getOrder())
@@ -1430,7 +1236,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param string|\Magento\Sales\Model\Order\Status\History $messagePrependTo
      * @return string|\Magento\Sales\Model\Order\Status\History
      */
-    protected function _prependMessage($messagePrependTo)
+    public function prependMessage($messagePrependTo)
     {
         $preparedMessage = $this->getPreparedMessage();
         if ($preparedMessage) {
@@ -1458,7 +1264,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param bool $asFloat
      * @return string|float
      */
-    protected function _formatAmount($amount, $asFloat = false)
+    public function formatAmount($amount, $asFloat = false)
     {
         $amount = $this->priceCurrency->round($amount);
         return !$asFloat ? (string)$amount : $amount;
@@ -1469,7 +1275,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amount
      * @return string
      */
-    protected function _formatPrice($amount)
+    public function formatPrice($amount)
     {
         return $this->getOrder()->getBaseCurrency()->formatTxt($amount);
     }
@@ -1493,11 +1299,11 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amountToCapture
      * @return bool
      */
-    protected function _isCaptureFinal($amountToCapture)
+    public function isCaptureFinal($amountToCapture)
     {
-        $amountPaid = $this->_formatAmount($this->getBaseAmountPaid(), true);
-        $amountToCapture = $this->_formatAmount($amountToCapture, true);
-        $orderGrandTotal = $this->_formatAmount($this->getOrder()->getBaseGrandTotal(), true);
+        $amountPaid = $this->formatAmount($this->getBaseAmountPaid(), true);
+        $amountToCapture = $this->formatAmount($amountToCapture, true);
+        $orderGrandTotal = $this->formatAmount($this->getOrder()->getBaseGrandTotal(), true);
         if ($orderGrandTotal == $amountPaid + $amountToCapture) {
             if (false !== $this->getShouldCloseParentTransaction()) {
                 $this->setShouldCloseParentTransaction(true);
@@ -1512,7 +1318,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @return bool
      */
-    protected function _isSameCurrency()
+    public function isSameCurrency()
     {
         return !$this->getCurrencyCode() || $this->getCurrencyCode() == $this->getOrder()->getBaseCurrencyCode();
     }
@@ -1527,6 +1333,16 @@ class Payment extends Info implements OrderPaymentInterface
     public function setTransactionAdditionalInfo($key, $value)
     {
         $this->transactionAdditionalInfo[$key] = $value;
+    }
+
+    /**
+     * Additional transaction info setter
+     *
+     * @return array
+     */
+    public function getTransactionAdditionalInfo()
+    {
+        return $this->transactionAdditionalInfo;
     }
 
     /**
