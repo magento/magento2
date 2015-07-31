@@ -56,6 +56,7 @@ class PrepareCatalogProductCollectionPrices
      * @param StoreManagerInterface $storeManager
      * @param TimezoneInterface $localeDate
      * @param CustomerModelSession $customerSession
+     * @param GroupManagementInterface $groupManagement
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,

@@ -43,6 +43,7 @@ class ProcessAdminFinalPrice
 
     /**
      * @param RulePricesStorage $rulePricesStorage
+     * @param Registry $coreRegistry
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $resourceRuleFactory
      * @param TimezoneInterface $localeDate
      */

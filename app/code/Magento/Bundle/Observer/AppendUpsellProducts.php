@@ -31,13 +31,15 @@ class AppendUpsellProducts
 
     /**
      * @param \Magento\Bundle\Helper\Data $bundleData
+     * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
+     * @param \Magento\Catalog\Model\Config $config
+     * @param \Magento\Bundle\Model\Resource\Selection $bundleSelection
      */
     public function __construct(
         \Magento\Bundle\Helper\Data $bundleData,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Config $config,
         \Magento\Bundle\Model\Resource\Selection $bundleSelection
-
     ) {
         $this->bundleData = $bundleData;
         $this->productVisibility = $productVisibility;
