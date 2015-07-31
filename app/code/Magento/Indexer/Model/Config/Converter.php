@@ -105,6 +105,7 @@ class Converter implements ConverterInterface
             'source'   => $this->getAttributeValue($node, 'source'),
             'name'     => $this->getAttributeValue($node, 'name'),
             'provider' => $this->getAttributeValue($node, 'provider'),
+            'prefix'   => $this->getAttributeValue($node, 'prefix'),
             'fields'   => [],
         ];
         foreach ($node->childNodes as $childNode) {

@@ -319,7 +319,15 @@ class Base implements ActionInterface
                 $this->data['fieldsets'][$fieldsetName] =
                     $fieldsetObject->addDynamicData($this->data['fieldsets'][$fieldsetName]);
             }
-            foreach ($fieldset['fields'] as $fieldName => $field) {
+            foreach ($this->data['fieldsets'][$fieldsetName]['fields'] as $fieldName => $field) {
+                $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['origin'] =
+                    $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['origin']
+                        ?: $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'];
+                if ($this->data['fieldsets'][$fieldsetName]['prefix']) {
+                    $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'] =
+                        $this->data['fieldsets'][$fieldsetName]['prefix'] . '_'
+                        . $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'];
+                }
                 $this->saveFieldByType($field);
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['handler'] =
                     $this->handlerPool->get($field['handler']);

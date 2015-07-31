@@ -18,7 +18,7 @@ class DefaultHandler implements HandlerInterface
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {
-        $source->getSelect()->columns($fieldInfo['name'], $alias);
+        $source->getSelect()->columns($fieldInfo['origin'] . ' AS ' . $fieldInfo['name'], $alias);
     }
 
     /**

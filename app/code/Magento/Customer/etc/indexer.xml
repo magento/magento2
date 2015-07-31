@@ -26,15 +26,15 @@
             <field name="last_visit_at" xsi:type="filterable" dataType="datetime" handler="LastVisitAtHandler"/>
         </fieldset>
 
-        <fieldset name="shipping_address" source="Magento\Customer\Model\Resource\Address\Collection">
+        <fieldset name="shipping_address" source="Magento\Customer\Model\Resource\Address\Collection" prefix="shipping">
             <reference fieldset="customer" from="entity_id" to="default_shipping"/>
-            <field name="shipping_address_full" xsi:type="searchable" dataType="text" handler="ShippingAddressHandler"/>
+            <field name="full" xsi:type="searchable" dataType="text" handler="ShippingAddressHandler"/>
         </fieldset>
 
         <fieldset name="billing_address" source="Magento\Customer\Model\Resource\Address\Collection"
-                  provider="Magento\Customer\Model\Indexer\Address\AttributeProvider">
+                  provider="Magento\Customer\Model\Indexer\Address\AttributeProvider" prefix="billing">
             <reference fieldset="customer" from="entity_id" to="default_billing"/>
-            <field name="billing_address_full" xsi:type="searchable" dataType="text" handler="BillingAddressHandler"/>
+            <field name="full" xsi:type="searchable" dataType="text" handler="BillingAddressHandler"/>
             <field name="telephone" xsi:type="searchable" dataType="varchar"/>
             <field name="postcode" xsi:type="searchable" dataType="varchar"/>
             <field name="country_id" xsi:type="filterable" dataType="varchar"/>
@@ -47,7 +47,7 @@
             <field name="company" xsi:type="searchable" dataType="varchar"/>
         </fieldset>
 
-        <saveHandler class="Magento\Indexer\Model\SaveHandler\CustomerHandler"/>
+        <saveHandler class="Magento\Customer\Model\Indexer\SaveHandler"/>
         <structure class="Magento\Customer\Model\Indexer\GridStructure"/>
     </indexer>
 </config>

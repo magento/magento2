@@ -64,10 +64,6 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with('is_used_in_grid', true)
-            ->willReturnSelf();
-        $this->collection->expects($this->once())
             ->method('getItems')
             ->willReturn([$attribute]);
         $this->eavConfig->expects($this->once())
@@ -81,12 +77,21 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('setEntity')
             ->with($entity)
             ->willReturnSelf();
-        $attribute->expects($this->exactly(2))
+        $attribute->expects($this->exactly(3))
             ->method('getName')
             ->willReturn($attrName);
         $attribute->expects($this->exactly(2))
             ->method('getBackendType')
             ->willReturn($attrBackendType);
+        $attribute->expects($this->exactly(3))
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['is_used_in_grid', null, true],
+                    ['is_searchable_in_grid', null, false],
+                    ['is_filterable_in_grid', null, false],
+                ]
+            );
 
         $this->assertEquals(
             ['fields' =>
@@ -131,10 +136,6 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with('is_used_in_grid', true)
-            ->willReturnSelf();
-        $this->collection->expects($this->once())
             ->method('getItems')
             ->willReturn([$attribute]);
         $this->eavConfig->expects($this->once())
@@ -148,7 +149,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('setEntity')
             ->with($entity)
             ->willReturnSelf();
-        $attribute->expects($this->exactly(2))
+        $attribute->expects($this->once())
             ->method('getName')
             ->willReturn($attrName);
         $attribute->expects($this->once())
@@ -156,18 +157,21 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($attrBackendType);
         $attribute->expects($this->once())
             ->method('getData')
-            ->with('is_searchable_in_grid')
-            ->willReturn(true);
+            ->willReturnMap(
+                [
+                    ['is_searchable_in_grid', null, true],
+                ]
+            );
 
         $this->assertEquals(
             ['fields' =>
                 [
                     $attrName => [
                         'name' => $attrName,
-                        'handler' => null,
+                        'handler' => 'handler',
                         'origin' => $attrName,
                         'type' => 'searchable',
-                        'filters' => [],
+                        'filters' => ['filter'],
                         'dataType' => 'data_type',
                     ]
                 ]
@@ -201,10 +205,6 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with('is_used_in_grid', true)
-            ->willReturnSelf();
-        $this->collection->expects($this->once())
             ->method('getItems')
             ->willReturn([$attribute]);
         $this->eavConfig->expects($this->once())
@@ -218,16 +218,17 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('setEntity')
             ->with($entity)
             ->willReturnSelf();
-        $attribute->expects($this->exactly(2))
+        $attribute->expects($this->exactly(3))
             ->method('getName')
             ->willReturn($attrName);
         $attribute->expects($this->exactly(2))
             ->method('getBackendType')
             ->willReturn($attrBackendType);
-        $attribute->expects($this->exactly(2))
+        $attribute->expects($this->exactly(3))
             ->method('getData')
             ->willReturnMap(
                 [
+                    ['is_used_in_grid', null, true],
                     ['is_searchable_in_grid', null, false],
                     ['is_filterable_in_grid', null, true],
                 ]

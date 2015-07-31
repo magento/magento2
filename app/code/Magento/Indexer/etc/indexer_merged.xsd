@@ -129,6 +129,7 @@
         <xs:attribute name="source" type="classType" use="required"/>
         <xs:attribute name="provider" type="classType" use="optional"/>
         <xs:attribute name="name" type="nameType" use="required"/>
+        <xs:attribute name="prefix" type="nameType" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="fieldType">
