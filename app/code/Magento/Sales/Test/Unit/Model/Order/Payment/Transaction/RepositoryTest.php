@@ -293,9 +293,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $transactionId
         )->willReturn($transaction);
         $transaction->expects($this->once())->method('getId')->willReturn($transactionId);
-        $this->entityStorage->expects($this->once())->method('addByIdentifyingFields')->with(
-            $transaction, $identityFieldsForCache, $cacheStorage
-        );
+        $this->entityStorage->expects($this->once())
+            ->method('addByIdentifyingFields')
+            ->with($transaction, $identityFieldsForCache, $cacheStorage);
         $this->assertEquals($transaction, $this->repository->getByTransactionId($transactionId, $paymentId, $orderId));
     }
 
