@@ -68,6 +68,7 @@ class Refund implements RelationInterface
      * Prepare order data for refund
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @return void
      */
     protected function prepareOrder(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -133,6 +134,7 @@ class Refund implements RelationInterface
      * Prepare invoice data for refund
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @return void
      */
     protected function prepareInvoice(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -149,6 +151,7 @@ class Refund implements RelationInterface
      * Prepare payment data for refund
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @return void
      */
     protected function preparePayment(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {

@@ -74,12 +74,9 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $data = [];
-        $this->creditmemoRepositoryMock = $this->getMock('Magento\Sales\Api\CreditmemoRepositoryInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->creditmemoRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\CreditmemoRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->creditmemoFactoryMock = $this->getMock('Magento\Sales\Model\Order\CreditmemoFactory', [], [], '', false);
         $this->orderFactoryMock = $this->getMockBuilder('Magento\Sales\Model\OrderFactory')
             ->disableOriginalConstructor()
