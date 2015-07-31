@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Locale;
 
 /**
@@ -42,6 +43,14 @@ class DeployStaticContentCommand extends Command
     private $objectManagerFactory;
 
     /**
+     * object manager to create various objects
+     *
+     * @var ObjectManagerInterface
+     *
+     */
+    private $objectManager;
+
+    /**
      * Inject dependencies
      *
      * @param ObjectManagerFactory $objectManagerFactory
@@ -49,10 +58,12 @@ class DeployStaticContentCommand extends Command
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        Locale $validator
+        Locale $validator,
+        ObjectManagerInterface $objectManager
     ) {
         $this->objectManagerFactory = $objectManagerFactory;
         $this->validator = $validator;
+        $this->objectManager = $objectManager;
         parent::__construct();
     }
 
@@ -98,15 +109,13 @@ class DeployStaticContentCommand extends Command
         }
 
         try {
-            $objectManager = $this->objectManagerFactory->create([]);
-
             // run the deployment logic
-            $filesUtil = $objectManager->create(
+            $filesUtil = $this->objectManager->create(
                 '\Magento\Framework\App\Utility\Files',
                 ['pathToSource' => BP]
             );
 
-            $deployer = $objectManager->create(
+            $deployer = $this->objectManager->create(
                 'Magento\Deploy\Model\Deployer',
                 ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
             );
