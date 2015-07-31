@@ -5,27 +5,108 @@
  */
 namespace Magento\Framework\Amqp\Test\Unit\Config;
 
+use Magento\Framework\Amqp\Config\Converter;
+
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\Amqp\Config\Converter
      */
-    protected $converter;
+    private $converter;
+
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigMock;
 
     /**
      * Initialize parameters
      */
     protected function setUp()
     {
-        $this->converter = new \Magento\Framework\Amqp\Config\Converter();
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->deploymentConfigMock = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->converter = $objectManager->getObject(
+            'Magento\Framework\Amqp\Config\Converter',
+            ['deploymentConfig' => $this->deploymentConfigMock]
+        );
     }
 
     /**
-     * Testing converting valid cron configuration
+     * Test converting valid configuration
      */
     public function testConvert()
     {
-        $expected = [
+        $expected = $this->getConvertedQueueConfig();
+        $xmlFile = __DIR__ . '/_files/queue.xml';
+        $dom = new \DOMDocument();
+        $dom->loadXML(file_get_contents($xmlFile));
+        $result = $this->converter->convert($dom);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test converting valid configuration with publisher for topic overridden in env.php
+     */
+    public function testConvertWithEnvOverride()
+    {
+        $customizedTopic = 'customer.deleted';
+        $customPublisher = 'test-queue';
+        $envTopicsConfig = [
+            'topics' => [
+                'some_topic_name' => 'custom_publisher',
+                $customizedTopic => $customPublisher,
+            ]
+        ];
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('getConfigData')
+            ->with(Converter::ENV_QUEUE)
+            ->willReturn($envTopicsConfig);
+        $expected = $this->getConvertedQueueConfig();
+        $expected[Converter::TOPICS][$customizedTopic][Converter::TOPIC_PUBLISHER] = $customPublisher;
+        $xmlFile = __DIR__ . '/_files/queue.xml';
+        $dom = new \DOMDocument();
+        $dom->loadXML(file_get_contents($xmlFile));
+        $result = $this->converter->convert($dom);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test converting valid configuration with invalid override configuration in env.php
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Publisher "invalid_publisher_name", specified in env.php for topic "customer.deleted" i
+     */
+    public function testConvertWithEnvOverrideException()
+    {
+        $customizedTopic = 'customer.deleted';
+        $envTopicsConfig = [
+            'topics' => [
+                'some_topic_name' => 'custom_publisher',
+                $customizedTopic => 'invalid_publisher_name',
+            ]
+        ];
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('getConfigData')
+            ->with(Converter::ENV_QUEUE)
+            ->willReturn($envTopicsConfig);
+        $xmlFile = __DIR__ . '/_files/queue.xml';
+        $dom = new \DOMDocument();
+        $dom->loadXML(file_get_contents($xmlFile));
+        $this->converter->convert($dom);
+    }
+
+    /**
+     * Get content of _files/queue.xml converted into array.
+     *
+     * @return array
+     */
+    protected function getConvertedQueueConfig()
+    {
+        return [
             'publishers' => [
                 'test-queue' => [
                     'name' => 'test-queue',
@@ -56,11 +137,5 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
-
-        $xmlFile = __DIR__ . '/../_files/queue_valid.xml';
-        $dom = new \DOMDocument();
-        $dom->loadXML(file_get_contents($xmlFile));
-        $result = $this->converter->convert($dom);
-        $this->assertEquals($expected, $result);
     }
 }

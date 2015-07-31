@@ -48,6 +48,7 @@ class RabbitMqConfig
      * Constructor
      *
      * Example environment config:
+     * <code>
      * 'queue' =>
      *     [
      *         'rabbit' => [
@@ -59,6 +60,7 @@ class RabbitMqConfig
      *             'ssl' => [],
      *         ],
      *     ],
+     * </code>
      *
      * @param DeploymentConfig $config
      */

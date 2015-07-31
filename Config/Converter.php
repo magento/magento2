@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Amqp\Config;
+
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Converts AMQP config from \DOMDocument to array
@@ -21,6 +22,24 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const TOPIC_PUBLISHER = 'publisher';
     const TOPIC_SCHEMA = 'schema';
 
+    const ENV_QUEUE = 'queue';
+    const ENV_TOPICS = 'topics';
+
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * Initialize dependencies
+     *
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     */
+    public function __construct(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
+    {
+        $this->deploymentConfig = $deploymentConfig;
+    }
+
     /**
      * Convert dom node tree to array
      *
@@ -29,10 +48,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        return [
-            self::PUBLISHERS => $this->extractPublishers($source),
-            self::TOPICS => $this->extractTopics($source)
-        ];
+        $publishers = $this->extractPublishers($source);
+        $topics = $this->extractTopics($source);
+        $this->overridePublishersForTopics($topics, $publishers);
+        return [self::PUBLISHERS => $publishers, self::TOPICS => $topics];
     }
 
     /**
@@ -75,5 +94,46 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             ];
         }
         return $output;
+    }
+
+    /**
+     * Override publishers declared for topics in queue.xml using values specified in the etc/env.php
+     *
+     * Note that $topics argument is modified by reference.
+     *
+     * Example environment config:
+     * <code>
+     * 'queue' =>
+     *     [
+     *         'topics' => [
+     *             'some_topic_name' => 'custom_publisher',
+     *         ],
+     *     ],
+     * </code>
+     *
+     * @param array &$topics
+     * @param array $publishers
+     * @return void
+     * @throws LocalizedException
+     */
+    protected function overridePublishersForTopics(array &$topics, array $publishers)
+    {
+        $queueConfig =  $this->deploymentConfig->getConfigData(self::ENV_QUEUE);
+        if (isset($queueConfig[self::ENV_TOPICS]) && is_array($queueConfig[self::ENV_TOPICS])) {
+            foreach ($queueConfig[self::ENV_TOPICS] as $topicName => $publisherName) {
+                if (isset($topics[$topicName])) {
+                    if (isset($publishers[$publisherName])) {
+                        $topics[$topicName][self::TOPIC_PUBLISHER] = $publisherName;
+                    } else {
+                        throw new LocalizedException(
+                            __(
+                                'Publisher "%publisher", specified in env.php for topic "%topic" is not declared.',
+                                ['publisher' => $publisherName, 'topic' => $topicName]
+                            )
+                        );
+                    }
+                }
+            }
+        }
     }
 }
