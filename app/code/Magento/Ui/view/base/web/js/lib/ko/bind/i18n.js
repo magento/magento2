@@ -11,8 +11,7 @@ define([
 ], function ($, ko, module) {
     'use strict';
 
-    var inlineTranslation = (module.config() || {}).inlineTranslation,
-        locations = {
+    var locations = {
             'legend': 'Caption for the fieldset element',
             'label': 'Label for an input element.',
             'button': 'Push button',
@@ -129,7 +128,8 @@ define([
          */
         execute = function (element, valueAccessor, isUpdate) {
             var original = ko.unwrap(valueAccessor() || ''),
-                el = getRealElement(element, isUpdate);
+                el = getRealElement(element, isUpdate),
+                inlineTranslation = (module.config() || {}).inlineTranslation;
 
             if (inlineTranslation) {
                 setTranslateProp(el, original);
