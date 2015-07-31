@@ -13,7 +13,7 @@ angular.module('select-version', ['ngStorage'])
 
         $scope.processed = false;
         $scope.processError = false;
-        $scope.readyToNext = false;
+        $scope.readyForNext = false;
 
         $http.get('index.php/select-version/systemPackage',{'responseType' : 'json'})
             .success(function (data) {
@@ -22,7 +22,7 @@ angular.module('select-version', ['ngStorage'])
                     $scope.versions = data.package.versions;
                     $scope.selectedOption = $scope.versions[0].id;
 
-                    $scope.readyToNext = true;
+                    $scope.readyForNext = true;
                 } else {
                     $scope.processError = true;
                 }
@@ -30,10 +30,10 @@ angular.module('select-version', ['ngStorage'])
                 $scope.processed = true;
             })
             .error(function (data) {
+                $scope.processError = true;
             });
 
         $scope.update = function(component) {
-            console.log($scope.package);
             $localStorage.packages = [
                 $scope.package
             ];

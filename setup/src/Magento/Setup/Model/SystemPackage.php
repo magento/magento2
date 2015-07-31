@@ -10,6 +10,9 @@ use Magento\Composer\MagentoComposerApplication;
 use Magento\Composer\InfoCommand;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 
+/**
+ * Class SystemPackage returns system package and available for update versions
+ */
 class SystemPackage
 {
     /**
@@ -67,7 +70,6 @@ class SystemPackage
         foreach ($systemPackageInfo['available_versions'] as $version) {
             if (version_compare($currentVersion, $version, '<')) {
                 $versions[] = ['id' => $version, 'name' => $version];
-
             }
         }
 
