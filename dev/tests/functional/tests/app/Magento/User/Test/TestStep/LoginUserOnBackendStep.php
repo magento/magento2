@@ -70,9 +70,12 @@ class LoginUserOnBackendStep implements TestStepInterface
      */
     public function run()
     {
-        $this->logoutUserOnBackendStep->run();
-
         $this->adminAuth->open();
+
+        if (!$this->adminAuth->getLoginBlock()->isVisible()) {
+            $this->logoutUserOnBackendStep->run();
+        }
+
         $this->adminAuth->getLoginBlock()->fill($this->user);
         $this->adminAuth->getLoginBlock()->submit();
         $this->adminAuth->getLoginBlock()->waitFormNotVisible();
