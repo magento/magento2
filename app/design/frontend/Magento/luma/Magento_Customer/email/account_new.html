@@ -22,10 +22,16 @@
         customer_url=$this.getUrl($store,'customer/account/')
     |raw}}
 </p>
-<ul>
-    <li><strong>{{trans "Email:"}}</strong> {{var customer.email}}</li>
-    <li><strong>{{trans "Password:"}}</strong> <em>{{trans "Password you set when creating account"}}</em></li>
-</ul>
+<table class="email-credentials">
+    <tr>
+        <th>{{trans "Email:"}}</th>
+        <td>{{var customer.email}}</td>
+    </tr>
+    <tr>
+        <th>{{trans "Password:"}}</th>
+        <td><em>{{trans "Password you set when creating account"}}</em></td>
+    </tr>
+</table>
 <p>
     {{trans
         'Forgot your account password? Click <a href="%reset_url">here</a> to reset it.'
@@ -33,12 +39,62 @@
         reset_url="$this.getUrl($store,'customer/account/createPassword/',[_query:[id:$customer.id,token:$customer.rp_token]])"
     |raw}}
 </p>
+<br />
 <p>{{trans "When you sign in to your account, you will be able to:"}}</p>
-<ul>
-    <li>{{trans "Proceed through checkout faster"}}</li>
-    <li>{{trans "Check the status of orders"}}</li>
-    <li>{{trans "View past orders"}}</li>
-    <li>{{trans "Store alternative addresses (for shipping to multiple family members and friends)"}}</li>
-</ul>
+<table class="email-features">
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <img src="/pub/static/frontend/Magento/luma/en_US/Magento_Customer/icn_checkout.png" height="30px" width="30px" alt="Quick Checkout" />
+                    </td>
+                    <td>
+                        <h3>{{trans "Proceed through checkout faster"}}</h3>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <img src="/pub/static/frontend/Magento/luma/en_US/Magento_Customer/icn_status.png" height="30px" width="30px" alt="Order Status" />
+                    </td>
+                    <td>
+                        <h3>{{trans "Check the status of orders"}}</h3>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <img src="/pub/static/frontend/Magento/luma/en_US/Magento_Customer/icn_address.png" height="30px" width="30px" at="Manage Addresses" />
+                    </td>
+                    <td>
+                        <h3>{{trans "Store alternative addresses"}}</h3>
+                        <p>For shipping to multiple family members and friends</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <img src="/pub/static/frontend/Magento/luma/en_US/Magento_Customer/icn_history.png" height="30px" width="30px" alt="Order History" />
+                    </td>
+                    <td>
+                        <h3>{{trans "View past orders"}}</h3>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 {{template config_path="design/email/footer_template"}}
