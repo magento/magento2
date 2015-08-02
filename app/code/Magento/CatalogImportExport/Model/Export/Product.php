@@ -768,6 +768,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     public function export()
     {
+        $shouldProfile = false;
+        if (extension_loaded('xhprof')) {
+            $xhprofRoot = "/lukerodgers.co.uk/builds/xhprof";
+            if (is_dir($xhprofRoot)) {
+                $shouldProfile = true;
+                require_once $xhprofRoot . "/xhprof_lib/utils/xhprof_lib.php";
+                require_once $xhprofRoot . "/xhprof_lib/utils/xhprof_runs.php";
+                xhprof_enable();
+            }
+        }
+
         //Execution time may be very long
         set_time_limit(0);
 
@@ -794,7 +805,18 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 break;
             }
         }
-        return $writer->getContents();
+
+        $contents = $writer->getContents();
+        if ($shouldProfile) {
+            $uri = date("y-m-d-h-i-s")."-".$_SERVER['SERVER_ADDR']."-".$_SERVER['REQUEST_URI'];
+            $uri = preg_replace('#[^0-9a-z]+#i', '-', $uri);
+            $uri = strtolower($uri);
+            $uri = trim($uri, '-');
+            $xhprof_data = xhprof_disable();
+            $xhprof_runs = new \XHProfRuns_Default();
+            $xhprof_runs->save_run($xhprof_data, $uri);
+        }
+        return $contents;
     }
 
     /**
