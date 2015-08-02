@@ -6,12 +6,12 @@ require dirname(__FILE__) . '/abstract.php';
 class CreateCategoriesApp extends AbstractApp
 {
 
-    public function launch()
+    public function run()
     {
         $this->_objectManager->get('Magento\Framework\Registry')
             ->register('isSecureArea', true);
 
-        for ($i=0; $i<200; ++$i) {
+        for ($i=0; $i<2500; ++$i) {
             $newCategoryName = 'Performance Category ' .$i;
 
             /** @var Magento\Catalog\Model\Category\Interceptor $newCategory */
@@ -35,8 +35,6 @@ class CreateCategoriesApp extends AbstractApp
                 echo "Deleting\t" . $newCategoryName . PHP_EOL;
             }
         }
-
-        return parent::launch();
     }
 }
 

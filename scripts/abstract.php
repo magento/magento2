@@ -10,7 +10,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\App\AreaList as AreaList;
 use Magento\Framework\App\State as State;
 
-class AbstractApp implements AppInterface
+abstract class AbstractApp implements AppInterface
 {
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -36,8 +36,11 @@ class AbstractApp implements AppInterface
 
     public function launch()
     {
+        $this->run();
         return $this->_response;
     }
+
+    abstract public function run();
 
     public function catchException(\Magento\Framework\App\Bootstrap $bootstrap, \Exception $exception)
     {
