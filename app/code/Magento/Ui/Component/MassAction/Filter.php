@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Component\MassAction;
 
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\RequestInterface;
@@ -36,22 +37,32 @@ class Filter
     protected $components = [];
 
     /**
+     * @var FilterBuilder
+     */
+    protected $filterBuilder;
+
+    /**
      * @param UiComponentFactory $factory
      * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
         UiComponentFactory $factory,
-        RequestInterface $request
+        RequestInterface $request,
+        FilterBuilder $filterBuilder
     ) {
         $this->factory = $factory;
         $this->request = $request;
+        $this->filterBuilder = $filterBuilder;
     }
 
     /**
+     * Returns component by namespace
+     *
      * @return UiComponentInterface
      * @throws LocalizedException
      */
-    protected function getComponent()
+    public function getComponent()
     {
         $namespace = $this->request->getParam('namespace');
         if (!isset($this->components[$namespace])) {
@@ -77,6 +88,39 @@ class Filter
 
         $collection->addFieldToFilter($collection->getIdFieldName(), ['in' => $ids]);
         return $this->applySelection($collection);
+    }
+
+    /**
+     * Apply selection by Excluded Included to Search Result
+     *
+     * @throws LocalizedException
+     * @return void
+     */
+    public function applySelectionOnTargetProvider()
+    {
+        $selected = $this->request->getParam(static::SELECTED_PARAM);
+        $excluded = $this->request->getParam(static::EXCLUDED_PARAM);
+        if ('false' === $excluded) {
+            return;
+        }
+        $component = $this->getComponent();
+        $this->prepareComponent($component);
+        $dataProvider = $component->getContext()->getDataProvider();
+        try {
+            if (is_array($excluded) && !empty($excluded)) {
+                $this->filterBuilder->setConditionType('nin')
+                    ->setField($dataProvider->getPrimaryFieldName())
+                    ->setValue($excluded);
+                $dataProvider->addFilter($this->filterBuilder->create());
+            } elseif (is_array($selected) && !empty($selected)) {
+                $this->filterBuilder->setConditionType('in')
+                    ->setField($dataProvider->getPrimaryFieldName())
+                    ->setValue($selected);
+                $dataProvider->addFilter($this->filterBuilder->create());
+            }
+        } catch (\Exception $e) {
+            throw new LocalizedException(__($e->getMessage()));
+        }
     }
 
     /**
@@ -113,7 +157,7 @@ class Filter
      * @param UiComponentInterface $component
      * @return void
      */
-    protected function prepareComponent(UiComponentInterface $component)
+    public function prepareComponent(UiComponentInterface $component)
     {
         foreach ($component->getChildComponents() as $child) {
             $this->prepareComponent($child);

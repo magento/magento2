@@ -15,22 +15,21 @@ define([
         defaults: {
             template: 'ui/grid/exportButton',
             checked: '',
-            params: {
-                filters: {}
-            },
-            filtersConfig: {
-                provider: '${ $.provider }',
-                path: 'params.filters'
-            },
-            imports: {
-                'params.filters': '${ $.filtersConfig.provider }:${ $.filtersConfig.path }'
+            modules: {
+                selections: '${ $.selectProvider }'
             }
         },
 
         initialize: function () {
             this._super()
-                .observe('checked')
                 .initChecked();
+        },
+
+        initObservable: function () {
+            this._super()
+                .observe('checked');
+
+            return this;
         },
 
         initChecked: function () {
@@ -42,14 +41,40 @@ define([
             return this;
         },
 
-        applyOption: function () {
-            var option = _.filter(this.options, function (op) {
-                return op.value === this.checked();
-            }, this)[0];
+        getParams: function () {
+            var selections = this.selections(),
+                data = selections.getSelections(),
+                itemsType = data.excludeMode ? 'excluded' : 'selected',
+                result = {};
 
-            location.href = option.url + '?' + $.param({
-                'filters': this.params.filters
+            result['filters'] = data.params.filters;
+            result['search'] = data.params.search;
+            result['namespace'] = data.params.namespace;
+            result[itemsType] = data[itemsType];
+
+            if (!result[itemsType].length) {
+                result[itemsType] = false;
+            }
+            return result;
+        },
+
+        getActiveOption: function () {
+            return _.findWhere(this.options, {
+                value: this.checked()
             });
+        },
+
+        buildOptionUrl: function (option) {
+            var url = option.url + '?';
+
+            return url + $.param(this.getParams());
+        },
+
+        applyOption: function () {
+            var option = this.getActiveOption(),
+                url = this.buildOptionUrl(option);
+
+            location.href = url;
         }
     });
 });

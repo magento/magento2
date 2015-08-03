@@ -109,9 +109,9 @@ class LookupExpression extends \Zend_Db_Expr
             $expr = new \Zend_Db_Expr(
                 sprintf(
                     '%s %s',
-                    $this->adapter->quoteIdentifier('lookup.' . $column)
-                ),
-                $direction
+                    $this->adapter->quoteIdentifier('lookup.' . $column),
+                    $direction
+                )
             );
             $select->order($expr);
         }

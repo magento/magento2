@@ -175,7 +175,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     public function getSearchResult()
     {
         //TODO: Technical dept, should be implemented as part of SearchAPI support for Catalog Grids
-        return null;
+        return $this->getCollection();
     }
 
     /**
