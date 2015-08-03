@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
+use Magento\Framework\App\Resource;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 /**
@@ -134,7 +135,7 @@ abstract class AbstractType
         $this->_attrSetColFac = $attrSetColFac;
         $this->_prodAttrColFac = $prodAttrColFac;
         $this->_resource = $resource;
-        $this->_connection = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection();
         if ($this->isSuitable()) {
             if (!isset($params[0])
                 || !isset($params[1])

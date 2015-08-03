@@ -9,6 +9,7 @@
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\App\Resource;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -343,7 +344,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (isset($data['connection'])) {
             $this->_connection = $data['connection'];
         } else {
-            $this->_connection = $resource->getConnection('write');
+            $this->_connection = $resource->getConnection();
         }
 
         if (isset($data['resource_helper'])) {
@@ -1044,7 +1045,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         // Parse custom options.
         $rowData = $this->_parseCustomOptions($rowData);
-        $multiRow = array();
+        $multiRow = [];
         if (empty($rowData['custom_options'])) {
             return $multiRow;
         }
@@ -1054,7 +1055,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($rowData['custom_options'] as $name => $customOption) {
             $i++;
             foreach ($customOption as $rowOrder => $optionRow) {
-                $row = array(
+                $row = [
                     self::COLUMN_STORE => '',
                     self::COLUMN_TYPE => $name ? $optionRow['type'] : '',
                     self::COLUMN_TITLE => $name,
@@ -1064,7 +1065,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     self::COLUMN_ROW_SKU => $optionRow['sku'],
                     self::COLUMN_ROW_SORT => $rowOrder,
                     self::COLUMN_PREFIX . 'sku' => $optionRow['sku']
-                );
+                ];
 
                 $percent_suffix = isset($optionRow['price_type']) && ($optionRow['price_type'] == 'percent') ? '%' : '';
                 $row[self::COLUMN_ROW_PRICE] = isset($optionRow['price']) ? $optionRow['price'] . $percent_suffix : '';
@@ -1748,7 +1749,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $rowData;
         }
         $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter, $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
-        $options = array();
+        $options = [];
         $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
         $k = 0;
         $name = '';
