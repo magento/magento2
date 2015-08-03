@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model;
+
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
