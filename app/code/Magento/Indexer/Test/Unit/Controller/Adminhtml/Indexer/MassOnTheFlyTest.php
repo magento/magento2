@@ -171,7 +171,7 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->indexReg = $this->getMock(
-            'Magento\Indexer\Model\IndexerRegistry',
+            'Magento\Framework\Indexer\IndexerRegistry',
             ['get', 'setScheduled'],
             [],
             '',
@@ -207,10 +207,10 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
         } else {
 
             $this->objectManager->expects($this->any())
-                ->method('get')->with('Magento\Indexer\Model\IndexerRegistry')
+                ->method('get')->with('Magento\Framework\Indexer\IndexerRegistry')
                 ->will($this->returnValue($this->indexReg));
             $indexerInterface = $this->getMockForAbstractClass(
-                'Magento\Indexer\Model\IndexerInterface',
+                'Magento\Framework\Indexer\IndexerInterface',
                 ['setScheduled'],
                 '',
                 false

@@ -9,10 +9,10 @@ class IndexerRegistryTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetCreatesIndexerInstancesAndReusesExistingOnes()
     {
-        $firstIndexer = $this->getMock('Magento\Indexer\Model\IndexerInterface');
+        $firstIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
         $firstIndexer->expects($this->once())->method('load')->with('first-indexer')->willReturnSelf();
 
-        $secondIndexer = $this->getMock('Magento\Indexer\Model\IndexerInterface');
+        $secondIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
         $secondIndexer->expects($this->once())->method('load')->with('second-indexer')->willReturnSelf();
 
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');

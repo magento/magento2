@@ -27,7 +27,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->indexer = $this->getMockForAbstractClass('\Magento\Indexer\Model\IndexerInterface', [], '', false);
+        $this->indexer = $this->getMockForAbstractClass('\Magento\Framework\Indexer\IndexerInterface', [], '', false);
         $this->import = $this->getMock(
             '\Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import',
             ['getPriceIndexer', 'invalidateIndexer'],

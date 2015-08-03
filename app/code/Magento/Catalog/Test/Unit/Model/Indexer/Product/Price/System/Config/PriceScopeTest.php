@@ -38,7 +38,7 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
 
         $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
         $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);

@@ -10,7 +10,7 @@ use Magento\Framework\Search\Request\Dimension;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver
+ * Test for \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
  */
 class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,7 +45,7 @@ class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->target = $objectManager->getObject(
-            '\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver',
+            '\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver',
             [
                 'resource' => $this->resource,
                 'scopeResolver' => $this->scopeResolver

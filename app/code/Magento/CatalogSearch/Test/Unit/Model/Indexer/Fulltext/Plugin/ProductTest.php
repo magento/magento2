@@ -35,7 +35,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->subjectMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
 
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\IndexerInterface',
+            'Magento\Framework\Indexer\IndexerInterface',
             [],
             '',
             false,
@@ -44,7 +44,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ['getId', 'getState', '__wakeup']
         );
 
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
 
         $this->model = new Product($this->indexerRegistryMock);
     }

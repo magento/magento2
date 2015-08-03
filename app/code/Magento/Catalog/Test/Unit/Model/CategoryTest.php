@@ -140,8 +140,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->flatState = $this->getMock('Magento\Catalog\Model\Indexer\Category\Flat\State', [], [], '', false);
-        $this->flatIndexer = $this->getMock('Magento\Indexer\Model\IndexerInterface');
-        $this->productIndexer = $this->getMock('Magento\Indexer\Model\IndexerInterface');
+        $this->flatIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
+        $this->productIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
         $this->categoryUrlPathGenerator = $this->getMock(
             'Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator',
             [],
@@ -157,7 +157,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->indexerRegistry = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
 
         $this->metadataServiceMock = $this->getMock('\Magento\Catalog\Api\CategoryAttributeRepositoryInterface');
         $this->attributeValueFactory = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')

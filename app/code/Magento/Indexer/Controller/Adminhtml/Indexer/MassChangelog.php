@@ -22,7 +22,7 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
             try {
                 foreach ($indexerIds as $indexerId) {
                     /** @var \Magento\Framework\Indexer\IndexerInterface $model */
-                    $model = $this->_objectManager->get('Magento\Indexer\Model\IndexerRegistry')->get($indexerId);
+                    $model = $this->_objectManager->get('Magento\Framework\Indexer\IndexerRegistry')->get($indexerId);
                     $model->setScheduled(true);
                 }
                 $this->messageManager->addSuccess(
