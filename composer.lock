@@ -45,7 +45,7 @@
             "authors": [
                 {
                     "name": "Braintree",
-                    "homepage": "http://www.braintreepayments.com"
+                    "homepage": "https://www.braintreepayments.com"
                 }
             ],
             "description": "Braintree PHP Client Library",
@@ -94,7 +94,7 @@
                     "Composer": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -102,16 +102,16 @@
                 {
                     "name": "Nils Adermann",
                     "email": "naderman@naderman.de",
-                    "homepage": "http://www.naderman.de"
+                    "homepage": "https://www.naderman.de"
                 },
                 {
                     "name": "Jordi Boggiano",
                     "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be"
+                    "homepage": "https://seld.be"
                 }
             ],
             "description": "Composer helps you declare, manage and install dependencies of PHP projects, ensuring you have the right stack everywhere.",
-            "homepage": "http://getcomposer.org/",
+            "homepage": "https://getcomposer.org/",
             "keywords": [
                 "autoload",
                 "dependency",
@@ -223,7 +223,7 @@
                     "MagentoHackathon\\Composer\\Magento": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0"
             ],
@@ -293,7 +293,7 @@
                     "Zend_": "library/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "library/"
             ],
@@ -301,7 +301,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Magento Zend Framework 1",
-            "homepage": "http://framework.zend.com/",
+            "homepage": "https://framework.zend.com/",
             "keywords": [
                 "ZF1",
                 "framework"
@@ -360,7 +360,7 @@
                     "Monolog\\": "src/Monolog"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -368,11 +368,11 @@
                 {
                     "name": "Jordi Boggiano",
                     "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be"
+                    "homepage": "https://seld.be"
                 }
             ],
             "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-            "homepage": "http://github.com/Seldaek/monolog",
+            "homepage": "https://github.com/Seldaek/monolog",
             "keywords": [
                 "log",
                 "logging",
@@ -409,7 +409,7 @@
                     "lessc.inc.php"
                 ]
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -427,8 +427,8 @@
                     "homepage": "https://github.com/oyejorge"
                 }
             ],
-            "description": "PHP port of the Javascript version of LESS http://lesscss.org",
-            "homepage": "http://lessphp.gpeasy.com",
+            "description": "PHP port of the Javascript version of LESS https://lesscss.org",
+            "homepage": "https://lessphp.gpeasy.com",
             "keywords": [
                 "css",
                 "less",
@@ -492,7 +492,7 @@
                 }
             ],
             "description": "Converts CSS styles into inline style attributes in your HTML code",
-            "homepage": "http://www.pelagodesign.com/sidecar/emogrifier/",
+            "homepage": "https://www.pelagodesign.com/sidecar/emogrifier/",
             "time": "2015-05-15 11:37:51"
         },
         {
@@ -515,14 +515,14 @@
                     "Psr\\Log\\": ""
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
+                    "homepage": "https://www.php-fig.org/"
                 }
             ],
             "description": "Common interface for logging libraries",
@@ -559,7 +559,7 @@
                     "Seld\\JsonLint\\": "src/Seld/JsonLint/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -567,7 +567,7 @@
                 {
                     "name": "Jordi Boggiano",
                     "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be"
+                    "homepage": "https://seld.be"
                 }
             ],
             "description": "JSON Linter",
@@ -774,7 +774,7 @@
                 }
             ],
             "description": "Javascript Minifier built in PHP",
-            "homepage": "http://github.com/tedious/JShrink",
+            "homepage": "https://github.com/tedious/JShrink",
             "keywords": [
                 "javascript",
                 "minifier"
@@ -804,14 +804,14 @@
                     "cssmin.php"
                 ]
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Túbal Martín",
-                    "homepage": "http://tubalmartin.me/"
+                    "homepage": "https://tubalmartin.me/"
                 }
             ],
             "description": "A PHP port of the YUI CSS compressor",
@@ -866,7 +866,7 @@
                     "Zend\\Code\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -923,7 +923,7 @@
                     "Zend\\Config\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -974,7 +974,7 @@
                     "Zend\\Console\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1076,7 +1076,7 @@
                     "Zend\\Di\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1121,7 +1121,7 @@
                     "Zend\\Escaper\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1167,7 +1167,7 @@
                     "Zend\\EventManager\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1222,7 +1222,7 @@
                     "Zend\\Filter\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1290,7 +1290,7 @@
                     "Zend\\Form\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1302,16 +1302,16 @@
             "time": "2015-03-28 20:29:18"
         },
         {
-            "name": "zendframework/zend-http",
+            "name": "zendframework/zend-https",
             "version": "2.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-http.git",
+                "url": "https://github.com/zendframework/zend-https.git",
                 "reference": "9c6047a0bdb3094d3ea07a215ff929cc47de4deb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-http/zipball/9c6047a0bdb3094d3ea07a215ff929cc47de4deb",
+                "url": "https://api.github.com/repos/zendframework/zend-https/zipball/9c6047a0bdb3094d3ea07a215ff929cc47de4deb",
                 "reference": "9c6047a0bdb3094d3ea07a215ff929cc47de4deb",
                 "shasum": ""
             },
@@ -1336,17 +1336,17 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Http\\": "src/"
+                    "Zend\\https\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "provides an easy interface for performing Hyper-Text Transfer Protocol (HTTP) requests",
-            "homepage": "https://github.com/zendframework/zend-http",
+            "description": "provides an easy interface for performing Hyper-Text Transfer Protocol (https) requests",
+            "homepage": "https://github.com/zendframework/zend-https",
             "keywords": [
-                "http",
+                "https",
                 "zf2"
             ],
             "time": "2015-03-27 15:46:30"
@@ -1404,7 +1404,7 @@
                     "Zend\\I18n\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1456,7 +1456,7 @@
                     "Zend\\InputFilter\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1489,11 +1489,11 @@
                 "fabpot/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "~4.0",
                 "satooshi/php-coveralls": "dev-master",
-                "zendframework/zend-http": "self.version",
+                "zendframework/zend-https": "self.version",
                 "zendframework/zend-server": "self.version"
             },
             "suggest": {
-                "zendframework/zend-http": "Zend\\Http component",
+                "zendframework/zend-https": "Zend\\https component",
                 "zendframework/zend-server": "Zend\\Server component",
                 "zendframework/zendxml": "To support Zend\\Json\\Json::fromXml() usage"
             },
@@ -1509,7 +1509,7 @@
                     "Zend\\Json\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1555,7 +1555,7 @@
                     "Zend\\Loader\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1615,7 +1615,7 @@
                     "Zend\\Log\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1668,7 +1668,7 @@
                     "Zend\\Math\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1726,7 +1726,7 @@
                     "Zend\\ModuleManager\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1766,7 +1766,7 @@
                 "zendframework/zend-console": "self.version",
                 "zendframework/zend-di": "self.version",
                 "zendframework/zend-filter": "self.version",
-                "zendframework/zend-http": "self.version",
+                "zendframework/zend-https": "self.version",
                 "zendframework/zend-i18n": "self.version",
                 "zendframework/zend-inputfilter": "self.version",
                 "zendframework/zend-json": "self.version",
@@ -1786,7 +1786,7 @@
                 "zendframework/zend-console": "Zend\\Console component",
                 "zendframework/zend-di": "Zend\\Di component",
                 "zendframework/zend-filter": "Zend\\Filter component",
-                "zendframework/zend-http": "Zend\\Http component",
+                "zendframework/zend-https": "Zend\\https component",
                 "zendframework/zend-i18n": "Zend\\I18n component for translatable segments",
                 "zendframework/zend-inputfilter": "Zend\\Inputfilter component",
                 "zendframework/zend-json": "Zend\\Json component",
@@ -1813,7 +1813,7 @@
                     "Zend\\Mvc\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1865,7 +1865,7 @@
                     "Zend\\Serializer\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1913,7 +1913,7 @@
                     "Zend\\Server\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1963,7 +1963,7 @@
                     "Zend\\ServiceManager\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1998,10 +1998,10 @@
                 "fabpot/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "~4.0",
                 "satooshi/php-coveralls": "dev-master",
-                "zendframework/zend-http": "self.version"
+                "zendframework/zend-https": "self.version"
             },
             "suggest": {
-                "zendframework/zend-http": "Zend\\Http component"
+                "zendframework/zend-https": "Zend\\https component"
             },
             "type": "library",
             "extra": {
@@ -2015,7 +2015,7 @@
                     "Zend\\Soap\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2070,7 +2070,7 @@
                     "Zend\\Stdlib\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2117,7 +2117,7 @@
                     "Zend\\Text\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2164,7 +2164,7 @@
                     "Zend\\Uri\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2228,7 +2228,7 @@
                     "Zend\\Validator\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2268,7 +2268,7 @@
                 "zendframework/zend-escaper": "self.version",
                 "zendframework/zend-feed": "self.version",
                 "zendframework/zend-filter": "self.version",
-                "zendframework/zend-http": "self.version",
+                "zendframework/zend-https": "self.version",
                 "zendframework/zend-i18n": "self.version",
                 "zendframework/zend-json": "self.version",
                 "zendframework/zend-mvc": "self.version",
@@ -2283,7 +2283,7 @@
                 "zendframework/zend-escaper": "Zend\\Escaper component",
                 "zendframework/zend-feed": "Zend\\Feed component",
                 "zendframework/zend-filter": "Zend\\Filter component",
-                "zendframework/zend-http": "Zend\\Http component",
+                "zendframework/zend-https": "Zend\\https component",
                 "zendframework/zend-i18n": "Zend\\I18n component",
                 "zendframework/zend-json": "Zend\\Json component",
                 "zendframework/zend-mvc": "Zend\\Mvc component",
@@ -2305,7 +2305,7 @@
                     "Zend\\View\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2362,7 +2362,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/"
+                    "homepage": "https://ocramius.github.com/"
                 }
             ],
             "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
@@ -2454,7 +2454,7 @@
                     "League\\CLImate\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2462,7 +2462,7 @@
                 {
                     "name": "Joe Tannenbaum",
                     "email": "hey@joe.codes",
-                    "homepage": "http://joe.codes/",
+                    "homepage": "https://joe.codes/",
                     "role": "Developer"
                 }
             ],
@@ -2496,12 +2496,12 @@
             "require-dev": {
                 "phpunit/phpunit": "3.7.*",
                 "predis/predis": "0.8.*@dev",
-                "symfony/http-foundation": "~2.1"
+                "symfony/https-foundation": "~2.1"
             },
             "suggest": {
-                "ext-openssl": "Allows for usage of secure connections with the stream-based HTTP client.",
+                "ext-openssl": "Allows for usage of secure connections with the stream-based https client.",
                 "predis/predis": "Allows using the Redis storage backend.",
-                "symfony/http-foundation": "Allows using the Symfony Session storage backend."
+                "symfony/https-foundation": "Allows using the Symfony Session storage backend."
             },
             "type": "library",
             "extra": {
@@ -2515,7 +2515,7 @@
                     "OAuth\\Unit": "tests"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2570,7 +2570,7 @@
                     "PDepend\\": "src/main/php/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2611,7 +2611,7 @@
                     "PHPMD\\": "src/main/php"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2629,7 +2629,7 @@
                 }
             ],
             "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",
-            "homepage": "http://phpmd.org/",
+            "homepage": "https://phpmd.org/",
             "keywords": [
                 "mess detection",
                 "mess detector",
@@ -2724,7 +2724,7 @@
                     "File/"
                 ]
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 ""
             ],
@@ -2927,7 +2927,7 @@
                     "src/"
                 ]
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "",
                 "../../symfony/yaml/"
@@ -2943,7 +2943,7 @@
                 }
             ],
             "description": "The PHP Unit Testing framework.",
-            "homepage": "http://www.phpunit.de/",
+            "homepage": "https://www.phpunit.de/",
             "keywords": [
                 "phpunit",
                 "testing",
@@ -3063,7 +3063,7 @@
                 }
             ],
             "description": "Provides the functionality to compare PHP values for equality",
-            "homepage": "http://www.github.com/sebastianbergmann/comparator",
+            "homepage": "https://www.github.com/sebastianbergmann/comparator",
             "keywords": [
                 "comparator",
                 "compare",
@@ -3102,7 +3102,7 @@
                     "src/"
                 ]
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3117,7 +3117,7 @@
                 }
             ],
             "description": "Diff implementation",
-            "homepage": "http://www.github.com/sebastianbergmann/diff",
+            "homepage": "https://www.github.com/sebastianbergmann/diff",
             "keywords": [
                 "diff"
             ],
@@ -3165,7 +3165,7 @@
                 }
             ],
             "description": "Provides functionality to handle HHVM/PHP environments",
-            "homepage": "http://www.github.com/sebastianbergmann/environment",
+            "homepage": "https://www.github.com/sebastianbergmann/environment",
             "keywords": [
                 "Xdebug",
                 "environment",
@@ -3232,7 +3232,7 @@
                 }
             ],
             "description": "Provides the functionality to export PHP variables for visualization",
-            "homepage": "http://www.github.com/sebastianbergmann/exporter",
+            "homepage": "https://www.github.com/sebastianbergmann/exporter",
             "keywords": [
                 "export",
                 "exporter"
@@ -3289,7 +3289,7 @@
                 }
             ],
             "description": "Provides functionality to recursively process PHP variables",
-            "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
+            "homepage": "https://www.github.com/sebastianbergmann/recursion-context",
             "time": "2015-06-21 08:04:50"
         },
         {
@@ -3366,7 +3366,7 @@
                     "StaticReview\\": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3374,7 +3374,7 @@
                 {
                     "name": "Samuel Parkinson",
                     "email": "sam.james.parkinson@gmail.com",
-                    "homepage": "http://samp.im"
+                    "homepage": "https://samp.im"
                 }
             ],
             "description": "An extendable framework for version control hooks.",
@@ -3437,7 +3437,7 @@
                     "CodeSniffer/Standards/Zend/Sniffs/"
                 ]
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3448,7 +3448,7 @@
                 }
             ],
             "description": "PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
-            "homepage": "http://www.squizlabs.com/php-codesniffer",
+            "homepage": "https://www.squizlabs.com/php-codesniffer",
             "keywords": [
                 "phpcs",
                 "standards"
@@ -3592,7 +3592,7 @@
             },
             "suggest": {
                 "symfony/dependency-injection": "",
-                "symfony/http-kernel": ""
+                "symfony/https-kernel": ""
             },
             "type": "library",
             "extra": {
