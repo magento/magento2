@@ -10,34 +10,36 @@ namespace Magento\Sales\Model\Order\Payment\State;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Payment;
 
-class Authorize implements CommandInterface
+/**
+ * Class Order
+ */
+class OrderCommand implements CommandInterface
 {
+    /**
+     * Run command
+     *
+     * @param OrderPaymentInterface $payment
+     * @param string|float|int $amount
+     * @param OrderInterface $order
+     * @return string
+     */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
         $state = Order::STATE_PROCESSING;
         $status = false;
         $formattedAmount = $order->getBaseCurrency()->formatTxt($amount);
         if ($payment->getIsTransactionPending()) {
-            $state = Order::STATE_PAYMENT_REVIEW;
             $message = __(
-                'We will authorize %1 after the payment is approved at the payment gateway.',
+                'The order amount of %1 is pending approval on the payment gateway.',
                 $formattedAmount
             );
-        } else {
+            $state = Order::STATE_PAYMENT_REVIEW;
             if ($payment->getIsFraudDetected()) {
-                $state = Order::STATE_PROCESSING;
-                $message = __(
-                    'Order is suspended as its authorizing amount %1 is suspected to be fraudulent.',
-                    $formattedAmount
-                );
-            } else {
-                $message = __('Authorized amount of %1', $formattedAmount);
+                $status = Order::STATUS_FRAUD;
             }
-        }
-        if ($payment->getIsFraudDetected()) {
-            $status = Order::STATUS_FRAUD;
+        } else {
+            $message = __('Ordered amount of %1', $formattedAmount);
         }
         $this->setOrderStateAndStatus($order, $status, $state);
 
