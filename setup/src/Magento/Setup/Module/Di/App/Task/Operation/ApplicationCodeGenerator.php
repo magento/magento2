@@ -45,4 +45,14 @@ class ApplicationCodeGenerator implements OperationInterface
             $this->classesScanner->getList($path);
         }
     }
+
+    /**
+     * Returns operation name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Application code generator';
+    }
 }

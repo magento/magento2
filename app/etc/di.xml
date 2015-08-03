@@ -89,7 +89,6 @@
     <preference for="Magento\Framework\Mview\View\CollectionInterface" type="Magento\Framework\Mview\View\Collection" />
     <preference for="Magento\Framework\Mview\View\SubscriptionInterface" type="Magento\Framework\Mview\View\Subscription" />
     <preference for="Magento\Framework\Mview\View\ChangelogInterface" type="Magento\Framework\Mview\View\Changelog" />
-    <preference for="Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Flat"/>
     <preference for="Magento\Framework\Api\MetadataServiceInterface" type="Magento\Framework\Api\DefaultMetadataService"/>
     <preference for="Magento\Framework\Api\MetadataObjectInterface" type="Magento\Framework\Api\AttributeMetadata"/>
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria"/>
@@ -213,11 +212,6 @@
             <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Asset\MinifyService">
-        <arguments>
-            <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Cache\Frontend\Factory">
         <arguments>
             <argument name="enforcedOptions" xsi:type="init_parameter">Magento\Framework\App\Cache\Frontend\Factory::PARAM_CACHE_FORCED_OPTIONS</argument>
@@ -268,7 +262,7 @@
     <type name="Magento\Framework\View\Layout\Data\Structure" shared="false" />
     <type name="Magento\Theme\Model\View\Design">
         <arguments>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Acl" shared="false" />
@@ -313,7 +307,7 @@
     </type>
     <type name="Magento\Framework\App\Resource">
         <arguments>
-            <argument name="adapterFactory" xsi:type="object">Magento\Framework\App\Resource\ConnectionFactory</argument>
+            <argument name="connectionFactory" xsi:type="object">Magento\Framework\App\Resource\ConnectionFactory</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Resource\Config">
@@ -601,29 +595,23 @@
             <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </virtualType>
-    <virtualType name="fallbackResolverSimpleWithGroupedCache" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Grouped</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\File">
         <arguments>
-            <argument name="resolver" xsi:type="object">fallbackResolverSimpleWithGroupedCache</argument>
+            <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile">
         <arguments>
-            <argument name="resolver" xsi:type="object">fallbackResolverSimpleWithGroupedCache</argument>
+            <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile">
         <arguments>
-            <argument name="resolver" xsi:type="object">fallbackResolverSimpleWithGroupedCache</argument>
+            <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
         </arguments>
     </type>
     <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Flat</argument>
             <argument name="alternativeExtensions" xsi:type="array">
                 <item name="css" xsi:type="array">
                     <item name="less" xsi:type="string">less</item>
@@ -631,9 +619,14 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="viewFileMinifiedFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification">
+        <arguments>
+            <argument name="fallback" xsi:type="object">viewFileFallbackResolver</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\StaticFile">
         <arguments>
-            <argument name="resolver" xsi:type="object">viewFileFallbackResolver</argument>
+            <argument name="resolver" xsi:type="object">viewFileMinifiedFallbackResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Code\Generator">
