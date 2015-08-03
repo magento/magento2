@@ -41,7 +41,13 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
         $this->model = new Group($this->indexerRegistryMock);
     }
 
