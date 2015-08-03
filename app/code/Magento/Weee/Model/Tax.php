@@ -317,7 +317,6 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                                     $value * $currentPercent / 100
                                 );
                             }
-                            $taxAmount = $this->priceCurrency->round($value * $currentPercent / 100);
                         }
                     }
 
