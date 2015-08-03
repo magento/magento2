@@ -67,10 +67,10 @@ class Relation implements \Magento\Framework\Model\Resource\Db\VersionControl\Re
         $changedAddresses['default_billing'] = $customer->getData('default_billing');
         $changedAddresses['default_shipping'] = $customer->getData('default_shipping');
 
-        $customer->getResource()->getWriteConnection()->update(
+        $customer->getResource()->getConnection()->update(
             $customer->getResource()->getTable('customer_entity'),
             $changedAddresses,
-            $customer->getResource()->getWriteConnection()->quoteInto('entity_id = ?', $customer->getId())
+            $customer->getResource()->getConnection()->quoteInto('entity_id = ?', $customer->getId())
         );
     }
 }

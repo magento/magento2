@@ -33,9 +33,9 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects($this->once())->method('from')->with('catalog_category_entity');
-        $connection = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
+        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
         $this->_resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->_resource->expects(
@@ -43,7 +43,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getConnection'
         )->with(
-            'catalog_write'
+            'catalog'
         )->will(
             $this->returnValue($connection)
         );
@@ -131,7 +131,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     public function testAddCollectionData()
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('join')->will($this->returnSelf());
         $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());

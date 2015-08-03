@@ -32,16 +32,16 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function addOptionValueToCollection($collection, $attribute, $valueExpr)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $attributeCode = $attribute->getAttributeCode();
         $optionTable1 = $attributeCode . '_option_value_t1';
         $optionTable2 = $attributeCode . '_option_value_t2';
         $tableJoinCond1 = "{$optionTable1}.option_id={$valueExpr} AND {$optionTable1}.store_id=0";
-        $tableJoinCond2 = $adapter->quoteInto(
+        $tableJoinCond2 = $connection->quoteInto(
             "{$optionTable2}.option_id={$valueExpr} AND {$optionTable2}.store_id=?",
             $collection->getStoreId()
         );
-        $valueExpr = $adapter->getCheckSql(
+        $valueExpr = $connection->getCheckSql(
             "{$optionTable2}.value_id IS NULL",
             "{$optionTable1}.value",
             "{$optionTable2}.value"
@@ -73,7 +73,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $store,
         $hasValueField = true
     ) {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $attributeTable = $attribute->getBackend()->getTable();
         $attributeCode = $attribute->getAttributeCode();
 
@@ -96,9 +96,9 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $joinCondition .= ' AND e.child_id = t1.entity_id';
         }
 
-        $valueExpr = $adapter->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
+        $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
         /** @var $select \Magento\Framework\DB\Select */
-        $select = $adapter->select()->joinLeft(
+        $select = $connection->select()->joinLeft(
             ['t1' => $attributeTable],
             $joinCondition,
             []
@@ -109,14 +109,14 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         if ($attribute->getFrontend()->getInputType() != 'multiselect' && $hasValueField) {
-            $valueIdExpr = $adapter->getCheckSql('to2.value_id > 0', 'to2.value', 'to1.value');
+            $valueIdExpr = $connection->getCheckSql('to2.value_id > 0', 'to2.value', 'to1.value');
             $select->joinLeft(
                 ['to1' => $this->getTable('eav_attribute_option_value')],
                 "to1.option_id = {$valueExpr} AND to1.store_id = 0",
                 []
             )->joinLeft(
                 ['to2' => $this->getTable('eav_attribute_option_value')],
-                $adapter->quoteInto("to2.option_id = {$valueExpr} AND to2.store_id = ?", $store),
+                $connection->quoteInto("to2.option_id = {$valueExpr} AND to2.store_id = ?", $store),
                 [$attributeCode . '_value' => $valueIdExpr]
             );
         }
