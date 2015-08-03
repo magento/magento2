@@ -51,7 +51,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->with('core_read')
             ->willReturn($this->adapterMock);
 
-        $this->resourceMock->expects($this->once())
+        $this->resourceMock->expects($this->atLeastOnce())
             ->method('getTableName')
             ->willReturn('table_name');
 
@@ -89,5 +89,33 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->selectMock);
 
         $this->model->isWeeeInLocation('US', 0, 1);
+    }
+
+    public function testFetchWeeTaxCalculationsByEntity()
+    {
+        $this->selectMock->expects($this->any())
+            ->method('where')
+            ->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->any())
+            ->method('from')
+            ->with(
+                ['eavTable' => 'table_name'],
+                [
+                    'eavTable.attribute_code',
+                    'eavTable.attribute_id',
+                    'eavTable.frontend_label'
+                ]
+            )->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->any())
+            ->method('joinLeft')
+            ->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->any())
+            ->method('joinInner')
+            ->willReturn($this->selectMock);
+
+        $this->model->fetchWeeTaxCalculationsByEntity('US', 0, 1, 3, 4);
     }
 }
