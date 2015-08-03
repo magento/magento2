@@ -101,13 +101,13 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->registry = $this->getMock($className, [], [], '', false);
 
         $className = '\Magento\Eav\Model\Entity\AttributeFactory';
-        $this->attributeFactory = $this->getMock($className, [], [], '', false);
+        $this->attributeFactory = $this->getMock($className, ['create'], [], '', false);
 
         $className = '\Magento\Store\Model\StoreManagerInterface';
         $this->storeManager = $this->getMock($className, [], [], '', false);
 
         $className = '\Magento\Tax\Model\CalculationFactory';
-        $this->calculationFactory = $this->getMock($className, [], [], '', false);
+        $this->calculationFactory = $this->getMock($className, ['create'], [], '', false);
 
         $className = '\Magento\Customer\Model\Session';
         $this->customerSession = $this->getMock($className, [], [], '', false);
@@ -153,23 +153,13 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductWeeeAttributes()
     {
-        $className = 'Magento\Catalog\Model\Product';
-        $product = $this->getMock($className, [], [], '', false);
+        $product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $website = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
+        $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $group = $this->getMock('\Magento\Store\Model\Group', [], [], '', false);
 
-        $className = 'Magento\Store\Model\Website';
-        $website = $this->getMock($className, [], [], '', false);
-
-        $className = '\Magento\Store\Model\Store';
-        $store = $this->getMock($className, [], [], '', false);
-
-        $className = '\Magento\Store\Model\Group';
-        $group = $this->getMock($className, [], [], '', false);
-
-        $className = '\Magento\Eav\Model\Entity\Attribute';
-        $attribute = $this->getMock($className, [], [], '', false);
-
-        $className = '\Magento\Tax\Model\Calculation';
-        $calculation = $this->getMock($className, [], [], '', false);
+        $attribute = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
+        $calculation = $this->getMock('Magento\Tax\Model\Calculation', [], [], '', false);
 
         $obj = new \Magento\Framework\Object(['country' => 'US', 'region' => 'TX']);
         $calculation->expects($this->once())
@@ -215,7 +205,6 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->weeeConfig->expects($this->any())
             ->method('isEnabled')
             ->willReturn(true);
-
 
         $this->weeeConfig->expects($this->any())
             ->method('isTaxable')
