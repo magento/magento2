@@ -83,6 +83,7 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up test
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
