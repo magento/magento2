@@ -63,9 +63,8 @@ class IndexStructure
      */
     public function delete($index, array $dimensions = [])
     {
-        $adapter = $this->getAdapter();
-        $this->dropTable($adapter, $this->indexScopeResolver->resolve($index, $dimensions));
-        $this->dropTable($adapter, $this->flatScopeResolver->resolve($index, $dimensions));
+        $this->dropTable($this->resource->getConnection(), $this->indexScopeResolver->resolve($index, $dimensions));
+        $this->dropTable($this->resource->getConnection(), $this->flatScopeResolver->resolve($index, $dimensions));
     }
 
     /**
@@ -89,9 +88,8 @@ class IndexStructure
      */
     protected function createFulltextIndex($tableName)
     {
-        $adapter = $this->getAdapter();
-        $table = $this->configureFulltextTable($adapter->newTable($tableName));
-        $adapter->createTable($table);
+        $table = $this->configureFulltextTable($this->resource->getConnection()->newTable($tableName));
+        $this->resource->getConnection()->createTable($table);
     }
 
     /**
@@ -137,8 +135,7 @@ class IndexStructure
      */
     protected function createFlatIndex($tableName, array $fields)
     {
-        $adapter = $this->getAdapter();
-        $table = $adapter->newTable($tableName);
+        $table = $this->resource->getConnection()->newTable($tableName);
         $table->addColumn(
             'entity_id',
             Table::TYPE_INTEGER,
@@ -158,27 +155,18 @@ class IndexStructure
             $size = $columnMap['size'];
             $table->addColumn($name, $type, $size);
         }
-        $adapter->createTable($table);
+        $this->resource->getConnection()->createTable($table);
     }
 
     /**
-     * @return false|AdapterInterface
-     */
-    private function getAdapter()
-    {
-        $adapter = $this->resource->getConnection('write');
-        return $adapter;
-    }
-
-    /**
-     * @param AdapterInterface $adapter
+     * @param AdapterInterface $connection
      * @param string $tableName
      * @return void
      */
-    private function dropTable(AdapterInterface $adapter, $tableName)
+    private function dropTable(AdapterInterface $connection, $tableName)
     {
-        if ($adapter->isTableExists($tableName)) {
-            $adapter->dropTable($tableName);
+        if ($connection->isTableExists($tableName)) {
+            $connection->dropTable($tableName);
         }
     }
 }
