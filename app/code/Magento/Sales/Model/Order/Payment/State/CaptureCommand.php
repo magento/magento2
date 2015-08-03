@@ -6,10 +6,9 @@
 
 namespace Magento\Sales\Model\Order\Payment\State;
 
-
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order as SalesOrder;
 
 class CaptureCommand implements CommandInterface
 {
@@ -23,7 +22,7 @@ class CaptureCommand implements CommandInterface
      */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
-        $state = Order::STATE_PROCESSING;
+        $state = SalesOrder::STATE_PROCESSING;
         $status = false;
         $formattedAmount = $order->getBaseCurrency()->formatTxt($amount);
         if ($payment->getIsTransactionPending()) {
@@ -31,9 +30,9 @@ class CaptureCommand implements CommandInterface
                 'An amount of %1 will be captured after being approved at the payment gateway.',
                 $formattedAmount
             );
-            $state = Order::STATE_PAYMENT_REVIEW;
+            $state = SalesOrder::STATE_PAYMENT_REVIEW;
             if ($payment->getIsFraudDetected()) {
-                $status = Order::STATUS_FRAUD;
+                $status = SalesOrder::STATUS_FRAUD;
             }
         } else {
             // normal online capture: invoice is marked as "paid"
