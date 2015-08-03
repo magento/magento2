@@ -334,7 +334,7 @@ class ComposerInformation
     private function savePackagesForUpdateToCache($availableVersions)
     {
         $syncInfo = [];
-        $syncInfo['lastSyncDate'] = $this->dateTime->formatDate(true);
+        $syncInfo['lastSyncDate'] = str_replace('-', '/', $this->dateTime->formatDate(true));
         $syncInfo['packages'] = $availableVersions;
         $data = json_encode($syncInfo, JSON_UNESCAPED_SLASHES);
         try {
