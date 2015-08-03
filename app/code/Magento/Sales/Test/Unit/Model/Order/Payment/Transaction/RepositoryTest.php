@@ -318,7 +318,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $paymentId,
             $transactionId
         )->willReturn(false);
-        $transaction->expects($this->never())->method('getId')->willReturn($transactionId);
+        $transaction->expects($this->once())->method('getId')->willReturn(false);
         $this->assertEquals(
             false,
             $this->repository->getByTransactionId($transactionId, $paymentId, $orderId)
