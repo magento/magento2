@@ -14,9 +14,9 @@
         <div data-role="steps-wizard-controls" class="steps-wizard-navigation">
             <ul class="nav-bar">
                 <?php foreach ($block->getSteps() as $step) { ?>
-                    <li data-role="collapsible">
+                    <li data-role="collapsible" data-bind="css: { 'active': selectedStep() == '<?= $step->getComponentName() ?>'}">
                         <a href="#<?= $step->getComponentName() ?>"
-                           data-bind="click: showSpecificStep, css: { 'active': '#' + selectedStep() == $element.hash }">
+                           data-bind="click: showSpecificStep">
                             <?= $step->getCaption() ?>
                         </a>
                     </li>

@@ -67,7 +67,7 @@ define([
             this.index = newIndex;
         };
         this.getStep = function(stepIndex) {
-            return this.steps[stepIndex || this.index];
+            return this.steps[stepIndex || this.index] || {};
         };
         this.notifyMessage = function (message, error) {
             $(this.element).notification('clear').notification('add', {
@@ -81,7 +81,9 @@ define([
         };
         this.render = function() {
             $(this.element).notification('clear');
-            this.getStep().render(this);
+            if (!_.isEmpty(this.getStep())) {
+                this.getStep().render(this);
+            }
         };
         this.render();
     };
