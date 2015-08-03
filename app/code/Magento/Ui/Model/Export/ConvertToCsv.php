@@ -142,7 +142,8 @@ class ConvertToCsv
      *
      * @param array $list
      * @param string $label
-     * @return array
+     * @param array $output
+     * @return void
      */
     protected function getComplexLabel($list, $label, &$output)
     {
@@ -189,9 +190,9 @@ class ConvertToCsv
         $component = $this->filter->getComponent();
         $childComponents = $component->getChildComponents();
         $listingTop = $childComponents['listing_top'];
-        foreach($listingTop->getChildComponents() as $child) {
+        foreach ($listingTop->getChildComponents() as $child) {
             if ($child instanceof \Magento\Ui\Component\Filters) {
-                foreach($child->getChildComponents() as $filter) {
+                foreach ($child->getChildComponents() as $filter) {
                     if ($filter instanceof Select) {
                         $options[$filter->getName()] = $this->getFilterOptions($filter);
                     }
