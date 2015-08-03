@@ -25,7 +25,7 @@ class InvalidateCacheTest extends \PHPUnit_Framework_TestCase
     /**
      * Subject mock
      *
-     * @var \Magento\Indexer\Model\ActionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ActionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 

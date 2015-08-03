@@ -84,7 +84,7 @@ class GenerateFixturesCommand extends Command
             /** @var $config \Magento\Indexer\Model\Config */
             $config = $fixtureModel->getObjectManager()->get('Magento\Indexer\Model\Config');
             $indexerListIds = $config->getIndexers();
-            /** @var $indexerRegistry \Magento\Indexer\Model\IndexerRegistry */
+            /** @var $indexerRegistry \Magento\Framework\Indexer\IndexerRegistry */
             $indexerRegistry = $fixtureModel->getObjectManager()->create('Magento\Indexer\Model\IndexerRegistry');
             $indexersState = [];
             foreach ($indexerListIds as $indexerId) {

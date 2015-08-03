@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Indexer\Model;
-
+namespace Magento\Framework\Indexer;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Indexer\Model\ScopeResolver\FlatScopeResolver;
-use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 class IndexStructure implements IndexStructureInterface
 {
@@ -21,7 +20,7 @@ class IndexStructure implements IndexStructureInterface
      */
     private $resource;
     /**
-     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver
+     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
      */
     private $indexScopeResolver;
     /**
@@ -41,7 +40,7 @@ class IndexStructure implements IndexStructureInterface
     /**
      * @param Resource|Resource $resource
      * @param IndexScopeResolver $indexScopeResolver
-     * @param \Magento\Indexer\Model\ScopeResolver\FlatScopeResolver $flatScopeResolver
+     * @param \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver $flatScopeResolver
      * @param array $columnTypesMap
      */
     public function __construct(

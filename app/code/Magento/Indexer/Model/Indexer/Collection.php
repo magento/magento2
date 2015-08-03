@@ -53,7 +53,7 @@ class Collection extends \Magento\Framework\Data\Collection
         if (!$this->isLoaded()) {
             $states = $this->statesFactory->create();
             foreach (array_keys($this->config->getIndexers()) as $indexerId) {
-                /** @var \Magento\Indexer\Model\IndexerInterface $indexer */
+                /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
                 $indexer = $this->getNewEmptyItem();
                 $indexer->load($indexerId);
                 foreach ($states->getItems() as $state) {

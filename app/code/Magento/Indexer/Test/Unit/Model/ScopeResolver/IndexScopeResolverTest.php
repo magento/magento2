@@ -25,7 +25,7 @@ class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
     private $resource;
 
     /**
-     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver
+     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
      */
     private $target;
 

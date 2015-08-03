@@ -10,7 +10,7 @@ use \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup;
 class StoreGroupTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexerMock;
 
@@ -30,7 +30,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     protected $subjectMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 

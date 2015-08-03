@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model;
+namespace Magento\Framework\Indexer;
 
 interface IndexerInterface
 {
@@ -82,17 +82,17 @@ interface IndexerInterface
     /**
      * Return related state object
      *
-     * @return Indexer\State
+     * @return StateInterface
      */
     public function getState();
 
     /**
      * Set indexer state object
      *
-     * @param Indexer\State $state
+     * @param StateInterface $state
      * @return IndexerInterface
      */
-    public function setState(Indexer\State $state);
+    public function setState(StateInterface $state);
 
     /**
      * Check whether indexer is run by schedule

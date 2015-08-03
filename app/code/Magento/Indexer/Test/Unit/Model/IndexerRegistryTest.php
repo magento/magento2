@@ -19,7 +19,7 @@ class IndexerRegistryTest extends \PHPUnit_Framework_TestCase
         $objectManager->expects($this->at(0))->method('create')->willReturn($firstIndexer);
         $objectManager->expects($this->at(1))->method('create')->willReturn($secondIndexer);
 
-        $unit = new \Magento\Indexer\Model\IndexerRegistry($objectManager);
+        $unit = new \Magento\Framework\Indexer\IndexerRegistry($objectManager);
         $this->assertSame($firstIndexer, $unit->get('first-indexer'));
         $this->assertSame($secondIndexer, $unit->get('second-indexer'));
         $this->assertSame($firstIndexer, $unit->get('first-indexer'));

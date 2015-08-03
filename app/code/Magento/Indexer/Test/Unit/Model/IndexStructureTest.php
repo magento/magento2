@@ -16,12 +16,12 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class IndexStructureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $indexScopeResolver;
 
     /**
-     * @var \Magento\Indexer\Model\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $flatScopeResolver;
 
@@ -36,7 +36,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
     private $adapter;
 
     /**
-     * @var \Magento\Indexer\Model\IndexStructure
+     * @var \Magento\Framework\Indexer\IndexStructure
      */
     private $target;
 

@@ -3,16 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model\SaveHandler;
+namespace Magento\Framework\Indexer\SaveHandler;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Indexer\Model\IndexStructureInterface;
-use Magento\Indexer\Model\ScopeResolver\FlatScopeResolver;
-use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\SaveHandler\Batch;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -60,8 +60,8 @@ class IndexerHandler implements IndexerInterface
      * @param IndexStructureInterface $indexStructure
      * @param Resource $resource
      * @param Batch $batch
-     * @param \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
-     * @param \Magento\Indexer\Model\ScopeResolver\FlatScopeResolver $flatScopeResolver
+     * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @param \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver $flatScopeResolver
      * @param array $data
      * @param int $batchSize
      */

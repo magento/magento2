@@ -61,10 +61,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Indexer\Category\Flat\State|\PHPUnit_Framework_MockObject_MockObject */
     protected $flatState;
 
-    /** @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $flatIndexer;
 
-    /** @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $productIndexer;
 
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
@@ -76,7 +76,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
-    /** @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
     protected $indexerRegistry;
 
     /**

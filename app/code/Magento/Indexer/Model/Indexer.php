@@ -4,6 +4,11 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model;
+use Magento\Framework\Indexer\ActionInterface;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\Indexer\StructureFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -235,7 +240,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     /**
      * Return related state object
      *
-     * @return Indexer\State
+     * @return StateInterface
      */
     public function getState()
     {
@@ -249,10 +254,10 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     /**
      * Set indexer state object
      *
-     * @param Indexer\State $state
+     * @param StateInterface $state
      * @return IndexerInterface
      */
-    public function setState(Indexer\State $state)
+    public function setState(StateInterface $state)
     {
         $this->state = $state;
         return $this;

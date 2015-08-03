@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Indexer;
+use Magento\Framework\Indexer\StateInterface;
 
 /**
  * @method string getIndexerId()
@@ -12,7 +13,7 @@ namespace Magento\Indexer\Model\Indexer;
  * @method string getUpdated()
  * @method \Magento\Indexer\Model\Indexer\State setUpdated($value)
  */
-class State extends \Magento\Framework\Model\AbstractModel
+class State extends \Magento\Framework\Model\AbstractModel implements StateInterface
 {
     /**
      * Indexer statuses
