@@ -157,6 +157,13 @@ define([
         },
         render: function(wizard) {
             this.wizard = wizard;
+            if (this.initData) {
+                this.wizard.notifyMessage(
+                    $.mage.__('When you remove or add an attribute, we automatically ' +
+                    'update all configurations and you will need to manually recreate the current configurations.'),
+                    false
+                );
+            }
             this.requestAttributes(wizard.data.attributesIds());
         },
         force: function(wizard) {
