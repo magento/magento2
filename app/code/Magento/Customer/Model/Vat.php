@@ -6,6 +6,9 @@
 namespace Magento\Customer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Information as StoreInformation;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Store\Model\ScopeInterface;
 
@@ -53,16 +56,6 @@ class Vat
     const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     /**
-     * Configuration path to merchant country id
-     */
-    const XML_PATH_MERCHANT_COUNTRY_CODE = 'general/store_information/country_id';
-
-    /**
-     * Config path to merchant VAT number
-     */
-    const XML_PATH_MERCHANT_VAT_NUMBER = 'general/store_information/merchant_vat_number';
-
-    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -87,13 +80,13 @@ class Vat
     /**
      * Retrieve merchant country code
      *
-     * @param \Magento\Store\Model\Store|string|int|null $store
+     * @param Store|string|int|null $store
      * @return string
      */
     public function getMerchantCountryCode($store = null)
     {
         return (string)$this->scopeConfig->getValue(
-            self::XML_PATH_MERCHANT_COUNTRY_CODE,
+            StoreInformation::XML_PATH_STORE_INFO_COUNTRY_CODE,
             ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -102,13 +95,13 @@ class Vat
     /**
      * Retrieve merchant VAT number
      *
-     * @param \Magento\Store\Model\Store|string|int|null $store
+     * @param Store|string|int|null $store
      * @return string
      */
     public function getMerchantVatNumber($store = null)
     {
         return (string)$this->scopeConfig->getValue(
-            self::XML_PATH_MERCHANT_VAT_NUMBER,
+            StoreInformation::XML_PATH_STORE_INFO_VAT_NUMBER,
             ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -119,7 +112,7 @@ class Vat
      *
      * @param string $customerCountryCode
      * @param \Magento\Framework\Object $vatValidationResult
-     * @param \Magento\Store\Model\Store|string|int $store
+     * @param Store|string|int $store
      * @return null|int
      */
     public function getCustomerGroupIdBasedOnVatNumber($customerCountryCode, $vatValidationResult, $store = null)
@@ -168,16 +161,15 @@ class Vat
     public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
     {
         // Default response
-        $gatewayResponse = new \Magento\Framework\Object(
-            ['is_valid' => false, 'request_date' => '', 'request_identifier' => '', 'request_success' => false]
-        );
+        $gatewayResponse = new \Magento\Framework\Object([
+            'is_valid' => false,
+            'request_date' => '',
+            'request_identifier' => '',
+            'request_success' => false,
+        ]);
 
         if (!extension_loaded('soap')) {
-            $this->logger->critical(
-                new \Magento\Framework\Exception\LocalizedException(
-                    __('PHP SOAP extension is required.')
-                )
-            );
+            $this->logger->critical(new LocalizedException(__('PHP SOAP extension is required.')));
             return $gatewayResponse;
         }
 
@@ -253,7 +245,7 @@ class Vat
      *
      * @param string $customerCountryCode
      * @param \Magento\Framework\Object $vatValidationResult
-     * @param \Magento\Store\Model\Store|string|int|null $store
+     * @param Store|string|int|null $store
      * @return null|string
      */
     public function getCustomerVatClass($customerCountryCode, $vatValidationResult, $store = null)
@@ -292,11 +284,7 @@ class Vat
     {
         $euCountries = explode(
             ',',
-            $this->scopeConfig->getValue(
-                self::XML_PATH_EU_COUNTRIES_LIST,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )
+            $this->scopeConfig->getValue(self::XML_PATH_EU_COUNTRIES_LIST, ScopeInterface::SCOPE_STORE, $storeId)
         );
         return in_array($countryCode, $euCountries);
     }

@@ -51,12 +51,6 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     /**#@+
      * Configuration paths
      */
-    const XML_PATH_STORE_STORE_NAME = 'general/store_information/name';
-
-    const XML_PATH_STORE_STORE_PHONE = 'general/store_information/phone';
-
-    const XML_PATH_STORE_STORE_HOURS = 'general/store_information/hours';
-
     const XML_PATH_STORE_IN_URL = 'web/url/use_store';
 
     const XML_PATH_USE_REWRITES = 'web/seo/use_rewrites';
@@ -311,9 +305,9 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     protected $currencyFactory;
 
     /**
-     * @var \Magento\Store\Model\Address\Renderer
+     * @var \Magento\Store\Model\Information
      */
-    protected $addressRenderer;
+    protected $information;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -337,6 +331,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data optional generic object data
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -357,7 +352,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Store\Model\Address\Renderer $renderer,
+        \Magento\Store\Model\Information $information,
         $currencyInstalled,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
@@ -378,7 +373,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         $this->_httpContext = $httpContext;
         $this->_session = $session;
         $this->currencyFactory = $currencyFactory;
-        $this->addressRenderer = $renderer;
+        $this->information = $information;
         $this->_currencyInstalled = $currencyInstalled;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -1163,16 +1158,20 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     {
         if (null === $this->_frontendName) {
             $storeGroupName = (string)$this->_config
-                ->getValue(self::XML_PATH_STORE_STORE_NAME, ScopeInterface::SCOPE_STORE, $this);
+                ->getValue(Information::XML_PATH_STORE_INFO_NAME, ScopeInterface::SCOPE_STORE, $this);
             $this->_frontendName = !empty($storeGroupName) ? $storeGroupName : $this->getGroup()->getName();
         }
         return $this->_frontendName;
     }
 
+    /**
+     * Retrieve formatted store address from config
+     *
+     * @return string
+     */
     public function getFormattedAddress()
     {
-        $address = new \Magento\Framework\Object();
-        $this->addressRenderer->format($address, 'html');
+        return $this->information->getFormattedAddress($this);
     }
 
     /**
