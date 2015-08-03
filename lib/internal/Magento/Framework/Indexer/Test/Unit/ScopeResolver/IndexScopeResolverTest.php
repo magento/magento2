@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Indexer\Test\Unit\Model\ScopeResolver;
+namespace Magento\Framework\Indexer\Test\Unit\ScopeResolver;
 
 use Magento\Framework\Search\Request\Dimension;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

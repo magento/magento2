@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Model;
+namespace Magento\Framework\Indexer\Test\Unit;
 
 class IndexerRegistryTest extends \PHPUnit_Framework_TestCase
 {

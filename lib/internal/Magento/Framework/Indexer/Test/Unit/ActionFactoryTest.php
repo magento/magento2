@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Model;
+namespace Magento\Framework\Indexer\Test\Unit;
 
 class ActionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $model;
 
@@ -20,7 +20,7 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->model = new \Magento\Indexer\Model\ActionFactory($this->objectManagerMock);
+        $this->model = new \Magento\Framework\Indexer\ActionFactory($this->objectManagerMock);
     }
 
     /**
