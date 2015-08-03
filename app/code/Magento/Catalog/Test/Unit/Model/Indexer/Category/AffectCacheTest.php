@@ -30,7 +30,7 @@ class AffectCacheTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->subjectMock = $this->getMockForAbstractClass('Magento\Indexer\Model\ActionInterface',
+        $this->subjectMock = $this->getMockForAbstractClass('Magento\Framework\Indexer\ActionInterface',
             [], '', false, true, true, []);
         $this->contextMock = $this->getMock('Magento\Indexer\Model\CacheContext',
             [], [], '', false);
