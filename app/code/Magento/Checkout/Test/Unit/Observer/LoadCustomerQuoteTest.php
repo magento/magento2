@@ -3,21 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Test\Unit\Model;
-
-use \Magento\Checkout\Model\Observer;
+namespace Magento\Checkout\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class LoadCustomerQuoteTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Observer */
+    /** @var \Magento\Checkout\Observer\LoadCustomerQuote */
     protected $object;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-    /** @var Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $checkoutSession;
 
     /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -28,18 +26,10 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
         $this->checkoutSession = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
         $this->messageManager = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
-        $this->object = $this->objectManager->getObject('Magento\Checkout\Model\Observer', [
+        $this->object = $this->objectManager->getObject('Magento\Checkout\Observer\LoadCustomerQuote', [
             'checkoutSession' => $this->checkoutSession,
             'messageManager' => $this->messageManager,
         ]);
-    }
-
-    public function testUnsetAll()
-    {
-        $this->checkoutSession->expects($this->once())->method('clearQuote')->will($this->returnSelf());
-        $this->checkoutSession->expects($this->once())->method('clearStorage')->will($this->returnSelf());
-
-        $this->object->unsetAll();
     }
 
     public function testLoadCustomerQuoteThrowingCoreException()
@@ -49,7 +39,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
         $this->messageManager->expects($this->once())->method('addError')->with('Message');
 
-        $this->object->loadCustomerQuote();
+        $this->object->invoke();
     }
 
     public function testLoadCustomerQuoteThrowingException()
@@ -61,19 +51,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())->method('addException')
             ->with($exception, 'Load customer quote error');
 
-        $this->object->loadCustomerQuote();
+        $this->object->invoke();
     }
 
-    public function testSalesQuoteSaveAfter()
-    {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $observer->expects($this->once())->method('getEvent')->will(
-            $this->returnValue(new \Magento\Framework\Object(
-                ['quote' => new \Magento\Framework\Object(['is_checkout_cart' => 1, 'id' => 7])]
-            ))
-        );
-        $this->checkoutSession->expects($this->once())->method('getQuoteId')->with(7);
-
-        $this->object->salesQuoteSaveAfter($observer);
-    }
 }

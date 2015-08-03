@@ -3814,6 +3814,7 @@ return [
     ['Magento\Tax\Model\Observer', 'corresponding classes in Magento\Tax\Observer\*'],
     ['Magento\CacheInvalidate\Model\Observer', 'corresponding classes in Magento\CacheInvalidate\Observer\*'],
     ['Magento\Catalog\Model\Observer', 'corresponding classes in Magento\Catalog\Observer\*'],
-    ['Magento\CatalogInventory\Model\Observer'],
-    ['Magento\Paypal\Model\Observer'],
+    ['Magento\CatalogInventory\Model\Observer', 'corresponding classes in Magento\CatalogInventory\Observer\*'],
+    ['Magento\Paypal\Model\Observer', 'corresponding classes in Magento\Paypal\Observer\*'],
+    ['Magento\Checkout\Model\Observer', 'corresponding classes in Magento\Checkout\Observer\*'],
 ];

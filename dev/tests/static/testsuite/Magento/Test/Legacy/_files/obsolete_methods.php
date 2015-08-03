@@ -2356,4 +2356,7 @@ return [
     ['hasActive', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::hasActive'],
     ['getCatalogLayer', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\AddCatalogToTopmenuItems::getCatalogLayer'],
     ['getMenuCategoryData', 'Magento\Catalog\Model\Observer', 'Magento\Catalog\Observer\MenuCategoryData::getMenuCategoryData'],
+    ['loadCustomerQuote', 'Magento\Checkout\Model\Observer', 'Magento\Checkout\Observer\LoadCustomerQuote::invoke'],
+    ['salesQuoteSaveAfter', 'Magento\Checkout\Model\Observer', 'Magento\Checkout\Observer\SalesQuoteSaveAfter::invoke'],
+    ['unsetAll', 'Magento\Checkout\Model\Observer', 'Magento\Checkout\Observer\UnsetAll::invoke'],
 ];
