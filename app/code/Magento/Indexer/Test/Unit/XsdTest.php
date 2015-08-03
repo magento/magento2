@@ -20,7 +20,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_xsdSchema = BP . '/app/code/Magento/Indexer/etc/indexer.xsd';
+        $this->_xsdSchema = BP . '/lib/internal/Magento/Framework/Indexer/etc/indexer.xsd';
         $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 
@@ -32,7 +32,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate(
-            BP . '/app/code/Magento/Indexer/etc/indexer_merged.xsd',
+            BP . '/lib/internal/Magento/Framework/Indexer/etc/indexer_merged.xsd',
             $xmlString
         );
         $this->assertEquals($expectedError, $actualError);
