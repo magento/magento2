@@ -34,9 +34,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveOptionSystemAttribute()
     {
-        /** @var $adapter \PHPUnit_Framework_MockObject_MockObject */
-        /** @var $resourceModel \Magento\Eav\Model\Resource\Entity\Attribute */
-        list($adapter, $resourceModel) = $this->_prepareResourceModel();
+        /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $resourceModelMock \Magento\Eav\Model\Resource\Entity\Attribute */
+        list($connectionMock, $resourceModelMock) = $this->_prepareResourceModel();
 
         $attributeData = [
             'attribute_id' => '123',
@@ -63,7 +63,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $model->setDefault(['2']);
         $model->setOption(['delete' => [1 => '', 2 => '']]);
 
-        $adapter->expects(
+        $connectionMock->expects(
             $this->once()
         )->method(
             'insert'
@@ -71,7 +71,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             $this->returnValueMap([['eav_attribute', $attributeData, 1]])
         );
 
-        $adapter->expects(
+        $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
@@ -86,7 +86,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
-        $adapter->expects(
+        $connectionMock->expects(
             $this->once()
         )->method(
             'update'
@@ -95,9 +95,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ['default_value' => 2],
             ['attribute_id = ?' => null]
         );
-        $adapter->expects($this->never())->method('delete');
+        $connectionMock->expects($this->never())->method('delete');
 
-        $resourceModel->save($model);
+        $resourceModelMock->save($model);
     }
 
     /**
@@ -105,9 +105,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveOptionNewUserDefinedAttribute()
     {
-        /** @var $adapter \PHPUnit_Framework_MockObject_MockObject */
-        /** @var $resourceModel \Magento\Eav\Model\Resource\Entity\Attribute */
-        list($adapter, $resourceModel) = $this->_prepareResourceModel();
+        /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $resourceModelMock \Magento\Eav\Model\Resource\Entity\Attribute */
+        list($connectionMock, $resourceModelMock) = $this->_prepareResourceModel();
 
         $attributeData = [
             'entity_type_id' => 4,
@@ -131,14 +131,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $model = $this->getMock('Magento\Framework\Model\AbstractModel', null, $arguments);
         $model->setOption(['value' => ['option_1' => ['Backend Label', 'Frontend Label']]]);
 
-        $adapter->expects(
+        $connectionMock->expects(
             $this->any()
         )->method(
             'lastInsertId'
         )->will(
             $this->returnValueMap([['eav_attribute', 123], ['eav_attribute_option_value', 321]])
         );
-        $adapter->expects(
+        $connectionMock->expects(
             $this->once()
         )->method(
             'update'
@@ -147,7 +147,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 [['eav_attribute', ['default_value' => ''], ['attribute_id = ?' => 123], 1]]
             )
         );
-        $adapter->expects(
+        $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
@@ -162,14 +162,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
-        $adapter->expects(
+        $connectionMock->expects(
             $this->once()
         )->method(
             'delete'
         )->will(
             $this->returnValueMap([['eav_attribute_option_value', ['option_id = ?' => ''], 0]])
         );
-        $adapter->expects(
+        $connectionMock->expects(
             $this->exactly(4)
         )->method(
             'insert'
@@ -192,7 +192,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $resourceModel->save($model);
+        $resourceModelMock->save($model);
     }
 
     /**
@@ -200,9 +200,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveOptionNoValue()
     {
-        /** @var $adapter \PHPUnit_Framework_MockObject_MockObject */
-        /** @var $resourceModel \Magento\Eav\Model\Resource\Entity\Attribute */
-        list($adapter, $resourceModel) = $this->_prepareResourceModel();
+        /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $resourceModelMock \Magento\Eav\Model\Resource\Entity\Attribute */
+        list($connectionMock, $resourceModelMock) = $this->_prepareResourceModel();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var $model \Magento\Framework\Model\AbstractModel */
@@ -211,11 +211,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $model = $this->getMock('Magento\Framework\Model\AbstractModel', null, $arguments);
         $model->setOption('not-an-array');
 
-        $adapter->expects($this->once())->method('insert')->with('eav_attribute');
-        $adapter->expects($this->never())->method('delete');
-        $adapter->expects($this->never())->method('update');
+        $connectionMock->expects($this->once())->method('insert')->with('eav_attribute');
+        $connectionMock->expects($this->never())->method('delete');
+        $connectionMock->expects($this->never())->method('update');
 
-        $resourceModel->save($model);
+        $resourceModelMock->save($model);
     }
 
     /**
@@ -225,7 +225,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareResourceModel()
     {
-        $adapter = $this->getMock(
+        $connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [
                 '_connect',
@@ -244,7 +244,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $adapter->expects(
+        $connectionMock->expects(
             $this->any()
         )->method(
             'describeTable'
@@ -253,7 +253,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_describeEavAttribute())
         );
-        $adapter->expects(
+        $connectionMock->expects(
             $this->any()
         )->method(
             'quote'
@@ -292,7 +292,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $resource->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
-        $resource->expects($this->any())->method('getConnection')->with()->will($this->returnValue($adapter));
+        $resource->expects($this->any())->method('getConnection')->with()->will($this->returnValue($connectionMock));
         $eavEntityType = $this->getMock('Magento\Eav\Model\Resource\Entity\Type', [], [], '', false, false);
 
         $relationProcessorMock = $this->getMock(
@@ -312,13 +312,13 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'storeManager' => $storeManager,
             'eavEntityType' => $eavEntityType,
         ];
-        $resourceModel = $this->getMock(
+        $resourceModelMock = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute',
             ['getAdditionalAttributeTable'],
             $arguments
         );
 
-        return [$adapter, $resourceModel];
+        return [$connectionMock, $resourceModelMock];
     }
 
     /**

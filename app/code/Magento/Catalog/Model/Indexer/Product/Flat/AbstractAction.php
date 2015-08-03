@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Abstract action reindex class
  *
@@ -88,7 +90,7 @@ abstract class AbstractAction
         $this->_storeManager = $storeManager;
         $this->_productIndexerHelper = $productHelper;
         $this->_productType = $productType;
-        $this->_connection = $resource->getConnection('default');
+        $this->_connection = $resource->getConnection();
         $this->_tableBuilder = $tableBuilder;
         $this->_flatTableBuilder = $flatTableBuilder;
     }

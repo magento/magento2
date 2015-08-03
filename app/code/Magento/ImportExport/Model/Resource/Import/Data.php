@@ -29,14 +29,14 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->jsonHelper = $jsonHelper;
     }
 
@@ -57,9 +57,9 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function getIterator()
     {
-        $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()->from($this->getMainTable(), ['data'])->order('id ASC');
-        $stmt = $adapter->query($select);
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable(), ['data'])->order('id ASC');
+        $stmt = $connection->query($select);
 
         $stmt->setFetchMode(\Zend_Db::FETCH_NUM);
         if ($stmt instanceof \IteratorAggregate) {
@@ -80,7 +80,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function cleanBunches()
     {
-        return $this->_getWriteAdapter()->delete($this->getMainTable());
+        return $this->getConnection()->delete($this->getMainTable());
     }
 
     /**
@@ -112,8 +112,8 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function getUniqueColumnData($code)
     {
-        $adapter = $this->_getReadAdapter();
-        $values = array_unique($adapter->fetchCol($adapter->select()->from($this->getMainTable(), [$code])));
+        $connection = $this->getConnection();
+        $values = array_unique($connection->fetchCol($connection->select()->from($this->getMainTable(), [$code])));
 
         if (count($values) != 1) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -158,7 +158,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      */
     public function saveBunch($entity, $behavior, array $data)
     {
-        return $this->_getWriteAdapter()->insert(
+        return $this->getConnection()->insert(
             $this->getMainTable(),
             ['behavior' => $behavior, 'entity' => $entity, 'data' => $this->jsonHelper->jsonEncode($data)]
         );

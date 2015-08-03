@@ -258,7 +258,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         foreach ($productAttributes as $code => $attribute) {
             if (in_array($code, $allWeee)) {
 
-                $attributeSelect = $this->getResource()->getReadConnection()->select();
+                $attributeSelect = $this->getResource()->getConnection()->select();
                 $attributeSelect->from(
                     $this->getResource()->getTable('weee_tax'),
                     'value'
@@ -285,7 +285,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                     'website_id ' . \Magento\Framework\DB\Select::SQL_DESC];
                 $attributeSelect->order($order);
 
-                $value = $this->getResource()->getReadConnection()->fetchOne($attributeSelect);
+                $value = $this->getResource()->getConnection()->fetchOne($attributeSelect);
                 if ($value) {
                     $taxAmount = $amount = 0;
                     $amount = $value;
