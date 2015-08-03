@@ -210,13 +210,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $consumers[$consumerName][self::CONSUMER_CONNECTION]
                         = $consumerConfig[self::ENV_CONSUMER_CONNECTION];
                 }
-            } else {
-                throw new LocalizedException(
-                    __(
-                        'Consumer "%consumer", specified in env.php is not declared.',
-                        ['consumer' => $consumerName]
-                    )
-                );
             }
         }
     }
