@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\Transaction;
 
-
 use Magento\Sales\Model\Order\Payment\Transaction;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
@@ -182,7 +181,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                         ->with(false)
                         ->willReturnSelf();
                 }
-                $this->orderMock->expects($this->at(1))->method('addRelatedObject')->with($parentTransaction);
+                $this->orderMock->expects($this->at(2))->method('addRelatedObject')->with($parentTransaction);
             }
         }
     }
