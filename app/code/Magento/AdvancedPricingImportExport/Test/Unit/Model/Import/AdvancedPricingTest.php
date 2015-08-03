@@ -9,6 +9,7 @@ namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 use \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory as ResourceFactory;
 use \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -22,14 +23,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $resourceFactory;
 
     /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
+
+    /**
      * @var \Magento\Catalog\Helper\Data |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $catalogData;
-
-    /**
-     * @var \Magento\Catalog\Model\Product |\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productModel;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver |\PHPUnit_Framework_MockObject_MockObject
@@ -72,6 +73,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $dataSourceModel;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $localeDate;
@@ -106,8 +112,20 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      */
     protected $advancedPricing;
 
+    /**
+     * @var \Magento\Framework\Stdlib\String
+     */
+    protected $stringObject;
+
+    /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected $errorAggregator;
+
     public function setUp()
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->jsonHelper = $this->getMock(
             '\Magento\Framework\Json\Helper\Data',
             [],
@@ -150,6 +168,22 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->eavConfig = $this->getMock(
+            '\Magento\Eav\Model\Config',
+            [],
+            [],
+            '',
+            false
+        );
+        $entityType = $this->getMock(
+            '\Magento\Eav\Model\Entity\Type',
+            [],
+            [],
+            '',
+            false
+        );
+        $entityType->method('getEntityTypeId')->willReturn('');
+        $this->eavConfig->method('getEntityType')->willReturn($entityType);
         $this->resourceFactory = $this->getMock(
             '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory',
             ['create', 'getTable'],
@@ -159,13 +193,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         );
         $this->resourceFactory->expects($this->any())->method('create')->willReturnSelf();
         $this->resourceFactory->expects($this->any())->method('getTable')->willReturnSelf();
-        $this->productModel = $this->getMock(
-            '\Magento\Catalog\Model\Product',
-            [],
-            [],
-            '',
-            false
-        );
         $this->catalogData = $this->getMock(
             '\Magento\Catalog\Helper\Data',
             [],
@@ -208,6 +235,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->stringObject = $this->getMock(
+            '\Magento\Framework\Stdlib\String',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->errorAggregator = $this->getErrorAggregatorObject();
         $this->localeDate = $this->getMock(
             '\Magento\Framework\Stdlib\DateTime\Timezone',
             ['date', 'format'],
@@ -250,7 +285,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider validateRowResultDataProvider
      */
-    public function testValidateRowResult($rowData, $validatedRows, $invalidRows, $behavior, $expectedResult)
+    public function testValidateRowResult($rowData, $behavior, $expectedResult)
     {
         $rowNum = 0;
         $advancedPricingMock = $this->getAdvancedPricingMock([
@@ -261,8 +296,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             'getWebSiteId',
             'getBehavior',
         ]);
-        $this->setPropertyValue($advancedPricingMock, '_validatedRows', $validatedRows);
-        $this->setPropertyValue($advancedPricingMock, '_invalidRows', $invalidRows);
         $this->validator->expects($this->any())->method('isValid')->willReturn(true);
         $advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn($behavior);
 
@@ -275,7 +308,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider validateRowAddRowErrorCallDataProvider
      */
-    public function testValidateRowAddRowErrorCall($rowData, $validatedRows, $invalidRows, $behavior, $error)
+    public function testValidateRowAddRowErrorCall($rowData, $behavior, $error)
     {
         $rowNum = 0;
         $advancedPricingMock = $this->getAdvancedPricingMock([
@@ -286,8 +319,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             'getWebSiteId',
             'getBehavior',
         ]);
-        $this->setPropertyValue($advancedPricingMock, '_validatedRows', $validatedRows);
-        $this->setPropertyValue($advancedPricingMock, '_invalidRows', $invalidRows);
         $this->validator->expects($this->any())->method('isValid')->willReturn(true);
         $advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $advancedPricingMock->expects($this->once())->method('addRowError')->with($error, $rowNum);
@@ -692,23 +723,13 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 '$rowData' => [
                     AdvancedPricing::COL_SKU => 'sku value',
                 ],
-                '$validatedRows' => [
-                    0 => ['value']
-                ],
-                '$invalidRows' => [
-                    0 => ['value']
-                ],
                 '$behavior' => null,
-                '$expectedResult' => false,
+                '$expectedResult' => true,
             ],
             [
                 '$rowData' => [
                     AdvancedPricing::COL_SKU => null,
                 ],
-                '$validatedRows' => [],
-                '$invalidRows' => [
-                    0 => ['value']
-                ],
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$expectedResult' => false,
             ],
@@ -716,33 +737,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 '$rowData' => [
                     AdvancedPricing::COL_SKU => 'sku value',
                 ],
-                '$validatedRows' => [],
-                '$invalidRows' => [
-                    0 => ['value']
-                ],
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$expectedResult' => true,
-            ],
-            [
-                '$rowData' => [
-                    AdvancedPricing::COL_SKU => 'sku value',
-                ],
-                '$validatedRows' => [],
-                '$invalidRows' => [
-                    0 => ['value']
-                ],
-                '$behavior' => null,
-                '$expectedResult' => false,
-            ],
-            [
-                '$rowData' => [
-                    AdvancedPricing::COL_SKU => 'sku value',
-                ],
-                '$validatedRows' => [],
-                '$invalidRows' => [],
-                '$behavior' => null,
-                '$expectedResult' => true,
-            ],
+            ]
         ];
     }
 
@@ -758,20 +755,12 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 '$rowData' => [
                     AdvancedPricing::COL_SKU => null,
                 ],
-                '$validatedRows' => [],
-                '$invalidRows' => [
-                    0 => ['value']
-                ],
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$error' => RowValidatorInterface::ERROR_SKU_IS_EMPTY,
             ],
             [
                 '$rowData' => [
                     AdvancedPricing::COL_SKU => false,
-                ],
-                '$validatedRows' => [],
-                '$invalidRows' => [
-                    0 => ['value']
                 ],
                 '$behavior' => null,
                 '$error' => RowValidatorInterface::ERROR_ROW_IS_ORPHAN,
@@ -847,18 +836,40 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 $this->jsonHelper,
                 $this->importExportData,
                 $this->resourceHelper,
+                $this->eavConfig,
                 $this->dataSourceModel,
                 $this->resource,
                 $this->resourceFactory,
-                $this->productModel,
                 $this->catalogData,
                 $this->storeResolver,
-                $this->importProduct,
                 $this->validator,
                 $this->websiteValidator,
                 $this->groupPriceValidator,
+                $this->stringObject,
+                $this->errorAggregator
             ],
             ''
+        );
+    }
+
+    /**
+     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected function getErrorAggregatorObject()
+    {
+        $errorFactory = $this->getMockBuilder(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $errorFactory->method('create')->willReturn(
+            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+        );
+        return $this->objectManagerHelper->getObject(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            [
+                'errorFactory' => $errorFactory
+            ]
         );
     }
 }
