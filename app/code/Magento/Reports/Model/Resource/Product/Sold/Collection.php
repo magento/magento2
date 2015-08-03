@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\Resource\Product\Sold;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Collection extends \Magento\Reports\Model\Resource\Order\Collection
 {
     /**
@@ -43,12 +46,12 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      */
     public function addOrderedQty($from = '', $to = '')
     {
-        $adapter = $this->getConnection();
-        $orderTableAliasName = $adapter->quoteIdentifier('order');
+        $connection = $this->getConnection();
+        $orderTableAliasName = $connection->quoteIdentifier('order');
 
         $orderJoinCondition = [
             $orderTableAliasName . '.entity_id = order_items.order_id',
-            $adapter->quoteInto("{$orderTableAliasName}.state <> ?", \Magento\Sales\Model\Order::STATE_CANCELED),
+            $connection->quoteInto("{$orderTableAliasName}.state <> ?", \Magento\Sales\Model\Order::STATE_CANCELED),
         ];
 
         if ($from != '' && $to != '') {

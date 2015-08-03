@@ -56,9 +56,9 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
             self::$dataVersions = null;
             // Data version array will be filled only if Data column exist
 
-            if ($this->_getReadAdapter()->isTableExists($this->getMainTable())) {
-                $select = $this->_getReadAdapter()->select()->from($this->getMainTable(), '*');
-                $rowset = $this->_getReadAdapter()->fetchAll($select);
+            if ($this->getConnection()->isTableExists($this->getMainTable())) {
+                $select = $this->getConnection()->select()->from($this->getMainTable(), '*');
+                $rowset = $this->getConnection()->fetchAll($select);
                 foreach ($rowset as $row) {
                     self::$schemaVersions[$row['module']] = $row['schema_version'];
                     if (array_key_exists('data_version', $row)) {
@@ -79,7 +79,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
      */
     public function getDbVersion($moduleName)
     {
-        if (!$this->_getReadAdapter()) {
+        if (!$this->getConnection()) {
             return false;
         }
         $this->_loadVersion('db');
@@ -95,14 +95,14 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
 
         if ($this->getDbVersion($moduleName)) {
             self::$schemaVersions[$moduleName] = $version;
-            return $this->_getWriteAdapter()->update(
+            return $this->getConnection()->update(
                 $this->getMainTable(),
                 $dbModuleInfo,
                 ['module = ?' => $moduleName]
             );
         } else {
             self::$schemaVersions[$moduleName] = $version;
-            return $this->_getWriteAdapter()->insert($this->getMainTable(), $dbModuleInfo);
+            return $this->getConnection()->insert($this->getMainTable(), $dbModuleInfo);
         }
     }
 
@@ -111,7 +111,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
      */
     public function getDataVersion($moduleName)
     {
-        if (!$this->_getReadAdapter()) {
+        if (!$this->getConnection()) {
             return false;
         }
         $this->_loadVersion('data');
@@ -127,10 +127,10 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
 
         if ($this->getDbVersion($moduleName) || $this->getDataVersion($moduleName)) {
             self::$dataVersions[$moduleName] = $version;
-            $this->_getWriteAdapter()->update($this->getMainTable(), $data, ['module = ?' => $moduleName]);
+            $this->getConnection()->update($this->getMainTable(), $data, ['module = ?' => $moduleName]);
         } else {
             self::$dataVersions[$moduleName] = $version;
-            $this->_getWriteAdapter()->insert($this->getMainTable(), $data);
+            $this->getConnection()->insert($this->getMainTable(), $data);
         }
     }
 }

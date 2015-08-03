@@ -29,13 +29,13 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getLastRecordDate()
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('log_summary'),
-            [$adapter->quoteIdentifier('date') => 'MAX(add_date)']
+            [$connection->quoteIdentifier('date') => 'MAX(add_date)']
         );
 
-        return $adapter->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 
     /**
@@ -48,9 +48,9 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCounts($from, $to, $store)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $result = ['customers' => 0, 'visitors' => 0];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('log_customer'),
             'visitor_id'
         )->where(
@@ -64,10 +64,10 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->where('store_id = ?', $store);
         }
 
-        $customers = $adapter->fetchCol($select);
+        $customers = $connection->fetchCol($select);
         $result['customers'] = count($customers);
 
-        $select = $adapter->select();
+        $select = $connection->select();
         $select->from(
             $this->getTable('log_visitor'),
             'COUNT(*)'
@@ -86,7 +86,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->where('visitor_id NOT IN(?)', $customers);
         }
 
-        $result['visitors'] = $adapter->fetchOne($select);
+        $result['visitors'] = $connection->fetchOne($select);
 
         return $result;
     }
@@ -100,12 +100,12 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveLog($data, $id = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         if ($id === null) {
-            $adapter->insert($this->getTable('log_summary'), $data);
+            $connection->insert($this->getTable('log_summary'), $data);
         } else {
-            $condition = $adapter->quoteInto('summary_id = ?', $id);
-            $adapter->update($this->getTable('log_summary'), $data, $condition);
+            $condition = $connection->quoteInto('summary_id = ?', $id);
+            $connection->update($this->getTable('log_summary'), $data, $condition);
         }
     }
 
@@ -117,9 +117,9 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function removeEmpty($date)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $condition = ['add_date < ?' => $date, 'customer_count = 0', 'visitor_count = 0'];
-        $adapter->delete($this->getTable('log_summary'), $condition);
+        $connection->delete($this->getTable('log_summary'), $condition);
     }
 
     /**
@@ -131,8 +131,8 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getLogId($from, $to)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('log_summary'),
             'summary_id'
         )->where(
@@ -143,6 +143,6 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $to
         );
 
-        return $adapter->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 }

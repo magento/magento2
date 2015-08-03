@@ -15,7 +15,7 @@
                     </button>
                 </div>
                 <!-- ko template: previewTpl --><!-- /ko -->
-                <div data-bind="foreach: { data:  element.getRegion('head'), as: 'element' }, stopPropagation: true">
+                <div data-bind="foreach: { data:  element.getRegion('head'), as: 'element' }">
                     <!-- ko template: element.getTemplate() --><!-- /ko -->
                 </div>
             </li>
