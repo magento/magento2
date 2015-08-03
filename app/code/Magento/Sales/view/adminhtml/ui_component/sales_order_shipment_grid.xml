@@ -64,6 +64,7 @@
         <exportButton name="export_button">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">sales_order_shipment_grid.sales_order_shipment_grid.sales_order_shipment_columns.ids</item>
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
                     <item name="options" xsi:type="array">
                         <item name="cvs" xsi:type="array">
