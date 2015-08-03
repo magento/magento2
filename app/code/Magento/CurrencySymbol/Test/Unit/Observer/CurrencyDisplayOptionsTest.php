@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CurrencySymbol\Test\Unit\Model;
+namespace Magento\CurrencySymbol\Test\Unit\Observer;
 
 use \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
 
 /**
- * Test for \Magento\CurrencySymbol\Model\Observer
+ * Test for \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions
  */
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CurrencySymbol\Model\Observer
+     * @var \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions
      */
     private $observer;
 
@@ -74,7 +74,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->mockEventObserver->expects($this->any())->method('getEvent')->willReturn($this->mockEvent);
         $this->mockSymbolFactory->expects($this->any())->method('create')->willReturn($this->mockSymbol);
 
-        $this->observer = new \Magento\CurrencySymbol\Model\Observer($this->mockSymbolFactory);
+        $this->observer = new \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions($this->mockSymbolFactory);
     }
 
     public function testCurrencyDisplayOptionsEmpty()
@@ -85,7 +85,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->mockEvent->expects($this->once())->method('getCurrencyOptions')->willReturn($sampleCurrencyOptionObject);
         $this->mockSymbol->expects($this->never())->method('getCurrencySymbol')->with(null)->willReturn(null);
 
-        $this->observer->currencyDisplayOptions($this->mockEventObserver);
+        $this->observer->invoke($this->mockEventObserver);
 
         // Check if option set is empty
         $this->assertEquals([], $sampleCurrencyOptionObject->getData());
@@ -110,7 +110,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->with($sampleCurrency)
             ->willReturn($sampleCurrencySymbol);
 
-        $this->observer->currencyDisplayOptions($this->mockEventObserver);
+        $this->observer->invoke($this->mockEventObserver);
 
         // Check if option set is empty
         $this->assertEquals($expectedCurrencyOptions, $sampleCurrencyOptionObject->getData());

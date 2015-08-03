@@ -3817,4 +3817,5 @@ return [
     ['Magento\CatalogInventory\Model\Observer', 'corresponding classes in Magento\CatalogInventory\Observer\*'],
     ['Magento\Paypal\Model\Observer', 'corresponding classes in Magento\Paypal\Observer\*'],
     ['Magento\Checkout\Model\Observer', 'corresponding classes in Magento\Checkout\Observer\*'],
+    ['Magento\CurrencySymbol\Model\Observer', 'corresponding classes in Magento\CurrencySymbol\Observer\*'],
 ];

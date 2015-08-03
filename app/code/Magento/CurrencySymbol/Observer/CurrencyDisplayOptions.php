@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CurrencySymbol\Model;
+namespace Magento\CurrencySymbol\Observer;
 
 use Magento\Framework\Locale\Currency;
 
 /**
  * Currency Symbol Observer
  */
-class Observer
+class CurrencyDisplayOptions
 {
     /**
      * @var \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory
@@ -31,7 +31,7 @@ class Observer
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function currencyDisplayOptions(\Magento\Framework\Event\Observer $observer)
+    public function invoke(\Magento\Framework\Event\Observer $observer)
     {
         $baseCode = $observer->getEvent()->getBaseCode();
         $currencyOptions = $observer->getEvent()->getCurrencyOptions();

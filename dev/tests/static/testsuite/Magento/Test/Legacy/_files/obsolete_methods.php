@@ -2359,4 +2359,5 @@ return [
     ['loadCustomerQuote', 'Magento\Checkout\Model\Observer', 'Magento\Checkout\Observer\LoadCustomerQuote::invoke'],
     ['salesQuoteSaveAfter', 'Magento\Checkout\Model\Observer', 'Magento\Checkout\Observer\SalesQuoteSaveAfter::invoke'],
     ['unsetAll', 'Magento\Checkout\Model\Observer', 'Magento\Checkout\Observer\UnsetAll::invoke'],
+    ['currencyDisplayOptions', 'Magento\CurrencySymbol\Model\Observer', 'Magento\CurrencySymbol\Observer\CurrencyDisplayOptions::invoke'],
 ];
