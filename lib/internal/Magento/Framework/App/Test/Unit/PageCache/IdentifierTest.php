@@ -18,9 +18,9 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $isSecure bool
-     * @param $uri string
-     * @param $vary string|null
+     * @param bool $isSecure
+     * @param string $uri
+     * @param string|null $vary
      * @return \Magento\Framework\App\Request\Http
      */
     protected function getRequestMock($isSecure, $uri, $vary = null)
@@ -40,8 +40,8 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $getVeryStringCalledTimes int
-     * @param $vary string|null
+     * @param int $getVeryStringCalledTimes
+     * @param string|null $vary
      * @return \Magento\Framework\App\Http\Context
      */
     protected function getContextMock($getVeryStringCalledTimes, $vary)
