@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
-class Capture extends AbstractOperation
+class CaptureOperation extends AbstractOperation
 {
     public function capture(OrderPaymentInterface $payment, $invoice)
     {

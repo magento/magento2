@@ -647,24 +647,24 @@
             <argument name="metadata" xsi:type="object">orderAddressMetadata</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Order\Payment\Operations\Authorize">
+    <type name="Magento\Sales\Model\Order\Payment\Operations\AuthorizeOperation">
         <arguments>
-            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\Authorize</argument>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\AuthorizeCommand</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Order\Payment\Operations\Capture">
+    <type name="Magento\Sales\Model\Order\Payment\Operations\CaptureOperation">
         <arguments>
-            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\Capture</argument>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\CaptureCommand</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Order\Payment\Operations\Order">
+    <type name="Magento\Sales\Model\Order\Payment\Operations\OrderOperation">
         <arguments>
-            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\Order</argument>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\OrderCommand</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotification">
+    <type name="Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotificationOperation">
         <arguments>
-            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\RegisterCaptureNotification</argument>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\RegisterCaptureNotificationCommand</argument>
         </arguments>
     </type>
 </config>

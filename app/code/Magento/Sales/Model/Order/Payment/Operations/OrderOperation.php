@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 /**
  * Class Order
  */
-class Order extends AbstractOperation
+class OrderOperation extends AbstractOperation
 {
     public function order(OrderPaymentInterface $payment, $amount)
     {
