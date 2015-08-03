@@ -22,7 +22,7 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_indexerRegistryMock = $this->getMock(
-            '\Magento\Indexer\Model\IndexerRegistry',
+            '\Magento\Framework\Indexer\IndexerRegistry',
             ['isScheduled', 'get', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate'],
             [],
             '',

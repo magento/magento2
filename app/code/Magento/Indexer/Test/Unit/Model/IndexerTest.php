@@ -80,7 +80,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $structureFactory = $this->getMockBuilder('Magento\Indexer\Model\StructureFactory')
+        $structureFactory = $this->getMockBuilder('Magento\Framework\Indexer\StructureFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

@@ -53,7 +53,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Indexer\Model\IndexerInterface'
+            'Magento\Framework\Indexer\IndexerInterface'
         )->will(
             $this->returnValue($indexer)
         );

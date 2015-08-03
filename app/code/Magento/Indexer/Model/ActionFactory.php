@@ -35,7 +35,7 @@ class ActionFactory
         $action = $this->objectManager->create($className, $arguments);
         if (!$action instanceof ActionInterface) {
             throw new \InvalidArgumentException(
-                $className . ' doesn\'t implement \Magento\Indexer\Model\ActionInterface'
+                $className . ' doesn\'t implement \Magento\Framework\Indexer\ActionInterface'
             );
         }
 

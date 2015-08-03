@@ -47,7 +47,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\IndexerInterface',
+            'Magento\Framework\Indexer\IndexerInterface',
             [],
             '',
             false,
@@ -75,7 +75,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             return false;
         };
 
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
 
         $this->model = new StoreGroup($this->indexerRegistryMock, $this->stateMock);
     }

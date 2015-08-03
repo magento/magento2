@@ -5,6 +5,6 @@
  */
 
 /* @var \Magento\Framework\Indexer\IndexerInterface $model */
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Indexer\Model\IndexerRegistry')
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Indexer\IndexerRegistry')
     ->get('catalogsearch_fulltext');
 $model->setScheduled(true);

@@ -53,11 +53,11 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->with('write')
             ->willReturn($this->adapter);
-        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
+        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver')
             ->setMethods(['resolve'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->flatScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\FlatScopeResolver')
+        $this->flatScopeResolver = $this->getMockBuilder('\Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver')
             ->setMethods(['resolve'])
             ->disableOriginalConstructor()
             ->getMock();

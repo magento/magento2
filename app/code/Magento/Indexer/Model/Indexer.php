@@ -6,7 +6,7 @@
 namespace Magento\Indexer\Model;
 
 use Magento\Framework\Indexer\ActionInterface;
-use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerInterface as IdxInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
@@ -14,7 +14,7 @@ use Magento\Framework\Indexer\StructureFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Indexer extends \Magento\Framework\Object implements IndexerInterface
+class Indexer extends \Magento\Framework\Object implements IdxInterface
 {
     /**
      * @var string
@@ -209,7 +209,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      * Fill indexer data from config
      *
      * @param string $indexerId
-     * @return IndexerInterface
+     * @return IdxInterface
      * @throws \InvalidArgumentException
      */
     public function load($indexerId)
@@ -256,7 +256,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      * Set indexer state object
      *
      * @param StateInterface $state
-     * @return IndexerInterface
+     * @return IdxInterface
      */
     public function setState(StateInterface $state)
     {
