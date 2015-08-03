@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Product;
 
 use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action;
 
-
 class ActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
