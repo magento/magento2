@@ -89,11 +89,21 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
             $mergedData = array_merge($existingCoupon->getData(), $coupon->getData());
             $coupon->setData($mergedData);
         }
+
+        //blend in specific fields from the rule
         try {
             $rule = $this->ruleFactory->create()->load($coupon->getRuleId());
             if (!$rule->getRuleId()) {
                 throw \Magento\Framework\Exception\NoSuchEntityException::singleField('rule_id', $coupon->getRuleId());
             }
+            if ($rule->getCouponType() == $rule::COUPON_TYPE_NO_COUPON) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Specified rule does not allow coupons')
+                );
+            }
+            $coupon->setExpirationDate($rule->getToDate());
+            $coupon->setUsageLimit($rule->getUsesPerCoupon());
+            $coupon->setUsagePerCustomer($rule->getUsesPerCustomer());
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Error occurred when saving coupon: %1', $e->getMessage())

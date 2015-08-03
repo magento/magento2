@@ -20,10 +20,7 @@ class CouponRepositoryTest extends WebapiAbstract
         $data = [
                 'rule_id' => '1',
                 'code' => 'mycouponcode1',
-                'usage_limit' => 0,
-                'usage_per_customer' => 0,
                 'times_used' => 0,
-                'expiration_date' => '2015-09-09 00:00:00',
                 'is_primary' => null,
                 'created_at' => '2015-07-20 00:00:00',
                 'type' => 1,
@@ -38,40 +35,57 @@ class CouponRepositoryTest extends WebapiAbstract
     {
         //test create
         $inputData = $this->getCouponData();
+
         /** @var $registry \Magento\Framework\Registry */
         $registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
-
         /** @var $salesRule \Magento\SalesRule\Model\Rule */
         $salesRule = $registry->registry('_fixture/Magento_SalesRule_Api_RuleRepository');
-
         $ruleId = $salesRule->getRuleId();
-        $inputData['rule_id'] = $ruleId;
 
+        $inputData['rule_id'] = $ruleId;
         $result = $this->createCoupon($inputData);
 
         $this->assertArrayHasKey('coupon_id', $result);
         $couponId = $result['coupon_id'];
         unset($result['coupon_id']);
+        $result = $this->verifySalesRuleInfluence($result);
         $this->assertEquals($inputData, $result);
 
         //test getList
         $result = $this->verifyGetList($couponId);
         $inputData = array_merge(['coupon_id' => $couponId], $inputData);
+        $result = $this->verifySalesRuleInfluence($result);
         $this->assertEquals($inputData, $result);
 
         //test update
         $inputData['times_used'] = 2;
-        $inputData['usage_limit'] = 3;
         $inputData['code'] = 'mycouponcode2';
         $result = $this->updateCoupon($couponId, $inputData);
+        $result = $this->verifySalesRuleInfluence($result);
         $this->assertEquals($inputData, $result);
 
         //test get
         $result = $this->getCoupon($couponId);
+        $result = $this->verifySalesRuleInfluence($result);
         $this->assertEquals($inputData, $result);
 
         //test delete
         $this->assertEquals(true, $this->deleteCoupon($couponId));
+    }
+
+    // verify (and remove) the fields that are set by the Sales Rule
+    protected function verifySalesRuleInfluence($result)
+    {
+        //optional
+        unset($result['expiration_date']);
+
+        $this->assertArrayHasKey('usage_per_customer', $result);
+        unset($result['usage_per_customer']);
+
+        $this->assertArrayHasKey('usage_limit', $result);
+        unset($result['usage_limit']);
+
+        return $result;
     }
 
     public function verifyGetList($couponId)
