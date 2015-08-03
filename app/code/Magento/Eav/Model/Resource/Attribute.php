@@ -63,15 +63,15 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
         $select = parent::_getLoadSelect($field, $value, $object);
         $websiteId = (int)$object->getWebsite()->getId();
         if ($websiteId) {
-            $adapter = $this->_getReadAdapter();
+            $connection = $this->getConnection();
             $columns = [];
             $scopeTable = $this->_getEavWebsiteTable();
-            $describe = $adapter->describeTable($scopeTable);
+            $describe = $connection->describeTable($scopeTable);
             unset($describe['attribute_id']);
             foreach (array_keys($describe) as $columnName) {
                 $columns['scope_' . $columnName] = $columnName;
             }
-            $conditionSql = $adapter->quoteInto(
+            $conditionSql = $connection->quoteInto(
                 $this->getMainTable() . '.attribute_id = scope_table.attribute_id AND scope_table.website_id =?',
                 $websiteId
             );
@@ -91,10 +91,10 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     protected function _afterSave(AbstractModel $object)
     {
         $forms = $object->getData('used_in_forms');
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         if (is_array($forms)) {
             $where = ['attribute_id=?' => $object->getId()];
-            $adapter->delete($this->_getFormAttributeTable(), $where);
+            $connection->delete($this->_getFormAttributeTable(), $where);
 
             $data = [];
             foreach ($forms as $formCode) {
@@ -102,7 +102,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
             }
 
             if ($data) {
-                $adapter->insertMultiple($this->_getFormAttributeTable(), $data);
+                $connection->insertMultiple($this->_getFormAttributeTable(), $data);
             }
         }
 
@@ -110,14 +110,14 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
         if (!$object->isObjectNew() && $object->dataHasChangedFor('sort_order')) {
             $data = ['sort_order' => $object->getSortOrder()];
             $where = ['attribute_id=?' => (int)$object->getId()];
-            $adapter->update($this->getTable('eav_entity_attribute'), $data, $where);
+            $connection->update($this->getTable('eav_entity_attribute'), $data, $where);
         }
 
         // save scope attributes
         $websiteId = (int)$object->getWebsite()->getId();
         if ($websiteId) {
             $table = $this->_getEavWebsiteTable();
-            $describe = $this->_getReadAdapter()->describeTable($table);
+            $describe = $this->getConnection()->describeTable($table);
             $data = [];
             if (!$object->getScopeWebsiteId() || $object->getScopeWebsiteId() != $websiteId) {
                 $data = $this->getScopeValues($object);
@@ -134,7 +134,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
                 $updateColumns[] = $columnName;
             }
 
-            $adapter->insertOnDuplicate($table, $data, $updateColumns);
+            $connection->insertOnDuplicate($table, $data, $updateColumns);
         }
 
         return parent::_afterSave($object);
@@ -148,9 +148,9 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      */
     public function getScopeValues(\Magento\Eav\Model\Attribute $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['attribute_id' => (int)$object->getId(), 'website_id' => (int)$object->getWebsite()->getId()];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->_getEavWebsiteTable()
         )->where(
             'attribute_id = :attribute_id'
@@ -159,7 +159,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
         )->limit(
             1
         );
-        $result = $adapter->fetchRow($select, $bind);
+        $result = $connection->fetchRow($select, $bind);
 
         if (!$result) {
             $result = [];
@@ -176,15 +176,15 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      */
     public function getUsedInForms(AbstractModel $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['attribute_id' => (int)$object->getId()];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->_getFormAttributeTable(),
             'form_code'
         )->where(
             'attribute_id = :attribute_id'
         );
 
-        return $adapter->fetchCol($select, $bind);
+        return $connection->fetchCol($select, $bind);
     }
 }
