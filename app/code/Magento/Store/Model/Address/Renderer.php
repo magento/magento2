@@ -16,15 +16,6 @@ use Magento\Framework\Object;
 class Renderer
 {
     /**
-     * Template used to format store address information
-     */
-    const DEFAULT_STORE_ADDRESS_FORMAT = "{{var name}}\n"
-        . "{{var street_line1}}\n"
-        . "{{depend street_line2}}{{var street_line2}}\n{{/depend}}"
-        . "{{var city}}, {{var region}} {{var postcode}},\n"
-        . "{{var country}}";
-
-    /**
      * @var EventManager
      */
     protected $eventManager;
@@ -57,7 +48,8 @@ class Renderer
     {
         $this->eventManager->dispatch('store_address_format', ['type' => $type, 'store_info' => $storeInfo]);
         $address = $this->filterManager->template(
-            self::DEFAULT_STORE_ADDRESS_FORMAT,
+            "{{var name}}\n{{var street_line1}}\n{{depend street_line2}}{{var street_line2}}\n{{/depend}}"
+            . "{{var city}}, {{var region}} {{var postcode}},\n{{var country}}",
             ['variables' => $storeInfo->getData()]
         );
 
