@@ -1,4 +1,4 @@
-<form method="post" id="shipping-zip-form" data-bind="blockLoader: isLoading">
+<form method="post" id="shipping-zip-form" data-bind="blockLoader: isLoading, submit: getEstimationInfo">
     <fieldset class="fieldset estimate">
         <legend class="legend">
             <span data-bind="text: $t('Estimate Shipping and Tax')"></span>
@@ -56,7 +56,7 @@
         </div>
         <div class="actions-toolbar">
             <div class="primary">
-                <button type="submit" class="action quote primary" data-bind="click: getEstimationInfo">
+                <button type="submit" class="action quote primary">
                     <span data-bind="text: $t('Get a Quote')"></span>
                 </button>
             </div>

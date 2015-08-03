@@ -28,17 +28,20 @@ define(
             isLoading: shippingService.isLoading,
             shippingRates: shippingService.getShippingRates(),
 
-            getEstimationInfo: function (elem, event) {
-                var addressForm = $('#shipping-zip-form');
-                event.preventDefault();
-                if (addressForm.validation() && addressForm.validation('isValid')) {
-                    var addressFlat = {
-                        'country': 'US',
-                        'postcode': 11111
-                    };
+            getEstimationInfo: function (form, event) {
+                var addressForm = $(form),
+                    addressData = {},
+                    formDataArray = addressForm.serializeArray();
 
-                    var address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
-                    selectShippingAddress(address);
+                if (event) {
+                    event.preventDefault();
+                }
+
+                if (addressForm.validation() && addressForm.validation('isValid')) {
+                    formDataArray.forEach(function (entry) {
+                       addressData[entry.name] = entry.value;
+                    });
+                    selectShippingAddress(addressConverter.formAddressDataToQuoteAddress(addressData));
                 }
             }
         });
