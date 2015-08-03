@@ -138,5 +138,4 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         return [];
     }
-
 }
