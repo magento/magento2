@@ -205,18 +205,25 @@ class RowCustomizer implements RowCustomizerInterface
         $bundleData = '';
         $selections->addAttributeToSort('position');
         foreach ($selections as $selection) {
+            $selectionData = [
+                'sku' => $selection->getSku(),
+                'price' => $selection->getSelectionPriceValue(),
+                'default' => $selection->getIsDefault(),
+                'default_qty' => $selection->getSelectionQty(),
+                'price_type' => $this->getPriceTypeValue($selection->getSelectionPriceType())
+            ];
             $bundleData .= $optionValues
-                . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR . 'sku'
-                . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $selection->getSku()
-                . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR . 'price'
-                . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $selection->getSelectionPriceValue()
-                . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR . 'default'
-                . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $selection->getIsDefault()
-                . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR . 'default_qty'
-                . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $selection->getSelectionQty()
-                . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR . 'price_type'
-                . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
-                . $this->getPriceTypeValue($selection->getSelectionPriceType())
+                . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                . implode(
+                    ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                    array_map(
+                        function ($value, $key) {
+                            return $key . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $value;
+                        },
+                        $selectionData,
+                        array_keys($selectionData)
+                    )
+                )
                 . ImportProductModel::PSEUDO_MULTI_LINE_SEPARATOR;
         }
 
