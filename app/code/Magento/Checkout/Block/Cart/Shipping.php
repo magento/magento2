@@ -385,4 +385,12 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         $collection = $this->_directoryBlock->getCountryCollection();
         return $collection->count() > 1 ? true : false;
     }
+
+    /**
+     * @return array
+     */
+    public function getEstimationConfig()
+    {
+        return [];
+    }
 }

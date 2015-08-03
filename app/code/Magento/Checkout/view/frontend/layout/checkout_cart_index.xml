@@ -21,7 +21,18 @@
                         <block class="Magento\Framework\View\Element\Text\ListText" name="checkout.cart.order.actions"/>
                     </block>
                     <container name="checkout.cart.widget" as="checkout_cart_widget" label="Shopping Cart Items After"/>
-                    <block class="Magento\Checkout\Block\Cart\Shipping" name="checkout.cart.shipping" as="shipping" template="cart/shipping.phtml"/>
+                    <block class="Magento\Checkout\Block\Cart\Shipping" name="checkout.cart.shipping" as="shipping" template="cart/shipping.phtml">
+                        <arguments>
+                            <argument name="jsLayout" xsi:type="array">
+                                <item name="components" xsi:type="array">
+                                    <item name="shipping" xsi:type="array">
+                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/cart/shipping-estimation</item>
+                                        <item name="displayArea" xsi:type="string">shipping</item>
+                                    </item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </block>
                     <block class="Magento\Checkout\Block\Cart\Coupon" name="checkout.cart.coupon" as="coupon" template="cart/coupon.phtml"/>
                     <container name="checkout.cart.totals.container" as="totals" label="Shopping Cart Totals">
                         <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" template="cart/totals.phtml"/>
