@@ -17,8 +17,8 @@
                         <table>
                             <tr>
                                 <td>
-                                    <p><a href="#">About Us</a></p>
-                                    <p><a href="#">Customer Service</a></p>
+                                    <p><a href="#">{{trans "About Us"}}</a></p>
+                                    <p><a href="#">{{trans "Customer Service"}}</a></p>
                                 </td>
                                 <td>
                                     {{depend store_phone}}
@@ -34,12 +34,8 @@
                                 </td>
                                 <td>
                                     <p class="address">
-                                        The Luma Store<br />
-                                        1234 Example St<br />
-                                        Austin, TX 66666<br />
-                                        United States
+                                        {{var $store.getFormattedAddress() |raw}}
                                     </p>
-                                    <?php /* {{config path="general/store_information/address"}} */ ?>
                                 </td>
                             </tr>
                         </table>
