@@ -2359,4 +2359,13 @@ return [
         'Magento\Sales\Model\Order\Address\Validator',
         'Magento\Sales\Model\Order\Address\Validator::validateForCustomer'
     ],
+    ['getListForCustomer', '\Magento\Quote\Api\CartItemRepositoryInterface'],
+    ['saveForCustomer', '\Magento\Quote\Api\CartItemRepositoryInterface'],
+    ['deleteByIdForCustomer', '\Magento\Quote\Api\CartItemRepositoryInterface'],
+    ['getListForCustomer', '\Magento\Quote\Model\Quote\Item\Repository'],
+    ['saveForCustomer', '\Magento\Quote\Model\Quote\Item\Repository'],
+    ['deleteByIdForCustomer', '\Magento\Quote\Model\Quote\Item\Repository'],
+    ['getStoreCodeFromCookie', '\Magento\Store\Model\Store'],
+    ['deleteCookie', '\Magento\Store\Model\Store'],
+    ['setCookie', '\Magento\Store\Model\Store'],
 ];
