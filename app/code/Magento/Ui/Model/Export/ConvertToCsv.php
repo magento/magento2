@@ -9,6 +9,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Ui\Component\Filters\Type\Select;
 
 /**
  * Class ConvertToCsv
@@ -115,34 +117,88 @@ class ConvertToCsv
      *
      * @param DocumentInterface $document
      * @param array $fields
+     * @param array $options
      * @return array
      */
-    protected function getRowData(DocumentInterface $document, $fields)
+    protected function getRowData(DocumentInterface $document, $fields, $options)
     {
         $row = [];
         foreach ($fields as $column) {
-            $row[] = $document->getCustomAttribute($column)->getValue();
+            if (isset($options[$column])) {
+                $key = $document->getCustomAttribute($column)->getValue();
+                if (isset($options[$column][$key])) {
+                    $row[] = $options[$column][$key];
+                }
+                $row[] = '';
+            } else {
+                $row[] = $document->getCustomAttribute($column)->getValue();
+            }
         }
         return $row;
     }
 
     /**
-     * Returns Filters with options
+     * Returns complex option
      *
-     * @param UiComponentInterface $component
-     * @return \Magento\Ui\Component\Filters
-     * @throws \Exception
+     * @param array $list
+     * @param string $label
+     * @return array
      */
-    protected function getFieldOptions(UiComponentInterface $component)
+    protected function getComplexLabel($list, $label, &$output)
     {
-        $childComponents = $component->getChildComponents();
-        $listingTop = $childComponents['listing_top'];
-        foreach($listingTop as $child) {
-            if ($child instanceof \Magento\Ui\Component\Filters) {
-                return $child;
+        foreach ($list as $item) {
+            if (!is_array($item['value'])) {
+                $output[$item['value']] = $label . $item['label'];
+            } else {
+                $this->getComplexLabel($item['value'], $label . $item['label'], $output);
             }
         }
-        throw new \Exception('No filters found');
+    }
+
+    /**
+     * Returns array of Select options
+     *
+     * @param Select $filter
+     * @return array
+     */
+    protected function getFilterOptions(Select $filter)
+    {
+        $options = [];
+        foreach ($filter->getOptionProvider()->toOptionArray() as $option) {
+            if (!is_array($option['value'])) {
+                $options[$option['value']] = $option['label'];
+            } else {
+                $complexOption = [];
+                $this->getComplexLabel(
+                    $option['value'],
+                    $option['label'],
+                    $options
+                );
+            }
+        }
+        return $options;
+    }
+    /**
+     * Returns Filters with options
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        $options = [];
+        $component = $this->filter->getComponent();
+        $childComponents = $component->getChildComponents();
+        $listingTop = $childComponents['listing_top'];
+        foreach($listingTop->getChildComponents() as $child) {
+            if ($child instanceof \Magento\Ui\Component\Filters) {
+                foreach($child->getChildComponents() as $filter) {
+                    if ($filter instanceof Select) {
+                        $options[$filter->getName()] = $this->getFilterOptions($filter);
+                    }
+                }
+            }
+        }
+        return $options;
     }
 
     /**
@@ -153,6 +209,7 @@ class ConvertToCsv
      */
     public function getCsvFile()
     {
+        $options = $this->getOptions();
         $component = $this->filter->getComponent();
         $name = md5(microtime());
         $file = 'export/'. $component->getName() . $name . '.csv';
@@ -166,7 +223,7 @@ class ConvertToCsv
         $stream->lock();
         $stream->writeCsv($this->getHeaders($component));
         foreach ($searchResult->getItems() as $document) {
-            $stream->writeCsv($this->getRowData($document, $fields));
+            $stream->writeCsv($this->getRowData($document, $fields, $options));
         }
         $stream->unlock();
         $stream->close();
