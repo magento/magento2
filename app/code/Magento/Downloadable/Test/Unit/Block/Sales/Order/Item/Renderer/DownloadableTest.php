@@ -6,6 +6,8 @@
 
 namespace Magento\Downloadable\Test\Unit\Block\Sales\Order\Item\Renderer;
 
+use Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory;
+
 /**
  * Tests Magento\Downloadable\Test\Unit\Block\Sales\Order\Item\Renderer\Downloadable
  */
@@ -22,7 +24,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     protected $purchasedFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemsFactory;
 
