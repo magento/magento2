@@ -126,6 +126,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
             return false;
         }
         $path = 'carriers/' . $this->_code . '/' . $field;
+
         return $this->_scopeConfig->getValue(
             $path,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -147,6 +148,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
             return false;
         }
         $path = 'carriers/' . $this->_code . '/' . $field;
+
         return $this->_scopeConfig->isSetFlag(
             $path,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -158,15 +160,6 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      * Collect and get rates
      *
      * @param \Magento\Framework\Object $request
-     * @return \Magento\Shipping\Model\Rate\Result|bool|null
-     * @abstract
-     */
-    abstract public function collectRates(\Magento\Framework\Object $request);
-
-    /**
-     * Do request to shipment
-     * Implementation must be in overridden method
-     *
      * @param Request $request
      * @return \Magento\Framework\Object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -298,9 +291,9 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
             if ($availableCountries && in_array($request->getDestCountryId(), $availableCountries)) {
                 return $this;
             } elseif ($showMethod && (!$availableCountries || $availableCountries && !in_array(
-                $request->getDestCountryId(),
-                $availableCountries
-            ))
+                        $request->getDestCountryId(),
+                        $availableCountries
+                    ))
             ) {
                 /** @var Error $error */
                 $error = $this->_rateErrorFactory->create();
@@ -312,6 +305,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
                         'Sorry, but we can\'t deliver to the destination country with this shipping module.'
                     )
                 );
+
                 return $error;
             } else {
                 /*
@@ -320,6 +314,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
                 return false;
             }
         }
+
         return $this;
     }
 
@@ -343,6 +338,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     public function isActive()
     {
         $active = $this->getConfigData('active');
+
         return $active == 1 || $active == 'true';
     }
 
@@ -515,17 +511,6 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     }
 
     /**
-     * Return weight in pounds
-     *
-     * @param int $weight In some measure
-     * @return float Weight in pounds
-     */
-    public function convertWeightToLbs($weight)
-    {
-        return $weight;
-    }
-
-    /**
      * Sets the number of boxes for shipping
      *
      * @param int $weight in some measure
@@ -537,12 +522,12 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
         reset num box first before retrieve again
         */
         $this->_numBoxes = 1;
-        $weight = $this->convertWeightToLbs($weight);
         $maxPackageWeight = $this->getConfigData('max_package_weight');
         if ($weight > $maxPackageWeight && $maxPackageWeight != 0) {
             $this->_numBoxes = ceil($weight / $maxPackageWeight);
             $weight = $weight / $this->_numBoxes;
         }
+
         return $weight;
     }
 
