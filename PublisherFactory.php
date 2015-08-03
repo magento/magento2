@@ -34,7 +34,7 @@ class PublisherFactory
      *     <arguments>
      *         <argument name="publishers" xsi:type="array">
      *             <item name="rabbitmq" xsi:type="array">
-     *                 <item name="type" xsi:type="object">Magento\RabbitMq\Model\RabbitMqPublisher</item>
+     *                 <item name="type" xsi:type="object">Magento\RabbitMq\Model\Publisher</item>
      *                 <item name="connectionName" xsi:type="string">rabbitmq</item>
      *             </item>
      *         </argument>
