@@ -15,14 +15,14 @@ abstract class AbstractProcessor
      */
     const INDEXER_ID = '';
 
-    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry */
     protected $indexerRegistry;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      */
     public function __construct(
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
     ) {
         $this->indexerRegistry = $indexerRegistry;
     }
@@ -30,7 +30,7 @@ abstract class AbstractProcessor
     /**
      * Get indexer
      *
-     * @return \Magento\Indexer\Model\IndexerInterface
+     * @return \Magento\Framework\Indexer\IndexerInterface
      */
     public function getIndexer()
     {

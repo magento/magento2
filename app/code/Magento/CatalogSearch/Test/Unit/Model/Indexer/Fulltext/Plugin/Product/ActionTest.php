@@ -12,7 +12,7 @@ use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action;
 class ActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexerMock;
 
@@ -22,7 +22,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     protected $subjectMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 

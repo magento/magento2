@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Indexer\Model\ScopeResolver;
-
+namespace Magento\Framework\Indexer\ScopeResolver;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\App\ScopeResolverInterface;

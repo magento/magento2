@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model;
+namespace Magento\Framework\Indexer;
 
 use Magento\Framework\ObjectManagerInterface;
 
@@ -47,7 +47,7 @@ class HandlerPool
         $handler = $this->objectManager->get($handlerClass);
         if (!$handler instanceof HandlerInterface) {
             throw new \InvalidArgumentException(
-                $handlerClass . ' doesn\'t implement \Magento\Indexer\Model\HandlerInterface'
+                $handlerClass . ' doesn\'t implement \Magento\Framework\Indexer\HandlerInterface'
             );
         }
 

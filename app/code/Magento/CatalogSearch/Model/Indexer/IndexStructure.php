@@ -10,8 +10,8 @@ use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Indexer\Model\IndexStructureInterface;
-use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 class IndexStructure implements IndexStructureInterface
 {

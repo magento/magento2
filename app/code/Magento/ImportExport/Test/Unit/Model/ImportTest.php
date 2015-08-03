@@ -59,7 +59,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistry;
 

@@ -106,7 +106,7 @@ class Full
     protected $engine;
 
     /**
-     * @var \Magento\Framework\IndexerInterface
+     * @var \Magento\Framework\Indexer\SaveHandler\IndexerInterface
      */
     protected $indexHandler;
 

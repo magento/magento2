@@ -19,7 +19,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     /**
      * Full reindex
      *
-     * @var \Magento\Indexer\Model\IndexerInterface
+     * @var \Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexer;
 
@@ -39,7 +39,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Magento\Indexer\Model\IndexerRegistry $indexerRegistry */
+        /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
         $indexerRegistry = $this->objectManager->create('\Magento\Indexer\Model\IndexerRegistry');
         $this->indexer =  $indexerRegistry->get('catalogsearch_fulltext');
 

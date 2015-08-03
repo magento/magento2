@@ -7,7 +7,7 @@
 /**
  * Index Engine Interface
  */
-namespace Magento\Framework;
+namespace Magento\Framework\Indexer\SaveHandler;
 
 use Magento\Framework\Search\Request\Dimension;
 

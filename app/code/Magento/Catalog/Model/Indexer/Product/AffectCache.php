@@ -26,12 +26,12 @@ class AffectCache
     }
 
     /**
-     * @param \Magento\Indexer\Model\ActionInterface $subject
+     * @param \Magento\Framework\Indexer\ActionInterface $subject
      * @param array $ids
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(\Magento\Indexer\Model\ActionInterface $subject, $ids)
+    public function beforeExecute(\Magento\Framework\Indexer\ActionInterface $subject, $ids)
     {
         $this->context->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
         return [$ids];

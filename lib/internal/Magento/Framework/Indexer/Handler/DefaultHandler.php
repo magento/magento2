@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model\Handler;
+namespace Magento\Framework\Indexer\Handler;
 
 use Magento\Framework\App\Resource\SourceProviderInterface;
-use Magento\Indexer\Model\HandlerInterface;
+use Magento\Framework\Indexer\HandlerInterface;
 
 class DefaultHandler implements HandlerInterface
 {

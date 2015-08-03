@@ -11,7 +11,7 @@ use \Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Impo
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexer;
 

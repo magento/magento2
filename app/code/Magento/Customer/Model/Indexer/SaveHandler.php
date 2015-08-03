@@ -6,7 +6,7 @@
 namespace Magento\Customer\Model\Indexer;
 
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Indexer\Model\SaveHandler\IndexerHandler;
+use Magento\Framework\Indexer\SaveHandler\IndexerHandler;
 
 class SaveHandler extends IndexerHandler
 {

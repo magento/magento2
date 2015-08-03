@@ -201,7 +201,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected $metadataService;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexerRegistry;
 
@@ -246,7 +246,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -1107,7 +1107,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function reindex()
     {
-        /** @var \Magento\Indexer\Model\Indexer $indexer */
+        /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexRow($this->getId());
     }

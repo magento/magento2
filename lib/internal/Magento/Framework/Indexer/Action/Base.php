@@ -3,21 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model\Action;
+namespace Magento\Framework\Indexer\Action;
 
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\IndexerInterface;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Stdlib\String as StdString;
-use Magento\Indexer\Model\ActionInterface;
-use Magento\Indexer\Model\FieldsetPool;
-use Magento\Indexer\Model\HandlerPool;
-use Magento\Indexer\Model\IndexStructureInterface;
-use Magento\Indexer\Model\SaveHandlerFactory;
+use Magento\Framework\Indexer\ActionInterface;
+use Magento\Framework\Indexer\FieldsetPool;
+use Magento\Framework\Indexer\HandlerPool;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\Indexer\SaveHandlerFactory;
 use Magento\Framework\App\Resource\SourceFactory;
-use Magento\Indexer\Model\HandlerInterface;
+use Magento\Framework\Indexer\HandlerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

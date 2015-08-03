@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model;
+namespace Magento\Framework\Indexer;
 
 use Magento\Framework\ObjectManagerInterface;
 
@@ -34,7 +34,7 @@ class FieldsetPool
         $handler = $this->objectManager->get($fieldsetClass);
         if (!$handler instanceof FieldsetInterface) {
             throw new \InvalidArgumentException(
-                $fieldsetClass . ' doesn\'t implement \Magento\Indexer\Model\FieldsetInterface'
+                $fieldsetClass . ' doesn\'t implement \Magento\Framework\Indexer\FieldsetInterface'
             );
         }
         return $handler;

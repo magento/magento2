@@ -49,7 +49,7 @@ class InstallData implements InstallDataInterface
 
     /**
      * @param string $indexerId
-     * @return \Magento\Indexer\Model\IndexerInterface
+     * @return \Magento\Framework\Indexer\IndexerInterface
      */
     private function getIndexer($indexerId)
     {

@@ -57,7 +57,7 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
     protected $messageManager;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexReg;
 

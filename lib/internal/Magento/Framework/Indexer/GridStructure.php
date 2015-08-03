@@ -3,14 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Model\Indexer;
+namespace Magento\Framework\Indexer;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Indexer\Model\IndexStructureInterface;
-use Magento\Indexer\Model\ScopeResolver\FlatScopeResolver;
+use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 
 class GridStructure implements IndexStructureInterface
 {
@@ -38,7 +37,7 @@ class GridStructure implements IndexStructureInterface
 
     /**
      * @param Resource|Resource $resource
-     * @param \Magento\Indexer\Model\ScopeResolver\FlatScopeResolver $flatScopeResolver
+     * @param FlatScopeResolver $flatScopeResolver
      * @param array $columnTypesMap
      */
     public function __construct(

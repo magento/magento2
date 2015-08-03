@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Indexer;
 
-use Magento\Customer\Model\Indexer\GridStructure;
+use Magento\Framework\Indexer\GridStructure;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 
@@ -17,7 +17,7 @@ class GridStructureTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
-     * @var \Magento\Indexer\Model\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $flatScopeResolver;
 
@@ -38,7 +38,7 @@ class GridStructureTest extends \PHPUnit_Framework_TestCase
         $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->flatScopeResolver = $this->getMockBuilder('Magento\Indexer\Model\ScopeResolver\FlatScopeResolver')
+        $this->flatScopeResolver = $this->getMockBuilder('Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->any())
