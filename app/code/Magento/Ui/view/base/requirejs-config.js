@@ -11,7 +11,8 @@ var config = {
         '*': {
             uiComponent: 'Magento_Ui/js/lib/component/main',
             uiRegistry: 'Magento_Ui/js/lib/registry/registry',
-            uiLayout: 'Magento_Ui/js/core/renderer/layout'
+            uiLayout: 'Magento_Ui/js/core/renderer/layout',
+            uiClass: 'Magento_Ui/js/lib/class'
         }
     }
 };

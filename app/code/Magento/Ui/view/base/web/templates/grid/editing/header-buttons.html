@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-info-panel" data-bind="visible: isMultiEditing">
+    <div class="messages" data-bind="visible: hasErrors()">
+        <div class="message message-warning">
+            <strong>There are <!-- ko text: countErros() --><!-- /ko --> meesages requires your attention.</strong>
+            Please make corrections to the errors in the table below and re-submit.
+        </div>
+    </div>
+    <div class="data-grid-info-panel-actions">
+        <button class="action-tertiary" type="button" data-bind="click: cancel">
+            <span data-bind="text: 'Cancel'"></span>
+        </button>
+        <button class="action-primary" type="button" data-bind="click: save">
+            <span data-bind="text: 'Save Edits'"></span>
+        </button>
+    </div>
+</div>

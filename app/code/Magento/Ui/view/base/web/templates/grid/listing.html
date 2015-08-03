@@ -5,174 +5,35 @@
  */
 -->
 
-<div class="data-grid-info-panel">
-    <div class="messages">
-        <div class="message message-warning">
-            <strong>There are 3 meesages requires your attention.</strong>
-            Please make corrections to the errors in the table below and re-submit.
-        </div>
-    </div>
-    <div class="data-grid-info-panel-actions">
-        <button class="action-tertiary" type="button"><span>Cancel</span></button>
-        <button class="action-primary" type="button"><span>Save Edits</span></button>
-    </div>
-</div>
 <div class="admin__data-grid-wrap">
-    <table
-        class="data-grid _in-edit"
-        data-bind="
-            afterRender: dndConfig.enabled ?
-                function (elem) { dnd('setTable', elem); } :
-                false,
-            css: {
-                'data-grid-draggable': dndConfig.enabled
-            }">
-        <thead data-part="head">
-        <tr data-part="head.row">
-            <!-- ko foreach: elems -->
-            <!-- ko template: getHeader() --><!-- /ko -->
-            <!-- /ko -->
-        </tr>
+    <table class="data-grid">
+        <thead>
+            <tr data-bind="foreach: elems">
+                <!-- ko template: getHeader() --><!-- /ko -->
+            </tr>
         </thead>
-        <tbody data-part="body">
-        <!-- ko if: hasData() -->
-        <!-- ko foreach: { data: rows, as: 'row' } -->
-        <tr data-part="body.row">
-            <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
-            <!-- ko template: getBody() --><!-- /ko -->
+        <tbody>
+            <!-- ko foreach: { data: rows, as: 'row' } -->
+                <tr class="data-row"
+                    data-bind="
+                        css: {
+                            '_even-row': !($index() % 2)
+                        },
+                        foreach: {
+                            data: $parent.elems,
+                            as: 'field'
+                        }
+                        ">
+                    <!-- ko template: getBody() --><!-- /ko -->
+                </tr>
             <!-- /ko -->
-        </tr>
-        <!-- /ko -->
 
-        <tr class="data-grid-editable-row">
-            <td class="data-grid-checkbox-cell">
-                <label class="data-grid-checkbox-cell-inner">
-                    <input class="admin__control-checkbox" type="checkbox" value="1" id="check1">
-                    <label for="check1"></label>
-                </label>
-            </td>
-            <td>
-                2
-            </td>
-            <td>
-                <input class="admin__control-text" type="text" value="Home page">
-            </td>
-            <td>
-                <input class="admin__control-text" type="text" value="no-route">
-            </td>
-            <td>
-                <select class="admin__control-select">
-                    <option value="1">1 column</option>
-                    <option value="2">2 column</option>
-                </select>
-            </td>
-            <td>
-                <select class="admin__control-select">
-                    <option value="1">All Store views</option>
-                    <option value="2">Not All Store views</option>
-                </select>
-            </td>
-            <td>
-                <select class="admin__control-select">
-                    <option value="1">Enabled</option>
-                    <option value="2">Disabled</option>
-                </select>
-            </td>
-            <td>
-                Jul 10, 2015 11:29:01 AM
-            </td>
-            <td>
-                Jul 10, 2015 11:29:01 AM
-            </td>
-            <td class="data-grid-actions-cell">
-                <div class="action-select-wrap">
-                    <button class="action-select" disabled>
-                        <span data-bind="text: $t('Select')">Select</span>
-                    </button>
-                </div>
-                <!-- /ko -->
-            </td>
-        </tr>
-
-        <tr class="data-grid-editable-row">
-            <td class="data-grid-checkbox-cell">
-                <label class="data-grid-checkbox-cell-inner">
-                    <input class="admin__control-checkbox" type="checkbox" value="1" id="check1">
-                    <label for="check1"></label>
-                </label>
-            </td>
-            <td>
-                2
-            </td>
-            <td>
-                <input class="admin__control-text" type="text" value="Home page">
-            </td>
-            <td>
-                <input class="admin__control-text" type="text" value="no-route">
-            </td>
-            <td>
-                <select class="admin__control-select">
-                    <option value="1">1 column</option>
-                    <option value="2">2 column</option>
-                </select>
-            </td>
-            <td>
-                <select class="admin__control-select">
-                    <option value="1">All Store views</option>
-                    <option value="2">Not All Store views</option>
-                </select>
-            </td>
-            <td>
-                <select class="admin__control-select">
-                    <option value="1">Enabled</option>
-                    <option value="2">Disabled</option>
-                </select>
-            </td>
-            <td>
-                Jul 10, 2015 11:29:01 AM
-            </td>
-            <td>
-                Jul 10, 2015 11:29:01 AM
-            </td>
-            <td class="data-grid-actions-cell">
-                <div class="action-select-wrap">
-                    <button class="action-select">
-                        <span>Select</span>
-                    </button>
-                    <ul class="action-menu">
-                        <li>
-                            <a class="action-menu-item" href="http://magento2.js/index.php/admin/cms/page/edit/page_id/2/">Edit</a>
-                        </li>
-
-                        <li>
-                            <a class="action-menu-item" href="http://magento2.js/index.php/admin/cms/page/delete/page_id/2/">Delete</a>
-                        </li>
-
-                        <li>
-                            <a class="action-menu-item" href="http://magento2.js/index.php/home/?SID=9jm7kopgjjq5ir55t1pcaqbfh5&amp;___store=default">Preview</a>
-                        </li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-        <tr class="data-grid-editable-row data-grid-editable-row-actions">
-            <td colspan="10">
-                <button class="action-tertiary" type="button"><span>Cancel</span></button>
-                <button class="action-primary" type="button"><span>Save</span></button>
-            </td>
-        </tr>
-
-        <!-- /ko -->
-
-        <!-- ko ifnot: hasData() -->
-        <tr class="data-grid-tr-no-data">
-            <td data-bind="attr: { colspan: countVisible() },
-                                   text: $t('We couldn\'t find any records.')"></td>
-        </tr>
-        <!-- /ko -->
+            <!-- ko ifnot: hasData() -->
+            <tr class="data-grid-tr-no-data">
+                <td data-bind="attr: { colspan: countVisible() },
+                                       text: $t('We couldn\'t find any records.')"></td>
+            </tr>
+            <!-- /ko -->
         </tbody>
     </table>
-    <!-- ko if: dndConfig.enabled -->
-    <!-- ko template: dndConfig.containerTmpl --><!-- /ko -->
-    <!-- /ko -->
 </div>

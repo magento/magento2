@@ -69,9 +69,7 @@ class FileManager
      */
     public function createRequireJsMixinsAsset()
     {
-        $relPath = $this->config->getMixinsFileRelativePath();
-        $this->ensureSourceFile($relPath);
-        return $this->assetRepo->createArbitrary($relPath, '');
+        return $this->assetRepo->createArbitrary($this->config->getMixinsFileRelativePath(), '');
     }
 
     /**
