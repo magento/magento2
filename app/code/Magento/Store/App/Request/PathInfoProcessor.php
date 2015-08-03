@@ -32,8 +32,13 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
         $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
         $storeCode = $pathParts[0];
 
-        $stores = $this->_storeManager->getStores(false, true);
-        if (isset($stores[$storeCode]) && $stores[$storeCode]->isUseStoreInUrl()) {
+        try {
+            $store = $this->_storeManager->getStore($storeCode);
+        } catch (\InvalidArgumentException $e) { // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
+            return $pathInfo;
+        }
+
+        if ($store->isUseStoreInUrl()) {
             if (!$request->isDirectAccessFrontendName($storeCode)) {
                 $this->_storeManager->setCurrentStore($storeCode);
                 $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');

@@ -433,7 +433,7 @@ class IndexBuilder
          * Update products rules prices per each website separately
          * because of max join limit in mysql
          */
-        foreach ($this->storeManager->getWebsites(false) as $website) {
+        foreach ($this->storeManager->getWebsites() as $website) {
             $productsStmt = $this->getRuleProductsStmt($website->getId(), $productId);
 
             $dayPrices = [];
