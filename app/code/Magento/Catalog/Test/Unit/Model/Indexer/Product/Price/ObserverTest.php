@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price;
 
+use Magento\Framework\App\Resource;
+
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,7 +25,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_storeManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
@@ -105,21 +107,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
         $this->_resourceMock->expects(
             $this->once()
-        )
-        ->method(
+        )->method(
             'getConnection'
-        )
-        ->with(
-            'write'
-        )
-        ->will(
+        )->will(
             $this->returnValue($connectionMock)
         );
 
-
         $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
-
 
         $this->_storeManagerMock->expects(
             $this->once()

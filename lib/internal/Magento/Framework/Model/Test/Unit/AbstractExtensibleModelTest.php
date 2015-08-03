@@ -75,8 +75,7 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Model\Resource\Db\AbstractDb',
             [
                 '_construct',
-                '_getReadAdapter',
-                '_getWriteAdapter',
+                'getConnection',
                 '__wakeup',
                 'commit',
                 'delete',
