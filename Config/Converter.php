@@ -6,6 +6,7 @@
 namespace Magento\Framework\Amqp\Config;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Converts AMQP config from \DOMDocument to array
@@ -130,7 +131,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $topics[$topicName][self::TOPIC_PUBLISHER] = $publisherName;
             } else {
                 throw new LocalizedException(
-                    __(
+                    new Phrase(
                         'Publisher "%publisher", specified in env.php for topic "%topic" is not declared.',
                         ['publisher' => $publisherName, 'topic' => $topicName]
                     )

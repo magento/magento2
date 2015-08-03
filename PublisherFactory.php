@@ -56,7 +56,7 @@ class PublisherFactory
         $this->publishers = [];
 
         $publishers = $compositeHelper->filterAndSortDeclaredComponents($publishers);
-        foreach ($publishers as $name => $publisherConfig) {
+        foreach ($publishers as $publisherConfig) {
             $this->add($publisherConfig['connectionName'], $publisherConfig['type']);
         }
     }
