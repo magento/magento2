@@ -11,7 +11,15 @@ define([
     'use strict';
 
     function parseData(placeholder, data, direction) {
+        if (typeof data !== 'string') {
+            return false;
+        }
+
         data = data.split(':');
+
+        if (!data[0]) {
+            return false;
+        }
 
         if (!data[1]) {
             data[1] = data[0];
@@ -170,8 +178,10 @@ define([
                     callbacks.forEach(function (callback) {
                         data = parseData(owner.name, target, 'imports');
 
-                        setData(owner.maps, callback, data);
-                        transfer(owner, data, callback);
+                        if (data) {
+                            setData(owner.maps, callback, data);
+                            transfer(owner, data, callback);
+                        }
                     });
                 });
             });
@@ -188,8 +198,10 @@ define([
                 if (links.hasOwnProperty(property)) {
                     data = parseData(owner.name, links[property], direction);
 
-                    setData(owner.maps, property, data);
-                    transfer(owner, data, property, true);
+                    if (data) {
+                        setData(owner.maps, property, data);
+                        transfer(owner, data, property, true);
+                    }
                 }
             }
 

@@ -15,7 +15,8 @@ define([
     './bind/fadeVisible',
     './bind/mage-init',
     './bind/after-render',
-    './extender/observable_array'
+    './extender/observable_array',
+    './extender/bound-nodes'
 ], function (ko, templateEngine) {
     'use strict';
 

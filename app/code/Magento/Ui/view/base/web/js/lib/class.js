@@ -5,7 +5,7 @@
 define([
     'underscore',
     'mageUtils',
-    'mage/utils/super'
+    'mage/utils/wrapper'
 ], function (_, utils, wrapper) {
     'use strict';
 

@@ -106,7 +106,7 @@
         }
     }
     tr {
-        &:nth-child(even) {
+        &._even-row {
             td {
                 background-color: @data-grid-td__even__background-color;
                 &._dragging {
@@ -378,7 +378,7 @@
     &._in-edit {
         tbody {
             tr {
-                &:nth-child(even) {
+                &._even-row {
                     &.data-grid-editable-row {
                         &:hover {
                             td {
