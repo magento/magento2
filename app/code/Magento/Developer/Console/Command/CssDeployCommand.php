@@ -226,7 +226,8 @@ class CssDeployCommand extends Command
                 [
                     'asset'           => $asset,
                     'origContent'     => $content,
-                    'origContentType' => $asset->getContentType()
+                    'origContentType' => $asset->getContentType(),
+                    'origAssetPath'   => str_replace(BP . '/', '', $sourceFile)
                 ]
             );
 
