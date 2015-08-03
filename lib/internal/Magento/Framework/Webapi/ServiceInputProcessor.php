@@ -111,17 +111,7 @@ class ServiceInputProcessor
                 }
             }
         }
-
-        if (!empty($inputError)) {
-            $exception = new InputException();
-            foreach ($inputError as $errorParamField) {
-                $exception->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
-            }
-            if ($exception->wasErrorAdded()) {
-                throw $exception;
-            }
-        }
-
+        $this->processInputError($inputError);
         return $inputData;
     }
 
@@ -250,7 +240,7 @@ class ServiceInputProcessor
      * @param mixed $value
      * @param string $type Convert given value to the this type
      * @return mixed
-     * @throws \Magento\Framework\LogicException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function convertValue($value, $type)
     {
@@ -335,5 +325,25 @@ class ServiceInputProcessor
         }
         $this->cache->save(serialize($params), $cacheId, [WebapiCache::CACHE_TAG]);
         return $params;
+    }
+
+    /**
+     * Process an input error
+     *
+     * @param array $inputError
+     * @return void
+     * @throws InputException
+     */
+    protected function processInputError($inputError)
+    {
+        if (!empty($inputError)) {
+            $exception = new InputException();
+            foreach ($inputError as $errorParamField) {
+                $exception->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
+            }
+            if ($exception->wasErrorAdded()) {
+                throw $exception;
+            }
+        }
     }
 }
