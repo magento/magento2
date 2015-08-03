@@ -6,6 +6,7 @@
 namespace Magento\Framework\Amqp\Config;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Converts AMQP config from \DOMDocument to array
@@ -157,21 +158,23 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function overridePublishersForTopics(array &$topics, array $publishers)
     {
-        $queueConfig = $this->getQueueConfig();
-        if (isset($queueConfig[self::ENV_TOPICS]) && is_array($queueConfig[self::ENV_TOPICS])) {
-            foreach ($queueConfig[self::ENV_TOPICS] as $topicName => $publisherName) {
-                if (isset($topics[$topicName])) {
-                    if (isset($publishers[$publisherName])) {
-                        $topics[$topicName][self::TOPIC_PUBLISHER] = $publisherName;
-                    } else {
-                        throw new LocalizedException(
-                            __(
-                                'Publisher "%publisher", specified in env.php for topic "%topic" is not declared.',
-                                ['publisher' => $publisherName, 'topic' => $topicName]
-                            )
-                        );
-                    }
-                }
+        $queueConfig =  $this->deploymentConfig->getConfigData(self::ENV_QUEUE);
+        if (!isset($queueConfig[self::ENV_TOPICS]) || !is_array($queueConfig[self::ENV_TOPICS])) {
+            return;
+        }
+        foreach ($queueConfig[self::ENV_TOPICS] as $topicName => $publisherName) {
+            if (!isset($topics[$topicName])) {
+                continue;
+            }
+            if (isset($publishers[$publisherName])) {
+                $topics[$topicName][self::TOPIC_PUBLISHER] = $publisherName;
+            } else {
+                throw new LocalizedException(
+                    new Phrase(
+                        'Publisher "%publisher", specified in env.php for topic "%topic" is not declared.',
+                        ['publisher' => $publisherName, 'topic' => $topicName]
+                    )
+                );
             }
         }
     }
