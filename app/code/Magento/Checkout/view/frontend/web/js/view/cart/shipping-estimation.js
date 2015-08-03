@@ -6,11 +6,16 @@
 /*global alert*/
 define(
     [
+        'jquery',
+        'ko',
         'uiComponent',
         'Magento_Checkout/js/action/select-shipping-address',
-        'Magento_Checkout/js/model/address-converter'
+        'Magento_Checkout/js/model/address-converter',
+        'Magento_Checkout/js/model/shipping-rate-service',
+        'Magento_Checkout/js/model/shipping-service',
+        'mage/validation'
     ],
-    function(Component, selectShippingAddress, addressConverter) {
+    function($, ko, Component, selectShippingAddress, addressConverter, shippingRateService, shippingService) {
         'use strict';
         return Component.extend({
             defaults: {
@@ -20,17 +25,21 @@ define(
             isCityActive: true,
             isCityRequired: true,
             isZipCodeRequired: true,
+            isLoading: shippingService.isLoading,
+            shippingRates: shippingService.getShippingRates(),
 
             getEstimationInfo: function (elem, event) {
+                var addressForm = $('#shipping-zip-form');
                 event.preventDefault();
+                if (addressForm.validation() && addressForm.validation('isValid')) {
+                    var addressFlat = {
+                        'country': 'US',
+                        'postcode': 11111
+                    };
 
-                var addressFlat = {
-                    'country': 'US',
-                    'postcode': 11111
-                };
-
-                var address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
-                selectShippingAddress(address);
+                    var address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
+                    selectShippingAddress(address);
+                }
             }
         });
     }
