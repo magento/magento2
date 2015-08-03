@@ -75,7 +75,13 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             return false;
         };
 
-        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
 
         $this->model = new StoreGroup($this->indexerRegistryMock, $this->stateMock);
     }

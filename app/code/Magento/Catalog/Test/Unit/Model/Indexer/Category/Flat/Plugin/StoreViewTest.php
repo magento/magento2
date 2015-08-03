@@ -61,7 +61,13 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             return false;
         };
         $this->subjectMock = $this->getMock('Magento\Store\Model\Resource\Store', [], [], '', false);
-        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
         $this->model = new StoreView($this->indexerRegistryMock, $this->stateMock);
     }
 

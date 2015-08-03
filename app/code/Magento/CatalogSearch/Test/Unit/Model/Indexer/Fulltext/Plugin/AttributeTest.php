@@ -41,7 +41,13 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
         $this->config =  $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
             ->disableOriginalConstructor()
             ->getMock();

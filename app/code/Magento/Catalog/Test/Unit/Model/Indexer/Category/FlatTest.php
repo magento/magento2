@@ -60,7 +60,13 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             ['getId', 'load', 'isInvalid', 'isWorking', '__wakeup']
         );
 
-        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
 
         $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat(
             $this->fullMock,
