@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Weee\Test\Model;
+namespace Magento\Weee\Test\Unit\Model;
 
 use Magento\Weee\Model\Tax;
 
