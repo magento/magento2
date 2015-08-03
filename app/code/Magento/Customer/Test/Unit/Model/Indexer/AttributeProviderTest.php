@@ -99,13 +99,15 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                     $existentName => $existentField,
                     $attrName => [
                         'name' => $attrName,
-                        'handler' => null,
+                        'handler' => 'Magento\Indexer\Model\Handler\AttributeHandler',
                         'origin' => $attrName,
                         'type' => 'virtual',
                         'filters' => [],
                         'dataType' => $attrBackendType,
-                    ]
-                ]
+                        'entity' => Customer::ENTITY,
+                        'bind' => null,
+                    ],
+                ],
             ],
             $this->object->addDynamicData($data)
         );
@@ -173,8 +175,8 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                         'type' => 'searchable',
                         'filters' => ['filter'],
                         'dataType' => 'data_type',
-                    ]
-                ]
+                    ],
+                ],
             ],
             $this->object->addDynamicData($data)
         );
@@ -191,7 +193,14 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             'filters' => ['filter'],
             'dataType' => 'data_type',
         ];
-        $data = ['fields' => [$existentName => $existentField]];
+        $data = [
+            'fields' => [$existentName => $existentField],
+            'references' => [
+                'customer' => [
+                    'to' => 'to_field',
+                ],
+            ],
+        ];
         $attrName = $existentName;
         $attrBackendType = 'varchar';
 
@@ -239,13 +248,20 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     $attrName => [
                         'name' => $attrName,
-                        'handler' => null,
+                        'handler' => 'Magento\Indexer\Model\Handler\AttributeHandler',
                         'origin' => $attrName,
                         'type' => 'filterable',
                         'filters' => [],
                         'dataType' => 'varchar',
-                    ]
-                ]
+                        'entity' => Customer::ENTITY,
+                        'bind' => 'to_field',
+                    ],
+                ],
+                'references' => [
+                    'customer' => [
+                        'to' => 'to_field',
+                    ],
+                ],
             ],
             $this->object->addDynamicData($data)
         );
