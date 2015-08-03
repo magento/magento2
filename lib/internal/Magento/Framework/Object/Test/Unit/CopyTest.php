@@ -79,7 +79,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
 
         $eventName = sprintf('core_copy_fieldset_%s_%s', 'fieldset', 'aspect');
         $data = [
-            'target' => [$this->targetMock],
+            'target' => new \Magento\Framework\Object([$this->targetMock]),
             'source' => $this->sourceMock,
             'root'   => 'global',
         ];
@@ -148,7 +148,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             'value' => 'value',
         ];
         $data = [
-            'target' => $newTarget,
+            'target' => new \Magento\Framework\Object($newTarget),
             'source' => $this->sourceMock,
             'root'   => 'global',
         ];

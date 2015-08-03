@@ -23,11 +23,6 @@ class Source
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\View\Asset\PreProcessor\Cache
-     */
-    protected $cache;
-
-    /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $rootDir;
@@ -58,7 +53,6 @@ class Source
     private $chainFactory;
 
     /**
-     * @param PreProcessor\Cache $cache
      * @param \Magento\Framework\Filesystem $filesystem
      * @param PreProcessor\Pool $preProcessorPool
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
@@ -66,14 +60,12 @@ class Source
      * @param ChainFactoryInterface $chainFactory
      */
     public function __construct(
-        PreProcessor\Cache $cache,
         \Magento\Framework\Filesystem $filesystem,
         PreProcessor\Pool $preProcessorPool,
         \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback,
         \Magento\Framework\View\Design\Theme\ListInterface $themeList,
         ChainFactoryInterface $chainFactory
     ) {
-        $this->cache = $cache;
         $this->filesystem = $filesystem;
         $this->rootDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->varDir = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
@@ -122,7 +114,7 @@ class Source
      * - directory code where the file is supposed to be found
      * - relative path to the file
      *
-     * Automatically caches the obtained successful results or returns false if source file was not found
+     * returns false if source file was not found
      *
      * @param LocalInterface $asset
      * @return array|bool
@@ -132,33 +124,17 @@ class Source
         $sourceFile = $this->findSourceFile($asset);
         $dirCode = DirectoryList::ROOT;
         $path = $this->rootDir->getRelativePath($sourceFile);
-        $cacheId = $path . ':' . $asset->getPath();
-        $cached = $this->cache->load($cacheId);
-        if ($cached) {
-            return unserialize($cached);
-        }
 
-        $origContent = $path ? $this->rootDir->readFile($path) : '';
-        $origContentType = $this->getContentType($path) ?: $asset->getContentType();
-
-        $chain = $this->chainFactory->create(
-            [
-                'asset' => $asset,
-                'origContent' => $origContent,
-                'origContentType' => $origContentType,
-                'origAssetPath' => $path
-            ]
-        );
-
+        $chain = $this->createChain($asset, $path);
         $this->preProcessorPool->process($chain);
         $chain->assertValid();
+        $dirCode = DirectoryList::ROOT;
         if ($chain->isChanged()) {
             $dirCode = DirectoryList::VAR_DIR;
             $path = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $chain->getTargetAssetPath();
             $this->varDir->writeFile($path, $chain->getContent());
         }
         $result = [$dirCode, $path];
-        $this->cache->save(serialize($result), $cacheId);
         return $result;
     }
 
@@ -251,5 +227,33 @@ class Source
             return false;
         }
         return $this->rootDir->getRelativePath($sourceFile);
+    }
+
+    /**
+     * Creates a chain for pre-processing
+     *
+     * @param LocalInterface $asset
+     * @param string|bool $path
+     * @return PreProcessor\Chain
+     */
+    private function createChain(LocalInterface $asset, $path)
+    {
+        if ($path) {
+            $origContent = $this->rootDir->readFile($path);
+            $origContentType = $this->getContentType($path);
+        } else {
+            $origContent = '';
+            $origContentType = $asset->getContentType();
+        }
+
+        $chain = $this->chainFactory->create(
+            [
+                'asset' => $asset,
+                'origContent' => $origContent,
+                'origContentType' => $origContentType,
+                'origAssetPath' => $path
+            ]
+        );
+        return $chain;
     }
 }

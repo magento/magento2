@@ -166,11 +166,9 @@ define([
                 }
             };
 
-            filters.extractPreviews(filters.elems);
-            expect(filters.previews().length).toEqual(0);
             filters.elems.push(elem);
-            filters.extractPreviews(filters.elems);
-            expect(filters.previews().length).toEqual(1);
+            filters.extractActive(filters.elems);
+            expect(filters.active().length).toEqual(0);
         });
     });
 });

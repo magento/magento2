@@ -35,7 +35,7 @@
 
 </div>
 
-<div id="php-version" class="rediness-check-item" ng-show="version.visible">
+<div id="php-version" class="readiness-check-item" ng-show="version.visible">
 
     <h3 class="readiness-check-title" ng-hide="version.processed">
         Checking PHP Version...
@@ -58,7 +58,7 @@
 
         <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(version)">
 
-            <div class="rediness-check-side">
+            <div class="readiness-check-side">
                 <p class="side-title">Need Help?</p>
                 <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>
             </div>
@@ -67,17 +67,22 @@
 
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">PHP Version Check</h3>
-                <p>
-                    Your PHP version is {{version.data.current}}. The required PHP version is {{version.data.required}}.
-                    <a href="#php-version" ng-click="updateOnExpand(version)">
-                        <span ng-hide="version.expanded">Show detail</span>
-                        <span ng-show="version.expanded">Hide detail</span>
-                    </a>
-                </p>
-                <p ng-show="version.expanded">
-                    Download and install PHP version {{version.data.required}} from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.
-                </p>
-                <p ng-show="version.expanded">If you need more help please call your hosting provider.</p>
+                <div ng-show="version.isRequestError">
+                    <p>Server failed to respond. Please try again.</p>
+                </div>
+                <div ng-hide="version.isRequestError">
+                    <p>
+                        Your PHP version is {{version.data.current}}. The required PHP version is {{version.data.required}}.
+                        <a href="#php-version" ng-click="updateOnExpand(version)">
+                            <span ng-hide="version.expanded">Show detail</span>
+                            <span ng-show="version.expanded">Hide detail</span>
+                        </a>
+                    </p>
+                    <p ng-show="version.expanded">
+                        Download and install PHP version {{version.data.required}} from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.
+                    </p>
+                    <p ng-show="version.expanded">If you need more help please call your hosting provider.</p>
+                </div>
             </div>
 
         </div>
@@ -86,7 +91,7 @@
 
 </div>
 
-<div id="php-settings" class="rediness-check-item" ng-show="settings.visible">
+<div id="php-settings" class="readiness-check-item" ng-show="settings.visible">
 
     <h3 class="readiness-check-title" ng-hide="settings.processed">
         Checking PHP Settings...
@@ -110,17 +115,22 @@
         <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(settings)">
 
             <span class="readiness-check-icon icon-failed-round"></span>
-            <h3 class="readiness-check-title">PHP Settings Check</h3>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Settings Check</h3>
 
-            <div ng-repeat="setting in settings.data">
-                <div ng-show="setting.error && setting.helpUrl" class="rediness-check-side">
-                    <p class="side-title">Need Help?</p>
-                    <a href="{{setting.helpUrl}}" target="_blank">PHP Documentation</a>
+                <div ng-show="settings.isRequestError">
+                    <p>Server failed to respond. Please try again.</p>
                 </div>
-                <div ng-show="setting.error" class="readiness-check-content">
-                    <p>
-                        {{setting.message}}
-                    </p>
+                <div ng-hide="settings.isRequestError" ng-repeat="setting in settings.data">
+                    <div ng-show="setting.error && setting.helpUrl" class="readiness-check-side">
+                        <p class="side-title">Need Help?</p>
+                        <a href="{{setting.helpUrl}}" target="_blank">PHP Documentation</a>
+                    </div>
+                    <div ng-show="setting.error">
+                        <p>
+                            {{setting.message}}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -129,7 +139,7 @@
 
 </div>
 
-<div id="php-extensions" class="rediness-check-item" ng-show="extensions.visible">
+<div id="php-extensions" class="readiness-check-item" ng-show="extensions.visible">
 
     <h3 ng-hide="extensions.processed" class="readiness-check-title">
         Checking PHP Extensions...
@@ -169,7 +179,7 @@
                     </span>
                 </div>
 
-                <div class="rediness-check-side">
+                <div class="readiness-check-side">
                     <p class="side-title">Need Help?</p>
                     <a href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a>
                 </div>
@@ -178,32 +188,37 @@
 
                 <div class="readiness-check-content">
                     <h3 class="readiness-check-title">PHP Extensions Check</h3>
-                    <p>
-                        {{extensions.data.missing.length}} missing PHP extensions.
-                        <a href="#php-extensions" ng-click="updateOnExpand(extensions)">
-                            <span ng-hide="extensions.expanded">Show detail</span>
-                            <span ng-show="extensions.expanded">Hide detail</span>
-                        </a>
-                    </p>
-                    <p>
-                        The best way to resolve this is to install the correct missing extensions. The exact fix depends on our server, your host, and other system variables.
-                        <br>
-                        Our <a href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a> can get you started.
-                    </p>
-                    <p>
-                        If you need more help, please call your hosting provider.
-                    </p>
-                    <ul class="list" ng-show="extensions.expanded">
-                        <li
-                            class="list-item-icon"
-                            ng-repeat="name in extensions.data.required"
-                            ng-switch="extensions.data.missing.indexOf(name) >= 0"
-                            >
-                            <span ng-switch-when="true" class="icon-failed"></span>
-                            <span ng-switch-default class="icon-success"></span>
-                            PHP Extension {{name}}.
-                        </li>
-                    </ul>
+                    <div ng-show="extensions.isRequestError">
+                        <p>Server failed to respond. Please try again.</p>
+                    </div>
+                    <div ng-hide="extensions.isRequestError">
+                        <p>
+                            {{extensions.data.missing.length}} missing PHP extensions.
+                            <a href="#php-extensions" ng-click="updateOnExpand(extensions)">
+                                <span ng-hide="extensions.expanded">Show detail</span>
+                                <span ng-show="extensions.expanded">Hide detail</span>
+                            </a>
+                        </p>
+                        <p>
+                            The best way to resolve this is to install the correct missing extensions. The exact fix depends on our server, your host, and other system variables.
+                            <br>
+                            Our <a href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a> can get you started.
+                        </p>
+                        <p>
+                            If you need more help, please call your hosting provider.
+                        </p>
+                        <ul class="list" ng-show="extensions.expanded">
+                            <li
+                                class="list-item-icon"
+                                ng-repeat="name in extensions.data.required"
+                                ng-switch="extensions.data.missing.indexOf(name) >= 0"
+                                >
+                                <span ng-switch-when="true" class="icon-failed"></span>
+                                <span ng-switch-default class="icon-success"></span>
+                                PHP Extension {{name}}.
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
             </div>
@@ -214,7 +229,7 @@
 
 </div>
 
-<div class="rediness-check-item" id="php-permissions" ng-show="permissions.visible">
+<div class="readiness-check-item" id="php-permissions" ng-show="permissions.visible">
 
     <h3 class="readiness-check-title" ng-hide="permissions.processed">
         Checking File Permissions...
@@ -246,7 +261,7 @@
 
         <div ng-switch-default ng-init="updateOnError(permissions)">
 
-            <div class="rediness-check-side">
+            <div class="readiness-check-side">
                 <p class="side-title">Need Help?</p>
                 <a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/composer-clone.html#instgde-prereq-compose-access" target="_blank">File Permission Help</a>
             </div>
@@ -256,32 +271,37 @@
             <div class="readiness-check-content">
 
                 <h3 class="readiness-check-title">File Permission Check</h3>
-                <p>
-                    {{permissions.data.required.length - permissions.data.current.length}} file permission not met.
-                    <a href="#php-permissions" ng-click="updateOnExpand(permissions)">
-                        <span ng-hide="permissions.expanded">Show detail</span>
-                        <span ng-show="permissions.expanded">Hide detail</span>
-                    </a>
-                </p>
-                <p>
-                    The best way to resolve this is to allow write permissions for the following Magento directories. The exact fix depends on your server, your host, and other system variables.
-                    <br>
-                    Our <a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/composer-clone.html#instgde-prereq-compose-access" target="_blank">File Permission Help</a> can get you started.
-                </p>
-                <p>
-                    If you need more help, please call your hosting provider.
-                </p>
+                <div ng-show="permissions.isRequestError">
+                    <p>Server failed to respond. Please try again.</p>
+                </div>
+                <div ng-hide="permissions.isRequestError">
+                    <p>
+                        {{permissions.data.required.length - permissions.data.current.length}} file permission not met.
+                        <a href="#php-permissions" ng-click="updateOnExpand(permissions)">
+                            <span ng-hide="permissions.expanded">Show detail</span>
+                            <span ng-show="permissions.expanded">Hide detail</span>
+                        </a>
+                    </p>
+                    <p>
+                        The best way to resolve this is to allow write permissions for the following Magento directories. The exact fix depends on your server, your host, and other system variables.
+                        <br>
+                        Our <a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/composer-clone.html#instgde-prereq-compose-access" target="_blank">File Permission Help</a> can get you started.
+                    </p>
+                    <p>
+                        If you need more help, please call your hosting provider.
+                    </p>
 
-                <ul class="list" ng-show="permissions.expanded">
-                    <li
-                        class="list-item-icon"
-                        ng-repeat="name in permissions.data.required"
-                        ng-switch="hasItem(permissions.data.current, name)">
-                        <span ng-switch-when="true" class="icon-success"></span>
-                        <span ng-switch-default class="icon-failed"></span>
-                        <span>"{{name}}" writable directory permission.</span>
-                    </li>
-                </ul>
+                    <ul class="list" ng-show="permissions.expanded">
+                        <li
+                            class="list-item-icon"
+                            ng-repeat="name in permissions.data.required"
+                            ng-switch="hasItem(permissions.data.current, name)">
+                            <span ng-switch-when="true" class="icon-success"></span>
+                            <span ng-switch-default class="icon-failed"></span>
+                            <span>"{{name}}" writable directory permission.</span>
+                        </li>
+                    </ul>
+                </div>
 
             </div>
 

@@ -16,9 +16,10 @@ define(
         'mage/translate'
     ],
     function (ko, Component, customer, addressList, quote, createBillingAddress, selectBillingAddress, $t) {
-        "use strict";
+        'use strict';
 
-        var newAddressOption = {
+        var lastSelectedBillingAddress = null,
+            newAddressOption = {
             getAddressInline: function() {
                 return $t('New Address');
             },
@@ -34,18 +35,31 @@ define(
                 template: 'Magento_Checkout/billing-address'
             },
 
+            initialize: function () {
+                this._super();
+                quote.paymentMethod.subscribe(function() {
+                    this.cancelAddressEdit();
+                }, this);
+            },
+
             initObservable: function () {
                 this._super()
                     .observe({
                         selectedAddress: null,
-                        isAddressDetailsVisible: quote.shippingAddress() != null,
+                        isAddressDetailsVisible: quote.billingAddress() != null,
                         isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length == 1,
                         isAddressSameAsShipping: false
                     });
+
                 quote.billingAddress.subscribe(function(newAddress) {
-                    this.isAddressSameAsShipping(newAddress == quote.shippingAddress() && !quote.isVirtual());
+                    this.isAddressSameAsShipping(
+                        newAddress != null
+                            && newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()
+                            && !quote.isVirtual()
+                    );
                     this.isAddressDetailsVisible(true);
                 }, this);
+
                 return this;
             },
 
@@ -71,6 +85,8 @@ define(
                     selectBillingAddress(quote.shippingAddress());
                     this.isAddressDetailsVisible(true);
                 } else {
+                    lastSelectedBillingAddress = quote.billingAddress();
+                    quote.billingAddress(null);
                     this.isAddressDetailsVisible(false);
                 }
                 return true;
@@ -97,16 +113,27 @@ define(
             },
 
             editAddress: function () {
+                lastSelectedBillingAddress = quote.billingAddress();
+                quote.billingAddress(null);
                 this.isAddressDetailsVisible(false);
             },
 
             cancelAddressEdit: function () {
+                this.restoreBillingAddress();
                 if (quote.billingAddress()) {
                     // restore 'Same As Shipping' checkbox state
                     this.isAddressSameAsShipping(
-                        !quote.isVirtual() && (quote.shippingAddress() == quote.billingAddress())
+                        quote.billingAddress() != null
+                            && quote.billingAddress().getCacheKey() == quote.shippingAddress().getCacheKey()
+                            && !quote.isVirtual()
                     );
                     this.isAddressDetailsVisible(true);
+                }
+            },
+
+            restoreBillingAddress: function () {
+                if (lastSelectedBillingAddress != null) {
+                    selectBillingAddress(lastSelectedBillingAddress);
                 }
             },
 

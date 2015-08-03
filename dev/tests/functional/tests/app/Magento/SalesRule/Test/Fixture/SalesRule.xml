@@ -6,89 +6,41 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="salesRule" module="Magento_SalesRule" type="flat" entity_type="salesrule" collection="Magento\SalesRule\Model\Resource\Rule\Collection" repository_class="Magento\SalesRule\Test\Repository\SalesRule" handler_interface="Magento\SalesRule\Test\Handler\SalesRule\SalesRuleInterface" class="Magento\SalesRule\Test\Fixture\SalesRule">
-        <dataset name="default">
-            <field name="name" xsi:type="string">Default price rule %isolation%</field>
-            <field name="is_active" xsi:type="string">Active</field>
-            <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
-            </field>
-            <field name="customer_group_ids" xsi:type="array">
-                <item name="0" xsi:type="string">NOT LOGGED IN</item>
-                <item name="1" xsi:type="string">General</item>
-                <item name="2" xsi:type="string">Wholesale</item>
-                <item name="3" xsi:type="string">Retailer</item>
-            </field>
-            <field name="coupon_type" xsi:type="string">No Coupon</field>
-            <field name="simple_action" xsi:type="string">Percent of product price discount</field>
-            <field name="discount_amount" xsi:type="string">50</field>
-        </dataset>
+    <fixture name="salesRule"
+             module="Magento_SalesRule"
+             type="flat"
+             entity_type="salesrule"
+             collection="Magento\SalesRule\Model\Resource\Rule\Collection"
+             repository_class="Magento\SalesRule\Test\Repository\SalesRule"
+             handler_interface="Magento\SalesRule\Test\Handler\SalesRule\SalesRuleInterface"
+             class="Magento\SalesRule\Test\Fixture\SalesRule">
         <field name="rule_id" is_required="1" />
-        <field name="name" group="rule_information">
-            <default_value xsi:type="string">Default price rule %isolation%</default_value>
-        </field>
+        <field name="name" group="rule_information" />
         <field name="description" group="rule_information" />
         <field name="from_date" group="rule_information" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="to_date" group="rule_information" source="Magento\Backend\Test\Fixture\Source\Date" />
-        <field name="uses_per_customer" group="rule_information">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="is_active" group="rule_information">
-            <default_value xsi:type="string">Active</default_value>
-        </field>
+        <field name="uses_per_customer" group="rule_information" />
+        <field name="is_active" group="rule_information" />
         <field name="conditions_serialized" group="conditions" source="Magento\SalesRule\Test\Fixture\SalesRule\ConditionsSerialized" />
         <field name="actions_serialized" group="actions" />
-        <field name="stop_rules_processing" group="actions">
-            <default_value xsi:type="string">1</default_value>
-        </field>
-        <field name="is_advanced">
-            <default_value xsi:type="string">1</default_value>
-        </field>
+        <field name="stop_rules_processing" group="actions" />
+        <field name="is_advanced" />
         <field name="product_ids" />
-        <field name="sort_order" group="rule_information">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="simple_action" group="actions">
-            <default_value xsi:type="string">Percent of product price discount</default_value>
-        </field>
-        <field name="discount_amount" group="actions">
-            <default_value xsi:type="number">50</default_value>
-        </field>
+        <field name="sort_order" group="rule_information" />
+        <field name="simple_action" group="actions" />
+        <field name="discount_amount" group="actions" />
         <field name="discount_qty" group="actions" />
         <field name="discount_step" group="actions" />
-        <field name="apply_to_shipping" group="actions">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="times_used">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="is_rss" group="rule_information">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="coupon_type" group="rule_information">
-            <default_value xsi:type="string">No Coupon</default_value>
-        </field>
-        <field name="use_auto_generation" group="rule_information">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="uses_per_coupon" group="rule_information">
-            <default_value xsi:type="number">0</default_value>
-        </field>
+        <field name="apply_to_shipping" group="actions" />
+        <field name="times_used" />
+        <field name="is_rss" group="rule_information" />
+        <field name="coupon_type" group="rule_information" />
+        <field name="use_auto_generation" group="rule_information" />
+        <field name="uses_per_coupon" group="rule_information" />
         <field name="simple_free_shipping" group="actions" />
         <field name="id" />
-        <field name="website_ids" group="rule_information">
-            <default_value xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
-            </default_value>
-        </field>
-        <field name="customer_group_ids" group="rule_information">
-            <default_value xsi:type="array">
-                <item name="0" xsi:type="string">NOT LOGGED IN</item>
-                <item name="1" xsi:type="string">General</item>
-                <item name="2" xsi:type="string">Wholesale</item>
-                <item name="3" xsi:type="string">Retailer</item>
-            </default_value>
-        </field>
+        <field name="website_ids" group="rule_information" />
+        <field name="customer_group_ids" group="rule_information" />
         <field name="store_labels" group="labels" />
         <field name="coupon_code" group="rule_information" />
         <field name="rule" />

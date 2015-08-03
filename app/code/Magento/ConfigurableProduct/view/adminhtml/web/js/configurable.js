@@ -23,21 +23,6 @@ Product.Config.prototype = {
             showBothPrices: false,
             inclTaxTitle: jQuery.mage.__('Incl. Tax')
         };
-        for (var ii in config.attributes) {
-            if (config.attributes.hasOwnProperty(ii)) {
-                var attribute = config.attributes[ii];
-                for (var jj in attribute.options) {
-                    if (attribute.options.hasOwnProperty(jj)) {
-                        var option = attribute.options[jj];
-                        option.price = +option.prices.finalPrice.amount;
-                        option.inclTaxPrice = +option.prices.finalPrice.amount;
-                        option.exclTaxPrice = +option.prices.basePrice.amount;
-                        config.taxConfig.showBothPrices = config.taxConfig.showBothPrices
-                            || (option.inclTaxPrice !== option.exclTaxPrice);
-                    }
-                }
-            }
-        }
 
         this.config     = config;
         this.taxConfig  = this.config.taxConfig;
@@ -145,16 +130,17 @@ Product.Config.prototype = {
     },
 
     reloadOptionLabels: function(element){
-        var selectedPrice;
-        if(element.options[element.selectedIndex].config && !this.config.stablePrices){
-            selectedPrice = parseFloat(element.options[element.selectedIndex].config.price)
+        var selectedPrice = 0;
+        if(element.options[element.selectedIndex] && element.options[element.selectedIndex].config){
+            var option = element.options[element.selectedIndex].config;
+            selectedPrice = parseFloat(this.config.optionPrices[option.allowedProducts[0]].finalPrice.amount);
         }
-        else{
-            selectedPrice = 0;
-        }
+        element.setAttribute('price', selectedPrice);
         for(var i=0;i<element.options.length;i++){
             if(element.options[i].config){
-                element.options[i].text = this.getOptionLabel(element.options[i].config, element.options[i].config.price-selectedPrice);
+                element.options[i].setAttribute('price', selectedPrice);
+                element.options[i].setAttribute('summarizePrice', 0);
+                element.options[i].text = this.getOptionLabel(element.options[i].config, selectedPrice);
             }
         }
     },
@@ -200,7 +186,7 @@ Product.Config.prototype = {
 
                 if(allowedProducts.size()>0){
                     options[i].allowedProducts = allowedProducts;
-                    element.options[index] = new Option(this.getOptionLabel(options[i], options[i].price), options[i].id);
+                    element.options[index] = new Option(this.getOptionLabel(options[i]), options[i].id);
                     if (typeof options[i].price != 'undefined') {
                         element.options[index].setAttribute('price', options[i].price);
                     }
@@ -211,26 +197,8 @@ Product.Config.prototype = {
         }
     },
 
-    getOptionLabel: function(option, price){
-        var price = parseFloat(price);
-        var includeTax = parseFloat(option.inclTaxPrice);
-        var excludeTax = parseFloat(option.exclTaxPrice);
-
-        if (this.taxConfig.showIncludeTax || this.taxConfig.showBothPrices) {
-            price = includeTax;
-        } else {
-            price = excludeTax;
-        }
-
-        var str = option.label;
-        if(price){
-            if (this.taxConfig.showBothPrices) {
-                str+= ' ' + this.formatPrice(excludeTax, true) + ' (' + this.formatPrice(price, true) + ' ' + this.taxConfig.inclTaxTitle + ')';
-            } else {
-                str+= ' ' + this.formatPrice(price, true);
-            }
-        }
-        return str;
+    getOptionLabel: function(option){
+        return option.label;
     },
 
     formatPrice: function(price, showSign){

@@ -12,13 +12,12 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
- * Class AssertBundleItemsOnProductPage
- * Assert that displayed product bundle items data on product page equals passed from fixture preset
+ * Assert that displayed product bundle items data on product page equals passed from fixture
  */
 class AssertBundleItemsOnProductPage extends AbstractAssertForm
 {
     /**
-     * Assert that displayed product bundle items data on product page equals passed from fixture preset
+     * Assert that displayed product bundle items data on product page equals passed from fixture.
      *
      * @param CatalogProductView $catalogProductView
      * @param BundleProduct $product
@@ -48,7 +47,7 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
     }
 
     /**
-     * Prepare bundle options
+     * Prepare bundle options.
      *
      * @param BundleProduct $product
      * @return array
@@ -89,12 +88,12 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
     }
 
     /**
-     * Return Text if displayed on frontend equals with fixture
+     * Return Text if displayed on frontend equals with fixture.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Bundle options data on product page equals to passed from fixture preset.';
+        return 'Bundle options data on product page equals to passed from fixture dataset.';
     }
 }

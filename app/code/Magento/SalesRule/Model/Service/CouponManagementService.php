@@ -3,13 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Model\Service;
 
-use Magento\SalesRule\Api\Data\RuleInterface;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use \Magento\SalesRule\Model\Resource\Rule\Collection;
+use Magento\SalesRule\Model\Coupon;
 
 /**
  * Coupon management service class
@@ -42,6 +38,13 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      */
     protected $resourceModel;
 
+    /**
+     * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
+     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
+     * @param \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $collectionFactory
+     * @param \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator
+     * @param \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel
+     */
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -72,12 +75,29 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         }
 
         try {
+            $rule = $this->ruleFactory->create()->load($couponSpec->getRuleId());
+            if (!$rule->getRuleId()) {
+                throw \Magento\Framework\Exception\NoSuchEntityException::singleField(
+                    \Magento\SalesRule\Model\Coupon::KEY_RULE_ID,
+                    $couponSpec->getRuleId()
+                );
+            }
+            if (!$rule->getUseAutoGeneration()) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Specified rule does not allow automatic coupon generation')
+                );
+            }
+
             $this->couponGenerator->setData($data);
+            $this->couponGenerator->setData('to_date', $rule->getToDate());
+            $this->couponGenerator->setData('uses_per_coupon', $rule->getUsesPerCoupon());
+            $this->couponGenerator->setData('usage_per_customer', $rule->getUsesPerCustomer());
+
             $this->couponGenerator->generatePool();
             return $this->couponGenerator->getGeneratedCodes();
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Error occured when generating coupons: %1', $e->getMessage())
+                __('Error occurred when generating coupons: %1', $e->getMessage())
             );
         }
     }
@@ -95,9 +115,14 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         $data['qty'] = $couponSpec->getQuantity();
         $data['format'] = $couponSpec->getFormat();
         $data['length'] = $couponSpec->getLength();
-        $data['to_date'] = $couponSpec->getExpirationDate();
-        $data['uses_per_coupon'] = $couponSpec->getUsagePerCoupon();
-        $data['uses_per_customer'] = $couponSpec->getUsagePerCustomer();
+        $data['prefix'] = $couponSpec->getPrefix();
+        $data['suffix'] = $couponSpec->getSuffix();
+        $data['dash'] = $couponSpec->getDelimiterAtEvery();
+
+        //if specified, use the supplied delimiter
+        if ($couponSpec->getDelimiter()) {
+            $data['delimiter'] = $couponSpec->getDelimiter();
+        }
         return $data;
     }
 
@@ -146,18 +171,18 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
         if (!$ignoreInvalid) {
             if ($couponsCollection->getSize() != count($fieldValues)) {
-                throw new \Magento\Framework\Exception\LocalizedException('Some inputs are invalid');
+                throw new \Magento\Framework\Exception\LocalizedException(__('Some coupons are invalid.'));
             }
         }
         try {
             /** @var \Magento\SalesRule\Model\Coupon $coupon */
-            foreach ($couponsCollection as $coupon) {
+            foreach ($couponsCollection->getItems() as $coupon) {
                 $coupon->delete();
             }
             return true;
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Error occured when deleting coupons: %1.', $e->getMessage())
+                __('Error occurred when deleting coupons: %1.', $e->getMessage())
             );
         }
     }

@@ -32,8 +32,9 @@ class AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax extends
     public function getCategoryPrices(FixtureInterface $product, $actualPrices)
     {
         $priceBlock = $this->catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
+        $actualPrices['category_price'] = $priceBlock->getPrice();
         $actualPrices['category_price_excl_tax'] = $priceBlock->getPriceExcludingTax();
-        $actualPrices['category_price_incl_tax'] = null;
+        $actualPrices['category_price_incl_tax'] = $priceBlock->getPriceIncludingTax();
 
         return $actualPrices;
     }
@@ -46,9 +47,10 @@ class AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax extends
      */
     public function getProductPagePrices($actualPrices)
     {
-        $viewBlock = $this->catalogProductView->getViewBlock();
-        $actualPrices['product_view_price_excl_tax'] = $viewBlock->getPriceBlock()->getPriceExcludingTax();
-        $actualPrices['product_view_price_incl_tax'] = null;
+        $priceBlock = $this->catalogProductView->getViewBlock()->getPriceBlock();
+        $actualPrices['product_view_price'] = $priceBlock->getPrice();
+        $actualPrices['product_view_price_excl_tax'] = $priceBlock->getPriceExcludingTax();
+        $actualPrices['product_view_price_incl_tax'] = $priceBlock->getPriceIncludingTax();
 
         return $actualPrices;
     }

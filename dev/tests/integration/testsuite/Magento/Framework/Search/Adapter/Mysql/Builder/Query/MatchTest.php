@@ -29,7 +29,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildQuery($conditionType, $expectedSuffix)
     {
-        $conditionPattern = "(MATCH (data_index) AGAINST ('%ssomeValue*' IN BOOLEAN MODE) * %s) AS score";
+        $conditionPattern = "(MATCH (data_index) AGAINST ('%ssomeValue*' IN BOOLEAN MODE) * POW(2, %s)) AS score";
         $expectedScoreCondition = sprintf($conditionPattern, $expectedSuffix, ScoreBuilder::WEIGHT_FIELD);
         $expectedSql = "SELECT `someTable`.* FROM `someTable` WHERE (MATCH (data_index) " .
             "AGAINST ('{$expectedSuffix}someValue*' IN BOOLEAN MODE))";

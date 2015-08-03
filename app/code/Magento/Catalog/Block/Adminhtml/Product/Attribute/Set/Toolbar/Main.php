@@ -27,7 +27,7 @@ class Main extends \Magento\Backend\Block\Template
             'addButton',
             'Magento\Backend\Block\Widget\Button',
             [
-                'label' => __('Add New Set'),
+                'label' => __('Add Product Template'),
                 'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/add') . '\')',
                 'class' => 'add primary add-set'
             ]

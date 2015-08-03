@@ -6,7 +6,7 @@
 /*global confirm:true*/
 define([
     "jquery",
-    'Magento_Checkout/js/model/cart/authentication-popup',
+    'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
     "jquery/ui",
     "mage/decorate"
@@ -24,41 +24,41 @@ define([
         },
 
         _initContent: function() {
-            var self = this;
+            var self = this,
+                events = {};
 
             this.element.decorate('list', this.options.isRecursive);
 
-            $(this.options.button.close).click(function(event) {
+            events['click ' + this.options.button.close] = function(event) {
                 event.stopPropagation();
                 $(self.options.targetElement).dropdownDialog("close");
-            });
-
-            $(this.options.button.checkout).on('click', $.proxy(function() {
+            };
+            events['click ' + this.options.button.checkout] = $.proxy(function() {
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
                 if (customer() == false && !cart().isGuestCheckoutAllowed) {
                     authenticationPopup.showModal();
+
                     return false;
                 }
                 location.href = this.options.url.checkout;
-            }, this));
-
-            $(this.options.button.remove).click(function(event) {
+            }, this);
+            events['click ' + this.options.button.remove] =  function(event) {
                 event.stopPropagation();
                 if (confirm(self.options.confirmMessage)) {
-                    self._removeItem($(this));
+                    self._removeItem($(event.target));
                 }
-            });
-
-            $(this.options.item.qty).keyup(function() {
-                self._showItemButton($(this));
-            });
-            $(this.options.item.button).click(function(event) {
+            };
+            events['keyup ' + this.options.item.qty] = function(event) {
+                self._showItemButton($(event.target));
+            };
+            events['click ' + this.options.item.button] = function(event) {
                 event.stopPropagation();
-                self._updateItemQty($(this))
-            });
+                self._updateItemQty($(event.target));
+            };
 
+            this._on(this.element, events);
             this._calcHeight();
             this._isOverflowed();
         },
@@ -122,10 +122,8 @@ define([
          * Update content after update qty
          *
          * @param elem
-         * @param response
-         * @private
          */
-        _updateItemQtyAfter: function(elem, response) {
+        _updateItemQtyAfter: function(elem) {
             this._hideItemButton(elem);
         },
 

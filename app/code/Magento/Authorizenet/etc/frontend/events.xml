@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="checkout_submit_all_after">
+        <observer name="directpost_save_order_after_submit" instance="Magento\Authorizenet\Model\Directpost\Observer" method="saveOrderAfterSubmit" />
+    </event>
+    <event name="checkout_directpost_placeOrder">
+        <observer name="directpost_save_order_onepage" instance="Magento\Authorizenet\Model\Directpost\Observer" method="addFieldsToResponse" />
+    </event>
+</config>

@@ -73,21 +73,17 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
         $optionValues = [
             [
                 'value_index' => 5,
-                'pricing_value' => 10,
-                'is_percent' => 0,
             ],
             [
                 'value_index' => 6,
-                'pricing_value' => 5,
-                'is_percent' => 1,
             ],
         ];
         $optionMock1 = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute')
             ->disableOriginalConstructor()
-            ->setMethods(['getPrices', 'setValues'])
+            ->setMethods(['getOptions', 'setValues'])
             ->getMock();
         $optionMock1->expects($this->once())
-            ->method('getPrices')
+            ->method('getOptions')
             ->willReturn($optionValues);
 
         $optionValueMock1 = $this->getMockBuilder('\Magento\ConfigurableProduct\Api\Data\OptionValueInterface')
@@ -97,14 +93,6 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
             ->method('setValueIndex')
             ->with($optionValues[0]['value_index'])
             ->willReturnSelf();
-        $optionValueMock1->expects($this->once())
-            ->method('setPricingValue')
-            ->with($optionValues[0]['pricing_value'])
-            ->willReturnSelf();
-        $optionValueMock1->expects($this->once())
-            ->method('setIsPercent')
-            ->with($optionValues[0]['is_percent'])
-            ->willReturnSelf();
 
         $optionValueMock2 = $this->getMockBuilder('\Magento\ConfigurableProduct\Api\Data\OptionValueInterface')
             ->disableOriginalConstructor()
@@ -112,14 +100,6 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
         $optionValueMock2->expects($this->once())
             ->method('setValueIndex')
             ->with($optionValues[1]['value_index'])
-            ->willReturnSelf();
-        $optionValueMock2->expects($this->once())
-            ->method('setPricingValue')
-            ->with($optionValues[1]['pricing_value'])
-            ->willReturnSelf();
-        $optionValueMock2->expects($this->once())
-            ->method('setIsPercent')
-            ->with($optionValues[1]['is_percent'])
             ->willReturnSelf();
 
         $this->optionValueFactory->expects($this->at(0))
@@ -131,10 +111,10 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
 
         $optionMock2 = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute')
             ->disableOriginalConstructor()
-            ->setMethods(['getPrices', 'setValues'])
+            ->setMethods(['getOptions', 'setValues'])
             ->getMock();
         $optionMock2->expects($this->once())
-            ->method('getPrices')
+            ->method('getOptions')
             ->willReturn([]);
         $optionMock2->expects($this->once())
             ->method('setValues')

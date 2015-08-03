@@ -13,7 +13,7 @@ use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
  * Controller for testing the CookieManager.
  *
  */
-class CookieTester extends \Magento\Framework\App\Action\Action
+abstract class CookieTester extends \Magento\Framework\App\Action\Action
 {
     /** @var PhpCookieManager */
     protected $cookieManager;

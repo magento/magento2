@@ -28,7 +28,7 @@
                 "cookieNotices": {
                     "cookieAllowButtonSelector": "#btn-cookie-allow",
                     "cookieName": "<?php echo \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
-                    "cookieValue": "<?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>",
+                    "cookieValue": <?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>,
                     "cookieLifetime": <?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getCookieRestrictionLifetime()?>,
                     "noCookiesUrl": "<?php echo $block->getUrl('cookie/index/noCookies') ?>"
                 }

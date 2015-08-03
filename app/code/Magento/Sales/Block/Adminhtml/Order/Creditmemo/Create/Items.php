@@ -63,7 +63,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
                     'Magento\Backend\Block\Widget\Button',
                     [
                         'label' => __('Refund'),
-                        'class' => 'save submit-button refund',
+                        'class' => 'save submit-button refund primary',
                         'onclick' => 'disableElements(\'submit-button\');submitCreditMemo()'
                     ]
                 );
@@ -73,7 +73,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
                 'Magento\Backend\Block\Widget\Button',
                 [
                     'label' => __('Refund Offline'),
-                    'class' => 'save submit-button',
+                    'class' => 'save submit-button primary',
                     'onclick' => 'disableElements(\'submit-button\');submitCreditMemoOffline()'
                 ]
             );

@@ -34,7 +34,9 @@ class Import
      */
     public function afterImportSource(\Magento\ImportExport\Model\Import $subject, $import)
     {
-        $this->_indexerCategoryProductProcessor->markIndexerAsInvalid();
+        if (!$this->_indexerCategoryProductProcessor->isIndexerScheduled()) {
+            $this->_indexerCategoryProductProcessor->markIndexerAsInvalid();
+        }
         return $import;
     }
 }

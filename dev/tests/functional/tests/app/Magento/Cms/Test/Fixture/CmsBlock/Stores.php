@@ -6,37 +6,23 @@
 
 namespace Magento\Cms\Test\Fixture\CmsBlock;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Data source for 'stores' field.
  *
  * Data keys:
- *  - dataSet
+ *  - dataset
  */
-class Stores implements FixtureInterface
+class Stores extends DataSource
 {
-    /**
-     * Array with store names.
-     *
-     * @var array
-     */
-    protected $data = [];
-
     /**
      * Array with store fixtures.
      *
      * @var array
      */
     protected $stores;
-
-    /**
-     * Data set configuration settings.
-     *
-     * @var array
-     */
-    protected $params;
 
     /**
      * Create custom Store if we have block with custom store view.
@@ -49,11 +35,11 @@ class Stores implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataSet'])) {
-            $dataSets = is_array($data['dataSet']) ? $data['dataSet'] : [$data['dataSet']];
-            foreach ($dataSets as $dataSet) {
+        if (isset($data['dataset'])) {
+            $datasets = is_array($data['dataset']) ? $data['dataset'] : [$data['dataset']];
+            foreach ($datasets as $dataset) {
                 /** @var \Magento\Store\Test\Fixture\Store $store */
-                $store = $fixtureFactory->createByCode('store', ['dataSet' => $dataSet]);
+                $store = $fixtureFactory->createByCode('store', ['dataset' => $dataset]);
                 if (!$store->hasData('store_id')) {
                     $store->persist();
                 }
@@ -66,29 +52,6 @@ class Stores implements FixtureInterface
     }
 
     /**
-     * Persist custom selections store view.
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set.
-     *
-     * @param string|null $key [optional]
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
      * Return stores.
      *
      * @return array
@@ -96,15 +59,5 @@ class Stores implements FixtureInterface
     public function getStores()
     {
         return $this->stores;
-    }
-
-    /**
-     * Return data set configuration settings.
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 }

@@ -26,6 +26,7 @@ define([
             error: '',
             notice: '',
             customScope: '',
+            additionalClasses: {},
 
             listens: {
                 value: 'onUpdate',
@@ -46,7 +47,9 @@ define([
         initialize: function () {
             _.bindAll(this, 'reset');
 
-            this._super();
+            this._super()
+                ._setClasses();
+
             this.initialValue = this.getInitialValue();
 
             this.value(this.initialValue);
@@ -86,6 +89,33 @@ define([
                 'uid': uid,
                 'noticeId': 'notice-' + uid,
                 'inputName': utils.serializeName(this.dataScope)
+            });
+
+            return this;
+        },
+
+        /**
+         * Extends 'additionalClasses' object.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        _setClasses: function () {
+            var addtional = this.additionalClasses,
+                classes;
+
+            if (_.isString(addtional)) {
+                addtional = this.additionalClasses.split(' ');
+                classes = this.additionalClasses = {};
+
+                addtional.forEach(function (name) {
+                    classes[name] = true;
+                }, this);
+            }
+
+            _.extend(this.additionalClasses, {
+                required:   this.required,
+                _error:     this.error,
+                _disabled:  this.disabled
             });
 
             return this;

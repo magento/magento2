@@ -6,9 +6,10 @@
 define([
     "jquery",
     "mage/template",
+    "Magento_Checkout/js/action/set-payment-information",
     "jquery/ui",
     "Magento_Payment/js/model/credit-card-validation/validator"
-], function($, mageTemplate){
+], function($, mageTemplate, setPaymentInformationAction){
     'use strict';
 
     $.widget('mage.transparent', {
@@ -73,6 +74,7 @@ define([
          * @private
          */
         _orderSave: function() {
+            setPaymentInformationAction();
             var postData = $(this.options.paymentFormSelector).serialize();
             if ($(this.options.reviewAgreementForm).length) {
                 postData += '&' + $(this.options.reviewAgreementForm).serialize();

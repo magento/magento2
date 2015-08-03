@@ -53,7 +53,7 @@ abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'frontend_label',
             [
-                'header' => __('Attribute Label'),
+                'header' => __('Default label'),
                 'sortable' => true,
                 'index' => 'frontend_label',
                 'header_css_class' => 'col-label',

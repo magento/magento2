@@ -190,7 +190,7 @@ class Observer
         if ($disabledRulesCount) {
             $this->messageManager->addWarning(
                 __(
-                    '%1 Shopping Cart Price Rules based on "%2" attribute have been disabled.',
+                    '%1 Cart Price Rules based on "%2" attribute have been disabled.',
                     $disabledRulesCount,
                     $attributeCode
                 )

@@ -22,10 +22,13 @@
                 <!-- ko foreach: getRegion('beforeMethods') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->
-                <div id="checkout-payment-method-load" class="opc-payment">
+                <div id="checkout-payment-method-load" class="opc-payment" data-bind="visible: isPaymentMethodsAvailable">
                     <!-- ko foreach: getRegion('payment-methods-list') -->
                         <!-- ko template: getTemplate() --><!-- /ko -->
                     <!-- /ko -->
+                </div>
+                <div class="no-quotes-block" data-bind="visible: isPaymentMethodsAvailable() == false">
+                    <!-- ko text: $t('No Payment method available.')--><!-- /ko -->
                 </div>
                 <!-- ko foreach: getRegion('afterMethods') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->

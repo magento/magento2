@@ -27,9 +27,9 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Click on narrow near "Add Product" button
  * 4. Select Configurable Product
  * 5. Fill in data according to data sets
- *  5.1 If field "attributeNew/dataSet" is not empty - search created attribute by putting it's name
+ *  5.1 If field "attributeNew/dataset" is not empty - search created attribute by putting it's name
  *      to variation Search field.
- *  5.2 If "attribute/dataSet" is not empty- create new Variation Set
+ *  5.2 If "attribute/dataset" is not empty- create new Variation Set
  * 6. Save product
  * 7. Perform all assertions
  *
@@ -80,6 +80,7 @@ class CreateConfigurableProductEntityTest extends Injectable
      */
     public function test(ConfigurableProduct $product)
     {
+        $this->markTestIncomplete('MAGETWO-40002');
         // Steps
         $this->productIndex->open();
         $this->productIndex->getGridPageActionBlock()->addProduct('configurable');

@@ -106,7 +106,7 @@ class View extends \Magento\Framework\Object
      * @param string $module
      * @return $this
      */
-    public function init(\Magento\Catalog\Model\Product $product, $location, $module = null)
+    public function init($product, $location, $module = null)
     {
         $this->_product = $product;
         $this->_location = $location;
@@ -207,7 +207,7 @@ class View extends \Magento\Framework\Object
      */
     public function getWidth()
     {
-        return $this->_getImageVar(self::SUFFIX_WIDTH);
+        return $this->_getImageVar(self::SUFFIX_WIDTH) ?: null;
     }
 
     /**

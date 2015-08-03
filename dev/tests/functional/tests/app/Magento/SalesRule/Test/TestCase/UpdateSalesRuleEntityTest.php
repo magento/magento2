@@ -65,7 +65,7 @@ class UpdateSalesRuleEntityTest extends Injectable
     {
         $productForSalesRule1 = $fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'simple_for_salesrule_1']
+            ['dataset' => 'simple_for_salesrule_1']
         );
         $productForSalesRule1->persist();
         return [

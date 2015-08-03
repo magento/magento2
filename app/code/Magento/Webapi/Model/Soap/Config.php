@@ -141,7 +141,7 @@ class Config
      *
      * @return array
      */
-    protected function getSoapServicesConfig()
+    public function getSoapServicesConfig()
     {
         if (null === $this->soapServices) {
             $soapServicesConfig = $this->cache->load(self::CACHE_ID);

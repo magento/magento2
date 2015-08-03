@@ -63,6 +63,12 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']
         )) {
+            if (!isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+                ['payment']['children']['payments-list']['children'])) {
+                $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+                ['payment']['children']['payments-list']['children'] = [];
+            }
+
             $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']['payments-list']['children'] =
                 array_merge_recursive(
@@ -111,6 +117,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                     'component' => 'Magento_Checkout/js/view/billing-address',
                     'displayArea' => 'billing-address-form-' . $paymentCode,
                     'provider' => 'checkoutProvider',
+                    'deps' => 'checkoutProvider',
                     'dataScopePrefix' => 'billingAddress' . $paymentCode,
                     'sortOrder' => 1,
                     'children' => [
@@ -162,7 +169,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                                     'telephone' => [
                                         'config' => [
                                             'tooltip' => [
-                                                'description' => 'For delivery Questions',
+                                                'description' => 'For delivery questions.',
                                             ],
                                         ],
                                     ],

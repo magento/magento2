@@ -11,8 +11,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class RuleRepositoryTest extends WebapiAbstract
 {
+    const SERVICE_NAME = 'salesRuleRuleRepositoryV1';
     const RESOURCE_PATH = '/V1/salesRules';
-    const SERVICE_NAME = 'ruleRepositoryV1';
+    const SERVICE_VERSION = "V1";
 
     protected function getSalesRuleData()
     {
@@ -136,7 +137,7 @@ class RuleRepositoryTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
+                'serviceVersion' => self::SERVICE_VERSION,
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
@@ -172,7 +173,7 @@ class RuleRepositoryTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
+                'serviceVersion' => self::SERVICE_VERSION,
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
@@ -194,12 +195,12 @@ class RuleRepositoryTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
-                'operation' => self::SERVICE_NAME . 'deleteById',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'DeleteById',
             ],
         ];
 
-        return $this->_webApiCall($serviceInfo, ['id' => $id]);
+        return $this->_webApiCall($serviceInfo, ['rule_id' => $id]);
     }
 
     protected function updateRule($id, $data)
@@ -211,7 +212,7 @@ class RuleRepositoryTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
+                'serviceVersion' => self::SERVICE_VERSION,
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
@@ -229,8 +230,8 @@ class RuleRepositoryTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
-                'operation' => self::SERVICE_NAME . 'Save',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetById',
             ],
         ];
 

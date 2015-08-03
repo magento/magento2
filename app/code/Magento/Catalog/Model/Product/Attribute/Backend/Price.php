@@ -41,23 +41,31 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_config;
 
     /**
+     * @var \Magento\Framework\Locale\FormatInterface
+     */
+    protected $localeFormat;
+
+    /**
      * Construct
      *
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\Locale\FormatInterface $localeFormat
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_helper = $catalogData;
         $this->_config = $config;
+        $this->localeFormat = $localeFormat;
     }
 
     /**
@@ -150,12 +158,25 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             return parent::validate($object);
         }
 
-        if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $value) || $value < 0) {
+        if (!$this->isPositiveOrZero($value)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Please enter a number 0 or greater in this field.')
             );
         }
 
         return true;
+    }
+
+    /**
+     * Returns whether the value is greater than, or equal to, zero
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    protected function isPositiveOrZero($value)
+    {
+        $value = $this->localeFormat->getNumber($value);
+        $isNegative = $value < 0;
+        return  !$isNegative;
     }
 }

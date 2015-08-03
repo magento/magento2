@@ -26,9 +26,6 @@ $product->load(1);
 if ($product->getId()) {
     $product->delete();
 }
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data')
-    ->setProductPrice(1, null);
 
 require __DIR__ . '/configurable_attribute_rollback.php';
 

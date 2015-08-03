@@ -18,10 +18,11 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
     const KEY_RULE_ID = 'rule_id';
     const KEY_FORMAT = 'format';
     const KEY_LENGTH = 'length';
-    const KEY_USAGE_PER_COUPON = 'usage_per_coupon';
-    const KEY_USAGE_PER_CUSTOMER = 'usage_per_customer';
-    const KEY_EXPIRATION_DATE = 'expiration_date';
     const KEY_QUANTITY = 'quantity';
+    const KEY_PREFIX = 'prefix';
+    const KEY_SUFFIX = 'suffix';
+    const KEY_DELIMITER_AT_EVERY = 'dash';
+    const KEY_DELIMITER = 'delimiter';
 
     /**
      * Get the id of the rule associated with the coupon
@@ -108,66 +109,87 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
     }
 
     /**
-     * Get usage limit per coupon
-     *
-     * @return int|null
-     */
-    public function getUsagePerCoupon()
-    {
-        return $this->_get(self::KEY_USAGE_PER_COUPON);
-    }
-
-    /**
-     * Set usage limit per coupon
-     *
-     * @param int $usagePerCoupon
-     * @return $this
-     */
-    public function setUsagePerCoupon($usagePerCoupon)
-    {
-        return $this->setData(self::KEY_USAGE_PER_COUPON, $usagePerCoupon);
-    }
-
-    /**
-     * Get usage limit per customer
-     *
-     * @return int|null
-     */
-    public function getUsagePerCustomer()
-    {
-        return $this->_get(self::KEY_USAGE_PER_CUSTOMER);
-    }
-
-    /**
-     * Set usage limit per customer
-     *
-     * @param int $usagePerCustomer
-     * @return $this
-     */
-    public function setUsagePerCustomer($usagePerCustomer)
-    {
-        return $this->setData(self::KEY_USAGE_PER_CUSTOMER, $usagePerCustomer);
-    }
-
-    /**
-     * Get expiration date
+     * Get the prefix
      *
      * @return string|null
      */
-    public function getExpirationDate()
+    public function getPrefix()
     {
-        return $this->_get(self::KEY_EXPIRATION_DATE);
+        return $this->_get(self::KEY_PREFIX);
     }
 
     /**
-     * Set expiration date
+     * Set the prefix
      *
-     * @param string $expirationDate
+     * @param string $prefix
      * @return $this
      */
-    public function setExpirationDate($expirationDate)
+    public function setPrefix($prefix)
     {
-        return $this->setData(self::KEY_EXPIRATION_DATE, $expirationDate);
+        return $this->setData(self::KEY_PREFIX, $prefix);
+    }
+
+    /**
+     * Get the suffix
+     *
+     * @return string|null
+     */
+    public function getSuffix()
+    {
+        return $this->_get(self::KEY_SUFFIX);
+    }
+
+    /**
+     * Set the suffix
+     *
+     * @param string $suffix
+     * @return $this
+     */
+    public function setSuffix($suffix)
+    {
+        return $this->setData(self::KEY_SUFFIX, $suffix);
+    }
+
+    /**
+     * Get the spacing where the delimiter should exist
+     *
+     * @return int|null
+     */
+    public function getDelimiterAtEvery()
+    {
+        return $this->_get(self::KEY_DELIMITER_AT_EVERY);
+    }
+
+    /**
+     * Set the spacing where the delimiter should exist
+     *
+     * @param int $delimiterAtEvery
+     * @return $this
+     */
+    public function setDelimiterAtEvery($delimiterAtEvery)
+    {
+        return $this->setData(self::KEY_DELIMITER_AT_EVERY, $delimiterAtEvery);
+    }
+
+    /**
+     * Get the delimiter
+     *
+     * @return string|null
+     */
+    public function getDelimiter()
+    {
+        return $this->_get(self::KEY_DELIMITER);
+    }
+
+    /**
+     * Set the delimiter
+     *
+     * @param string $delimiter
+     * @return $this
+     */
+    public function setDelimiter($delimiter)
+    {
+        return $this->setData(self::KEY_DELIMITER, $delimiter);
     }
 
     /**
@@ -188,8 +210,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface $extensionAttributes
-    )
-    {
+    ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

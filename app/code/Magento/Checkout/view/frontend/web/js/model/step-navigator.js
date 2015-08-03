@@ -48,6 +48,9 @@ define(
                         requestedItemIndex = index;
                     }
                 });
+                if (requestedItemIndex == -1) {
+                    return false;
+                }
                 return activeItemIndex > requestedItemIndex;
             },
 

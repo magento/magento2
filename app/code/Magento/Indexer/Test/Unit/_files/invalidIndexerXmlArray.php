@@ -26,14 +26,4 @@ return [
         '<title>Test</title><description>Test</description></indexer></config>',
         ["Element 'indexer': Duplicate key-sequence ['view_01'] in unique identity-constraint 'uniqueViewId'."],
     ],
-    'indexer_without_title' => [
-        '<?xml version="1.0"?><config><indexer id="somename" view_id="view_01" class="Class\Name">' .
-        '<description>Test</description></indexer></config>',
-        ["Element 'description': This element is not expected. Expected is ( title )."],
-    ],
-    'indexer_without_description' => [
-        '<?xml version="1.0"?><config><indexer id="somename" view_id="view_01" class="Class\Name">' .
-        '<title>Test</title></indexer></config>',
-        ["Element 'indexer': Missing child element(s). Expected is ( description )."],
-    ]
 ];

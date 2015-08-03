@@ -39,22 +39,14 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * Add price data to attribute
+     * Get attribute options
      *
-     * @param array $priceData
-     * @return $this
+     * @return array
      */
-    public function addPrice($priceData)
+    public function getOptions()
     {
-        $data = $this->getPrices();
-        if ($data === null) {
-            $data = [];
-        }
-        $data[] = $priceData;
-        $this->setPrices($data);
-        return $this;
+        return $this->getData('options');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -78,7 +70,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         parent::afterSave();
         $this->_getResource()->saveLabel($this);
-        $this->_getResource()->savePrices($this);
         return $this;
     }
 

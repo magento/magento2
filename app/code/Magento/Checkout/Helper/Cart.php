@@ -77,7 +77,11 @@ class Cart extends \Magento\Framework\Url\Helper\Data
         $continueUrl = $this->urlEncoder->encode($this->_urlBuilder->getCurrentUrl());
         $urlParamName = \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED;
 
-        $routeParams = [$urlParamName => $continueUrl, 'product' => $product->getEntityId()];
+        $routeParams = [
+            $urlParamName => $continueUrl,
+            'product' => $product->getEntityId(),
+            '_secure' => $this->_getRequest()->isSecure()
+        ];
 
         if (!empty($additional)) {
             $routeParams = array_merge($routeParams, $additional);
@@ -99,7 +103,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
     /**
      * Retrieve url for remove product from cart
      *
-     * @param   \Magento\Quote\Model\Quote\Item $item
+     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  string
      */
     public function getRemoveUrl($item)
@@ -114,7 +118,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
     /**
      * Get post parameters for delete from cart
      *
-     * @param \Magento\Quote\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return string
      */
     public function getDeletePostJson($item)

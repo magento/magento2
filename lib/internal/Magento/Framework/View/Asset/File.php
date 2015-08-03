@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\View\Asset\ConfigInterface as AssetConfigInterface;
+
 /**
  * A locally available static view file asset that can be referred with a file path
  *
@@ -44,19 +46,32 @@ class File implements MergeableInterface
     private $resolvedFile;
 
     /**
+     * @var Minification
+     */
+    private $minification;
+
+    /**
      * @param Source $source
      * @param ContextInterface $context
      * @param string $filePath
      * @param string $module
      * @param string $contentType
+     * @param Minification $minification
      */
-    public function __construct(Source $source, ContextInterface $context, $filePath, $module, $contentType)
-    {
+    public function __construct(
+        Source $source,
+        ContextInterface $context,
+        $filePath,
+        $module,
+        $contentType,
+        Minification $minification
+    ) {
         $this->source = $source;
         $this->context = $context;
         $this->filePath = $filePath;
         $this->module = $module;
         $this->contentType = $contentType;
+        $this->minification = $minification;
     }
 
     /**
@@ -92,6 +107,7 @@ class File implements MergeableInterface
         $result = $this->join($result, $this->context->getPath());
         $result = $this->join($result, $this->module);
         $result = $this->join($result, $this->filePath);
+        $result = $this->minification->addMinifiedSign($result);
         return $result;
     }
 
@@ -143,7 +159,11 @@ class File implements MergeableInterface
      */
     public function getContent()
     {
-        return (string)$this->source->getContent($this);
+        $content = $this->source->getContent($this);
+        if (false === $content) {
+            throw new File\NotFoundException("Unable to get content for '{$this->getPath()}'");
+        }
+        return $content;
     }
 
     /**

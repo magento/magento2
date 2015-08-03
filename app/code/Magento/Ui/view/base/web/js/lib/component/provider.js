@@ -120,9 +120,11 @@ define([
 
         restore: function () {
             var ns = this.storageConfig.namespace,
-                stored = this.storage().get(ns);
+                storage = this.storage();
 
-            utils.extend(this, stored);
+            if (storage) {
+                utils.extend(this, storage.get(ns));
+            }
 
             return this;
         },
@@ -133,7 +135,7 @@ define([
 
             data = data || this.get(property);
 
-            this.storage().set(path, data);
+            this.storage('set', path, data);
 
             return this;
         },
@@ -142,7 +144,7 @@ define([
             var ns = this.storageConfig.namespace,
                 path = utils.fullPath(ns, property);
 
-            this.storage().remove(path);
+            this.storage('remove', path);
 
             return this;
         }

@@ -219,4 +219,14 @@ class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
 
         return $this;
     }
+
+    /**
+     * Add is used in grid filter
+     *
+     * @return $this
+     */
+    public function addIsUsedInGridFilter()
+    {
+        return $this->addFieldToFilter('additional_table.is_used_in_grid', 1);
+    }
 }

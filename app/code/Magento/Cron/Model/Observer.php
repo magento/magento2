@@ -229,7 +229,12 @@ class Observer
 
         $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->timezone->scopeTimeStamp()))->save();
 
-        call_user_func_array($callback, [$schedule]);
+        try {
+            call_user_func_array($callback, [$schedule]);
+        } catch (\Exception $e) {
+            $schedule->setStatus(Schedule::STATUS_ERROR);
+            throw $e;
+        }
 
         $schedule->setStatus(Schedule::STATUS_SUCCESS)->setFinishedAt(strftime(
             '%Y-%m-%d %H:%M:%S',

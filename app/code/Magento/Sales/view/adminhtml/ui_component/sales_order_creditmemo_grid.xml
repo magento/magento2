@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid_data_source</item>
+            <item name="deps" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">sales_order_creditmemo_columns</item>
+    </argument>
+    <dataSource name="sales_order_creditmemo_grid_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">CreditmemoGridDataProvider</argument>
+            <argument name="name" xsi:type="string">sales_order_creditmemo_grid_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">increment_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <container name="listing_top">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="template" xsi:type="string">ui/grid/toolbar</item>
+            </item>
+        </argument>
+        <bookmark name="bookmarks">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
+                    <item name="displayArea" xsi:type="string">dataGridActions</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
+                        <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
+                        <item name="namespace" xsi:type="string">sales_order_creditmemo_grid</item>
+                    </item>
+                </item>
+            </argument>
+        </bookmark>
+        <container name="columns_controls">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="columnsData" xsi:type="array">
+                        <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.sales_order_creditmemo_columns</item>
+                    </item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
+                    <item name="displayArea" xsi:type="string">dataGridActions</item>
+                </item>
+            </argument>
+        </container>
+        <exportButton name="export_button">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">dataGridActions</item>
+                    <item name="options" xsi:type="array">
+                        <item name="cvs" xsi:type="array">
+                            <item name="value" xsi:type="string">csv</item>
+                            <item name="label" xsi:type="string" translate="true">CSV</item>
+                            <item name="url" xsi:type="string">sales/creditmemo/exportCsv</item>
+                        </item>
+                        <item name="xml" xsi:type="array">
+                            <item name="value" xsi:type="string">xml</item>
+                            <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                            <item name="url" xsi:type="string">sales/creditmemo/exportExcel</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </exportButton>
+        <filterSearch name="fulltext">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid_data_source</item>
+                    <item name="chipsProvider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters_chips</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.search</item>
+                    </item>
+                </item>
+            </argument>
+        </filterSearch>
+        <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
+                    <item name="dataScope" xsi:type="string">filters</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.filters</item>
+                    </item>
+                    <item name="childDefaults" xsi:type="array">
+                        <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+            <filterInput name="increment_id">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">increment_id</item>
+                        <item name="label" xsi:type="string" translate="true">Credit Memo #</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterRange name="created_at" class="Magento\Ui\Component\Filters\Type\DateRange">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">created_at</item>
+                        <item name="label" xsi:type="string" translate="true">Created</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterDate name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
+                        </item>
+                    </argument>
+                </filterDate>
+                <filterDate name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
+                        </item>
+                    </argument>
+                </filterDate>
+            </filterRange>
+            <filterInput name="order_increment_id">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">order_increment_id</item>
+                        <item name="label" xsi:type="string" translate="true">Order #</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterRange name="order_created_at" class="Magento\Ui\Component\Filters\Type\DateRange">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">order_created_at</item>
+                        <item name="label" xsi:type="string" translate="true">Order Date</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterDate name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
+                        </item>
+                    </argument>
+                </filterDate>
+                <filterDate name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
+                        </item>
+                    </argument>
+                </filterDate>
+            </filterRange>
+            <filterInput name="billing_name">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">billing_name</item>
+                        <item name="label" xsi:type="string" translate="true">Bill-to Name</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterSelect name="state">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Creditmemo\State\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="dataScope" xsi:type="string">state</item>
+                        <item name="label" xsi:type="string" translate="true">Status</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterRange name="base_grand_total">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">base_grand_total</item>
+                        <item name="label" xsi:type="string" translate="true">Refunded</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
+            <filterSelect name="order_status">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Status\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="dataScope" xsi:type="string">order_status</item>
+                        <item name="label" xsi:type="string" translate="true">Order Status</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterSelect name="store_id">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Store\Ui\Component\Listing\Column\Store\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="dataScope" xsi:type="string">store_id</item>
+                        <item name="label" xsi:type="string" translate="true">Purchased From</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterInput name="billing_address">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">billing_address</item>
+                        <item name="label" xsi:type="string" translate="true">Billing Address</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterInput name="shipping_address">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">shipping_address</item>
+                        <item name="label" xsi:type="string" translate="true">Shipping Address</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterInput name="customer_name">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">customer_name</item>
+                        <item name="label" xsi:type="string" translate="true">Customer Name</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterInput name="customer_email">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">customer_email</item>
+                        <item name="label" xsi:type="string" translate="true">Customer Email</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterSelect name="customer_group_id">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Customer\Ui\Component\Listing\Column\Group\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="dataScope" xsi:type="string">customer_group_id</item>
+                        <item name="label" xsi:type="string" translate="true">Customer Group</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterSelect name="payment_method">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Payment\Ui\Component\Listing\Column\Method\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="dataScope" xsi:type="string">payment_method</item>
+                        <item name="label" xsi:type="string" translate="true">Payment Method</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterInput name="shipping_information">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">shipping_information</item>
+                        <item name="label" xsi:type="string" translate="true">Shipping Information</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterRange name="subtotal">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">subtotal</item>
+                        <item name="label" xsi:type="string" translate="true">Subtotal</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
+            <filterRange name="shipping_and_handling">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">shipping_and_handling</item>
+                        <item name="label" xsi:type="string" translate="true">Shipping and Handling</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
+            <filterRange name="adjustment_positive">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">adjustment_positive</item>
+                        <item name="label" xsi:type="string" translate="true">Adjustment Refund</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
+            <filterRange name="adjustment_negative">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">adjustment_negative</item>
+                        <item name="label" xsi:type="string" translate="true">Adjustment Fee</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
+            <filterRange name="order_base_grand_total">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">order_base_grand_total</item>
+                        <item name="label" xsi:type="string" translate="true">Grand Total</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
+        </filters>
+        <massaction name="listing_massaction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.sales_order_creditmemo_columns.ids</item>
+                    <item name="displayArea" xsi:type="string">bottom</item>
+                    <item name="actions" xsi:type="array">
+                        <item name="pdfcreditmemos_order" xsi:type="array">
+                            <item name="type" xsi:type="string">pdfcreditmemos_order</item>
+                            <item name="label" xsi:type="string" translate="true">PDF Credit Memos</item>
+                            <item name="url" xsi:type="string">sales/creditmemo/pdfcreditmemos</item>
+                        </item>
+                    </item>
+                    <item name="indexField" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
+        </massaction>
+        <paging name="listing_paging">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.paging</item>
+                    </item>
+                    <item name="selectProvider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.sales_order_creditmemo_columns.ids</item>
+                    <item name="displayArea" xsi:type="string">bottom</item>
+                    <item name="options" xsi:type="array">
+                        <item name="20" xsi:type="array">
+                            <item name="value" xsi:type="number">20</item>
+                            <item name="label" xsi:type="string" translate="true">20</item>
+                        </item>
+                        <item name="30" xsi:type="array">
+                            <item name="value" xsi:type="number">30</item>
+                            <item name="label" xsi:type="string" translate="true">30</item>
+                        </item>
+                        <item name="50" xsi:type="array">
+                            <item name="value" xsi:type="number">50</item>
+                            <item name="label" xsi:type="string" translate="true">50</item>
+                        </item>
+                        <item name="100" xsi:type="array">
+                            <item name="value" xsi:type="number">100</item>
+                            <item name="label" xsi:type="string" translate="true">100</item>
+                        </item>
+                        <item name="200" xsi:type="array">
+                            <item name="value" xsi:type="number">200</item>
+                            <item name="label" xsi:type="string" translate="true">200</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </paging>
+    </container>
+    <columns name="sales_order_creditmemo_columns">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.bookmarks</item>
+                    <item name="namespace" xsi:type="string">current</item>
+                </item>
+                <item name="childDefaults" xsi:type="array">
+                    <item name="controlVisibility" xsi:type="boolean">true</item>
+                    <item name="actionField" xsi:type="string">actions</item>
+                    <item name="clickAction" xsi:type="string">view</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.bookmarks</item>
+                        <item name="root" xsi:type="string">columns.${ $.index }</item>
+                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="draggable" xsi:type="boolean">false</item>
+                    <item name="indexField" xsi:type="string">entity_id</item>
+                    <item name="controlVisibility" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="increment_id">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Credit Memo</item>
+                </item>
+            </argument>
+        </column>
+        <column name="created_at">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Created</item>
+                </item>
+            </argument>
+        </column>
+        <column name="order_increment_id">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Order</item>
+                </item>
+            </argument>
+        </column>
+        <column name="order_created_at">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Order Date</item>
+                </item>
+            </argument>
+        </column>
+        <column name="billing_name">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Bill-to Name</item>
+                </item>
+            </argument>
+        </column>
+        <column name="state" class="Magento\Sales\Ui\Component\Listing\Column\Creditmemo\State">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Status</item>
+                </item>
+            </argument>
+        </column>
+        <column name="base_grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Refunded</item>
+                </item>
+            </argument>
+        </column>
+        <column name="order_status" class="Magento\Sales\Ui\Component\Listing\Column\Status">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Order Status</item>
+                </item>
+            </argument>
+        </column>
+        <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Purchased From</item>
+                </item>
+            </argument>
+        </column>
+        <column name="billing_address" class="Magento\Sales\Ui\Component\Listing\Column\Address">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Billing Address</item>
+                </item>
+            </argument>
+        </column>
+        <column name="shipping_address" class="Magento\Sales\Ui\Component\Listing\Column\Address">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Shipping Address</item>
+                </item>
+            </argument>
+        </column>
+        <column name="customer_name">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Customer Name</item>
+                </item>
+            </argument>
+        </column>
+        <column name="customer_email">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Email</item>
+                </item>
+            </argument>
+        </column>
+        <column name="customer_group_id" class="Magento\Sales\Ui\Component\Listing\Column\CustomerGroup">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Customer Group</item>
+                </item>
+            </argument>
+        </column>
+        <column name="payment_method" class="Magento\Sales\Ui\Component\Listing\Column\PaymentMethod">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Payment Method</item>
+                </item>
+            </argument>
+        </column>
+        <column name="shipping_information">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Shipping Information</item>
+                </item>
+            </argument>
+        </column>
+        <column name="subtotal" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Subtotal</item>
+                </item>
+            </argument>
+        </column>
+        <column name="shipping_and_handling" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Shipping &amp; Handling</item>
+                </item>
+            </argument>
+        </column>
+        <column name="adjustment_positive" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Adjustment Refund</item>
+                </item>
+            </argument>
+        </column>
+        <column name="adjustment_negative" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Adjustment Fee</item>
+                </item>
+            </argument>
+        </column>
+        <column name="order_base_grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Grand Total</item>
+                </item>
+            </argument>
+        </column>
+        <column name="actions" class="Magento\Sales\Ui\Component\Listing\Column\OrderCreditmemoActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="draggable" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">actions</item>
+                    <item name="indexField" xsi:type="string">entity_id</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Action</item>
+                    <item name="data_type" xsi:type="string">actions</item>
+                    <item name="filterable" xsi:type="boolean">false</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+    </columns>
+</listing>

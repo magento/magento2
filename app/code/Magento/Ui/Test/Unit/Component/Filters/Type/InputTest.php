@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Component\Filters\Type\Input;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -91,7 +91,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
             ->with(Input::NAME, ['extends' => Input::NAME]);
         $this->contextMock->expects($this->any())
             ->method('getRequestParam')
-            ->with(AbstractFilter::FILTER_VAR)
+            ->with(UiContext::FILTER_VAR)
             ->willReturn($filterData);
 
         if ($expectedCondition !== null) {
@@ -104,7 +104,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
             );
             $dataProvider->expects($this->any())
                 ->method('addFilter')
-                ->with($name, $expectedCondition);
+                ->with($expectedCondition, $name);
 
             $this->contextMock->expects($this->any())
                 ->method('getDataProvider')

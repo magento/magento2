@@ -13,13 +13,21 @@
         <xs:attribute name="label" type="xs:string" use="required"/>
         <xs:attribute name="file" type="xs:string" use="required"/>
         <xs:attribute name="type" type="emailTemplateFormatType" use="required"/>
-        <xs:attribute name="module" type="xs:string" use="optional"/>
+        <xs:attribute name="module" type="xs:string" use="required"/>
+        <xs:attribute name="area" type="areaType" use="required"/>
     </xs:complexType>
 
     <xs:simpleType name="emailTemplateFormatType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="html"/>
             <xs:enumeration value="text"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="areaType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="frontend"/>
+            <xs:enumeration value="adminhtml"/>
         </xs:restriction>
     </xs:simpleType>
 

@@ -13,7 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rate extends \Magento\Backend\App\Action
+abstract class Rate extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Registry

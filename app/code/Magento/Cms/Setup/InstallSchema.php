@@ -9,6 +9,7 @@ namespace Magento\Cms\Setup;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * @codeCoverageIgnore
@@ -272,7 +273,26 @@ class InstallSchema implements InstallSchemaInterface
         );
         $installer->getConnection()->createTable($table);
 
+        $installer->getConnection()->addIndex(
+            $installer->getTable('cms_page'),
+            $setup->getIdxName(
+                $installer->getTable('cms_page'),
+                ['title', 'meta_keywords', 'meta_description', 'identifier', 'content'],
+                AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            ['title', 'meta_keywords', 'meta_description', 'identifier', 'content'],
+            AdapterInterface::INDEX_TYPE_FULLTEXT
+        );
+        $installer->getConnection()->addIndex(
+            $installer->getTable('cms_block'),
+            $setup->getIdxName(
+                $installer->getTable('cms_block'),
+                ['title', 'identifier', 'content'],
+                AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            ['title', 'identifier', 'content'],
+            AdapterInterface::INDEX_TYPE_FULLTEXT
+        );
         $installer->endSetup();
-
     }
 }

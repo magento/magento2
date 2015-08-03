@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\SalesRule\Test\TestCase\UpdateSalesRuleEntityTest">
         <variation name="UpdateSalesRuleEntityTestVariation1">
-            <data name="salesRuleOrigin/dataSet" xsi:type="string">active_sales_rule_with_complex_conditions</data>
+            <data name="salesRuleOrigin/dataset" xsi:type="string">active_sales_rule_with_complex_conditions</data>
             <data name="salesRule/data/conditions_serialized" xsi:type="string">{Conditions combination:[[Shipping Method|is|\[flatrate\] Fixed][Shipping Postcode|is|95814][Shipping State/Province|is|California][Shipping Country|is|United States]]}</data>
             <data name="salesRule/data/simple_action" xsi:type="string">Buy X get Y free (discount amount is Y)</data>
             <data name="salesRule/data/discount_amount" xsi:type="string">1</data>

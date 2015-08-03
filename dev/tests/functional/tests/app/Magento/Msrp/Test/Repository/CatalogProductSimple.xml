@@ -9,7 +9,7 @@
     <repository class="Magento\Catalog\Test\Repository\CatalogProductSimple">
         <dataset name="msrp_before_order_confirmation">
             <field name="attribute_set_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="name" xsi:type="string">Simple Product with msrp %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_with_msrp_%isolation%</field>
@@ -20,17 +20,17 @@
             </field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">560</item>
-                <item name="preset" xsi:type="string">-</item>
+                <item name="dataset" xsi:type="string">-</item>
             </field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">taxable_goods</item>
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="checkout_data" xsi:type="array">
-                <item name="preset" xsi:type="string">order_default</item>
+                <item name="dataset" xsi:type="string">simple_order_default</item>
             </field>
             <field name="msrp" xsi:type="string">600</field>
             <field name="msrp_display_actual_price_type" xsi:type="string">Before Order Confirmation</field>
@@ -47,13 +47,13 @@
             </field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
-                <item name="preset" xsi:type="string">-</item>
+                <item name="dataset" xsi:type="string">-</item>
             </field>
             <field name="category_ids" xsi:type="array">
-                <item name="presets" xsi:type="string">default_subcategory</item>
+                <item name="dataset" xsi:type="string">default_subcategory</item>
             </field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">taxable_goods</item>
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>

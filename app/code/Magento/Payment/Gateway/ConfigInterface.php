@@ -16,4 +16,20 @@ interface ConfigInterface
      * @return mixed
      */
     public function getValue($field, $storeId = null);
+
+    /**
+     * Sets method code
+     *
+     * @param string $methodCode
+     * @return void
+     */
+    public function setMethodCode($methodCode);
+
+    /**
+     * Sets path pattern
+     *
+     * @param string $pathPattern
+     * @return void
+     */
+    public function setPathPattern($pathPattern);
 }

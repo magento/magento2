@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @see \Magento\Paypal\Block\Express\Review\Details
+ */
+?>
+<div class="table-wrapper">
+    <table id="details-table" class="data table table-paypal-review-items">
+        <caption class="table-caption"><?php echo __('Items in Your Shopping Cart') ?></caption>
+        <thead>
+        <tr>
+            <th class="col name" scope="col"><?php echo __('Product Name') ?></th>
+            <th class="col price" scope="col"><?php echo __('Price') ?></th>
+            <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
+            <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($block->getItems() as $_item): ?>
+            <?php echo $block->getItemHtml($_item) ?>
+        <?php endforeach ?>
+        </tbody>
+        <tfoot>
+            <?php echo $block->getChildHtml('totals'); ?>
+        </tfoot>
+    </table>
+</div>

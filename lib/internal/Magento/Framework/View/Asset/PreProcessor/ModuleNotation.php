@@ -26,17 +26,17 @@ class ModuleNotation implements Asset\PreProcessorInterface
     private $cssResolver;
 
     /**
-     * @var \Magento\Framework\View\Asset\ModuleNotation\Resolver
+     * @var \Magento\Framework\View\Asset\NotationResolver\Module
      */
     private $notationResolver;
 
     /**
      * @param CssResolver $cssResolver
-     * @param \Magento\Framework\View\Asset\ModuleNotation\Resolver $notationResolver
+     * @param \Magento\Framework\View\Asset\NotationResolver\Module $notationResolver
      */
     public function __construct(
         CssResolver $cssResolver,
-        \Magento\Framework\View\Asset\ModuleNotation\Resolver $notationResolver
+        \Magento\Framework\View\Asset\NotationResolver\Module $notationResolver
     ) {
         $this->cssResolver = $cssResolver;
         $this->notationResolver = $notationResolver;

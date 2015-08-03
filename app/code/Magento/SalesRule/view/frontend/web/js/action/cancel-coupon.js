@@ -14,23 +14,26 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/payment-service',
+        'Magento_Checkout/js/model/error-processor',
         'Magento_Ui/js/model/messageList',
         'mage/storage',
-        'Magento_Checkout/js/action/get-totals'
+        'Magento_Checkout/js/action/get-totals',
+        'mage/translate'
     ],
-    function (ko, $, quote, urlManager, paymentService, messageList, storage, getTotalsAction) {
+    function (ko, $, quote, urlManager, paymentService, errorProcessor, messageList, storage, getTotalsAction, $t) {
         'use strict';
         return function (isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
             var url = urlManager.getCancelCouponUrl(quoteId);
+            var message = $t('Your coupon was successfully removed');
+            messageList.clear();
             return storage.delete(
                 url,
                 false
             ).done(
                 function (response) {
-                    isLoading(false);
                     var deferred = $.Deferred();
-
+                    isLoading(false);
                     getTotalsAction([], deferred);
                     $.when(deferred).done(function() {
                         isApplied(false);
@@ -38,12 +41,12 @@ define(
                             paymentService.getAvailablePaymentMethods()
                         );
                     });
+                    messageList.addSuccessMessage({'message': message});
                 }
-            ).error(
+            ).fail(
                 function (response) {
                     isLoading(false);
-                    var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
+                    errorProcessor.process(response);
                 }
             );
         };

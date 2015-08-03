@@ -67,7 +67,7 @@ class AssertTermOnCheckout extends AbstractConstraint
         );
         $product = $createProductsStep->run();
 
-        $billingAddress = $fixtureFactory->createByCode('address', ['dataSet' => 'default']);
+        $billingAddress = $fixtureFactory->createByCode('address', ['dataset' => 'default']);
 
         $browser->open($_ENV['app_frontend_url'] . $product['products'][0]->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->clickAddToCartButton();
@@ -79,9 +79,8 @@ class AssertTermOnCheckout extends AbstractConstraint
         $checkoutOnepage->getBillingBlock()->clickContinue();
         $checkoutOnepage->getShippingMethodBlock()->selectShippingMethod($shipping);
         $checkoutOnepage->getShippingMethodBlock()->clickContinue();
-        $checkoutOnepage->getPaymentMethodsBlock()->selectPaymentMethod($payment);
-        $checkoutOnepage->getPaymentMethodsBlock()->clickContinue();
-        $checkoutOnepage->getAgreementReview()->placeOrder();
+        $checkoutOnepage->getPaymentBlock()->selectPaymentMethod($payment);
+        $checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
 
         \PHPUnit_Framework_Assert::assertEquals(
             self::NOTIFICATION_MESSAGE,

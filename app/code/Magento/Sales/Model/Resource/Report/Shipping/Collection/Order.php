@@ -87,11 +87,11 @@ class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractColl
     }
 
     /**
-     * Add selected data
+     * Apply custom columns before load
      *
      * @return $this
      */
-    protected function _initSelect()
+    protected function _beforeLoad()
     {
         $this->getSelect()->from($this->getResource()->getMainTable(), $this->_getSelectedColumns());
 
@@ -101,6 +101,6 @@ class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractColl
         if ($this->isSubTotals()) {
             $this->getSelect()->group([$this->_periodFormat]);
         }
-        return parent::_initSelect();
+        return parent::_beforeLoad();
     }
 }

@@ -12,6 +12,7 @@
 //  ---------------------------------------------
 
 @data-grid-search-action__size: 2rem;
+@data-grid-search-menu-item__background-color: @color-blue-clear-sky;
 
 @data-grid-filters__font-size: 1.3rem;
 @data-grid-filters__background-color: @page-wrapper__background-color;
@@ -31,6 +32,9 @@
 @data-grid-filters-current-action-remove__hover__background-color: darken(@data-grid-filters-current-action-remove__background-color, 10%);
 @data-grid-filters-current-action-remove__size: 1.6rem;
 
+@data-grid-search-menu__z-index: @data-grid-overlay__z-index - 1;
+@data-grid-search-control-action-menu-item__quantity: 5;
+
 //
 //  Filter action & search
 //  ---------------------------------------------
@@ -41,7 +45,6 @@
 
 //  Data Grid Search
 .data-grid-search-control-wrap {
-    display: none;
     float: left;
     max-width: 45.5rem;
     position: relative;
@@ -71,7 +74,9 @@
             }
         }
         &:focus {
-            box-shadow: @focus__box-shadow;
+            ._keyfocus & {
+                box-shadow: @focus__box-shadow;
+            }
         }
         &:before {
             &:extend(.abs-icon all);
@@ -84,7 +89,14 @@
         }
     }
     .action-menu {
-        z-index: 1;
+        z-index: @data-grid-search-menu__z-index;
+        max-height: 3.85rem * @data-grid-search-control-action-menu-item__quantity; // ToDo UI: change static item height
+        overflow-y: auto;
+    }
+    .action-menu-item {
+        &._selected {
+            background-color: @data-grid-search-menu-item__background-color;
+        }
     }
 }
 
@@ -144,14 +156,12 @@
     .appearing__off();
     clear: both;
     font-size: @data-grid-filters__font-size;
-    max-height: 0;
     transition: opacity .3s ease;
     &._show {
         .appearing__on();
         border-bottom: 1px solid @data-grid-filters-action__active__border-color;
         border-top: 1px solid @data-grid-filters-action__active__border-color;
         margin-bottom: .7rem;
-        max-height: 50rem;
         padding: 3.6rem 0 3rem;
         position: relative;
         top: -1px;

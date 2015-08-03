@@ -6,19 +6,19 @@
 namespace Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 
 use Magento\Framework\View\Element\Template;
-use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 class Generic extends Template
 {
     /**
-     * @var Item
+     * @var AbstractItem
      */
     protected $item;
 
     /**
      * Returns current quote item
      *
-     * @return Item
+     * @return AbstractItem
      */
     public function getItem()
     {
@@ -28,10 +28,10 @@ class Generic extends Template
     /**
      * Set current quote item
      *
-     * @param Item $item
+     * @param AbstractItem $item
      * @return $this
      */
-    public function setItem(Item $item)
+    public function setItem(AbstractItem $item)
     {
         $this->item = $item;
         return $this;

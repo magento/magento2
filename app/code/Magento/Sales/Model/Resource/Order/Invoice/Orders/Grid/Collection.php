@@ -62,31 +62,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Invoice\Grid\Collec
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addFieldToSelect(
-            'entity_id'
-        )->addFieldToSelect(
-            'created_at'
-        )->addFieldToSelect(
-            'order_id'
-        )->addFieldToSelect(
-            'increment_id'
-        )->addFieldToSelect(
-            'state'
-        )->addFieldToSelect(
-            'grand_total'
-        )->addFieldToSelect(
-            'base_grand_total'
-        )->addFieldToSelect(
-            'store_currency_code'
-        )->addFieldToSelect(
-            'base_currency_code'
-        )->addFieldToSelect(
-            'order_currency_code'
-        )->addFieldToSelect(
-            'billing_name'
-        )->setOrderFilter(
-            $this->getOrder()
-        );
+        $this->setOrderFilter($this->getOrder());
         return $this;
     }
 }

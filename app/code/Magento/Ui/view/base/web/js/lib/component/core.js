@@ -3,28 +3,26 @@
  * See COPYING.txt for license details.
  */
 define([
-    'ko',
-    'mageUtils',
     'underscore',
     'uiRegistry',
     'Magento_Ui/js/lib/storage'
-], function (ko, utils, _, registry) {
+], function (_, registry) {
     'use strict';
 
     return {
         defaults: {
             template: 'ui/collection',
-            parentName: '${ $.$data.getPart( $.name, -2) }',
-            parentScope: '${ $.$data.getPart( $.dataScope, -2) }',
-            containers: [],
-            _elems: [],
-            elems: [],
+            ignoreTmpls: {
+                childDefaults: true
+            },
             storageConfig: {
                 provider: 'localStorage',
                 namespace: '${ $.name }',
                 path: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }'
             },
-            additionalClasses: false
+            modules: {
+                storage: '${ $.storageConfig.provider }'
+            }
         },
 
         /**
@@ -38,11 +36,10 @@ define([
             this._super()
                 .initProperties()
                 .initObservable()
-                .initStorage()
                 .initModules()
                 .initUnique()
-                .initLinks()
-                .setListners(this.listens);
+                .setListeners(this.listens)
+                .initLinks();
 
             return this;
         },
@@ -54,7 +51,10 @@ define([
          */
         initProperties: function () {
             _.extend(this, {
-                source: registry.get(this.provider)
+                source: registry.get(this.provider),
+                containers: [],
+                _elems: [],
+                elems: []
             });
 
             return this;
@@ -67,17 +67,6 @@ define([
          */
         initObservable: function () {
             this.observe('elems');
-
-            return this;
-        },
-
-        /**
-         * Creates async wrapper on a specified storage component.
-         *
-         * @returns {Component} Chainable.
-         */
-        initStorage: function () {
-            this.storage = registry.async(this.storageConfig.provider);
 
             return this;
         },
@@ -166,24 +155,6 @@ define([
         },
 
         /**
-         * Splits incoming string and returns its' part specified by offset.
-         *
-         * @param {String} parts
-         * @param {Number} [offset]
-         * @param {String} [delimiter=.]
-         * @returns {String}
-         */
-        getPart: function (parts, offset, delimiter) {
-            delimiter = delimiter || '.';
-            parts = parts.split(delimiter);
-            offset = utils.formatOffset(parts, offset);
-
-            parts.splice(offset, 1);
-
-            return parts.join(delimiter) || '';
-        },
-
-        /**
          * Updates property specified in uniqueNs
          * if components' unique property is set to 'true'.
          *
@@ -207,27 +178,6 @@ define([
                 property = this.uniqueProp;
 
             this[property](active);
-        },
-
-        /**
-         * Provides classes of element as object used by knockout's css binding.
-         */
-        getStyles: function() {
-            var styles = {
-                required: this.required,
-                _error: this.error,
-                _disabled: this.disabled
-            };
-            if (typeof this.additionalClasses === 'string') {
-                var item,
-                    additionalClasses = this.additionalClasses.split(" ");
-                for (item in additionalClasses) {
-                    if (additionalClasses.hasOwnProperty(item)) {
-                        styles[additionalClasses[item]] = true;
-                    }
-                }
-            }
-            return styles;
         }
     };
 });

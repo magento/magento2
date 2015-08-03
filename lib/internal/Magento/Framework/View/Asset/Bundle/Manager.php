@@ -40,23 +40,30 @@ class Manager
 
     /** @var array */
     public static $availableTypes = [self::ASSET_TYPE_JS, self::ASSET_TYPE_HTML];
+    /**
+     * @var Asset\Minification
+     */
+    private $minification;
 
     /**
      * @param Filesystem $filesystem
      * @param Bundle $bundle
      * @param Bundle\ConfigInterface $bundleConfig
      * @param Asset\ConfigInterface $assetConfig
+     * @param Asset\Minification $minification
      */
     public function __construct(
         Filesystem $filesystem,
         Bundle $bundle,
         Bundle\ConfigInterface $bundleConfig,
-        Asset\ConfigInterface $assetConfig
+        Asset\ConfigInterface $assetConfig,
+        Asset\Minification $minification
     ) {
         $this->filesystem = $filesystem;
         $this->assetConfig = $assetConfig;
         $this->bundleConfig = $bundleConfig;
         $this->bundle = $bundle;
+        $this->minification = $minification;
     }
 
     /**
@@ -71,20 +78,94 @@ class Manager
             $this->bundleConfig->getConfig($asset->getContext())->getExcludedFiles(),
             $this->excluded
         );
-        if (in_array($asset->getFilePath(), $excludedFiles)) {
-            return true;
+        foreach ($excludedFiles as $file) {
+            if ($this->isExcludedFile($file, $asset)) {
+                return true;
+            }
         }
 
-        // check if file in excluded directory
-        $assetDirectory  = dirname($asset->getFilePath());
-        foreach ($this->bundleConfig->getConfig($asset->getContext())->getExcludedDir() as $dir) {
-            if (strpos($assetDirectory, $dir) !== false) {
+        foreach ($this->bundleConfig->getConfig($asset->getContext())->getExcludedDir() as $directory) {
+            if ($this->isExcludedDirectory($directory, $asset)) {
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * Check if asset file in excluded directory
+     *
+     * @param string $directoryPath
+     * @param LocalInterface $asset
+     * @return bool
+     */
+    protected function isExcludedDirectory($directoryPath, $asset)
+    {
+        /** @var $asset LocalInterface */
+        $assetDirectory = dirname($asset->getFilePath());
+        $assetDirectory .= substr($assetDirectory, -1) != '/' ? '/' : '';
+        $directoryPath .= substr($directoryPath, -1) != '/' ? '/' : '';
+
+        /** @var $asset LocalInterface */
+        $directoryPathInfo = $this->splitPath($directoryPath);
+        if ($directoryPathInfo && $this->compareModules($directoryPathInfo, $asset)) {
+            return strpos($assetDirectory, $directoryPathInfo['excludedPath']) === 0;
+        }
+        return false;
+    }
+
+    /**
+     * Check if asset file is excluded
+     *
+     * @param string $filePath
+     * @param LocalInterface $asset
+     * @return bool
+     */
+    protected function isExcludedFile($filePath, $asset)
+    {
+        /** @var $asset LocalInterface */
+        $filePathInfo = $this->splitPath($filePath);
+        if ($filePathInfo && $this->compareModules($filePathInfo, $asset)) {
+            return $asset->getFilePath() == $filePathInfo['excludedPath'];
+        }
+        return false;
+    }
+
+    /**
+     * Compare asset module with excluded module
+     *
+     * @param array $filePathInfo
+     * @param LocalInterface $asset
+     * @return bool
+     */
+    protected function compareModules($filePathInfo, $asset)
+    {
+        /** @var $asset LocalInterface */
+        if (($filePathInfo['excludedModule'] == 'Lib' && $asset->getModule() == '')
+            || ($filePathInfo['excludedModule'] == $asset->getModule())
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get excluded module and path from complex string
+     *
+     * @param string $path
+     * @return array|bool
+     */
+    protected function splitPath($path)
+    {
+        if (strpos($path, '::') > 0) {
+            list($excludedModule, $excludedPath) = explode('::', $path);
+            return [
+                'excludedModule' => $excludedModule,
+                'excludedPath' => $excludedPath,
+            ];
+        }
+        return false;
+    }
 
     /**
      * Add asset to the bundle
@@ -112,7 +193,7 @@ class Manager
         if (in_array($asset->getFilePath(), $this->excluded)) {
             return false;
         }
-        if ($this->assetConfig->isAssetMinification($asset->getContentType())) {
+        if ($this->minification->isEnabled($asset->getContentType())) {
 
             if (strpos($sourceFile, '.min.') !== false) {
                 $this->excluded[] = str_replace('.min.', '', $sourceFile);

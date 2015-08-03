@@ -7,10 +7,10 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
-        'Magento_Ui/js/model/messageList',
+        'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer'
     ],
-    function (quote, urlBuilder, storage, messageList, customer) {
+    function (quote, urlBuilder, storage, errorProcessor, customer) {
         'use strict';
 
         return function () {
@@ -22,8 +22,8 @@ define(
              * Checkout for guest and registered customer.
              */
             if (!customer.isLoggedIn()) {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/set-payment-information', {
-                    quoteId: quote.getQuoteId()
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/set-payment-information', {
+                    cartId: quote.getQuoteId()
                 });
                 payload = {
                     cartId: quote.getQuoteId(),
@@ -47,8 +47,7 @@ define(
                 }
             ).fail(
                 function (response) {
-                    var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
+                    errorProcessor.process(response);
                 }
             );
         };

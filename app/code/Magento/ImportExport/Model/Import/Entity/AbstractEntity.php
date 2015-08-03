@@ -204,6 +204,34 @@ abstract class AbstractEntity
     protected $_resourceHelper;
 
     /**
+     * Count if created items
+     *
+     * @var int
+     */
+    protected $countItemsCreated = 0;
+
+    /**
+     * Count if updated items
+     *
+     * @var int
+     */
+    protected $countItemsUpdated = 0;
+
+    /**
+     * Count if deleted items
+     *
+     * @var int
+     */
+    protected $countItemsDeleted = 0;
+
+    /**
+     * Need to log in import history
+     *
+     * @var bool
+     */
+    protected $logInHistory = false;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
@@ -659,6 +687,16 @@ abstract class AbstractEntity
     }
 
     /**
+     * Is import need to log in history.
+     *
+     * @return bool
+     */
+    public function isNeedToLogInHistory()
+    {
+        return $this->logInHistory;
+    }
+
+    /**
      * Validate data row.
      *
      * @param array $rowData
@@ -745,5 +783,35 @@ abstract class AbstractEntity
             $this->_dataValidated = true;
         }
         return $this;
+    }
+
+    /**
+     * Get count of created items
+     *
+     * @return int
+     */
+    public function getCreatedItemsCount()
+    {
+        return $this->countItemsCreated;
+    }
+
+    /**
+     * Get count of updated items
+     *
+     * @return int
+     */
+    public function getUpdatedItemsCount()
+    {
+        return $this->countItemsUpdated;
+    }
+
+    /**
+     * Get count of deleted items
+     *
+     * @return int
+     */
+    public function getDeletedItemsCount()
+    {
+        return $this->countItemsDeleted;
     }
 }

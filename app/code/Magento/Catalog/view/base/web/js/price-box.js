@@ -50,9 +50,8 @@ define([
          * Call on event updatePrice. Proxy to updatePrice method.
          * @param {Event} event
          * @param {Object} prices
-         * @param {Boolean} isReplace
          */
-        onUpdatePrice: function onUpdatePrice(event, prices, isReplace) {
+        onUpdatePrice: function onUpdatePrice(event, prices) {
             return this.updatePrice(prices);
         },
 
@@ -71,7 +70,7 @@ define([
         updatePrice: function updatePrice(newPrices) {
             var prices = this.cache.displayPrices,
                 additionalPrice = {},
-                keys = [];
+                pricesCode = [];
 
             this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};
 
@@ -80,16 +79,16 @@ define([
             }
 
             if (!_.isEmpty(additionalPrice)) {
-                keys = _.keys(additionalPrice);
+                pricesCode = _.keys(additionalPrice);
             } else if (!_.isEmpty(prices)) {
-                keys = _.keys(prices);
+                pricesCode = _.keys(prices);
             }
 
             _.each(this.cache.additionalPriceObject, function (additional) {
                 if (additional && !_.isEmpty(additional)) {
-                    keys = _.keys(additional);
+                    pricesCode = _.keys(additional);
                 }
-                _.each(keys, function (priceCode) {
+                _.each(pricesCode, function (priceCode) {
                     var priceValue = additional[priceCode] || {};
                     priceValue.amount = +priceValue.amount || 0;
                     priceValue.adjustments = priceValue.adjustments || {};
@@ -98,9 +97,11 @@ define([
                         'amount': 0,
                         'adjustments': {}
                     };
-                    additionalPrice[priceCode].amount = 0 + (additionalPrice[priceCode].amount || 0) + priceValue.amount;
+                    additionalPrice[priceCode].amount =  0 + (additionalPrice[priceCode].amount || 0)
+                        + priceValue.amount;
                     _.each(priceValue.adjustments, function (adValue, adCode) {
-                        additionalPrice[priceCode].adjustments[adCode] = 0 + (additionalPrice[priceCode].adjustments[adCode] || 0) + adValue;
+                        additionalPrice[priceCode].adjustments[adCode] = 0
+                            + (additionalPrice[priceCode].adjustments[adCode] || 0) + adValue;
                     });
                 });
             });
@@ -130,27 +131,18 @@ define([
          * Render price unit block.
          */
         reloadPrice: function reDrawPrices() {
-            var box = this.element,
-                prices = this.cache.displayPrices,
-                priceFormat = this.options.priceConfig && this.options.priceConfig.priceFormat || {},
+            var priceFormat = (this.options.priceConfig && this.options.priceConfig.priceFormat) || {},
                 priceTemplate = mageTemplate(this.options.priceTemplate);
 
-            _.each(prices, function (price, priceCode) {
-                var html,
-                    finalPrice = price.amount;
+            _.each(this.cache.displayPrices, function (price, priceCode) {
+                price.final = _.reduce(price.adjustments, function(memo, amount) {
+                    return memo + amount;
+                }, price.amount);
 
-                _.each(price.adjustments, function (adjustmentAmount) {
-                    finalPrice += adjustmentAmount;
-                });
+                price.formatted = utils.formatPrice(price.final, priceFormat);
 
-                price.final = finalPrice;
-                price.formatted = utils.formatPrice(finalPrice, priceFormat);
-
-                html = priceTemplate({
-                    data: price
-                });
-                $('[data-price-type="' + priceCode + '"]', box).html(html);
-            });
+                $('[data-price-type="' + priceCode + '"]', this.element).html(priceTemplate({data: price}));
+            }, this);
         },
 
         /**

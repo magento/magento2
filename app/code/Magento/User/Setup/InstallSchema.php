@@ -124,7 +124,7 @@ class InstallSchema implements InstallSchemaInterface
             )->addColumn(
                 'interface_locale',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                5,
+                16,
                 ['nullable' => false, 'default' => 'en_US'],
                 'Backend interface locale'
             )->addIndex(

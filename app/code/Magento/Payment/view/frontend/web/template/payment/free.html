@@ -27,7 +27,11 @@
             <div class="primary">
                 <button class="action primary checkout"
                         type="submit"
-                        data-bind="click: placeOrder, attr: {title: $t('Place Order')}">
+                        data-bind="
+                        click: placeOrder,
+                        attr: {title: $t('Place Order')},
+                        css: {disabled: !isPlaceOrderActionAllowed()}
+                        ">
                     <span data-bind="text: $t('Place Order')"></span>
                 </button>
             </div>

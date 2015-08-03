@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary */
+?>
+<div data-bind="scope: '<?= $block->getComponentName()?>'">
+    <h2 class="steps-wizard-title"><?= __('Step 4: Summary') ?></h2>
+    <div class="steps-wizard-info">
+        <span><?= __('Here are all the products you will create:') ?></span>
+    </div>
+
+    <div class="admin__data-grid-wrap">
+        <table class="data-grid data-grid-configurable">
+            <thead>
+            <tr>
+                <!-- ko foreach: attributesName -->
+                <th class="data-grid-th" data-bind="text: $data"></th>
+                <!-- /ko -->
+            </tr>
+            </thead>
+
+            <tbody data-bind="foreach: grid">
+                <tr>
+                    <!-- ko foreach: $data -->
+                    <!-- ko if: $data && $data.preview -->
+                    <td class="data-grid-thumbnail-cell">
+                        <div class="images-uploaded">
+                            <img data-bind="attr: {src: $data.preview}" />
+                            <span data-bind="text: $data.images.length"></span>
+                        </div>
+                    </td>
+                    <!-- /ko -->
+                    <!-- ko ifnot: $data && $data.preview -->
+                    <td>
+                        <span data-bind='text: $data'></span>
+                    </td>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "<?= $block->getComponentName()?>": {
+                        "component": "Magento_ConfigurableProduct/js/variations/steps/summary",
+                        "appendTo": "<?= $block->getParentComponentName()?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

@@ -66,7 +66,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
                 [
                     'name' => 'price_rule_type',
                     'options' => [__('Any'), __('Specified')],
-                    'label' => __('Shopping Cart Price Rule')
+                    'label' => __('Cart Price Rule')
                 ]
             );
 

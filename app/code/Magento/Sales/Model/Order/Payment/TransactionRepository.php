@@ -81,7 +81,7 @@ class TransactionRepository
         }
         if (!isset($this->registry[$id])) {
             $filter = $this->filterBuilder->setField('transaction_id')->setValue($id)->setConditionType('eq')->create();
-            $this->searchCriteriaBuilder->addFilter([$filter]);
+            $this->searchCriteriaBuilder->addFilters([$filter]);
             $this->find($this->searchCriteriaBuilder->create());
 
             if (!isset($this->registry[$id])) {

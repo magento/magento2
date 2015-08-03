@@ -122,6 +122,7 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Whether the coupon is primary coupon for the rule that it's associated with
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsPrimary();
 

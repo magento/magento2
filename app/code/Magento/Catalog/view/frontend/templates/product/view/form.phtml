@@ -19,6 +19,7 @@
     <form action="<?php echo $block->getSubmitUrl($_product) ?>" method="post"
           id="product_addtocart_form"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+        <input type="hidden" name="selected_configurable_option" value="" />
         <input type="hidden" name="related_product" id="related-products-field" value="" />
         <?php echo $block->getChildHtml('form_top'); ?>
         <?php if (!$block->hasOptions()):?>

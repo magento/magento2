@@ -22,6 +22,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         parent::_construct();
         $this->setId('promo_catalog_edit_tabs');
         $this->setDestElementId('edit_form');
-        $this->setTitle(__('Shopping Cart Price Rule'));
+        $this->setTitle(__('Cart Price Rule'));
     }
 }

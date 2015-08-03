@@ -26,12 +26,12 @@ interface RuleRepositoryInterface
     /**
      * Get rule by ID.
      *
-     * @param int $id
+     * @param int $ruleId
      * @return \Magento\SalesRule\Api\Data\RuleInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $id is not found
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getById($id);
+    public function getById($ruleId);
 
     /**
      * Retrieve sales rules.
@@ -45,10 +45,10 @@ interface RuleRepositoryInterface
     /**
      * Delete rule by ID.
      *
-     * @param int $id
+     * @param int $ruleId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById($id);
+    public function deleteById($ruleId);
 }

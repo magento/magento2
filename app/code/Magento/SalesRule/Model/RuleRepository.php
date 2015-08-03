@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Model;
 
-use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use \Magento\SalesRule\Model\Resource\Rule\Collection;
+use Magento\Framework\Api\SortOrder;
+use Magento\SalesRule\Model\Resource\Rule\Collection;
 
 /**
  * Sales rule CRUD class
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 {
@@ -150,7 +150,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
             $field = $sortOrder->getField();
             $collection->addOrder(
                 $field,
-                ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
@@ -159,7 +159,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 
         $rules = [];
         /** @var \Magento\SalesRule\Model\Rule $ruleModel */
-        foreach ($collection as $ruleModel) {
+        foreach ($collection->getItems() as $ruleModel) {
             $ruleModel->getCustomerGroupIds();
             $ruleModel->getStoreLabels();
             $rules[] = $this->toDataModelConverter->toDataModel($ruleModel);
@@ -182,8 +182,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      */
     public function deleteById($id)
     {
-        $model = $this->ruleFactory->create()
-            ->load($id);
+        $model = $this->ruleFactory->create()->load($id);
 
         if (!$model->getId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException();

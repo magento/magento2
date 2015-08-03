@@ -6,30 +6,15 @@
 
 namespace Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class StoreId
- * Store id source
+ * Store id source.
  */
-class StoreId implements FixtureInterface
+class StoreId extends DataSource
 {
-    /**
-     * Resource data
-     *
-     * @var string
-     */
-    protected $data;
-
-    /**
-     * Data set configuration settings
-     *
-     * @var array
-     */
-    protected $params;
-
     /**
      * @param FixtureFactory $fixtureFactory
      * @param array $params
@@ -40,45 +25,12 @@ class StoreId implements FixtureInterface
         $this->params = $params;
         if (preg_match('`%(.*?)%`', $data, $store)) {
             /** @var Store $storeFixture */
-            $storeFixture = $fixtureFactory->createByCode('store', ['dataSet' => $store[1]]);
+            $storeFixture = $fixtureFactory->createByCode('store', ['dataset' => $store[1]]);
             if (!$storeFixture->hasData('store_id')) {
                 $storeFixture->persist();
             }
             $data = str_replace('%' . $store[1] . '%', $storeFixture->getName(), $data);
         }
         $this->data = $data;
-    }
-
-    /**
-     * Persist custom selections products
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data
-     *
-     * @param string|null $key [optional]
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 }

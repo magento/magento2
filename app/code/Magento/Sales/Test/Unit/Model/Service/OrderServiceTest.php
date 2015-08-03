@@ -152,11 +152,15 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
             ->with(123)
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
+            ->method('setConditionType')
+            ->with('eq')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($this->filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addFilter')
-            ->with(['eq' => $this->filterMock])
+            ->method('addFilters')
+            ->with([$this->filterMock])
             ->willReturn($this->filterBuilderMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')

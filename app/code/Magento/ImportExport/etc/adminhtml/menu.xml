@@ -9,5 +9,6 @@
     <menu>
         <add id="Magento_ImportExport::system_convert_import" title="Import" module="Magento_ImportExport" sortOrder="10" parent="Magento_Backend::system_convert" action="adminhtml/import" resource="Magento_ImportExport::import"/>
         <add id="Magento_ImportExport::system_convert_export" title="Export" module="Magento_ImportExport" sortOrder="20" parent="Magento_Backend::system_convert" action="adminhtml/export" resource="Magento_ImportExport::export"/>
+        <add id="Magento_ImportExport::system_convert_history" title="Import History" module="Magento_ImportExport" sortOrder="40" parent="Magento_Backend::system_convert" action="adminhtml/history" resource="Magento_ImportExport::history"/>
     </menu>
 </config>

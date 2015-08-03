@@ -28,6 +28,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
         $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $localeFormatMock = $this->getMock('\Magento\Framework\Locale\FormatInterface', [], [], '', false);
         $groupManagement = $this->getMock('Magento\Customer\Api\GroupManagementInterface', [], [], '', false);
 
         $this->_model = $this->getMockForAbstractClass(
@@ -37,6 +38,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $storeManagerMock,
                 'catalogData' => $this->_helper,
                 'config' => $configMock,
+                'localeFormat' => $localeFormatMock,
                 'catalogProductType' => $productTypeMock,
                 'groupManagement' => $groupManagement
             ]

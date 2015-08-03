@@ -1,0 +1,116 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Braintree\Block\Form $block */
+$_form = $block;
+$_code = $_form->getMethodCode();
+$_storedCards = $this->helper('\Magento\Braintree\Helper\Createorder')->getLoggedInCustomerCards();
+$_useVault = $block->useVault();
+$_useCvv = $block->useCvv();
+$clientToken = $block->getClientToken();
+$isFraudDetectionEnabled = $block->isFraudDetectionEnabled();
+$braintreeDataJs = $block->getBraintreeDataJs();
+$formData = [
+    "useVault" => $_useVault,
+    "useCvv"  => $_useCvv,
+    "clientToken" => $clientToken,
+    "code" => $_code,
+    "isFraudDetectionEnabled" => $isFraudDetectionEnabled,
+    "braintreeDataJs"=> $braintreeDataJs,
+];
+$serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($formData);
+?>
+<input id="<?php echo $_code ?>_payment_method" type="hidden" name="payment[method]" value="<?php echo $_code ?>" />
+<div id="payment_form_<?php echo $_code ?>" class="admin__page-section-item" style="display:none;"
+    data-mage-init='{"braintreeCcForm":<?php echo $serializedFormData ?>}'
+    >
+    <input type="hidden" name="payment[payment_method_nonce]" id="braintree_nonce" value="" />
+    <input type="hidden" name="payment[cc_last4]" id="cc_last4" value="" />
+    <?php if ($isFraudDetectionEnabled): ?>
+    <input type="hidden" name="payment[device_data]" id="braintree_device_id" value="" />
+    <?php endif; ?>
+    <?php if ($_storedCards): ?>
+    <fieldset class="admin__fieldset">
+        <div class="admin__field" id="<?php echo $_code ?>_token_selector">
+            <label class="admin__field-label" for="<?php echo $_code ?>_cc_token"><?php echo __('Payment Information') ?></label>
+            <div class="admin__field-control control">
+                <select id="<?php echo $_code ?>_cc_token" name="payment[cc_token]" class="select admin__control-select">
+                    <?php foreach ($_storedCards as $creditCard): ?>
+                        <option value="<?php echo $creditCard->token?>" <?php echo $creditCard->default ? 'selected="selected"' : '' ?>>
+                            <?php echo $creditCard->maskedNumber  . ' - ' . $creditCard->cardType ?>
+                        </option>
+                    <?php endforeach; ?>
+                        <option value=''><?php echo __('Add new card') ?></option>
+                </select>
+            </div>
+        </div>
+    </fieldset>
+    <?php endif; ?>
+    <fieldset class="admin__fieldset hide_if_token_selected">
+    <div class="admin__field">
+        <label class="label admin__field-label" for="<?php echo $_code ?>_cc_type" ><?php echo __('Credit Card Type') ?><span class="required">*</span></label>
+        <div class="admin__field-control control">
+            <select id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" class="required-entry _required select admin__control-select validate-cc-type-select">
+                <option value="">--<?php echo __('Please Select')?>--</option>
+            <?php $_ccType = $_form->getInfoData('cc_type') ?>
+            <?php foreach ($_form->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
+                <option value="<?php echo $_typeCode ?>"<?php if($_typeCode==$_ccType): ?> selected="selected"<?php endif ?>><?php echo $_typeName ?></option>
+            <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+    </fieldset>
+    <fieldset class="admin__fieldset hide_if_token_selected">
+    <div class="admin__field">
+        <label class="label admin__field-label" for="<?php echo $_code ?>_cc_number"><?php echo __('Credit Card Number') ?><span class="required">*</span></label>
+        <div class="admin__field-control control">
+            <input type="text" id="<?php echo $_code ?>_cc_number" data-encrypted-name="payment[cc_number]"  title="<?php echo __('Credit Card Number') ?>" class="input-text admin__control-text validate-cc-number validate-cc-type" value="" />
+        </div>
+    </div>
+    </fieldset>
+    <fieldset class="admin__fieldset hide_if_token_selected">
+    <div id="<?php echo $_code ?>_cc_type_exp_div" class="admin__field">
+        <label class="label admin__field-label" for="<?php echo $_code ?>_expiration" ><?php echo __('Expiration Date') ?><span class="required">*</span></label>
+        <div class="admin__field-control control">
+            <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp required-entry _required select admin__control-select">
+            <?php $_ccExpMonth = $_form->getInfoData('cc_exp_month') ?>
+            <?php foreach ($_form->getCcMonths() as $k=>$v): ?>
+                <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpMonth): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+            <?php endforeach ?>
+            </select>
+            <?php $_ccExpYear = $_form->getInfoData('cc_exp_year') ?>
+            <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year required-entry _required select admin__control-select">
+            <?php foreach ($_form->getCcYears() as $k=>$v): ?>
+                <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpYear): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+            <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+    </fieldset>
+    <?php echo $_form->getChildHtml() ?>
+    <?php if($_form->hasVerification()): ?>
+    <fieldset class="admin__fieldset hide_if_token_selected">
+        <div id="<?php echo $_code ?>_cc_type_cvv_div" class="admin__field">
+            <label class="label admin__field-label" for="<?php echo $_code ?>_cc_cid" ><?php echo __('Card Verification Number') ?><span class="required">*</span></label>
+            <div class="admin__field-control control">
+                <div class="v-fix">
+                    <input type="text" title="<?php echo __('Card Verification Number') ?>" class="input-text admin__control-text cvv required-entry validate-cc-cvn" id="<?php echo $_code ?>_cc_cid" data-encrypted-name="payment[cc_cid]" value="" />
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <?php endif; ?>
+    <?php if($_useVault): ?>
+    <fieldset class="admin__fieldset hide_if_token_selected">
+        <div id="<?php echo $_code ?>_store_in_vault_div" style="text-align:left;" class="">
+            <input type="checkbox" title="<?php echo __('Save this card for future use') ?>" class="input-checkbox" id="<?php echo $_code ?>_store_in_vault" name="payment[store_in_vault]" value="1" />
+            <label for="<?php echo $_code ?>_store_in_vault" style="float:none;"><?php echo __('Save this card for future use') ?></label>
+        </div>
+    </fieldset>
+    <?php endif; ?>
+</div>

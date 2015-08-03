@@ -144,7 +144,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getCheckoutUrl()
     {
-        return $this->getUrl('checkout/onepage', ['_secure' => true]);
+        return $this->getUrl('checkout', ['_secure' => true]);
     }
 
     /**

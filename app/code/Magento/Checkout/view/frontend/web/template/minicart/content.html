@@ -79,6 +79,14 @@
         </strong>
         <!-- ko if: cart().cart_empty_message -->
             <p class="minicart empty text"><!-- ko text: cart().cart_empty_message --><!-- /ko --></p>
+
+            <div class="actions">
+                <div class="secondary">
+                    <a class="action viewcart" data-bind="attr: {href: shoppingCartUrl}">
+                        <span><!-- ko text: $t('View and edit cart') --><!-- /ko --></span>
+                    </a>
+                </div>
+            </div>
         <!-- /ko -->
     <!-- /ko -->
 

@@ -9,10 +9,21 @@ namespace Magento\Email\Model\Template;
  * Core Email Template Filter Model
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter extends \Magento\Framework\Filter\Template
 {
+    /**
+     * The name used in the {{trans}} directive
+     */
+    const TRANS_DIRECTIVE_NAME = 'trans';
+
+    /**
+     * The regex to match interior portion of a {{trans "foo"}} translation directive
+     */
+    const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
+
     /**
      * Use absolute links flag
      *
@@ -35,6 +46,20 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_modifiers = ['nl2br' => ''];
 
     /**
+     * Whether template being filtered is child of another template
+     *
+     * @var bool
+     */
+    private $isChildTemplate = false;
+
+    /**
+     * List of CSS files to inline
+     *
+     * @var []
+     */
+    private $inlineCssFiles = [];
+
+    /**
      * Store id
      *
      * @var int
@@ -42,9 +67,14 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_storeId = null;
 
     /**
+     * @var array
+     */
+    private $designParams = [];
+
+    /**
      * @var bool
      */
-    protected $_plainTemplateMode = false;
+    private $plainTemplateMode = false;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -106,16 +136,14 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_appState;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
-    protected $backendUrlBuilder;
+    protected $urlModel;
 
     /**
-     * Include processor
-     *
-     * @var callable|null
+     * @var \Pelago\Emogrifier
      */
-    protected $_includeProcessor = null;
+    protected $emogrifier;
 
     /**
      * @param \Magento\Framework\Stdlib\String $string
@@ -128,7 +156,8 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
+     * @param \Magento\Framework\UrlInterface $urlModel
+     * @param \Pelago\Emogrifier $emogrifier
      * @param array $variables
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -144,7 +173,8 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
-        \Magento\Backend\Model\UrlInterface $backendUrlBuilder,
+        \Magento\Framework\UrlInterface $urlModel,
+        \Pelago\Emogrifier $emogrifier,
         $variables = []
     ) {
         $this->_escaper = $escaper;
@@ -157,7 +187,8 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_layout = $layout;
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
-        $this->backendUrlBuilder = $backendUrlBuilder;
+        $this->urlModel = $urlModel;
+        $this->emogrifier = $emogrifier;
         parent::__construct($string, $variables);
     }
 
@@ -194,8 +225,40 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setPlainTemplateMode($plainTemplateMode)
     {
-        $this->_plainTemplateMode = (bool)$plainTemplateMode;
+        $this->plainTemplateMode = (bool) $plainTemplateMode;
         return $this;
+    }
+
+    /**
+     * Check whether template is plain
+     *
+     * @return bool
+     */
+    public function isPlainTemplateMode()
+    {
+        return $this->plainTemplateMode;
+    }
+
+    /**
+     * Set whether template being filtered is child of another template
+     *
+     * @param bool $isChildTemplate
+     * @return $this
+     */
+    public function setIsChildTemplate($isChildTemplate)
+    {
+        $this->isChildTemplate = (bool) $isChildTemplate;
+        return $this;
+    }
+
+    /**
+     * Get whether template being filtered is child of another template
+     *
+     * @return bool
+     */
+    public function isChildTemplate()
+    {
+        return $this->isChildTemplate;
     }
 
     /**
@@ -208,6 +271,28 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $this->_storeId = $storeId;
         return $this;
+    }
+
+    /**
+     * Set design parameters
+     *
+     * @param array $designParams
+     * @return $this
+     */
+    public function setDesignParams(array $designParams)
+    {
+        $this->designParams = $designParams;
+        return $this;
+    }
+
+    /**
+     * Get design parameters
+     *
+     * @return array
+     */
+    public function getDesignParams()
+    {
+        return $this->designParams;
     }
 
     /**
@@ -224,49 +309,6 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @param string[] $construction
-     * @return mixed
-     */
-    public function includeDirective($construction)
-    {
-        // Processing of {include template=... [...]} statement
-        $includeParameters = $this->_getIncludeParameters($construction[2]);
-        if (!isset($includeParameters['template']) or !$this->getIncludeProcessor()) {
-            // Not specified template or not set include processor
-            $replacedValue = '{Error in include processing}';
-        } else {
-            // Including of template
-            $templateCode = $includeParameters['template'];
-            unset($includeParameters['template']);
-            $includeParameters = array_merge_recursive($includeParameters, $this->_templateVars);
-            $replacedValue = call_user_func($this->getIncludeProcessor(), $templateCode, $includeParameters);
-        }
-        return $replacedValue;
-    }
-
-    /**
-     * Sets the processor of includes.
-     *
-     * @param callable $callback it must return string
-     * @return $this
-     */
-    public function setIncludeProcessor(array $callback)
-    {
-        $this->_includeProcessor = $callback;
-        return $this;
-    }
-
-    /**
-     * Sets the processor of includes.
-     *
-     * @return callable|null
-     */
-    public function getIncludeProcessor()
-    {
-        return is_callable($this->_includeProcessor) ? $this->_includeProcessor : null;
-    }
-
-    /**
      * Retrieve Block html directive
      *
      * @param array $construction
@@ -277,7 +319,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function blockDirective($construction)
     {
         $skipParams = ['class', 'id', 'output'];
-        $blockParameters = $this->_getIncludeParameters($construction[2]);
+        $blockParameters = $this->getParameters($construction[2]);
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -322,9 +364,9 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function layoutDirective($construction)
     {
-        $this->_directiveParams = $this->_getIncludeParameters($construction[2]);
+        $this->_directiveParams = $this->getParameters($construction[2]);
         if (!isset($this->_directiveParams['area'])) {
-            $this->_directiveParams['area'] = 'frontend';
+            $this->_directiveParams['area'] = \Magento\Framework\App\Area::AREA_FRONTEND;
         }
         if ($this->_directiveParams['area'] != $this->_appState->getAreaCode()) {
             return $this->_appState->emulateAreaCode(
@@ -401,7 +443,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function viewDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         $url = $this->_assetRepo->getUrlWithParams($params['url'], $params);
         return $url;
     }
@@ -414,7 +456,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
@@ -428,7 +470,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function storeDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         if (!isset($params['_query'])) {
             $params['_query'] = [];
         }
@@ -453,66 +495,109 @@ class Filter extends \Magento\Framework\Filter\Template
             unset($params['url']);
         }
 
-        return $this->getUrl($path, $params);
+        return $this->urlModel->getUrl($path, $params);
     }
 
     /**
-     * @param string $path
-     * @param array $params
-     * @return string
+     * Set current URL model, which will be used for URLs generation.
+     *
+     * @param \Magento\Framework\UrlInterface $urlModel
+     * @return $this
      */
-    protected function getUrl($path, $params)
+    public function setUrlModel(\Magento\Framework\UrlInterface $urlModel)
     {
-        $isBackendStore = \Magento\Store\Model\Store::DEFAULT_STORE_ID === $this->getStoreId()
-            || \Magento\Store\Model\Store::ADMIN_CODE === $this->getStoreId();
-
-        return $isBackendStore
-            ? $this->backendUrlBuilder->getUrl($path, $params)
-            : $this->_storeManager->getStore($this->getStoreId())->getUrl($path, $params);
+        $this->urlModel = $urlModel;
+        return $this;
     }
 
     /**
-     * Directive for converting special characters to HTML entities
-     * Supported options:
-     *     allowed_tags - Comma separated html tags that have not to be converted
+     * Trans directive for localized strings support
+     *
+     * Usage:
+     *
+     *   {{trans "string to translate"}}
+     *   {{trans "string to %var" var="$variable"}}
+     *
+     * The |escape modifier is applied by default, use |raw to override
      *
      * @param string[] $construction
      * @return string
      */
-    public function escapehtmlDirective($construction)
+    public function transDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
-        if (!isset($params['var'])) {
+        list($directive, $modifiers) = $this->explodeModifiers($construction[2], 'escape');
+
+        list($text, $params) = $this->getTransParameters($directive);
+        if (empty($text)) {
             return '';
         }
 
-        $allowedTags = null;
-        if (isset($params['allowed_tags'])) {
-            $allowedTags = preg_split('/\s*\,\s*/', $params['allowed_tags'], 0, PREG_SPLIT_NO_EMPTY);
+        $text = __($text, $params)->render();
+        return $this->applyModifiers($text, $modifiers);
+    }
+
+    /**
+     * Parses directive construction into a multipart array containing the text value and key/value pairs of parameters
+     *
+     * @param string $value raw parameters
+     * @return array always a two-part array in the format [value, [param, ...]]
+     */
+    protected function getTransParameters($value)
+    {
+        if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
+            return ['', []];  // malformed directive body; return without breaking list
         }
 
-        return $this->_escaper->escapeHtml($params['var'], $allowedTags);
+        $text = stripslashes($matches[2]);
+
+        $params = [];
+        if (!empty($matches[3])) {
+            $params = $this->getParameters($matches[3]);
+        }
+
+        return [$text, $params];
     }
 
     /**
      * Var directive with modifiers support
+     *
+     * The |escape modifier is applied by default, use |raw to override
      *
      * @param string[] $construction
      * @return string
      */
     public function varDirective($construction)
     {
-        if (count($this->_templateVars) == 0) {
-            // If template preprocessing
+        // just return the escaped value if no template vars exist to process
+        if (count($this->templateVars) == 0) {
             return $construction[0];
         }
 
-        $parts = explode('|', $construction[2], 2);
+        list($directive, $modifiers) = $this->explodeModifiers($construction[2], 'escape');
+        return $this->applyModifiers($this->getVariable($directive, ''), $modifiers);
+    }
+
+    /**
+     * Explode modifiers out of a given string
+     *
+     * This will return the value and modifiers in a two-element array. Where no modifiers are present in the passed
+     * value an array with a null modifier string will be returned
+     *
+     * Syntax: some text value, etc|modifier string
+     *
+     * Result: ['some text value, etc', 'modifier string']
+     *
+     * @param string $value
+     * @param string $default assumed modifier if none present
+     * @return array
+     */
+    protected function explodeModifiers($value, $default = null)
+    {
+        $parts = explode('|', $value, 2);
         if (2 === count($parts)) {
-            list($variableName, $modifiersString) = $parts;
-            return $this->_amplifyModifiers($this->_getVariable($variableName, ''), $modifiersString);
+            return $parts;
         }
-        return $this->_getVariable($construction[2], '');
+        return [$value, $default];
     }
 
     /**
@@ -524,7 +609,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $modifiers
      * @return string
      */
-    protected function _amplifyModifiers($value, $modifiers)
+    protected function applyModifiers($value, $modifiers)
     {
         foreach (explode('|', $modifiers) as $part) {
             if (empty($part)) {
@@ -569,11 +654,12 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * HTTP Protocol directive
      *
-     * Using:
-     * {{protocol}} - current protocol http or https
-     * {{protocol url="www.domain.com/"}} domain URL with current protocol
-     * {{protocol http="http://url" https="https://url"}
-     * also allow additional parameter "store"
+     * Usage:
+     *
+     *     {{protocol}} - current protocol http or https
+     *     {{protocol url="www.domain.com/"}} - domain URL with current protocol
+     *     {{protocol http="http://url" https="https://url"}}
+     *     {{protocol store="1"}} - Optional parameter which gets protocol from provide store based on store ID or code
      *
      * @param string[] $construction
      * @throws \Magento\Framework\Exception\MailException
@@ -581,7 +667,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function protocolDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         $store = null;
         if (isset($params['store'])) {
             try {
@@ -615,7 +701,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function configDirective($construction)
     {
         $configValue = '';
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         $storeId = $this->getStoreId();
         if (isset($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
@@ -636,14 +722,14 @@ class Filter extends \Magento\Framework\Filter\Template
     public function customvarDirective($construction)
     {
         $customVarValue = '';
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         if (isset($params['code'])) {
             $variable = $this->_variableFactory->create()->setStoreId(
                 $this->getStoreId()
             )->loadByCode(
                 $params['code']
             );
-            $mode = $this->_plainTemplateMode
+            $mode = $this->isPlainTemplateMode()
                 ? \Magento\Variable\Model\Variable::TYPE_TEXT
                 : \Magento\Variable\Model\Variable::TYPE_HTML;
             $value = $variable->getValue($mode);
@@ -655,8 +741,184 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * Filter the string as template.
-     * Rewrited for logging exceptions
+     * Load and return the contents of a CSS file
+     *
+     * Usage:
+     *
+     *     {{css file="css/filename.css"}} - Load file from theme directory
+     *     {{css file="Magento_Sales::css/filename.css"}} - Load file from module directory or module directory in theme
+     *
+     * @param string[] $construction
+     * @return string
+     */
+    public function cssDirective($construction)
+    {
+        $params = $this->getParameters($construction[2]);
+        $file = isset($params['file']) ? $params['file'] : null;
+        if (!$file) {
+            // Return CSS comment for debugging purposes
+            return '/* ' . __('"file" parameter must be specified') . ' */';
+        }
+
+        $css = $this->getCssFilesContent([$params['file']]);
+
+        if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX) !== false) {
+            // Return LESS compilation error wrapped in CSS comment
+            return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
+        } elseif (!empty($css)) {
+            return $css;
+        } else {
+            // Return CSS comment for debugging purposes
+            return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
+        }
+    }
+
+    /**
+     * Set file to apply as inline CSS
+     *
+     * This directive will cause CSS files to be applied inline to the HTML in the email template.
+     * This directive does not inline the CSS itself, but adds the files to the parent template model so that the model
+     * can handle the inlining at a later point, once all HTML has been assembled.
+     *
+     * Usage:
+     *
+     *     {{inlinecss file="css/filename.css"}} - Load file from theme directory
+     *     {{inlinecss file="Magento_Sales::css/filename.css"}} - Load file from module directory or module
+     *                                                            directory in theme
+     *
+     * @param string[] $construction
+     * @return string
+     * @throws \Magento\Framework\Exception\MailException
+     */
+    public function inlinecssDirective($construction)
+    {
+        // Plain text templates shouldn't have CSS applied inline
+        if ($this->isPlainTemplateMode()) {
+            return '';
+        }
+
+        // If this template is a child of another template, skip processing so that the parent template will process
+        // this directive. This is important as CSS inlining must operate on the entire HTML document.
+        if ($this->isChildTemplate()) {
+            return $construction[0];
+        }
+
+        $params = $this->getParameters($construction[2]);
+        if (!isset($params['file']) || !$params['file']) {
+            throw new \Magento\Framework\Exception\MailException(
+                __('"file" parameter must be specified and must not be empty')
+            );
+        }
+
+        $this->addInlineCssFile($params['file']);
+
+        // CSS should be applied after entire template has been filtered, so add as after filter callback
+        $this->addAfterFilterCallback([$this, 'applyInlineCss']);
+        return '';
+    }
+
+    /**
+     * Add filename of CSS file to inline
+     *
+     * @param string $file
+     * @return $this
+     */
+    protected function addInlineCssFile($file)
+    {
+        $this->inlineCssFiles[] = $file;
+        return $this;
+    }
+
+    /**
+     * Get filename of CSS file to inline
+     *
+     * @return array
+     */
+    protected function getInlineCssFiles()
+    {
+        return $this->inlineCssFiles;
+    }
+
+    /**
+     * Load CSS file from materialized static view directory
+     *
+     * @param [] $files
+     * @return string
+     * @throws \Magento\Framework\Exception\MailException
+     */
+    public function getCssFilesContent(array $files)
+    {
+        // Remove duplicate files
+        $files = array_unique($files);
+
+        $designParams = $this->getDesignParams();
+        if (!count($designParams)) {
+            throw new \Magento\Framework\Exception\MailException(
+                __('Design params must be set before calling this method')
+            );
+        }
+        $css = '';
+        foreach ($files as $file) {
+            $asset = $this->_assetRepo->createAsset($file, $designParams);
+            $css .= $asset->getContent();
+        }
+        return $css;
+    }
+
+    /**
+     * Merge HTML and CSS and return HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
+     * in order to support all email clients.
+     *
+     * @param string $html
+     * @return string
+     * @throws \Magento\Framework\Exception\MailException
+     */
+    public function applyInlineCss($html)
+    {
+        // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline and then load those files
+        $cssToInline = $this->getCssFilesContent(
+            $this->getInlineCssFiles()
+        );
+        // Only run Emogrify if HTML and CSS contain content
+        if ($html && $cssToInline) {
+            try {
+                // Don't try to compile CSS that has LESS compilation errors
+                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
+                    !== false
+                ) {
+                    throw new \Magento\Framework\Exception\MailException(
+                        __('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>')
+                    );
+                }
+
+                $emogrifier = $this->emogrifier;
+                $emogrifier->setHtml($html);
+                $emogrifier->setCss($cssToInline);
+
+                // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
+                $emogrifier->disableStyleBlocksParsing();
+
+                $processedHtml = $emogrifier->emogrify();
+            } catch (\Exception $e) {
+                if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+                    $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
+                        . PHP_EOL
+                        . $html;
+                } else {
+                    $processedHtml = $html;
+                }
+                $this->_logger->error($e);
+            }
+        } else {
+            $processedHtml = $html;
+        }
+        return $processedHtml;
+    }
+
+    /**
+     * Filter the string as template
+     *
+     * Overrides parent method in order to handle exceptions
      *
      * @param string $value
      * @return string
@@ -667,7 +929,15 @@ class Filter extends \Magento\Framework\Filter\Template
         try {
             $value = parent::filter($value);
         } catch (\Exception $e) {
-            $value = '';
+            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
+            // prevent callbacks running for unrelated content (e.g., email subject and email body)
+            $this->resetAfterFilterCallbacks();
+
+            if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+                $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
+            } else {
+                $value = __("We're sorry, an error has occurred while generating this email.");
+            }
             $this->_logger->critical($e);
         }
         return $value;

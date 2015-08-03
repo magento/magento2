@@ -203,7 +203,8 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $beforeCompareUrl = $this->_catalogSession->getBeforeCompareUrl();
         $params = [
             'product' => $product->getId(),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl)
+            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl),
+            '_secure' => $this->_getRequest()->isSecure()
         ];
 
         return $this->_getUrl('checkout/cart/add', $params);

@@ -7,19 +7,19 @@ namespace Magento\Checkout\Block\Cart\Item\Renderer;
 
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Framework\View\Element\Text;
-use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 class Actions extends Text
 {
     /**
-     * @var Item
+     * @var AbstractItem
      */
     protected $item;
 
     /**
      * Returns current quote item
      *
-     * @return Item
+     * @return AbstractItem
      */
     public function getItem()
     {
@@ -29,10 +29,10 @@ class Actions extends Text
     /**
      * Set current quote item
      *
-     * @param Item $item
+     * @param AbstractItem $item
      * @return $this
      */
-    public function setItem(Item $item)
+    public function setItem(AbstractItem $item)
     {
         $this->item = $item;
         return $this;

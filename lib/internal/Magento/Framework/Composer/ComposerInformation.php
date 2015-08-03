@@ -7,7 +7,6 @@
 namespace Magento\Framework\Composer;
 
 use Composer\Factory as ComposerFactory;
-use Composer\IO\BufferIO;
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -32,12 +31,12 @@ class ComposerInformation
      * Constructor
      *
      * @param Filesystem $filesystem
-     * @param BufferIO $io
+     * @param BufferIoFactory $bufferIoFactory
      * @throws \Exception
      */
     public function __construct(
         Filesystem $filesystem,
-        BufferIO $io
+        BufferIoFactory $bufferIoFactory
     ) {
         // composer.json is in same directory as vendor
         $vendorPath = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
@@ -53,7 +52,7 @@ class ComposerInformation
         putenv('COMPOSER_HOME=' . $filesystem->getDirectoryRead(DirectoryList::COMPOSER_HOME)->getAbsolutePath());
 
         // Create Composer
-        $this->composer = ComposerFactory::create($io, $composerJson);
+        $this->composer = ComposerFactory::create($bufferIoFactory->create(), $composerJson);
         $this->locker = $this->composer->getLocker();
     }
 

@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Integration\Test\TestCase\ActivateIntegrationEntityTest">
         <variation name="ActivateIntegrationEntityTestVariation1">
-            <data name="integration/dataSet" xsi:type="string">default_with_all_resources</data>
+            <data name="integration/dataset" xsi:type="string">default_with_all_resources</data>
             <data name="resourceDepth" xsi:type="number">1</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationResourcesPopup"/>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensPopup"/>

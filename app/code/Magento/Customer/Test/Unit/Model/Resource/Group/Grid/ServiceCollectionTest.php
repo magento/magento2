@@ -8,6 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Resource\Group\Grid;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Customer\Model\Resource\Group\Grid\ServiceCollection;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Unit test for \Magento\Customer\Model\Resource\Group\Grid\ServiceCollection
@@ -81,14 +82,14 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $sortOrder = $this->sortOrderBuilder
             ->setField('name')
-            ->setDirection(SearchCriteria::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $expectedSearchCriteria = $this->searchCriteriaBuilder
             ->setCurrentPage(1)
             ->setPageSize(false)
             ->addSortOrder($sortOrder)
-            ->addFilter(
+            ->addFilters(
                 [$this->filterBuilder->setField('name')->setConditionType('eq')->setValue('Magento')->create()]
             )->create();
 
@@ -111,7 +112,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         $value = '35';
         $sortOrder = $this->sortOrderBuilder
             ->setField('name')
-            ->setDirection(SearchCriteria::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $filter = $this->filterBuilder->setField($field)->setConditionType($conditionType)->setValue($value)->create();
@@ -119,7 +120,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
             ->setCurrentPage(1)
             ->setPageSize(0)
             ->addSortOrder($sortOrder)
-            ->addFilter([$filter])
+            ->addFilters([$filter])
             ->create();
 
         // Verifies that the search criteria Data Object created by the serviceCollection matches expected
@@ -143,14 +144,14 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
         $sortOrder = $this->sortOrderBuilder
             ->setField('name')
-            ->setDirection(SearchCriteria::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $expectedSearchCriteria = $this->searchCriteriaBuilder
             ->setCurrentPage(1)
             ->setPageSize(0)
             ->addSortOrder($sortOrder)
-            ->addFilter(
+            ->addFilters(
                 [
                     $this->filterBuilder->setField($fieldA)->setConditionType('eq')->setValue($value)->create(),
                     $this->filterBuilder->setField($fieldB)->setConditionType('eq')->setValue($value)->create(),
@@ -179,20 +180,20 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
         $sortOrder = $this->sortOrderBuilder
             ->setField('name')
-            ->setDirection(SearchCriteria::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $expectedSearchCriteria = $this->searchCriteriaBuilder
             ->setCurrentPage(1)
             ->setPageSize(0)
             ->addSortOrder($sortOrder)
-            ->addFilter(
+            ->addFilters(
                 [
                     $this->filterBuilder->setField($fieldA)->setConditionType('gt')
                         ->setValue($value)->create(),
                 ]
             )
-            ->addFilter(
+            ->addFilters(
                 [
                     $this->filterBuilder->setField($fieldB)->setConditionType('gt')
                         ->setValue($value)->create(),

@@ -34,7 +34,7 @@
 
         <!-- ko ifnot: hasData() -->
             <tr class="data-grid-tr-no-data">
-                <td data-bind="attr: { colspan: getColspan() },
+                <td data-bind="attr: { colspan: countVisible() },
                                text: $t('We couldn\'t find any records.')"></td>
             </tr>
         <!-- /ko -->

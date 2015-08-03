@@ -52,12 +52,6 @@ class InstallSchema implements InstallSchemaInterface
             ['nullable' => true],
             'Theme Path'
         )->addColumn(
-            'theme_version',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            ['nullable' => false],
-            'Theme Version'
-        )->addColumn(
             'theme_title',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
