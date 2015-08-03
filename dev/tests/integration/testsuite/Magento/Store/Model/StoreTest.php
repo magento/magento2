@@ -10,6 +10,7 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\UrlInterface;
 use Zend\Stdlib\Parameters;
 
 class StoreTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +21,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $modelParams;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $model;
 
@@ -36,7 +37,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @return \PHPUnit_Framework_MockObject_MockObject|Store
      */
     protected function _getStoreModel()
     {
@@ -59,6 +60,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'httpContext' => $objectManager->get('Magento\Framework\App\Http\Context'),
             'session' => $objectManager->get('Magento\Framework\Session\SessionManagerInterface'),
             'currencyFactory' => $objectManager->get('Magento\Directory\Model\CurrencyFactory'),
+            'information' => $objectManager->get('Magento\Store\Model\Information'),
             'currencyInstalled' => 'system/currency/installed',
         ];
 
@@ -101,6 +103,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $loadId
+     * @param $expectedId
      * @dataProvider loadDataProvider
      */
     public function testLoad($loadId, $expectedId)
@@ -153,20 +157,13 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         /* config operations require store to be loaded */
         $this->model->load('default');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
-        )->setValue(
-            \Magento\Store\Model\Store::XML_PATH_USE_REWRITES,
-            $useRewrites,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
-        )->setValue(
-            \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-            $useStoreCode,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+            ->setValue(Store::XML_PATH_USE_REWRITES, $useRewrites, ScopeInterface::SCOPE_STORE);
+
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+            ->setValue(Store::XML_PATH_STORE_IN_URL, $useStoreCode, ScopeInterface::SCOPE_STORE);
 
         $actual = $this->model->getBaseUrl($type);
         $this->assertEquals($expected, $actual);
@@ -178,26 +175,26 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function getBaseUrlDataProvider()
     {
         return [
-            [\Magento\Framework\UrlInterface::URL_TYPE_WEB, false, false, 'http://localhost/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_WEB, false, true, 'http://localhost/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_WEB, true, false, 'http://localhost/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_WEB, true, true, 'http://localhost/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_LINK, false, false, 'http://localhost/index.php/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_LINK, false, true, 'http://localhost/index.php/default/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_LINK, true, false, 'http://localhost/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_LINK, true, true, 'http://localhost/default/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, false, false, 'http://localhost/index.php/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, false, true, 'http://localhost/index.php/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, true, false, 'http://localhost/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, true, true, 'http://localhost/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_STATIC, false, false, 'http://localhost/pub/static/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_STATIC, false, true, 'http://localhost/pub/static/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_STATIC, true, false, 'http://localhost/pub/static/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_STATIC, true, true, 'http://localhost/pub/static/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, false, false, 'http://localhost/pub/media/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, false, true, 'http://localhost/pub/media/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, true, false, 'http://localhost/pub/media/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, true, true, 'http://localhost/pub/media/']
+            [UrlInterface::URL_TYPE_WEB, false, false, 'http://localhost/'],
+            [UrlInterface::URL_TYPE_WEB, false, true, 'http://localhost/'],
+            [UrlInterface::URL_TYPE_WEB, true, false, 'http://localhost/'],
+            [UrlInterface::URL_TYPE_WEB, true, true, 'http://localhost/'],
+            [UrlInterface::URL_TYPE_LINK, false, false, 'http://localhost/index.php/'],
+            [UrlInterface::URL_TYPE_LINK, false, true, 'http://localhost/index.php/default/'],
+            [UrlInterface::URL_TYPE_LINK, true, false, 'http://localhost/'],
+            [UrlInterface::URL_TYPE_LINK, true, true, 'http://localhost/default/'],
+            [UrlInterface::URL_TYPE_DIRECT_LINK, false, false, 'http://localhost/index.php/'],
+            [UrlInterface::URL_TYPE_DIRECT_LINK, false, true, 'http://localhost/index.php/'],
+            [UrlInterface::URL_TYPE_DIRECT_LINK, true, false, 'http://localhost/'],
+            [UrlInterface::URL_TYPE_DIRECT_LINK, true, true, 'http://localhost/'],
+            [UrlInterface::URL_TYPE_STATIC, false, false, 'http://localhost/pub/static/'],
+            [UrlInterface::URL_TYPE_STATIC, false, true, 'http://localhost/pub/static/'],
+            [UrlInterface::URL_TYPE_STATIC, true, false, 'http://localhost/pub/static/'],
+            [UrlInterface::URL_TYPE_STATIC, true, true, 'http://localhost/pub/static/'],
+            [UrlInterface::URL_TYPE_MEDIA, false, false, 'http://localhost/pub/media/'],
+            [UrlInterface::URL_TYPE_MEDIA, false, true, 'http://localhost/pub/media/'],
+            [UrlInterface::URL_TYPE_MEDIA, true, false, 'http://localhost/pub/media/'],
+            [UrlInterface::URL_TYPE_MEDIA, true, true, 'http://localhost/pub/media/']
         ];
     }
 
@@ -206,24 +203,17 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBaseUrlInPub()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
-                ],
-            ]
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize([
+            Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
+                DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
+            ],
+        ]);
+
         $this->model = $this->_getStoreModel();
         $this->model->load('default');
 
-        $this->assertEquals(
-            'http://localhost/pub/static/',
-            $this->model->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC)
-        );
-        $this->assertEquals(
-            'http://localhost/pub/media/',
-            $this->model->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
-        );
+        $this->assertEquals('http://localhost/pub/static/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_STATIC));
+        $this->assertEquals('http://localhost/pub/media/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_MEDIA));
     }
 
     /**
@@ -240,20 +230,13 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         /* config operations require store to be loaded */
         $this->model->load('default');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
-        )->setValue(
-            \Magento\Store\Model\Store::XML_PATH_USE_REWRITES,
-            false,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
-        )->setValue(
-            \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-            $useStoreCode,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+            ->setValue(Store::XML_PATH_USE_REWRITES, false, ScopeInterface::SCOPE_STORE);
+
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+            ->setValue(Store::XML_PATH_STORE_IN_URL, $useStoreCode, ScopeInterface::SCOPE_STORE);
 
         // emulate custom entry point
         $_SERVER['SCRIPT_FILENAME'] = 'custom_entry.php';
@@ -272,29 +255,29 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function getBaseUrlForCustomEntryPointDataProvider()
     {
         return [
-            [\Magento\Framework\UrlInterface::URL_TYPE_LINK, false, false, 'http://localhost/custom_entry.php/'],
+            [UrlInterface::URL_TYPE_LINK, false, false, 'http://localhost/custom_entry.php/'],
             [
-                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
+                UrlInterface::URL_TYPE_LINK,
                 false,
                 true,
                 'http://localhost/custom_entry.php/default/'
             ],
-            [\Magento\Framework\UrlInterface::URL_TYPE_LINK, true, false, 'http://localhost/index.php/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_LINK, true, true, 'http://localhost/index.php/default/'],
+            [UrlInterface::URL_TYPE_LINK, true, false, 'http://localhost/index.php/'],
+            [UrlInterface::URL_TYPE_LINK, true, true, 'http://localhost/index.php/default/'],
             [
-                \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK,
+                UrlInterface::URL_TYPE_DIRECT_LINK,
                 false,
                 false,
                 'http://localhost/custom_entry.php/'
             ],
             [
-                \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK,
+                UrlInterface::URL_TYPE_DIRECT_LINK,
                 false,
                 true,
                 'http://localhost/custom_entry.php/'
             ],
-            [\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, true, false, 'http://localhost/index.php/'],
-            [\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, true, true, 'http://localhost/index.php/']
+            [UrlInterface::URL_TYPE_DIRECT_LINK, true, false, 'http://localhost/index.php/'],
+            [UrlInterface::URL_TYPE_DIRECT_LINK, true, true, 'http://localhost/index.php/']
         ];
     }
 
@@ -329,19 +312,15 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testCRUD()
     {
-        $this->model->setData(
-            [
-                'code' => 'test',
-                'website_id' => 1,
-                'group_id' => 1,
-                'name' => 'test name',
-                'sort_order' => 0,
-                'is_active' => 1,
-            ]
-        );
-        $crud = new \Magento\TestFramework\Entity(
-            $this->model, ['name' => 'new name'], 'Magento\Store\Model\Store'
-        );
+        $this->model->setData([
+            'code' => 'test',
+            'website_id' => 1,
+            'group_id' => 1,
+            'name' => 'test name',
+            'sort_order' => 0,
+            'is_active' => 1,
+        ]);
+        $crud = new \Magento\TestFramework\Entity($this->model, ['name' => 'new name'], 'Magento\Store\Model\Store');
         $crud->testCrud();
     }
 
@@ -382,6 +361,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $storeInUrl
+     * @param $disableStoreInUrl
+     * @param $expectedResult
      * @dataProvider isUseStoreInUrlDataProvider
      */
     public function testIsUseStoreInUrl($storeInUrl, $disableStoreInUrl, $expectedResult)
@@ -391,20 +373,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false, false);
 
         $params = $this->modelParams;
-        $params['context'] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Model\Context',
-            ['appState' => $appStateMock]
-        );
+        $params['context'] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Model\Context', ['appState' => $appStateMock]);
 
-        $configMock->expects(
-            $this->any()
-        )->method(
-            'getValue'
-        )->with(
-            $this->stringContains(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)
-        )->will(
-            $this->returnValue($storeInUrl)
-        );
+        $configMock->expects($this->any())
+            ->method('getValue')
+            ->with($this->stringContains(Store::XML_PATH_STORE_IN_URL))
+            ->will($this->returnValue($storeInUrl));
+
         $params['config'] = $configMock;
         $model = $objectManager->create('Magento\Store\Model\Store', $params);
         $model->setDisableStoreInUrl($disableStoreInUrl);
@@ -436,7 +412,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testIsCurrentlySecure($expected, $serverValues)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Store\Model\Store $model */
+        /** @var Store $model */
         $model = $objectManager->create('Magento\Store\Model\Store');
 
         $request = $objectManager->get('Magento\Framework\App\RequestInterface');
@@ -464,7 +440,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testIsCurrentlySecureNoSecureBaseUrl()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Store\Model\Store $model */
+        /** @var Store $model */
         $model = $objectManager->create('Magento\Store\Model\Store');
 
         $server = $_SERVER;
