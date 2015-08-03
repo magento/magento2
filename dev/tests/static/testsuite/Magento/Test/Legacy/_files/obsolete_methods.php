@@ -2398,4 +2398,7 @@ return [
     ['_getWriteAdapter', 'Magento\MediaStorage\Model\Resource\File\Storage\AbstractStorage'],
     ['getAdapter', 'Magento\Search\Model\SearchEngine'],
     ['getAdapter', 'Magento\Framework\DB\Select'],
+    ['getStoreCodeFromCookie', '\Magento\Store\Model\Store'],
+    ['deleteCookie', '\Magento\Store\Model\Store'],
+    ['setCookie', '\Magento\Store\Model\Store'],
 ];
