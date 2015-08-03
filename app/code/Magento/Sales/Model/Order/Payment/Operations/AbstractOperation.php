@@ -3,9 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order\Payment\Operations;
-
 
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -39,6 +37,9 @@ abstract class AbstractOperation
 
     /**
      * @param CommandInterface $stateCommand
+     * @param BuilderInterface $transactionBuilder
+     * @param ManagerInterface $transactionManager
+     * @param EventManagerInterface $eventManager
      */
     public function __construct(
         CommandInterface $stateCommand,
@@ -56,10 +57,12 @@ abstract class AbstractOperation
      * Create new invoice with maximum qty for invoice for each item
      * register this invoice and capture
      *
+     * @param OrderPaymentInterface $payment
      * @return Invoice
      */
     protected function invoice(OrderPaymentInterface $payment)
     {
+        /** @var Invoice $invoice */
         $invoice = $payment->getOrder()->prepareInvoice();
 
         $invoice->register();
@@ -77,6 +80,7 @@ abstract class AbstractOperation
      *
      * @param OrderPaymentInterface $payment
      * @param array $data
+     * @return void
      */
     protected function updateTotals(OrderPaymentInterface $payment, $data)
     {
@@ -105,9 +109,8 @@ abstract class AbstractOperation
             }
         }
         foreach ($order->getInvoiceCollection() as $invoice) {
-            if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN && $invoice->load(
-                    $invoice->getId()
-                )
+            if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN
+                && $invoice->load($invoice->getId())
             ) {
                 $invoice->setTransactionId($transactionId);
                 return $invoice;

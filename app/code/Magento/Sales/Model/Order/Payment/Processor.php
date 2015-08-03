@@ -3,9 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order\Payment;
-
 
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -47,6 +45,7 @@ class Processor
      * @param AuthorizeOperation $authorizeOperation
      * @param CaptureOperation $captureOperation
      * @param OrderOperation $orderOperation
+     * @param RegisterCaptureNotificationOperation $registerCaptureNotification
      */
     public function __construct(
         AuthorizeOperation $authorizeOperation,
@@ -98,6 +97,14 @@ class Processor
         return $this->orderOperation->order($payment, $amount);
     }
 
+    /**
+     * Registers capture notification.
+     *
+     * @param OrderPaymentInterface $payment
+     * @param string|float $amount
+     * @param bool|int $skipFraudDetection
+     * @return OrderPaymentInterface
+     */
     public function registerCaptureNotification(
         OrderPaymentInterface $payment,
         $amount,
