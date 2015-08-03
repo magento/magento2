@@ -176,7 +176,7 @@ define(
             },
 
             /** Shipping Method View **/
-            rates: shippingService.getSippingRates(),
+            rates: shippingService.getShippingRates(),
             isLoading: shippingService.isLoading,
             isSelected: ko.computed(function () {
                     return quote.shippingMethod()
