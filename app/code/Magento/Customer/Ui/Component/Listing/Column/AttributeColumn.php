@@ -44,7 +44,11 @@ class AttributeColumn extends Column
         if (!isset($dataSource['data']['items'])) {
             return;
         }
-        $options = $this->metadata->getAttributeMetadata($this->getName())->getOptions();
+
+        $attributeCode = isset($this->getData('config')['origin'])
+            ? $this->getData('config')['origin']
+            : $this->getName();
+        $options = $this->metadata->getAttributeMetadata($attributeCode)->getOptions();
         if (count($options)) {
             foreach ($dataSource['data']['items'] as &$item) {
                 if (!isset($item[$this->getName()])) {
