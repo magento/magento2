@@ -124,7 +124,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeDeleteStateException()
     {
-        $this->resourceMock->expects($this->once())
+        $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'));
 
@@ -148,7 +148,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeDelete()
     {
-        $this->resourceMock->expects($this->once())
+        $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'));
 

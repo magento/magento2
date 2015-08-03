@@ -165,7 +165,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
             $field = $sortOrder->getField();
             $collection->addOrder(
                 $field,
-                ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
