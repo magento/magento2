@@ -214,7 +214,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Resource\Order\Grid\Collection')
+            ->with('Magento\Sales\Model\Resource\Order\Collection')
             ->willReturn($this->orderCollectionMock);
         $this->orderCollectionMock->expects($this->once())
             ->method('addFieldToFilter')
@@ -282,7 +282,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Resource\Order\Grid\Collection')
+            ->with('Magento\Sales\Model\Resource\Order\Collection')
             ->willReturn($this->orderCollectionMock);
         $this->orderCollectionMock->expects($this->once())
             ->method('addFieldToFilter')
