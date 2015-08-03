@@ -5,6 +5,8 @@
  */
 namespace Magento\Shipping\Model\Carrier;
 
+use Magento\Quote\Model\Quote\Address\RateRequest;
+
 /**
  * Interface AbstractCarrierInterface
  */
@@ -22,11 +24,11 @@ interface AbstractCarrierInterface
     /**
      * Collect and get rates
      *
-     * @param \Magento\Framework\Object $request
+     * @param RateRequest $request
      * @return \Magento\Framework\Object|bool|null
      * @api
      */
-    public function collectRates(\Magento\Framework\Object $request);
+    public function collectRates(RateRequest $request);
 
     /**
      * Do request to shipment
@@ -138,15 +140,6 @@ interface AbstractCarrierInterface
      * @api
      */
     public function getFinalPriceWithHandlingFee($cost);
-
-    /**
-     * Return weight in pounds
-     *
-     * @param int $weight in someone measure
-     * @return float Weight in pounds
-     * @api
-     */
-    public function convertWeightToLbs($weight);
 
     /**
      * Set the number of boxes for shipping
