@@ -9,10 +9,9 @@ define(
         'jquery',
         'Magento_Checkout/js/view/payment/default',
         'Magento_Checkout/js/model/quote',
-        'braintree',
-        'mage/translate'
+        'braintree'
     ],
-    function ($, Component, quote, braintreeClientSDK, $t) {
+    function ($, Component, quote, braintreeClientSDK) {
         var braintreeConfig = window.checkoutConfig.payment.braintree_paypal;
 
         return Component.extend({
@@ -57,14 +56,6 @@ define(
                 };
             },
 
-            validate: function () {
-                if (!this.paymentMethodNonce()) {
-                    alert($t('Please click on PayPal button to authorize the payment.'));
-                    return false;
-                }
-                return true;
-            },
-
             disposeSubscriptions: function () {
                 if (this.totalSubscription) {
                     this.totalSubscription.dispose();
@@ -103,6 +94,9 @@ define(
                         self.paymentMethodNonce(null);
                     }
                 });
+            },
+            isValid: function () {
+                return this.paymentMethodNonce() ? true : false;
             }
         });
     }
