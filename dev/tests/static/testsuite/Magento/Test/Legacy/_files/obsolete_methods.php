@@ -2365,4 +2365,7 @@ return [
     ['getListForCustomer', '\Magento\Quote\Model\Quote\Item\Repository'],
     ['saveForCustomer', '\Magento\Quote\Model\Quote\Item\Repository'],
     ['deleteByIdForCustomer', '\Magento\Quote\Model\Quote\Item\Repository'],
+    ['getStoreCodeFromCookie', '\Magento\Store\Model\Store'],
+    ['deleteCookie', '\Magento\Store\Model\Store'],
+    ['setCookie', '\Magento\Store\Model\Store'],
 ];
