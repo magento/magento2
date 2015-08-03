@@ -27,7 +27,7 @@
                                                                     <item name="component" xsi:type="string">Magento_Braintree/js/view/payment/braintree-methods</item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="braintree" xsi:type="array">
-                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
                                                                         </item>
                                                                         <item name="braintree_paypal" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
