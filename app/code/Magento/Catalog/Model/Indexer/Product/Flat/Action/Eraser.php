@@ -7,6 +7,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
+use Magento\Framework\App\Resource;
+
 class Eraser
 {
     /**
@@ -35,7 +37,7 @@ class Eraser
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->productIndexerHelper = $productHelper;
-        $this->connection = $resource->getConnection('default');
+        $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
     }
 

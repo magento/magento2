@@ -11,6 +11,7 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\Aggregation\Range as AggregationRange;
 use Magento\Framework\Search\Request\Aggregation\RangeBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
+use Magento\Framework\Translate\AdapterInterface;
 
 class Range implements BucketInterface
 {
@@ -27,6 +28,11 @@ class Range implements BucketInterface
     private $resource;
 
     /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
      * @param Metrics $metricsBuilder
      * @param Resource $resource
      */
@@ -34,6 +40,7 @@ class Range implements BucketInterface
     {
         $this->metricsBuilder = $metricsBuilder;
         $this->resource = $resource;
+        $this->connection = $resource->getConnection();
     }
 
     /**
@@ -52,7 +59,7 @@ class Range implements BucketInterface
         $select->where('main_table.entity_id IN (?)', $entityIds);
 
         /** @var Select $fullQuery */
-        $fullQuery = $this->getConnection()
+        $fullQuery = $this->connection
             ->select();
         $fullQuery->from(['main_table' => $select], null);
         $fullQuery = $this->generateCase($fullQuery, $bucket->getRanges());
@@ -60,14 +67,6 @@ class Range implements BucketInterface
         $fullQuery->group(new \Zend_Db_Expr('1'));
 
         return $dataProvider->execute($fullQuery);
-    }
-
-    /**
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    private function getConnection()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
     }
 
     /**
@@ -93,7 +92,7 @@ class Range implements BucketInterface
                 $casesResults = array_merge($casesResults, ["`{$field}` < {$to}" => "'*_{$to}'"]);
             }
         }
-        $cases = $this->getConnection()
+        $cases = $this->connection
             ->getCaseSql('', $casesResults);
         $select->columns([RequestBucketInterface::FIELD_VALUE => $cases]);
 

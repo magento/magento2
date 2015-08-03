@@ -39,17 +39,17 @@ class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogConfig = $catalogConfig;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -127,7 +127,7 @@ class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getAttributeForSelect($attributeCode)
     {
-        $describe = $this->_getWriteAdapter()->describeTable($this->getFlatTableName());
+        $describe = $this->getConnection()->describeTable($this->getFlatTableName());
         if (!isset($describe[$attributeCode])) {
             return null;
         }
@@ -149,7 +149,7 @@ class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getAttributeSortColumn($attributeCode)
     {
-        $describe = $this->_getWriteAdapter()->describeTable($this->getFlatTableName());
+        $describe = $this->getConnection()->describeTable($this->getFlatTableName());
         if (!isset($describe[$attributeCode])) {
             return null;
         }
@@ -167,7 +167,7 @@ class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getAllTableColumns()
     {
-        $describe = $this->_getWriteAdapter()->describeTable($this->getFlatTableName());
+        $describe = $this->getConnection()->describeTable($this->getFlatTableName());
         return array_keys($describe);
     }
 

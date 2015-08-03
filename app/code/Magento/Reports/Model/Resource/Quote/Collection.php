@@ -19,7 +19,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -29,7 +29,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Customer\Model\Resource\Customer $customerResource,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
@@ -86,20 +86,20 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      */
     public function addCustomerData($filter = null)
     {
-        $customersSelect = $this->customerResource->getReadConnection()->select();
+        $customersSelect = $this->customerResource->getConnection()->select();
         $customersSelect->from(
             ['customer' => $this->customerResource->getTable('customer_entity')],
             'entity_id'
         );
         if (isset($filter['customer_name'])) {
-            $customerName = $customersSelect->getAdapter()
+            $customerName = $this->customerResource->getConnection()
                 ->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
             $customersSelect->where($customerName . ' LIKE ?', '%' . $filter['customer_name'] . '%');
         }
         if (isset($filter['email'])) {
             $customersSelect->where('customer.email LIKE ?', '%' . $filter['email'] . '%');
         }
-        $filteredCustomers = $this->customerResource->getReadConnection()->fetchCol($customersSelect);
+        $filteredCustomers = $this->customerResource->getConnection()->fetchCol($customersSelect);
         $this->getSelect()->where('main_table.customer_id IN (?)', $filteredCustomers);
         return $this;
     }
@@ -151,22 +151,24 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      */
     public function resolveCustomerNames()
     {
-        $select = $this->customerResource->getReadConnection()->select();
-        $customerName = $select->getAdapter()->getConcatSql(['firstname', 'lastname'], ' ');
+        $select = $this->customerResource->getConnection()->select();
+        $customerName = $this->customerResource->getConnection()->getConcatSql(['firstname', 'lastname'], ' ');
 
         $select->from(
             ['customer' => $this->customerResource->getTable('customer_entity')],
             ['email']
-        )->columns(
+        );
+        $select->columns(
             ['customer_name' => $customerName]
-        )->where(
+        );
+        $select->where(
             'customer.entity_id IN (?)',
             array_column(
                 $this->getData(),
                 'customer_id'
             )
         );
-        $customersData = $select->getAdapter()->fetchAll($select);
+        $customersData = $this->customerResource->getConnection()->fetchAll($select);
 
         foreach ($this->getItems() as $item) {
             $item->setData(array_merge($item->getData(), current($customersData)));

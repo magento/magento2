@@ -33,7 +33,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstract
      * @param RelationComposite $entityRelationComposite,
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param Customer\CollectionFactory $customersFactory
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -41,11 +41,11 @@ class Group extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstract
         RelationComposite $entityRelationComposite,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_customersFactory = $customersFactory;
-        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $resourcePrefix);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
     }
 
     /**

@@ -129,9 +129,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_resource;
 
     /**
-     * Instance of mysql database adapter.
+     * Instance of database adapter.
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 
