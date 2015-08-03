@@ -3809,4 +3809,7 @@ return [
         'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
         . '\Configurable'
     ],
+    ['Magento\Store\Model\Storage\Db', 'Magento\Store\Model\StoreManagerInterface'],
+    ['Magento\Store\Model\Storage\DefaultStorage', 'Magento\Store\Model\StoreManagerInterface'],
+    ['Magento\Store\Model\StorageFactory'],
 ];

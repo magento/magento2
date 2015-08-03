@@ -137,7 +137,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $storeIds[] = $storeId;
         }
 
-        $select = $this->_getReadAdapter()
+        $select = $this->getConnection()
             ->select()
             ->from(['attr_table' => $table], [])
             ->where("attr_table.{$this->getEntityIdField()} = ?", $object->getId())
@@ -146,7 +146,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         if ($setId) {
             $select->join(
                 ['set_table' => $this->getTable('eav_entity_attribute')],
-                $this->_getReadAdapter()->quoteInto(
+                $this->getConnection()->quoteInto(
                     'attr_table.attribute_id = set_table.attribute_id' . ' AND set_table.attribute_set_id = ?',
                     $setId
                 ),
@@ -218,7 +218,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _saveAttributeValue($object, $attribute, $value)
     {
-        $write = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $storeId = (int) $this->_storeManager->getStore($object->getStoreId())->getId();
         $table = $attribute->getBackend()->getTable();
 
@@ -229,7 +229,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          */
         if ($this->_storeManager->hasSingleStore()) {
             $storeId = $this->getDefaultStoreId();
-            $write->delete(
+            $connection->delete(
                 $table,
                 [
                     'attribute_id = ?' => $attribute->getAttributeId(),
@@ -292,12 +292,12 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             if ($attribute->getIsRequired() || $attribute->getIsRequiredInAdminStore()) {
                 $table = $attribute->getBackend()->getTable();
 
-                $select = $this->_getReadAdapter()->select()
+                $select = $this->getConnection()->select()
                     ->from($table)
                     ->where('attribute_id = ?', $attribute->getAttributeId())
                     ->where('store_id = ?', $this->getDefaultStoreId())
                     ->where('entity_id = ?', $object->getEntityId());
-                $row = $this->_getReadAdapter()->fetchOne($select);
+                $row = $this->getConnection()->fetchOne($select);
 
                 if (!$row) {
                     $data = new \Magento\Framework\Object(
@@ -309,7 +309,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                         ]
                     );
                     $bind = $this->_prepareDataForTable($data, $table);
-                    $this->_getWriteAdapter()->insertOnDuplicate($table, $bind, ['value']);
+                    $this->getConnection()->insertOnDuplicate($table, $bind, ['value']);
                 }
             }
         }
@@ -343,10 +343,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _updateAttributeForStore($object, $attribute, $value, $storeId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $table = $attribute->getBackend()->getTable();
         $entityIdField = $attribute->getBackend()->getEntityIdField();
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from($table, 'value_id')
             ->where("$entityIdField = :entity_field_id")
             ->where('store_id = :store_id')
@@ -356,7 +356,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             'store_id' => $storeId,
             'attribute_id' => $attribute->getId(),
         ];
-        $valueId = $adapter->fetchOne($select, $bind);
+        $valueId = $connection->fetchOne($select, $bind);
         /**
          * When value for store exist
          */
@@ -364,7 +364,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $bind = ['value' => $this->_prepareValueForSave($value, $attribute)];
             $where = ['value_id = ?' => (int) $valueId];
 
-            $adapter->update($table, $bind, $where);
+            $connection->update($table, $bind, $where);
         } else {
             $bind = [
                 $entityIdField => (int) $object->getId(),
@@ -373,7 +373,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 'store_id' => (int) $storeId,
             ];
 
-            $adapter->insert($table, $bind);
+            $connection->insert($table, $bind);
         }
 
         return $this;
@@ -389,7 +389,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _deleteAttributes($object, $table, $info)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $entityIdField = $this->getEntityIdField();
         $globalValues = [];
         $websiteAttributes = [];
@@ -413,7 +413,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          * Delete global scope attributes
          */
         if (!empty($globalValues)) {
-            $adapter->delete($table, ['value_id IN (?)' => $globalValues]);
+            $connection->delete($table, ['value_id IN (?)' => $globalValues]);
         }
 
         $condition = [
@@ -430,7 +430,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 $delCondition['attribute_id IN(?)'] = $websiteAttributes;
                 $delCondition['store_id IN(?)'] = $storeIds;
 
-                $adapter->delete($table, $delCondition);
+                $connection->delete($table, $delCondition);
             }
         }
 
@@ -442,7 +442,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $delCondition['attribute_id IN(?)'] = $storeAttributes;
             $delCondition['store_id = ?'] = (int) $object->getStoreId();
 
-            $adapter->delete($table, $delCondition);
+            $connection->delete($table, $delCondition);
         }
 
         return $this;
@@ -528,7 +528,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $staticAttributes = [];
         $typedAttributes = [];
         $staticTable = null;
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         foreach ($attribute as $item) {
             /* @var $attribute \Magento\Catalog\Model\Entity\Attribute */
@@ -555,13 +555,13 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          * Collecting static attributes
          */
         if ($staticAttributes) {
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $staticTable,
                 $staticAttributes
             )->where(
                 $this->getEntityIdField() . ' = :entity_id'
             );
-            $attributesData = $adapter->fetchRow($select, ['entity_id' => $entityId]);
+            $attributesData = $connection->fetchRow($select, ['entity_id' => $entityId]);
         }
 
         /**
@@ -574,7 +574,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $store = (int) $store;
         if ($typedAttributes) {
             foreach ($typedAttributes as $table => $_attributes) {
-                $select = $adapter->select()
+                $select = $connection->select()
                     ->from(['default_value' => $table], ['attribute_id'])
                     ->where('default_value.attribute_id IN (?)', array_keys($_attributes))
                     ->where('default_value.entity_id = :entity_id')
@@ -583,13 +583,13 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 $bind = ['entity_id' => $entityId];
 
                 if ($store != $this->getDefaultStoreId()) {
-                    $valueExpr = $adapter->getCheckSql(
+                    $valueExpr = $connection->getCheckSql(
                         'store_value.value IS NULL',
                         'default_value.value',
                         'store_value.value'
                     );
                     $joinCondition = [
-                        $adapter->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
+                        $connection->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
                         'store_value.entity_id = :entity_id',
                         'store_value.store_id = :store_id',
                     ];
@@ -605,7 +605,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     $select->columns(['attr_value' => 'value'], 'default_value');
                 }
 
-                $result = $adapter->fetchPairs($select, $bind);
+                $result = $connection->fetchPairs($select, $bind);
                 foreach ($result as $attrId => $value) {
                     $attrCode = $typedAttributes[$table][$attrId];
                     $attributesData[$attrCode] = $value;

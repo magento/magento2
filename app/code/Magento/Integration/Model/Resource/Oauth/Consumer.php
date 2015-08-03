@@ -15,15 +15,15 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_dateTime = $dateTime;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -56,9 +56,9 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->_getWriteAdapter();
-        $adapter->delete($this->getTable('oauth_nonce'), ['consumer_id' => $object->getId()]);
-        $adapter->delete($this->getTable('oauth_token'), ['consumer_id' => $object->getId()]);
+        $connection = $this->getConnection();
+        $connection->delete($this->getTable('oauth_nonce'), ['consumer_id' => $object->getId()]);
+        $connection->delete($this->getTable('oauth_token'), ['consumer_id' => $object->getId()]);
         return parent::_afterDelete($object);
     }
 
@@ -70,13 +70,13 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getTimeInSecondsSinceCreation($consumerId)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()
+        $connection = $this->getConnection();
+        $select = $connection->select()
             ->from($this->getMainTable())
-            ->reset(\Zend_Db_Select::COLUMNS)
+            ->reset(\Magento\Framework\DB\Select::COLUMNS)
             ->columns('CURRENT_TIMESTAMP() - created_at')
             ->where('entity_id = ?', $consumerId);
 
-        return $adapter->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 }
