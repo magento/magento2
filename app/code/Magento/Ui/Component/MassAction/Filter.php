@@ -94,6 +94,7 @@ class Filter
      * Apply selection by Excluded Included to Search Result
      *
      * @throws LocalizedException
+     * @return void
      */
     public function applySelectionOnTargetProvider()
     {

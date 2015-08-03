@@ -79,6 +79,7 @@ class ConvertToCsv
     /**
      * Retrieve Headers row array for Export
      *
+     * @param UiComponentInterface $component
      * @return string[]
      */
     protected function getHeaders(UiComponentInterface $component)
@@ -113,7 +114,7 @@ class ConvertToCsv
      * Returns row data
      *
      * @param DocumentInterface $document
-     * @param $fields
+     * @param array $fields
      * @return array
      */
     protected function getRowData(DocumentInterface $document, $fields)
@@ -123,6 +124,25 @@ class ConvertToCsv
             $row[] = $document->getCustomAttribute($column)->getValue();
         }
         return $row;
+    }
+
+    /**
+     * Returns Filters with options
+     *
+     * @param UiComponentInterface $component
+     * @return \Magento\Ui\Component\Filters
+     * @throws \Exception
+     */
+    protected function getFieldOptions(UiComponentInterface $component)
+    {
+        $childComponents = $component->getChildComponents();
+        $listingTop = $childComponents['listing_top'];
+        foreach($listingTop as $child) {
+            if ($child instanceof \Magento\Ui\Component\Filters) {
+                return $child;
+            }
+        }
+        throw new \Exception('No filters found');
     }
 
     /**

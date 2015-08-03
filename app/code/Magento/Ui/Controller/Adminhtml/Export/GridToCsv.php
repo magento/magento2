@@ -35,6 +35,7 @@ class GridToCsv extends Action
      * @param Context $context
      * @param UiComponentFactory $factory
      * @param ConvertToCsv $converter
+     * @param FileFactory $fileFactory
      */
     public function __construct(
         Context $context,
@@ -52,6 +53,7 @@ class GridToCsv extends Action
      * Export data provider to CSV
      *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function execute()
     {
