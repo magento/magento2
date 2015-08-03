@@ -309,6 +309,11 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     protected $currencyFactory;
 
     /**
+     * @var \Magento\Store\Model\Address\Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\Resource\Store $resource
@@ -350,6 +355,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
+        \Magento\Store\Model\Address\Renderer $renderer,
         $currencyInstalled,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
@@ -370,6 +376,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         $this->_httpContext = $httpContext;
         $this->_session = $session;
         $this->currencyFactory = $currencyFactory;
+        $this->addressRenderer = $renderer;
         $this->_currencyInstalled = $currencyInstalled;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -1162,6 +1169,12 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
             $this->_frontendName = !empty($storeGroupName) ? $storeGroupName : $this->getGroup()->getName();
         }
         return $this->_frontendName;
+    }
+
+    public function getFormattedAddress()
+    {
+        $address = new \Magento\Framework\Object();
+        $this->addressRenderer->format($address, 'html');
     }
 
     /**
