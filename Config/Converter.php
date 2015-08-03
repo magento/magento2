@@ -32,12 +32,17 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const ENV_QUEUE = 'queue';
     const ENV_TOPICS = 'topics';
     const ENV_CONSUMERS = 'consumers';
-    const ENV_CONNECTION = 'connection';
+    const ENV_CONSUMER_CONNECTION = 'connection';
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
+
+    /**
+     * @var array
+     */
+    private $queueConfig;
 
     /**
      * Initialize dependencies
@@ -152,7 +157,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function overridePublishersForTopics(array &$topics, array $publishers)
     {
-        $queueConfig = $this->deploymentConfig->getConfigData(self::ENV_QUEUE);
+        $queueConfig = $this->getQueueConfig();
         if (isset($queueConfig[self::ENV_TOPICS]) && is_array($queueConfig[self::ENV_TOPICS])) {
             foreach ($queueConfig[self::ENV_TOPICS] as $topicName => $publisherName) {
                 if (isset($topics[$topicName])) {
@@ -174,7 +179,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Override connections declared for consumers in queue.xml using values specified in the etc/env.php
      *
-     * Note that $topics argument is modified by reference.
+     * Note that $consumers argument is modified by reference.
      *
      * Example environment config:
      * <code>
@@ -192,22 +197,38 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function overrideConnectionsForConsumers(array &$consumers)
     {
-        $queueConfig = $this->deploymentConfig->getConfigData(self::ENV_QUEUE);
-        if (isset($queueConfig[self::ENV_CONSUMERS]) && is_array($queueConfig[self::ENV_CONSUMERS])) {
-            foreach ($queueConfig[self::ENV_CONSUMERS] as $consumerName => $consumerConfig) {
-                if (isset($consumers[$consumerName])) {
-                    if (isset($consumerConfig[self::ENV_CONNECTION])) {
-                        $consumers[$consumerName][self::CONSUMER_CONNECTION] = $consumerConfig[self::ENV_CONNECTION];
-                    }
-                } else {
-                    throw new LocalizedException(
-                        __(
-                            'Consumer "%consumer", specified in env.php is not declared.',
-                            ['consumer' => $consumerName]
-                        )
-                    );
+        $queueConfig = $this->getQueueConfig();
+        if (!isset($queueConfig[self::ENV_CONSUMERS]) || !is_array($queueConfig[self::ENV_CONSUMERS])) {
+            return;
+        }
+        foreach ($queueConfig[self::ENV_CONSUMERS] as $consumerName => $consumerConfig) {
+            if (isset($consumers[$consumerName])) {
+                if (isset($consumerConfig[self::ENV_CONSUMER_CONNECTION])) {
+                    $consumers[$consumerName][self::CONSUMER_CONNECTION]
+                        = $consumerConfig[self::ENV_CONSUMER_CONNECTION];
                 }
+            } else {
+                throw new LocalizedException(
+                    __(
+                        'Consumer "%consumer", specified in env.php is not declared.',
+                        ['consumer' => $consumerName]
+                    )
+                );
             }
         }
+    }
+
+    /**
+     * Return the queue configuration
+     *
+     * @return array
+     */
+    protected function getQueueConfig()
+    {
+        if ($this->queueConfig == null) {
+            $this->queueConfig = $this->deploymentConfig->getConfigData(self::ENV_QUEUE);
+        }
+
+        return $this->queueConfig;
     }
 }

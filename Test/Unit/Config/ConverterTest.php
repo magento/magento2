@@ -54,14 +54,14 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertWithTopicsEnvOverride()
     {
         $customizedTopic = 'customer.deleted';
-        $customPublisher = 'test-queue';
+        $customPublisher = 'test-publisher-1';
         $envTopicsConfig = [
             'topics' => [
                 'some_topic_name' => 'custom_publisher',
                 $customizedTopic => $customPublisher,
             ]
         ];
-        $this->deploymentConfigMock->expects($this->any())
+        $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Converter::ENV_QUEUE)
             ->willReturn($envTopicsConfig);
@@ -89,7 +89,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 $customizedTopic => 'invalid_publisher_name',
             ]
         ];
-        $this->deploymentConfigMock->expects($this->any())
+        $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Converter::ENV_QUEUE)
             ->willReturn($envTopicsConfig);
@@ -105,13 +105,13 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertWithConsumersEnvOverride()
     {
         $customizedConsumer = 'customer_deleted_listener';
-        $customConnection = 'test-queue-5';
+        $customConnection = 'test-queue-3';
         $envConsumersConfig = [
             'consumers' => [
                 $customizedConsumer => ['connection' => $customConnection],
             ]
         ];
-        $this->deploymentConfigMock->expects($this->any())
+        $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Converter::ENV_QUEUE)
             ->willReturn($envConsumersConfig);
@@ -133,14 +133,14 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertWithConsumersEnvOverrideException()
     {
         $customizedConsumer = 'customer_deleted_listener';
-        $customConnection = 'test-queue-5';
+        $customConnection = 'test-queue-3';
         $envConsumersConfig = [
             'consumers' => [
                 'some_random_consumer' => ['connection' => 'db'],
                 $customizedConsumer => ['connection' => $customConnection],
             ]
         ];
-        $this->deploymentConfigMock->expects($this->any())
+        $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Converter::ENV_QUEUE)
             ->willReturn($envConsumersConfig);
@@ -162,13 +162,13 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'publishers' => [
-                'test-queue' => [
-                    'name' => 'test-queue',
+                'test-publisher-1' => [
+                    'name' => 'test-publisher-1',
                     'connection' => 'rabbitmq',
                     'exchange' => 'magento',
                 ],
-                'test-queue-2' => [
-                    'name' => 'test-queue-2',
+                'test-publisher-2' => [
+                    'name' => 'test-publisher-2',
                     'connection' => 'db',
                     'exchange' => 'magento',
                 ],
@@ -177,30 +177,30 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'customer.created' => [
                     'name' => 'customer.created',
                     'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
-                    'publisher' => 'test-queue',
+                    'publisher' => 'test-publisher-1',
                 ],
                 'customer.updated' => [
                     'name' => 'customer.updated',
                     'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
-                    'publisher' => 'test-queue-2',
+                    'publisher' => 'test-publisher-2',
                 ],
                 'customer.deleted' => [
                     'name' => 'customer.deleted',
                     'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
-                    'publisher' => 'test-queue-2',
+                    'publisher' => 'test-publisher-2',
                 ],
             ],
             'consumers' => [
                 'customer_created_listener' => [
                     'name' => 'customer_created_listener',
-                    'queue' => 'test-queue-3',
+                    'queue' => 'test-queue-1',
                     'connection' => 'rabbitmq',
                     'class' => 'Data\Type',
                     'method' => 'processMessage'
                 ],
                 'customer_deleted_listener' => [
                     'name' => 'customer_deleted_listener',
-                    'queue' => 'test-queue-4',
+                    'queue' => 'test-queue-2',
                     'connection' => 'db',
                     'class' => 'Other\Type',
                     'method' => 'processMessage2'
