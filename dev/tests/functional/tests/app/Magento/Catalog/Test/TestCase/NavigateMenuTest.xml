@@ -9,7 +9,7 @@
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTest9">
             <data name="menuItem" xsi:type="string">Products > Catalog</data>
-            <data name="pageTitle" xsi:type="string">Inventory</data>
+            <data name="pageTitle" xsi:type="string">Catalog</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest10">
