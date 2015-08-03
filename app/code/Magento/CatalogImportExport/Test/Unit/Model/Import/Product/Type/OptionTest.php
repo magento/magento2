@@ -408,7 +408,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['reset', 'addProductToFilter', 'getSelect', 'getNewEmptyItem'])
             ->getMockForAbstractClass();
 
-        $select = $this->getMock('Zend_Db_Select', ['join', 'where'], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', ['join', 'where'], [], '', false);
         $select->expects($this->any())->method('join')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
 

@@ -25,7 +25,19 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUniqRulesNamesList()
     {
-        $dbAdapterMock = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', [], '', false);
+        $dbAdapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+            ->setMethods(['_connect', 'quote'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dbAdapterMock
+            ->expects($this->any())
+            ->method('quote')
+            ->willReturnCallback(
+                function ($value) {
+                    return "'$value'";
+                }
+            );
+
         $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [$dbAdapterMock]);
         $select->expects(
             $this->once()
@@ -38,15 +50,15 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($select)
         );
 
-        $adapterMock = $this->getMock(
+        $connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'fetchAll'],
             [],
             '',
             false
         );
-        $adapterMock->expects($this->once())->method('select')->will($this->returnValue($select));
-        $adapterMock->expects(
+        $connectionMock->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connectionMock->expects(
             $this->once()
         )->method(
             'fetchAll'
@@ -63,7 +75,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($adapterMock));
+        $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $resourceMock->expects($this->once())->method('getTableName')->will($this->returnValue(self::TABLE_NAME));
 
         $flagFactory = $this->getMock('Magento\Reports\Model\FlagFactory', [], [], '', false);
