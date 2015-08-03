@@ -35,16 +35,13 @@ class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
     /**
      * @param Config $eavConfig
      * @param CollectionFactory $collectionFactory
-     * @param string $defaultHandler
      */
     public function __construct(
         Config $eavConfig,
-        CollectionFactory $collectionFactory,
-        $defaultHandler = 'Magento\Indexer\Model\Handler\DefaultHandler'
+        CollectionFactory $collectionFactory
     ) {
         $this->eavConfig = $eavConfig;
         $this->collectionFactory = $collectionFactory;
-        $this->defaultHandler = $defaultHandler;
     }
 
     /**
@@ -60,14 +57,6 @@ class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
         $data['fields'] = $this->merge($data['fields'], $additionalFields);
 
         return $data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultHandler()
-    {
-        return $this->defaultHandler;
     }
 
     /**

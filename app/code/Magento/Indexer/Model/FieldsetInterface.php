@@ -8,13 +8,10 @@ namespace Magento\Indexer\Model;
 interface FieldsetInterface
 {
     /**
+     * Add additional fields to fieldset
+     *
      * @param array $data
      * @return array
      */
     public function addDynamicData(array $data);
-
-    /**
-     * @return string
-     */
-    public function getDefaultHandler();
 }
