@@ -36,7 +36,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterface, IdentityInterface
+class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterface, IdentityInterface, \Magento\Store\Api\Data\StoreInterface
 {
     /**
      * Entity name
@@ -101,11 +101,6 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      * Cache tag
      */
     const CACHE_TAG = 'store';
-
-    /**
-     * Cookie name
-     */
-    const COOKIE_NAME = 'store';
 
     /**
      * Script name, which returns all the images
@@ -285,16 +280,6 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     protected $_currencyInstalled;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    protected $_cookieMetadataFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
-     */
-    protected $_cookieManager;
-
-    /**
      * @var \Magento\Framework\App\Http\Context
      */
     protected $_httpContext;
@@ -303,6 +288,16 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $currencyFactory;
+
+    /**
+     * @var \Magento\Store\Api\GroupRepositoryInterface
+     */
+    protected $groupRepository;
+
+    /**
+     * @var \Magento\Store\Api\WebsiteRepositoryInterface
+     */
+    protected $websiteRepository;
 
     /**
      * @var \Magento\Store\Model\Information
@@ -322,12 +317,12 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param string $currencyInstalled
+     * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
+     * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data optional generic object data
@@ -347,13 +342,13 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\Information $information,
         $currencyInstalled,
+        \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
+        \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = []
@@ -368,13 +363,13 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         $this->filesystem = $filesystem;
         $this->_storeManager = $storeManager;
         $this->_sidResolver = $sidResolver;
-        $this->_cookieMetadataFactory = $cookieMetadataFactory;
-        $this->_cookieManager = $cookieManager;
         $this->_httpContext = $httpContext;
         $this->_session = $session;
         $this->currencyFactory = $currencyFactory;
         $this->information = $information;
         $this->_currencyInstalled = $currencyInstalled;
+        $this->groupRepository = $groupRepository;
+        $this->websiteRepository = $websiteRepository;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -513,7 +508,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         if ($this->getWebsiteId() === null) {
             return false;
         }
-        return $this->_storeManager->getWebsite($this->getWebsiteId());
+        return $this->websiteRepository->getById($this->getWebsiteId());
     }
 
     /**
@@ -973,7 +968,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         if (null === $this->getGroupId()) {
             return false;
         }
-        return $this->_storeManager->getGroup($this->getGroupId());
+        return $this->groupRepository->get($this->getGroupId());
     }
 
     /**
@@ -1182,44 +1177,6 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
-    }
-
-    /**
-     * Set store cookie with this store's code for a year.
-     *
-     * @return $this
-     */
-    public function setCookie()
-    {
-        $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
-            ->setHttpOnly(true)
-            ->setDurationOneYear()
-            ->setPath($this->getStorePath());
-        $this->_cookieManager->setPublicCookie(self::COOKIE_NAME, $this->getCode(), $cookieMetadata);
-        return $this;
-    }
-
-    /**
-     * Get store code from store cookie.
-     *
-     * @return null|string
-     */
-    public function getStoreCodeFromCookie()
-    {
-        return $this->_cookieManager->getCookie(self::COOKIE_NAME);
-    }
-
-    /**
-     * Delete store cookie.
-     *
-     * @return $this
-     */
-    public function deleteCookie()
-    {
-        $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
-            ->setPath($this->getStorePath());
-        $this->_cookieManager->deleteCookie(self::COOKIE_NAME, $cookieMetadata);
-        return $this;
     }
 
     /**

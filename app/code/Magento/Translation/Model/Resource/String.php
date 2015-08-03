@@ -26,20 +26,20 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      * @param string|null $scope
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        $resourcePrefix = null,
+        $connectionName = null,
         $scope = null
     ) {
         $this->_localeResolver = $localeResolver;
         $this->scopeResolver = $scopeResolver;
         $this->scope = $scope;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -63,12 +63,12 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
         if (is_string($value)) {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $this->getMainTable()
             )->where(
                 $this->getMainTable() . '.string=:tr_string'
             );
-            $result = $this->_getReadAdapter()->fetchRow($select, ['tr_string' => $value]);
+            $result = $this->getConnection()->fetchRow($select, ['tr_string' => $value]);
             $object->setData($result);
             $this->_afterLoad($object);
             return $result;
@@ -100,14 +100,14 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             ['store_id', 'translate']
         )->where(
             'string = :translate_string'
         );
-        $translations = $adapter->fetchPairs($select, ['translate_string' => $object->getString()]);
+        $translations = $connection->fetchPairs($select, ['translate_string' => $object->getString()]);
         $object->setStoreTranslations($translations);
         return parent::_afterLoad($object);
     }
@@ -120,15 +120,15 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()
+        $connection = $this->getConnection();
+        $select = $connection->select()
             ->from($this->getMainTable(), 'key_id')
             ->where('string = :string')
             ->where('store_id = :store_id');
 
         $bind = ['string' => $object->getString(), 'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID];
 
-        $object->setId($adapter->fetchOne($select, $bind));
+        $object->setId($connection->fetchOne($select, $bind));
         return parent::_beforeSave($object);
     }
 
@@ -140,14 +140,14 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             ['store_id', 'key_id']
         )->where(
             'string = :string'
         );
-        $stores = $adapter->fetchPairs($select, ['string' => $object->getString()]);
+        $stores = $connection->fetchPairs($select, ['string' => $object->getString()]);
 
         $translations = $object->getStoreTranslations();
 
@@ -155,14 +155,14 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
             foreach ($translations as $storeId => $translate) {
                 if ($translate === null || $translate == '') {
                     $where = ['store_id = ?' => $storeId, 'string = ?' => $object->getString()];
-                    $adapter->delete($this->getMainTable(), $where);
+                    $connection->delete($this->getMainTable(), $where);
                 } else {
                     $data = ['store_id' => $storeId, 'string' => $object->getString(), 'translate' => $translate];
 
                     if (isset($stores[$storeId])) {
-                        $adapter->update($this->getMainTable(), $data, ['key_id = ?' => $stores[$storeId]]);
+                        $connection->update($this->getMainTable(), $data, ['key_id = ?' => $stores[$storeId]]);
                     } else {
-                        $adapter->insert($this->getMainTable(), $data);
+                        $connection->insert($this->getMainTable(), $data);
                     }
                 }
             }
@@ -192,7 +192,7 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $where['store_id = ?'] = $storeId;
         }
 
-        $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+        $this->getConnection()->delete($this->getMainTable(), $where);
 
         return $this;
     }
@@ -208,7 +208,7 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveTranslate($string, $translate, $locale = null, $storeId = null)
     {
-        $write = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $table = $this->getMainTable();
 
         if ($locale === null) {
@@ -219,7 +219,7 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $storeId = $this->getStoreId();
         }
 
-        $select = $write->select()->from(
+        $select = $connection->select()->from(
             $table,
             ['key_id', 'translate']
         )->where(
@@ -238,18 +238,18 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'crc_string' => crc32($string),
         ];
 
-        if ($row = $write->fetchRow($select, $bind)) {
+        if ($row = $connection->fetchRow($select, $bind)) {
             $original = $string;
             if (strpos($original, '::') !== false) {
                 list(, $original) = explode('::', $original);
             }
             if ($original == $translate) {
-                $write->delete($table, ['key_id=?' => $row['key_id']]);
+                $connection->delete($table, ['key_id=?' => $row['key_id']]);
             } elseif ($row['translate'] != $translate) {
-                $write->update($table, ['translate' => $translate], ['key_id=?' => $row['key_id']]);
+                $connection->update($table, ['translate' => $translate], ['key_id=?' => $row['key_id']]);
             }
         } else {
-            $write->insert(
+            $connection->insert(
                 $table,
                 [
                     'store_id' => $storeId,
