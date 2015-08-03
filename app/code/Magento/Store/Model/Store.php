@@ -17,6 +17,7 @@ use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -36,7 +37,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterface, IdentityInterface, \Magento\Store\Api\Data\StoreInterface
+class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterface, IdentityInterface, StoreInterface
 {
     /**
      * Entity name
