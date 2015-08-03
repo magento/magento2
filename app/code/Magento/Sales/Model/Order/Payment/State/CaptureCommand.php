@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order\Payment\State;
 
 use Magento\Sales\Api\Data\OrderInterface;
@@ -44,9 +43,12 @@ class CaptureCommand implements CommandInterface
     }
 
     /**
-     * @param Order $order
+     * @param SalesOrder $order
+     * @param string $status
+     * @param string $state
+     * @return void
      */
-    protected function setOrderStateAndStatus(Order $order, $status, $state)
+    protected function setOrderStateAndStatus(SalesOrder $order, $status, $state)
     {
         if (!$status) {
             $status = $order->getConfig()->getStateDefaultStatus($state);
