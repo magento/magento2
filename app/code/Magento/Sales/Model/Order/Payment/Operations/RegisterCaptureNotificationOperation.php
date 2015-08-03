@@ -35,6 +35,7 @@ class RegisterCaptureNotificationOperation extends AbstractOperation
         if (!$invoice) {
             if ($payment->isSameCurrency() && $payment->isCaptureFinal($amount)) {
                 $invoice = $order->prepareInvoice()->register();
+                $invoice->setOrder($order);
                 $order->addRelatedObject($invoice);
                 $payment->setCreatedInvoice($invoice);
             } else {
@@ -45,6 +46,7 @@ class RegisterCaptureNotificationOperation extends AbstractOperation
 
         if (!$payment->getIsTransactionPending()) {
             if ($invoice && Invoice::STATE_OPEN == $invoice->getState()) {
+                $invoice->setOrder($order);
                 $invoice->pay();
                 $this->updateTotals($payment, ['base_amount_paid_online' => $amount]);
                 $order->addRelatedObject($invoice);
