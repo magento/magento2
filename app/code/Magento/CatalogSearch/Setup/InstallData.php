@@ -3,14 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogSearch\Setup;
-
 
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Indexer\Model\IndexerInterfaceFactory;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 class InstallData implements InstallDataInterface
