@@ -168,4 +168,3 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
         $this->systemPackage->getPackageVersions();
     }
 }
-
