@@ -22,13 +22,13 @@ abstract class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getFormAttributeIds($formCode)
     {
         $bind = ['form_code' => $formCode];
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             'attribute_id'
         )->where(
             'form_code = :form_code'
         );
 
-        return $this->_getReadAdapter()->fetchCol($select, $bind);
+        return $this->getConnection()->fetchCol($select, $bind);
     }
 }
