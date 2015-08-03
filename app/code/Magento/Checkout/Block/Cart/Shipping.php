@@ -82,6 +82,11 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $collectQuote;
 
     /**
+     * @var \Magento\Checkout\Model\CompositeConfigProvider
+     */
+    protected $configProvider;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -94,6 +99,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param CustomerRepositoryInterface $customerRepository
      * @param QuoteRepository $quoteRepository
      * @param \Magento\Checkout\Model\Cart\CollectQuote $collectQuote
+     * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -110,6 +116,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         CustomerRepositoryInterface $customerRepository,
         QuoteRepository $quoteRepository,
         \Magento\Checkout\Model\Cart\CollectQuote $collectQuote,
+        \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -121,6 +128,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->customerRepository = $customerRepository;
         $this->quoteRepository = $quoteRepository;
         $this->collectQuote = $collectQuote;
+        $this->configProvider = $configProvider;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
     }
@@ -392,5 +400,15 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     public function getEstimationConfig()
     {
         return [];
+    }
+
+    /**
+     * Retrieve checkout configuration
+     *
+     * @return array
+     */
+    public function getCheckoutConfig()
+    {
+        return $this->configProvider->getConfig();
     }
 }
