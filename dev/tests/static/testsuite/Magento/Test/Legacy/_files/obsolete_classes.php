@@ -3809,6 +3809,9 @@ return [
         'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
         . '\Configurable'
     ],
+    ['Magento\Store\Model\Storage\Db', 'Magento\Store\Model\StoreManagerInterface'],
+    ['Magento\Store\Model\Storage\DefaultStorage', 'Magento\Store\Model\StoreManagerInterface'],
+    ['Magento\Store\Model\StorageFactory'],
     ['Magento\Bundle\Model\Observer', 'corresponding classes in Magento\Bundle\Observer\*'],
     ['Magento\CatalogRule\Model\Observer', 'corresponding classes in Magento\CatalogRule\Observer\*'],
     ['Magento\Tax\Model\Observer', 'corresponding classes in Magento\Tax\Observer\*'],
