@@ -331,6 +331,7 @@ class ServiceInputProcessor
      * Process an input error
      *
      * @param array $inputError
+     * @return void
      * @throws InputException
      */
     protected function processInputError($inputError)
