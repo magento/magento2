@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Information as StoreInformation;
 
 /**
  * Template model class
@@ -459,14 +460,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         }
         if (!isset($variables['store_phone'])) {
             $variables['store_phone'] = $this->scopeConfig->getValue(
-                \Magento\Store\Model\Store::XML_PATH_STORE_STORE_PHONE,
+                StoreInformation::XML_PATH_STORE_INFO_PHONE,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
         if (!isset($variables['store_hours'])) {
             $variables['store_hours'] = $this->scopeConfig->getValue(
-                \Magento\Store\Model\Store::XML_PATH_STORE_STORE_HOURS,
+                StoreInformation::XML_PATH_STORE_INFO_HOURS,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
