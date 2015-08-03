@@ -42,10 +42,9 @@ class IndexStructure
      */
     public function delete($index, array $dimensions)
     {
-        $adapter = $this->getAdapter();
         $tableName = $this->indexScopeResolver->resolve($index, $dimensions);
-        if ($adapter->isTableExists($tableName)) {
-            $adapter->dropTable($tableName);
+        if ($this->resource->getConnection()->isTableExists($tableName)) {
+            $this->resource->getConnection()->dropTable($tableName);
         }
     }
 
@@ -66,8 +65,7 @@ class IndexStructure
      */
     protected function createFulltextIndex($tableName)
     {
-        $adapter = $this->getAdapter();
-        $table = $adapter->newTable($tableName)
+        $table = $this->resource->getConnection()->newTable($tableName)
             ->addColumn(
                 'entity_id',
                 Table::TYPE_INTEGER,
@@ -94,15 +92,6 @@ class IndexStructure
                 ['data_index'],
                 ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
             );
-        $adapter->createTable($table);
-    }
-
-    /**
-     * @return false|AdapterInterface
-     */
-    private function getAdapter()
-    {
-        $adapter = $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
-        return $adapter;
+        $this->resource->getConnection()->createTable($table);
     }
 }

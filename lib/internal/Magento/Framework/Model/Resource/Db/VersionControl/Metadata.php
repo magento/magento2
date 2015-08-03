@@ -29,7 +29,7 @@ class Metadata
             $this->metadataInfo[$entityClass] =
                 array_fill_keys(
                     array_keys(
-                        $entity->getResource()->getReadConnection()->describeTable(
+                        $entity->getResource()->getConnection()->describeTable(
                             $entity->getResource()->getMainTable()
                         )
                     ),

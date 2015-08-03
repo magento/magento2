@@ -8,6 +8,7 @@ namespace Magento\AdvancedPricingImportExport\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Framework\App\Resource;
 
 /**
  * Class AdvancedPricing
@@ -165,6 +166,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ProcessingErrorAggregatorInterface $errorAggregator
     ) {
         $this->_localeDate = $localeDate;
+        $this->_connection = $resource->getConnection('write');
         $this->_resourceFactory = $resourceFactory;
         $this->_catalogData = $catalogData;
         $this->_storeResolver = $storeResolver;

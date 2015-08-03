@@ -30,9 +30,6 @@ class NvpTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $regionFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $adapterFactory;
-
     /** @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $countryFactory;
 

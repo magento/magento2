@@ -7,6 +7,7 @@ namespace Magento\ImportExport\Model\Import;
 
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Framework\App\Resource;
 
 /**
  * Import entity abstract model
@@ -224,7 +225,7 @@ abstract class AbstractEntity
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -234,7 +235,7 @@ abstract class AbstractEntity
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
@@ -242,7 +243,10 @@ abstract class AbstractEntity
         $this->_dataSourceModel = isset(
             $data['data_source_model']
         ) ? $data['data_source_model'] : $importFactory->create()->getDataSourceModel();
-        $this->_connection = isset($data['connection']) ? $data['connection'] : $resource->getConnection('write');
+        $this->_connection =
+            isset($data['connection']) ?
+            $data['connection'] :
+            $resource->getConnection();
         $this->string = $string;
         $this->_pageSize = isset(
             $data['page_size']

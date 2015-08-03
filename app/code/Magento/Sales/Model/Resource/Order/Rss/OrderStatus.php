@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Rss;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Order Rss Resource Model
  *
@@ -13,14 +15,14 @@ namespace Magento\Sales\Model\Resource\Order\Rss;
 class OrderStatus
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $_resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(Resource $resource)
     {
         $this->_resource = $resource;
     }
@@ -35,7 +37,7 @@ class OrderStatus
     {
         /** @var $resource \Magento\Framework\App\Resource */
         $resource = $this->_resource;
-        $read = $resource->getConnection('core_read');
+        $read = $resource->getConnection();
 
         $fields = ['notified' => 'is_customer_notified', 'comment', 'created_at'];
         $commentSelects = [];
@@ -66,7 +68,7 @@ class OrderStatus
         );
         $commentSelects[] = '(' . $select . ')';
 
-        $commentSelect = $read->select()->union($commentSelects, \Zend_Db_Select::SQL_UNION_ALL);
+        $commentSelect = $read->select()->union($commentSelects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
 
         $select = $read->select()->from(
             ['orders' => $resource->getTableName('sales_order')],
