@@ -29,7 +29,7 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
      */
     public function getSteps()
     {
-        if ($this->steps == null) {
+        if ($this->steps === null) {
             foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $step) {
                 if ($step instanceof StepsWizard\StepInterface) {
                     $this->steps[$step->getComponentName()] = $step;
@@ -39,6 +39,7 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
         return $this->steps;
     }
 
+    // @codeCoverageIgnoreStart
     /**
      * @return array
      */
@@ -64,6 +65,7 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @param array $initData
      * @return array
      */
     public function setInitData($initData)
