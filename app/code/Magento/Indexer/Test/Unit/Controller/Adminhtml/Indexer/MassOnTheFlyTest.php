@@ -144,7 +144,13 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
         $this->actionFlag = $this->getMock('\Magento\Framework\App\ActionFlag', ['get'], [], '', false);
         $this->actionFlag->expects($this->any())->method("get")->willReturn($this->objectManager);
-        $this->objectManager = $this->getMock('Magento\Framework\TestFramework\Unit\Helper\ObjectManager', ['get'], [], '', false);
+        $this->objectManager = $this->getMock(
+            'Magento\Framework\TestFramework\Unit\Helper\ObjectManager',
+            ['get'],
+            [],
+            '',
+            false
+        );
         $this->request = $this->getMockForAbstractClass(
             '\Magento\Framework\App\RequestInterface',
             ['getParam', 'getRequest'],
