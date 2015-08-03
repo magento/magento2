@@ -36,12 +36,14 @@ class AttributeProvider implements FieldsetInterface
     }
 
     /**
+     * Add EAV attribute fields to fieldset
+     *
      * @param array $data
      * @return array
      */
     public function addDynamicData(array $data)
     {
-        $additionalFields = $this->convert($this->getAttributes());
+        $additionalFields = $this->convert($this->getAttributes(), $data);
         $data['fields'] = $this->merge($data['fields'], $additionalFields);
         return $data;
     }
@@ -70,10 +72,13 @@ class AttributeProvider implements FieldsetInterface
     }
 
     /**
+     * Convert attributes to fields
+     *
      * @param Attribute[] $attributes
+     * @param array $fieldset
      * @return array
      */
-    protected function convert(array $attributes)
+    protected function convert(array $attributes, array $fieldset)
     {
         $fields = [];
         foreach ($attributes as $attribute) {
@@ -81,11 +86,15 @@ class AttributeProvider implements FieldsetInterface
                 if ($attribute->getData('is_used_in_grid')) {
                     $fields[$attribute->getName()] = [
                         'name' => $attribute->getName(),
-                        'handler' => null,
+                        'handler' => 'Magento\Indexer\Model\Handler\AttributeHandler',
                         'origin' => $attribute->getName(),
                         'type' => $this->getType($attribute),
                         'dataType' => $attribute->getBackendType(),
                         'filters' => [],
+                        'entity' => static::ENTITY,
+                        'bind' => isset($fieldset['references']['customer']['to'])
+                            ? $fieldset['references']['customer']['to']
+                            : null,
                     ];
                 }
             } else {
@@ -99,6 +108,8 @@ class AttributeProvider implements FieldsetInterface
     }
 
     /**
+     * Get field type for attribute
+     *
      * @param Attribute $attribute
      * @return string
      */
@@ -116,6 +127,8 @@ class AttributeProvider implements FieldsetInterface
     }
 
     /**
+     * Merge fields with attribute fields
+     *
      * @param array $dataFields
      * @param array $searchableFields
      * @return array
@@ -135,12 +148,5 @@ class AttributeProvider implements FieldsetInterface
         }
 
         return $dataFields;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultHandler()
-    {
     }
 }

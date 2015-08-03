@@ -5,25 +5,11 @@
  */
 namespace Magento\Indexer\Model\Handler;
 
-use Magento\Indexer\Model\HandlerInterface;
 use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Indexer\Model\HandlerInterface;
 
-class ConcatHandler implements HandlerInterface
+class AttributeHandler implements HandlerInterface
 {
-    /**
-     * @var \Magento\Framework\DB\ConcatExpression
-     */
-    protected $concatExpression;
-
-    /**
-     * @param \Zend_Db_Expr $concatExpression
-     */
-    public function __construct(
-        \Zend_Db_Expr $concatExpression
-    ) {
-        $this->concatExpression = $concatExpression;
-    }
-
     /**
      * Prepare SQL for field and add it to collection
      *
@@ -34,6 +20,16 @@ class ConcatHandler implements HandlerInterface
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {
-        $source->getSelect()->columns([$fieldInfo['name'] => $this->concatExpression]);
+        if (isset($fieldInfo['bind'])) {
+            $source->joinAttribute(
+                $fieldInfo['name'],
+                $fieldInfo['entity'] . '/' . $fieldInfo['origin'],
+                $fieldInfo['bind'],
+                null,
+                'left'
+            );
+        } else {
+            $source->addAttributeToSelect($fieldInfo['origin'], 'left');
+        }
     }
 }
