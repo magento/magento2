@@ -262,7 +262,7 @@
     <type name="Magento\Framework\View\Layout\Data\Structure" shared="false" />
     <type name="Magento\Theme\Model\View\Design">
         <arguments>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Acl" shared="false" />

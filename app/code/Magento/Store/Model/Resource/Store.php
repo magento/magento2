@@ -11,6 +11,23 @@ namespace Magento\Store\Model\Resource;
 class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
+     * @var \Magento\Framework\App\Cache\Type\Config
+     */
+    protected $configCache;
+
+    /**
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
+     */
+    public function __construct(
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\App\Cache\Type\Config $configCacheType
+    ) {
+        $this->configCache = $configCacheType;
+        parent::__construct($context);
+    }
+
+    /**
      * Define main table and primary key
      *
      * @return void
@@ -78,6 +95,7 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
         ];
 
         $this->getConnection()->delete($this->getTable('core_config_data'), $where);
+        $this->configCache->clean();
         return $this;
     }
 
