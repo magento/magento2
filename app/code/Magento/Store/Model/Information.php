@@ -6,6 +6,8 @@
 
 namespace Magento\Store\Model;
 
+use Magento\Directory\Model\CountryFactory;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Object;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Address\Renderer;
@@ -44,11 +46,28 @@ class Information
     protected $renderer = null;
 
     /**
-     * @param Renderer $renderer
+     * @var CountryFactory
      */
-    public function __construct(Renderer $renderer)
-    {
+    protected $countryFactory = null;
+
+    /**
+     * @var RegionFactory
+     */
+    protected $regionFactory = null;
+
+    /**
+     * @param Renderer $renderer
+     * @param CountryFactory $countryFactory
+     * @param RegionFactory $regionFactory
+     */
+    public function __construct(
+        Renderer $renderer,
+        CountryFactory $countryFactory,
+        RegionFactory $regionFactory
+    ) {
         $this->renderer = $renderer;
+        $this->countryFactory = $countryFactory;
+        $this->regionFactory = $regionFactory;
     }
 
     /**
@@ -59,7 +78,7 @@ class Information
      */
     public function getStoreInformation(Store $store)
     {
-        $information = new Object([
+        $info = new Object([
             'name' => $store->getConfig(self::XML_PATH_STORE_INFO_NAME),
             'phone' => $store->getConfig(self::XML_PATH_STORE_INFO_PHONE),
             'hours' => $store->getConfig(self::XML_PATH_STORE_INFO_HOURS),
@@ -72,15 +91,15 @@ class Information
             'vat_number' => $store->getConfig(self::XML_PATH_STORE_INFO_VAT_NUMBER),
         ]);
 
-        if ($information->getRegionId()) {
-
+        if ($info->getCountryId()) {
+            $info->setCountry($this->countryFactory->create()->loadByCode($info->getCountryId())->getName());
         }
 
-        if ($information->getCountryId()) {
-
+        if ($info->getRegionId()) {
+            $info->setRegion($this->regionFactory->create()->load($info->getRegionId())->getName());
         }
 
-        return $information;
+        return $info;
     }
 
     /**
