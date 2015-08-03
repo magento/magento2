@@ -25,16 +25,6 @@ class NameTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemsFactory;
-//
-//    /**
-//     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
-//     */
-//    protected $layout;
-//
-//    /**
-//     * @var \Magento\Framework\Json\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
-//     */
-//    protected $jsonEncoder;
 
     public function setUp()
     {
