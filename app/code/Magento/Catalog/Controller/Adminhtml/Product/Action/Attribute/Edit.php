@@ -35,6 +35,8 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         if (!$this->_validateProducts()) {
             return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['_current' => true]);
         }
-        return $this->resultPageFactory->create();
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->prepend(__('Update Attributes'));
+        return $resultPage;
     }
 }

@@ -11,7 +11,7 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 /**
  * Customer groups controller
  */
-class Group extends \Magento\Backend\App\Action
+abstract class Group extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

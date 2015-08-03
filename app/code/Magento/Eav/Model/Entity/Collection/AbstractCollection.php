@@ -5,6 +5,8 @@
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
+use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -14,8 +16,13 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
+abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
+    /**
+     * Attribute table alias prefix
+     */
+    const ATTRIBUTE_TABLE_ALIAS_PREFIX = 'at_';
+
     /**
      * Array of items with item id key
      *
@@ -368,7 +375,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      *
      * @param mixed $attribute
      * @param mixed $condition
-     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     * @return $this|AbstractDb
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
@@ -1248,7 +1255,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      */
     protected function _getAttributeTableAlias($attributeCode)
     {
-        return $this->getConnection()->getTableName('at_' . $attributeCode);
+        return $this->getConnection()->getTableName(self::ATTRIBUTE_TABLE_ALIAS_PREFIX . $attributeCode);
     }
 
     /**
@@ -1558,5 +1565,50 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
             unset($this->_itemsById[$this->_items[$key]->getId()]);
         }
         return parent::removeItemByKey($key);
+    }
+
+    /**
+     * Returns main table name - extracted from "module/table" style and
+     * validated by db adapter
+     *
+     * @return string
+     */
+    public function getMainTable()
+    {
+        return $this->getSelect()->getPart(Select::FROM)['e']['tableName'];
+    }
+
+    /**
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @param string $field
+     * @param string $alias
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function addFieldToSelect($field, $alias = null)
+    {
+        return $this->addAttributeToSelect($field);
+    }
+
+    /**
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @param string $field
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     */
+    public function removeFieldFromSelect($field)
+    {
+        return $this->removeAttributeToSelect($field);
+    }
+
+    /**
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     */
+    public function removeAllFieldsFromSelect()
+    {
+        return $this->removeAttributeToSelect();
     }
 }

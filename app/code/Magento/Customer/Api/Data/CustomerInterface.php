@@ -218,7 +218,7 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
      *
      * @api
      * @param string $lastname
-     * @return string
+     * @return $this
      */
     public function setLastname($lastname);
 

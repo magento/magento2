@@ -34,6 +34,15 @@
             </item>
         </argument>
     </filters>
+    <filterSearch class="Magento\Ui\Component\Filters\Type\Search">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
+                <item name="displayArea" xsi:type="string">dataGridFilters</item>
+
+            </item>
+        </argument>
+    </filterSearch>
     <filterSelect class="Magento\Ui\Component\Filters\Type\Select">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -62,7 +71,6 @@
             </item>
         </argument>
     </filterDate>
-
     <container class="Magento\Ui\Component\Container">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
@@ -263,4 +271,12 @@
         <argument name="data" xsi:type="array">
         </argument>
     </bookmark>
+    <exportButton class="Magento\Ui\Component\ExportButton">
+        <argument name="data" xsi:type="array">
+            <item name="template" xsi:type="string">templates/export/button</item>
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/export</item>
+            </item>
+        </argument>
+    </exportButton>
 </components>

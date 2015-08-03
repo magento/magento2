@@ -15,13 +15,6 @@
     <type name="Magento\Catalog\Model\Product\Validator">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Product\Validator\Plugin" sortOrder="50" />
     </type>
-    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="configurableProducts" xsi:type="string">Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType\Configurable</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations\Main">
         <arguments>
             <argument name="inputTypeFactory" xsi:type="object">Magento\Catalog\Model\System\Config\Source\InputtypeFactory</argument>

@@ -7,6 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
     <default>
+        <design>
+            <email>
+                <header_template>design_email_header_template</header_template>
+                <footer_template>design_email_footer_template</footer_template>
+            </email>
+        </design>
         <system>
             <media_storage_configuration>
                 <allowed_resources>

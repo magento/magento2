@@ -11,9 +11,9 @@
             <data name="description" xsi:type="string">Assert items return to stock (partial refund)</data>
             <data name="data/items_data/0/back_to_stock" xsi:type="string">Yes</data>
             <data name="data/items_data/0/qty" xsi:type="string">1</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
+            <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
-            <data name="order/data/price/preset" xsi:type="string">partial_refund</data>
+            <data name="order/data/price/dataset" xsi:type="string">partial_refund</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoButton" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
@@ -28,9 +28,9 @@
             <data name="data/form_data/shipping_amount" xsi:type="string">0</data>
             <data name="data/form_data/adjustment_positive" xsi:type="string">5</data>
             <data name="data/form_data/adjustment_negative" xsi:type="string">10</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
+            <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::default</data>
-            <data name="order/data/price/preset" xsi:type="string">full_refund_with_zero_shipping_refund</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_refund_with_zero_shipping_refund</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoButton" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />

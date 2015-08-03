@@ -35,7 +35,7 @@ require(['jquery', 'prototype'], function(jQuery){
          * Base url
          * @type {string}
          */
-        sampleFilesBaseUrl: '<?php echo $block->getBaseUrl() ?>' + 'pub/',
+        sampleFilesBaseUrl: '<?php echo $block->getUrl('*/*/download/', ['filename' => 'entity-name']) ?>',
 
         /**
          * Reset selected index
@@ -105,7 +105,7 @@ require(['jquery', 'prototype'], function(jQuery){
         showSampleFile: function(entityId) {
             var sampleFileSpan = jQuery('#sample-file-span');
             if (entityId) {
-                var sampleFileLink = this.sampleFilesBaseUrl + entityId + '.csv';
+                var sampleFileLink = this.sampleFilesBaseUrl.replace('entity-name', entityId);
                 jQuery('#sample-file-link').attr('href', sampleFileLink);
                 if (sampleFileSpan.is(':hidden')) {
                     sampleFileSpan.show();

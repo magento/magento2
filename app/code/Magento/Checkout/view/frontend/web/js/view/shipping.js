@@ -69,6 +69,7 @@ define(
                 template: 'Magento_Checkout/shipping'
             },
             visible: ko.observable(!quote.isVirtual()),
+            errorValidationMessage: ko.observable(false),
             isCustomerLoggedIn: customer.isLoggedIn,
             isFormPopUpVisible: formPopUpState.isVisible,
             isFormInline: addressList().length == 0,
@@ -100,10 +101,14 @@ define(
                     stepNavigator.registerStep('shipping', 'Shipping', this.visible, 10);
                 }
 
-                this.isFormPopUpVisible.subscribe(function(value) {
+                this.isFormPopUpVisible.subscribe(function (value) {
                     if (value) {
                         self.getPopUp().openModal();
                     }
+                });
+
+                quote.shippingMethod.subscribe(function (value) {
+                    self.errorValidationMessage(false);
                 });
 
                 return this;
@@ -195,13 +200,17 @@ define(
                     emailValidationResult = customer.isLoggedIn();
 
                 if (!quote.shippingMethod()) {
-                    alert($t('Please specify a shipping method'));
+                    this.errorValidationMessage('Please specify a shipping method');
                     return false;
                 }
 
                 if (!customer.isLoggedIn()) {
                     $(loginFormSelector).validation();
                     emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
+                }
+
+                if (!emailValidationResult) {
+                    $(loginFormSelector + ' input[name=username]').focus();
                 }
 
                 if (this.isFormInline) {

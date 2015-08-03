@@ -252,7 +252,7 @@ class Editor extends Textarea
         if ($this->getConfig('add_widgets')) {
             $buttonsHtml .= $this->_getButtonHtml(
                 [
-                    'title' => $this->translate('Insert Widget...'),
+                    'title' => $this->translate('Insert Frontend App...'),
                     'onclick' => "widgetTools.openDialog('" . $this->getConfig(
                         'widget_window_url'
                     ) . "widget_target_id/" . $this->getHtmlId() . "')",

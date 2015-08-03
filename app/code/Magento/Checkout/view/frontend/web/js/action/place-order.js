@@ -8,20 +8,19 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
         'mage/url',
-        'Magento_Ui/js/model/messageList',
-        'Magento_Customer/js/model/customer',
-        'underscore'
+        'Magento_Checkout/js/model/error-processor',
+        'Magento_Customer/js/model/customer'
     ],
-    function (quote, urlBuilder, storage, url, messageList, customer, _) {
+    function (quote, urlBuilder, storage, url, errorProcessor, customer) {
         'use strict';
 
         return function (paymentData, redirectOnSuccess) {
-            var serviceUrl, payload;
+            var serviceUrl,
+                payload;
 
             redirectOnSuccess = redirectOnSuccess === false ? false : true;
-            /**
-             * Checkout for guest and registered customer.
-             */
+
+            /** Checkout for guest and registered customer. */
             if (!customer.isLoggedIn()) {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/payment-information', {
                     quoteId: quote.getQuoteId()
@@ -40,7 +39,7 @@ define(
                     billingAddress: quote.billingAddress()
                 };
             }
-            storage.post(
+            return storage.post(
                 serviceUrl, JSON.stringify(payload)
             ).done(
                 function () {
@@ -50,8 +49,7 @@ define(
                 }
             ).fail(
                 function (response) {
-                    var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
+                    errorProcessor.process(response);
                 }
             );
         };

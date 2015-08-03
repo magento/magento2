@@ -59,12 +59,7 @@ class Options implements OptionSourceInterface
         $groupCollection = $this->systemStore->getGroupCollection();
         $storeCollection = $this->systemStore->getStoreCollection();
 
-        $currentOptions = [
-            (string)__('All Store Views') => [
-                'label' => __('All Store Views'),
-                'value' => 0,
-            ],
-        ];
+        $currentOptions = [];
         /** @var \Magento\Store\Model\Website $website */
         foreach ($websiteCollection as $website) {
             $groups = [];

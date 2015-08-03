@@ -43,6 +43,27 @@ interface IndexerInterface
     public function getDescription();
 
     /**
+     * Return indexer fields
+     *
+     * @return array
+     */
+    public function getFields();
+
+    /**
+     * Return indexer sources
+     *
+     * @return array
+     */
+    public function getSources();
+
+    /**
+     * Return indexer handlers
+     *
+     * @return array
+     */
+    public function getHandlers();
+
+    /**
      * Fill indexer data from config
      *
      * @param string $indexerId

@@ -148,7 +148,10 @@ class Builder
      */
     private function clear()
     {
-        $this->data = [];
+        $this->data = [
+            'dimensions' => [],
+            'placeholder' => [],
+        ];
     }
 
     /**

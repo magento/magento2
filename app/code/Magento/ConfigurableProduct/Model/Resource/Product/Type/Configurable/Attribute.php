@@ -19,13 +19,6 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_labelTable;
 
     /**
-     * Price table name cache
-     *
-     * @var string
-     */
-    protected $_priceTable;
-
-    /**
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
@@ -65,7 +58,6 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $this->_init('catalog_product_super_attribute', 'product_super_attribute_id');
         $this->_labelTable = $this->getTable('catalog_product_super_attribute_label');
-        $this->_priceTable = $this->getTable('catalog_product_super_attribute_pricing');
     }
 
     /**
@@ -118,146 +110,6 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 ]
             );
         }
-        return $this;
-    }
-
-    /**
-     * Save Options prices (Depends from price save scope)
-     *
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute
-     * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function savePrices($attribute)
-    {
-        $write = $this->_getWriteAdapter();
-        // define website id scope
-        if ($this->getCatalogHelper()->isPriceGlobal()) {
-            $websiteId = 0;
-        } else {
-            $websiteId = (int)$this->_storeManager->getStore($attribute->getStoreId())->getWebsite()->getId();
-        }
-
-        $values = $attribute->getValues();
-        if (!is_array($values)) {
-            $values = [];
-        }
-
-        $new = [];
-        $old = [];
-
-        // retrieve old values
-        $select = $write->select()->from(
-            $this->_priceTable
-        )->where(
-            'product_super_attribute_id = :product_super_attribute_id'
-        )->where(
-            'website_id = :website_id'
-        );
-
-        $bind = ['product_super_attribute_id' => (int)$attribute->getId(), 'website_id' => $websiteId];
-        $rowSet = $write->fetchAll($select, $bind);
-        foreach ($rowSet as $row) {
-            $key = implode('-', [$row['website_id'], $row['value_index']]);
-            if (!isset($old[$key])) {
-                $old[$key] = $row;
-            } else {
-                // delete invalid (duplicate row)
-                $where = $write->quoteInto('value_id = ?', $row['value_id']);
-                $write->delete($this->_priceTable, $where);
-            }
-        }
-
-        // prepare new values
-        foreach ($values as $v) {
-            if (empty($v['value_index'])) {
-                continue;
-            }
-            $key = implode('-', [$websiteId, $v['value_index']]);
-            $new[$key] = [
-                'value_index' => $v['value_index'],
-                'pricing_value' => $v['pricing_value'],
-                'is_percent' => $v['is_percent'],
-                'website_id' => $websiteId,
-                'use_default' => !empty($v['use_default_value']) ? true : false,
-            ];
-        }
-
-        $insert = [];
-        $update = [];
-        $delete = [];
-
-        foreach ($old as $k => $v) {
-            if (!isset($new[$k])) {
-                $delete[] = $v['value_id'];
-            }
-        }
-        foreach ($new as $k => $v) {
-            $needInsert = false;
-            $needUpdate = false;
-            $needDelete = false;
-
-            $isGlobal = true;
-            if (!$this->getCatalogHelper()->isPriceGlobal() && $websiteId != 0) {
-                $isGlobal = false;
-            }
-
-            $hasValue = $isGlobal && !empty($v['pricing_value']) || !$isGlobal && !$v['use_default'];
-
-            if (isset($old[$k])) {
-                // data changed
-                $dataChanged = $old[$k]['is_percent'] != $v['is_percent'] ||
-                    $old[$k]['pricing_value'] != $v['pricing_value'];
-                if (!$hasValue) {
-                    $needDelete = true;
-                } elseif ($dataChanged) {
-                    $needUpdate = true;
-                }
-            } elseif ($hasValue) {
-                $needInsert = true;
-            }
-
-            if (!$isGlobal && empty($v['pricing_value'])) {
-                $v['pricing_value'] = 0;
-                $v['is_percent'] = 0;
-            }
-
-            if ($needInsert) {
-                $insert[] = [
-                    'product_super_attribute_id' => $attribute->getId(),
-                    'value_index' => $v['value_index'],
-                    'is_percent' => $v['is_percent'],
-                    'pricing_value' => $v['pricing_value'],
-                    'website_id' => $websiteId,
-                ];
-            }
-            if ($needUpdate) {
-                $update[$old[$k]['value_id']] = [
-                    'is_percent' => $v['is_percent'],
-                    'pricing_value' => $v['pricing_value'],
-                ];
-            }
-            if ($needDelete) {
-                $delete[] = $old[$k]['value_id'];
-            }
-        }
-
-        if (!empty($delete)) {
-            $where = $write->quoteInto('value_id IN(?)', $delete);
-            $write->delete($this->_priceTable, $where);
-        }
-        if (!empty($update)) {
-            foreach ($update as $valueId => $bind) {
-                $where = $write->quoteInto('value_id=?', $valueId);
-                $write->update($this->_priceTable, $bind, $where);
-            }
-        }
-        if (!empty($insert)) {
-            $write->insertMultiple($this->_priceTable, $insert);
-        }
-
         return $this;
     }
 
@@ -344,7 +196,6 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         parent::_afterLoad($object);
         $this->loadLabel($object);
-        $this->loadPrices($object);
         return $this;
     }
 
@@ -378,31 +229,6 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $data = $connection->fetchRow($select);
         $object->setLabel($data['label']);
         $object->setUseDefault($data['use_default']);
-        return $this;
-    }
-
-    /**
-     * Load prices for configurable attribute
-     *
-     * @param ConfigurableAttribute $object
-     * @return $this
-     */
-    protected function loadPrices(ConfigurableAttribute $object)
-    {
-        $websiteId = $this->_catalogData->isPriceGlobal() ? 0 : (int)$this->_storeManager->getStore()->getWebsiteId();
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->_priceTable)
-            ->where('product_super_attribute_id = ?', $object->getId())
-            ->where('website_id = ?', $websiteId);
-
-        foreach ($select->query() as $row) {
-            $data = [
-                'value_index'   => $row['value_index'],
-                'is_percent'    => $row['is_percent'],
-                'pricing_value' => $row['pricing_value'],
-            ];
-            $object->addPrice($data);
-        }
         return $this;
     }
 }

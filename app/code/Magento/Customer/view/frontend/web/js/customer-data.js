@@ -45,7 +45,7 @@ define([
         getFromServer: function (sectionNames) {
             var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
-                throw new Error(jqXHR.responseJSON.message);
+                throw new Error(jqXHR);
             });
         }
     };
@@ -130,16 +130,20 @@ define([
 
     /** Events listener **/
     $(document).on('ajaxComplete', function (event, xhr, settings) {
-        if (settings.type.match(/post/i)) {
+        if (settings.type.match(/post|put/i)) {
             var sections = sectionConfig.getAffectedSections(settings.url);
             if (sections) {
                 customerData.invalidate(sections);
+                var redirects = ['redirect', 'backUrl'];
+                if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) {
+                    return ;
+                }
                 customerData.reload(sections);
             }
         }
     });
     $(document).on('submit', function (event) {
-        if (event.target.method.match(/post/i)) {
+        if (event.target.method.match(/post|put/i)) {
             var sections = sectionConfig.getAffectedSections(event.target.action);
             if (sections) {
                 customerData.invalidate(sections);

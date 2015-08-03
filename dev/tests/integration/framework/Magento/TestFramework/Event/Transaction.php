@@ -97,7 +97,7 @@ class Transaction
             } catch (\Exception $e) {
                 $test->getTestResultObject()->addFailure(
                     $test,
-                    new \PHPUnit_Framework_AssertionFailedError($e->getMessage()),
+                    new \PHPUnit_Framework_AssertionFailedError((string)$e),
                     0
                 );
             }

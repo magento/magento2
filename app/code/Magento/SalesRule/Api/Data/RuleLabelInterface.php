@@ -45,15 +45,17 @@ interface RuleLabelInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\SalesRule\Api\Data\RuleExtensionInterface|null
+     * @return \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes
+     * @param \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(
+        \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface $extensionAttributes
+    );
 }

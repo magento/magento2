@@ -1,0 +1,23 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-search-control-wrap">
+    <input
+            class="admin__control-text data-grid-search-control"
+            data-bind="
+                attr: {
+                    placeholder: placeholder
+                },
+                textInput: inputValue,
+                keyboard: {
+                    13: apply,
+                    27: cancel
+                }"
+            type="text"/>
+    <button class="action-submit" data-bind="click: apply.bind($data, false)" type="button">
+        <span data-bind="text: $t('Search')"></span>
+    </button>
+</div>

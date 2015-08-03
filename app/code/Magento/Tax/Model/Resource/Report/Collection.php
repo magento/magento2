@@ -85,11 +85,11 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     }
 
     /**
-     * Add selected data
+     * Apply custom columns before load
      *
      * @return $this
      */
-    protected function _initSelect()
+    protected function _beforeLoad()
     {
         $this->getSelect()->from($this->getResource()->getMainTable(), $this->_getSelectedColumns());
         if (!$this->isTotals() && !$this->isSubTotals()) {
@@ -99,6 +99,6 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         if ($this->isSubTotals()) {
             $this->getSelect()->group([$this->_periodFormat]);
         }
-        return parent::_initSelect();
+        return parent::_beforeLoad();
     }
 }

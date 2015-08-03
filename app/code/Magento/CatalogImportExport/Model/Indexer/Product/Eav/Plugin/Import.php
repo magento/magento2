@@ -31,7 +31,9 @@ class Import
      */
     public function afterImportSource(\Magento\ImportExport\Model\Import $subject, $import)
     {
-        $this->_indexerEavProcessor->markIndexerAsInvalid();
+        if (!$this->_indexerEavProcessor->isIndexerScheduled()) {
+            $this->_indexerEavProcessor->markIndexerAsInvalid();
+        }
         return $import;
     }
 }

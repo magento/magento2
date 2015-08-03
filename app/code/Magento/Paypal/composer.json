@@ -1,0 +1,40 @@
+{
+    "name": "magento/module-paypal",
+    "description": "N/A",
+    "require": {
+        "php": "~5.5.0|~5.6.0",
+        "magento/module-config": "1.0.0-beta",
+        "magento/module-store": "1.0.0-beta",
+        "magento/module-checkout": "1.0.0-beta",
+        "magento/module-sales": "1.0.0-beta",
+        "magento/module-quote": "1.0.0-beta",
+        "magento/module-customer": "1.0.0-beta",
+        "magento/module-payment": "1.0.0-beta",
+        "magento/module-backend": "1.0.0-beta",
+        "magento/module-tax": "1.0.0-beta",
+        "magento/module-directory": "1.0.0-beta",
+        "magento/module-theme": "1.0.0-beta",
+        "magento/module-catalog": "1.0.0-beta",
+        "magento/module-eav": "1.0.0-beta",
+        "magento/framework": "1.0.0-beta",
+        "magento/module-ui": "1.0.0-beta",
+        "lib-libxml": "*",
+        "magento/magento-composer-installer": "*"
+    },
+    "suggest": {
+        "magento/module-checkout-agreements": "1.0.0-beta"
+    },
+    "type": "magento2-module",
+    "version": "1.0.0-beta",
+    "license": [
+        "proprietary"
+    ],
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Magento/Paypal"
+            ]
+        ]
+    }
+}

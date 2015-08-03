@@ -77,49 +77,64 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
     public function setLength($length);
 
     /**
-     * Get usage limit per coupon
-     *
-     * @return int|null
-     */
-    public function getUsagePerCoupon();
-
-    /**
-     * Set usage limit per coupon
-     *
-     * @param int $usesPerCoupon
-     * @return $this
-     */
-    public function setUsagePerCoupon($usesPerCoupon);
-
-    /**
-     * Get usage limit per customer
-     *
-     * @return int|null
-     */
-    public function getUsagePerCustomer();
-
-    /**
-     * Set usage limit per customer
-     *
-     * @param int $usesPerCustomer
-     * @return $this
-     */
-    public function setUsagePerCustomer($usesPerCustomer);
-
-    /**
-     * Get expiration date
+     * Get the prefix
      *
      * @return string|null
      */
-    public function getExpirationDate();
+    public function getPrefix();
 
     /**
-     * Set expiration date
+     * Set the prefix
      *
-     * @param string $expirationDate
+     * @param string $prefix
      * @return $this
      */
-    public function setExpirationDate($expirationDate);
+    public function setPrefix($prefix);
+
+    /**
+     * Get the suffix
+     *
+     * @return string|null
+     */
+    public function getSuffix();
+
+    /**
+     * Set the suffix
+     *
+     * @param string $suffix
+     * @return $this
+     */
+    public function setSuffix($suffix);
+
+    /**
+     * Get the spacing where the delimiter should exist
+     *
+     * @return int|null
+     */
+    public function getDelimiterAtEvery();
+
+    /**
+     * Set the spacing where the delimiter should exist
+     *
+     * @param int $delimiterAtEvery
+     * @return $this
+     */
+    public function setDelimiterAtEvery($delimiterAtEvery);
+
+    /**
+     * Get the delimiter
+     *
+     * @return string|null
+     */
+    public function getDelimiter();
+
+    /**
+     * Set the delimiter
+     *
+     * @param string $delimiter
+     * @return $this
+     */
+    public function setDelimiter($delimiter);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

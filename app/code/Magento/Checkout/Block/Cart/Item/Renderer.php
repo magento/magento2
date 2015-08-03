@@ -11,7 +11,7 @@ namespace Magento\Checkout\Block\Cart\Item;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
 /**
@@ -31,7 +31,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     protected $_checkoutSession;
 
     /**
-     * @var Item
+     * @var AbstractItem
      */
     protected $_item;
 
@@ -122,10 +122,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Set item for render
      *
-     * @param Item $item
+     * @param AbstractItem $item
      * @return $this
      */
-    public function setItem(Item $item)
+    public function setItem(AbstractItem $item)
     {
         $this->_item = $item;
         return $this;
@@ -134,7 +134,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get quote item
      *
-     * @return Item
+     * @return AbstractItem
      */
     public function getItem()
     {
@@ -518,10 +518,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return the unit price html
      *
-     * @param Item $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getUnitPriceHtml(Item  $item)
+    public function getUnitPriceHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.item.price.unit');
@@ -532,10 +532,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return row total html
      *
-     * @param Item  $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getRowTotalHtml(Item  $item)
+    public function getRowTotalHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.item.price.row');
@@ -546,10 +546,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return item price html for sidebar
      *
-     * @param Item  $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getSidebarItemPriceHtml(Item  $item)
+    public function getSidebarItemPriceHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.cart.item.price.sidebar');
@@ -560,10 +560,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get unit price excluding tax html
      *
-     * @param Item $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getUnitPriceExclTaxHtml(Item  $item)
+    public function getUnitPriceExclTaxHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.unit.excl');
@@ -574,10 +574,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get unit price including tax html
      *
-     * @param Item $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getUnitPriceInclTaxHtml(Item  $item)
+    public function getUnitPriceInclTaxHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.unit.incl');
@@ -588,10 +588,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get row total excluding tax html
      *
-     * @param Item $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getRowTotalExclTaxHtml(Item  $item)
+    public function getRowTotalExclTaxHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.excl');
@@ -602,10 +602,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get row total including tax html
      *
-     * @param Item $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getRowTotalInclTaxHtml(Item  $item)
+    public function getRowTotalInclTaxHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.incl');
@@ -616,10 +616,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get row total including tax html
      *
-     * @param Item $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getActions(Item $item)
+    public function getActions(AbstractItem $item)
     {
         /** @var Actions $block */
         $block = $this->getChildBlock('actions');

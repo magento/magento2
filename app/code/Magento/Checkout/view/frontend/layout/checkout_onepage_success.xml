@@ -18,6 +18,7 @@
         </referenceBlock>
         <referenceContainer name="content">
             <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success" template="success.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Registration" name="checkout.registration" template="registration.phtml" cacheable="false"/>
         </referenceContainer>
         <container name="order.success.additional.info" label="Order Success Additional Info"/>
     </body>

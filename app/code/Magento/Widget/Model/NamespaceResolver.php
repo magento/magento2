@@ -12,19 +12,19 @@ class NamespaceResolver
      *
      * @var array
      */
-    protected $_moduleNamespaces;
+    protected $moduleNamespaces;
 
     /**
      * @var \Magento\Framework\Module\ModuleListInterface
      */
-    protected $_moduleList;
+    protected $moduleList;
 
     /**
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      */
     public function __construct(\Magento\Framework\Module\ModuleListInterface $moduleList)
     {
-        $this->_moduleList = $moduleList;
+        $this->moduleList = $moduleList;
     }
 
     /**
@@ -34,28 +34,15 @@ class NamespaceResolver
      * @param string $name
      * @param bool $asFullModuleName
      * @return string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function determineOmittedNamespace($name, $asFullModuleName = false)
     {
-        if (null === $this->_moduleNamespaces) {
-            $this->_moduleNamespaces = [];
-            foreach ($this->_moduleList->getNames() as $moduleName) {
-                $module = strtolower($moduleName);
-                $this->_moduleNamespaces[substr($module, 0, strpos($module, '_'))][$module] = $moduleName;
-            }
-        }
-
-        $explodeString = strpos(
-            $name,
-            '\\'
-        ) === false ? '_' : '\\';
-        $name = explode($explodeString, strtolower($name));
+        $this->prepareModuleNamespaces();
+        $name = $this->prepareName($name);
 
         $partsNum = count($name);
         $defaultNamespaceFlag = false;
-        foreach ($this->_moduleNamespaces as $namespaceName => $namespace) {
+        foreach ($this->moduleNamespaces as $namespaceName => $namespace) {
             // assume the namespace is omitted (default namespace only, which comes first)
             if ($defaultNamespaceFlag === false) {
                 $defaultNamespaceFlag = true;
@@ -73,5 +60,33 @@ class NamespaceResolver
             }
         }
         return '';
+    }
+
+    /**
+     * Prepare module namespaces
+     *
+     * @return void
+     */
+    protected function prepareModuleNamespaces()
+    {
+        if (null === $this->moduleNamespaces) {
+            $this->moduleNamespaces = [];
+            foreach ($this->moduleList->getNames() as $moduleName) {
+                $module = strtolower($moduleName);
+                $this->moduleNamespaces[substr($module, 0, strpos($module, '_'))][$module] = $moduleName;
+            }
+        }
+    }
+
+    /**
+     * Prepare name
+     *
+     * @param string $name
+     * @return array
+     */
+    protected function prepareName($name)
+    {
+        $explodeString = strpos($name, '\\') === false ? '_' : '\\';
+        return explode($explodeString, strtolower($name));
     }
 }

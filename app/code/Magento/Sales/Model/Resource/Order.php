@@ -126,7 +126,9 @@ class Order extends SalesResource implements OrderResourceInterface
                 $parent = $item->getQuoteParentItemId();
                 if ($parent && !$item->getParentItem()) {
                     $item->setParentItem($object->getItemByQuoteItemId($parent));
-                } elseif (!$parent) {
+                }
+                $childItems = $item->getChildrenItems();
+                if (empty($childItems)) {
                     $itemsCount++;
                 }
             }

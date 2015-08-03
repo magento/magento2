@@ -61,7 +61,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Load Shopping Cart Price Rule by coupon code
+     * Load Cart Price Rule by coupon code
      *
      * @param string $couponCode
      * @return $this
@@ -222,6 +222,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Whether the coupon is primary coupon for the rule that it's associated with
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsPrimary()
     {
@@ -297,8 +298,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\CouponExtensionInterface $extensionAttributes
-    )
-    {
+    ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd

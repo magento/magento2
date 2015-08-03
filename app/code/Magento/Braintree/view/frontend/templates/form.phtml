@@ -1,0 +1,121 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Braintree\Block\Form $block */
+$_code = $block->getMethodCode();
+$_loggedIn = $block->isCustomerLoggedIn();
+$_storedCards = $block->getStoredCards();
+$_useVault = $_loggedIn && $block->useVault() && count($_storedCards);
+$_autoDetection = $block->isCcDetectionEnabled();
+$clientToken = $block->getClientToken();
+?>
+<fieldset class="fieldset items braintree" id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <input type="hidden" name="payment[payment_method_nonce]" id="braintree_nonce" value="" />
+    <input type="hidden" name="payment[cc_last4]" id="<?php echo $_code ?>_cc_last4" value="" />
+    <?php if ($_autoDetection) : ?>
+        <input type="hidden" id="card_type_autoselect" value="" />
+    <?php endif; ?>
+    <?php if ($_useVault): ?>
+        <li id="<?php echo $_code ?>_token_selector">
+            <label for="<?php echo $_code ?>_cc_token"><?php echo __('Payment Information') ?></label>
+            <div class="input-box">
+                <select id="<?php echo $_code ?>_cc_token" name="payment[cc_token]">
+                    <?php foreach ($_storedCards as $creditCard): ?>
+                        <option value="<?php echo $creditCard->token?>" <?php echo $creditCard->default ? 'selected="selected"' : '' ?>>
+                            <?php echo $creditCard->maskedNumber . ' - ' . $creditCard->cardType; ?>
+                        </option>
+                    <?php endforeach; ?>
+                        <option value=''><?php echo __('Add new card') ?></option>
+                </select>
+            </div>
+        </li>
+    <?php endif; ?>
+    <div class="field type required hide_if_token_selected">
+        <label for="<?php echo $_code ?>_cc_type" class="label"><span><?php echo __('Credit Card Type') ?></span></label>
+        <div class="control">
+            <select id="<?php echo $_code ?>_cc_type"
+                    data-mage-init='{"creditCardType":{"creditCardTypeContainer":"#<?php echo $_code ?>_cc_type_ss_div"}}'
+                    name="payment[cc_type]" data-validate='{required:true, "validate-cc-type-select":"#<?php echo $_code ?>_cc_number"}' class="select">
+                <option value=""><?php echo __('--Please Select--')?></option>
+                <?php $_ccType = $block->getInfoData('cc_type') ?>
+                <?php foreach ($block->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
+                    <option value="<?php echo $_typeCode ?>"<?php if ($_typeCode == $_ccType): ?> selected="selected"<?php endif ?>><?php echo $_typeName ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+    <div class="field number required hide_if_token_selected">
+        <label for="<?php echo $_code ?>_cc_number" class="label"><span><?php echo __('Credit Card Number') ?></span></label>
+        <div class="control">
+            <input type="number" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo __('Credit Card Number') ?>" class="input-text" value="" data-validate='{"required-number":true, "validate-cc-number":"#<?php echo $_code ?>_cc_type", "validate-cc-type":"#<?php echo $_code ?>_cc_type"}'/>
+        </div>
+    </div>
+    <div class="field date required hide_if_token_selected" id="<?php echo $_code ?>_cc_type_exp_div">
+        <label for="<?php echo $_code ?>_expiration" class="label"><span><?php echo __('Expiration Date') ?></span></label>
+        <div class="control">
+            <div class="fields group group-2">
+                <div class="field no-label month">
+                    <div class="control">
+                        <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="select month" data-validate='{required:true, "validate-cc-exp":"#<?php echo $_code ?>_expiration_yr"}'>
+                            <?php $_ccExpMonth = $block->getInfoData('cc_exp_month') ?>
+                            <?php foreach ($block->getCcMonths() as $k => $v): ?>
+                                <option value="<?php echo $k ? $k : '' ?>"<?php if ($k == $_ccExpMonth): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="field no-label year">
+                    <div class="control">
+                        <?php $_ccExpYear = $block->getInfoData('cc_exp_year') ?>
+                        <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="select year" data-validate='{required:true}'>
+                            <?php foreach ($block->getCcYears() as $k => $v): ?>
+                                <option value="<?php echo $k ? $k : '' ?>"<?php if ($k == $_ccExpYear): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php if ($block->hasVerification()): ?>
+        <div class="field cvv required hide_if_token_selected" id="<?php echo $_code ?>_cc_type_cvv_div">
+            <label for="<?php echo $_code ?>_cc_cid" class="label"><span><?php echo __('Card Verification Number') ?></span></label>
+            <div class="control">
+                <input type="number" title="<?php echo __('Card Verification Number') ?>" class="input-text cvv" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" data-validate='{"required-number":true, "validate-cc-cvn":"#<?php echo $_code ?>_cc_type"}' />
+                <?php $_content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' . __('Card Verification Number Visual Reference') . '\" title=\"' . __('Card Verification Number Visual Reference') . '\" />'; ?>
+                <div class="note">
+                    <a href="#" class="action cvv" title="<?php echo __('What is this?') ?>" data-mage-init='{"tooltip": {"content": "<?php echo $_content ?>"}}'><span><?php echo __('What is this?') ?></span></a>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if($block->canSaveCard()): ?>
+        <li id="<?php echo $_code ?>_store_in_vault_div" style="text-align:left;" class="hide_if_token_selected">
+            <input type="checkbox" title="<?php echo __('Save this card for future use') ?>" class="input-checkbox" id="<?php echo $_code ?>_store_in_vault" checked="checked" name="payment[store_in_vault]" value="1" />
+            <label for="<?php echo $_code ?>_store_in_vault" class="required" style="float:none;"><?php echo __('Save this card for future use') ?></label>
+        </li>
+    <?php endif; ?>
+</fieldset>
+
+<?php
+    $formData = [
+        "useVault" => $_useVault,
+        "clientToken" => $clientToken,
+        "autoDetection" => $_autoDetection,
+        "loggedIn" => $_loggedIn,
+    ];
+    $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($formData);
+?>
+<script type="text/x-magento-init">
+    {
+        "#payment_form_braintree": {
+            "braintreeForm": <?php echo $serializedFormData ?>
+        }
+    }
+</script>

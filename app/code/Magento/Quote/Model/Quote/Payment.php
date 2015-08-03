@@ -211,8 +211,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function getOrderPlaceRedirectUrl()
     {
         $method = $this->getMethodInstance();
-        if ($method && $method instanceof AbstractMethod) {
-            return $method->getOrderPlaceRedirectUrl();
+        if ($method) {
+            return $method->getConfigData('order_place_redirect_url');
         }
         return '';
     }

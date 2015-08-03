@@ -33,12 +33,18 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
         $this->_indexerMock = $this->getMock(
             'Magento\Indexer\Model\Indexer',
-            ['getId', 'invalidate'],
+            ['getId', 'invalidate', 'getPriceIndexer', 'isScheduled'],
             [],
             '',
             false
         );
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Indexer\Model\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
 
         $this->_model = $this->_objectManager->getObject(
             'Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin\Import',
@@ -46,13 +52,19 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test AfterImportSource()
+     */
     public function testAfterImportSource()
     {
         $this->_indexerMock->expects($this->once())->method('invalidate');
-        $this->indexerRegistryMock->expects($this->once())
+        $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)
             ->will($this->returnValue($this->_indexerMock));
+        $this->_indexerMock->expects($this->any())
+            ->method('isScheduled')
+            ->will($this->returnValue(false));
 
         $importMock = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);
         $this->assertEquals('return_value', $this->_model->afterImportSource($importMock, 'return_value'));

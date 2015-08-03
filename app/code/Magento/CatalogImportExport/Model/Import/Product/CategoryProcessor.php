@@ -30,6 +30,13 @@ class CategoryProcessor
     protected $categories = [];
 
     /**
+     * Categories id to object cache.
+     *
+     * @var array
+     */
+    protected $categoriesCache = [];
+
+    /**
      * Instance of catalog category factory.
      *
      * @var \Magento\Catalog\Model\CategoryFactory
@@ -56,11 +63,15 @@ class CategoryProcessor
     {
         if (empty($this->categories)) {
             $collection = $this->categoryColFactory->create();
-            $collection->addNameToResult();
+            $collection->addAttributeToSelect('name')
+                ->addAttributeToSelect('url_key')
+                ->addAttributeToSelect('url_path');
             /* @var $collection \Magento\Catalog\Model\Resource\Category\Collection */
             foreach ($collection as $category) {
                 $structure = explode(self::DELIMITER_CATEGORY, $category->getPath());
                 $pathSize = count($structure);
+
+                $this->categoriesCache[$category->getId()] = $category;
                 if ($pathSize > 1) {
                     $path = [];
                     for ($i = 1; $i < $pathSize; $i++) {
@@ -86,7 +97,9 @@ class CategoryProcessor
     {
         /** @var \Magento\Catalog\Model\Category $category */
         $category = $this->categoryFactory->create();
-        $parentCategory = $this->categoryFactory->create()->load($parentId);
+        if (!($parentCategory = $this->getCategoryById($parentId))) {
+            $parentCategory = $this->categoryFactory->create()->load($parentId);
+        }
         $category->setPath($parentCategory->getPath());
         $category->setParentId($parentId);
         $category->setName($name);
@@ -94,6 +107,7 @@ class CategoryProcessor
         $category->setIncludeInMenu(true);
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
         $category->save();
+        $this->categoriesCache[$category->getId()] = $category;
 
         return $category->getId();
     }
@@ -143,5 +157,17 @@ class CategoryProcessor
         }
 
         return $categoriesIds;
+    }
+
+    /**
+     * Get category by Id
+     *
+     * @param int $categoryId
+     *
+     * @return \Magento\Catalog\Model\Category|null
+     */
+    public function getCategoryById($categoryId)
+    {
+        return isset($this->categoriesCache[$categoryId]) ? $this->categoriesCache[$categoryId] : null;
     }
 }

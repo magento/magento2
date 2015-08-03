@@ -16,19 +16,9 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
     protected $suggestedListModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $eventManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectFactoryMock;
+    protected $configurableAttributeHandler;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -52,27 +42,16 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attributeFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
-            ['create'], [], '', false
+        $this->configurableAttributeHandler = $this->getMock(
+            'Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler',
+            [],
+            [],
+            '',
+            false
         );
         $this->resourceHelperMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Helper',
             [],
-            [],
-            '',
-            false
-        );
-        $this->eventManagerMock = $this->getMock(
-            '\Magento\Framework\Event\ManagerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->objectFactoryMock = $this->getMock(
-            '\Magento\Framework\ObjectFactory',
-            ['create'],
             [],
             '',
             false
@@ -94,18 +73,15 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->labelPart)
         );
-        $this->attributeFactoryMock->expects(
+        $this->configurableAttributeHandler->expects(
             $this->once()
         )->method(
-            'create'
+            'getApplicableAttributes'
         )->will(
             $this->returnValue($this->collectionMock)
         );
         $valueMap = [
-            ['main_table.frontend_input', ['in' => 123 ], $this->collectionMock],
             ['frontend_label', ['like' => $this->labelPart], $this->collectionMock],
-            ['is_user_defined', 1, $this->collectionMock],
-            ['is_global', \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL, $this->collectionMock],
         ];
         $this->collectionMock->expects(
             $this->any()
@@ -114,7 +90,7 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap($valueMap)
         );
-        $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource', '__wakeup', 'getApplyTo'];
+        $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource'];
         $this->attributeMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Eav\Attribute',
             $methods,
@@ -130,20 +106,13 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(['id' => $this->attributeMock])
         );
         $this->suggestedListModel = new \Magento\ConfigurableProduct\Model\SuggestedAttributeList(
-            $this->attributeFactoryMock,
-            $this->resourceHelperMock,
-            $this->eventManagerMock,
-            $this->objectFactoryMock
+            $this->configurableAttributeHandler,
+            $this->resourceHelperMock
         );
     }
 
     public function testGetSuggestedAttributesIfTheyApplicable()
     {
-        $object = $this->getMock('\Magento\Framework\Object', [], [], '', false);
-        $object->expects($this->once())->method('setData');
-        $object->expects($this->once())->method('getData')->willReturn(123);
-        $this->objectFactoryMock->expects($this->once())->method('create')->willReturn($object);
-
         $source = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
             [],
@@ -152,26 +121,26 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
             false
         );
         $result['id'] = ['id' => 'id', 'label' => 'label', 'code' => 'code', 'options' => 'options'];
-        $this->attributeMock->expects($this->any())->method('getApplyTo')->will($this->returnValue(false));
         $this->attributeMock->expects($this->once())->method('getId')->will($this->returnValue('id'));
         $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));
         $this->attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('code'));
         $this->attributeMock->expects($this->once())->method('getSource')->will($this->returnValue($source));
         $source->expects($this->once())->method('getAllOptions')->with(false)->will($this->returnValue('options'));
+        $this->configurableAttributeHandler->expects($this->once())->method('isAttributeApplicable')
+            ->with($this->attributeMock)->willReturn(true);
+
         $this->assertEquals($result, $this->suggestedListModel->getSuggestedAttributes($this->labelPart));
     }
 
     public function testGetSuggestedAttributesIfTheyNotApplicable()
     {
-        $object = $this->getMock('\Magento\Framework\Object', [], [], '', false);
-        $object->expects($this->once())->method('setData');
-        $object->expects($this->once())->method('getData')->willReturn(123);
-        $this->objectFactoryMock->expects($this->once())->method('create')->willReturn($object);
-        $this->attributeMock->expects($this->any())->method('getApplyTo')->will($this->returnValue(['simple']));
         $this->attributeMock->expects($this->never())->method('getId');
         $this->attributeMock->expects($this->never())->method('getFrontendLabel');
         $this->attributeMock->expects($this->never())->method('getAttributeCode');
         $this->attributeMock->expects($this->never())->method('getSource');
+        $this->configurableAttributeHandler->expects($this->once())->method('isAttributeApplicable')
+            ->with($this->attributeMock)->willReturn(false);
+
         $this->assertEquals([], $this->suggestedListModel->getSuggestedAttributes($this->labelPart));
     }
 }

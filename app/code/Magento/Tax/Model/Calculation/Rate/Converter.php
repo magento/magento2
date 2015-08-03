@@ -74,6 +74,10 @@ class Converter
             'zip_is_range' => $returnNumericLogic?0:false,
         ];
 
+        if ($taxRateFormData['tax_region_id'] === '0') {
+            $taxRateFormData['tax_region_id'] = '';
+        }
+
         if ($taxRate->getZipFrom() && $taxRate->getZipTo()) {
             $taxRateFormData['zip_is_range'] = $returnNumericLogic?1:true;
             $taxRateFormData['zip_from'] = $taxRate->getZipFrom();

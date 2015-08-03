@@ -81,7 +81,7 @@ class UpdateCustomVariableEntityTest extends Injectable
         $customVariableOrigin->persist();
 
         // TODO: Move store creation to "__prepare" method after fix bug MAGETWO-29331
-        $storeOrigin = $factory->createByCode('store', ['dataSet' => 'custom']);
+        $storeOrigin = $factory->createByCode('store', ['dataset' => 'custom']);
         $storeOrigin->persist();
         $this->store = $storeOrigin;
 

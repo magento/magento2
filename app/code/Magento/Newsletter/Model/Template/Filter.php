@@ -21,7 +21,7 @@ class Filter extends \Magento\Widget\Model\Template\Filter
      */
     public function widgetDirective($construction)
     {
-        if (!isset($this->_templateVars['subscriber'])) {
+        if (!isset($this->templateVars['subscriber'])) {
             return $construction[0];
         }
         $construction[2] .= sprintf(' store_id ="%s"', $this->getStoreId());

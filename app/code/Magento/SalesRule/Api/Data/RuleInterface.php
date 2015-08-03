@@ -13,7 +13,7 @@ namespace Magento\SalesRule\Api\Data;
 interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     const FREE_SHIPPING_NONE = 'NONE';
-    const FREE_SHIPPING_MATCHING_ITEMs_ONLY = 'MATCHING_ITEMS_ONLY';
+    const FREE_SHIPPING_MATCHING_ITEMS_ONLY = 'MATCHING_ITEMS_ONLY';
     const FREE_SHIPPING_WITH_MATCHING_ITEMS = 'FREE_WITH_MATCHING_ITEMS';
 
     const DISCOUNT_ACTION_BY_PERCENT = 'by_percent';
@@ -164,6 +164,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Whether the coupon is active
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsActive();
 
@@ -209,6 +210,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Whether to stop rule processing
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getStopRulesProcessing();
 
@@ -224,6 +226,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * TODO: is this field needed
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsAdvanced();
 
@@ -325,6 +328,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Whether the rule applies to shipping
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getApplyToShipping();
 
@@ -355,6 +359,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return whether the rule is in RSS
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsRss();
 
@@ -385,6 +390,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Whether to auto generate coupon
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseAutoGeneration();
 

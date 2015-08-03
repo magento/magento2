@@ -36,7 +36,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param \Magento\Framework\Object $item
      * @return array|null
      */
-    public function getChilds($item)
+    public function getChildren($item)
     {
         $itemsArray = [];
 

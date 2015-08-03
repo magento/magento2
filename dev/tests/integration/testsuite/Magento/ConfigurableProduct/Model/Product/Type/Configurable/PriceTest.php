@@ -24,19 +24,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price'
         );
 
-        // without configurable options
-        $this->assertEquals(100.0, $model->getFinalPrice(1, $product));
-
-        // with configurable options
-        $attributes = $product->getTypeInstance()->getConfigurableAttributes($product);
-        foreach ($attributes as $attribute) {
-            $prices = $attribute->getPrices();
-            $product->addCustomOption(
-                'attributes',
-                serialize([$attribute->getProductAttribute()->getId() => $prices[0]['value_index']])
-            );
-            break;
-        }
-        $this->assertEquals(105.0, $model->getFinalPrice(1, $product));
+        // final price is the lowest price of configurable variations
+        $this->assertEquals(10, $model->getFinalPrice(1, $product));
     }
 }

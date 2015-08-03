@@ -6,7 +6,7 @@
 -->
 <!-- IFRAME for request to Payment Gateway -->
 <iframe width="0" height="0" data-bind="src: getSource(), attr: {id: getCode() + '-transparent-iframe', 'data-container': getCode() + '-transparent-iframe'}" allowtransparency="true" frameborder="0"  name="iframeTransparent" style="display:none;width:100%;background-color:transparent"></iframe>
-<form class="form" id="co-transparent-form" action="#" method="post" data-bind="mageInit: {
+<form class="form" id="co-transparent-form" autocomplete="off" action="#" method="post" data-bind="mageInit: {
     'transparent':{
         'controller': getControllerName(),
         'gateway': getCode(),
@@ -29,8 +29,10 @@
 <div class="actions-toolbar" id="review-buttons-container">
     <div class="primary">
         <button data-role="review-save" type="submit"
-                data-bind="attr: {title: $t('Place order')}"
-                class="button action primary checkout"><span data-bind="text: $t('Place order')"></span></button>
+                data-bind="attr: {title: $t('Place Order')}"
+                class="button action primary checkout">
+            <span data-bind="text: $t('Place Order')"></span>
+        </button>
         <button type="submit" id="originalPlaceOrder" class="hidden"
                 data-bind="click: originalPlaceOrder($parents[1])"></button>
     </div>

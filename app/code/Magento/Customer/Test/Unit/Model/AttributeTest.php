@@ -161,7 +161,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\AbstractResource')
             ->setMethods(['_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName', 'saveInSetIncluding'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->cacheManager = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
             ->getMock();
         $this->eventDispatcher = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')

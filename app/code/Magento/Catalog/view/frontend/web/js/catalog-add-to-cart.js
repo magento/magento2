@@ -4,8 +4,9 @@
  */
 define([
     'jquery',
+    'mage/translate',
     'jquery/ui'
-], function($) {
+], function($, $t) {
     "use strict";
 
     $.widget('mage.catalogAddToCart', {
@@ -16,7 +17,13 @@ define([
             bindSubmit: true,
             minicartSelector: '[data-block="minicart"]',
             messagesSelector: '[data-placeholder="messages"]',
-            productStatusSelector: '.stock.available'
+            productStatusSelector: '.stock.available',
+            addToCartButtonSelector: '.action.tocart',
+            addToCartButtonDisabledClass: 'disabled',
+            addToCartButtonTextWhileAdding: $t('Adding...'),
+            addToCartButtonTextAdded: $t('Added'),
+            addToCartButtonTextDefault: $t('Add to Cart')
+
         },
 
         _create: function() {
@@ -49,6 +56,9 @@ define([
 
         ajaxSubmit: function(form) {
             var self = this;
+            $(self.options.minicartSelector).trigger('contentLoading');
+            self.disableAddToCartButton(form);
+
             $.ajax({
                 url: form.attr('action'),
                 data: form.serialize(),
@@ -82,8 +92,30 @@ define([
                             .find('span')
                             .html(res.product.statusText);
                     }
+                    self.enableAddToCartButton(form);
                 }
             });
+        },
+
+        disableAddToCartButton: function(form) {
+            var addToCartButton = $(form).find(this.options.addToCartButtonSelector);
+            addToCartButton.addClass(this.options.addToCartButtonDisabledClass);
+            addToCartButton.attr('title', this.options.addToCartButtonTextWhileAdding);
+            addToCartButton.find('span').text(this.options.addToCartButtonTextWhileAdding);
+        },
+
+        enableAddToCartButton: function(form) {
+            var self = this,
+                addToCartButton = $(form).find(this.options.addToCartButtonSelector);
+
+            addToCartButton.find('span').text(this.options.addToCartButtonTextAdded);
+            addToCartButton.attr('title', this.options.addToCartButtonTextAdded);
+
+            setTimeout(function() {
+                addToCartButton.removeClass(self.options.addToCartButtonDisabledClass);
+                addToCartButton.find('span').text(self.options.addToCartButtonTextDefault);
+                addToCartButton.attr('title', self.options.addToCartButtonTextDefault);
+            }, 1000);
         }
     });
 

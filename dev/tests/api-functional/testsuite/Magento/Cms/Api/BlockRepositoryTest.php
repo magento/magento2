@@ -222,13 +222,14 @@ class BlockRepositoryTest extends WebapiAbstract
         $this->currentBlock = $this->blockRepository->save($blockDataObject);
 
         $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
             ->create('Magento\Framework\Api\SearchCriteriaBuilder');
         $filter = $filterBuilder
             ->setField(BlockInterface::IDENTIFIER)
             ->setValue($blockIdentifier)
             ->create();
-        $searchCriteriaBuilder->addFilter([$filter]);
+        $searchCriteriaBuilder->addFilters([$filter]);
 
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];

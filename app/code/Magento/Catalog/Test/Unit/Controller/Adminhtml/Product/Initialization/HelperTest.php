@@ -45,6 +45,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected $websiteMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dateFilterMock;
+
+    /**
      * @var int
      */
     protected $websiteId = 1;
@@ -66,6 +71,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->websiteMock = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->dateFilterMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\Filter\Date', [], [], '', false);
 
         $this->stockFilterMock = $this->getMock(
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter',
@@ -91,6 +97,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'setWebsiteIds',
                 'isLockedAttribute',
                 'lockAttribute',
+                'getAttributes',
                 'unlockAttribute',
                 'getOptionsReadOnly',
                 'setProductOptions',
@@ -129,12 +136,43 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             $this->storeManagerMock,
             $this->stockFilterMock,
             $this->productLinksMock,
-            $this->jsHelperMock
+            $this->jsHelperMock,
+            $this->dateFilterMock
         );
 
         $productData = [
             'stock_data' => ['stock_data'],
             'options' => ['option1', 'option2']
+        ];
+
+        $attributeNonDate = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeDate = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+
+        $attributeNonDateBackEnd =
+            $this->getMock('Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend', [], [], '', false);
+        $attributeDateBackEnd =
+            $this->getMock('Magento\Eav\Model\Entity\Attribute\Backend\Datetime', [], [], '', false);
+
+        $attributeNonDate->expects($this->any())
+            ->method('getBackend')
+            ->will($this->returnValue($attributeNonDateBackEnd));
+
+        $attributeDate->expects($this->any())
+            ->method('getBackend')
+            ->will($this->returnValue($attributeDateBackEnd));
+
+
+        $attributeNonDateBackEnd->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('non-datetime'));
+
+        $attributeDateBackEnd->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('datetime'));
+
+        $attributesArray = [
+            $attributeNonDate,
+            $attributeDate
         ];
 
         $useDefaults = ['attributeCode1', 'attributeCode2'];
@@ -185,6 +223,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('lockAttribute')
             ->with('media');
+
+        $this->productMock->expects($this->once())
+            ->method('getAttributes')
+            ->will($this->returnValue($attributesArray));
 
         $productData['category_ids'] = [];
         $productData['website_ids'] = [];
@@ -256,7 +298,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             $this->storeManagerMock,
             $this->stockFilterMock,
             $this->productLinksMock,
-            $this->jsHelperMock
+            $this->jsHelperMock,
+            $this->dateFilterMock
         );
         $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
         $this->assertEquals($expectedResults, $result);

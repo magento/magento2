@@ -321,6 +321,7 @@ EXPECTED_SQL;
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $groupRepository = $objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
         $builder = $objectManager->create('Magento\Framework\Api\FilterBuilder');
         $joinedExtensionAttribute = 'test_dummy_attribute';
@@ -328,7 +329,7 @@ EXPECTED_SQL;
         $filter = $builder->setField($joinedExtensionAttribute)
             ->setValue($joinedExtensionAttributeValue)
             ->create();
-        $searchCriteriaBuilder->addFilter([$filter]);
+        $searchCriteriaBuilder->addFilters([$filter]);
         $searchResults = $groupRepository->getList($searchCriteriaBuilder->create());
         $items = $searchResults->getItems();
         $this->assertCount(1, $items, 'Filtration by extension attribute does not work.');
@@ -346,6 +347,7 @@ EXPECTED_SQL;
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $groupRepository = $objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
         $builder = $objectManager->create('Magento\Framework\Api\FilterBuilder');
         $joinedExtensionAttribute = 'test_complex_dummy_attribute.frontend_label';
@@ -353,7 +355,7 @@ EXPECTED_SQL;
         $filter = $builder->setField($joinedExtensionAttribute)
             ->setValue($joinedExtensionAttributeValue)
             ->create();
-        $searchCriteriaBuilder->addFilter([$filter]);
+        $searchCriteriaBuilder->addFilters([$filter]);
         $searchResults = $groupRepository->getList($searchCriteriaBuilder->create());
         $items = $searchResults->getItems();
         $this->assertCount(1, $items, 'Filtration by extension attribute does not work.');

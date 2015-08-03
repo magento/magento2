@@ -38,10 +38,6 @@ define([
             expect(multiSelect.allSelected()).toBeFalsy();
             expect(multiSelect.excluded()).toEqual([]);
             expect(multiSelect.selected()).toEqual([]);
-            multiSelect.exportSelections();
-            //expect(multiSelect.source.set).toHaveBeenCalledWith([]);
-            expect(multiSelect.source.set.calls.argsFor(1))
-                .toEqual([]);
         });
 
         it('Select specific several rows on several pages', function () {

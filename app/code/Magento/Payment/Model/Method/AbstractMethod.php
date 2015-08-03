@@ -745,6 +745,9 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     public function getConfigData($field, $storeId = null)
     {
+        if ('order_place_redirect_url' === $field) {
+            return $this->getOrderPlaceRedirectUrl();
+        }
         if (null === $storeId) {
             $storeId = $this->getStore();
         }

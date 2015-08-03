@@ -89,18 +89,18 @@ class CreateSalesRuleEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $customer = $fixtureFactory->createByCode('customer', ['dataSet' => 'default']);
+        $customer = $fixtureFactory->createByCode('customer', ['dataset' => 'default']);
         $customer->persist();
 
         $productForSalesRule1 = $fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'simple_for_salesrule_1']
+            ['dataset' => 'simple_for_salesrule_1']
         );
         $productForSalesRule1->persist();
 
         $productForSalesRule2 = $fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'simple_for_salesrule_2']
+            ['dataset' => 'simple_for_salesrule_2']
         );
         $productForSalesRule2->persist();
 

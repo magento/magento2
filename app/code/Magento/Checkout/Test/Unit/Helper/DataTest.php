@@ -148,7 +148,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setTemplateOptions'
         )->with(
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 8]
+            [
+                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            ]
         )->will(
             $this->returnSelf()
         );

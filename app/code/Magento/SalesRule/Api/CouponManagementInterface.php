@@ -35,11 +35,11 @@ interface CouponManagementInterface
     /**
      * Delete coupon by coupon codes.
      *
-     * @param int[] $codes
-     * @param bool $ignoreInvalidIds
+     * @param string[] $codes
+     * @param bool $ignoreInvalidCodes
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteByCodes(array $codes, $ignoreInvalidIds = true);
+    public function deleteByCodes(array $codes, $ignoreInvalidCodes = true);
 }

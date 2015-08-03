@@ -33,7 +33,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      */
     public function getTabLabel()
     {
-        return __('Widget Options');
+        return __('Frontend App Options');
     }
 
     /**
@@ -43,7 +43,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      */
     public function getTabTitle()
     {
-        return __('Widget Options');
+        return __('Frontend App Options');
     }
 
     /**

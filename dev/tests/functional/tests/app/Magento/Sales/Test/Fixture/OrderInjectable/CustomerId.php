@@ -28,8 +28,8 @@ class CustomerId extends DataSource
             $this->data = $data['customer'];
             return;
         }
-        if (isset($data['dataSet'])) {
-            $customer = $fixtureFactory->createByCode('customer', ['dataSet' => $data['dataSet']]);
+        if (isset($data['dataset'])) {
+            $customer = $fixtureFactory->createByCode('customer', ['dataset' => $data['dataset']]);
             if ($customer->hasData('id') === false) {
                 $customer->persist();
             }

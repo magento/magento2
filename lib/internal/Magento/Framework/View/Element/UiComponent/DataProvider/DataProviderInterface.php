@@ -91,11 +91,12 @@ interface DataProviderInterface
     /**
      * Add field filter to collection
      *
-     * @param string|array $field
      * @param string|int|array|null $condition
-     * @return void
+     * @param null|string|array $field
+     * @param string $type
+     * @return mixed
      */
-    public function addFilter($field, $condition = null);
+    public function addFilter($condition, $field = null, $type = 'regular');
 
     /**
      * Add ORDER BY to the end or to the beginning

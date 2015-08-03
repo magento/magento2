@@ -1159,11 +1159,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getFinalPrice($qty = null)
     {
-        $price = $this->_getData('final_price');
-        if ($price !== null) {
-            return $price;
+        if ($this->_getData('final_price') === null) {
+            $this->setFinalPrice($this->getPriceModel()->getFinalPrice($qty, $this));
         }
-        return $this->getPriceModel()->getFinalPrice($qty, $this);
+        return $this->_getData('final_price');
     }
 
     /**

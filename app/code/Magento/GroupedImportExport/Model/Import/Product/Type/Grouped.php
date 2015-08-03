@@ -31,17 +31,19 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\Resource $resource
      * @param array $params
      * @param Grouped\Links $links
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\Resource $resource,
         array $params,
         Grouped\Links $links
     ) {
         $this->links = $links;
-        parent::__construct($attrSetColFac, $prodAttrColFac, $params);
+        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
     }
 
     /**

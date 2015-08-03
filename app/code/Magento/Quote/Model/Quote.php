@@ -268,7 +268,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $criteriaBuilder;
+    protected $searchCriteriaBuilder;
 
     /**
      * Filter builder
@@ -421,7 +421,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->_quotePaymentCollectionFactory = $quotePaymentCollectionFactory;
         $this->_objectCopyService = $objectCopyService;
         $this->addressRepository = $addressRepository;
-        $this->criteriaBuilder = $criteriaBuilder;
+        $this->searchCriteriaBuilder = $criteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->stockRegistry = $stockRegistry;
         $this->itemProcessor = $itemProcessor;
@@ -1328,7 +1328,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         foreach ($this->getItemsCollection() as $item) {
             /** @var \Magento\Quote\Model\Resource\Quote\Item $item */
             if (!$item->isDeleted()) {
-                $items[$item->getId()] = $item;
+                $items[] = $item;
             }
         }
         return $items;

@@ -138,7 +138,7 @@ class ShippingSavedTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
 
         $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $this->criteriaBuilderMock->expects($this->once())->method('addFilter')->with([$filterMock])->willReturnSelf();
+        $this->criteriaBuilderMock->expects($this->once())->method('addFilters')->with([$filterMock])->willReturnSelf();
         $this->criteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
 
         $searchResultMock = $this->getMock('Magento\Customer\Api\Data\AddressSearchResultsInterface');

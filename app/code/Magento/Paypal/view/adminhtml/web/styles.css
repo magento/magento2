@@ -1,0 +1,16 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.pp-general-uk > .entry-edit-head > .config-heading .heading strong,
+.pp-method-payflow > .entry-edit-head > .config-heading .heading strong,
+.pp-method-express > .entry-edit-head > .config-heading .heading strong,
+.pp-method-general > .entry-edit-head > .config-heading .heading strong { padding-left:90px;background:url(images/paypal-logo.png) no-repeat 0 0;line-height: 23px;}
+.pp-method-general > .entry-edit-head > .config-heading:before { content:url(images/pp-allinone.png);float:right;}
+.pp-method-express > .entry-edit-head > .config-heading:before { content:url(images/pp-alt.png);float:right;}
+.pp-method-payflow > .entry-edit-head > .config-heading:before { content:url(images/pp-gateways.png);float:right;}
+.pp-general-uk > .entry-edit-head > .config-heading:before { content:url(images/pp-uk.png);float:right;}
+.payflow-settings-notice { border:1px solid #d1d0ce;padding:0 10px;margin: 0;}
+.payflow-settings-notice .important-label {color:#f00;}
+.payflow-settings-notice ul.options-list {list-style:disc;padding:0 2em;}

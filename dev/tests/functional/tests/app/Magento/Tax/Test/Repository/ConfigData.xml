@@ -557,14 +557,14 @@
             <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="label" xsi:type="string">Including Tax</item>
                 <item name="value" xsi:type="number">0</item>
             </field>
             <field name="tax/calculation/apply_after_discount" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">After Discount</item>
-                <item name="value" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Before Discount</item>
+                <item name="value" xsi:type="number">0</item>
             </field>
             <field name="tax/calculation/discount_tax" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>

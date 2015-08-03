@@ -8,7 +8,7 @@ namespace Magento\Multishipping\Controller\Checkout;
 /**
  * Multishipping checkout address manipulation controller
  */
-class Address extends \Magento\Framework\App\Action\Action
+abstract class Address extends \Magento\Framework\App\Action\Action
 {
     /**
      * {@inheritdoc}

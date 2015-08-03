@@ -39,7 +39,7 @@ class Content extends Tab
     protected $addVariableButton = ".add-variable";
 
     /**
-     * Insert Widget button selector.
+     * Insert Frontend App button selector.
      *
      * @var string
      */
@@ -73,7 +73,7 @@ class Content extends Tab
     }
 
     /**
-     * Clicking in content tab 'Insert Widget' button.
+     * Clicking in content tab 'Insert Frontend App' button.
      *
      * @return void
      */
@@ -124,8 +124,8 @@ class Content extends Tab
         if (isset($fields['content_heading']['value'])) {
             $element->find($this->contentHeading)->setValue($fields['content_heading']['value']);
         }
-        if (isset($fields['content']['value']['widget']['preset'])) {
-            foreach ($fields['content']['value']['widget']['preset'] as $widget) {
+        if (isset($fields['content']['value']['widget']['dataset'])) {
+            foreach ($fields['content']['value']['widget']['dataset'] as $widget) {
                 $this->clickInsertWidget();
                 $this->getWidgetBlock()->addWidget($widget);
             }

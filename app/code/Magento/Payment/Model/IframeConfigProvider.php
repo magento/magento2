@@ -27,6 +27,11 @@ class IframeConfigProvider implements ConfigProviderInterface
     const DEFAULT_YEAR_LENGTH = 2;
 
     /**
+     * Checkout identifier for transparent iframe payments
+     */
+    const CHECKOUT_IDENTIFIER = 'checkout_flow';
+
+    /**
      * @var Repository
      */
     protected $assetRepo;
@@ -93,7 +98,7 @@ class IframeConfigProvider implements ConfigProviderInterface
                     'dateDelim' => [$this->methodCode => $this->getDateDelim()],
                     'cardFieldsMap' => [$this->methodCode => $this->getCardFieldsMap()],
                     'source' =>  [$this->methodCode => $this->getViewFileUrl('blank.html')],
-                    'controllerName' => [$this->methodCode => $this->getController()],
+                    'controllerName' => [$this->methodCode => self::CHECKOUT_IDENTIFIER],
                     'cgiUrl' => [$this->methodCode => $this->getCgiUrl()],
                     'placeOrderUrl' => [$this->methodCode => $this->getPlaceOrderUrl()],
                     'saveOrderUrl' => [$this->methodCode => $this->getSaveOrderUrl()],
@@ -165,16 +170,6 @@ class IframeConfigProvider implements ConfigProviderInterface
             $this->logger->critical($e);
             return $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }
-    }
-
-    /**
-     * Retrieve the controller name
-     *
-     * @return string
-     */
-    protected function getController()
-    {
-        return $this->request->getControllerName();
     }
 
     /**

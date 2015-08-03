@@ -119,12 +119,12 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="base_grand_total">
                         <arguments>
-                            <argument name="id" xsi:type="string">grand_total</argument>
+                            <argument name="id" xsi:type="string">base_grand_total</argument>
                             <argument name="header" xsi:type="string" translate="true">Refunded</argument>
                             <argument name="type" xsi:type="string">currency</argument>
                             <argument name="currency" xsi:type="string">order_currency_code</argument>
                             <argument name="rate" xsi:type="string">1</argument>
-                            <argument name="index" xsi:type="string">grand_total</argument>
+                            <argument name="index" xsi:type="string">base_grand_total</argument>
                             <argument name="header_css_class" xsi:type="string">col-refunded</argument>
                             <argument name="column_css_class" xsi:type="string">col-refunded</argument>
                         </arguments>

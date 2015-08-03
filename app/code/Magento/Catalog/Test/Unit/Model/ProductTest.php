@@ -1370,4 +1370,41 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         return $reflectionProperty->getValue($object);
     }
+
+    public function testGetFinalPrice()
+    {
+        $finalPrice = 11;
+        $qty = 1;
+        $this->model->setQty($qty);
+        $productTypePriceMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Type\Price',
+            ['getFinalPrice'],
+            [],
+            '',
+            false
+        );
+        
+        $productTypePriceMock->expects($this->any())
+            ->method('getFinalPrice')
+            ->with($qty, $this->model)
+            ->will($this->returnValue($finalPrice));
+
+        $this->productTypeInstanceMock->expects($this->any())
+            ->method('priceFactory')
+            ->with($this->model->getTypeId())
+            ->will($this->returnValue($productTypePriceMock));
+
+        $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
+        $this->model->setFinalPrice(9.99);
+    }
+
+    public function testGetFinalPricePreset()
+    {
+        $finalPrice = 9.99;
+        $qty = 1;
+        $this->model->setQty($qty);
+        $this->model->setFinalPrice($finalPrice);
+        $this->productTypeInstanceMock->expects($this->never())->method('priceFactory');
+        $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
+    }
 }

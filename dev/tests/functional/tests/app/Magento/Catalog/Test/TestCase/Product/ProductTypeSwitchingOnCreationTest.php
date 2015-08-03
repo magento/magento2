@@ -17,8 +17,8 @@ use Magento\Mtf\TestCase\Injectable;
  * Test Flow:
  * 1. Open backend
  * 2. Go to Products > Catalog
- * 3. Start create product from preconditions (according dataSet)
- * 4. Fill data from dataSet
+ * 3. Start create product from preconditions (according dataset)
+ * 4. Fill data from dataset
  * 5. Save
  * 6. Perform all assertions
  *
@@ -83,8 +83,8 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
         // Steps
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getGridPageActionBlock()->addProduct($createProduct);
-        list($fixture, $dataSet) = explode('::', $product);
-        $product = $this->fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
+        list($fixture, $dataset) = explode('::', $product);
+        $product = $this->fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
         $this->catalogProductNew->getProductForm()->fill($product);
         $this->catalogProductNew->getFormPageActions()->save($product);
 

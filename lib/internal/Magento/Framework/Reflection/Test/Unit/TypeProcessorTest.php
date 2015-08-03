@@ -213,4 +213,24 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
         $this->_typeProcessor->findSetterMethodName($class, 'ActivE');
     }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessageRegExp /@param annotation is incorrect for the parameter "name" \w+/
+     */
+    public function testGetParamType()
+    {
+        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $methodReflection = $class->getMethod('setName');
+        $paramsReflection = $methodReflection->getParameters();
+        $this->_typeProcessor->getParamType($paramsReflection[0]);
+    }
+
+    public function testGetParameterDescription()
+    {
+        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $methodReflection = $class->getMethod('setName');
+        $paramsReflection = $methodReflection->getParameters();
+        $this->assertEquals('Name of the attribute', $this->_typeProcessor->getParamDescription($paramsReflection[0]));
+    }
 }

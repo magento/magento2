@@ -62,7 +62,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        $this->searchCriteriaBuilder->addFilter(
+        $this->searchCriteriaBuilder->addFilters(
             [
                 $this->filterBuilder
                     ->setField('entity_type_code')

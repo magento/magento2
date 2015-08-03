@@ -4,226 +4,305 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use \Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Asset\Repository;
 
+/**
+ * Unit test for Magento\Framework\View\Asset\Repository
+ */
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    private $repository;
+
+    /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $baseUrl;
+    private $urlMock;
 
     /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $design;
+    private $designMock;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $themeList;
+    private $listMock;
 
     /**
      * @var \Magento\Framework\View\Asset\Source|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $source;
-
-    /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $theme;
-
-    /**
-     * @var Repository
-     */
-    private $object;
+    private $sourceMock;
 
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestMock;
+    private $httpMock;
 
+    /**
+     * @var \Magento\Framework\View\Asset\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fileFactoryMock;
+
+    /**
+     * @var \Magento\Framework\View\Asset\File\FallbackContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fallbackFactoryMock;
+
+    /**
+     * @var \Magento\Framework\View\Asset\File\ContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $contextFactoryMock;
+
+    /**
+     * @var \Magento\Framework\View\Asset\RemoteFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $remoteFactoryMock;
+
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
-        $this->themeList = $this->getMockForAbstractClass('\Magento\Framework\View\Design\Theme\ListInterface');
-        $this->source = $this->getMock(
-            'Magento\Framework\View\Asset\Source',
-            ['getFile', 'getContent'],
-            [],
-            '',
-            false
-        );
-        $this->baseUrl = $this->getMockForAbstractClass('Magento\Framework\UrlInterface');
-        $this->design = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
-        $this->theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->urlMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->object = new Repository(
-            $this->baseUrl,
-            $this->design,
-            $this->themeList,
-            $this->source,
-            $this->requestMock
+        $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->listMock = $this->getMockBuilder('Magento\Framework\View\Design\Theme\ListInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->sourceMock = $this->getMockBuilder('Magento\Framework\View\Asset\Source')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->httpMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->fileFactoryMock = $this->getMockBuilder('Magento\Framework\View\Asset\FileFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->fallbackFactoryMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContextFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextFactoryMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\ContextFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->remoteFactoryMock = $this->getMockBuilder('Magento\Framework\View\Asset\RemoteFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->repository = new Repository(
+            $this->urlMock,
+            $this->designMock,
+            $this->listMock,
+            $this->sourceMock,
+            $this->httpMock,
+            $this->fileFactoryMock,
+            $this->fallbackFactoryMock,
+            $this->contextFactoryMock,
+            $this->remoteFactoryMock
         );
     }
 
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Could not find theme 'nonexistent_theme' for area 'area'
+     * @return void
      */
     public function testUpdateDesignParamsWrongTheme()
     {
         $params = ['area' => 'area', 'theme' => 'nonexistent_theme'];
-        $this->themeList->expects($this->once())
+        $this->listMock->expects($this->once())
             ->method('getThemeByFullPath')
             ->with('area/nonexistent_theme')
             ->will($this->returnValue(null));
-        $this->object->updateDesignParams($params);
-    }
-
-    public function testCreateAsset()
-    {
-        $this->mockDesign();
-        $this->baseUrl->expects($this->once())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('http://example.com/static/'));
-        $asset = $this->object->createAsset('test/file.js');
-        $this->assertInstanceOf('\Magento\Framework\View\Asset\File', $asset);
-        $this->assertEquals('area/theme/locale/test/file.js', $asset->getPath());
-        $this->assertEquals('test/file.js', $asset->getFilePath());
-        $this->assertEquals('js', $asset->getContentType());
-        $this->assertInstanceOf('\Magento\Framework\View\Asset\File\FallbackContext', $asset->getContext());
-        $this->assertEquals('', $asset->getModule());
-        $this->assertEquals('http://example.com/static/area/theme/locale/test/file.js', $asset->getUrl());
-
-        $this->source->expects($this->once())->method('getFile')->with($asset)->will($this->returnValue('source'));
-        $this->source->expects($this->once())->method('getContent')->with($asset)->will($this->returnValue('content'));
-        $this->assertEquals('source', $asset->getSourceFile());
-        $this->assertEquals('content', $asset->getContent());
-
-        $anotherAsset = $this->object->createAsset('another/file.id');
-        $this->assertSame($anotherAsset->getContext(), $asset->getContext());
-    }
-
-    public function testCreateAssetModular()
-    {
-        $this->mockDesign();
-        $asset = $this->object->createAsset('Module_Name::test/file.js');
-        $this->assertEquals('Module_Name', $asset->getModule());
-        $this->assertEquals('test/file.js', $asset->getFilePath());
-    }
-
-    public function testGetStaticViewFileContext()
-    {
-        $this->mockDesign();
-        $context = $this->object->getStaticViewFileContext();
-        $this->assertInstanceOf('\Magento\Framework\View\Asset\ContextInterface', $context);
-        $this->assertSame($context, $this->object->getStaticViewFileContext()); // to ensure in-memory caching
-        $asset = $this->object->createAsset('test/file.js');
-        $this->assertSame($context, $asset->getContext()); // and once again to ensure in-memory caching for real
+        $this->repository->updateDesignParams($params);
     }
 
     /**
-     * @param string $fileId
-     * @param string $similarToModule
-     * @param string $expectedPath
-     * @param string $expectedType
-     * @param string $expectedModule
-     * @dataProvider createSimilarDataProvider
+     * @param array $params
+     * @param array $result
+     * @return void
+     * @dataProvider updateDesignParamsDataProvider
      */
-    public function testCreateSimilar($fileId, $similarToModule, $expectedPath, $expectedType, $expectedModule)
+    public function testUpdateDesignParams($params, $result)
     {
-        $similarTo = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
-        $context = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\ContextInterface');
-        $similarTo->expects($this->once())->method('getContext')->will($this->returnValue($context));
-        $similarTo->expects($this->any())->method('getModule')->will($this->returnValue($similarToModule));
-        $asset = $this->object->createSimilar($fileId, $similarTo);
-        $this->assertInstanceOf('\Magento\Framework\View\Asset\File', $asset);
-        $this->assertSame($context, $asset->getContext());
-        $this->assertEquals($expectedPath, $asset->getFilePath());
-        $this->assertEquals($expectedType, $asset->getContentType());
-        $this->assertEquals($expectedModule, $asset->getModule());
+        $this->listMock
+            ->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->willReturn('ThemeID');
+
+        $this->repository->updateDesignParams($params);
+        $this->assertEquals($result, $params);
     }
 
     /**
      * @return array
      */
-    public function createSimilarDataProvider()
+    public function updateDesignParamsDataProvider()
     {
         return [
-            ['test/file.css', '', 'test/file.css', 'css', ''],
-            ['test/file.js', '', 'test/file.js', 'js', ''],
-            ['test/file.css', 'Module_Name', 'test/file.css', 'css', 'Module_Name'],
-            ['Module_Name::test/file.css', 'Module_Two', 'test/file.css', 'css', 'Module_Name'],
+            [
+                ['area' => 'AREA'],
+                ['area' => 'AREA', 'themeModel' => '', 'module' => '', 'locale' => '']],
+            [
+                ['themeId' => 'ThemeID'],
+                ['area' => '', 'themeId' => 'ThemeID', 'themeModel' => 'ThemeID', 'module' => '', 'locale' => '']
+            ]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateAsset()
+    {
+        $this->listMock
+            ->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->willReturnArgument(0);
+
+        $fallbackContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContex')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->fallbackFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'baseUrl' => '',
+                    'areaType' => '',
+                    'themePath' => 'Default',
+                    'localeCode' => '',
+                    'isSecure' => '',
+                ]
+            )
+            ->willReturn($fallbackContextMock);
+
+        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->fileFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'source' => $this->sourceMock,
+                    'context' => $fallbackContextMock,
+                    'filePath' => 'test/file.js',
+                    'module' => 'Test',
+                    'contentType' => ''
+                ]
+            )
+            ->willReturn($assetMock);
+
+        $this->assertEquals(
+            $assetMock,
+            $this->repository->createAsset('test/file.js', ['module' => 'Test', 'theme' => 'Default'])
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetStaticViewFileContext()
+    {
+        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface', [], [], '', false);
+        $this->designMock
+            ->expects($this->any())
+            ->method('getDesignParams')
+            ->willReturn(
+                [
+                    'themeModel' => $themeMock,
+                    'area' => 'area',
+                    'locale' => 'locale'
+                ]
+            );
+        $this->listMock
+            ->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->willReturnArgument(0);
+        $this->httpMock
+            ->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(false);
+
+        $fallbackContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContex')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->fallbackFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'baseUrl' => '',
+                    'areaType' => 'area',
+                    'themePath' => '',
+                    'localeCode' => 'locale',
+                    'isSecure' => '',
+                ]
+            )
+            ->willReturn($fallbackContextMock);
+
+        $this->assertEquals(
+            $fallbackContextMock,
+            $this->repository->getStaticViewFileContext()
+        );
     }
 
     /**
      * @param string $filePath
-     * @param string $dirPath
-     * @param string $baseUrlType
-     * @param string $expectedType
-     * @param string $expectedUrl
-     * @dataProvider createArbitraryDataProvider
-     */
-    public function testCreateArbitrary($filePath, $dirPath, $baseUrlType, $expectedType, $expectedUrl)
-    {
-        $this->baseUrl->expects($this->once())
-            ->method('getBaseUrl')
-            ->will($this->returnValueMap([
-                [['_type' => 'static'], 'http://example.com/static/'],
-                [['_type' => 'media'], 'http://example.com/media/'],
-            ]));
-        $dirType = 'dirType';
-        $asset = $this->object->createArbitrary($filePath, $dirPath, $dirType, $baseUrlType);
-        $this->assertInstanceOf('\Magento\Framework\View\Asset\File', $asset);
-        $this->assertEquals($expectedType, $asset->getContentType());
-        $this->assertEquals($expectedUrl, $asset->getUrl());
-        $this->assertEquals($dirType, $asset->getContext()->getBaseDirType());
-
-        $anotherAsset = $this->object->createArbitrary('another/path.js', $dirPath, $dirType, $baseUrlType);
-        $this->assertSame($anotherAsset->getContext(), $asset->getContext());
-    }
-
-    /**
-     * @return array
-     */
-    public function createArbitraryDataProvider()
-    {
-        return [
-            ['test/example.js', 'dir/path', 'static', 'js', 'http://example.com/static/dir/path/test/example.js'],
-            ['test/example.css', '', 'media', 'css', 'http://example.com/media/test/example.css'],
-            ['img/logo.gif', 'uploaded', 'media', 'gif', 'http://example.com/media/uploaded/img/logo.gif'],
-        ];
-    }
-
-    /**
-     * @param string $fileId
-     * @param string $relFilePath
-     * @param string $relModule
-     * @param string $expFilePath
-     * @param string $expType
-     * @param string $expModule
+     * @param string $resultFilePath
+     * @param string $module
+     * @return void
      * @dataProvider createRelatedDataProvider
      */
-    public function testCreateRelated($fileId, $relFilePath, $relModule, $expFilePath, $expType, $expModule)
+    public function testCreateRelated($filePath, $resultFilePath, $module)
     {
-        $relativeTo = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
-        $context = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\ContextInterface');
-        $relativeTo->expects($this->once())->method('getContext')->will($this->returnValue($context));
-        $relativeTo->expects($this->any())->method('getModule')->will($this->returnValue($relModule));
-        $relativeTo->expects($this->any())->method('getFilePath')->will($this->returnValue($relFilePath));
-        $asset = $this->object->createRelated($fileId, $relativeTo);
-        $this->assertInstanceOf('\Magento\Framework\View\Asset\File', $asset);
-        $this->assertSame($context, $asset->getContext());
-        $this->assertEquals($expFilePath, $asset->getFilePath());
-        $this->assertEquals($expType, $asset->getContentType());
-        $this->assertEquals($expModule, $asset->getModule());
+        $originalContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\ContextInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $originalAssetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+            ->disableOriginalConstructor()
+            ->setMethods(['getModule', 'getContext'])
+            ->getMock();
+        $originalAssetMock
+            ->expects($this->any())
+            ->method('getContext')
+            ->willReturn($originalContextMock);
+
+        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->fileFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'source' => $this->sourceMock,
+                    'context' => $originalContextMock,
+                    'filePath' => $resultFilePath,
+                    'module' => $module,
+                    'contentType' => ''
+                ]
+            )
+            ->willReturn($assetMock);
+
+        $this->assertEquals(
+            $assetMock,
+            $this->repository->createRelated($filePath, $originalAssetMock)
+        );
     }
 
     /**
@@ -232,98 +311,119 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     public function createRelatedDataProvider()
     {
         return [
-            ['test/file.ext', 'rel/file.ext2', '', 'rel/test/file.ext', 'ext', ''],
-            ['test/file.ext', 'rel/file.ext2', 'Module_Name', 'rel/test/file.ext', 'ext', 'Module_Name'],
-            ['Module_One::test/file.ext', 'rel/file.ext2', 'Module_Two', 'test/file.ext', 'ext', 'Module_One'],
-            ['Module_Name::test/file.ext', '', '', 'test/file.ext', 'ext', 'Module_Name'],
+            ['test/file.js', '/test/file.js', ''],
+            ['test::file.js', 'file.js', 'test'],
         ];
     }
 
-    public function testCreateRemoteAsset()
+    /**
+     * @return void
+     */
+    public function testCreateArbitrary()
     {
-        $asset = $this->object->createRemoteAsset('url', 'type');
-        $this->assertInstanceOf('\Magento\Framework\View\Asset\Remote', $asset);
-        $this->assertEquals('url', $asset->getUrl());
-        $this->assertEquals('type', $asset->getContentType());
-    }
+        $contextMock = $this->getMockBuilder('Magento\Framework\View\Asset\ContextInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-    public function testGetUrl()
-    {
-        $this->mockDesign();
-        $this->baseUrl->expects($this->once())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('http://example.com/static/'));
-        $result = $this->object->getUrl('Module_Name::img/product/placeholder.png');
+        $this->contextFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'baseUrl' => '',
+                    'baseDirType' => 'dirType',
+                    'contextPath' => 'dir/path'
+                ]
+            )
+            ->willReturn($contextMock);
+
+        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->fileFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'source' => $this->sourceMock,
+                    'context' => $contextMock,
+                    'filePath' => 'test/file.js',
+                    'module' => '',
+                    'contentType' => ''
+                ]
+            )
+            ->willReturn($assetMock);
+
         $this->assertEquals(
-            'http://example.com/static/area/theme/locale/Module_Name/img/product/placeholder.png',
-            $result
+            $assetMock,
+            $this->repository->createArbitrary('test/file.js', 'dir/path', 'dirType', 'static')
         );
     }
 
-    public function testGetUrlWithParams()
+    /**
+     * @return void
+     */
+    public function testCreateRemoteAsset()
     {
-        $defaultTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $defaults = [
-            'area' => 'area',
-            'themeModel' => $defaultTheme,
-            'locale' => 'locale',
-        ];
-        $this->design->expects($this->atLeastOnce())->method('getDesignParams')->will($this->returnValue($defaults));
-        $this->design->expects($this->once())
-            ->method('getConfigurationDesignTheme')
-            ->with('custom_area')
-            ->will($this->returnValue(false));
-        $this->design->expects($this->any())
-            ->method('getThemePath')
-            ->with($this->theme)
-            ->will($this->returnValue('custom_theme'));
-        $this->baseUrl->expects($this->once())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('http://example.com/static/'));
-        $params = [
-            'area' => 'custom_area',
-            'locale' => 'en_US',
-            'module' => 'This_Shall_Not_Be_Used',
-        ];
-        $result = $this->object->getUrlWithParams('Module_Name::file.ext', $params);
-        $this->assertEquals('http://example.com/static/custom_area/custom_theme/en_US/Module_Name/file.ext', $result);
     }
 
-    private function mockDesign()
+    /**
+     * @return void
+     */
+    public function testGetUrl()
     {
-        $params = [
-            'area'       => 'area',
-            'themeModel' => $this->theme,
-            'locale'     => 'locale',
-        ];
-        $this->design->expects($this->atLeastOnce())->method('getDesignParams')->will($this->returnValue($params));
-        $this->design->expects($this->any())
-            ->method('getConfigurationDesignTheme')
-            ->with('area')
-            ->will($this->returnValue($this->theme));
-        $this->design->expects($this->any())
-            ->method('getThemePath')
-            ->with($this->theme)
-            ->will($this->returnValue('theme'));
-        $this->themeList->expects($this->any())->method('getThemeByFullPath')->will($this->returnValue($this->theme));
+        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface', [], [], '', false);
+        $this->designMock
+            ->expects($this->any())
+            ->method('getDesignParams')
+            ->willReturn(
+                [
+                    'themeModel' => $themeMock,
+                    'area' => 'area',
+                    'locale' => 'locale'
+                ]
+            );
+
+        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $assetMock
+            ->expects($this->any())
+            ->method('getUrl')
+            ->willReturn('some url');
+
+        $this->fileFactoryMock
+            ->expects($this->exactly(2))
+            ->method('create')
+            ->with(
+                [
+                    'source' => $this->sourceMock,
+                    'context' => '',
+                    'filePath' => 'test/file.js',
+                    'module' => '',
+                    'contentType' => ''
+                ]
+            )
+            ->willReturn($assetMock);
+
+        $this->assertEquals(
+            'some url',
+            $this->repository->getUrl('test/file.js')
+        );
+        $this->assertEquals(
+            'some url',
+            $this->repository->getUrlWithParams('test/file.js', [])
+        );
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Scope separator "::" cannot be used without scope identifier.
+     * @return void
      */
     public function testExtractModuleException()
     {
-        Repository::extractModule('::no_scope.ext');
+        $this->repository->extractModule('::asdsad');
     }
-
-    public function testExtractModule()
-    {
-        $this->assertEquals(['Module_One', 'File'], Repository::extractModule('Module_One::File'));
-        $this->assertEquals(['', 'File'], Repository::extractModule('File'));
-        $this->assertEquals(
-            ['Module_One', 'File::SomethingElse'],
-            Repository::extractModule('Module_One::File::SomethingElse')
-        );
-    }
-} 
+}

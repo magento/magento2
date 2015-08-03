@@ -5,34 +5,35 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+
+class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * Cancel selected orders
      *
+     * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    protected function massAction(AbstractCollection $collection)
     {
-        $orderIds = $this->getRequest()->getPost('order_ids', []);
         $countCancelOrder = 0;
-        $countNonCancelOrder = 0;
-        foreach ($orderIds as $orderId) {
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
-            if ($order->canCancel()) {
-                $order->cancel()->save();
-                $countCancelOrder++;
-            } else {
-                $countNonCancelOrder++;
+        foreach ($collection->getItems() as $order) {
+            if (!$order->canCancel()) {
+                continue;
             }
+            $order->cancel();
+            $order->save();
+            $countCancelOrder++;
         }
-        if ($countNonCancelOrder) {
-            if ($countCancelOrder) {
-                $this->messageManager->addError(__('%1 order(s) cannot be canceled.', $countNonCancelOrder));
-            } else {
-                $this->messageManager->addError(__('You cannot cancel the order(s).'));
-            }
+        $countNonCancelOrder = $collection->count() - $countCancelOrder;
+
+        if ($countNonCancelOrder && $countCancelOrder) {
+            $this->messageManager->addError(__('%1 order(s) cannot be canceled.', $countNonCancelOrder));
+        } elseif ($countNonCancelOrder) {
+            $this->messageManager->addError(__('You cannot cancel the order(s).'));
         }
+
         if ($countCancelOrder) {
             $this->messageManager->addSuccess(__('We canceled %1 order(s).', $countCancelOrder));
         }

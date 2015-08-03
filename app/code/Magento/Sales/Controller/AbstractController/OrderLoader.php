@@ -9,6 +9,7 @@ namespace Magento\Sales\Controller\AbstractController;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\RedirectFactory;
 
 class OrderLoader implements OrderLoaderInterface
 {
@@ -38,24 +39,32 @@ class OrderLoader implements OrderLoaderInterface
     protected $resultForwardFactory;
 
     /**
+     * @var RedirectFactory
+     */
+    protected $redirectFactory;
+
+    /**
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param Registry $registry
      * @param \Magento\Framework\UrlInterface $url
      * @param ForwardFactory $resultForwardFactory
+     * @param RedirectFactory $redirectFactory
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
         OrderViewAuthorizationInterface $orderAuthorization,
         Registry $registry,
         \Magento\Framework\UrlInterface $url,
-        ForwardFactory $resultForwardFactory
+        ForwardFactory $resultForwardFactory,
+        RedirectFactory $redirectFactory
     ) {
         $this->orderFactory = $orderFactory;
         $this->orderAuthorization = $orderAuthorization;
         $this->registry = $registry;
         $this->url = $url;
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->redirectFactory = $redirectFactory;
     }
 
     /**
@@ -78,7 +87,7 @@ class OrderLoader implements OrderLoaderInterface
             return true;
         }
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->redirectFactory->create();
         return $resultRedirect->setUrl($this->url->getUrl('*/*/history'));
     }
 }

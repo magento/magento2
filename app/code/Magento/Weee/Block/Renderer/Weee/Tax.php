@@ -136,7 +136,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
     public function getValues()
     {
         $values = [];
-        $data = $this->getElement()->getValue();
+        $data = $this->getElement()->getEscapedValue();
 
         if (is_array($data) && count($data)) {
             usort($data, [$this, '_sortWeeeTaxes']);

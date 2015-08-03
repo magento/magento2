@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @see \Magento\Paypal\Block\Adminhtml\System\Config\ApiWizard
+ */
+?>
+<div class="pp-buttons-container">
+    <button onclick="javascript:window.open('<?php echo $block->getButtonUrl()?>', 'apiwizard','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=100, top=100, width=380, height=470'); return false;" class="scalable" type="button" id="<?php echo $block->getHtmlId() ?>">
+        <span><span><span><?php echo $block->escapeHtml($block->getButtonLabel()); ?></span></span></span>
+    </button>
+    <button onclick="javascript:window.open('<?php echo $block->getSandboxButtonUrl()?>', 'apiwizard','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=100, top=100, width=380, height=470'); return false;" class="scalable" type="button" id="<?php echo $block->getSandboxHtmlId() ?>">
+        <span><span><span><?php echo $block->escapeHtml($block->getSandboxButtonLabel()); ?></span></span></span>
+    </button>
+</div>

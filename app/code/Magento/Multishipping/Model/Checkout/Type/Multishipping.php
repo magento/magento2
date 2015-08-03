@@ -878,7 +878,7 @@ class Multishipping extends \Magento\Framework\Object
                     ->setConditionType('eq')
                     ->create();
                 $addresses = (array)($this->addressRepository->getList(
-                    $this->searchCriteriaBuilder->addFilter([$filter])->create()
+                    $this->searchCriteriaBuilder->addFilters([$filter])->create()
                 )->getItems());
                 if ($addresses) {
                     $address = reset($addresses);

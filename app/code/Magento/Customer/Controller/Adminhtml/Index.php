@@ -24,7 +24,7 @@ use Magento\Framework\Api\DataObjectHelper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Index extends \Magento\Backend\App\Action
+abstract class Index extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Validator
@@ -229,20 +229,16 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Customer initialization
      *
-     * @param string $idFieldName
      * @return string customer id
      */
-    protected function _initCustomer($idFieldName = 'id')
+    protected function initCurrentCustomer()
     {
-        $customerId = (int)$this->getRequest()->getParam($idFieldName);
-        $customer = $this->_objectManager->create('Magento\Customer\Model\Customer');
+        $customerId = (int)$this->getRequest()->getParam('id');
+
         if ($customerId) {
-            $customer->load($customerId);
             $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
         }
 
-        // TODO: Investigate if any piece of code still relies on this; remove if not.
-        $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $customer);
         return $customerId;
     }
 
