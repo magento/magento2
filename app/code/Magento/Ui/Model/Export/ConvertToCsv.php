@@ -169,7 +169,6 @@ class ConvertToCsv
             if (!is_array($option['value'])) {
                 $options[$option['value']] = $option['label'];
             } else {
-                $complexOption = [];
                 $this->getComplexLabel(
                     $option['value'],
                     $option['label'],
