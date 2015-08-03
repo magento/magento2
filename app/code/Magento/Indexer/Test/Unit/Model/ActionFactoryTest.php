@@ -25,7 +25,7 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage NotAction doesn't implement \Magento\Indexer\Model\ActionInterface
+     * @expectedExceptionMessage NotAction doesn't implement \Magento\Framework\Indexer\ActionInterface
      */
     public function testGetWithException()
     {
@@ -40,16 +40,16 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $actionInterfaceMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\ActionInterface',
+            'Magento\Framework\Indexer\ActionInterface',
             [],
             '',
             false
         );
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Indexer\Model\ActionInterface', [])
+            ->with('Magento\Framework\Indexer\ActionInterface', [])
             ->willReturn($actionInterfaceMock);
-        $this->model->create('Magento\Indexer\Model\ActionInterface');
-        $this->assertInstanceOf('Magento\Indexer\Model\ActionInterface', $actionInterfaceMock);
+        $this->model->create('Magento\Framework\Indexer\ActionInterface');
+        $this->assertInstanceOf('Magento\Framework\Indexer\ActionInterface', $actionInterfaceMock);
     }
 }

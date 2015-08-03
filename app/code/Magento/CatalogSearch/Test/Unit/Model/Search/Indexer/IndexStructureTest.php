@@ -11,7 +11,7 @@ use Magento\Framework\DB\Ddl\Table;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for \Magento\Indexer\Model\IndexStructure
+ * Test for \Magento\Framework\Indexer\IndexStructure
  */
 class IndexStructureTest extends \PHPUnit_Framework_TestCase
 {

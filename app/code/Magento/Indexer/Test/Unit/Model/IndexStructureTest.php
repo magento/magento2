@@ -11,7 +11,7 @@ use Magento\Framework\DB\Ddl\Table;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for \Magento\Indexer\Model\IndexStructure
+ * Test for \Magento\Framework\Indexer\IndexStructure
  */
 class IndexStructureTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,7 +65,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->target = $objectManager->getObject(
-            '\Magento\Indexer\Model\IndexStructure',
+            '\Magento\Framework\Indexer\IndexStructure',
             [
                 'resource' => $this->resource,
                 'indexScopeResolver' => $this->indexScopeResolver,

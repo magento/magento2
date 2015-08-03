@@ -107,6 +107,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     private $dataObjectHelperMock;
 
     /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexerRegistry;
+
+    /**
      * @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $extensionAttributesFactory;
@@ -176,6 +181,10 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('getEventDispatcher')
             ->willReturn($this->eventDispatcher);
 
+        $this->indexerRegistry = $this->getMockBuilder('Magento\Framework\Indexer\IndexerRegistry')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->attribute = new Attribute(
             $this->contextMock,
             $this->registryMock,
@@ -192,6 +201,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             $this->timezoneMock,
             $this->reservedAttributeListMock,
             $this->resolverMock,
+            $this->indexerRegistry,
             $this->resourceMock
         );
     }
