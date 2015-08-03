@@ -20,7 +20,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /**
-     * @var \Magento\Indexer\Model\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $actionFactoryMock;
 
