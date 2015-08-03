@@ -83,7 +83,7 @@
                 </item>
             </argument>
         </filterSearch>
-        <filters name="listing_filters">
+        <filters name="listing_filters" class="Magento\Customer\Ui\Component\Listing\Filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
@@ -193,7 +193,7 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterRange name="created_at"  class="Magento\Ui\Component\Filters\Type\DateRange">
+            <filterRange name="created_at" class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">created_at</item>
@@ -292,7 +292,7 @@
             </argument>
         </paging>
     </container>
-    <columns name="customer_columns">
+    <columns name="customer_columns" class="Magento\Customer\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="storageConfig" xsi:type="array">
