@@ -285,7 +285,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         );
         $output['postCodes'] = $this->postCodesConfig->getPostCodes();
         $output['imageData'] = $this->imageProvider->getImages($quoteId);
-        $output['countryData'] = $this->getCountryData();
         $output['defaultCountryId'] = $this->directoryHelper->getDefaultCountry();
         $output['totalsData'] = $this->getTotalsData();
         $output['shippingPolicy'] = [

@@ -22,6 +22,7 @@
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="cart" xsi:type="string">Magento\Checkout\CustomerData\Cart</item>
+                <item name="directory-data" xsi:type="string">Magento\Checkout\CustomerData\DirectoryData</item>
             </argument>
         </arguments>
     </type>
