@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface as AppScopeInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Object;
 use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\Model\AbstractModel;
@@ -267,7 +269,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     /**
      * Filesystem instance
      *
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $filesystem;
 
@@ -544,6 +546,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      * @param boolean|null $secure
      * @return string
      * @throws \InvalidArgumentException
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -599,8 +602,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
             }
 
             if (false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
-                $distroBaseUrl = $this->_request->getDistroBaseUrl();
-                $url = str_replace(self::BASE_URL_PLACEHOLDER, $distroBaseUrl, $url);
+                $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->_request->getDistroBaseUrl(), $url);
             }
 
             $this->_baseUrlCache[$cacheKey] = rtrim($url, '/') . '/';
@@ -664,15 +666,15 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      * If we use Database file storage and server doesn't support rewrites (.htaccess in media folder)
      * we have to put name of fetching media script exactly into URL
      *
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param Filesystem $filesystem
      * @param bool $secure
      * @return string|bool
      */
-    protected function _getMediaScriptUrl(\Magento\Framework\Filesystem $filesystem, $secure)
+    protected function _getMediaScriptUrl(Filesystem $filesystem, $secure)
     {
         if (!$this->getConfig(self::XML_PATH_USE_REWRITES) && $this->_coreFileStorageDatabase->checkDbUsage()) {
-            return $this->getBaseUrl(UrlInterface::URL_TYPE_WEB, $secure)
-                . $filesystem->getUri(DirectoryList::PUB) . '/' . self::MEDIA_REWRITE_SCRIPT;
+            $baseUrl = $this->getBaseUrl(UrlInterface::URL_TYPE_WEB, $secure);
+            return $baseUrl . $filesystem->getUri(DirectoryList::PUB) . '/' . self::MEDIA_REWRITE_SCRIPT;
         }
         return false;
     }
@@ -698,8 +700,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      */
     public function isUseStoreInUrl()
     {
-        return !($this->hasDisableStoreInUrl()
-            && $this->getDisableStoreInUrl())
+        return !($this->hasDisableStoreInUrl() && $this->getDisableStoreInUrl())
             && $this->getConfig(self::XML_PATH_STORE_IN_URL);
     }
 
@@ -747,13 +748,9 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         }
 
         $secureBaseUrl = $this->_config->getValue(self::XML_PATH_SECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
+        $secureFrontend = $this->_config->getValue(self::XML_PATH_SECURE_IN_FRONTEND, ScopeInterface::SCOPE_STORE);
 
-        if (!$secureBaseUrl ||
-            !$this->_config->getValue(
-                self::XML_PATH_SECURE_IN_FRONTEND,
-                ScopeInterface::SCOPE_STORE
-            )
-        ) {
+        if (!$secureBaseUrl || !$secureFrontend) {
             return false;
         }
 
@@ -954,7 +951,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function getRootCategoryId()
     {
         if (!$this->getGroup()) {
-            return 0;
+            return 0;   // TODO move default root category ID to constant
         }
         return $this->getGroup()->getRootCategoryId();
     }
@@ -962,18 +959,19 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     /**
      * Set group model for store
      *
-     * @param \Magento\Store\Model\Group $group
-     * @return void
+     * @param Group $group
+     * @return Store
      */
-    public function setGroup(\Magento\Store\Model\Group $group)
+    public function setGroup(Group $group)
     {
         $this->setGroupId($group->getId());
+        return $this;
     }
 
     /**
      * Retrieve group model
      *
-     * @return \Magento\Store\Model\Group|bool
+     * @return Group|bool
      */
     public function getGroup()
     {
@@ -1087,11 +1085,11 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     /**
      * Check if store is active
      *
-     * @return boolean|null
+     * @return boolean
      */
     public function getIsActive()
     {
-        return $this->_getData('is_active');
+        return (bool)$this->_getData('is_active');
     }
 
     /**
@@ -1198,11 +1196,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
             ->setHttpOnly(true)
             ->setDurationOneYear()
             ->setPath($this->getStorePath());
-        $this->_cookieManager->setPublicCookie(
-            self::COOKIE_NAME,
-            $this->getCode(),
-            $cookieMetadata
-        );
+        $this->_cookieManager->setPublicCookie(self::COOKIE_NAME, $this->getCode(), $cookieMetadata);
         return $this;
     }
 
