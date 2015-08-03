@@ -13,9 +13,9 @@ class Db
     /**
      * Database connection adapter
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $_write;
+    protected $connection;
 
     /**
      * Tables foreign key data array
@@ -43,7 +43,7 @@ class Db
         \Magento\Framework\App\Resource $resource
     ) {
         $this->_resourceHelper = $resHelperFactory->create();
-        $this->_write = $resource->getConnection('backup_write');
+        $this->connection = $resource->getConnection('backup');
     }
 
     /**
@@ -63,7 +63,7 @@ class Db
      */
     public function getTables()
     {
-        return $this->_write->listTables();
+        return $this->connection->listTables();
     }
 
     /**
@@ -120,7 +120,7 @@ class Db
      */
     public function getTableStatus($tableName)
     {
-        $row = $this->_write->showTableStatus($tableName);
+        $row = $this->connection->showTableStatus($tableName);
 
         if ($row) {
             $statusObject = new \Magento\Framework\DataObject();
@@ -128,7 +128,7 @@ class Db
                 $statusObject->setData(strtolower($field), $value);
             }
 
-            $cntRow = $this->_write->fetchRow($this->_write->select()->from($tableName, 'COUNT(1) as rows'));
+            $cntRow = $this->connection->fetchRow($this->connection->select()->from($tableName, 'COUNT(1) as rows'));
             $statusObject->setRows($cntRow['rows']);
 
             return $statusObject;
@@ -170,7 +170,7 @@ class Db
      */
     public function getTableHeader($tableName)
     {
-        $quotedTableName = $this->_write->quoteIdentifier($tableName);
+        $quotedTableName = $this->connection->quoteIdentifier($tableName);
         return "\n--\n" . "-- Table structure for table {$quotedTableName}\n" . "--\n\n";
     }
 
@@ -237,7 +237,7 @@ class Db
     public function beginTransaction()
     {
         $this->_resourceHelper->prepareTransactionIsolationLevel();
-        $this->_write->beginTransaction();
+        $this->connection->beginTransaction();
         return $this;
     }
 
@@ -248,7 +248,7 @@ class Db
      */
     public function commitTransaction()
     {
-        $this->_write->commit();
+        $this->connection->commit();
         $this->_resourceHelper->restoreTransactionIsolationLevel();
         return $this;
     }
@@ -260,7 +260,7 @@ class Db
      */
     public function rollBackTransaction()
     {
-        $this->_write->rollBack();
+        $this->connection->rollBack();
         $this->_resourceHelper->restoreTransactionIsolationLevel();
         return $this;
     }
@@ -273,7 +273,7 @@ class Db
      */
     public function runCommand($command)
     {
-        $this->_write->query($command);
+        $this->connection->query($command);
         return $this;
     }
 }

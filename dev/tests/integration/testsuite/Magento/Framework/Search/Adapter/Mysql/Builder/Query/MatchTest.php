@@ -54,7 +54,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\App\Resource $resource */
         $resource = $this->objectManager->create('Magento\Framework\App\Resource');
         /** @var \Magento\Framework\DB\Select $select */
-        $select = $resource->getConnection(Config::DEFAULT_SETUP_CONNECTION)->select();
+        $select = $resource->getConnection()->select();
         $select->from('someTable');
 
         $resultSelect = $match->build($scoreBuilder, $select, $query, $conditionType);

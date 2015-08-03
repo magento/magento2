@@ -104,10 +104,10 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             throw new ValidatorException(__('Please enter a customer email.'));
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $bind = ['email' => $customer->getEmail()];
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getEntityTable(),
             [$this->getEntityIdField()]
         )->where(
@@ -122,7 +122,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             $select->where('entity_id != :entity_id');
         }
 
-        $result = $adapter->fetchOne($select, $bind);
+        $result = $connection->fetchOne($select, $bind);
         if ($result) {
             throw new AlreadyExistsException(
                 __('A customer with the same email already exists in an associated website.')
@@ -203,9 +203,9 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     public function loadByEmail(\Magento\Customer\Model\Customer $customer, $email)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['customer_email' => $email];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getEntityTable(),
             [$this->getEntityIdField()]
         )->where(
@@ -222,7 +222,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             $select->where('website_id = :website_id');
         }
 
-        $customerId = $adapter->fetchOne($select, $bind);
+        $customerId = $connection->fetchOne($select, $bind);
         if ($customerId) {
             $this->load($customer, $customerId);
         } else {
@@ -252,8 +252,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     public function findEmailDuplicates()
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('customer_entity'),
             ['email', 'cnt' => 'COUNT(*)']
         )->group(
@@ -263,7 +263,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         )->limit(
             1
         );
-        $lookup = $adapter->fetchRow($select);
+        $lookup = $connection->fetchRow($select);
         if (empty($lookup)) {
             return false;
         }
@@ -278,9 +278,9 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     public function checkCustomerId($customerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['entity_id' => (int)$customerId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('customer_entity'),
             'entity_id'
         )->where(
@@ -289,7 +289,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             1
         );
 
-        $result = $adapter->fetchOne($select, $bind);
+        $result = $connection->fetchOne($select, $bind);
         if ($result) {
             return true;
         }
@@ -304,16 +304,16 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     public function getWebsiteId($customerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['entity_id' => (int)$customerId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('customer_entity'),
             'website_id'
         )->where(
             'entity_id = :entity_id'
         );
 
-        return $adapter->fetchOne($select, $bind);
+        return $connection->fetchOne($select, $bind);
     }
 
     /**

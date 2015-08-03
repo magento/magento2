@@ -84,7 +84,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->any())->method('getConnection')
-            ->with(Resource::DEFAULT_READ_RESOURCE)
             ->will($this->returnValue($connectionAdapter));
 
         $this->scoreBuilder = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\ScoreBuilder')

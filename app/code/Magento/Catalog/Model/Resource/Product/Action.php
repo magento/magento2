@@ -23,8 +23,7 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
         $this->setType(
             \Magento\Catalog\Model\Product::ENTITY
         )->setConnection(
-            $resource->getConnection('catalog_read'),
-            $resource->getConnection('catalog_write')
+            $resource->getConnection('catalog')
         );
     }
 
@@ -42,7 +41,7 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
         $object = new \Magento\Framework\DataObject();
         $object->setStoreId($storeId);
 
-        $this->_getWriteAdapter()->beginTransaction();
+        $this->getConnection()->beginTransaction();
         try {
             foreach ($attrData as $attrCode => $value) {
                 $attribute = $this->getAttribute($attrCode);
@@ -64,9 +63,9 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
                 }
                 $this->_processAttributeValues();
             }
-            $this->_getWriteAdapter()->commit();
+            $this->getConnection()->commit();
         } catch (\Exception $e) {
-            $this->_getWriteAdapter()->rollBack();
+            $this->getConnection()->rollBack();
             throw $e;
         }
 

@@ -67,7 +67,7 @@ class DataProvider
             $currentScopeId = $this->scopeResolver->getScope($currentScope)->getId();
             $currenCategory = $this->layer->getCurrentCategory();
 
-            $derivedTable = $this->getSelect();
+            $derivedTable = $this->resource->getConnection()->select();
             $derivedTable->from(
                 ['main_table' => $this->resource->getTableName('catalog_category_product_index')],
                 [
@@ -84,26 +84,10 @@ class DataProvider
                 )->where('`category`.`path` LIKE ?', $currenCategory->getPath() . '%')
                 ->where('`category`.`level` > ?', $currenCategory->getLevel());
             }
-            $select = $this->getSelect();
+            $select = $this->resource->getConnection()->select();
             $select->from(['main_table' => $derivedTable]);
             return $select;
         }
         return $proceed($bucket, $dimensions);
-    }
-
-    /**
-     * @return Select
-     */
-    private function getSelect()
-    {
-        return $this->getConnection()->select();
-    }
-
-    /**
-     * @return AdapterInterface
-     */
-    private function getConnection()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
     }
 }
