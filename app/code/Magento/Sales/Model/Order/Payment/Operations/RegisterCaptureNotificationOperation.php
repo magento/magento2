@@ -3,9 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order\Payment\Operations;
-
 
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Invoice;
@@ -14,6 +12,14 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 
 class RegisterCaptureNotificationOperation extends AbstractOperation
 {
+    /**
+     * Registers capture notification.
+     *
+     * @param OrderPaymentInterface $payment
+     * @param string|float $amount
+     * @param bool|int $skipFraudDetection
+     * @return OrderPaymentInterface
+     */
     public function registerCaptureNotification(OrderPaymentInterface $payment, $amount, $skipFraudDetection = false)
     {
         /**

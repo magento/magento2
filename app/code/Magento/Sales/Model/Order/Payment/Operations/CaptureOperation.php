@@ -3,10 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order\Payment\Operations;
 
-
+use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
@@ -14,12 +13,20 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 
 class CaptureOperation extends AbstractOperation
 {
+    /**
+     * Captures payment.
+     *
+     * @param OrderPaymentInterface $payment
+     * @param InvoiceInterface|null $invoice
+     * @return OrderPaymentInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function capture(OrderPaymentInterface $payment, $invoice)
     {
         /**
          * @var $payment Payment
          */
-        if (is_null($invoice)) {
+        if (null === $invoice) {
             $invoice = $this->invoice($payment);
             $payment->setCreatedInvoice($invoice);
             if ($payment->getIsFraudDetected()) {

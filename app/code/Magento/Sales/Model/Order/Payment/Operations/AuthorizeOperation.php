@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order\Payment\Operations;
 
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -13,6 +12,14 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 
 class AuthorizeOperation extends AbstractOperation
 {
+    /**
+     * Authorizes payment.
+     *
+     * @param OrderPaymentInterface $payment
+     * @param bool $isOnline
+     * @param string|float $amount
+     * @return OrderPaymentInterface
+     */
     public function authorize(OrderPaymentInterface $payment, $isOnline, $amount)
     {
         // check for authorization amount to be equal to grand total
