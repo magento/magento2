@@ -84,6 +84,22 @@ class AttributeRepository
     }
 
     /**
+     * @param string $code
+     * @return AttributeMetadataInterface|null
+     */
+    public function getMetadataByCode($code)
+    {
+        $result = null;
+        foreach ($this->getList() as $attribute) {
+            if ($attribute->getAttributeCode() == $code) {
+                $result = $attribute;
+                break;
+            }
+        }
+        return $result;
+    }
+
+    /**
      * @param Attribute $attribute
      * @return AttributeMetadataInterface|null
      */

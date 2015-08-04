@@ -17,7 +17,6 @@ class ColumnFactory
      */
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
-        'select' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
 
@@ -27,17 +26,18 @@ class ColumnFactory
     protected $dataTypeMap = [
         'default' => 'text',
         'text' => 'text',
-        'boolean' => 'select',
-        'select' => 'select',
-        'multiselect' => 'select',
+        'boolean' => 'text',
+        'select' => 'text',
+        'multiselect' => 'text',
         'date' => 'date',
     ];
 
     /**
      * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
      */
-    public function __construct(\Magento\Framework\View\Element\UiComponentFactory $componentFactory)
-    {
+    public function __construct(
+        \Magento\Framework\View\Element\UiComponentFactory $componentFactory
+    ) {
         $this->componentFactory = $componentFactory;
     }
 
@@ -55,9 +55,7 @@ class ColumnFactory
             'label' => __($attribute->getFrontendLabel()),
             'dataType' => $this->getDataType($attribute),
             'align' => 'left',
-            'add_field' => true,
-            'visible' => $attribute->getIsVisibleInGrid(),
-            'handler' => 'Magento\Customer\Ui\Component\Listing\Column\AttributeColumn',
+            'visible' => (bool)$attribute->getIsVisibleInGrid(),
         ], $config);
 
         if ($attribute->getOptions()) {
