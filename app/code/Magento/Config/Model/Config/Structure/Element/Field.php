@@ -421,7 +421,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
         }
 
         $sourceModel = $this->_sourceFactory->create($sourceModel);
-        if ($sourceModel instanceof \Magento\Framework\Object) {
+        if ($sourceModel instanceof \Magento\Framework\DataObject) {
             $sourceModel->setPath($this->getPath());
         }
         if ($method) {

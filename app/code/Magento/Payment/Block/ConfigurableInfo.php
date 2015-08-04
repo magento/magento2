@@ -41,8 +41,8 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
     /**
      * Prepare PayPal-specific payment information
      *
-     * @param \Magento\Framework\Object|array|null $transport
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject|array|null $transport
+     * @return \Magento\Framework\DataObject
      */
     protected function _prepareSpecificInformation($transport = null)
     {
@@ -73,13 +73,13 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
     /**
      * Sets data to transport
      *
-     * @param \Magento\Framework\Object $transport
+     * @param \Magento\Framework\DataObject $transport
      * @param string $field
      * @param string $value
      * @return void
      */
     protected function setDataToTransfer(
-        \Magento\Framework\Object $transport,
+        \Magento\Framework\DataObject $transport,
         $field,
         $value
     ) {

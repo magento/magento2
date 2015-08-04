@@ -13,10 +13,10 @@ namespace Magento\Log\Block\Adminhtml\Online\Grid\Renderer;
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         return $row->getCustomerId() > 0 ? __('Customer') : __('Visitor');
     }
