@@ -7,7 +7,7 @@
 //  Loaders
 //  _____________________________________________
 
-.loader(
+.mixin-loader(
     @_loader-overlay-background-color: @loader-overlay__background-color,
     @_loader-overlay-z-index: @loader-overlay__z-index,
     @_loader-icon-width: @loader-icon__width,
@@ -66,7 +66,7 @@
     );
 }
 
-.loading(
+.mixin-loading(
     @_loading-background-color: @loading__background-color,
     @_loading-background-image: @loading__background-image
 ) {
@@ -82,7 +82,7 @@
     }
 }
 
-.loading-mask() {
+.mixin-loading-mask() {
     bottom: 0;
     left: 0;
     margin: auto;

@@ -7,7 +7,7 @@
 //  Popups
 //  _____________________________________________
 
-.popup(
+.mixin-popup(
     @_popup-width: @popup__width,
     @_popup-height: @popup__height,
     @_popup-padding: @popup__padding,
@@ -151,7 +151,7 @@
     }
 }
 
-.window-overlay(
+.mixin-window-overlay(
     @_overlay-background: @overlay__background,
     @_overlay-opacity: @overlay__opacity,
     @_overlay-opacity-old: @overlay__opacity-old,
@@ -192,7 +192,6 @@
     overflow-y: auto;
     .css(max-height, @_popup-height);
 }
-
 
 //  Popup Headings
 ._popup-headings(
