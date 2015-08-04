@@ -16,7 +16,7 @@ class AffectCacheTest extends \PHPUnit_Framework_TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\Indexer\Model\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 

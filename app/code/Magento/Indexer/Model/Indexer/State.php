@@ -10,15 +10,6 @@ use Magento\Framework\Indexer\StateInterface;
 class State extends \Magento\Framework\Model\AbstractModel implements StateInterface
 {
     /**
-     * Indexer statuses
-     */
-    const STATUS_WORKING = 'working';
-
-    const STATUS_VALID = 'valid';
-
-    const STATUS_INVALID = 'invalid';
-
-    /**
      * Prefix of model events names
      *
      * @var string

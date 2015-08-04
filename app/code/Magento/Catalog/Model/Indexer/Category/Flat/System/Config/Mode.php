@@ -62,7 +62,7 @@ class Mode extends \Magento\Framework\App\Config\Value
         if ((bool)$this->getValue() != (bool)$this->getOldValue()) {
             if ((bool)$this->getValue()) {
                 $this->indexerState->loadByIndexer(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID);
-                $this->indexerState->setStatus(\Magento\Indexer\Model\Indexer\State::STATUS_INVALID);
+                $this->indexerState->setStatus(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID);
                 $this->indexerState->save();
             } else {
                 $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)

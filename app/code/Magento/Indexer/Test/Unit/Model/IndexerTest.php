@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Model;
 
+use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Model\Indexer\State;
 
 class IndexerTest extends \PHPUnit_Framework_TestCase
@@ -399,7 +400,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStatus()
     {
-        $status = State::STATUS_WORKING;
+        $status = StateInterface::STATUS_WORKING;
         $stateMock = $this->getMock(
             '\Magento\Indexer\Model\Indexer\State',
             ['load', 'getStatus'],
@@ -439,9 +440,9 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     public function statusDataProvider()
     {
         return [
-            ['isValid', State::STATUS_VALID],
-            ['isInvalid', State::STATUS_INVALID],
-            ['isWorking', State::STATUS_WORKING]
+            ['isValid', StateInterface::STATUS_VALID],
+            ['isInvalid', StateInterface::STATUS_INVALID],
+            ['isWorking', StateInterface::STATUS_WORKING]
         ];
     }
 
@@ -456,7 +457,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
-        $stateMock->expects($this->once())->method('setStatus')->with(State::STATUS_INVALID)->will(
+        $stateMock->expects($this->once())->method('setStatus')->with(StateInterface::STATUS_INVALID)->will(
             $this->returnSelf()
         );
         $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
