@@ -28,7 +28,6 @@ class AttributeRepository
      */
     protected $addressAttributeCollection;
 
-
     /**
      * @var \Magento\Customer\Model\Metadata\CustomerMetadata
      */
@@ -80,7 +79,6 @@ class AttributeRepository
                 }
                 $this->attributes[$attributeCode] = $attribute;
             }
-
         }
         return $this->attributes;
     }
