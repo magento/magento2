@@ -634,6 +634,12 @@ class Transaction extends AbstractModel implements TransactionInterface
      */
     public function beforeSave()
     {
+        if (!$this->getOrderId() && $this->getOrder()) {
+            $this->setOrderId($this->getOrder()->getId());
+        }
+        if (!$this->getPaymentId() && $this->getOrder()) {
+            $this->setPaymentId($this->getOrder()->getPayment()->getId());
+        }
         // set parent id
         $this->_verifyPaymentObject();
         if (!$this->getId()) {

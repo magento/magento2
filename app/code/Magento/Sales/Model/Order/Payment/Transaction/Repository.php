@@ -107,7 +107,11 @@ class Repository implements TransactionRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $transactionType
+     * @param int $paymentId
+     * @param int $orderId
+     * @return bool|\Magento\Framework\Model\AbstractModel|mixed
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getByTransactionType($transactionType, $paymentId, $orderId)
     {
@@ -149,7 +153,11 @@ class Repository implements TransactionRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $transactionId
+     * @param int $paymentId
+     * @param int $orderId
+     * @return bool|\Magento\Framework\Api\ExtensibleDataInterface|\Magento\Framework\Model\AbstractModel
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getByTransactionId($transactionId, $paymentId, $orderId)
     {
