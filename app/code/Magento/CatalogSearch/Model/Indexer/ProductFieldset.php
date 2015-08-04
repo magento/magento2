@@ -28,11 +28,6 @@ class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
     private $searchableAttributes;
     
     /**
-     * @var string
-     */
-    private $defaultHandler;
-
-    /**
      * @param Config $eavConfig
      * @param CollectionFactory $collectionFactory
      */

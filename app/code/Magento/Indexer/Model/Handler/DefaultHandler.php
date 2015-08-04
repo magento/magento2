@@ -20,14 +20,4 @@ class DefaultHandler implements HandlerInterface
     {
         $source->getSelect()->columns($fieldInfo['origin'] . ' AS ' . $fieldInfo['name'], $alias);
     }
-
-    /**
-     * @param SourceProviderInterface $source
-     * @param array $fieldInfo
-     * @return void
-     */
-    public function prepareData(SourceProviderInterface $source, $fieldInfo)
-    {
-        new \Exception('Not implemented yet');
-    }
 }
