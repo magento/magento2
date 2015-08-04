@@ -223,7 +223,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         );
         $this->creditmemoFactoryMock = $this->getMock(
             'Magento\Sales\Model\Order\CreditmemoFactory',
-            ['create'],
+            [],
             [],
             '',
             false
