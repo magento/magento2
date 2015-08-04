@@ -212,23 +212,20 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Product thumbnail image url getter
+     * Retrieve product image
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return string
+     * @param string $imageId
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Block\Product\Image
      */
-    public function getThumbnailUrl($product)
+    public function getImage($product, $imageId)
     {
-        return (string)$this->imageHelper->init($product, 'thumbnail')->resize($this->getThumbnailSize());
-    }
+        $imageHelper = clone $this->imageHelper;
+        $imageHelper->init($product, $imageId);
 
-    /**
-     * Thumbnail image size getter
-     *
-     * @return int
-     */
-    public function getThumbnailSize()
-    {
-        return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
+        return $this->getLayout()->createBlock(
+            'Magento\Catalog\Block\Product\Image', '', ['imageHelper' => $imageHelper]
+        );
     }
 }

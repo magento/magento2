@@ -3794,4 +3794,5 @@ return [
         'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
         . '\Configurable'
     ],
+    ['Magento\Catalog\Model\Product\Image\View'],
 ];

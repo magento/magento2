@@ -142,7 +142,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
             $description = sprintf(
                 $description,
                 $product->getProductUrl(),
-                $this->imageHelper->init($product, 'thumbnail')->resize(75, 75),
+                $this->imageHelper->init($product, 'rss_thumbnail')->getUrl(),
                 $product->getDescription(),
                 $product->getAllowedPriceInRss() ? $this->renderPriceHtml($product) : ''
             );

@@ -24,7 +24,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                    title="<?php echo $block->escapeHtml($block->getProductName()) ?>"
                    class="product-item-photo">
             <?php endif; ?>
-            <?php echo $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($product, 'cart_page_product_thumbnail')->toHtml(); ?>
+            <?php echo $block->getImage($product, 'cart_page_product_thumbnail')->toHtml(); ?>
             <?php if ($block->hasProductUrl()):?></a><?php endif;?>
             <div class="product-item-details">
                 <strong class="product-item-name">
