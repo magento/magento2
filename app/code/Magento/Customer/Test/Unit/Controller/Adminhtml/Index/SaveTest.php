@@ -71,7 +71,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $formFactoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObjectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectFactoryMock;
 
@@ -165,7 +165,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->formFactoryMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\FormFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectFactoryMock = $this->getMockBuilder('Magento\Framework\ObjectFactory')
+        $this->objectFactoryMock = $this->getMockBuilder('Magento\Framework\DataObjectFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -380,8 +380,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -641,8 +641,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -827,8 +827,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->requestMock, 'customer')
             ->willReturn($filteredData);
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -967,8 +967,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->requestMock, 'customer')
             ->willReturn($filteredData);
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1107,8 +1107,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->requestMock, 'customer')
             ->willReturn($filteredData);
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 

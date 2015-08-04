@@ -126,7 +126,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->mockGridDateRendererBehaviorWithLocale($locale);
         $this->mockGridDateColumnConfig($index, $period);
 
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getData'])
             ->getMock();
         $objectMock->expects($this->once())->method('getData')->willReturn($data);
@@ -185,7 +185,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->mockGridDateRendererBehaviorWithLocale('en_US');
         $this->mockGridDateColumnConfig('period', 'day');
 
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getData'])
             ->getMock();
         $objectMock->expects($this->any())->method('getData')->willReturn('2014-06-25');

@@ -50,7 +50,7 @@ class Observer
     protected $_itemsFactory;
 
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
 
@@ -61,7 +61,7 @@ class Observer
      * @param \Magento\Downloadable\Model\Link\Purchased\ItemFactory $itemFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -70,7 +70,7 @@ class Observer
         \Magento\Downloadable\Model\Link\Purchased\ItemFactory $itemFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
-        \Magento\Framework\Object\Copy $objectCopyService
+        \Magento\Framework\DataObject\Copy $objectCopyService
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_purchasedFactory = $purchasedFactory;
@@ -84,7 +84,7 @@ class Observer
     /**
      * Prepare product to save
      *
-     * @param   \Magento\Framework\Object $observer
+     * @param   \Magento\Framework\DataObject $observer
      * @return  $this
      */
     public function prepareProductSave($observer)
@@ -102,7 +102,7 @@ class Observer
     /**
      * Save data from order to purchased links
      *
-     * @param \Magento\Framework\Object $observer
+     * @param \Magento\Framework\DataObject $observer
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -197,7 +197,7 @@ class Observer
     /**
      * Set checkout session flag if order has downloadable product(s)
      *
-     * @param \Magento\Framework\Object $observer
+     * @param \Magento\Framework\DataObject $observer
      * @return $this
      */
     public function setHasDownloadableProducts($observer)
@@ -223,7 +223,7 @@ class Observer
     /**
      * Set status of link
      *
-     * @param \Magento\Framework\Object $observer
+     * @param \Magento\Framework\DataObject $observer
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)

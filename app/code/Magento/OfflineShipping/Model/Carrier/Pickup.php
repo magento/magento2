@@ -50,11 +50,11 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     }
 
     /**
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return \Magento\Shipping\Model\Rate\Result
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function collectRates(\Magento\Framework\Object $request)
+    public function collectRates(\Magento\Framework\DataObject $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;

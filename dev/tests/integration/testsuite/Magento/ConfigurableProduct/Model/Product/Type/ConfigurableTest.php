@@ -44,7 +44,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetRelationInfo()
     {
         $info = $this->_model->getRelationInfo();
-        $this->assertInstanceOf('Magento\Framework\Object', $info);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $info);
         $this->assertEquals('catalog_product_super_link', $info->getTable());
         $this->assertEquals('parent_id', $info->getParentFieldName());
         $this->assertEquals('product_id', $info->getChildFieldName());
@@ -271,7 +271,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $buyRequest = new \Magento\Framework\Object(
+        $buyRequest = new \Magento\Framework\DataObject(
             ['qty' => 5, 'super_attribute' => [$attribute['attribute_id'] => $optionValueId]]
         );
         $result = $this->_model->prepareForCart($buyRequest, $this->_product);
@@ -280,7 +280,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         foreach ($result as $product) {
             $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
         }
-        $this->assertInstanceOf('Magento\Framework\Object', $result[1]->getCustomOption('parent_product_id'));
+        $this->assertInstanceOf('Magento\Framework\DataObject', $result[1]->getCustomOption('parent_product_id'));
     }
 
     public function testGetSpecifyOptionMessage()
@@ -339,9 +339,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->_product->setCustomOptions(
             [
-                'simple_product' => new \Magento\Framework\Object(
+                'simple_product' => new \Magento\Framework\DataObject(
                         [
-                            'product' => new \Magento\Framework\Object(['weight' => 2]),
+                            'product' => new \Magento\Framework\DataObject(['weight' => 2]),
                         ]
                     ),
             ]
@@ -351,7 +351,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testAssignProductToOption()
     {
-        $option = new \Magento\Framework\Object();
+        $option = new \Magento\Framework\DataObject();
         $this->_model->assignProductToOption('test', $option, $this->_product);
         $this->assertEquals('test', $option->getProduct());
         // other branch of logic depends on \Magento\Sales module
@@ -378,7 +378,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessBuyRequest()
     {
-        $buyRequest = new \Magento\Framework\Object(['super_attribute' => ['10', 'string']]);
+        $buyRequest = new \Magento\Framework\DataObject(['super_attribute' => ['10', 'string']]);
         $result = $this->_model->processBuyRequest($this->_product, $buyRequest);
         $this->assertEquals(['super_attribute' => [10]], $result);
     }
@@ -538,7 +538,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $buyRequest = new \Magento\Framework\Object(
+        $buyRequest = new \Magento\Framework\DataObject(
             ['qty' => 5, 'super_attribute' => [$attribute['attribute_id'] => $optionValueId]]
         );
         $this->_model->prepareForCart($buyRequest, $this->_product);

@@ -16,7 +16,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connectionMock;
 
     /**
      * @var \Magento\Framework\Model\Resource\Db\Context | \PHPUnit_Framework_MockObject_MockObject
@@ -63,7 +63,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->adapter = $this->getMockForAbstractClass(
+        $this->connectionMock = $this->getMockForAbstractClass(
             'Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             '',
@@ -142,11 +142,11 @@ class MetaTest extends \PHPUnit_Framework_TestCase
         ];
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->adapter);
+            ->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->willReturn($metaTableName);
-        $this->adapter->expects($this->any())->method('select')->willReturn($this->select);
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))
             ->method('from')
             ->with($metaTableName, [$metaIdFieldName])
@@ -155,7 +155,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->with('entity_type = :entity_type AND store_id = :store_id')
             ->willReturn($this->select);
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('fetchOne')
             ->with($this->select, ['entity_type' => $entityType, 'store_id' => $storeId])
             ->willReturn($metaId);
@@ -173,9 +173,9 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ->method('from')
             ->with('sequence_meta', '*', null)
             ->willReturn($this->select);
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier');
-        $this->adapter->expects($this->once())->method('fetchRow')->willReturn($metaData);
+        $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($metaData);
         $this->resourceProfile->expects($this->once())->method('loadActiveProfile')->willReturn($this->profile);
         $this->meta->expects($this->at(0))->method('setData')->with($metaData);
         $this->meta->expects($this->at(2))->method('setData')->with('active_profile', $this->profile);
