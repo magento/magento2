@@ -5,100 +5,143 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-/**
- * @method setImageType(string)
- * @method string getImageType()
- * @method setImageWidth(string)
- * @method string getImageWidth()
- * @method setImageHeight(string)
- * @method string getImageHeight()
- * @method setImageLabel(string)
- * @method string getImageLabel()
- * @method setAddWhiteBorders(bool)
- * @method bool getAddWhiteBorders()
- * @method \Magento\Catalog\Helper\Image getImageHelper()
- * @method setImageHelper(\Magento\Catalog\Helper\Image $imageHelper)
- * @method \Magento\Catalog\Model\Product getProduct()
- *
- * Product image block
- * @SuppressWarnings(PHPMD.ExcessivePublicCount)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Image extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Template image only
-     *
-     * @var string
+     * @var \Magento\Catalog\Helper\Image
      */
-    protected $_templateImage = 'Magento_Catalog::product/image.phtml';
+    protected $imageHelper;
 
     /**
-     * Template image with html frame border
-     *
-     * @var string
+     * @var \Magento\Catalog\Model\Product
      */
-    protected $_templateWithBorders = 'Magento_Catalog::product/image_with_borders.phtml';
+    protected $product;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image\View
+     * @var array
      */
-    protected $_productImageView;
+    protected $attributes = [];
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Product\Image\View $productImageView
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Product\Image\View $productImageView,
+        \Magento\Catalog\Helper\Image $imageHelper,
         array $data = []
     ) {
-        $this->_productImageView = $productImageView;
+        $this->imageHelper = $imageHelper;
         parent::__construct($context, $data);
     }
 
     /**
-     * Initialize model
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param string $location
-     * @param string $module
-     * @return \Magento\Catalog\Block\Product\Image
+     * {@inheritdoc}
      */
-    public function init(\Magento\Catalog\Model\Product $product, $location, $module = 'Magento_Catalog')
+    public function getTemplate()
     {
-        $this->_productImageView->init($product, $location, $module);
-        $this->_initTemplate();
-        return $this;
-    }
-
-    /**
-     * Select a template based on white_border flag
-     *
-     * @return \Magento\Catalog\Block\Product\Image
-     */
-    protected function _initTemplate()
-    {
-        if (null === $this->getTemplate()) {
-            $template = $this->getProductImageView()
-                ->isWhiteBorders() ? $this
-                ->_templateImage : $this
-                ->_templateWithBorders;
-            $this->setTemplate($template);
+        if (!$this->_template) {
+            $this->_template = $this->imageHelper->getFrame()
+                ? 'Magento_Catalog::product/image.phtml'
+                : 'Magento_Catalog::product/image_with_borders.phtml';
         }
-        return $this;
+        return $this->_template;
     }
 
     /**
-     * Getter for product image view model
+     * Retrieve image URL
      *
-     * @return \Magento\Catalog\Model\Product\Image\View
+     * @return string
      */
-    public function getProductImageView()
+    public function getImageUrl()
     {
-        return $this->_productImageView;
+        return $this->imageHelper->getUrl();
+    }
+
+    /**
+     * Retrieve image width
+     *
+     * @return string
+     */
+    public function getWidth()
+    {
+        return $this->imageHelper->getWidth();
+    }
+
+    /**
+     * Retrieve image height
+     *
+     * @return string
+     */
+    public function getHeight()
+    {
+        return $this->imageHelper->getHeight();
+    }
+
+    /**
+     * Retrieve image label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->imageHelper->getLabel();
+    }
+
+    /**
+     * Retrieve width value for resized image
+     *
+     * @return string
+     */
+    public function getResizedImageWidth()
+    {
+        return $this->imageHelper->getResizedImageInfo()[0];
+    }
+
+    /**
+     * Retrieve height value for resized image
+     *
+     * @return mixed
+     */
+    public function getResizedImageHeight()
+    {
+        return $this->imageHelper->getResizedImageInfo()[1];
+    }
+
+    /**
+     * Retrieve image ratio
+     *
+     * @return float
+     */
+    public function getRatio()
+    {
+        return $this->imageHelper->getHeight() / $this->imageHelper->getWidth();
+    }
+
+    /**
+     * Retrieve image custom attributes for HTML element
+     *
+     * @return string
+     */
+    public function getCustomAttributes()
+    {
+        $attributes = [];
+        foreach ($this->attributes as $name => $value) {
+            $attributes[] = $name . '="' . $value . '"';
+        }
+        return !empty($attributes) ? implode(' ', $attributes) : '';
+    }
+
+    /**
+     * Set image custom attribute
+     *
+     * @param string $name
+     * @param string $value
+     * @return $this
+     */
+    public function setAttribute($name, $value = null)
+    {
+        $this->attributes[$name] = $value;
+        return $this;
     }
 }

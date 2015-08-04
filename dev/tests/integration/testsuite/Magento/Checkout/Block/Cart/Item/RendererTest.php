@@ -50,18 +50,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         unset($_SESSION);
     }
 
-    public function testThumbnail()
-    {
-        $size = $this->_block->getThumbnailSize();
-        $sidebarSize = $this->_block->getThumbnailSidebarSize();
-        $this->assertGreaterThan(1, $size);
-        $this->assertGreaterThan(1, $sidebarSize);
-        $this->assertContains('/' . $size, $this->_block->getProductThumbnailUrl());
-        $this->assertContains('/' . $sidebarSize, $this->_block->getProductThumbnailSidebarUrl());
-        $this->assertStringEndsWith('magento_image.jpg', $this->_block->getProductThumbnailUrl());
-        $this->assertStringEndsWith('magento_image.jpg', $this->_block->getProductThumbnailSidebarUrl());
-    }
-
     /**
      * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *

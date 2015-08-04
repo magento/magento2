@@ -172,50 +172,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     }
 
     /**
-     * Get product thumbnail image url
-     *
-     * @return \Magento\Catalog\Model\Product\Image
-     */
-    public function getProductThumbnailUrl()
-    {
-        return (string)$this->getProductThumbnail()->resize($this->getThumbnailSize());
-    }
-
-    /**
-     * Product image thumbnail getter
-     *
-     * @return int
-     */
-    public function getThumbnailSize()
-    {
-        return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
-    }
-
-    /**
-     * Get product thumbnail image url for sidebar
-     *
-     * @return \Magento\Catalog\Model\Product\Image
-     */
-    public function getProductThumbnailSidebarUrl()
-    {
-        return (string)$this->getProductThumbnail()->resize(
-            $this->getThumbnailSidebarSize()
-        )->setWatermarkSize(
-            '30x10'
-        );
-    }
-
-    /**
-     * Product image thumbnail getter
-     *
-     * @return int
-     */
-    public function getThumbnailSidebarSize()
-    {
-        return $this->getVar('product_thumbnail_image_sidebar_size', 'Magento_Catalog');
-    }
-
-    /**
      * @param string $productUrl
      * @return $this
      */
@@ -629,5 +585,23 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         } else {
             return '';
         }
+    }
+
+    /**
+     * Retrieve product image
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $imageId
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Block\Product\Image
+     */
+    public function getImage($product, $imageId)
+    {
+        $imageHelper = clone $this->_imageHelper;
+        $imageHelper->init($product, $imageId);
+
+        return $this->getLayout()->createBlock(
+            'Magento\Catalog\Block\Product\Image', '', ['imageHelper' => $imageHelper]
+        );
     }
 }

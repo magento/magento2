@@ -55,24 +55,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($product->getName(), $productForThumbnail->getName(), 'Invalid product was returned.');
     }
 
-    public function testGetProductThumbnail()
-    {
-        $productForThumbnail = $this->_initProduct();
-        /** Ensure that image helper was initialized with correct arguments */
-        $this->_imageHelper->expects(
-            $this->once()
-        )->method(
-            'init'
-        )->with(
-            $productForThumbnail,
-            'thumbnail'
-        )->will(
-            $this->returnSelf()
-        );
-        $productThumbnail = $this->_renderer->getProductThumbnail();
-        $this->assertSame($this->_imageHelper, $productThumbnail, 'Invalid product thumbnail is returned.');
-    }
-
     /**
      * Initialize product.
      *

@@ -333,27 +333,6 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Product thumbnail image url getter
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getThumbnailUrl($product)
-    {
-        return (string)$this->_imageHelper->init($product, 'thumbnail')->resize($this->getThumbnailSize());
-    }
-
-    /**
-     * Thumbnail image size getter
-     *
-     * @return int
-     */
-    public function getThumbnailSize()
-    {
-        return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
-    }
-
-    /**
      * Render HTML code referring to config settings
      *
      * @return string
@@ -365,5 +344,23 @@ class Inline extends \Magento\Framework\View\Element\Template
             return parent::_toHtml();
         }
         return '';
+    }
+
+    /**
+     * Retrieve product image
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $imageId
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Block\Product\Image
+     */
+    public function getImage($product, $imageId)
+    {
+        $imageHelper = clone $this->_imageHelper;
+        $imageHelper->init($product, $imageId);
+
+        return $this->getLayout()->createBlock(
+            'Magento\Catalog\Block\Product\Image', '', ['imageHelper' => $imageHelper]
+        );
     }
 }
