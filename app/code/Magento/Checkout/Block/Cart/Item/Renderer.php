@@ -601,7 +601,9 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         $imageHelper->init($product, $imageId);
 
         return $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Product\Image', '', ['imageHelper' => $imageHelper]
+            'Magento\Catalog\Block\Product\Image',
+            '',
+            ['imageHelper' => $imageHelper]
         );
     }
 }

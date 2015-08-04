@@ -24,6 +24,7 @@ class Image extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param array $data
      */
     public function __construct(

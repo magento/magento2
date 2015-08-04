@@ -78,6 +78,7 @@ class Cache
      *
      * @param Product $product
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function generate(Product $product)
     {

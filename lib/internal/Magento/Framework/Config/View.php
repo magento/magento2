@@ -26,6 +26,7 @@ class View extends \Magento\Framework\Config\AbstractXml
      *
      * @param \DOMDocument $dom
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _extractData(\DOMDocument $dom)
     {
