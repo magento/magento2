@@ -10,13 +10,11 @@ angular.module('select-version', ['ngStorage'])
             name: '',
             version: ''
         }];
-
+        $scope.readyForNext = false;
         $scope.upgradeProcessed = false;
         $scope.upgradeProcessError = false;
-        $scope.upgradeReadyForNext = false;
         $scope.componentsProcessed = false;
         $scope.componentsProcessError = false;
-        $scope.componentsReadyForNext = false;
 
         $http.get('index.php/select-version/systemPackage', {'responseType' : 'json'})
             .success(function (data) {
@@ -25,7 +23,7 @@ angular.module('select-version', ['ngStorage'])
                     $scope.packages[0].name = data.package.package;
                     $scope.packages[0].version = $scope.versions[0].id;
                     $scope.selectedOption = $scope.versions[0].id;
-                    $scope.upgradeReadyForNext = true;
+                    $scope.readyForNext = true;
                 } else {
                     $scope.upgradeProcessError = true;
                 }
@@ -35,31 +33,33 @@ angular.module('select-version', ['ngStorage'])
                 $scope.upgradeProcessError = true;
             });
 
-        $scope.choice = {
+        $scope.updateComponents = {
             yes: false,
             no: true
         };
-        $scope.$watch('choice.no', function() {
-            if (angular.equals($scope.choice.no, true)) {
-                $scope.choice.yes = false;
-                $scope.componentsProcessed = false;
-                $scope.componentsProcessError = false;
-                $scope.componentsReadyForNext = false;
+        $scope.$watch('updateComponents.no', function() {
+            if (angular.equals($scope.updateComponents.no, true)) {
+                $scope.updateComponents.yes = false;
             }
         });
 
-        $scope.$watch('choice.yes', function() {
-            if (angular.equals($scope.choice.yes, true)) {
-                $http.get('index.php/select-version/components', {'responseType' : 'json'}).
+        $scope.$watch('updateComponents.yes', function() {
+            if (angular.equals($scope.updateComponents.yes, true)
+                && !$scope.componentsProcessed && !$scope.componentsProcessError) {
+                $scope.readyForNext = false;
+                $http.get('index.php/other-components-grid/components', {'responseType' : 'json'}).
                     success(function(data) {
                         if (data.responseType != 'error') {
                             $scope.components = data.components;
                             $scope.total = data.total;
                             var keys = Object.keys($scope.components);
                             for (var i = 0; i < $scope.total; i++) {
-                                $scope.packages.push({name: keys[i], version: $scope.components[keys[i]].upgrades[0]});
+                                $scope.packages.push({
+                                    name: keys[i],
+                                    version: $scope.components[keys[i]].updates[0]
+                                });
                             }
-                            $scope.componentsReadyForNext = true;
+                            $scope.readyForNext = true;
                         } else {
                             $scope.componentsProcessError = true;
                         }
@@ -68,23 +68,44 @@ angular.module('select-version', ['ngStorage'])
                     .error(function (data) {
                         $scope.componentsProcessError = true;
                     });
-                $scope.choice.no = false;
+            }
+            if (angular.equals($scope.updateComponents.yes, true)) {
+                $scope.updateComponents.no = false;
             }
         });
 
-        $scope.updatePackages = function(name, upgrade) {
+        $scope.updateOtherComponentsList = function(name, $version) {
             for (var i = 0; i < $scope.total; i++) {
                 if ($scope.packages[i + 1].name === name) {
-                    $scope.packages[i + 1].version = upgrade;
+                    $scope.packages[i + 1].version = $version;
+                    $scope.components[i].version = $version;
                 }
             }
         };
 
-        $scope.update = function(component) {
+        $scope.removeComponentsFromList = function(name) {
+            var found = false;
+            for (var i = 0; i < $scope.total; i++) {
+                if ($scope.packages[i + 1].name === name) {
+                    $scope.packages.splice(i + 1, 1);
+                    $scope.total = $scope.total - 1;
+                    found = true;
+                }
+            }
+            if (!found) {
+                $scope.packages.push({
+                    name: name,
+                    version: $scope.components[name].updates[0]
+                });
+                $scope.total = $scope.total + 1;
+            }
+        };
+
+        $scope.update = function() {
             $scope.packages[0].version = $scope.selectedOption;
-            if (angular.equals($scope.choice.no, true)) {
-                for (var i = 0; i < $scope.total; i++) {
-                    $scope.packages.splice(i + 1, $scope.total);
+            if (angular.equals($scope.updateComponents.no, true)) {
+                if ($scope.total > 0) {
+                    $scope.packages.splice(1, $scope.total);
                 }
             } else {
                 for (var i = 0; i < $scope.total; i++) {

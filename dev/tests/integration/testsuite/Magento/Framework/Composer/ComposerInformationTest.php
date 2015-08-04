@@ -28,7 +28,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      * @var ComposerJsonFinder
      */
     private $composerJsonFinder;
-    
+
     /**
      * @var \Magento\Framework\Filesystem
      */
@@ -49,12 +49,12 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $directories = [
             DirectoryList::CONFIG => [DirectoryList::PATH => __DIR__ . '/_files/'],
             DirectoryList::ROOT => [DirectoryList::PATH => __DIR__ . '/_files/' . $composerDir],
-            DirectoryList::COMPOSER_HOME => [DirectoryList::PATH =>  __DIR__ . '/_files/' . $composerDir],
+            DirectoryList::COMPOSER_HOME => [DirectoryList::PATH => __DIR__ . '/_files/' . $composerDir],
         ];
 
         $this->directoryList = $this->objectManager->create(
             'Magento\Framework\App\Filesystem\DirectoryList',
-            [ 'root' => __DIR__ . '/_files/' . $composerDir, 'config' => $directories]
+            ['root' => __DIR__ . '/_files/' . $composerDir, 'config' => $directories]
         );
 
         $this->filesystem = $this->objectManager->create(
@@ -83,7 +83,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                     $this->directoryList
                 ),
                 'filesystem' => $this->filesystem,
-             ]
+            ]
         );
 
         $this->assertEquals("~5.5.0|~5.6.0", $composerInfo->getRequiredPhpVersion());
@@ -162,7 +162,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $requiredPackages = $composerInfo->getRootRequiredPackageTypesByNameVersion();
+        $requiredPackages = $composerInfo->getInstalledMagentoPackages();
         $this->assertArrayHasKey($packageName, $requiredPackages);
 
         $this->assertTrue($composerInfo->syncPackagesForUpdate());
@@ -210,5 +210,26 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                 'filesystem' => $this->filesystem,
             ]
         );
+    }
+
+    public function testCheckPackageInJson()
+    {
+        $packageName = 'magento/sample-module-minimal';
+
+        $this->setupDirectory('testSkeleton');
+
+        /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
+        $composerInfo = $this->objectManager->create(
+            'Magento\Framework\Composer\ComposerInformation',
+            [
+                'applicationFactory' => new MagentoComposerApplicationFactory(
+                    $this->composerJsonFinder,
+                    $this->directoryList
+                ),
+                'filesystem' => $this->filesystem,
+            ]
+        );
+
+        $this->assertTrue($composerInfo->checkPackageInJson($packageName));
     }
 }

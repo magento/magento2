@@ -1,0 +1,112 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Setup\Test\Unit\Controller;
+
+use \Magento\Setup\Controller\OtherComponentsGrid;
+use \Magento\Setup\Controller\ResponseTypeInterface;
+
+class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $composerInformation;
+
+    /**
+     * @var \Magento\Composer\InfoCommand|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $infoCommand;
+
+    /**
+     * Controller
+     *
+     * @var \Magento\Setup\Controller\OtherComponentsGrid
+     */
+    private $controller;
+
+    public function setUp()
+    {
+        $this->composerInformation = $this->getMock(
+            'Magento\Framework\Composer\ComposerInformation',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->infoCommand = $this->getMock('Magento\Composer\InfoCommand', [], [], '', false);
+        $magentoComposerApplicationFactory = $this->getMock(
+            'Magento\Framework\Composer\MagentoComposerApplicationFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $magentoComposerApplicationFactory->expects($this->once())
+            ->method('createInfoCommand')
+            ->willReturn($this->infoCommand);
+        $this->controller = new OtherComponentsGrid(
+            $this->composerInformation,
+            $magentoComposerApplicationFactory
+        );
+    }
+
+    public function testComponentsActionAction()
+    {
+        $this->composerInformation->expects($this->once())
+            ->method('getInstalledMagentoPackages')
+            ->willReturn([
+                'magento/sample-module1' => [
+                    'name' => 'magento/sample-module1',
+                    'type' => 'magento2-module',
+                    'version' => '1.0.0'
+                ]
+            ]);
+        $this->composerInformation->expects($this->once())
+            ->method('checkPackageInJson')
+            ->willReturn(true);
+        $this->infoCommand->expects($this->once())
+            ->method('run')
+            ->willReturn([
+                'versions' => '1.0.0',
+                'current_version' => '2.0.0, 3.0.0'
+            ]);
+        $jsonModel = $this->controller->componentsAction();
+        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $variables = $jsonModel->getVariables();
+        $this->assertArrayHasKey('responseType', $variables);
+        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
+        $this->assertArrayHasKey('success', $variables);
+        $this->assertEquals(true, $variables['success']);
+        $this->assertArrayHasKey('components', $variables);
+        $expected = [
+            'magento/sample-module1' => [
+                'name' => 'magento/sample-module1',
+                'type' => 'magento2-module',
+                'version' => '1.0.0',
+                'vendor' => 'magento',
+                'updates' => [0 => '1.0.0'],
+                'dropdownId' => 'dd_magento/sample-module10',
+                'checkboxId' => 'cb_magento/sample-module10'
+            ]
+        ];
+        $this->assertEquals($expected, $variables['components']);
+        $this->assertArrayHasKey('total', $variables);
+        $this->assertEquals(1, $variables['total']);
+    }
+
+    public function testComponentsActionActionWithError()
+    {
+        $this->composerInformation->expects($this->once())
+            ->method('getInstalledMagentoPackages')
+            ->will($this->throwException(new \Exception("Test error message")));
+        $jsonModel = $this->controller->componentsAction();
+        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $variables = $jsonModel->getVariables();
+        $this->assertArrayHasKey('responseType', $variables);
+        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
+    }
+}
