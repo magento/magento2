@@ -36,6 +36,7 @@ class ComposerInformation
      * @var Magento\Setup\Model\SystemPackage
      */
     private $systemPackage;
+
     /**
      * @var \Magento\Composer\MagentoComposerApplication
      */
