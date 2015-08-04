@@ -8,29 +8,29 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Customer\Api\MetadataInterface;
+use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 
 class AttributeColumn extends Column
 {
-    /** @var MetadataInterface */
-    protected $metadata;
+    /** @var AttributeRepository */
+    protected $attributeRepository;
 
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param MetadataInterface $metadata
+     * @param AttributeRepository $attributeRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        MetadataInterface $metadata,
+        AttributeRepository $attributeRepository,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-        $this->metadata = $metadata;
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -48,13 +48,13 @@ class AttributeColumn extends Column
         $attributeCode = isset($this->getData('config')['origin'])
             ? $this->getData('config')['origin']
             : $this->getName();
-        $options = $this->metadata->getAttributeMetadata($attributeCode)->getOptions();
-        if (count($options)) {
+        $metaData = $this->attributeRepository->getMetadataByCode($attributeCode);
+        if ($metaData && count($metaData->getOptions())) {
             foreach ($dataSource['data']['items'] as &$item) {
                 if (!isset($item[$this->getName()])) {
                     continue;
                 }
-                foreach ($options as $option) {
+                foreach ($metaData->getOptions() as $option) {
                     if ($option->getValue() == $item[$this->getName()]) {
                         $item[$this->getName()] = $option->getLabel();
                         break;

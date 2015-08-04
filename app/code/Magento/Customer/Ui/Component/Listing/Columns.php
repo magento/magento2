@@ -17,6 +17,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     protected $columnSortOrder;
 
     /**
+     * @var AttributeRepository
+     */
+    protected $attributeRepository;
+
+    /**
      * @param ContextInterface $context
      * @param ColumnFactory $columnFactory
      * @param AttributeRepository $attributeRepository
