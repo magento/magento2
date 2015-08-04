@@ -11,9 +11,9 @@ namespace Magento\Integration\Test\Unit\Model\Resource\Oauth;
 class ConsumerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
@@ -40,10 +40,10 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
 
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
         $contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
@@ -64,7 +64,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterDelete()
     {
-        $this->adapterMock->expects($this->exactly(2))->method('delete');
+        $this->connectionMock->expects($this->exactly(2))->method('delete');
         $this->assertInstanceOf(
             'Magento\Integration\Model\Resource\Oauth\Consumer',
             $this->consumerResource->_afterDelete($this->consumerMock)
@@ -78,8 +78,8 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->any())->method('reset')->will($this->returnValue($selectMock));
         $selectMock->expects($this->any())->method('columns')->will($this->returnValue($selectMock));
         $selectMock->expects($this->any())->method('where')->will($this->returnValue($selectMock));
-        $this->adapterMock->expects($this->any())->method('select')->willReturn($selectMock);
-        $this->adapterMock->expects($this->once())->method('fetchOne');
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $this->connectionMock->expects($this->once())->method('fetchOne');
         $this->consumerResource->getTimeInSecondsSinceCreation(1);
     }
 }

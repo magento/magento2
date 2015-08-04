@@ -87,7 +87,7 @@ class ValidatorFile extends Validator
     }
 
     /**
-     * @param \Magento\Framework\Object $processingParams
+     * @param \Magento\Framework\DataObject $processingParams
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return array
      * @throws LocalizedException

@@ -13,7 +13,7 @@ use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainerFactory;
 use Magento\Framework\Search\EntityMetadata;
-use Magento\Framework\Search\Request\Query\Bool as BoolQuery;
+use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
 use Magento\Framework\Search\Request\Query\Match as MatchQuery;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
@@ -150,20 +150,18 @@ class Mapper
      * @param ScoreBuilder $scoreBuilder
      * @return Select
      */
-    private function createAroundSelect(
-        Select $select,
-        ScoreBuilder $scoreBuilder
-    ) {
-        $parentSelect = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
-        $parentSelect
-            ->from(
-                ['main_select' => $select],
-                [
-                    $this->entityMetadata->getEntityId() => 'entity_id',
-                    'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
-                ]
-            )
-            ->group($this->entityMetadata->getEntityId());
+    private function createAroundSelect(Select $select, ScoreBuilder $scoreBuilder)
+    {
+        $parentSelect = $this->resource->getConnection()->select();
+        $parentSelect->from(
+            ['main_select' => $select],
+            [
+                $this->entityMetadata->getEntityId() => 'entity_id',
+                'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
+            ]
+        )->group(
+            $this->entityMetadata->getEntityId()
+        );
         return $parentSelect;
     }
 
@@ -355,7 +353,7 @@ class Mapper
             $select->columns($scoreBuilder->build());
             $select = $this->createAroundSelect($select, $scoreBuilder);
             $subSelect = $select;
-            $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
+            $select = $this->resource->getConnection()->select();
             $tables = array_merge(array_keys($matchQueries), ['main_select.relevance']);
             $relevance = implode('.relevance + ', $tables);
             $select

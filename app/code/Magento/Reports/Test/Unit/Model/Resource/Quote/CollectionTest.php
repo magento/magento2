@@ -20,7 +20,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readConnectionMock;
+    protected $connectionMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -57,18 +57,18 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->willReturnSelf();
 
-        $this->readConnectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->readConnectionMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
         $this->resourceMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock->expects($this->any())
-            ->method('getReadConnection')
-            ->willReturn($this->readConnectionMock);
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->any())
             ->method('getMainTable')
             ->willReturn('test_table');
@@ -112,51 +112,41 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $customersData = [['item_1']];
         $itemData = ['test'];
 
-        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $selectMock->expects($this->any())
-            ->method('getAdapter')
-            ->willReturn($this->readConnectionMock);
-        $selectMock->expects($this->once())
+        $this->selectMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->selectMock->expects($this->once())
             ->method('from')
             ->with(['customer' => $customerTableName], ['email'])
             ->willReturnSelf();
-        $selectMock->expects($this->once())
+        $this->selectMock->expects($this->once())
             ->method('columns')
             ->with(['customer_name' => $customerName])
             ->willReturnSelf();
-        $selectMock->expects($this->once())
+        $this->selectMock->expects($this->once())
             ->method('where')
             ->with('customer.entity_id IN (?)')
             ->willReturnSelf();
 
-        $this->readConnectionMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('getConcatSql')
             ->with(['firstname', 'lastname'], ' ')
             ->willReturn($customerName);
 
-        $readConnectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $readConnectionMock->expects($this->any())
-            ->method('select')
-            ->willReturn($selectMock);
-
-        $this->customerResourceMock->expects($this->once())
-            ->method('getReadConnection')
-            ->willReturn($readConnectionMock);
+        $this->customerResourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
         $this->customerResourceMock->expects($this->once())
             ->method('getTable')
             ->with('customer_entity')
             ->willReturn($customerTableName);
 
-        $this->readConnectionMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('select')
-            ->willReturn($selectMock);
-        $this->readConnectionMock->expects($this->once())
+            ->willReturn($this->selectMock);
+        $this->connectionMock->expects($this->once())
             ->method('fetchAll')
-            ->with($selectMock)
+            ->with($this->selectMock)
             ->willReturn($customersData);
 
         $this->fetchStrategyMock->expects($this->once())

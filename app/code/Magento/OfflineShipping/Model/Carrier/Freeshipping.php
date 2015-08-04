@@ -58,10 +58,10 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
     /**
      * FreeShipping Rates Collector
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return \Magento\Shipping\Model\Rate\Result|bool
      */
-    public function collectRates(\Magento\Framework\Object $request)
+    public function collectRates(\Magento\Framework\DataObject $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;
