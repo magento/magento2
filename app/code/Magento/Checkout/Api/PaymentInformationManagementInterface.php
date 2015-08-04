@@ -36,4 +36,12 @@ interface PaymentInformationManagementInterface
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress
     );
+
+    /**
+     * Get payment information
+     *
+     * @param int $cartId
+     * @return \Magento\Checkout\Api\Data\PaymentDetailsInterface
+     */
+    public function getPaymentInformation($cartId);
 }

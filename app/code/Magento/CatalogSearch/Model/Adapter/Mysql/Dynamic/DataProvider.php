@@ -47,6 +47,11 @@ class DataProvider implements DataProviderInterface
     private $intervalFactory;
 
     /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
      * @param Resource $resource
      * @param Range $range
      * @param Session $customerSession
@@ -61,6 +66,7 @@ class DataProvider implements DataProviderInterface
         IntervalFactory $intervalFactory
     ) {
         $this->resource = $resource;
+        $this->connection = $resource->getConnection();
         $this->range = $range;
         $this->customerSession = $customerSession;
         $this->dataProvider = $dataProvider;
@@ -98,8 +104,7 @@ class DataProvider implements DataProviderInterface
 
         $select = $this->setCustomerGroupId($select);
 
-        $result = $this->getConnection()
-            ->fetchRow($select);
+        $result = $this->connection->fetchRow($select);
 
         return $result;
     }
@@ -130,8 +135,7 @@ class DataProvider implements DataProviderInterface
         $column = $select->getPart(Select::COLUMNS)[0];
         $select->reset(Select::COLUMNS);
         $rangeExpr = new \Zend_Db_Expr(
-            $this->getConnection()
-                ->quoteInto('(FLOOR(' . $column[1] . ' / ? ) + 1)', $range)
+            $this->connection->quoteInto('(FLOOR(' . $column[1] . ' / ? ) + 1)', $range)
         );
 
         $select
@@ -139,8 +143,7 @@ class DataProvider implements DataProviderInterface
             ->columns(['metrix' => 'COUNT(*)'])
             ->group('range')
             ->order('range');
-        $result = $this->getConnection()
-            ->fetchPairs($select);
+        $result = $this->connection->fetchPairs($select);
 
         return $result;
     }
@@ -175,16 +178,7 @@ class DataProvider implements DataProviderInterface
      */
     private function getSelect()
     {
-        return $this->getConnection()
-            ->select();
-    }
-
-    /**
-     * @return AdapterInterface
-     */
-    private function getConnection()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        return $this->connection->select();
     }
 
     /**

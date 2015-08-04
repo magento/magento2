@@ -69,7 +69,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave($attributeCode, $data, $expected)
     {
         $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
-        $object = new \Magento\Framework\Object($data);
+        $object = new \Magento\Framework\DataObject($data);
         $this->_model->beforeSave($object);
         $this->assertTrue($object->hasData($attributeCode));
         $this->assertSame($expected, $object->getData($attributeCode));
@@ -115,7 +115,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
     public function testAfterLoad($attributeCode, $data, $expected)
     {
         $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
-        $object = new \Magento\Framework\Object($data);
+        $object = new \Magento\Framework\DataObject($data);
         $this->_model->afterLoad($object);
         $this->assertTrue($object->hasData($attributeCode));
         $this->assertSame($expected, $object->getData($attributeCode));
@@ -159,7 +159,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('isValueEmpty')
             ->will($this->returnValue($attributeData['isValueEmpty']));
-        $object = new \Magento\Framework\Object($data);
+        $object = new \Magento\Framework\DataObject($data);
         $this->assertSame($expected, $this->_model->validate($object));
     }
 
@@ -206,7 +206,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         );
         $this->_attribute->expects($this->any())->method('getEntity')->will($this->returnValue($entityMock));
         $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->will($this->returnValue(true));
-        $this->assertTrue($this->_model->validate(new \Magento\Framework\Object()));
+        $this->assertTrue($this->_model->validate(new \Magento\Framework\DataObject()));
     }
 
     /**
@@ -239,7 +239,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->_attribute->expects($this->any())->method('getEntity')->will($this->returnValue($entityMock));
         $this->_attribute->expects($this->any())->method('getFrontend')->will($this->returnValue($frontMock));
         $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->will($this->returnValue(false));
-        $this->assertTrue($this->_model->validate(new \Magento\Framework\Object()));
+        $this->assertTrue($this->_model->validate(new \Magento\Framework\DataObject()));
     }
 
     /**
@@ -251,7 +251,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
     {
         $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('value2'));
-        $object = new \Magento\Framework\Object($data);
+        $object = new \Magento\Framework\DataObject($data);
         $this->assertTrue($this->_model->validate($object));
     }
 
@@ -294,7 +294,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
     {
         $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('another value'));
-        $object = new \Magento\Framework\Object($data);
+        $object = new \Magento\Framework\DataObject($data);
         $this->_model->validate($object);
     }
 

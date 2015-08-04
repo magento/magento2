@@ -142,7 +142,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'getItemBackorders',
             '__wakeup',
         ];
-        $this->resultMock = $this->getMock('Magento\Framework\Object', $resultMethods, [], '', false);
+        $this->resultMock = $this->getMock('Magento\Framework\DataObject', $resultMethods, [], '', false);
 
         $this->stockRegistry = $this->getMockForAbstractClass(
             'Magento\CatalogInventory\Api\StockRegistryInterface',

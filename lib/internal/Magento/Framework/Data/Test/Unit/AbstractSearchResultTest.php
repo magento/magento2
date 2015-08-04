@@ -75,14 +75,14 @@ class AbstractSearchResultTest extends \PHPUnit_Framework_TestCase
     {
         $itemData = ['id' => 1];
 
-        $testItem = new \Magento\Framework\Object($itemData);
+        $testItem = new \Magento\Framework\DataObject($itemData);
 
         $this->query->expects($this->once())
             ->method('fetchAll')
             ->willReturn([$itemData]);
         $this->entityFactory->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\Object', ['data' => $itemData])
+            ->with('Magento\Framework\DataObject', ['data' => $itemData])
             ->willReturn($testItem);
 
         $items = $this->searchResult->getItems();

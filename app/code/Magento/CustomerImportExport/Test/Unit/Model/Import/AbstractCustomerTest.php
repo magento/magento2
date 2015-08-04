@@ -72,7 +72,7 @@ class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_customers as $customer) {
-            $customerCollection->addItem(new \Magento\Framework\Object($customer));
+            $customerCollection->addItem(new \Magento\Framework\DataObject($customer));
         }
 
         $modelMock = $this->getMockBuilder('Magento\CustomerImportExport\Model\Import\AbstractCustomer')

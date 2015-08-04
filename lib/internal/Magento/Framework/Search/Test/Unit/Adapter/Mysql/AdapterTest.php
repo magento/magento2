@@ -90,7 +90,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_READ_RESOURCE)
             ->will($this->returnValue($this->connectionAdapter));
 
         $this->mapper = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Mapper')
