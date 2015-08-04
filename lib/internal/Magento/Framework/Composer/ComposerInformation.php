@@ -67,10 +67,7 @@ class ComposerInformation
     private $pathToCacheFile = 'update_composer_packages.json';
 
     /** @var array */
-    private static $availableComponentTypesList = ['magento2-theme', 'magento2-language', 'magento2-module'];
-
-    /** @var array */
-    private static $componentTypesForSystemUpgrade = [
+    private static $packageTypes = [
         'magento2-theme',
         'magento2-language',
         'magento2-module',
@@ -113,7 +110,6 @@ class ComposerInformation
         $this->locker = $this->composer->getLocker();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->dateTime = $dateTime;
-        //$this->exclusionList[] = 'magento/product-community-edition';
     }
 
     /**
@@ -209,22 +205,17 @@ class ComposerInformation
     }
 
     /**
-     * Collect required packages and types from root composer.lock file
+     * Collect all installed Magento packages from composer.lock
      *
-     * @param string $from
      * @return array
      */
-    public function getRootRequiredPackageTypesByNameVersion($from = 'updater')
+    public function getInstalledMagentoPackages()
     {
         $packages = [];
-        if ($from === 'upgrader') {
-            $types = self::$componentTypesForSystemUpgrade;
-        } else {
-            $types = self::$availableComponentTypesList;
-        }
         /** @var PackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
-            if ((in_array($package->getType(), $types)) && (!$this->isSystemPackage($package->getPrettyName()))){
+            if ((in_array($package->getType(), self::$packageTypes)) 
+                && (!$this->isSystemPackage($package->getPrettyName()))) {
                 $packages[$package->getName()] = [
                     'name' => $package->getName(),
                     'type' => $package->getType(),
@@ -243,7 +234,7 @@ class ComposerInformation
     public function syncPackagesForUpdate()
     {
         $availableVersions = [];
-        foreach ($this->getRootRequiredPackageTypesByNameVersion() as $package) {
+        foreach ($this->getInstalledMagentoPackages() as $package) {
             $latestProductVersion = $this->getLatestNonDevVersion($package['name']);
             if ($latestProductVersion && version_compare($latestProductVersion, $package['version'], '>')) {
                 $packageName = $package['name'];
@@ -269,7 +260,7 @@ class ComposerInformation
             return false;
         }
         $updatePackages = $updatePackagesInfo['packages'];
-        $availablePackages = $this->getRootRequiredPackageTypesByNameVersion();
+        $availablePackages = $this->getInstalledMagentoPackages();
         foreach ($updatePackages as $package) {
             $packageName = $package['name'];
             if (array_key_exists($packageName, $availablePackages)) {
@@ -383,5 +374,22 @@ class ComposerInformation
             }
         }
         return false;
+    }
+
+    /**
+     * Check if a package is inside the root composer or not
+     *
+     * @param string $packageName
+     * @return bool
+     */
+    public function checkPackageInJson($packageName)
+    {
+        if (in_array($packageName, array_keys($this->composer->getPackage()->getRequires()))
+            || in_array($packageName, array_keys($this->composer->getPackage()->getDevRequires()))
+        ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

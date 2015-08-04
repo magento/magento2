@@ -14,27 +14,26 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="update()"
-                ng-disabled="(!upgradeReadyForNext && choice.no) || (!componentsReadyForNext && choice.yes)"
+                ng-disabled="!readyForNext || upgradeProcessError || componentsProcessError"
                 >Next</button>
         </div>
     </div>
 </div>
 
 <div class="row form-row">
-    <div class="message message-spinner" ng-hide="upgradeProcessed || upgradeProcessError">
+    <div class="message message-spinner" ng-show="!upgradeProcessed">
         <span class="spinner">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
         <span class="message-text">Checking for a new version...</span>
     </div>
-    <div class="message message-error" ng-hide="!upgradeProcessError">
+    <div class="message message-error" ng-show="upgradeProcessError">
             <span class="message-text">
                 Sorry, we can't take that action right now.
             </span>
     </div>
-
-    <div class="row" ng-hide="!upgradeReadyForNext">
+    <div class="row" ng-show="upgradeProcessed">
         <div class="col-m-3">
             <label class="form-label">
                 Magento Core Components
@@ -60,26 +59,24 @@
     <div class="col-m-4">
         <div class="form-column">
             <input
-                id="yesChoice"
+                id="yesUpdateComponents"
                 class="form-el-radio"
                 type="radio"
-                ng-model="choice.yes"
-                ng-value="true"
-                >
-            <label class="form-label" for="yesChoice">
+                ng-model="updateComponents.yes"
+                ng-value="true">
+            <label class="form-label" for="yesUpdateComponents">
                 Yes
             </label>
         </div>
         <div class="form-column">
             <input
-                id="noChoice"
+                id="noUpdateComponents"
                 class="form-el-radio"
                 type="radio"
-                ng-model="choice.no"
+                ng-model="updateComponents.no"
                 ng-value="true"
-                checked
-                >
-            <label class="form-label" for="noChoice">
+                checked>
+            <label class="form-label" for="noUpdateComponents">
                 No
             </label>
         </div>
@@ -89,23 +86,23 @@
 <div class="row">
     <label class="form-label">
         The other components below will be upgraded. <br/>
-        If you don't want some components upgraded, please de-select them.
+        If you don't want some components updated, please de-select them.
     </label>
     <br/>
     <br/>
 </div>
 
-<div ng-show="choice.yes">
+<div ng-show="updateComponents.yes">
     <div class="message message-spinner" ng-show="!componentsProcessed">
         <span class="spinner">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <span class="message-text">Populating information for other components...</span>
+        <span class="message-text">Retrieving information for other components...</span>
     </div>
-    <div class="message message-error" ng-hide="!componentsProcessError">
+    <div class="message message-error" ng-show="componentsProcessError">
             <span class="message-text">
-                Sorry, we can't populate the table right now.
+                Sorry, we can't retrieve data for the table right now.
             </span>
     </div>
     <div class="admin__data-grid-outer-wrap" ng-show="componentsProcessed">
@@ -150,17 +147,17 @@
                     <th class="data-grid-th _sortable _ascend">
                         <span>Component Name</span>
                     </th>
-                    <th class="data-grid-th  _sortable">
+                    <th class="data-grid-th _sortable">
                         <span>Type</span>
                     </th>
-                    <th class="data-grid-th  _sortable">
-                        <span>Author</span>
+                    <th class="data-grid-th _sortable">
+                        <span>Vendor</span>
                     </th>
-                    <th class="data-grid-th  _sortable">
+                    <th class="data-grid-th _sortable">
                         <span>Current Version</span>
                     </th>
                     <th class="data-grid-actions-cell data-grid-th">
-                        <span>Upgrade Version</span>
+                        <span>Update Version</span>
                     </th>
                 </tr>
                 </thead>
@@ -168,9 +165,10 @@
                 <tr ng-repeat="component in components">
                     <td class="data-grid-indicator-cell">
                         <div class="onoffswitch">
-                            <input type="checkbox" name="onoffswitch"
-                                   class="onoffswitch-checkbox" id="myonoffswitch" checked>
-                            <label class="onoffswitch-label" for="myonoffswitch">
+                            <input type="checkbox" name="{{component.checkboxId}}"
+                                   class="onoffswitch-checkbox" id="{{component.checkboxId}}"
+                                   ng-click="removeComponentsFromList(component.name)" checked>
+                            <label class="onoffswitch-label" for="{{component.checkboxId}}">
                                 <span class="onoffswitch-inner"></span>
                                 <span class="onoffswitch-switch"></span>
                             </label>
@@ -183,15 +181,15 @@
                         <span class="data-grid-data">{{component.type}}</span>
                     </td>
                     <td>
-                        <span class="data-grid-data">{{component.author}}</span>
+                        <span class="data-grid-data">{{component.vendor}}</span>
                     </td>
                     <td>
                         <span class="data-grid-data">{{component.version}}</span>
                     </td>
                     <td>
-                        <select ng-model="selectedVersion" ng-init="selectedVersion=component.upgrades[0]"
-                                ng-options="upgrade as upgrade for upgrade in component.upgrades"
-                                ng-change="updatePackages(component.name, selectedVersion)">
+                        <select ng-model="component.dropdownId" ng-init="component.dropdownId=component.updates[0]"
+                                ng-options="upgrade as upgrade for upgrade in component.updates"
+                                ng-change="updateOtherComponentsList(component.name, component.dropdownId)">
                         </select>
                     </td>
                 </tr>

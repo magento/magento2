@@ -17,21 +17,6 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
     private $systemPackage;
 
     /**
-     * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $composerInformation;
-
-    /**
-     * @var \Magento\Composer\InfoCommand|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $infoCommand;
-
-    /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $directoryList;
-
-    /**
      * Controller
      *
      * @var \Magento\Setup\Controller\SelectVersion
@@ -40,31 +25,9 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->systemPackage = $this->getMock('Magento\Setup\Model\SystemPackage', [], [], '', false);
-        $this->composerInformation = $this->getMock(
-            'Magento\Framework\Composer\ComposerInformation',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->infoCommand = $this->getMock('Magento\Composer\InfoCommand', [], [], '', false);
-        $magentoComposerApplicationFactory = $this->getMock(
-            'Magento\Framework\Composer\MagentoComposerApplicationFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $magentoComposerApplicationFactory->expects($this->once())
-            ->method('createInfoCommand')
-            ->willReturn($this->infoCommand);
         $this->controller = new SelectVersion(
-            $this->systemPackage,
-            $this->composerInformation,
-            $magentoComposerApplicationFactory,
-            $this->directoryList
+            $this->systemPackage
         );
     }
 
@@ -75,11 +38,17 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($viewModel->terminate());
     }
 
-    public function testSystemPackageActionAction()
+    public function testSystemPackageAction()
     {
         $this->systemPackage->expects($this->once())
             ->method('getPackageVersions')
-            ->willReturn(['package' => 'SamplePackage']);
+            ->willReturn([
+                'package' => 'magento/product-community-edition',
+                'versions' => [
+                    'id' => 'magento/product-community-edition',
+                    'name' => 'Version 1.0.0'
+                ]
+            ]);
         $jsonModel = $this->controller->systemPackageAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -93,36 +62,6 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
             ->method('getPackageVersions')
             ->will($this->throwException(new \Exception("Test error message")));
         $jsonModel = $this->controller->systemPackageAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
-        $variables = $jsonModel->getVariables();
-        $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
-    }
-
-    public function testComponentsActionAction()
-    {
-        $this->composerInformation->expects($this->once())
-            ->method('getRootRequiredPackageTypesByNameVersion')
-            ->willReturn([]);
-        $jsonModel = $this->controller->componentsAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
-        $variables = $jsonModel->getVariables();
-        $this->assertArrayHasKey('responseType', $variables);
-        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
-        $this->assertArrayHasKey('success', $variables);
-        $this->assertEquals(true, $variables['success']);
-        $this->assertArrayHasKey('components', $variables);
-        $this->assertEquals([], $variables['components']);
-        $this->assertArrayHasKey('total', $variables);
-        $this->assertEquals(0, $variables['total']);
-    }
-
-    public function testComponentsActionActionWithError()
-    {
-        $this->composerInformation->expects($this->once())
-            ->method('getRootRequiredPackageTypesByNameVersion')
-            ->will($this->throwException(new \Exception("Test error message")));
-        $jsonModel = $this->controller->componentsAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);

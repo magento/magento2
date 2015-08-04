@@ -32,6 +32,7 @@ return [
             'Magento\Setup\Controller\UpdaterSuccess',
             'Magento\Setup\Controller\BackupActionItems',
             'Magento\Setup\Controller\Maintenance',
+            'Magento\Setup\Controller\OtherComponentsGrid',
         ],
         'instance' => [
             'preference' => [
