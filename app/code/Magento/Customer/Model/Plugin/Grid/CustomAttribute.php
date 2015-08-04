@@ -25,6 +25,9 @@ class CustomAttribute
         $this->attributeRepository = $attributeRepository;
     }
 
+    /**
+     * @return AttributeMetadataInterface[]
+     */
     public function getCustomAttributesWithOptions()
     {
         $attributes = [];
@@ -36,6 +39,11 @@ class CustomAttribute
         return $attributes;
     }
 
+    /**
+     * @param AttributeMetadataInterface $attribute
+     * @param $optionId
+     * @return string
+     */
     protected function getAttributeOptionLabelById(AttributeMetadataInterface $attribute, $optionId)
     {
         $optionLabel = '';
