@@ -51,7 +51,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ['getIndexer']
         );
         $this->actionFactoryMock = $this->getMock(
-            'Magento\Indexer\Model\ActionFactory',
+            'Magento\Framework\Indexer\ActionFactory',
             ['create'],
             [],
             '',
