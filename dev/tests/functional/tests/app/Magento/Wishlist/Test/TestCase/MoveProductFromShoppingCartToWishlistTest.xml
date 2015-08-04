@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Wishlist\Test\TestCase\MoveProductFromShoppingCartToWishlistTest" summary="Move Products from Shopping Cart to Wishlist" zephyrId="MAGETWO-29545">
+    <testCase name="Magento\Wishlist\Test\TestCase\MoveProductFromShoppingCartToWishlistTest" summary="Move Products from Shopping Cart to Wishlist" ticketId="MAGETWO-29545">
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation1" firstConstraint="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" method="test">
             <data name="product" xsi:type="string">catalogProductSimple::default</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />

@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sitemap\Test\TestCase\DeleteSitemapEntityTest" summary="Delete Sitemap Entity" zephyrId="MAGETWO-23296">
+    <testCase name="Magento\Sitemap\Test\TestCase\DeleteSitemapEntityTest" summary="Delete Sitemap Entity" ticketId="MAGETWO-23296">
         <variation name="DeleteSitemapEntityTestVariation1">
             <data name="sitemap/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessDeleteMessage" />

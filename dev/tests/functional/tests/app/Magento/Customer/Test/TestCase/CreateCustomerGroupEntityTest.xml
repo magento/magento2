@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Customer\Test\TestCase\CreateCustomerGroupEntityTest" summary="Create Customer Group" zephyrId="MAGETWO-23422">
+    <testCase name="Magento\Customer\Test\TestCase\CreateCustomerGroupEntityTest" summary="Create Customer Group" ticketId="MAGETWO-23422">
         <variation name="CreateCustomerGroupEntityTestVariation1">
             <data name="customerGroup/data/tax_class_id/dataset" xsi:type="string">retail_customer</data>
             <data name="customerGroup/data/customer_group_code" xsi:type="string">GroupName%isolation%</data>

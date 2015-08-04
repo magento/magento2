@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Integration\Test\TestCase\UpdateIntegrationEntityTest" summary="Update Integration" zephyrId="MAGETWO-26102">
+    <testCase name="Magento\Integration\Test\TestCase\UpdateIntegrationEntityTest" summary="Update Integration" ticketId="MAGETWO-26102">
         <variation name="UpdateIntegrationEntityTestVariation1">
             <data name="integration/data/name" xsi:type="string">Integration_%isolation%</data>
             <data name="integration/data/email" xsi:type="string">-</data>

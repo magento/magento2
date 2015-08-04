@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Directory\Test\TestCase\CreateCurrencyRateTest" summary="Create Currency Rate" zephyrId="MAGETWO-36824">
+    <testCase name="Magento\Directory\Test\TestCase\CreateCurrencyRateTest" summary="Create Currency Rate" ticketId="MAGETWO-36824">
         <variation name="CreateCurrencyRateTestVariation1">
             <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
             <data name="currencyRate/data/currency_to" xsi:type="string">EUR</data>

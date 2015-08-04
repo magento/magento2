@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\UrlRewrite\Test\TestCase\CreateCategoryRewriteEntityTest" summary="Create Category URL Rewrites" zephyrId="MAGETWO-24280">
-        <variation name="CreateCategoryRewriteEntityTestVariation1" summary="Add Permanent Redirect for Category" zephyrId="MAGETWO-12407">
+    <testCase name="Magento\UrlRewrite\Test\TestCase\CreateCategoryRewriteEntityTest" summary="Create Category URL Rewrites" ticketId="MAGETWO-24280">
+        <variation name="CreateCategoryRewriteEntityTestVariation1" summary="Add Permanent Redirect for Category" ticketId="MAGETWO-12407">
             <data name="urlRewrite/data/entity_type" xsi:type="string">For category</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">cat%isolation%-redirect.html</data>

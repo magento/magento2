@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CatalogSearch\Test\TestCase\SuggestSearchingResultEntityTest" summary="Suggest Searching Results" zephyrId="MAGETWO-24671">
+    <testCase name="Magento\CatalogSearch\Test\TestCase\SuggestSearchingResultEntityTest" summary="Suggest Searching Results" ticketId="MAGETWO-24671">
         <variation name="SuggestSearchingResultEntityTestVariation1">
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::name</data>
             <data name="catalogSearch/data/num_results" xsi:type="string">-</data>

@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Store\Test\TestCase\CreateStoreGroupEntityTest" summary="Create Store Group" zephyrId="MAGETWO-27345">
+    <testCase name="Magento\Store\Test\TestCase\CreateStoreGroupEntityTest" summary="Create Store Group" ticketId="MAGETWO-27345">
         <variation name="CreateStoreGroupEntityTestVariation1">
             <data name="storeGroup/data/website_id/dataset" xsi:type="string">main_website</data>
             <data name="storeGroup/data/name" xsi:type="string">store_name_%isolation%</data>

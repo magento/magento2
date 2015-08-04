@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\User\Test\TestCase\DeleteUserRoleEntityTest" summary="Delete Admin User Role Entity" zephyrId="MAGETWO-23926">
+    <testCase name="Magento\User\Test\TestCase\DeleteUserRoleEntityTest" summary="Delete Admin User Role Entity" ticketId="MAGETWO-23926">
         <variation name="DeleteUserRoleEntityTestVariation1">
             <data name="isDefaultUser" xsi:type="string">0</data>
             <constraint name="Magento\User\Test\Constraint\AssertImpossibleDeleteYourOwnRole" />

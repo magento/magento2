@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Store\Test\TestCase\UpdateStoreGroupEntityTest" summary="Update Store Group" zephyrId="MAGETWO-27568">
+    <testCase name="Magento\Store\Test\TestCase\UpdateStoreGroupEntityTest" summary="Update Store Group" ticketId="MAGETWO-27568">
         <variation name="UpdateStoreGroupEntityTestVariation1">
             <data name="storeGroupOrigin/dataset" xsi:type="string">custom</data>
             <data name="storeGroup/data/website_id/dataset" xsi:type="string">main_website</data>

@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\Product\CreateSimpleProductEntityTest" summary="Create Simple Product" zephyrId="MAGETWO-23414">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\CreateSimpleProductEntityTest" summary="Create Simple Product" ticketId="MAGETWO-23414">
         <variation name="CreateSimpleProductEntityTestVariation1">
             <data name="description" xsi:type="string">Create product with custom options(fixed price)</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -336,7 +336,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation19" summary="Create product with cross-sell products" zephyrId="MAGETWO-29081">
+        <variation name="CreateSimpleProductEntityTestVariation19" summary="Create product with cross-sell products" ticketId="MAGETWO-29081">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -352,7 +352,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCrossSells" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation20" summary="Create product with up-sell products" zephyrId="MAGETWO-29105">
+        <variation name="CreateSimpleProductEntityTestVariation20" summary="Create product with up-sell products" ticketId="MAGETWO-29105">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -368,7 +368,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductUpSells" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation21" summary="Create product with related products" zephyrId="MAGETWO-29352">
+        <variation name="CreateSimpleProductEntityTestVariation21" summary="Create product with related products" ticketId="MAGETWO-29352">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -384,7 +384,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductRelatedProducts" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation22" summary="Can't Add Out of Stock Products to Shopping Cart" zephyrId="MAGETWO-12423">
+        <variation name="CreateSimpleProductEntityTestVariation22" summary="Can't Add Out of Stock Products to Shopping Cart" ticketId="MAGETWO-12423">
             <data name="configData" xsi:type="string">display_out_of_stock</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -397,7 +397,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddToCartButtonAbsent" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation23" summary="Create Simple Product with Creating New Category (Required Fields Only)" zephyrId="MAGETWO-13345">
+        <variation name="CreateSimpleProductEntityTestVariation23" summary="Create Simple Product with Creating New Category (Required Fields Only)" ticketId="MAGETWO-13345">
             <data name="product/data/category_ids/new_category" xsi:type="string">yes</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/url_key" xsi:type="string">simple%isolation%</data>
@@ -408,7 +408,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation24" summary="Create Simple Product and Assigning It to Category" zephyrId="MAGETWO-12514">
+        <variation name="CreateSimpleProductEntityTestVariation24" summary="Create Simple Product and Assigning It to Category" ticketId="MAGETWO-12514">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -422,7 +422,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation25" summary="Create Simple Product with Custom Options and Assign it to the Category" zephyrId="MAGETWO-12703">
+        <variation name="CreateSimpleProductEntityTestVariation25" summary="Create Simple Product with Custom Options and Assign it to the Category" ticketId="MAGETWO-12703">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -439,7 +439,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation26" summary="Create Simple Product with Advanced Inventory and Assign It to the Category" zephyrId="MAGETWO-12914">
+        <variation name="CreateSimpleProductEntityTestVariation26" summary="Create Simple Product with Advanced Inventory and Assign It to the Category" ticketId="MAGETWO-12914">
             <data name="description" xsi:type="string">MAGETWO-12914: Create Simple Product with Advanced Inventory and Assign It to the Category</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
