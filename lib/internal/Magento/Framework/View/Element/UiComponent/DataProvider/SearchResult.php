@@ -75,7 +75,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
 
     /**
      * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
-     * @return $this
+     * @return void
      */
     public function setAggregations($aggregations)
     {
