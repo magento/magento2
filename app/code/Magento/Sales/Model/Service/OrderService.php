@@ -215,7 +215,7 @@ class OrderService implements OrderManagementInterface
             }
         }
 
-        $transport = new \Magento\Framework\Object(
+        $transport = new \Magento\Framework\DataObject(
             [
                 'state'     => $state,
                 'status'    => $status,
