@@ -61,12 +61,12 @@ class Usage extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Load an object by customer_id & coupon_id
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param int $customerId
      * @param mixed $couponId
      * @return $this
      */
-    public function loadByCustomerCoupon(\Magento\Framework\Object $object, $customerId, $couponId)
+    public function loadByCustomerCoupon(\Magento\Framework\DataObject $object, $customerId, $couponId)
     {
         $connection = $this->getConnection();
         if ($connection && $couponId && $customerId) {

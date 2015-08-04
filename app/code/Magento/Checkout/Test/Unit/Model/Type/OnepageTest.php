@@ -63,7 +63,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $orderFactoryMock;
 
-    /** @var \Magento\Framework\Object\Copy|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject\Copy|\PHPUnit_Framework_MockObject_MockObject */
     protected $copyMock;
 
     /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -141,7 +141,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->customerFactoryMock = $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false);
         $this->quoteManagementMock = $this->getMock('Magento\Quote\Model\QuoteManagement', [], [], '', false);
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $this->copyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
+        $this->copyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
 
         $this->customerFormFactoryMock = $this->getMock(

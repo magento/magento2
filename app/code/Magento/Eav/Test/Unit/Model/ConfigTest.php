@@ -6,7 +6,7 @@
 
 namespace Magento\Eav\Test\Unit\Model;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Eav\Model\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -114,7 +114,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with(Config::ATTRIBUTES_CACHE_ID)
             ->willReturn($cachedValue);
 
-        $collectionStub = new Object([
+        $collectionStub = new DataObject([
             ['entity_type_code' => 'type_code_1', 'entity_type_id' => 1],
         ]);
         $this->collectionFactoryMock
@@ -125,7 +125,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->typeFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->willReturn(new Object(['id' => 101]));
+            ->willReturn(new DataObject(['id' => 101]));
 
         $this->universalFactoryMock
             ->expects($this->atLeastOnce())

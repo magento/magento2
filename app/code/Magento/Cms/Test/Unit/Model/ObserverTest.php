@@ -36,7 +36,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $eventMock;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectMock;
 
@@ -65,7 +65,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectMock = $this
-            ->getMockBuilder('Magento\Framework\Object')
+            ->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(
                 [
                     'setLoaded',

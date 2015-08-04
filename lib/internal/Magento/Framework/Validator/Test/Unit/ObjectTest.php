@@ -8,13 +8,13 @@ namespace Magento\Framework\Validator\Test\Unit;
 class ObjectTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Validator\Object
+     * @var \Magento\Framework\Validator\DataObject
      */
     protected $_model;
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Framework\Validator\Object();
+        $this->_model = new \Magento\Framework\Validator\DataObject();
 
         $fieldOneExactValue = new \Zend_Validate_Identical('field_one_value');
         $fieldOneExactValue->setMessage("'field_one' does not match expected value");
@@ -52,10 +52,10 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     /**
      * Entity validation routine to be used as a callback
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return bool
      */
-    public function isEntityValid(\Magento\Framework\Object $entity)
+    public function isEntityValid(\Magento\Framework\DataObject $entity)
     {
         return (bool)$entity->getData('is_valid');
     }
@@ -79,7 +79,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValid(array $inputEntityData, array $expectedErrors)
     {
-        $entity = new \Magento\Framework\Object($inputEntityData);
+        $entity = new \Magento\Framework\DataObject($inputEntityData);
         $isValid = $this->_model->isValid($entity);
         $this->assertFalse($isValid, 'Validation is expected to fail.');
 
