@@ -180,7 +180,7 @@ class ToModel
 
         $mergedData = array_merge($modelData, $data);
 
-        $validateResult = $ruleModel->validateData(new \Magento\Framework\Object($mergedData));
+        $validateResult = $ruleModel->validateData(new \Magento\Framework\DataObject($mergedData));
         if ($validateResult !== true) {
             $text = '';
             /** @var \Magento\Framework\Phrase $errorMessage */

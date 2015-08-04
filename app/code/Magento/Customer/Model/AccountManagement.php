@@ -32,7 +32,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\ObjectFactory;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Exception\MailException;
@@ -40,7 +40,7 @@ use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Stdlib\String as StringHelper;
+use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -189,7 +189,7 @@ class AccountManagement implements AccountManagementInterface
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\ObjectFactory
+     * @var ObjectFactory
      */
     protected $objectFactory;
 

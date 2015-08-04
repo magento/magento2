@@ -46,14 +46,14 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
     {
         $this->_cleanBundleOptionStockData();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
-        $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['bo' => $this->getTable('catalog_product_bundle_option')],
             ['parent_id']
         );
         $this->_addWebsiteJoinToSelect($select, false);
         $status = new \Zend_Db_Expr(
-            'MAX(' . $adapter->getCheckSql('e.required_options = 0', 'i.stock_status', '0') . ')'
+            'MAX(' . $connection->getCheckSql('e.required_options = 0', 'i.stock_status', '0') . ')'
         );
         $select->columns(
             'website_id',
@@ -92,10 +92,10 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
         $select->where('bo.required = ?', 1);
         $selectNonRequired->where('bo.required = ?', 0)->having($status . ' = 1');
         $query = $select->insertFromSelect($this->_getBundleOptionTable());
-        $adapter->query($query);
+        $connection->query($query);
 
         $query = $selectNonRequired->insertFromSelect($this->_getBundleOptionTable());
-        $adapter->query($query);
+        $connection->query($query);
 
         return $this;
     }
@@ -111,8 +111,8 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
     {
         $this->_prepareBundleOptionStockData($entityIds, $usePrimaryTable);
 
-        $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
         );
@@ -144,17 +144,20 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
         );
 
         // add limitation of status
-        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $condition = $connection->quoteInto(
+            '=?',
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        );
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
 
         if ($this->_isManageStock()) {
-            $statusExpr = $adapter->getCheckSql(
+            $statusExpr = $connection->getCheckSql(
                 'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
                 '1',
                 'cisi.is_in_stock'
             );
         } else {
-            $statusExpr = $adapter->getCheckSql(
+            $statusExpr = $connection->getCheckSql(
                 'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
                 'cisi.is_in_stock',
                 '1'
@@ -163,10 +166,10 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
 
         $select->columns(
             [
-                'status' => $adapter->getLeastSql(
+                'status' => $connection->getLeastSql(
                     [
                         new \Zend_Db_Expr(
-                            'MIN(' . $adapter->getCheckSql('o.stock_status IS NOT NULL', 'o.stock_status', '0') . ')'
+                            'MIN(' . $connection->getCheckSql('o.stock_status IS NOT NULL', 'o.stock_status', '0') . ')'
                         ),
                         new \Zend_Db_Expr('MIN(' . $statusExpr . ')'),
                     ]
@@ -216,7 +219,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
      */
     protected function _cleanBundleOptionStockData()
     {
-        $this->_getWriteAdapter()->delete($this->_getBundleOptionTable());
+        $this->getConnection()->delete($this->_getBundleOptionTable());
         return $this;
     }
 }

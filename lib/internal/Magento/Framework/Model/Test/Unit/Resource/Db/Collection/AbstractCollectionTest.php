@@ -8,8 +8,9 @@
 
 namespace Magento\Framework\Model\Test\Unit\Resource\Db\Collection;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
-use Magento\Framework\Object as MagentoObject;
+use Magento\Framework\DataObject as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -40,10 +41,10 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Model\Resource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject  */
     protected $resourceMock;
 
-    /** @var \Zend_Db_Adapter_Abstract|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
     protected $connectionMock;
 
-    /** @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject  */
     protected $selectMock;
 
     /** @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
@@ -65,11 +66,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock
             ->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($this->connectionMock));
 
         $this->selectMock = $this->getMock(
-            'Zend_Db_Select',
+            'Magento\Framework\DB\Select',
             ['getPart', 'setPart', 'from', 'columns'],
             [$this->connectionMock]
         );
@@ -108,7 +109,6 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
                 'logger' => $this->loggerMock,
                 'fetchStrategy' => $this->fetchStrategyMock,
                 'eventManager' => $this->managerMock,
-                // Magento\Framework\DB\Adapter\Pdo\Mysql extends Zend_Db_Adapter_Abstract
                 'connection' => $this->connectionMock,
                 // Magento\Framework\Flag\Resource extends Magento\Framework\Model\Resource\Db\AbstractDb
                 'resource' => $this->resourceMock,
@@ -197,7 +197,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getPart');
 
-        $this->assertTrue($this->uut->getSelect() instanceof \Zend_Db_Select);
+        $this->assertTrue($this->uut->getSelect() instanceof Select);
     }
 
     /**
@@ -217,8 +217,8 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getPart')
             ->will($this->returnValue($getPartRet));
 
-        $this->selectMock->expects($this->once())->method('setPart')->with(\Zend_Db_Select::COLUMNS, $expected);
-        $this->assertTrue($this->uut->getSelect() instanceof \Zend_Db_Select);
+        $this->selectMock->expects($this->once())->method('setPart')->with(\Magento\Framework\DB\Select::COLUMNS, $expected);
+        $this->assertTrue($this->uut->getSelect() instanceof Select);
     }
 
     public function getSelectDataProvider()
@@ -321,22 +321,22 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Zend_Db_Select does not extend \Magento\Framework\Object
+     * @expectedExceptionMessage Magento\Framework\DB\Select does not extend \Magento\Framework\DataObject
      */
     public function testSetModelInvalidType()
     {
-        $this->uut->setModel('Zend_Db_Select');
+        $this->uut->setModel(Select::class);
     }
 
     public function testSetModel()
     {
-        $this->assertTrue($this->uut->setModel('Magento\Framework\Object') instanceof Uut);
+        $this->assertTrue($this->uut->setModel('Magento\Framework\DataObject') instanceof Uut);
     }
 
     public function testGetModelName()
     {
-        $this->uut->setModel('Magento\Framework\Object');
-        $this->assertEquals('Magento\Framework\Object', $this->uut->getModelName());
+        $this->uut->setModel('Magento\Framework\DataObject');
+        $this->assertEquals('Magento\Framework\DataObject', $this->uut->getModelName());
     }
 
     public function testGetResourceModelName()
@@ -403,8 +403,8 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         for ($i = 0; $i < 3; $i++) {
-            /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $item */
-            $item = $this->getMock('Magento\Framework\Object', ['save']);
+            /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $item */
+            $item = $this->getMock('Magento\Framework\DataObject', ['save']);
             $item->expects($this->once())->method('save');
             $this->uut->addItem($item);
         }

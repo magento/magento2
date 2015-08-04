@@ -70,10 +70,10 @@ class Observer
     /**
      * If it's configured to capture on shipment - do this
      * 
-     * @param \Magento\Framework\Object $observer
+     * @param \Magento\Framework\DataObject $observer
      * @return $this
      */
-    public function processBraintreePayment(\Magento\Framework\Object $observer)
+    public function processBraintreePayment(\Magento\Framework\DataObject $observer)
     {
         $shipment = $observer->getEvent()->getShipment();
         $order = $shipment->getOrder();
@@ -117,10 +117,10 @@ class Observer
     /**
      * Delete Braintree customer when Magento customer is deleted
      * 
-     * @param \Magento\Framework\Object $observer
+     * @param \Magento\Framework\DataObject $observer
      * @return $this
      */
-    public function deleteBraintreeCustomer(\Magento\Framework\Object $observer)
+    public function deleteBraintreeCustomer(\Magento\Framework\DataObject $observer)
     {
         if (!$this->config->isActive()) {
             return $this;
