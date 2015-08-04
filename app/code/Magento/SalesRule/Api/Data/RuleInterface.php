@@ -297,7 +297,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Return maximum qty discount is applied
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountQty();
 
@@ -420,7 +420,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * When to grant free shipping
      *
-     * @return string
+     * @return string|null
      */
     public function getSimpleFreeShipping();
 
