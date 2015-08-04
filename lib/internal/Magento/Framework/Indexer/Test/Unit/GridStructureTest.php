@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Test\Unit\Model\Indexer;
+namespace Magento\Framework\Indexer\Test\Unit;
 
 use Magento\Framework\Indexer\GridStructure;
 use Magento\Framework\DB\Adapter\AdapterInterface;
