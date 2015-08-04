@@ -107,7 +107,7 @@ class TypeList implements TypeListInterface
             } else {
                 $typeTags = '';
             }
-            $types[$type] = new \Magento\Framework\Object(
+            $types[$type] = new \Magento\Framework\DataObject(
                 [
                     'id' => $type,
                     'cache_type' => $node['label'],

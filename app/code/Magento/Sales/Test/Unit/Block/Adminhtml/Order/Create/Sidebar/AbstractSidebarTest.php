@@ -20,7 +20,7 @@ class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->itemMock = $this->getMock('Magento\Framework\Object', ['getQty'], [], '', false);
+        $this->itemMock = $this->getMock('Magento\Framework\DataObject', ['getQty'], [], '', false);
         $this->abstractSidebar = $helper->getObject(
             'Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar',
             []
