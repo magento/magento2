@@ -45,11 +45,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     private $minificationMock;
 
-    /**
-     * @var \Magento\Framework\Translate\Inline|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $inline;
-
     protected function setUp()
     {
         $this->context = $this->getMock('\Magento\Framework\View\Element\Context', [], [], '', false);
@@ -57,7 +52,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->fileManager = $this->getMock('\Magento\RequireJs\Model\FileManager', [], [], '', false);
         $this->pageConfig = $this->getMock('\Magento\Framework\View\Page\Config', [], [], '', false);
         $this->bundleConfig = $this->getMock('Magento\Framework\View\Asset\ConfigInterface', [], [], '', false);
-        $this->inline = $this->getMock('Magento\Framework\Translate\Inline', [], [], '', false);
     }
 
     public function testSetLayout()
@@ -126,21 +120,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with('js')
             ->willReturn(true);
 
-        $this->inline
-            ->expects($this->once())
-            ->method('isAllowed')
-            ->willReturn(true);
-
-        $translationAsset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
-        $translationAsset
-            ->expects($this->atLeastOnce())
-            ->method('getFilePath')
-            ->willReturn('/path/to/translation.js');
-
-        $this->fileManager
-            ->expects($this->once())
-            ->method('createTranslateConfigAsset')
-            ->will($this->returnValue($translationAsset));
 
         $object = new Config(
             $this->context,
@@ -148,8 +127,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->fileManager,
             $this->pageConfig,
             $this->bundleConfig,
-            $this->minificationMock,
-            $this->inline
+            $this->minificationMock
         );
         $object->setLayout($layout);
     }
@@ -175,8 +153,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->fileManager,
             $this->pageConfig,
             $this->bundleConfig,
-            $this->minificationMock,
-            $this->inline
+            $this->minificationMock
         );
         $html = $object->toHtml();
         $expectedFormat = <<<expected
