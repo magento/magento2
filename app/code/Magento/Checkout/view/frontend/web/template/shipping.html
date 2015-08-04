@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-shipping" class="checkout-shipping-address" data-bind="fadeVisible: visible()">
+<li id="shipping" class="checkout-shipping-address" data-bind="fadeVisible: visible()">
     <div class="step-title" data-bind="text: $t('Shipping Address')" data-role="title"></div>
     <div id="checkout-step-shipping"
          class="step-content"
@@ -91,8 +91,7 @@
                                        data-bind="
                                                 value: method.carrier_code + '_' + method.method_code,
                                                 checked: $parent.isSelected,
-                                                attr: {'id': 's_method_' + method.carrier_code + '_' + method.method_code},
-                                                click: $parent.selectShippingMethod"
+                                                attr: {'id': 's_method_' + method.carrier_code + '_' + method.method_code}"
                                        class="radio"/>
                                 <!--/ko-->
                                 <!-- /ko -->
