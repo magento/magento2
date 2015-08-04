@@ -21,7 +21,7 @@ class ToOrderItemTest extends \PHPUnit_Framework_TestCase
     protected $orderItemFactoryMock;
 
     /**
-     * @var \Magento\Framework\Object\Copy|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectCopyServiceMock;
 
@@ -55,7 +55,7 @@ class ToOrderItemTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->objectCopyServiceMock = $this->getMock(
-            'Magento\Framework\Object\Copy',
+            'Magento\Framework\DataObject\Copy',
             [],
             [],
             '',

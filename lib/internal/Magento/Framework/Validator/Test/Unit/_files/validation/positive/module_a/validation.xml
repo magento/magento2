@@ -15,16 +15,16 @@
                         <constraint class="Magento\Framework\Validator\Test\Unit\Test\Alnum"/>
                     </property>
                     <property name="int">
-                        <constraint class="Magento\Framework\Validator\Test\Unit\Test\Int"/>
+                        <constraint class="Magento\Framework\Validator\Test\Unit\Test\IsInt"/>
                     </property>
                 </property_constraints>
                 <entity_constraints>
-                    <constraint class="Magento\Framework\Validator\Test\Unit\Test\True"/>
+                    <constraint class="Magento\Framework\Validator\Test\Unit\Test\IsTrue"/>
                 </entity_constraints>
             </rule>
             <rule name="always_true">
                 <entity_constraints>
-                    <constraint alias="alias" class="Magento\Framework\Validator\Test\Unit\Test\True"/>
+                    <constraint alias="alias" class="Magento\Framework\Validator\Test\Unit\Test\IsTrue"/>
                 </entity_constraints>
             </rule>
         </rules>

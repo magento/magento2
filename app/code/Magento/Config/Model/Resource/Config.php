@@ -36,8 +36,8 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb implements 
      */
     public function saveConfig($path, $value, $scope, $scopeId)
     {
-        $writeAdapter = $this->_getWriteAdapter();
-        $select = $writeAdapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             'path = ?',
@@ -49,15 +49,15 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb implements 
             'scope_id = ?',
             $scopeId
         );
-        $row = $writeAdapter->fetchRow($select);
+        $row = $connection->fetchRow($select);
 
         $newData = ['scope' => $scope, 'scope_id' => $scopeId, 'path' => $path, 'value' => $value];
 
         if ($row) {
             $whereCondition = [$this->getIdFieldName() . '=?' => $row[$this->getIdFieldName()]];
-            $writeAdapter->update($this->getMainTable(), $newData, $whereCondition);
+            $connection->update($this->getMainTable(), $newData, $whereCondition);
         } else {
-            $writeAdapter->insert($this->getMainTable(), $newData);
+            $connection->insert($this->getMainTable(), $newData);
         }
         return $this;
     }
@@ -72,13 +72,13 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb implements 
      */
     public function deleteConfig($path, $scope, $scopeId)
     {
-        $adapter = $this->_getWriteAdapter();
-        $adapter->delete(
+        $connection = $this->getConnection();
+        $connection->delete(
             $this->getMainTable(),
             [
-                $adapter->quoteInto('path = ?', $path),
-                $adapter->quoteInto('scope = ?', $scope),
-                $adapter->quoteInto('scope_id = ?', $scopeId)
+                $connection->quoteInto('path = ?', $path),
+                $connection->quoteInto('scope = ?', $scope),
+                $connection->quoteInto('scope_id = ?', $scopeId)
             ]
         );
         return $this;

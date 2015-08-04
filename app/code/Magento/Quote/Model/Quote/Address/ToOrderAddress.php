@@ -6,7 +6,7 @@
 
 namespace Magento\Quote\Model\Quote\Address;
 
-use Magento\Framework\Object\Copy;
+use Magento\Framework\DataObject\Copy;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Order\AddressRepository as OrderAddressRepository;
 use Magento\Sales\Api\Data\OrderAddressInterface;

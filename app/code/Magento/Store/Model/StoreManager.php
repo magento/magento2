@@ -5,6 +5,11 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Store\Api\StoreResolverInterface;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StoreManager implements \Magento\Store\Model\StoreManagerInterface
 {
     /**
@@ -23,148 +28,116 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
 
     /**
-     * Store storage factory model
-     *
-     * @var \Magento\Store\Model\StorageFactory
+     * @var \Magento\Store\Api\StoreRepositoryInterface
      */
-    protected $_factory;
+    protected $storeRepository;
 
     /**
-     * Event manager
-     *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var \Magento\Store\Api\GroupRepositoryInterface
      */
-    protected $_eventManager;
+    protected $groupRepository;
 
     /**
-     * Request model
-     *
-     * @var \Magento\Framework\App\RequestInterface
+     * @var \Magento\Store\Api\WebsiteRepositoryInterface
      */
-    protected $_request;
-
-    /**
-     * Default store code
-     *
-     * @var string
-     */
-    protected $_currentStore = null;
-
-    /**
-     * Flag is single store mode allowed
-     *
-     * @var bool
-     */
-    protected $_isSingleStoreAllowed = true;
-
-    /**
-     * Requested scope code
-     *
-     * @var string
-     */
-    protected $_scopeCode;
-
-    /**
-     * Requested scope type
-     *
-     * @var string
-     */
-    protected $_scopeType;
+    protected $websiteRepository;
 
     /**
      * Scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    protected $scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreResolverInterface
      */
-    protected $_storage;
+    protected $storeResolver;
 
     /**
-     * @param \Magento\Store\Model\StorageFactory $factory
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @var \Magento\Framework\Cache\FrontendInterface
+     */
+    protected $cache;
+
+    /**
+     * Default store code
+     *
+     * @var string
+     */
+    protected $currentStoreId = null;
+
+    /**
+     * Flag that shows that system has only one store view
+     *
+     * @var bool
+     */
+    protected $_hasSingleStore;
+
+    /**
+     * Flag is single store mode allowed
+     *
+     * @var bool
+     */
+    protected $isSingleStoreAllowed;
+
+    /**
+     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
+     * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
+     * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param string $scopeCode
-     * @param string $scopeType
+     * @param StoreResolverInterface $storeResolver
+     * @param \Magento\Framework\Cache\FrontendInterface $cache
+     * @param bool $isSingleStoreAllowed
      */
     public function __construct(
-        \Magento\Store\Model\StorageFactory $factory,
-        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
+        \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
+        \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        $scopeCode = '',
-        $scopeType = ScopeInterface::SCOPE_STORE
+        StoreResolverInterface $storeResolver,
+        \Magento\Framework\Cache\FrontendInterface $cache,
+        $isSingleStoreAllowed = true
     ) {
-        $this->_factory = $factory;
-        $this->_request = $request;
-        $this->_scopeCode = $scopeCode;
-        $this->_scopeType = $scopeType;
-        $this->_scopeConfig = $scopeConfig;
+        $this->storeRepository = $storeRepository;
+        $this->websiteRepository = $websiteRepository;
+        $this->groupRepository = $groupRepository;
+        $this->scopeConfig = $scopeConfig;
+        $this->storeResolver = $storeResolver;
+        $this->cache = $cache;
+        $this->isSingleStoreAllowed = $isSingleStoreAllowed;
     }
 
     /**
-     * Get storage instance
-     *
-     * @return \Magento\Store\Model\StoreManagerInterface
-     */
-    protected function _getStorage()
-    {
-        if (!$this->_storage instanceof \Magento\Store\Model\StoreManagerInterface) {
-            $arguments = [
-                'isSingleStoreAllowed' => $this->_isSingleStoreAllowed,
-                'currentStore' => $this->_currentStore,
-                'scopeCode' => $this->_scopeCode,
-                'scopeType' => $this->_scopeType
-            ];
-            $this->_storage = $this->_factory->get($arguments);
-        }
-        return $this->_storage;
-    }
-
-    /**
-     * Set current default store
-     *
-     * @param string $store
-     * @return void
+     * {@inheritdoc}
      */
     public function setCurrentStore($store)
     {
-        $this->_currentStore = $store;
-        $this->_getStorage()->setCurrentStore($store);
+        $this->currentStoreId = $store;
     }
 
     /**
-     * Allow or disallow single store mode
-     *
-     * @param bool $value
-     * @return void
+     * {@inheritdoc}
      */
     public function setIsSingleStoreModeAllowed($value)
     {
-        $this->_isSingleStoreAllowed = $value;
-        $this->_getStorage()->setIsSingleStoreModeAllowed($value);
+        $this->isSingleStoreAllowed = $value;
     }
 
     /**
-     * Check if store has only one store view
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasSingleStore()
     {
-        return $this->_getStorage()->hasSingleStore();
+        // TODO: MAGETWO-39902 add cache, move value to consts
+        return $this->isSingleStoreAllowed && count($this->getStores(true)) < 3;
     }
 
     /**
-     * Check if system is run in the single store mode
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isSingleStoreMode()
     {
-        return $this->hasSingleStore() && $this->isSingleStoreModeEnabled();
+        return $this->isSingleStoreModeEnabled() && $this->hasSingleStore();
     }
 
     /**
@@ -172,63 +145,100 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
      */
     public function getStore($storeId = null)
     {
-        return $this->_getStorage()->getStore($storeId);
+        if (!isset($storeId) || '' === $storeId || $storeId === true) {
+            if (!$this->currentStoreId) {
+                \Magento\Framework\Profiler::start('store.resolve');
+                $this->currentStoreId = $this->storeResolver->getCurrentStoreId();
+                \Magento\Framework\Profiler::stop('store.resolve');
+            }
+            $storeId = $this->currentStoreId;
+        }
+        if ($storeId instanceof \Magento\Store\Api\Data\StoreInterface) {
+            return $storeId;
+        }
+
+        $store = is_numeric($storeId)
+            ? $this->storeRepository->getById($storeId)
+            : $this->storeRepository->get($storeId);
+
+        return $store;
     }
 
     /**
-     * Retrieve stores array
-     *
-     * @param bool $withDefault
-     * @param bool $codeKey
-     * @return Store[]
+     * {@inheritdoc}
      */
     public function getStores($withDefault = false, $codeKey = false)
     {
-        return $this->_getStorage()->getStores($withDefault, $codeKey);
+        $stores = [];
+        foreach ($this->storeRepository->getList() as $store) {
+            if (!$withDefault && $store->getId() == 0) {
+                continue;
+            }
+            if ($codeKey) {
+                $stores[$store->getCode()] = $store;
+            } else {
+                $stores[$store->getId()] = $store;
+            }
+        }
+        return $stores;
     }
 
     /**
-     * Retrieve application website object
-     *
-     * @param null|bool|int|string|Website $websiteId
-     * @return Website
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * {@inheritdoc}
      */
     public function getWebsite($websiteId = null)
     {
-        return $this->_getStorage()->getWebsite($websiteId);
+        if ($websiteId === null || $websiteId === '') {
+            $website = $this->websiteRepository->getById($this->getStore()->getWebsiteId());
+        } elseif ($websiteId instanceof Website) {
+            $website = $websiteId;
+        } elseif ($websiteId === true) {
+            $website = $this->websiteRepository->getDefault();
+        } else {
+            $website = $this->websiteRepository->getById($websiteId);
+        }
+        return $website;
     }
 
     /**
-     * Get loaded websites
-     *
-     * @param bool $withDefault
-     * @param bool|string $codeKey
-     * @return Website[]
+     * {@inheritdoc}
      */
     public function getWebsites($withDefault = false, $codeKey = false)
     {
-        return $this->_getStorage()->getWebsites($withDefault, $codeKey);
+        $websites = [];
+        foreach ($this->websiteRepository->getList() as $website) {
+            if (!$withDefault && $website->getId() == 0) {
+                continue;
+            }
+            if ($codeKey) {
+                $websites[$website->getCode()] = $website;
+            } else {
+                $websites[$website->getId()] = $website;
+            }
+        }
+        return $websites;
     }
 
     /**
-     * Reinitialize store list
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function reinitStores()
     {
-        $this->_getStorage()->reinitStores();
+        $this->currentStoreId = null;
+        $this->storeRepository->clean();
+        $this->websiteRepository->clean();
+        $this->groupRepository->clean();
+        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [StoreResolver::CACHE_TAG]);
     }
 
     /**
-     * Retrieve default store for default group and website
-     *
-     * @return Store|null
+     * {@inheritdoc}
      */
     public function getDefaultStoreView()
     {
-        return $this->_getStorage()->getDefaultStoreView();
+        $defaultWebsite = $this->websiteRepository->getDefault();
+        $defaultStore = $this->getGroup($defaultWebsite->getDefaultGroupId())->getDefaultStore();
+        return $defaultStore ?: null;
     }
 
     /**
@@ -236,32 +246,29 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
      */
     public function getGroup($groupId = null)
     {
-        return $this->_getStorage()->getGroup($groupId);
+        if (null === $groupId) {
+            $group = $this->groupRepository->get($this->getStore()->getGroupId());
+        } elseif ($groupId instanceof \Magento\Store\Api\Data\GroupInterface) {
+            $group = $groupId;
+        } else {
+            $group = $this->groupRepository->get($groupId);
+        }
+        return $group;
     }
 
     /**
-     * Prepare array of store groups
-     * can be filtered to contain default store group or not by $withDefault flag
-     * depending on flag $codeKey array keys can be group id or group code
-     *
-     * @param bool $withDefault
-     * @param bool $codeKey
-     * @return \Magento\Store\Model\Group[]
+     * {@inheritdoc}
      */
-    public function getGroups($withDefault = false, $codeKey = false)
+    public function getGroups($withDefault = false)
     {
-        return $this->_getStorage()->getGroups($withDefault, $codeKey);
-    }
+        $groups = $this->groupRepository->getList();
 
-    /**
-     *  Unset website by id from app cache
-     *
-     * @param null|bool|int|string|Website $websiteId
-     * @return void
-     */
-    public function clearWebsiteCache($websiteId = null)
-    {
-        $this->_getStorage()->clearWebsiteCache($websiteId);
+        return $withDefault ? $groups : array_filter(
+            $groups,
+            function ($item) {
+                return $item->getId() != 0;
+            }
+        );
     }
 
     /**
@@ -274,7 +281,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
      */
     protected function isSingleStoreModeEnabled()
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_SINGLE_STORE_MODE_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

@@ -64,4 +64,14 @@ class ServiceDataAttributesGenerator implements OperationInterface
             class_exists($entityName);
         }
     }
+
+    /**
+     * Returns operation name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Service data attributes generation';
+    }
 }

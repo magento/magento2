@@ -7,8 +7,8 @@
 namespace Magento\Tax\Api;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Tax\Model\Calculation\Rate;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -485,7 +485,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             ->create();
         $sortOrder = $this->sortOrderBuilder
             ->setField(Rate::KEY_POSTCODE)
-            ->setDirection(SearchCriteria::SORT_DESC)
+            ->setDirection(SortOrder::SORT_DESC)
             ->create();
         // Order them by descending postcode (not the default order)
         $this->searchCriteriaBuilder->addFilters([$filter])

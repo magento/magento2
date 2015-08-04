@@ -73,7 +73,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
     }
 
     /**
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getProduct()
     {

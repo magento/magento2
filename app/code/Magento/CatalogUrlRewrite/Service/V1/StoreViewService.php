@@ -32,7 +32,7 @@ class StoreViewService
         Resource $resource
     ) {
         $this->eavConfig = $eavConfig;
-        $this->connection = $resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        $this->connection = $resource->getConnection();
     }
 
     /**

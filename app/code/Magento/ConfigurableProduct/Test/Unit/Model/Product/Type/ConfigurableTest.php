@@ -281,7 +281,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetRelationInfo()
     {
         $info = $this->_model->getRelationInfo();
-        $this->assertInstanceOf('Magento\Framework\Object', $info);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $info);
         $this->assertEquals('catalog_product_super_link', $info->getData('table'));
         $this->assertEquals('parent_id', $info->getData('parent_field_name'));
         $this->assertEquals('product_id', $info->getData('child_field_name'));

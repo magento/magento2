@@ -12,7 +12,7 @@ namespace Magento\Sales\Model\Resource\Collection;
 abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\VersionControl\Collection
 {
     /**
-     * @var \Zend_Db_Select
+     * @var \Magento\Framework\DB\Select
      */
     protected $_countSelect;
 
@@ -24,10 +24,10 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\V
     /**
      * Set select count sql
      *
-     * @param \Zend_Db_Select $countSelect
+     * @param \Magento\Framework\DB\Select $countSelect
      * @return $this
      */
-    public function setSelectCountSql(\Zend_Db_Select $countSelect)
+    public function setSelectCountSql(\Magento\Framework\DB\Select $countSelect)
     {
         $this->_countSelect = $countSelect;
         return $this;
@@ -36,11 +36,11 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\V
     /**
      * get select count sql
      *
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {
-        if (!$this->_countSelect instanceof \Zend_Db_Select) {
+        if (!$this->_countSelect instanceof \Magento\Framework\DB\Select) {
             $this->setSelectCountSql(parent::getSelectCountSql());
         }
         return $this->_countSelect;
@@ -133,10 +133,10 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\V
     protected function _getAllIdsSelect($limit = null, $offset = null)
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
         $idsSelect->limit($limit, $offset);
         return $idsSelect;
