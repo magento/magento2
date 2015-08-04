@@ -6,13 +6,13 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\Search\DocumentInterface;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Class Document
  */
-class Document extends Object implements DocumentInterface
+class Document extends DataObject implements DocumentInterface
 {
     /**
      * @var string|int
