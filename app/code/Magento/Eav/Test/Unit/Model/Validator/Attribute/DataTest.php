@@ -36,7 +36,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['create'],
             [
                 'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
-                'string' => $this->getMock('Magento\Framework\Stdlib\String')
+                'string' => $this->getMock('Magento\Framework\Stdlib\StringUtils')
             ]
         );
 
@@ -140,9 +140,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'frontend_input' => 'text',
             ]
         );
-        $collection = $this->getMockBuilder('Magento\Framework\Object')->setMethods(['getItems'])->getMock();
+        $collection = $this->getMockBuilder('Magento\Framework\DataObject')->setMethods(['getItems'])->getMock();
         $collection->expects($this->once())->method('getItems')->will($this->returnValue([$attribute]));
-        $entityType = $this->getMockBuilder('Magento\Framework\Object')
+        $entityType = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getAttributeCollection'])
             ->getMock();
         $entityType->expects($this->once())->method('getAttributeCollection')->will($this->returnValue($collection));
@@ -155,7 +155,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['create'],
             [
                 'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
-                'string' => $this->getMock('Magento\Framework\Stdlib\String')
+                'string' => $this->getMock('Magento\Framework\Stdlib\StringUtils')
             ]
         );
         $attrDataFactory->expects(
@@ -202,7 +202,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['create'],
             [
                 'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
-                'string' => $this->getMock('Magento\Framework\Stdlib\String')
+                'string' => $this->getMock('Magento\Framework\Stdlib\StringUtils')
             ]
         );
         $attrDataFactory->expects(
@@ -244,7 +244,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             [],
             [
                 'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
-                'string' => $this->getMock('Magento\Framework\Stdlib\String')
+                'string' => $this->getMock('Magento\Framework\Stdlib\StringUtils')
             ]
         );
         $validator = new \Magento\Eav\Model\Validator\Attribute\Data($attrDataFactory);
@@ -261,7 +261,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             [],
             [
                 'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
-                'string' => $this->getMock('Magento\Framework\Stdlib\String')
+                'string' => $this->getMock('Magento\Framework\Stdlib\StringUtils')
             ]
         );
         $validator = new \Magento\Eav\Model\Validator\Attribute\Data($attrDataFactory);
@@ -295,7 +295,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['create'],
             [
                 'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
-                'string' => $this->getMock('Magento\Framework\Stdlib\String')
+                'string' => $this->getMock('Magento\Framework\Stdlib\StringUtils')
             ]
         );
         $validator = new \Magento\Eav\Model\Validator\Attribute\Data($factory);

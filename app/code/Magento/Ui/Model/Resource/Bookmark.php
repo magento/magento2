@@ -43,7 +43,7 @@ class Bookmark extends AbstractDb
 
     /**
      * Prepare data to be saved to database
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      *
      * @return $this
      */

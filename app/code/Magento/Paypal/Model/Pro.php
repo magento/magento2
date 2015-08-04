@@ -181,11 +181,11 @@ class Pro
     /**
      * Transfer transaction/payment information from API instance to order payment
      *
-     * @param \Magento\Framework\Object|AbstractApi $from
+     * @param \Magento\Framework\DataObject|AbstractApi $from
      * @param \Magento\Payment\Model\InfoInterface $to
      * @return $this
      */
-    public function importPaymentInfo(\Magento\Framework\Object $from, \Magento\Payment\Model\InfoInterface $to)
+    public function importPaymentInfo(\Magento\Framework\DataObject $from, \Magento\Payment\Model\InfoInterface $to)
     {
         // update PayPal-specific payment information in the payment object
         $this->getInfo()->importToPayment($from, $to);
@@ -214,11 +214,11 @@ class Pro
     /**
      * Void transaction
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function void(\Magento\Framework\Object $payment)
+    public function void(\Magento\Framework\DataObject $payment)
     {
         $authTransactionId = $this->_getParentTransactionId($payment);
         if ($authTransactionId) {
@@ -236,11 +236,11 @@ class Pro
      * Attempt to capture payment
      * Will return false if the payment is not supposed to be captured
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @param float $amount
      * @return false|null
      */
-    public function capture(\Magento\Framework\Object $payment, $amount)
+    public function capture(\Magento\Framework\DataObject $payment, $amount)
     {
         $authTransactionId = $this->_getParentTransactionId($payment);
         if (!$authTransactionId) {
@@ -266,12 +266,12 @@ class Pro
     /**
      * Refund a capture transaction
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @param float $amount
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function refund(\Magento\Framework\Object $payment, $amount)
+    public function refund(\Magento\Framework\DataObject $payment, $amount)
     {
         $captureTxnId = $this->_getParentTransactionId($payment);
         if ($captureTxnId) {
@@ -304,10 +304,10 @@ class Pro
     /**
      * Cancel payment
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @return void
      */
-    public function cancel(\Magento\Framework\Object $payment)
+    public function cancel(\Magento\Framework\DataObject $payment)
     {
         if (!$payment->getOrder()->getInvoiceCollection()->count()) {
             $this->void($payment);
@@ -416,10 +416,10 @@ class Pro
     /**
      * Parent transaction id getter
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @return string
      */
-    protected function _getParentTransactionId(\Magento\Framework\Object $payment)
+    protected function _getParentTransactionId(\Magento\Framework\DataObject $payment)
     {
         return $payment->getParentTransactionId();
     }
