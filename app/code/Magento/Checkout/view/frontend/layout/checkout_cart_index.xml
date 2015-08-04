@@ -24,6 +24,19 @@
                     <block class="Magento\Checkout\Block\Cart\Shipping" name="checkout.cart.shipping" as="shipping" template="cart/shipping.phtml">
                         <arguments>
                             <argument name="jsLayout" xsi:type="array">
+                                <item name="types" xsi:type="array">
+                                    <item name="form.input" xsi:type="array">
+                                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="provider" xsi:type="string">checkoutProvider</item>
+                                            <item name="deps" xsi:type="array">
+                                                <item name="0" xsi:type="string">checkoutProvider</item>
+                                            </item>
+                                            <item name="template" xsi:type="string">ui/form/field</item>
+                                            <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                        </item>
+                                    </item>
+                                </item>
                                 <item name="components" xsi:type="array">
                                     <item name="block-summary" xsi:type="array">
                                         <item name="component" xsi:type="string">uiComponent</item>
@@ -34,6 +47,74 @@
                                             </item>
                                             <item name="block-rates" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/cart/shipping-rates</item>
+                                            </item>
+                                            <item name="block-shipping" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/cart/shipping-estimation</item>
+                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                <item name="sortOrder" xsi:type="string">1</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="address-fieldsets" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="config" xsi:type="array">
+                                                            <item name="deps" xsi:type="array">
+                                                                <item name="0" xsi:type="string">checkoutProvider</item>
+                                                            </item>
+                                                        </item>
+                                                        <item name="displayArea" xsi:type="string">address-fieldsets</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <item name="city" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="sortOrder" xsi:type="string">115</item>
+                                                                <item name="dataScope" xsi:type="string">shippingAddress.city</item>
+                                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                            </item>
+                                                            <item name="country_id" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                                                <item name="sortOrder" xsi:type="string">110</item>
+                                                                <item name="dataScope" xsi:type="string">shippingAddress.country_id</item>
+                                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="string">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="region_id" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
+                                                                <item name="sortOrder" xsi:type="string">112</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
+                                                                    <item name="customEntry" xsi:type="string">shippingAddress.region</item>
+                                                                </item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="validate-select" xsi:type="string">true</item>
+                                                                </item>
+                                                                <!-- Value of region_id field is filtered by the value of county_id attribute -->
+                                                                <item name="filterBy" xsi:type="array">
+                                                                    <item name="target" xsi:type="string"><![CDATA[${ $.provider }:${ $.parentScope }.country_id]]></item>
+                                                                    <item name="field" xsi:type="string">country_id</item>
+                                                                </item>
+                                                            </item>
+                                                            <!-- The following items override configuration of corresponding address attributes -->
+                                                            <item name="region" xsi:type="array">
+                                                                <!-- Make region attribute invisible on frontend. Corresponding input element is created by region_id field -->
+                                                                <item name="visible" xsi:type="boolean">false</item>
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="sortOrder" xsi:type="string">111</item>
+                                                                <item name="dataScope" xsi:type="string">shippingAddress.region</item>
+                                                            </item>
+                                                            <item name="postcode" xsi:type="array">
+                                                                <!-- post-code field has custom UI component -->
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code</item>
+                                                                <item name="dataScope" xsi:type="string">shippingAddress.postcode</item>
+                                                                <item name="sortOrder" xsi:type="string">114</item>
+                                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                            <item name="checkoutProvider" xsi:type="array">
+                                                <item name="component" xsi:type="string">uiComponent</item>
                                             </item>
                                         </item>
                                     </item>

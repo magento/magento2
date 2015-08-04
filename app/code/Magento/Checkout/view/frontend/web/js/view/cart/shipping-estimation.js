@@ -6,41 +6,35 @@
 /*global alert*/
 define(
     [
-        'jquery',
-        'ko',
-        'uiComponent',
+        'Magento_Ui/js/form/form',
         'Magento_Checkout/js/action/select-shipping-address',
         'Magento_Checkout/js/model/address-converter',
         'Magento_Checkout/js/model/shipping-rate-service',
         'Magento_Checkout/js/model/shipping-service',
         'mage/validation'
     ],
-    function($, ko, Component, selectShippingAddress, addressConverter, shippingRateService, shippingService) {
+    function(
+        Component,
+        selectShippingAddress,
+        addressConverter,
+        shippingRateService,
+        shippingService
+    ) {
         'use strict';
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/cart/shipping-estimation'
             },
-            isStateProvinceRequired: true,
-            isCityActive: true,
-            isCityRequired: true,
-            isZipCodeRequired: true,
             isLoading: shippingService.isLoading,
-            shippingRates: shippingService.getShippingRates(),
 
-            getEstimationInfo: function (form, event) {
-                var addressForm = $(form),
-                    addressData = {},
-                    formDataArray = addressForm.serializeArray();
+            getEstimationInfo: function () {
+                var addressData = null;
+                this.source.set('params.invalid', false);
+                this.source.trigger('shippingAddress.data.validate');
 
-                if (event) {
-                    event.preventDefault();
-                }
-
-                if (addressForm.validation() && addressForm.validation('isValid')) {
-                    formDataArray.forEach(function (entry) {
-                       addressData[entry.name] = entry.value;
-                    });
+                if (!this.source.get('params.invalid')) {
+                    addressData = this.source.get('shippingAddress');
+                    console.log(addressData);
                     selectShippingAddress(addressConverter.formAddressDataToQuoteAddress(addressData));
                 }
             }
