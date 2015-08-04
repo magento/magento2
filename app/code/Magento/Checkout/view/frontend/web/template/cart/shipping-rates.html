@@ -1,0 +1,22 @@
+<form id="co-shipping-method-form">
+    <fieldset class="fieldset rate">
+        <dl class="items methods" data-bind="foreach: shippingRateGroups">
+            <dt class="item-title"><span data-bind="text: $data"></span></dt>
+            <dd class="item-options"  data-bind="foreach: $parent.getRatesForGroup($data)">
+                <div class="field choice item">
+                    <!--<div>Error message</div>-->
+                    <input name="estimate_method" type="radio" class="radio" data-bind="checked: $parents[1].selectShippingMethod(method_code, carrier_code), attr: {value: method_code, id: 's_method_' + method_code}" />
+                    <label class="label" data-bind="attr: {for: 's_method_' + method_code}">
+                        <!-- ko text: method_title --><!-- /ko -->
+                        <!-- ko text: $parents[1].getFormattedPrice(amount) --><!-- /ko -->
+                    </label>
+                </div>
+            </dd>
+        </dl>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary update" data-bind="click: setShippingMethod"><span>Update Total</span></button>
+            </div>
+        </div>
+    </fieldset>
+</form>
