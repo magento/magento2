@@ -44,7 +44,7 @@ class ConcatExpression extends \Zend_Db_Expr
         array $columns,
         $separator = ' '
     ) {
-        $this->adapter = $resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        $this->adapter = $resource->getConnection();
         $this->columns = $columns;
         $this->separator = $separator;
     }
