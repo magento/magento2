@@ -11,7 +11,7 @@ require 'order.php';
 /** @var \Magento\Sales\Model\Order $order */
 
 $orderService = \Magento\TestFramework\ObjectManager::getInstance()->create(
-    'Magento\Sales\Model\Service\Order',
+    'Magento\Sales\Api\InvoiceManagementInterface',
     ['order' => $order]
 );
 $invoice = $orderService->prepareInvoice();
