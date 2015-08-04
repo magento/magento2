@@ -260,11 +260,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Proxy for \Magento\Weee\Model\Tax::getProductWeeeAttributes()
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param null|false|\Magento\Framework\Object     $shipping
-     * @param null|false|\Magento\Framework\Object     $billing
+     * @param null|false|\Magento\Framework\DataObject     $shipping
+     * @param null|false|\Magento\Framework\DataObject     $billing
      * @param Website                        $website
      * @param bool                           $calculateTaxes
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributes(
         $product,
@@ -328,7 +328,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns array of weee attributes allowed for display
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributesForDisplay($product)
     {
@@ -345,11 +345,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Product Weee attributes for price renderer
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param null|false|\Magento\Framework\Object $shipping Shipping Address
-     * @param null|false|\Magento\Framework\Object $billing Billing Address
+     * @param null|false|\Magento\Framework\DataObject $shipping Shipping Address
+     * @param null|false|\Magento\Framework\DataObject $billing Billing Address
      * @param null|Website $website
      * @param bool $calculateTaxes
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributesForRenderer(
         $product,
@@ -397,7 +397,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Returns all summed WEEE taxes with all local taxes applied
      *
-     * @param \Magento\Framework\Object[] $attributes Result from getProductWeeeAttributes()
+     * @param \Magento\Framework\DataObject[] $attributes Result from getProductWeeeAttributes()
      * @return float
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -409,7 +409,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $amount = 0;
         foreach ($attributes as $attribute) {
-            /* @var $attribute \Magento\Framework\Object */
+            /* @var $attribute \Magento\Framework\DataObject */
             $amount += $attribute->getAmountInclTax();
         }
 

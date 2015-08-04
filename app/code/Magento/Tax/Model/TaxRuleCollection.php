@@ -65,11 +65,11 @@ class TaxRuleCollection extends AbstractServiceCollection
      * Creates a collection item that represents a tax rule for the tax rules grid.
      *
      * @param TaxRuleInterface $taxRule Input data for creating the item.
-     * @return \Magento\Framework\Object Collection item that represents a tax rule
+     * @return \Magento\Framework\DataObject Collection item that represents a tax rule
      */
     protected function createTaxRuleCollectionItem(TaxRuleInterface $taxRule)
     {
-        $collectionItem = new \Magento\Framework\Object();
+        $collectionItem = new \Magento\Framework\DataObject();
         $collectionItem->setTaxCalculationRuleId($taxRule->getId());
         $collectionItem->setCode($taxRule->getCode());
         /* should cast to string so that some optional fields won't be null on the collection grid pages */
