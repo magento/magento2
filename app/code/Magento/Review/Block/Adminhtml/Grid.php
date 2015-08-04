@@ -353,7 +353,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get row url
      *
-     * @param \Magento\Review\Model\Review|\Magento\Framework\Object $row
+     * @param \Magento\Review\Model\Review|\Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)

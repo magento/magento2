@@ -21,7 +21,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPriceConfiguration($testArray, $expectedArray)
     {
-        $configObj = new \Magento\Framework\Object(
+        $configObj = new \Magento\Framework\DataObject(
             [
                 'config' => $testArray,
             ]
@@ -212,13 +212,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateProductOptions($testArray, $weeDisplay, $weeEnabled, $expectedArray)
     {
-        $configObj = new \Magento\Framework\Object(
+        $configObj = new \Magento\Framework\DataObject(
             [
                 'additional_options' => $testArray,
             ]
         );
 
-        $weeObject = new \Magento\Framework\Object(
+        $weeObject = new \Magento\Framework\DataObject(
             [
                 'code' => 'fpt',
                 'amount' => '15.0000',

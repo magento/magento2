@@ -74,12 +74,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $orderFactoryMock;
 
     /**
-     * @var \Zend_Db_Adapter_Abstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dbMock;
+    protected $connectionMock;
 
     /**
-     * @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $selectMock;
 
@@ -121,7 +121,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->selectMock = $this->getMockBuilder('Zend_Db_Select')
+        $this->selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock
@@ -145,16 +145,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getPart')
             ->willReturn([]);
 
-        $this->dbMock = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['select', 'getIfNullSql', 'getDateFormatSql', 'prepareSqlCondition', 'getCheckSql']
-        );
-        $this->dbMock
+        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+            ->setMethods(['select', 'getIfNullSql', 'getDateFormatSql', 'prepareSqlCondition', 'getCheckSql'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connectionMock
             ->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
@@ -164,8 +159,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resourceMock
             ->expects($this->once())
-            ->method('getReadConnection')
-            ->willReturn($this->dbMock);
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
 
         $this->collection = new Collection(
             $this->entityFactoryMock,
@@ -238,7 +233,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getTable')
             ->with($mainTable);
 
-        $this->dbMock
+        $this->connectionMock
             ->expects($getIfNullSqlResult)
             ->method('getIfNullSql');
 
@@ -329,7 +324,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getTable')
             ->with($mainTable);
 
-        $this->dbMock
+        $this->connectionMock
             ->expects($getIfNullSqlResult)
             ->method('getIfNullSql');
 
@@ -380,10 +375,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $fromDate = '1';
         $toDate = '2';
 
-        $this->dbMock
+        $this->connectionMock
             ->expects($this->at(0))
             ->method('prepareSqlCondition')
-            ->with('"created_at"', ['from' => $fromDate, 'to' => $toDate]);
+            ->with('`created_at`', ['from' => $fromDate, 'to' => $toDate]);
 
         $this->collection->setDateRange($fromDate, $toDate);
     }
@@ -396,7 +391,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetStoreIds($storeIds, $parameters)
     {
-        $this->dbMock
+        $this->connectionMock
             ->expects($this->any())
             ->method('getIfNullSql')
             ->willReturn('text');
