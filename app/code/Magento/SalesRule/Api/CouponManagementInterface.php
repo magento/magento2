@@ -26,7 +26,7 @@ interface CouponManagementInterface
      *
      * @param int[] $ids
      * @param bool $ignoreInvalidIds
-     * @return bool true on success
+     * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -37,7 +37,7 @@ interface CouponManagementInterface
      *
      * @param string[] $codes
      * @param bool $ignoreInvalidCodes
-     * @return bool true on success
+     * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
