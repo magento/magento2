@@ -388,6 +388,9 @@ class Indexer extends \Magento\Framework\Object implements IdxInterface
      */
     protected function getStructureInstance()
     {
+        if (!$this->getData('structure')) {
+            return null;
+        }
         return $this->structureFactory->create($this->getData('structure'));
     }
 
