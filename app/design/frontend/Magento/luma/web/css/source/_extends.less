@@ -1284,10 +1284,10 @@
 //  ---------------------------------------------
 
 .abs-table-striped {
-    .table-striped(
+    .mixin-table-striped(
         @_stripped-highlight: even
     );
-    .table-bordered(
+    .mixin-table-bordered(
         @_table_type: light
     );
 }
@@ -1306,7 +1306,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-table-bordered-desktop {
-        .table-bordered(
+        .mixin-table-bordered(
             @_table_type: light,
             @_table_border-width: 1px
         );

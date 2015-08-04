@@ -7,17 +7,17 @@
 //  Tables
 //  _____________________________________________
 
-.table(
+.mixin-table(
     @_table-width: @table__width,
     @_cell-padding-vertical: @table-cell__padding-vertical,
     @_cell-padding-horizontal: @table-cell__padding-horizontal,
     @_table-margin-bottom: @table__margin-bottom
 ) {
+    .css(margin-bottom, @_table-margin-bottom);
+    .css(width, @_table-width);
     border-collapse: collapse;
     border-spacing: 0;
-    .css(margin-bottom, @_table-margin-bottom);
     max-width: 100%;
-    .css(width, @_table-width);
     th {
         text-align: left;
     }
@@ -48,7 +48,7 @@
     }
 }
 
-.table-typography(
+.mixin-table-typography(
      @_table-td-font-size: @table-td__font-size,
      @_table-td-color: @table-td__color,
      @_table-td-font-family: @table-td__font-family,
@@ -90,7 +90,7 @@
     }
 }
 
-.table-background-color(
+.mixin-table-background-color(
     @_table-background-color: @table__background-color,
     @_table-head-background-color: @table-head__background-color,
     @_table-foot-background-color: @table-foot__background-color,
@@ -112,7 +112,7 @@
     }
 }
 
-.table-resize(
+.mixin-table-resize(
     @_td-padding-top: @table-cell__padding-vertical / 2,
     @_td-padding-right: @table-cell__padding-horizontal / 2,
     @_td-padding-bottom: @_td-padding-top,
@@ -136,7 +136,7 @@
     }
 }
 
-.table-bordered(
+.mixin-table-bordered(
     @_table_type: normal,
     @_table_border-width: @table__border-width,
     @_table_border-style: @table__border-style,
@@ -155,7 +155,7 @@
     }
 }
 
-.table-bordered(
+.mixin-table-bordered(
     @_table_type: normal,
     @_table_border-width: @table__border-width,
     @_table_border-style: @table__border-style,
@@ -186,7 +186,7 @@
     }
 }
 
-.table-bordered(
+.mixin-table-bordered(
     @_table_type: normal,
     @_table_border-width: @table__border-width,
     @_table_border-style: @table__border-style,
@@ -205,7 +205,7 @@
     }
 }
 
-.table-bordered(
+.mixin-table-bordered(
     @_table_type: normal,
     @_table_border-width: @table__border-width,
     @_table_border-style: @table__border-style,
@@ -226,7 +226,7 @@
     }
 }
 
-.table-bordered(
+.mixin-table-bordered(
     @_table_type: normal,
     @_table_border-width: @table__border-width,
     @_table_border-style: @table__border-style,
@@ -253,7 +253,7 @@
     }
 }
 
-.table-bordered(
+.mixin-table-bordered(
     @_table_type: normal,
     @_table_border-width: @table__border-width,
     @_table_border-style: @table__border-style,
@@ -272,7 +272,7 @@
     }
 }
 
-.table-striped(
+.mixin-table-striped(
     @_stripped-background-color: @table-cell-stripped__background-color,
     @_stripped-color: @table-cell-stripped__color,
     @_stripped-direction: horizontal,
@@ -287,7 +287,7 @@
     }
 }
 
-.table-striped(
+.mixin-table-striped(
     @_stripped-background-color: @table-cell-stripped__background-color,
     @_stripped-color: @table-cell-stripped__color,
     @_stripped-direction: horizontal,
@@ -302,7 +302,7 @@
     }
 }
 
-.table-striped(
+.mixin-table-striped(
     @_stripped-background-color: @table-cell-stripped__background-color,
     @_stripped-color: @table-cell-stripped__color,
     @_stripped-direction: horizontal,
@@ -321,7 +321,7 @@
     }
 }
 
-.table-striped(
+.mixin-table-striped(
     @_stripped-background-color: @table-cell-stripped__background-color,
     @_stripped-color: @table-cell-stripped__color,
     @_stripped-direction: horizontal,
@@ -340,7 +340,7 @@
     }
 }
 
-.table-hover(
+.mixin-table-hover(
     @_table_cell-background-color-hover: @table-cell__hover__background-color,
     @_table_cell-odd-background-color-hover: @_table_cell-background-color-hover
 ) {
@@ -358,16 +358,16 @@
     }
 }
 
-.table-overflow() {
-    width: 100%;
+.mixin-table-overflow() {
     .css(margin-bottom, @table__margin-bottom);
-    overflow-y: hidden;
     overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     -webkit-overflow-scrolling: touch;
 }
 
-.table-responsive(
+.mixin-table-responsive(
     @_table-background-color-responsive: @table-responsive__background-color,
     @_table-th-background-color-responsive: @table-responsive-th__background-color,
     @_reset-table-striped: false,
@@ -383,15 +383,15 @@
     }
 }
 
-.table-responsive(
+.mixin-table-responsive(
     @_table-background-color-responsive: @table-responsive__background-color,
     @_table-th-background-color-responsive: @table-responsive-th__background-color,
     @_reset-table-striped: false,
     @_reset-table-hover: false,
     @_table-responsive-cell-padding: @table-responsive-cell__padding
 ) when (@_reset-table-striped = true) and (@_reset-table-hover = true){
-    .table-striped(@_stripped-background-color: @_table-background-color-responsive);
-    .table-hover(
+    .mixin-table-striped(@_stripped-background-color: @_table-background-color-responsive);
+    .mixin-table-hover(
         @_table_cell-background-color-hover: @_table-background-color-responsive,
         @_table_cell-odd-background-color-hover: @_table-background-color-responsive
     );
@@ -404,14 +404,14 @@
     }
 }
 
-.table-responsive(
+.mixin-table-responsive(
     @_table-background-color-responsive: @table-responsive__background-color,
     @_table-th-background-color-responsive: @table-responsive-th__background-color,
     @_reset-table-striped: false,
     @_reset-table-hover: false,
     @_table-responsive-cell-padding: @table-responsive-cell__padding
 ) when (@_reset-table-striped = true) and (@_reset-table-hover = false){
-    .table-striped(@_stripped-background-color: @_table-background-color-responsive);
+    .mixin-table-striped(@_stripped-background-color: @_table-background-color-responsive);
     ._responsive-table(
         @_table-background-color-responsive: @_table-background-color-responsive,
         @_table-responsive-cell-padding: @_table-responsive-cell-padding
@@ -419,14 +419,14 @@
     .css(background-color, @_table-th-background-color-responsive);
 }
 
-.table-responsive(
+.mixin-table-responsive(
     @_table-background-color-responsive: @table-responsive__background-color,
     @_table-th-background-color-responsive: @table-responsive-th__background-color,
     @_reset-table-striped: false,
     @_reset-table-hover: false,
     @_table-responsive-cell-padding: @table-responsive-cell__padding
 ) when (@_reset-table-striped = false) and (@_reset-table-hover = true){
-    .table-hover(
+    .mixin-table-hover(
         @_table_cell-background-color-hover: @_table-background-color-responsive,
         @_table_cell-odd-background-color-hover: @_table-background-color-responsive
     );
@@ -439,7 +439,7 @@
     }
 }
 
-.table-caption(
+.mixin-table-caption(
     @_table-caption-hide: @table-caption__hide,
     @_table-caption-font-size: @table-caption__font-size,
     @_table-caption-color: @table-caption__color,
@@ -466,7 +466,7 @@
     }
 }
 
-.table-caption(
+.mixin-table-caption(
     @_table-caption-hide: @table-caption__hide,
     @_table-caption-font-size: @table-caption__font-size,
     @_table-caption-color: @table-caption__color,

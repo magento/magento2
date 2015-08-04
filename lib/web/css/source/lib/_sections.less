@@ -7,7 +7,7 @@
 //  Sections
 //  _____________________________________________
 
-.data-tabs__base(@_tab-control-height__base: @tab-control__height__base) {
+.mixin-data-tabs__base(@_tab-control-height__base: @tab-control__height__base) {
     .clearfix();
     position: relative;
     z-index: 1;
@@ -15,17 +15,17 @@
         float: left;
         width: auto;
         > .switch {
-            display: block;
             .css(height, @_tab-control-height__base);
+            display: block;
             position: relative;
             z-index: 2;
         }
     }
     > .item.content {
-        box-sizing: border-box;
         .clearfix();
-        float: right;
         .css(margin-top, @_tab-control-height__base);
+        box-sizing: border-box;
+        float: right;
         margin-left: -100%;
         width: 100%;
         &.active {
@@ -34,7 +34,7 @@
     }
 }
 
-.data-tabs(
+.mixin-data-tabs(
     @_tab-control-font-family: @tab-control__font-family,
     @_tab-control-font-size: @tab-control__font-size,
     @_tab-control-font-style: @tab-control__font-style,
@@ -77,7 +77,7 @@
     @_tab-content-padding-bottom: @tab-content__padding-bottom,
     @_tab-content-padding-left: @tab-content__padding-left
 ) {
-    .data-tabs__base();
+    .mixin-data-tabs__base();
     > .item.title {
         .css(margin, 0 @_tab-control-margin-right 0 0);
         > .switch {
@@ -148,7 +148,7 @@
     .css(border-top, @_tab-content-border);
 }
 
-.data-accordion__base() {
+.mixin-data-accordion__base() {
     margin: 0;
     padding: 0;
     > .item.title {
@@ -162,9 +162,9 @@
     > .item.content {
         .clearfix();
         box-sizing: border-box;
+        display: block;
         float: none;
         margin: 0;
-        display: block;
         &.active {
             display: block;
         }
@@ -212,7 +212,7 @@
     @_accordion-content-margin: @accordion-content__margin,
     @_accordion-content-padding: @accordion-content__padding
 ) {
-    .data-accordion__base();
+    .mixin-data-accordion__base();
     & when (@_accordion-control-margin-bottom = 0) {
         > .item.title {
             .css(margin, 0);
@@ -226,10 +226,10 @@
     > .item.title {
         > .switch {
             .css(background, @_accordion-control-background-color);
-            .css(border-top,@_accordion-control-border-top);
-            .css(border-right,@_accordion-control-border-right);
             .css(border-bottom,@_accordion-control-border-bottom);
             .css(border-left,@_accordion-control-border-left);
+            .css(border-right,@_accordion-control-border-right);
+            .css(border-top,@_accordion-control-border-top);
             .css(height, @_accordion-control-height);
             .css(padding, @_accordion-control-padding-top @_accordion-control-padding-right @_accordion-control-padding-bottom @_accordion-control-padding-left);
             .typography(

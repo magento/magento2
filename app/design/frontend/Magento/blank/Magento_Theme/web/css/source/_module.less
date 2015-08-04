@@ -118,7 +118,7 @@ body {
     }
     &.noscript,
     &.cookie {
-        .message(@_message-type: global-note);
+        .mixin-message(@_message-type: global-note);
         margin: 0;
     }
     &.cookie {
@@ -132,7 +132,7 @@ body {
         }
     }
     &.demo {
-        .message(@_message-type: global-caution);
+        .mixin-message(@_message-type: global-caution);
         text-align: center;
         margin-bottom: 0;
     }

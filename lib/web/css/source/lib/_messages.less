@@ -7,7 +7,7 @@
 //  Messages
 //  _____________________________________________
 
-.message(@_message-type: info) {
+.mixin-message(@_message-type: info) {
     @_message-background: "message-@{_message-type}__background";
     @_message-border-color: "message-@{_message-type}__border-color";
     @_message-color: "message-@{_message-type}__color";
@@ -81,8 +81,8 @@ and not (@_message-border-style = false) {
 }
 
 //  Messages with lateral icon
-.message-icon-lateral(@_message-type: info, @_message-position: right) {
-    .message(@_message-type);
+.mixin-message-icon-lateral(@_message-type: info, @_message-position: right) {
+    .mixin-message(@_message-type);
     @_message-icon-position: @_message-position;
     @_message-icon: "message-@{_message-type}-icon";
     @_message-icon-color: "message-@{_message-type}-icon__color-lateral";
@@ -104,8 +104,8 @@ and not (@_message-border-style = false) {
 }
 
 //  Messages with inner icon
-.message-icon-inner(@_message-type: info) {
-    .message(@_message-type);
+.mixin-message-icon-inner(@_message-type: info) {
+    .mixin-message(@_message-type);
     @_message-icon: "message-@{_message-type}-icon";
     @_message-icon-color: "message-@{_message-type}-icon__color-inner";
     @_message-icon-background: "message-@{_message-type}-icon__background";
