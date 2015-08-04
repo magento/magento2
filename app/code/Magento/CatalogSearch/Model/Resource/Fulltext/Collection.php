@@ -83,7 +83,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext
      * @param \Magento\Framework\Search\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string $searchRequestName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
