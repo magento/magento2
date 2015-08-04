@@ -10,7 +10,7 @@ use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\Translate\Inline as Inline;
 
 /**
- * Block responsible for including RequireJs config on the page
+ * Block responsible for including Inline Translation config on the page
  */
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {

@@ -6,7 +6,7 @@
 namespace Magento\Translation\Model;
 
 /**
- * A service for handling RequireJS files in the application
+ * A service for handling Translation config files
  */
 class FileManager
 {
