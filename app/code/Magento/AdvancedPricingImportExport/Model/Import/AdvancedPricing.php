@@ -7,6 +7,7 @@ namespace Magento\AdvancedPricingImportExport\Model\Import;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\Framework\App\Resource;
 
 /**
  * Class AdvancedPricing
@@ -176,7 +177,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
         $this->_dataSourceModel = $importData;
-        $this->_connection = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection();
         $this->_resourceFactory = $resourceFactory;
         $this->_productModel = $productModel;
         $this->_catalogData = $catalogData;

@@ -10,17 +10,12 @@ use Magento\Framework\App\Resource\SourceProviderInterface;
 interface HandlerInterface
 {
     /**
+     * Prepare SQL for field and add it to collection
+     *
      * @param SourceProviderInterface $source
      * @param string $alias
      * @param array $fieldInfo
      * @return void
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo);
-
-    /**
-     * @param SourceProviderInterface $source
-     * @param array $fieldInfo
-     * @return void
-     */
-    public function prepareData(SourceProviderInterface $source, $fieldInfo);
 }

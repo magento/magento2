@@ -28,14 +28,14 @@ class History extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getLastInsertedId($userId)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter
+        $connection = $this->getConnection();
+        $select = $connection
             ->select()
             ->from($this->getMainTable())
             ->order($this->getIdFieldName() . ' DESC')
             ->where('user_id = ?', $userId)
             ->limit(1);
 
-        return $adapter->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 }

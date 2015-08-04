@@ -33,7 +33,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $adapter;
+    protected $connectionMock;
 
     protected function setUp()
     {
@@ -44,7 +44,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->indexer =  $indexerRegistry->get('catalogsearch_fulltext');
 
         $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
-        $this->adapter = $this->resource->getConnection('core_read');
+        $this->connectionMock = $this->resource->getConnection();
     }
 
     /**
@@ -56,10 +56,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->indexer->reindexAll();
 
-        $select = $this->adapter->select()->from($this->resource->getTableName('catalogsearch_fulltext_scope1'))
+        $select = $this->connectionMock->select()->from($this->resource->getTableName('catalogsearch_fulltext_scope1'))
             ->where('`data_index` LIKE ?', '%' . 'Bundle Product Items' . '%');
 
-        $result = $this->adapter->fetchAll($select);
+        $result = $this->connectionMock->fetchAll($select);
         $this->assertCount(1, $result);
     }
 }

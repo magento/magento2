@@ -103,6 +103,13 @@ class GridStructure implements IndexStructureInterface
             $name = $field['name'];
             $type = $columnMap['type'];
             $size = $columnMap['size'];
+            if ($field['type'] === 'filterable') {
+                $table->addIndex(
+                    $this->resource->getIdxName($tableName, $name, AdapterInterface::INDEX_TYPE_INDEX),
+                    $name,
+                    AdapterInterface::INDEX_TYPE_INDEX
+                );
+            }
             $table->addColumn($name, $type, $size);
         }
         $adapter->createTable($table);
