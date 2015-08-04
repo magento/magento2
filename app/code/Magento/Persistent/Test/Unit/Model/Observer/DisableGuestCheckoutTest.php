@@ -49,7 +49,7 @@ class DisableGuestCheckoutTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithPersistentSession()
     {
-        $resultMock = $this->getMock('Magento\Framework\Object', ['setIsAllowed', '__wakeUp'], [], '', false);
+        $resultMock = $this->getMock('Magento\Framework\DataObject', ['setIsAllowed', '__wakeUp'], [], '', false);
         $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
         $this->observerMock
             ->expects($this->once())

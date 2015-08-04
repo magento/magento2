@@ -28,7 +28,7 @@ class UpdateProductOptionsTest extends \PHPUnit_Framework_TestCase
         $displayPriceExcludingTax
     ) {
 
-        $frameworkObject= new \Magento\Framework\Object();
+        $frameworkObject= new \Magento\Framework\DataObject();
         $frameworkObject->setAdditionalOptions([]);
 
         $product=$this->getMock('Magento\Catalog\Model\Product', [], [], '', false);

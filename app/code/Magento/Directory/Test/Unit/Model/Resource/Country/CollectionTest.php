@@ -79,7 +79,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray($optionsArray, $emptyLabel, $foregroundCountries, $expectedResults)
     {
         foreach ($optionsArray as $itemData) {
-            $this->_model->addItem(new \Magento\Framework\Object($itemData));
+            $this->_model->addItem(new \Magento\Framework\DataObject($itemData));
         }
 
         $this->_model->setForegroundCountries($foregroundCountries);
