@@ -221,7 +221,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param \SimpleXMLElement $xml
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _invokePrepareShippingLabelContent(\SimpleXMLElement $xml)
     {

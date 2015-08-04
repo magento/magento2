@@ -25,18 +25,17 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->adapterMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
+        $this->connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
 
         $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
         $this->resourceMock->expects($this->once())
             ->method('getConnection')
-            ->with('core_write')
-            ->willReturn($this->adapterMock);
+            ->willReturn($this->connectionMock);
 
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
@@ -57,7 +56,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', ['getId'], [], '', false);
         $productMock->expects($this->once())->method('getId')->willReturn($productId);
 
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('insert')
             ->with('table_name', ['entity_id' => $productId]);
 

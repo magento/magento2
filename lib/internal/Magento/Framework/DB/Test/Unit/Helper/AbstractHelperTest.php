@@ -31,7 +31,7 @@ class AbstractHelperTest extends \PHPUnit_Framework_TestCase
         $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->_resourceMock->expects($this->any())
             ->method('getConnection')
-            ->with('prefix_read')
+            ->with('prefix')
             ->will($this->returnValue($this->_adapterMock));
 
         $this->_model = $this->getMockForAbstractClass(

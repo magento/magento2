@@ -22,7 +22,7 @@ class EditablemultiselectTest extends \PHPUnit_Framework_TestCase
             ['value' => 3, 'label' => 'Value3'],
         ];
         $value = [1, 3];
-        $this->_model->setForm(new \Magento\Framework\Object());
+        $this->_model->setForm(new \Magento\Framework\DataObject());
         $this->_model->setData(['values' => $values, 'value' => $value]);
     }
 

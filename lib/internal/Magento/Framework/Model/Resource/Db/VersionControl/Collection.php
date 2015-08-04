@@ -21,7 +21,7 @@ abstract class Collection extends \Magento\Framework\Model\Resource\Db\Collectio
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Snapshot $entitySnapshot
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -30,7 +30,7 @@ abstract class Collection extends \Magento\Framework\Model\Resource\Db\Collectio
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         Snapshot $entitySnapshot,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->entitySnapshot = $entitySnapshot;
@@ -59,7 +59,7 @@ abstract class Collection extends \Magento\Framework\Model\Resource\Db\Collectio
     /**
      * @inheritdoc
      */
-    protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {
         $this->entitySnapshot->registerSnapshot($item);
         return $item;

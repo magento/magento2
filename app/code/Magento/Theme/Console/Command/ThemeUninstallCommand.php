@@ -361,7 +361,11 @@ class ThemeUninstallCommand extends Command
     {
         $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
         if ($themesDirRead->isExist($themePath . '/composer.json')) {
-            $rawData = \Zend_Json::decode($themesDirRead->readFile($themePath . '/composer.json'));
+            $rawData = [];
+            $themeFile = $themesDirRead->readFile($themePath . '/composer.json');
+            if ($themeFile) {
+                $rawData = \Zend_Json::decode($themeFile);
+            }
             return isset($rawData['name']) ? $rawData['name'] : '';
         }
         return '';
