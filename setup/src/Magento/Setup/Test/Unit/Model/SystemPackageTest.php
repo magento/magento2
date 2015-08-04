@@ -73,8 +73,13 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
         $this->locker = $this->getMock('Composer\Package\Locker', [], [], '', false);
         $this->repository = $this->getMock('Composer\Repository\ArrayRepository', [], [], '', false);
         $this->composer = $this->getMock('Composer\Composer', [], [], '', false);
-        $this->composerInformation =
-            $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
+        $this->composerInformation = $this->getMock(
+            'Magento\Framework\Composer\ComposerInformation',
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     public function testGetPackageVersions()
