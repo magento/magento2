@@ -52,15 +52,14 @@ define([
 
         /**
          * Generates [data-translate] attribute's value
-         * @param {String} original
-         * @param {String} translated
+         * @param {Object} translationData
          * @param {String} location
          */
-        composeTranslateObj = function (original, translated, location) {
+        composeTranslateAttr = function (translationData, location) {
             var obj = [{
-                'shown': translated,
-                'translated': translated,
-                'original': original,
+                'shown': translationData.shown,
+                'translated': translationData.translated,
+                'original': translationData.original,
                 'location': locations[location] || 'Text'
             }];
 
@@ -83,12 +82,19 @@ define([
          */
         setTranslateProp = function (el, original) {
             var location = $(el).prop('tagName').toLowerCase(),
-                translated = $.mage.__(original),
-                translateObj = composeTranslateObj(original, translated, location);
+                translationArray = $.mage.translate.parsedTranslate(original),
+                translationData = translationArray.length > 3 ?
+                {
+                    shown: translationArray[1], translated: translationArray[2], original: translationArray[3]
+                } :
+                {
+                    shown: original, translated: original, original: original
+                },
+                translateAttr = composeTranslateAttr(translationData, location);
 
-            $(el).attr('data-translate', translateObj);
+            $(el).attr('data-translate', translateAttr);
 
-            setText(el, translated);
+            setText(el, translationData.shown);
         },
 
         /**
