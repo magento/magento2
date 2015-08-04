@@ -25,7 +25,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $logger;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Object\ */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\ */
     protected $_observerObject;
 
     /**

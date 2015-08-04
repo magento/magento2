@@ -33,7 +33,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends \Magento\Catalog\Model\AbstractModel implements
-    \Magento\Framework\Object\IdentityInterface,
+    \Magento\Framework\DataObject\IdentityInterface,
     \Magento\Catalog\Api\Data\CategoryInterface,
     \Magento\Catalog\Api\Data\CategoryTreeInterface
 {
@@ -942,7 +942,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Return parent categories of current category
      *
-     * @return \Magento\Framework\Object[]|\Magento\Catalog\Model\Category[]
+     * @return \Magento\Framework\DataObject[]|\Magento\Catalog\Model\Category[]
      */
     public function getParentCategories()
     {

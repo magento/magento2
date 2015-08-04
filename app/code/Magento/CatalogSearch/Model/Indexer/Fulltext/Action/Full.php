@@ -643,12 +643,12 @@ class Full
      * Retrieve Product Emulator (Magento Object)
      *
      * @param string $typeId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function getProductEmulator($typeId)
     {
         if (!isset($this->productEmulators[$typeId])) {
-            $productEmulator = new \Magento\Framework\Object();
+            $productEmulator = new \Magento\Framework\DataObject();
             $productEmulator->setTypeId($typeId);
             $this->productEmulators[$typeId] = $productEmulator;
         }

@@ -79,14 +79,8 @@ class TermTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuild()
     {
-        $productIds = [1, 2, 3];
         $metrics = ['count' => 'count(*)'];
 
-        $this->select->expects($this->once())
-            ->method('where')
-            ->withConsecutive(
-                ['main_table.entity_id IN (?)', $productIds]
-            );
         $this->select->expects($this->once())
             ->method('columns')
             ->withConsecutive([$metrics]);
@@ -101,7 +95,12 @@ class TermTest extends \PHPUnit_Framework_TestCase
         $this->dataProvider->expects($this->once())->method('getDataSet')->willReturn($this->select);
         $this->dataProvider->expects($this->once())->method('execute')->willReturn($this->select);
 
-        $result = $this->term->build($this->dataProvider, [], $this->bucket, $productIds);
+        /** @var \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject $table */
+        $table = $this->getMockBuilder('Magento\Framework\DB\Ddl\Table')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $result = $this->term->build($this->dataProvider, [], $this->bucket, $table);
 
         $this->assertEquals($this->select, $result);
     }

@@ -579,7 +579,7 @@ abstract class AbstractDb extends AbstractResource
                 $this->_uniqueFields = [['field' => $fields, 'title' => $fields]];
             }
 
-            $data = new \Magento\Framework\Object($this->_prepareDataForSave($object));
+            $data = new \Magento\Framework\DataObject($this->_prepareDataForSave($object));
             $select = $this->getConnection()->select()->from($this->getMainTable());
 
             foreach ($fields as $unique) {
@@ -629,7 +629,7 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Perform actions after object load
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -641,7 +641,7 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -653,7 +653,7 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -665,7 +665,7 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Perform actions before object delete
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -677,7 +677,7 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Perform actions after object delete
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
