@@ -141,7 +141,7 @@ class Mapper
         );
 
         $select->limit($request->getSize());
-        $select->order('relevance ' . Select::SQL_DESC);
+        $select->order('score ' . Select::SQL_DESC);
         return $select;
     }
 
@@ -159,9 +159,7 @@ class Mapper
                 $this->entityMetadata->getEntityId() => 'entity_id',
                 'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
             ]
-        )->group(
-            $this->entityMetadata->getEntityId()
-        );
+        )->group($this->entityMetadata->getEntityId());
         return $parentSelect;
     }
 
@@ -361,7 +359,7 @@ class Mapper
                     ['main_select' => $subSelect],
                     [
                         $this->entityMetadata->getEntityId() => 'entity_id',
-                        'relevance' => sprintf('(%s)', $relevance),
+                        'score' => sprintf('(%s)', $relevance),
                     ]
                 );
 
