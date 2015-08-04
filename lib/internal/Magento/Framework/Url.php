@@ -795,11 +795,12 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
             return $this->createUrl($routePath, $routeParams);
         }
 
-        if (is_array($routeParams)) {
-            ksort($routeParams);
+        $cashedParams = $routeParams;
+        if (is_array($cashedParams)) {
+            ksort($cashedParams);
         }
 
-        $cacheKey = md5($routePath . serialize($routeParams));
+        $cacheKey = md5($routePath . serialize($cashedParams));
         if (!isset($this->cacheUrl[$cacheKey])) {
             $this->cacheUrl[$cacheKey] = $this->createUrl($routePath, $routeParams);
         }
