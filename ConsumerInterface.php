@@ -21,7 +21,7 @@ interface ConsumerInterface
     /**
      * Connects to a queue, consumes a message on the queue, and invoke a method to process the message contents.
      *
-     * @param int|null $numberOfMessages if not specified - wait for incoming messages forever,
+     * @param int|null $maxNumberOfMessages if not specified - wait for incoming messages forever,
      *      otherwise terminate execution after processing the specified number of messages
      * @return mixed
      */

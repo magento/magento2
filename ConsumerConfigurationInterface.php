@@ -15,4 +15,23 @@ interface ConsumerConfigurationInterface
      */
     public function getConsumerName();
 
+    /**
+     * @return string
+     */
+    public function getQueueName();
+
+    /**
+     * @return string
+     */
+    public function getExchangeName();
+
+    /**
+     * @return string
+     */
+    public function getTopicName();
+
+    /**
+     * @return callback
+     */
+    public function getCallback();
 }

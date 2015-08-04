@@ -34,7 +34,7 @@ class ConsumerFactory
      *     <arguments>
      *         <argument name="consumers" xsi:type="array">
      *             <item name="rabbitmq" xsi:type="array">
-     *                 <item name="type" xsi:type="object">Magento\RabbitMq\Model\RabbitMqConsumer</item>
+     *                 <item name="type" xsi:type="object">Magento\RabbitMq\Model\Consumer</item>
      *                 <item name="connectionName" xsi:type="string">rabbitmq</item>
      *             </item>
      *         </argument>
@@ -42,7 +42,7 @@ class ConsumerFactory
      * </type>
      *
      * @param QueueConfig $queueConfig
-     * @param PublisherInterface[] $publishers
+     * @param ConsumerInterface[] $consumers
      */
     public function __construct(
         QueueConfig $queueConfig,
