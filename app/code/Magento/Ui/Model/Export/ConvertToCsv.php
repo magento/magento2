@@ -137,7 +137,7 @@ class ConvertToCsv
     {
         $childComponents = $component->getChildComponents();
         $listingTop = $childComponents['listing_top'];
-        foreach($listingTop as $child) {
+        foreach ($listingTop as $child) {
             if ($child instanceof \Magento\Ui\Component\Filters) {
                 return $child;
             }
