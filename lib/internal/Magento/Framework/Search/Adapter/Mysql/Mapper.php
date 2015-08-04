@@ -351,7 +351,7 @@ class Mapper
             $select->columns($scoreBuilder->build());
             $select = $this->createAroundSelect($select, $scoreBuilder);
             $subSelect = $select;
-            $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
+            $select = $this->resource->getConnection()->select();
             $tables = array_merge(array_keys($matchQueries), ['main_select.relevance']);
             $relevance = implode('.relevance + ', $tables);
             $select
@@ -359,7 +359,7 @@ class Mapper
                     ['main_select' => $subSelect],
                     [
                         $this->entityMetadata->getEntityId() => 'entity_id',
-                        'score' => sprintf('(%s)', $score),
+                        'score' => sprintf('(%s)', $relevance),
                     ]
                 );
 
