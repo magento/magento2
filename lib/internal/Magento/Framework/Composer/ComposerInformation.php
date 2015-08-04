@@ -36,6 +36,7 @@ class ComposerInformation
      * @var Magento\Setup\Model\SystemPackage
      */
     private $systemPackage;
+
     /**
      * @var \Magento\Composer\MagentoComposerApplication
      */
@@ -113,7 +114,6 @@ class ComposerInformation
         $this->locker = $this->composer->getLocker();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->dateTime = $dateTime;
-        //$this->exclusionList[] = 'magento/product-community-edition';
     }
 
     /**
