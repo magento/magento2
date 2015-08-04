@@ -86,11 +86,11 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             'quote' =>  $quote,
         ]);
         $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-        $product->load(1);
+        $product->load(101);
 
         $amount = $this->_model->getProductWeeeAttributes($product, $shipping, null, null, true);
         $this->assertTrue(is_array($amount));
-        $this->assertArrayHasKey(0,$amount);
+        $this->assertArrayHasKey(0, $amount);
         $this->assertEquals(12.70, $amount[0]->getAmount());
     }
 }

@@ -35,7 +35,7 @@ $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('
 $product->setTypeId(
     'simple'
 )->setId(
-    1
+    101
 )->setAttributeSetId(
     $attributeSetId
 )->setStoreId(
