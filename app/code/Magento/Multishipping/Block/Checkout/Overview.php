@@ -98,12 +98,12 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Get object with payment info posted data
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getPayment()
     {
         if (!$this->hasData('payment')) {
-            $payment = new \Magento\Framework\Object($this->getRequest()->getPost('payment'));
+            $payment = new \Magento\Framework\DataObject($this->getRequest()->getPost('payment'));
             $this->setData('payment', $payment);
         }
         return $this->_getData('payment');
@@ -353,10 +353,10 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Return row-level item html
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    public function getRowItemHtml(\Magento\Framework\Object $item)
+    public function getRowItemHtml(\Magento\Framework\DataObject $item)
     {
         $type = $this->_getItemType($item);
         $renderer = $this->_getRowItemRenderer($type)->setItem($item);
