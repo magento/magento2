@@ -8,6 +8,7 @@ namespace Magento\Framework\Amqp\Test\Unit;
 
 use Magento\Framework\Amqp\Config\Data as QueueConfig;
 use Magento\Framework\Amqp\Config\Converter as QueueConfigConverter;
+use Magento\Framework\Amqp\ConsumerConfiguration;
 use Magento\Framework\Amqp\ConsumerFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -30,6 +31,8 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
 
     const TEST_CONSUMER_NAME = "test_consumer_name";
     const TEST_CONSUMER_CONNECTION = "test_consumer_connection";
+    const TEST_CONSUMER_QUEUE = "test_consumer_queue";
+    const TEST_CONSUMER_METHOD = "test_consumer_method";
 
     protected function setUp()
     {
@@ -115,12 +118,18 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testConnectionInjectedForConsumer()
     {
+        $dispatchTypeName = 'Magento\Framework\Object';
+
         $this->queueConfigMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue([
                 QueueConfigConverter::CONSUMERS => [
                     self::TEST_CONSUMER_NAME => [
-                        QueueConfigConverter::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION
+                        QueueConfigConverter::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION,
+                        QueueConfigConverter::CONSUMER_NAME => self::TEST_CONSUMER_NAME,
+                        QueueConfigConverter::CONSUMER_QUEUE => self::TEST_CONSUMER_QUEUE,
+                        QueueConfigConverter::CONSUMER_CLASS => $dispatchTypeName,
+                        QueueConfigConverter::CONSUMER_METHOD => self::TEST_CONSUMER_METHOD,
                     ]
                 ],
             ]));
@@ -131,12 +140,37 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
 
         $consumerTypeName = 'Magento\Amqp\Model\TestConsumer';
         $consumerMock = $this->getMockBuilder('Magento\Framework\Amqp\ConsumerInterface')
+            ->setMethods(['configure'])
             ->getMockForAbstractClass();
 
-        $objectManagerMock->expects($this->once())
+        $objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with($consumerTypeName, [])
             ->will($this->returnValue($consumerMock));
+
+        $dispatchInstanceMock = $this->getMockBuilder($dispatchTypeName)
+            ->setMethods(['dispatch'])
+            ->getMock();
+
+        $objectManagerMock->expects($this->at(1))
+            ->method('create')
+            ->with($dispatchTypeName, [])
+            ->will($this->returnValue($dispatchInstanceMock));
+
+        $consumerConfigurationMock = $this->getMockBuilder('Magento\Framework\Amqp\ConsumerConfiguration')
+            ->getMockForAbstractClass();
+
+        $objectManagerMock->expects($this->at(2))
+            ->method('create')
+            ->with('Magento\Framework\Amqp\ConsumerConfiguration', ['data' => [
+                ConsumerConfiguration::CONSUMER_NAME => self::TEST_CONSUMER_NAME,
+                ConsumerConfiguration::QUEUE_NAME => self::TEST_CONSUMER_QUEUE,
+                ConsumerConfiguration::CALLBACK => [
+                    $dispatchInstanceMock,
+                    self::TEST_CONSUMER_METHOD,
+                ],
+            ]])
+            ->will($this->returnValue($consumerConfigurationMock));
 
         $this->consumerFactory = $this->objectManager->getObject(
             'Magento\Framework\Amqp\ConsumerFactory',

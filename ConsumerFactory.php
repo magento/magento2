@@ -36,6 +36,11 @@ class ConsumerFactory
     private $objectManager = null;
 
     /**
+     * @var array
+     */
+    private $queueConfigData;
+
+    /**
      * Initialize dependencies.
      *
      * <type name="Magento\Framework\Amqp\ConsumerFactory">
@@ -51,7 +56,7 @@ class ConsumerFactory
      *
      * @param QueueConfig $queueConfig
      * @param ObjectManagerInterface $objectManager
-     * @param ConsumerInterface[] $consumers
+     * @param array $consumers Consumer configuration data
      */
     public function __construct(
         QueueConfig $queueConfig,
@@ -78,6 +83,9 @@ class ConsumerFactory
     {
         $consumerConfig = $this->getConsumerConfigForName($consumerName);
         $consumer = $this->createConsumerForConnectionName($consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION]);
+
+        $consumerConfigObject = $this->createConsumerConfiguration($consumerConfig);
+        $consumer->configure($consumerConfigObject);
         return $consumer;
     }
 
@@ -121,12 +129,49 @@ class ConsumerFactory
      */
     private function getConsumerConfigForName($consumerName)
     {
-        $queueConfig = $this->queueConfig->get();
+        $queueConfig = $this->getQueueConfigData();
         if (isset($queueConfig[QueueConfigConverter::CONSUMERS][$consumerName])) {
             return $queueConfig[QueueConfigConverter::CONSUMERS][$consumerName];
         }
         throw new LocalizedException(
             new Phrase('Specified consumer "%consumer" is not declared.', ['consumer' => $consumerName])
         );
+    }
+
+    /**
+     * Creates the objects necessary for the ConsumerConfigurationInterface to configure a Consumer.
+     *
+     * @param array $consumerConfig
+     * @return ConsumerConfigurationInterface
+     */
+    private function createConsumerConfiguration($consumerConfig)
+    {
+        $dispatchInstance = $this->objectManager->create(
+            $consumerConfig[QueueConfigConverter::CONSUMER_CLASS],
+            []
+        );
+        $configData = [
+            ConsumerConfiguration::CONSUMER_NAME => $consumerConfig[QueueConfigConverter::CONSUMER_NAME],
+            ConsumerConfiguration::QUEUE_NAME => $consumerConfig[QueueConfigConverter::CONSUMER_QUEUE],
+            ConsumerConfiguration::CALLBACK => [
+                $dispatchInstance,
+                $consumerConfig[QueueConfigConverter::CONSUMER_METHOD],
+            ],
+        ];
+
+        return $this->objectManager->create('Magento\Framework\Amqp\ConsumerConfiguration', [ 'data' => $configData ]);
+    }
+
+    /**
+     * Returns the queue configuration.
+     *
+     * @return array
+     */
+    private function getQueueConfigData()
+    {
+        if ($this->queueConfigData == null) {
+            $this->queueConfigData = $this->queueConfig->get();
+        }
+        return $this->queueConfigData;
     }
 }
