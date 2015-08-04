@@ -68,9 +68,9 @@ class Payment extends Info implements OrderPaymentInterface
     protected $transactionAdditionalInfo = [];
 
     /**
-     * @var \Magento\Sales\Model\Service\Order
+     * @var \Magento\Sales\Model\Order\CreditmemoFactory
      */
-    protected $_serviceOrderFactory;
+    protected $creditmemoFactory;
 
     /**
      * @var PriceCurrencyInterface
@@ -104,7 +104,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
+     * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface $transactionManager
@@ -121,7 +121,7 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
+        \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         ManagerInterface $transactionManager,
@@ -132,7 +132,7 @@ class Payment extends Info implements OrderPaymentInterface
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
-        $this->_serviceOrderFactory = $serviceOrderFactory;
+        $this->creditmemoFactory = $creditmemoFactory;
         $this->transactionRepository = $transactionRepository;
         $this->transactionManager = $transactionManager;
         $this->transactionBuilder = $transactionBuilder;
@@ -1316,16 +1316,15 @@ class Payment extends Info implements OrderPaymentInterface
     protected function prepareCreditMemo($amount, $baseGrandTotal, $invoice)
     {
         $entity = $invoice ?: $this->getOrder();
-        $serviceModel =  $this->_serviceOrderFactory->create(['order' => $this->getOrder()]);
         if ($entity->getBaseTotalRefunded() > 0) {
             $adjustment = ['adjustment_positive' => $amount];
         } else {
             $adjustment = ['adjustment_negative' => $baseGrandTotal - $amount];
         }
         if ($invoice) {
-            $creditMemo = $serviceModel->prepareInvoiceCreditmemo($invoice, $adjustment);
+            $creditMemo = $this->creditmemoFactory->createByInvoice($invoice, $adjustment);
         } else {
-            $creditMemo = $serviceModel->prepareCreditmemo($adjustment);
+            $creditMemo = $this->creditmemoFactory->createByOrder($this->getOrder(), $adjustment);
         }
         if ($creditMemo) {
             $totalRefunded = $entity->getBaseTotalRefunded() + $creditMemo->getBaseGrandTotal();
