@@ -25,7 +25,7 @@ interface AbstractCarrierInterface
      * Collect and get rates
      *
      * @param RateRequest $request
-     * @return \Magento\Framework\Object|bool|null
+     * @return \Magento\Framework\DataObject|bool|null
      * @api
      */
     public function collectRates(RateRequest $request);
