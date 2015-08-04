@@ -7,7 +7,7 @@
 -->
 <page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="mage/gallery.css"/>
+        <css src="mage/gallery/gallery.css"/>
     </head>
     <update handle="catalog_product_opengraph" />
     <update handle="page_calendar"/>
