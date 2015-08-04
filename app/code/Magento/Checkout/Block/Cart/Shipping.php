@@ -87,6 +87,21 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $configProvider;
 
     /**
+     * @var \Magento\Checkout\Block\Checkout\AttributeMerger
+     */
+    protected $merger;
+
+    /**
+     * @var \Magento\Directory\Model\Resource\Country\Collection
+     */
+    protected $countryCollection;
+
+    /**
+     * @var \Magento\Directory\Model\Resource\Region\Collection
+     */
+    protected $regionCollection;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -100,6 +115,9 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param QuoteRepository $quoteRepository
      * @param \Magento\Checkout\Model\Cart\CollectQuote $collectQuote
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
+     * @param \Magento\Checkout\Block\Checkout\AttributeMerger $merger
+     * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
+     * @param \Magento\Directory\Model\Resource\Region\Collection $regionCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -117,6 +135,9 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         QuoteRepository $quoteRepository,
         \Magento\Checkout\Model\Cart\CollectQuote $collectQuote,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
+        \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
+        \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
+        \Magento\Directory\Model\Resource\Region\Collection $regionCollection,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -129,6 +150,9 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->quoteRepository = $quoteRepository;
         $this->collectQuote = $collectQuote;
         $this->configProvider = $configProvider;
+        $this->merger = $merger;
+        $this->countryCollection = $countryCollection;
+        $this->regionCollection = $regionCollection;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
     }
@@ -395,14 +419,6 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
-     * @return array
-     */
-    public function getEstimationConfig()
-    {
-        return [];
-    }
-
-    /**
      * Retrieve checkout configuration
      *
      * @return array
@@ -410,5 +426,53 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     public function getCheckoutConfig()
     {
         return $this->configProvider->getConfig();
+    }
+
+    /**
+     * Retrieve serialized JS layout configuration ready to use in template
+     *
+     * @return string
+     */
+    public function getJsLayout()
+    {
+        $elements = [
+            'city' => [
+                'visible' => $this->getCityActive(),
+                'formElement' => 'input',
+                'label' => __('City'),
+                'validation' => ['required-entry' => $this->isCityRequired()]
+            ],
+            'country_id' => [
+                'visible' => true,
+                'formElement' => 'select',
+                'label' => __('Country'),
+                'options' => $this->countryCollection->load()->toOptionArray()
+            ],
+            'region_id' => [
+                'visible' => true,
+                'formElement' => 'select',
+                'label' => __('State/Province'),
+                'options' => $this->regionCollection->load()->toOptionArray(),
+                'validation' => ['required-entry' => $this->isStateProvinceRequired()]
+            ],
+            'postcode' => [
+                'visible' => true,
+                'formElement' => 'input',
+                'label' => __('Zip/Postal Code'),
+                'validation' => ['required-entry' => $this->isZipCodeRequired()]
+            ]
+        ];
+
+        if (isset($this->jsLayout['components']['block-shipping']['children']['address-fieldsets']['children'])) {
+            $this->jsLayout['components']['block-shipping']['children']['address-fieldsets']['children'] =
+                $this->merger->merge(
+                    $elements,
+                    'checkoutProvider',
+                    'shippingAddress',
+                    $this->jsLayout['components']['block-shipping']['children']['address-fieldsets']['children']
+                );
+        }
+
+        return json_encode($this->jsLayout);
     }
 }
