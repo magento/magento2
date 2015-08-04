@@ -25,6 +25,8 @@ class ConcatHandler implements HandlerInterface
     }
 
     /**
+     * Prepare SQL for field and add it to collection
+     *
      * @param SourceProviderInterface $source
      * @param string $alias
      * @param array $fieldInfo
@@ -33,15 +35,5 @@ class ConcatHandler implements HandlerInterface
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {
         $source->getSelect()->columns([$fieldInfo['name'] => $this->concatExpression]);
-    }
-
-    /**
-     * @param SourceProviderInterface $source
-     * @param array $fieldInfo
-     * @return void
-     */
-    public function prepareData(SourceProviderInterface $source, $fieldInfo)
-    {
-
     }
 }

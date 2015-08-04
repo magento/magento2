@@ -61,11 +61,9 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\Model\Resource\AbstractResource',
             [
                 'updateAttributes',
-                '_getWriteAdapter',
-                '_getReadAdapter',
+                'getConnection',
                 '_construct',
                 'getIdFieldName',
-                'getConnection'
             ],
             [],
             '',

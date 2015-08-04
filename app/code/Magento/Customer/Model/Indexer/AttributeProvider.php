@@ -36,12 +36,14 @@ class AttributeProvider implements FieldsetInterface
     }
 
     /**
+     * Add EAV attribute fields to fieldset
+     *
      * @param array $data
      * @return array
      */
     public function addDynamicData(array $data)
     {
-        $additionalFields = $this->convert($this->getAttributes());
+        $additionalFields = $this->convert($this->getAttributes(), $data);
         $data['fields'] = $this->merge($data['fields'], $additionalFields);
         return $data;
     }
@@ -70,10 +72,13 @@ class AttributeProvider implements FieldsetInterface
     }
 
     /**
+     * Convert attributes to fields
+     *
      * @param Attribute[] $attributes
+     * @param array $fieldset
      * @return array
      */
-    protected function convert(array $attributes)
+    protected function convert(array $attributes, array $fieldset)
     {
         $fields = [];
         foreach ($attributes as $attribute) {
@@ -81,16 +86,21 @@ class AttributeProvider implements FieldsetInterface
                 if ($attribute->getData('is_used_in_grid')) {
                     $fields[$attribute->getName()] = [
                         'name' => $attribute->getName(),
-                        'handler' => null,
+                        'handler' => 'Magento\Indexer\Model\Handler\AttributeHandler',
                         'origin' => $attribute->getName(),
                         'type' => $this->getType($attribute),
-                        'dataType' => $attribute->getBackendType(),
+                        'dataType' => $this->getBackendType($attribute),
                         'filters' => [],
+                        'entity' => static::ENTITY,
+                        'bind' => isset($fieldset['references']['customer']['to'])
+                            ? $fieldset['references']['customer']['to']
+                            : null,
                     ];
                 }
             } else {
                 $fields[$attribute->getName()] = [
                     'type' => $this->getType($attribute),
+                    'dataType' => $this->getBackendType($attribute),
                 ];
             }
         }
@@ -99,12 +109,28 @@ class AttributeProvider implements FieldsetInterface
     }
 
     /**
+     * Get backend type for attribute
+     *
+     * @param Attribute $attribute
+     * @return string
+     */
+    protected function getBackendType(Attribute $attribute)
+    {
+        return $attribute->getBackendTypeByInput($attribute->getFrontendInput());
+    }
+
+    /**
+     * Get field type for attribute
+     *
      * @param Attribute $attribute
      * @return string
      */
     protected function getType(Attribute $attribute)
     {
-        if ($attribute->getData('is_searchable_in_grid')) {
+        if (
+            in_array($this->getBackendType($attribute), ['varchar', 'text'])
+            && $attribute->getData('is_searchable_in_grid')
+        ) {
             $type = 'searchable';
         } elseif ($attribute->getData('is_filterable_in_grid')) {
             $type = 'filterable';
@@ -116,6 +142,8 @@ class AttributeProvider implements FieldsetInterface
     }
 
     /**
+     * Merge fields with attribute fields
+     *
      * @param array $dataFields
      * @param array $searchableFields
      * @return array
@@ -135,12 +163,5 @@ class AttributeProvider implements FieldsetInterface
         }
 
         return $dataFields;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultHandler()
-    {
     }
 }

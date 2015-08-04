@@ -162,38 +162,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     */
-    public function testSaveForCustomer()
-    {
-        $customerId = 1;
-        $cartId = 13;
-        $this->quoteRepositoryMock->expects($this->once())->method('getActiveForCustomer')
-            ->with($customerId)
-            ->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
-        $this->dataMock->expects($this->once())->method('getQty')->will($this->returnValue(12));
-        $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->productRepositoryMock->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($this->productMock));
-        $this->dataMock->expects($this->once())->method('getSku');
-        $this->quoteMock->expects($this->once())->method('addProduct')->with($this->productMock, 12);
-        $this->quoteMock->expects($this->never())->method('getItemById');
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
-        $this->quoteMock
-            ->expects($this->once())
-            ->method('getItemByProduct')
-            ->with($this->productMock)
-            ->will($this->returnValue($this->quoteItemMock));
-        $this->dataMock->expects($this->once())->method('getItemId')->will($this->returnValue(null));
-        $this->assertEquals($this->quoteItemMock, $this->repository->saveForCustomer($customerId, $this->dataMock));
-    }
-
-    /**
-     * @return void
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage Cart 11 doesn't contain item  5
      */
@@ -330,29 +298,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testDeleteByIdForCustomer()
-    {
-        $customerId = 1;
-        $cartId = 11;
-        $itemId = 5;
-        $this->quoteRepositoryMock->expects($this->once())->method('getActiveForCustomer')
-            ->with($customerId)
-            ->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())
-            ->method('getItemById')->with($itemId)->will($this->returnValue($this->quoteItemMock));
-        $this->quoteMock->expects($this->once())->method('removeItem');
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
-
-        $this->assertTrue($this->repository->deleteByIdForCustomer($customerId, $itemId));
-    }
-
-    /**
-     * @return void
-     */
     public function testGetList()
     {
         $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
@@ -363,27 +308,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->any())->method('getAllItems')->will($this->returnValue([$itemMock]));
 
         $this->assertEquals([$itemMock], $this->repository->getList(33));
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetListForCustomer()
-    {
-        $cartId = 1;
-        $customerId = 33;
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $this->quoteRepositoryMock->expects($this->once())->method('getActiveForCustomer')
-            ->with($customerId)
-            ->will($this->returnValue($quoteMock));
-        $quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
-        $this->quoteRepositoryMock->expects($this->once())->method('getActive')
-            ->with($cartId)
-            ->will($this->returnValue($quoteMock));
-        $itemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $quoteMock->expects($this->any())->method('getAllItems')->will($this->returnValue([$itemMock]));
-
-        $this->assertEquals([$itemMock], $this->repository->getListForCustomer($customerId));
     }
 
     /**

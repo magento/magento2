@@ -19,7 +19,7 @@ define([
                     authenticationPopup.showModal();
                     return false;
                 }
-                location.href = window.authenticationPopup.checkoutUrl;
+                location.href = config.checkoutUrl;
             });
 
         };

@@ -64,7 +64,7 @@ class LookupExpression extends \Zend_Db_Expr
         $this->referenceColumns = $referenceColumns;
         $this->sortOrder = $sortOrder;
         $this->resource = $resource;
-        $this->adapter = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        $this->adapter = $this->resource->getConnection();
     }
 
     /**
@@ -109,9 +109,9 @@ class LookupExpression extends \Zend_Db_Expr
             $expr = new \Zend_Db_Expr(
                 sprintf(
                     '%s %s',
-                    $this->adapter->quoteIdentifier('lookup.' . $column)
-                ),
-                $direction
+                    $this->adapter->quoteIdentifier('lookup.' . $column),
+                    $direction
+                )
             );
             $select->order($expr);
         }

@@ -52,6 +52,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
         $resourceModel
     ) {
         $this->_init('Magento\Framework\View\Element\UiComponent\DataProvider\Document', $resourceModel);
+        $this->setMainTable(true);
         parent::__construct(
             $entityFactory,
             $logger,

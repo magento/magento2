@@ -144,7 +144,7 @@ class Base implements ActionInterface
         IndexStructureInterface $indexStructure,
         $data = []
     ) {
-        $this->connection = $resource->getConnection('write');
+        $this->connection = $resource->getConnection();
         $this->fieldsetPool = $fieldsetPool;
         $this->data = $data;
         $this->sourceFactory = $sourceFactory;
