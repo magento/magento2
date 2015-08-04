@@ -384,12 +384,8 @@ class ComposerInformation
      */
     public function isPackageInComposerJson($packageName)
     {
-        if (in_array($packageName, array_keys($this->composer->getPackage()->getRequires()))
+        return (in_array($packageName, array_keys($this->composer->getPackage()->getRequires()))
             || in_array($packageName, array_keys($this->composer->getPackage()->getDevRequires()))
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+        );
     }
 }
