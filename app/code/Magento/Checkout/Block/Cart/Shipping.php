@@ -463,16 +463,13 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
             ]
         ];
 
-        if (isset($this->jsLayout['components']['block-shipping']['children']['address-fieldsets']['children'])) {
-            $this->jsLayout['components']['block-shipping']['children']['address-fieldsets']['children'] =
-                $this->merger->merge(
-                    $elements,
-                    'checkoutProvider',
-                    'shippingAddress',
-                    $this->jsLayout['components']['block-shipping']['children']['address-fieldsets']['children']
-                );
+        if (isset($this->jsLayout['components']['block-summary']['children']['block-shipping']['children']
+            ['address-fieldsets']['children'])
+        ) {
+            $fieldSetPointer = &$this->jsLayout['components']['block-summary']['children']['block-shipping']
+            ['children']['address-fieldsets']['children'];
+            $fieldSetPointer = $this->merger->merge($elements, 'checkoutProvider', 'shippingAddress', $fieldSetPointer);
         }
-
         return json_encode($this->jsLayout);
     }
 }

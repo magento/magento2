@@ -41,12 +41,9 @@
                                     <item name="block-summary" xsi:type="array">
                                         <item name="component" xsi:type="string">uiComponent</item>
                                         <item name="children" xsi:type="array">
-                                            <item name="block-shipping" xsi:type="array">
-                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/cart/shipping-estimation</item>
-                                                <item name="displayArea" xsi:type="string">block-shipping</item>
-                                            </item>
                                             <item name="block-rates" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/cart/shipping-rates</item>
+                                                <item name="sortOrder" xsi:type="string">2</item>
                                             </item>
                                             <item name="block-shipping" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/cart/shipping-estimation</item>
@@ -113,10 +110,10 @@
                                                     </item>
                                                 </item>
                                             </item>
-                                            <item name="checkoutProvider" xsi:type="array">
-                                                <item name="component" xsi:type="string">uiComponent</item>
-                                            </item>
                                         </item>
+                                    </item>
+                                    <item name="checkoutProvider" xsi:type="array">
+                                        <item name="component" xsi:type="string">uiComponent</item>
                                     </item>
                                 </item>
                             </argument>
