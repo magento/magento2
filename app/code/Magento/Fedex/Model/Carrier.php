@@ -240,18 +240,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Collect and get rates
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param RateRequest $request
      * @return Result|bool|null
      */
-    public function collectRates(\Magento\Framework\DataObject $request)
+    public function collectRates(RateRequest $request)
     {
-        if (!$this->getConfigFlag($this->_activeFlag)) {
-            return false;
+        if (!$this->canCollectRates()) {
+            return $this->getErrorMessage();
         }
+
         $this->setRequest($request);
-
         $this->_getQuotes();
-
         $this->_updateFreeMethodQuote($request);
 
         return $this->getResult();
@@ -470,6 +469,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $debugData['result'] = $response;
         }
         $this->_debug($debugData);
+
         return $response;
     }
 
@@ -496,6 +496,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (!$preparedGeneral->getError() || $this->_result->getError() && $preparedGeneral->getError()) {
             $this->_result->append($preparedGeneral);
         }
+
         return $this->_result;
     }
 
@@ -565,6 +566,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $result->append($rate);
             }
         }
+
         return $result;
     }
 
@@ -694,6 +696,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
             $this->_debug($debugData);
         }
+
         return $this->_parseXmlResponse($responseBody);
     }
 
@@ -762,6 +765,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $result->append($rate);
             }
         }
+
         return $result;
     }
 
@@ -909,8 +913,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INDIRECT' => __('Indirect'),
             ],
             'unit_of_measure' => [
-                'LB'   =>  __('Pounds'),
-                'KG'   =>  __('Kilograms'),
+                'LB' => __('Pounds'),
+                'KG' => __('Kilograms'),
             ],
         ];
 
@@ -952,6 +956,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'TWD' => 'NTD',
         ];
         $currencyCode = $this->_storeManager->getStore()->getBaseCurrencyCode();
+
         return isset($codes[$currencyCode]) ? $codes[$currencyCode] : $currencyCode;
     }
 
@@ -1174,6 +1179,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (empty($statuses)) {
             $statuses = __('Empty response');
         }
+
         return $statuses;
     }
 
@@ -1189,6 +1195,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         foreach ($allowed as $k) {
             $arr[$k] = $this->getCode('method', $k);
         }
+
         return $arr;
     }
 
@@ -1377,7 +1384,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // set dimensions
         if ($length || $width || $height) {
             $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'] = [];
-            $dimenssions = & $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'];
+            $dimenssions = &$requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'];
             $dimenssions['Length'] = $length;
             $dimenssions['Width'] = $width;
             $dimenssions['Height'] = $height;
@@ -1446,6 +1453,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $client = $this->_createShipSoapClient();
             $client->deleteShipment($requestData);
         }
+
         return true;
     }
 
@@ -1475,11 +1483,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if ($method == 'INTERNATIONAL_ECONOMY' || $method == 'INTERNATIONAL_FIRST') {
                 $allTypes = $this->getContainerTypesAll();
                 $exclude = ['FEDEX_10KG_BOX' => '', 'FEDEX_25KG_BOX' => ''];
+
                 return array_diff_key($allTypes, $exclude);
             } else {
                 if ($method == 'EUROPE_FIRST_INTERNATIONAL_PRIORITY') {
                     $allTypes = $this->getContainerTypesAll();
                     $exclude = ['FEDEX_BOX' => '', 'FEDEX_TUBE' => ''];
+
                     return array_diff_key($allTypes, $exclude);
                 } else {
                     if ($countryShipper == self::CANADA_COUNTRY_ID && $countryRecipient == self::CANADA_COUNTRY_ID) {
