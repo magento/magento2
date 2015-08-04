@@ -212,10 +212,8 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCheckPackageInJson()
+    public function testIsPackageInComposerJson()
     {
-        $packageName = 'magento/sample-module-minimal';
-
         $this->setupDirectory('testSkeleton');
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
@@ -230,6 +228,9 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertTrue($composerInfo->checkPackageInJson($packageName));
+        $packageName = 'magento/sample-module-minimal';
+        $this->assertTrue($composerInfo->isPackageInComposerJson($packageName));
+        $packageName = 'magento/wrong-module-name';
+        $this->assertFalse($composerInfo->isPackageInComposerJson($packageName));
     }
 }
