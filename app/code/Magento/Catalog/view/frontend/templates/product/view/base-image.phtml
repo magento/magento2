@@ -4,61 +4,28 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Product media data template
  *
  * @var $block \Magento\Catalog\Block\Product\View\Gallery
  */
 ?>
-<?php
-$_product = $block->getProduct();
-$_helper = $this->helper('Magento\Catalog\Helper\Output');
-
-$image = 'product_page_main_image';
-
-$_resizedWidth = $block->getVar("{$image}:width");
-$_resizedHeight = $block->getVar("{$image}:height") ?: $_resizedWidth;
-
-$_hasImage = ($_product->getImage() && $_product->getImage() != "no_selection") ? true : false;
-
-$whiteBorders =  $block->getVar("product_image_white_borders");
-$thumbWidth =  $block->getVar("product_page_more_views:width");
-$thumbHeight =  $block->getVar("product_page_more_views:height") ?: $thumbWidth;
-?>
 
 <div class="gallery-placeholder"></div>
-
-<?php $imagesItems = array(); ?>
-<?php foreach ($block->getGalleryImages() as $_image): ?>
-<?php
-        $imageSmall = $block->getImageUrl($_image, 'thumbnail', $whiteBorders, $thumbWidth, $thumbHeight);
-$imageMedium = $block->getImageUrl($_image, 'image', $whiteBorders, $_resizedWidth, $_resizedHeight);
-$imgCaption = $block->escapeHtml($_image->getLabel());
-$imageItem = ('{"img": "' . (string)$imageMedium . '", "thumb": "' . (string)$imageSmall . '", "caption": "' . (string)$imgCaption . '"}');
-array_push($imagesItems, $imageItem);
-?>
-<?php endforeach; ?>
-<?php $imagesItemsJson = '[' . implode(',', $imagesItems) . ']'; ?>
-
-<?php
-    $nav = $block->getVar("gallery_nav");
-    $loop = $block->getVar("gallery_loop");
-?>
 
 <script type="text/x-magento-init">
     {
         ".gallery-placeholder": {
-            "mage/new-gallery": {
-                 "nav": "<?php echo $nav; ?>",
+            "mage/gallery/gallery": {
+                 "nav": "<?php echo $block->getVar("gallery_nav"); ?>",
                  "width": "100%",
                  "height": 400,
-                 "loop": <?php echo $loop; ?>,
+                 "loop": <?php echo $block->getVar("gallery_loop"); ?>,
                  "keyboard": true,
                  "allowfullscreen": false,
-                 "showCaption": false,
-                 "data": <?php echo $imagesItemsJson; ?>
+                 "showCaption": true,
+                 "click": false,
+                 "data": <?php echo $block->getGalleryImagesJson(); ?>
             }
         }
     }

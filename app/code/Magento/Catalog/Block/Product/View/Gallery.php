@@ -16,13 +16,42 @@ use Magento\Framework\Data\Collection;
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
-     * Retrieve list of gallery images
+     * Retrieve collection of gallery images
      *
-     * @return array|Collection
+     * @return Collection
      */
     public function getGalleryImages()
     {
         return $this->getProduct()->getMediaGalleryImages();
+    }
+
+    /**
+     * Retrieve product images in JSON format
+     *
+     * @return string
+     */
+    public function getGalleryImagesJson()
+    {
+        $imagesItems = [];
+
+        $imageWidth = $this->getVar("product_page_main_image:width");
+        $imageHeight = $this->getVar("product_page_main_image:height") ?: $imageWidth;
+        $whiteBorders =  $this->getVar("product_image_white_borders");
+        $thumbWidth =  $this->getVar("product_page_more_views:width");
+        $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
+
+        foreach ($this->getProduct()->getMediaGalleryImages() as $image) {
+            $imageSmall = $this->getImageUrl($image, 'thumbnail', $whiteBorders, $thumbWidth, $thumbHeight);
+            $imageMedium = $this->getImageUrl($image, 'image', $whiteBorders, $imageWidth, $imageHeight);
+
+            $imagesItems[] = [
+                'img' => $imageMedium,
+                'thumb' => $imageSmall,
+                'caption' => $image->getLabel(),
+                'position' => $image->getPosition(),
+            ];
+        }
+        return json_encode($imagesItems);
     }
 
     /**
