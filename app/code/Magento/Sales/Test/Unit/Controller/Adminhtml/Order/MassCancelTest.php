@@ -252,11 +252,6 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess')
             ->with('We canceled 1 order(s).');
 
-        $this->resultRedirectMock->expects($this->once())
-            ->method('setPath')
-            ->with('sales/*/')
-            ->willReturnSelf();
-
         $this->massAction->execute();
     }
 
@@ -312,11 +307,6 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with('You cannot cancel the order(s).');
-
-        $this->resultRedirectMock->expects($this->once())
-            ->method('setPath')
-            ->with('sales/*/')
-            ->willReturnSelf();
 
         $this->massAction->execute();
     }
