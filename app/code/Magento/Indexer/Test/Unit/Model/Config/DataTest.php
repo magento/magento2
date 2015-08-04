@@ -39,7 +39,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->reader = $this->getMock('Magento\Indexer\Model\Config\Reader', ['read'], [], '', false);
+        $this->reader = $this->getMock('Magento\Framework\Indexer\Config\Reader', ['read'], [], '', false);
         $this->cache = $this->getMockForAbstractClass(
             'Magento\Framework\Config\CacheInterface',
             [],

@@ -33,33 +33,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_converter = $this->getMock('Magento\Framework\Indexer\Config\Converter', ['convert']);
-
-        $moduleReader = $this->getMock(
-            'Magento\Framework\Module\Dir\Reader',
-            ['getModuleDir'],
-            [],
-            '',
-            false
-        );
-        $moduleReader->expects(
-            $this->once()
-        )->method(
-            'getModuleDir'
-        )->with(
-            'etc',
-            'Magento_Indexer'
-        )->will(
-            $this->returnValue('stub')
-        );
-        $schemaLocator = new \Magento\Framework\Indexer\Config\SchemaLocator($moduleReader);
-
         $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
         $validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
 
         $this->_model = new \Magento\Framework\Indexer\Config\Reader(
             $this->_fileResolverMock,
             $this->_converter,
-            $schemaLocator,
+            new \Magento\Framework\Indexer\Config\SchemaLocator(),
             $validationState
         );
     }
