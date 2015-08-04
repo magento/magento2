@@ -53,7 +53,7 @@ class ComponentGrid extends AbstractActionController
     {
         $components = $this->filterComponentsList($this->composerInformation->getInstalledMagentoPackages());
         $lastSyncData = $this->composerInformation->getPackagesForUpdate();
-        if (!$lastSyncData) {
+        if (is_array($lastSyncData)) {
             $lastSyncData = $this->filterComponentsList($lastSyncData);
         }
         return new JsonModel(

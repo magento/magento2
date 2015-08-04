@@ -54,7 +54,7 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testComponentsActionAction()
+    public function testComponentsAction()
     {
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
@@ -66,13 +66,13 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
                 ]
             ]);
         $this->composerInformation->expects($this->once())
-            ->method('checkPackageInJson')
+            ->method('isPackageInComposerJson')
             ->willReturn(true);
         $this->infoCommand->expects($this->once())
             ->method('run')
             ->willReturn([
-                'versions' => '1.0.0',
-                'current_version' => '2.0.0, 3.0.0'
+                'versions' => '3.0.0, 2.0.0',
+                'current_version' => '1.0.0'
             ]);
         $jsonModel = $this->controller->componentsAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
@@ -88,7 +88,10 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
                 'type' => 'magento2-module',
                 'version' => '1.0.0',
                 'vendor' => 'magento',
-                'updates' => [0 => '1.0.0'],
+                'updates' => [
+                    0 => '3.0.0 (latest)',
+                    1 => '2.0.0'
+                ],
                 'dropdownId' => 'dd_magento/sample-module10',
                 'checkboxId' => 'cb_magento/sample-module10'
             ]
@@ -98,7 +101,7 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $variables['total']);
     }
 
-    public function testComponentsActionActionWithError()
+    public function testComponentsActionWithError()
     {
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
