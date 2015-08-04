@@ -47,7 +47,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectCopyService = $this->getMock('\Magento\Framework\Object\Copy', [], [], '', false);
+        $this->objectCopyService = $this->getMock('\Magento\Framework\DataObject\Copy', [], [], '', false);
         $this->accountManagement = $this->getMock('\Magento\Customer\Api\AccountManagementInterface');
         $this->customerFactory = $this->getMock(
             '\Magento\Customer\Api\Data\CustomerInterfaceFactory',

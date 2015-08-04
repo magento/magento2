@@ -10,7 +10,7 @@ namespace Magento\GiftMessage\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Save extends \Magento\Framework\Object
+class Save extends \Magento\Framework\DataObject
 {
     /**
      * @var bool
@@ -162,7 +162,7 @@ class Save extends \Magento\Framework\Object
     /**
      * Delete a single gift message from entity
      *
-     * @param \Magento\Framework\Object $entityModel
+     * @param \Magento\Framework\DataObject $entityModel
      * @param \Magento\GiftMessage\Model\Message|null $giftmessageModel
      * @return $this
      */
@@ -240,7 +240,7 @@ class Save extends \Magento\Framework\Object
     /**
      * Checks allowed quote item for gift messages
      *
-     * @param  \Magento\Framework\Object $item
+     * @param  \Magento\Framework\DataObject $item
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -260,7 +260,7 @@ class Save extends \Magento\Framework\Object
     /**
      * Retrieve is gift message available for item (product)
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return bool
      */
     public function isGiftMessagesAvailable($item)

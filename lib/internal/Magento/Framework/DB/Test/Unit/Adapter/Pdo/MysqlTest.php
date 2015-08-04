@@ -40,7 +40,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $string = $this->getMock('Magento\Framework\Stdlib\String');
+        $string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         $dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
         $logger = $this->getMockForAbstractClass('Magento\Framework\DB\LoggerInterface');
         $this->_mockAdapter = $this->getMock(

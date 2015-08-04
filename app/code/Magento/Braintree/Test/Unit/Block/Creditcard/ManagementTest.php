@@ -239,7 +239,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
         $regionCollectionMock->expects($this->once())
             ->method('getFirstItem')
-            ->willReturn(new \Magento\Framework\Object(['id' => $regionId]));
+            ->willReturn(new \Magento\Framework\DataObject(['id' => $regionId]));
 
         $this->assertEquals($regionId, $this->block->getRegionIdByName($regionCode, $countryId));
     }
@@ -298,7 +298,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $lastName = 'Doe';
 
         $customerId = 1003;
-        $customer = new \Magento\Framework\Object(
+        $customer = new \Magento\Framework\DataObject(
             [
                 'firstname' => $firstName,
                 'lastname' => $lastName,

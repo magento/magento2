@@ -344,7 +344,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Order payment
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -414,7 +414,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Authorize payment
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
      */
@@ -426,7 +426,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Void payment
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -450,7 +450,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Capture payment
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -477,7 +477,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                 $payment->setParentTransactionId($authorizationTransaction->getTxnId());
                 $payment->unsTransactionId();
                 $payment->setVoidOnlyAuthorization(true);
-                $payment->void(new \Magento\Framework\Object());
+                $payment->void(new \Magento\Framework\DataObject());
 
                 //Revert payment state after voiding
                 $payment->unsAuthorizationTransaction();
@@ -541,7 +541,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Refund capture
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -555,7 +555,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Cancel payment
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @return $this
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
@@ -633,7 +633,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Assign data to info model instance
      *
-     * @param array|\Magento\Framework\Object $data
+     * @param array|\Magento\Framework\DataObject $data
      * @return \Magento\Payment\Model\Info
      */
     public function assignData($data)
@@ -642,7 +642,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $key = ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT;
         if (is_array($data)) {
             $this->getInfoInstance()->setAdditionalInformation($key, isset($data[$key]) ? $data[$key] : null);
-        } elseif ($data instanceof \Magento\Framework\Object) {
+        } elseif ($data instanceof \Magento\Framework\DataObject) {
             $this->getInfoInstance()->setAdditionalInformation($key, $data->getData($key));
         }
         return $result;
@@ -731,7 +731,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Check void availability
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @internal param \Magento\Framework\Object $payment
+     * @internal param \Magento\Framework\DataObject $payment
      */
     public function canVoid()
     {
@@ -779,7 +779,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Call DoAuthorize
      *
      * @param int $amount
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @param string $parentTransactionId
      * @return \Magento\Paypal\Model\Api\AbstractApi
      */

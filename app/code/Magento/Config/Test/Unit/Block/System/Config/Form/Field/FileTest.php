@@ -43,7 +43,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ['data' => $this->testData]
         );
 
-        $formMock = new \Magento\Framework\Object();
+        $formMock = new \Magento\Framework\DataObject();
         $formMock->setHtmlIdPrefix($this->testData['html_id_prefix']);
         $formMock->setHtmlIdSuffix($this->testData['html_id_suffix']);
         $this->file->setForm($formMock);
