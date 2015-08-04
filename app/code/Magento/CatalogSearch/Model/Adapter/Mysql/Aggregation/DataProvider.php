@@ -42,6 +42,11 @@ class DataProvider implements DataProviderInterface
     private $customerSession;
 
     /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
      * @param Config $eavConfig
      * @param Resource $resource
      * @param ScopeResolverInterface $scopeResolver
@@ -55,6 +60,7 @@ class DataProvider implements DataProviderInterface
     ) {
         $this->eavConfig = $eavConfig;
         $this->resource = $resource;
+        $this->connection = $resource->getConnection();
         $this->scopeResolver = $scopeResolver;
         $this->customerSession = $customerSession;
     }
@@ -109,8 +115,7 @@ class DataProvider implements DataProviderInterface
      */
     public function execute(Select $select)
     {
-        return $this->getConnection()
-            ->fetchAssoc($select);
+        return $this->connection->fetchAssoc($select);
     }
 
     /**
@@ -118,15 +123,6 @@ class DataProvider implements DataProviderInterface
      */
     private function getSelect()
     {
-        return $this->getConnection()
-            ->select();
-    }
-
-    /**
-     * @return AdapterInterface
-     */
-    private function getConnection()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        return $this->connection->select();
     }
 }

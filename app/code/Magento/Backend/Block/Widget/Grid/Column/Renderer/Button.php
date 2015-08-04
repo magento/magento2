@@ -10,10 +10,10 @@ class Button extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * Render grid row
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $buttonType = $this->getColumn()->getButtonType();
         $buttonClass = $this->getColumn()->getButtonClass();

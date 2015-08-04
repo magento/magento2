@@ -11,9 +11,24 @@ define(
         'Magento_Checkout/js/action/select-payment-method',
         'Magento_Checkout/js/model/quote',
         'Magento_Customer/js/model/customer',
-        'Magento_Checkout/js/model/payment-service'
+        'Magento_Checkout/js/model/payment-service',
+        'Magento_Checkout/js/checkout-data',
+        'Magento_Checkout/js/model/checkout-data-resolver',
+        'uiRegistry'
     ],
-    function (ko, $, Component, placeOrderAction, selectPaymentMethodAction, quote, customer, paymentService) {
+    function (
+        ko,
+        $,
+        Component,
+        placeOrderAction,
+        selectPaymentMethodAction,
+        quote,
+        customer,
+        paymentService,
+        checkoutData,
+        checkoutDataResolver,
+        registry
+    ) {
         'use strict';
         return Component.extend({
             redirectAfterPlaceOrder: true,
@@ -25,10 +40,29 @@ define(
              */
             initialize: function () {
                 this._super().initChildren();
-
                 quote.billingAddress.subscribe(function(address) {
                     this.isPlaceOrderActionAllowed((address !== null));
                 }, this);
+                checkoutDataResolver.resolveBillingAddress();
+
+                var billingAddressCode = 'billingAddress' + this.getCode();
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    var defaultAddressData = checkoutProvider.get(billingAddressCode);
+                    if (defaultAddressData === undefined) {
+                        // skip if payment does not have a billing address form
+                        return;
+                    }
+                    var billingAddressData = checkoutData.getBillingAddressFromData();
+                    if (billingAddressData) {
+                        checkoutProvider.set(
+                            billingAddressCode,
+                            $.extend({}, defaultAddressData, billingAddressData)
+                        );
+                    }
+                    checkoutProvider.on(billingAddressCode, function (billingAddressData) {
+                        checkoutData.setBillingAddressFromData(billingAddressData);
+                    }, billingAddressCode);
+                });
 
                 return this;
             },
@@ -71,6 +105,7 @@ define(
 
             selectPaymentMethod: function() {
                 selectPaymentMethodAction(this.getData());
+                checkoutData.setSelectedPaymentMethod(this.item.method);
                 return true;
             },
 
@@ -122,6 +157,10 @@ define(
 
             disposeSubscriptions: function () {
                 // dispose all active subscriptions
+                var billingAddressCode = 'billingAddress' + this.getCode();
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    checkoutProvider.off(billingAddressCode);
+                });
             }
         });
     }

@@ -24,7 +24,7 @@ class QuoteTest  extends \PHPUnit_Framework_TestCase
     protected $addressFactoryMock;
 
     /**
-     * @var \Magento\Framework\Object\Copy|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $copyObjectMock;
 
@@ -63,7 +63,7 @@ class QuoteTest  extends \PHPUnit_Framework_TestCase
             false
         );
         $this->copyObjectMock = $this->getMock(
-            'Magento\Framework\Object\Copy',
+            'Magento\Framework\DataObject\Copy',
             [],
             [],
             '',

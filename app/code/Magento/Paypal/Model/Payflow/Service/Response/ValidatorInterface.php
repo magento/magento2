@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Interface ValidatorInterface
@@ -18,5 +18,5 @@ interface ValidatorInterface
      * @param Object $response
      * @return bool
      */
-    public function validate(Object $response);
+    public function validate(DataObject $response);
 }

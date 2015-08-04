@@ -42,6 +42,11 @@ class Preprocessor implements PreprocessorInterface
     private $attributePrefix;
 
     /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
      * @param ConditionManager $conditionManager
      * @param ScopeResolverInterface $scopeResolver
      * @param Config $config
@@ -59,6 +64,7 @@ class Preprocessor implements PreprocessorInterface
         $this->scopeResolver = $scopeResolver;
         $this->config = $config;
         $this->resource = $resource;
+        $this->connection = $resource->getConnection();
         $this->attributePrefix = $attributePrefix;
     }
 
@@ -82,7 +88,7 @@ class Preprocessor implements PreprocessorInterface
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
         $attribute = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $filter->getField());
-        $select = $this->getConnection()->select();
+        $select = $this->connection->select();
         $table = $attribute->getBackendTable();
         if ($filter->getField() == 'price') {
             $query = str_replace('price', 'min_price', $query);
@@ -114,7 +120,7 @@ class Preprocessor implements PreprocessorInterface
                     $queryContainer->addFilter($filterQuery);
                     return '';
                 }
-                $ifNullCondition = $this->getConnection()->getIfNullSql('current_store.value', 'main_table.value');
+                $ifNullCondition = $this->connection->getIfNullSql('current_store.value', 'main_table.value');
 
                 $select->from(['main_table' => $table], 'entity_id')
                     ->joinLeft(
@@ -136,13 +142,5 @@ class Preprocessor implements PreprocessorInterface
         return 'search_index.entity_id IN (
             select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
             )';
-    }
-
-    /**
-     * @return AdapterInterface
-     */
-    private function getConnection()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
     }
 }

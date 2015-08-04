@@ -154,7 +154,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             $websiteData = ['id' => $id, 'code' => $code];
-            $websites[$id] = new \Magento\Framework\Object($websiteData);
+            $websites[$id] = new \Magento\Framework\DataObject($websiteData);
         }
 
         return $websites;
@@ -177,7 +177,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             $storeData = ['id' => $id, 'code' => $code];
-            $stores[$id] = new \Magento\Framework\Object($storeData);
+            $stores[$id] = new \Magento\Framework\DataObject($storeData);
         }
 
         return $stores;

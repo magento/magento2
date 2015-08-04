@@ -60,23 +60,23 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'whereCallback'])
         );
 
-        $adapterMock = $this->getMock(
+        $connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'update', 'fetchAll', 'fetchOne'],
             [],
             '',
             false
         );
-        $adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->_selectMock));
-        $adapterMock->expects(
+        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->_selectMock));
+        $connectionMock->expects(
             $this->any()
         )->method(
             'update'
         )->will(
             $this->returnCallback([$this, 'updateCallback'])
         );
-        $adapterMock->expects($this->any())->method('fetchAll')->will($this->returnValue($tableData));
-        $adapterMock->expects($this->any())->method('fetchOne')->will($this->returnValue($tableRowsCount));
+        $connectionMock->expects($this->any())->method('fetchAll')->will($this->returnValue($tableData));
+        $connectionMock->expects($this->any())->method('fetchOne')->will($this->returnValue($tableRowsCount));
 
         return [
             'resource_config' => 'not_used',
@@ -84,7 +84,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             'module_config' => 'not_used',
             'base_dir' => 'not_used',
             'path_to_map_file' => 'not_used',
-            'connection' => $adapterMock,
+            'connection' => $connectionMock,
             'core_helper' => $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false, false),
             'aliases_map' => $aliasesMap
         ];
