@@ -60,11 +60,10 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      * Obtain specific row in grid
      *
      * @param array $filter
-     * @param bool $isSearchable
      * @param bool $isStrict
      * @return SimpleElement
      */
-    protected function getRow(array $filter, $isSearchable = true, $isStrict = true)
+    protected function getRow(array $filter, $isStrict = true)
     {
         $this->date = sprintf($this->date, $filter['date']);
         $location = '//table//tr[((preceding-sibling::' . sprintf($this->preceding, $filter['date'])
