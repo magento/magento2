@@ -587,7 +587,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model, $this->model->authorize($paymentObject, $amount));
         foreach ($expectedPaymentFields as $key => $value) {
             if ($key == 'getTransactionAdditionalInfo') {
-                $this->assertEquals($value, $paymentObject->getTransactionAdditionalInfo('token'));
+                $this->assertEquals($value, $paymentObject->getTransactionAdditionalInfo());
             } else {
                 $this->assertEquals($value, $paymentObject->getData($key), 'Incorrect field in paymentobject: ' . $key);
             }
