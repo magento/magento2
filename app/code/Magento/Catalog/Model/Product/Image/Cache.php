@@ -102,11 +102,13 @@ class Cache
                         $this->imageHelper->constrainOnly($imageData['constrain']);
                     }
                     if (isset($imageData['background'])) {
-                        $this->imageHelper->keepAspectRatio($imageData['background']);
+                        $this->imageHelper->backgroundColor($imageData['background']);
                     }
 
-                    if (isset($imageData['width']) || isset($imageData['height'])) {
-                        $this->imageHelper->resize($imageData['width'], $imageData['height']);
+                    $width = isset($imageData['width']) ? $imageData['width'] : null;
+                    $height = isset($imageData['height']) ? $imageData['height'] : null;
+                    if ($width || $height) {
+                        $this->imageHelper->resize($width, $height);
                     }
                     $this->imageHelper->save();
                 }
