@@ -42,6 +42,8 @@ class AttributeRepository
     /**
      * @param \Magento\Customer\Model\Resource\Attribute\Collection $attributeCollection
      * @param \Magento\Customer\Model\Resource\Address\Attribute\Collection $addressAttributeCollection
+     * @param \Magento\Customer\Model\Metadata\CustomerMetadata $customerMetadata
+     * @param AddressMetadataInterface $addressMetadata
      */
     public function __construct(
         \Magento\Customer\Model\Resource\Attribute\Collection $attributeCollection,
