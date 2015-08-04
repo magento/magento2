@@ -38,9 +38,6 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Catalog\Model\Product');
         $product->load(1);
 
-        $size = $this->_block->getImageSize();
-        $this->assertGreaterThan(1, $size);
-        $this->assertContains('/' . $size, $this->_block->getImageUrl($product));
         $this->assertStringEndsWith('magento_image.jpg', $this->_block->getImageUrl($product));
     }
 }
