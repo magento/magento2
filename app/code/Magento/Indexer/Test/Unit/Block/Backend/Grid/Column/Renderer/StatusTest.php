@@ -27,7 +27,10 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $model->setColumn($obj);
         $model->setIndex($indexValues[0]);
         $result = $model->render($obj);
-        $this->assertEquals($result, '<span class="' . $expectedResult['class'] . '"><span>' . $expectedResult['text'] . '</span></span>');
+        $this->assertEquals(
+            $result,
+            '<span class="' . $expectedResult['class'] . '"><span>' . $expectedResult['text'] . '</span></span>'
+        );
     }
 
     public function renderDataProvider()
@@ -47,5 +50,4 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-
 }
