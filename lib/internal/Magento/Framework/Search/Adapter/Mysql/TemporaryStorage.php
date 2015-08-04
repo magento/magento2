@@ -75,7 +75,7 @@ class TemporaryStorage
      */
     private function getConnection()
     {
-        return $this->resource->getConnection(\Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE);
+        return $this->resource->getConnection();
     }
 
     /**
