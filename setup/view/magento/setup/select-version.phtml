@@ -33,7 +33,7 @@
                 Sorry, we can't take that action right now.
             </span>
     </div>
-    <div class="row" ng-show="upgradeProcessed">
+    <div class="row" ng-show="upgradeProcessed && !upgradeProcessError">
         <div class="col-m-3">
             <label class="form-label">
                 Magento Core Components
@@ -50,7 +50,7 @@
     </div>
 </div>
 
-<div class="row form-row">
+<div class="row form-row" ng-show="!upgradeProcessError">
     <div class="col-m-3">
         <label class="form-label">
             Other Components
@@ -83,16 +83,15 @@
     </div>
 </div>
 
-<div class="row">
-    <label class="form-label">
-        The other components below will be upgraded. <br/>
-        If you don't want some components updated, please de-select them.
-    </label>
-    <br/>
-    <br/>
-</div>
-
-<div ng-show="updateComponents.yes">
+<div ng-show="updateComponents.yes && !upgradeProcessError">
+    <div class="row" ng-show="!upgradeProcessError">
+        <label class="form-label">
+            The other components below will be upgraded. <br/>
+            If you don't want some components updated, please de-select them.
+        </label>
+        <br/>
+        <br/>
+    </div>
     <div class="message message-spinner" ng-show="!componentsProcessed">
         <span class="spinner">
             <span></span><span></span><span></span><span></span>
@@ -167,7 +166,7 @@
                         <div class="onoffswitch">
                             <input type="checkbox" name="{{component.checkboxId}}"
                                    class="onoffswitch-checkbox" id="{{component.checkboxId}}"
-                                   ng-click="updateComponentList(component.name)" checked>
+                                   ng-click="AddRemoveComponentOnSliderMove(component.name)" checked>
                             <label class="onoffswitch-label" for="{{component.checkboxId}}">
                                 <span class="onoffswitch-inner"></span>
                                 <span class="onoffswitch-switch"></span>
@@ -203,3 +202,4 @@
 <div data-role="spinner" class="admin__data-grid-loading-mask hide" ng-class="{'hide':isHiddenSpinner}">
     <div class="grid-loader"></div>
 </div>
+
