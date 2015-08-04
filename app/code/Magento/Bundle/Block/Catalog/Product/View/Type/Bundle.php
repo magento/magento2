@@ -131,7 +131,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
         $defaultValues = [];
         $preConfiguredFlag = $currentProduct->hasPreconfiguredValues();
-        /** @var \Magento\Framework\Object|null $preConfiguredValues */
+        /** @var \Magento\Framework\DataObject|null $preConfiguredValues */
         $preConfiguredValues = $preConfiguredFlag ? $currentProduct->getPreconfiguredValues() : null;
 
         $position = 0;
@@ -154,7 +154,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         }
         $config = $this->getConfigData($currentProduct, $options);
 
-        $configObj = new \Magento\Framework\Object(
+        $configObj = new \Magento\Framework\DataObject(
             [
                 'config' => $config,
             ]
