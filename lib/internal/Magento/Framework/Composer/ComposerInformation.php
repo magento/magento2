@@ -277,7 +277,7 @@ class ComposerInformation
      */
     public function isSystemPackage($packageName = '')
     {
-        if(preg_match('/magento\/product-*/', $packageName) == 1) {
+        if (preg_match('/magento\/product-*/', $packageName) == 1) {
             return true;
         }
         return false;
