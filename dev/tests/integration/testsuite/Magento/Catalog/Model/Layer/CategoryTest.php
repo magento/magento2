@@ -129,7 +129,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 'Magento\Catalog\Model\Layer\Category'
             );
-            $model->setCurrentCategory(new \Magento\Framework\Object());
+            $model->setCurrentCategory(new \Magento\Framework\DataObject());
             $this->fail('Assign category of invalid class.');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
         }

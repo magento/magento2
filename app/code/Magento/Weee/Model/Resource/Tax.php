@@ -21,15 +21,15 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->dateTime = $dateTime;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -50,7 +50,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function fetchOne($select)
     {
-        return $this->_getReadAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -62,7 +62,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function isWeeeInLocation($countryId, $regionId, $websiteId)
     {
         // Check if there is a weee_tax for the country and region
-        $attributeSelect = $this->getReadConnection()->select();
+        $attributeSelect = $this->getConnection()->select();
         $attributeSelect->from(
             $this->getTable('weee_tax'),
             'value'
@@ -79,7 +79,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
             1
         );
 
-        $value = $this->getReadConnection()->fetchOne($attributeSelect);
+        $value = $this->getConnection()->fetchOne($attributeSelect);
         if ($value) {
             return true;
         }
@@ -97,7 +97,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function fetchWeeTaxCalculationsByEntity($countryId, $regionId, $websiteId, $storeId, $entityId)
     {
-        $attributeSelect = $this->getReadConnection()->select();
+        $attributeSelect = $this->getConnection()->select();
         $attributeSelect->from(
             ['eavTable' => $this->getTable('eav_attribute')],
             ['eavTable.attribute_code', 'eavTable.attribute_id', 'eavTable.frontend_label']
@@ -130,7 +130,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'weeeTax.website_id ' . \Magento\Framework\DB\Select::SQL_DESC];
         $attributeSelect->order($order);
 
-        $values = $this->getReadConnection()->fetchAll($attributeSelect);
+        $values = $this->getConnection()->fetchAll($attributeSelect);
 
         if ($values) {
             return $values;

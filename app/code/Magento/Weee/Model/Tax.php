@@ -139,8 +139,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param Product $product
-     * @param null|false|\Magento\Framework\Object $shipping
-     * @param null|false|\Magento\Framework\Object $billing
+     * @param null|false|\Magento\Framework\DataObject $shipping
+     * @param null|false|\Magento\Framework\DataObject $billing
      * @param Website $website
      * @param bool $calculateTax
      * @return int
@@ -200,7 +200,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param null|false|\Magento\Quote\Model\Quote\Address $billing
      * @param Website $website
      * @param bool $calculateTax
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -238,10 +238,10 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                 $shippingAddressArray = $this->_customerSession->getDefaultTaxShippingAddress();
                 $billingAddressArray = $this->_customerSession->getDefaultTaxBillingAddress();
                 if (!empty($billingAddressArray)) {
-                    $billing = new \Magento\Framework\Object($billingAddressArray);
+                    $billing = new \Magento\Framework\DataObject($billingAddressArray);
                 }
                 if (!empty($shippingAddressArray)) {
-                    $shipping = new \Magento\Framework\Object($shippingAddressArray);
+                    $shipping = new \Magento\Framework\DataObject($shippingAddressArray);
                 }
                 $customerTaxClass = $this->_customerSession->getCustomerTaxClassId();
             }
@@ -298,7 +298,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                     }
                 }
 
-                $one = new \Magento\Framework\Object();
+                $one = new \Magento\Framework\DataObject();
                 $one->setName(__($attribute['label_value'] ? $attribute['label_value'] : $attribute['frontend_label']))
                     ->setAmount($amount)
                     ->setTaxAmount($taxAmount)
