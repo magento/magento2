@@ -72,7 +72,7 @@ $order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 $item = $order->getAllItems()[0];
 
 /** @var \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory */
-$invoiceFactory = $objectManager->get('Magento\Sales\Model\Order\InvoiceFactory');
+$invoiceFactory = $objectManager->get('Magento\Sales\Api\InvoiceManagementInterface');
 
 /** @var $invoice \Magento\Sales\Model\Order\Invoice */
 $invoice = $invoiceFactory->prepareInvoice($order->getId(), [$item->getId() => 10]);
