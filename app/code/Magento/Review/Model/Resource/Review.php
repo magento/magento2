@@ -366,7 +366,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ':store_id' => $ratingSummaryObject->getStoreId(),
         ];
         $oldData = $connection->fetchRow($select, $bind);
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
 
         $data->setReviewsCount($reviewsCount)
             ->setEntityPkValue($object->getEntityPkValue())
@@ -381,10 +381,10 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Write rating summary
      *
      * @param array|bool $oldData
-     * @param \Magento\Framework\Object $data
+     * @param \Magento\Framework\DataObject $data
      * @return void
      */
-    protected function writeReviewSummary($oldData, \Magento\Framework\Object $data)
+    protected function writeReviewSummary($oldData, \Magento\Framework\DataObject $data)
     {
         $connection = $this->getConnection();
         $connection->beginTransaction();

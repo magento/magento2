@@ -59,7 +59,7 @@ abstract class Collection extends \Magento\Framework\Model\Resource\Db\Collectio
     /**
      * @inheritdoc
      */
-    protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {
         $this->entitySnapshot->registerSnapshot($item);
         return $item;

@@ -15,7 +15,7 @@ class Validate extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setError(false);
         $widgetInstance = $this->_initWidgetInstance();
         $result = $widgetInstance->validate();
