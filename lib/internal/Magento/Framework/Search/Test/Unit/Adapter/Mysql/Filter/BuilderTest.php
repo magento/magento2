@@ -10,7 +10,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Framework\Search\Request\Query\Bool as RequestBoolQuery;
+use Magento\Framework\Search\Request\Query\BoolExpression as RequestBoolQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
@@ -203,7 +203,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $field
      * @param $value
-     * @return \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createTermFilter($field, $value)
     {
@@ -247,7 +247,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      * @param $field
      * @param $from
      * @param $to
-     * @return \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createRangeFilter($field, $from, $to)
     {
@@ -383,11 +383,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      * @param array $must
      * @param array $should
      * @param array $mustNot
-     * @return \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createBoolFilter(array $must, array $should, array $mustNot)
     {
-        $filter = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\Bool')
+        $filter = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\BoolExpression')
             ->setMethods(['getMust', 'getShould', 'getMustNot'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -20,7 +20,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -38,14 +38,14 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         $connectionName = null
     ) {
         $this->_date = $date;
@@ -90,7 +90,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _saveUrlInfo($visitor)
     {
         $connection = $this->getConnection();
-        $data = new \Magento\Framework\Object(
+        $data = new \Magento\Framework\DataObject(
             [
                 'url' => $this->string->substr($visitor->getUrl(), 0, 250),
                 'referer' => $this->string->substr($visitor->getHttpReferer(), 0, 250),
@@ -145,7 +145,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object load
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
@@ -189,7 +189,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $language = $this->string->cleanString($visitor->getHttpAcceptLanguage());
         $language = $this->string->substr($language, 0, 255);
 
-        $data = new \Magento\Framework\Object(
+        $data = new \Magento\Framework\DataObject(
             [
                 'visitor_id' => $visitor->getId(),
                 'http_referer' => $referer,
@@ -217,7 +217,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _saveVisitorUrl($visitor)
     {
-        $data = new \Magento\Framework\Object(
+        $data = new \Magento\Framework\DataObject(
             [
                 'url_id' => $visitor->getLastUrlId(),
                 'visitor_id' => $visitor->getId(),
@@ -241,7 +241,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $connection = $this->getConnection();
 
         if ($visitor->getDoCustomerLogin()) {
-            $data = new \Magento\Framework\Object(
+            $data = new \Magento\Framework\DataObject(
                 [
                     'visitor_id' => $visitor->getVisitorId(),
                     'customer_id' => $visitor->getCustomerId(),
@@ -257,7 +257,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if ($visitor->getDoCustomerLogout() && ($logId = $visitor->getCustomerLogId())) {
-            $data = new \Magento\Framework\Object(
+            $data = new \Magento\Framework\DataObject(
                 [
                     'logout_at' => $this->_date->gmtDate(),
                     'store_id' => (int)$this->_storeManager->getStore()->getId(),
@@ -288,7 +288,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $connection = $this->getConnection();
         if ($visitor->getDoQuoteCreate()) {
-            $data = new \Magento\Framework\Object(
+            $data = new \Magento\Framework\DataObject(
                 [
                     'quote_id' => (int)$visitor->getQuoteId(),
                     'visitor_id' => (int)$visitor->getId(),
