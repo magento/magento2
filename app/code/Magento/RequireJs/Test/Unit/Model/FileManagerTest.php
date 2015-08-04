@@ -208,12 +208,12 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
         $this->object->createMinResolverAsset();
     }
 
-    public function testCreateTranslateConfigAsset()
+    public function testCreateRequireJsMixinsAsset()
     {
         $path = 'relative path';
         $this->configMock
             ->expects($this->once())
-            ->method('getTranslationConfigRelativePath')
+            ->method('getMixinsFileRelativePath')
             ->will($this->returnValue($path));
         $this->assetRepoMock
             ->expects($this->once())
@@ -221,6 +221,6 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
             ->with($path, '')
             ->willReturn($this->asset);
 
-        $this->assertSame($this->asset, $this->object->createTranslateConfigAsset());
+        $this->assertSame($this->asset, $this->object->createRequireJsMixinsAsset());
     }
 }

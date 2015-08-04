@@ -198,17 +198,6 @@ code;
         $this->assertSame('_requirejs/path/requirejs-config.js', $actual);
     }
 
-    public function testGetTranslationConfigRelativePath()
-    {
-        $this->minificationMock
-            ->expects($this->any())
-            ->method('addMinifiedSign')
-            ->willReturnArgument(0);
-        $this->context->expects($this->once())->method('getConfigPath')->will($this->returnValue('path'));
-        $actual = $this->object->getTranslationConfigRelativePath();
-        $this->assertSame('path/Magento_Translation/js/i18n-config.js', $actual);
-    }
-
     public function testGetMinResolverRelativePath()
     {
         $this->minificationMock
