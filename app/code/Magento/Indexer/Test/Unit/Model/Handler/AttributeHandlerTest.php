@@ -9,12 +9,12 @@ use Magento\Customer\Model\Resource\Customer\Collection;
 
 class AttributeHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Indexer\Model\Handler\AttributeHandler */
+    /** @var \Magento\Framework\Indexer\Handler\AttributeHandler */
     protected $model;
 
     protected function setUp()
     {
-        $this->model = new \Magento\Indexer\Model\Handler\AttributeHandler();
+        $this->model = new \Magento\Framework\Indexer\Handler\AttributeHandler();
     }
 
     public function testPrepareSql()
