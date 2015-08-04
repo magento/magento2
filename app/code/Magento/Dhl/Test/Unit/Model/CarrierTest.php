@@ -5,6 +5,8 @@
  */
 namespace Magento\Dhl\Test\Unit\Model;
 
+use Magento\Framework\Xml\Security;
+
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -145,6 +147,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'Magento\Dhl\Model\Carrier',
             [
                 'scopeConfig' => $scopeConfig,
+                'xmlSecurity' => new Security(),
                 'xmlElFactory' => $xmlElFactory,
                 'rateFactory' => $rateFactory,
                 'rateMethodFactory' => $rateMethodFactory,
@@ -218,7 +221,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param \SimpleXMLElement $xml
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _invokePrepareShippingLabelContent(\SimpleXMLElement $xml)
     {

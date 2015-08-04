@@ -554,8 +554,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (empty($productIds)) {
             return [];
         }
-        $adapter = $this->_connection;
-        $select = $adapter->select()->from(
+        $select = $this->_connection->select()->from(
             ['cpl' => $this->_resourceModel->getTableName('catalog_product_link')],
             [
                 'cpl.product_id',
@@ -570,14 +569,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             []
         )->joinLeft(
             ['cpla' => $this->_resourceModel->getTableName('catalog_product_link_attribute')],
-            $adapter->quoteInto(
+            $this->_connection->quoteInto(
                 '(cpla.link_type_id = cpl.link_type_id AND cpla.product_link_attribute_code = ?)',
                 'position'
             ),
             []
         )->joinLeft(
             ['cplaq' => $this->_resourceModel->getTableName('catalog_product_link_attribute')],
-            $adapter->quoteInto(
+            $this->_connection->quoteInto(
                 '(cplaq.link_type_id = cpl.link_type_id AND cplaq.product_link_attribute_code = ?)',
                 'qty'
             ),
@@ -598,7 +597,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $productIds
         );
 
-        $stmt = $adapter->query($select);
+        $stmt = $this->_connection->query($select);
         $linksRows = [];
         while ($linksRow = $stmt->fetch()) {
             $linksRows[$linksRow['product_id']][$linksRow['link_type_id']][] = [

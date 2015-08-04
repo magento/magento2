@@ -53,7 +53,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Retrieve gallery url
      *
-     * @param null|\Magento\Framework\Object $image
+     * @param null|\Magento\Framework\DataObject $image
      * @return string
      */
     public function getGalleryUrl($image = null)
@@ -68,7 +68,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Is product main image
      *
-     * @param \Magento\Framework\Object $image
+     * @param \Magento\Framework\DataObject $image
      * @return bool
      */
     public function isMainImage($image)

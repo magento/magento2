@@ -1145,7 +1145,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve shipping method
      *
      * @param bool $asObject return carrier code and shipping method data as object
-     * @return string|\Magento\Framework\Object
+     * @return string|\Magento\Framework\DataObject
      */
     public function getShippingMethod($asObject = false)
     {
@@ -1154,7 +1154,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return $shippingMethod;
         } else {
             list($carrierCode, $method) = explode('_', $shippingMethod, 2);
-            return new \Magento\Framework\Object(['carrier_code' => $carrierCode, 'method' => $method]);
+            return new \Magento\Framework\DataObject(['carrier_code' => $carrierCode, 'method' => $method]);
         }
     }
 
@@ -1304,7 +1304,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @param mixed $itemId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getItemById($itemId)
     {
@@ -1313,7 +1313,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @param mixed $quoteItemId
-     * @return  \Magento\Framework\Object|null
+     * @return  \Magento\Framework\DataObject|null
      */
     public function getItemByQuoteItemId($quoteItemId)
     {

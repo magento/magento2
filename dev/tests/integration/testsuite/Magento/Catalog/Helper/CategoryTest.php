@@ -64,7 +64,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
 
-        $category = new \Magento\Framework\Object(['url' => $url]);
+        $category = new \Magento\Framework\DataObject(['url' => $url]);
         $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
     }
 

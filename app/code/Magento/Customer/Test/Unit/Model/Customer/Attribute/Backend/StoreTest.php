@@ -30,13 +30,13 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveWithId()
     {
-        $object = $this->getMockBuilder('Magento\Framework\Object')
+        $object = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
 
         $object->expects($this->once())->method('getId')->will($this->returnValue(1));
-        /** @var \Magento\Framework\Object $object */
+        /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(
             'Magento\Customer\Model\Customer\Attribute\Backend\Store',
@@ -48,12 +48,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $storeName = 'store';
-        $object = $this->getMockBuilder('Magento\Framework\Object')
+        $object = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'hasStoreId', 'setStoreId', 'hasData', 'setData', 'getStoreId'])
             ->getMock();
 
-        $store = $this->getMockBuilder('Magento\Framework\Object')->setMethods(['getId', 'getName'])->getMock();
+        $store = $this->getMockBuilder('Magento\Framework\DataObject')->setMethods(['getId', 'getName'])->getMock();
         $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
         $store->expects($this->once())->method('getName')->will($this->returnValue($storeName));
 
@@ -70,7 +70,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($this->logicalOr('created_in', $storeName))
             ->will($this->returnSelf());
-        /** @var \Magento\Framework\Object $object */
+        /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(
             'Magento\Customer\Model\Customer\Attribute\Backend\Store',
