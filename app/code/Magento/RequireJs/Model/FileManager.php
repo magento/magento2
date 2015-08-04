@@ -87,16 +87,6 @@ class FileManager
     }
 
     /**
-     * Create a view asset representing the requirejs config.config property for inline translation
-     *
-     * @return \Magento\Framework\View\Asset\File
-     */
-    public function createTranslateConfigAsset()
-    {
-        return $this->assetRepo->createArbitrary($this->config->getTranslationConfigRelativePath(), '');
-    }
-
-    /**
      * Create a view asset representing the aggregated configuration file
      *
      * @return \Magento\Framework\View\Asset\File
