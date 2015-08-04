@@ -1878,7 +1878,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Do request to shipment
      *
      * @param \Magento\Shipping\Model\Shipment\Request $request
-     * @return array|\Magento\Framework\Object
+     * @return array|\Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function requestToShipment($request)
@@ -1889,7 +1889,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         }
         $result = $this->_doShipmentRequest($request);
 
-        $response = new \Magento\Framework\Object(
+        $response = new \Magento\Framework\DataObject(
             [
                 'info' => [
                     [
