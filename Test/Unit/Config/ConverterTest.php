@@ -125,35 +125,6 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test converting valid configuration with invalid override configuration in env.php
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Consumer "some_random_consumer", specified in env.php is not declared.
-     */
-    public function testConvertWithConsumersEnvOverrideException()
-    {
-        $customizedConsumer = 'customer_deleted_listener';
-        $customConnection = 'test-queue-3';
-        $envConsumersConfig = [
-            'consumers' => [
-                'some_random_consumer' => ['connection' => 'db'],
-                $customizedConsumer => ['connection' => $customConnection],
-            ]
-        ];
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('getConfigData')
-            ->with(Converter::ENV_QUEUE)
-            ->willReturn($envConsumersConfig);
-        $expected = $this->getConvertedQueueConfig();
-        $expected[Converter::CONSUMERS][$customizedConsumer][Converter::CONSUMER_CONNECTION] = $customConnection;
-        $xmlFile = __DIR__ . '/_files/queue.xml';
-        $dom = new \DOMDocument();
-        $dom->loadXML(file_get_contents($xmlFile));
-        $result = $this->converter->convert($dom);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
      * Get content of _files/queue.xml converted into array.
      *
      * @return array

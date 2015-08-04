@@ -158,7 +158,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function overridePublishersForTopics(array &$topics, array $publishers)
     {
-        $queueConfig =  $this->deploymentConfig->getConfigData(self::ENV_QUEUE);
+        $queueConfig = $this->getQueueConfig();
         if (!isset($queueConfig[self::ENV_TOPICS]) || !is_array($queueConfig[self::ENV_TOPICS])) {
             return;
         }
