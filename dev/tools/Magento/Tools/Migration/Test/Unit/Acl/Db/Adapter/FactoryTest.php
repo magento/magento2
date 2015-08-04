@@ -23,18 +23,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getAdapterDataProvider()
+    public function getConnectionDataProvider()
     {
         return [['Magento\Framework\DB\Adapter\Pdo\Mysql'], [''], [null]];
     }
 
     /**
      * @param $adapterType
-     * @dataProvider getAdapterDataProvider
+     * @dataProvider getConnectionDataProvider
      */
-    public function testGetAdapter($adapterType)
+    public function testGetConnection($adapterType)
     {
-        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
 
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManager->expects(
@@ -44,21 +44,21 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->equalTo('Magento\Framework\DB\Adapter\Pdo\Mysql')
         )->will(
-            $this->returnValue($adapterMock)
+            $this->returnValue($connectionMock)
         );
 
         $factory = new \Magento\Tools\Migration\Acl\Db\Adapter\Factory($objectManager);
-        $adapter = $factory->getAdapter($this->_config, $adapterType);
+        $adapter = $factory->getConnection($this->_config, $adapterType);
 
-        $this->assertInstanceOf('Zend_Db_Adapter_Abstract', $adapter);
+        $this->assertInstanceOf('Magento\Framework\DB\Adapter\Pdo\Mysql', $adapter);
     }
 
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testGetAdapterWithInvalidType()
+    public function testGetConnectionWithInvalidType()
     {
-        $adapterType = 'Magento\Framework\Object';
+        $adapterType = 'Magento\Framework\DataObject';
         $adapterMock = $this->getMock($adapterType, [], [], '', false);
 
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
@@ -74,6 +74,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $factory = new \Magento\Tools\Migration\Acl\Db\Adapter\Factory($objectManager);
-        $factory->getAdapter($this->_config, $adapterType);
+        $factory->getConnection($this->_config, $adapterType);
     }
 }

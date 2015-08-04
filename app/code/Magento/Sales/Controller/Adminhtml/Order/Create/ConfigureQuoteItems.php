@@ -15,7 +15,7 @@ class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Crea
     public function execute()
     {
         // Prepare data
-        $configureResult = new \Magento\Framework\Object();
+        $configureResult = new \Magento\Framework\DataObject();
         try {
             $quoteItemId = (int)$this->getRequest()->getParam('id');
             if (!$quoteItemId) {

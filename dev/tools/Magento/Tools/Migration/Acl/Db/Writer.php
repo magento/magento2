@@ -10,7 +10,7 @@ class Writer
     /**
      * DB adapter
      *
-     * @var \Zend_Db_Adapter_Abstract
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected $_adapter;
 
@@ -22,10 +22,10 @@ class Writer
     protected $_tableName;
 
     /**
-     * @param \Zend_Db_Adapter_Abstract $adapter
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $adapter
      * @param string $tableName source table
      */
-    public function __construct(\Zend_Db_Adapter_Abstract $adapter, $tableName)
+    public function __construct(\Magento\Framework\DB\Adapter\AdapterInterface $adapter, $tableName)
     {
         $this->_tableName = $tableName;
         $this->_adapter = $adapter;

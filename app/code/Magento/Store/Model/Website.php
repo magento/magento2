@@ -28,7 +28,7 @@ namespace Magento\Store\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Website extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\Framework\Object\IdentityInterface,
+    \Magento\Framework\DataObject\IdentityInterface,
     \Magento\Framework\App\ScopeInterface,
     \Magento\Store\Api\Data\WebsiteInterface
 {

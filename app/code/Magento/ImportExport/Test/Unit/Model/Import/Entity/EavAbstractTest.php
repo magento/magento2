@@ -24,7 +24,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_string;
 
@@ -60,7 +60,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_string = new \Magento\Framework\Stdlib\String();
+        $this->_string = new \Magento\Framework\Stdlib\StringUtils();
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_importFactory = $this->getMock(

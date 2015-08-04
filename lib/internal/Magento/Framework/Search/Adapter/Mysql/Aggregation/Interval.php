@@ -57,7 +57,7 @@ class Interval implements IntervalInterface
             ->limit($limit, $offset);
 
         return $this->arrayValuesToFloat(
-            $this->select->getAdapter()
+            $this->select->getConnection()
                 ->fetchCol($select)
         );
     }
@@ -75,7 +75,7 @@ class Interval implements IntervalInterface
         if ($lower !== null) {
             $select->where("${value} >= ?", $lower - self::DELTA);
         }
-        $offset = $this->select->getAdapter()
+        $offset = $this->select->getConnection()
             ->fetchRow($select)['count'];
         if (!$offset) {
             return false;
@@ -99,7 +99,7 @@ class Interval implements IntervalInterface
             $select->where("${value} < ? ", $data - self::DELTA);
         }
 
-        $offset = $this->select->getAdapter()
+        $offset = $this->select->getConnection()
             ->fetchRow($select)['count'];
 
         if (!$offset) {
@@ -116,7 +116,7 @@ class Interval implements IntervalInterface
 
         return $this->arrayValuesToFloat(
             array_reverse(
-                $this->select->getAdapter()
+                $this->select->getConnection()
                     ->fetchCol($select)
             )
         );
