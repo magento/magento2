@@ -106,7 +106,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
             ->method('run')
             ->with('magento/product-community-edition')
             ->willReturn(
-                array (
+                [
                     'name' => 'magento/product-community-edition',
                     'descrip.' => 'eCommerce Platform for Growth (Community Edition)',
                     'keywords' => '',
@@ -116,14 +116,13 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
                     'source' => '[]',
                     'names' => 'magento/product-community-edition',
                     'current_version' => '1.0.0',
-                    'available_versions' =>
-                        array (
-                            0 => 'dev-master',
-                            1 => '1.2.0',
-                            2 => '1.1.0',
-                            3 => '1.0.0',
-                        ),
-                )
+                    'available_versions' => [
+                        0 => 'dev-master',
+                        1 => '1.2.0',
+                        2 => '1.1.0',
+                        3 => '1.0.0',
+                    ],
+                ]
             );
 
         $this->assertEquals($expected, $this->systemPackage->getPackageVersions());
@@ -168,4 +167,3 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
         $this->systemPackage->getPackageVersions();
     }
 }
-

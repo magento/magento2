@@ -81,7 +81,27 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($viewModel->terminate());
     }
 
-    public function testUpdateInvalidRequest()
+    public function testUpdateInvalidRequestNoParam()
+    {
+        $content = '{}';
+        $this->request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->filesystem->expects($this->never())->method('getDirectoryWrite');
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
+        $this->controller->updateAction();
+    }
+
+    public function testUpdateInvalidRequestNotArray()
+    {
+        $content = '{"packages":"test","type":"cm"}';
+        $this->request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->filesystem->expects($this->never())->method('getDirectoryWrite');
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
+        $this->controller->updateAction();
+    }
+
+    public function testUpdateInvalidRequestMissingVersion()
     {
         $content = '{"packages":[{"name":"vendor\/package"}],"type":"cm"}';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
