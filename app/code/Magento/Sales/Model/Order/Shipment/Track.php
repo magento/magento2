@@ -112,7 +112,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @codeCoverageIgnore
      *
      * @param string $number
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setNumber($number)
     {

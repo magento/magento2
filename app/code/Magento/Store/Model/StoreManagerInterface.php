@@ -43,8 +43,8 @@ interface StoreManagerInterface
     /**
      * Retrieve application store object
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
-     * @return \Magento\Store\Model\Store
+     * @param null|string|bool|int|\Magento\Store\Api\Data\StoreInterface $storeId
+     * @return \Magento\Store\Api\Data\StoreInterface
      */
     public function getStore($storeId = null);
 
@@ -53,15 +53,15 @@ interface StoreManagerInterface
      *
      * @param bool $withDefault
      * @param bool $codeKey
-     * @return \Magento\Store\Model\Store[]
+     * @return \Magento\Store\Api\Data\StoreInterface[]
      */
     public function getStores($withDefault = false, $codeKey = false);
 
     /**
      * Retrieve application website object
      *
-     * @param null|bool|int|string|\Magento\Store\Model\Website $websiteId
-     * @return \Magento\Store\Model\Website
+     * @param null|bool|int|string|\Magento\Store\Api\Data\WebsiteInterface $websiteId
+     * @return \Magento\Store\Api\Data\WebsiteInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getWebsite($websiteId = null);
@@ -70,8 +70,8 @@ interface StoreManagerInterface
      * Get loaded websites
      *
      * @param bool $withDefault
-     * @param bool|string $codeKey
-     * @return \Magento\Store\Model\Website[]
+     * @param bool $codeKey
+     * @return \Magento\Store\Api\Data\WebsiteInterface[]
      */
     public function getWebsites($withDefault = false, $codeKey = false);
 
@@ -85,36 +85,25 @@ interface StoreManagerInterface
     /**
      * Retrieve default store for default group and website
      *
-     * @return \Magento\Store\Model\Store|null
+     * @return \Magento\Store\Api\Data\StoreInterface|null
      */
     public function getDefaultStoreView();
 
     /**
      * Retrieve application store group object
      *
-     * @param null|\Magento\Store\Model\Group|string $groupId
-     * @return \Magento\Store\Model\Group
+     * @param null|\Magento\Store\Api\Data\GroupInterface|string $groupId
+     * @return \Magento\Store\Api\Data\GroupInterface
      */
     public function getGroup($groupId = null);
 
     /**
      * Prepare array of store groups
-     * can be filtered to contain default store group or not by $withDefault flag
-     * depending on flag $codeKey array keys can be group id or group code
      *
      * @param bool $withDefault
-     * @param bool $codeKey
-     * @return \Magento\Store\Model\Group[]
+     * @return \Magento\Store\Api\Data\GroupInterface[]
      */
-    public function getGroups($withDefault = false, $codeKey = false);
-
-    /**
-     *  Unset website by id from app cache
-     *
-     * @param null|bool|int|string|\Magento\Store\Model\Website $websiteId
-     * @return void
-     */
-    public function clearWebsiteCache($websiteId = null);
+    public function getGroups($withDefault = false);
 
     /**
      * Set current default store

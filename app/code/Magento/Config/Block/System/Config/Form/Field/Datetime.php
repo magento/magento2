@@ -15,6 +15,7 @@ class Datetime extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @param AbstractElement $element
      * @return string
+     * @codeCoverageIgnore
      */
     protected function _getElementHtml(AbstractElement $element)
     {

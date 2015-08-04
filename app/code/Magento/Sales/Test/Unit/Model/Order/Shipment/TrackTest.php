@@ -41,7 +41,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreId()
     {
         $storeId = 10;
-        $storeObject = new \Magento\Framework\Object(['id' => $storeId]);
+        $storeObject = new \Magento\Framework\DataObject(['id' => $storeId]);
 
         $shipmentMock = $this->getMock(
             'Magento\Sales\Model\Order\Shipment',

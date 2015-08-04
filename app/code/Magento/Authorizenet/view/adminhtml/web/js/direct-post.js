@@ -32,13 +32,11 @@ directPost.prototype = {
         this.headers = [];
         this.isValid = true;
         this.paymentRequestSent = false;
-        this.isResponse = false;
         this.orderIncrementId = false;
         this.successUrl = false;
         this.hasError = false;
         this.tmpForm = false;
 
-        this.onSaveOnepageOrderSuccess = this.saveOnepageOrderSuccess.bindAsEventListener(this);
         this.onLoadIframe = this.loadIframe.bindAsEventListener(this);
         this.onLoadOrderIframe = this.loadOrderIframe.bindAsEventListener(this);
         this.onSubmitAdminOrder = this.submitAdminOrder.bindAsEventListener(this);
@@ -80,63 +78,30 @@ directPost.prototype = {
             .off('submitOrder')
             .on('submitOrder', this.submitAdminOrder.bind(this));
         if ($(this.iframeId)) {
-            switch (this.controller) {
-                case 'onepage':
-                    this.headers = $$('#' + checkout.accordion.container.readAttribute('id') + ' .section');
-                    var button = $('review-buttons-container').down('button');
-                    button.writeAttribute('onclick', '');
-                    button.stopObserving('click');
-                    button.observe('click', function() {
-                        if ($(this.iframeId)) {
-                            if (this.validate()) {
-                                this.saveOnepageOrder();
-                            }
-                        } else {
-                            review.save();
-                        }
-                    }.bind(this));
-                    break;
-                case 'order_create':
-                case 'order_edit':
-                    // Temporary solution will be removed after refactoring Authorize.Net (sales) functionality
-                    jQuery('.scalable.save:not(disabled)').removeAttr('onclick');
-                    jQuery(document).off('click.directPost');
-                    jQuery(document).on(
-                        'click.directPost',
-                        '.scalable.save:not(disabled)',
-                        jQuery.proxy(this.onSubmitAdminOrder, this)
-                    );
-
-                    $('order-' + this.iframeId).observe('load', this.onLoadOrderIframe);
-                    break;
-            }
-
+            // Temporary solution will be removed after refactoring Authorize.Net (sales) functionality
+            jQuery('.scalable.save:not(disabled)').removeAttr('onclick');
+            jQuery(document).off('click.directPost');
+            jQuery(document).on(
+                'click.directPost',
+                '.scalable.save:not(disabled)',
+                jQuery.proxy(this.onSubmitAdminOrder, this)
+            );
+            $('order-' + this.iframeId).observe('load', this.onLoadOrderIframe);
             $(this.iframeId).observe('load', this.onLoadIframe);
         }
     },
 
     loadIframe : function() {
         if (this.paymentRequestSent) {
-            switch (this.controller) {
-                case 'onepage':
-                    this.paymentRequestSent = false;
-                    if (!this.hasError) {
-                        this.returnQuote();
-                    }
-                    break;
-                case 'order_edit':
-                case 'order_create':
-                    if (!this.orderRequestSent) {
-                        this.paymentRequestSent = false;
-                        if (!this.hasError) {
-                            this.returnQuote();
-                        } else {
-                            this.changeInputOptions('disabled', false);
-                            jQuery('body').trigger('processStop');
-                            enableElements('save');
-                        }
-                    }
-                    break;
+            if (!this.orderRequestSent) {
+                this.paymentRequestSent = false;
+                if (!this.hasError) {
+                    this.returnQuote();
+                } else {
+                    this.changeInputOptions('disabled', false);
+                    jQuery('body').trigger('processStop');
+                    enableElements('save');
+                }
             }
             if (this.tmpForm) {
                 document.body.removeChild(this.tmpForm);
@@ -167,7 +132,7 @@ directPost.prototype = {
         new Ajax.Request(url, {
             onSuccess : function(transport) {
                 try {
-                    response = eval('(' + transport.responseText + ')');
+                    response = transport.responseText.evalJSON(true);
                 } catch (e) {
                     response = {};
                 }
@@ -175,17 +140,9 @@ directPost.prototype = {
                     alert(response.error_message);
                 }
                 $(this.iframeId).show();
-                switch (this.controller) {
-                    case 'onepage':
-                        this.resetLoadWaiting();
-                        break;
-                    case 'order_edit':
-                    case 'order_create':
-                        this.changeInputOptions('disabled', false);
-                        jQuery('body').trigger('processStop');
-                        enableElements('save');
-                        break;
-                }
+                this.changeInputOptions('disabled', false);
+                jQuery('body').trigger('processStop');
+                enableElements('save');
             }.bind(this)
         });
     },
@@ -202,66 +159,6 @@ directPost.prototype = {
             header.addClassName('allow');
         });
         checkout.setLoadWaiting(false);
-    },
-
-    saveOnepageOrder : function() {
-        this.hasError = false;
-        this.setLoadWaiting();
-        var params = Form.serialize(payment.form);
-        if (review.agreementsForm) {
-            params += '&' + Form.serialize(review.agreementsForm);
-        }
-        params += '&controller=' + this.controller;
-        new Ajax.Request(this.orderSaveUrl, {
-            method : 'post',
-            parameters : params,
-            onComplete : this.onSaveOnepageOrderSuccess,
-            onFailure : function(transport) {
-                this.resetLoadWaiting();
-                if (transport.status == 403) {
-                    checkout.ajaxFailure();
-                }
-            }
-        });
-    },
-
-    saveOnepageOrderSuccess : function(transport) {
-        if (transport.status == 403) {
-            checkout.ajaxFailure();
-        }
-        try {
-            response = eval('(' + transport.responseText + ')');
-        } catch (e) {
-            response = {};
-        }
-
-        if (response.success && response.directpost) {
-            this.orderIncrementId = response.directpost.fields.x_invoice_num;
-            var paymentData = {};
-            for ( var key in response.directpost.fields) {
-                paymentData[key] = response.directpost.fields[key];
-            }
-            var preparedData = this.preparePaymentRequest(paymentData);
-            this.sendPaymentRequest(preparedData);
-        } else {
-            var msg = response.error_messages;
-            if (typeof (msg) == 'object') {
-                msg = msg.join("\n");
-            }
-            if (msg) {
-                alert(msg);
-            }
-
-            if (response.update_section) {
-                $('checkout-' + response.update_section.name + '-load').replace(response.update_section.html);
-                response.update_section.html.evalScripts();
-            }
-
-            if (response.goto_section) {
-                checkout.gotoSection(response.goto_section);
-                checkout.reloadProgressBlock();
-            }
-        }
     },
 
     submitAdminOrder : function() {
@@ -324,7 +221,7 @@ directPost.prototype = {
 
     saveAdminOrderSuccess : function(data) {
         try {
-            response = eval('(' + data + ')');
+            response = data.evalJSON(true);
         } catch (e) {
             response = {};
         }

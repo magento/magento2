@@ -30,7 +30,7 @@ class Summary extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $field
      * @param mixed $value
      * @param AbstractModel $object
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -47,14 +47,14 @@ class Summary extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function reAggregate($summary)
     {
-        $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             ['primary_id' => new \Zend_Db_Expr('MAX(primary_id)'), 'store_id', 'entity_pk_value']
         )->group(
             ['entity_pk_value', 'store_id']
         );
-        foreach ($adapter->fetchAll($select) as $row) {
+        foreach ($connection->fetchAll($select) as $row) {
             if (isset($summary[$row['store_id']]) && isset($summary[$row['store_id']][$row['entity_pk_value']])) {
                 $summaryItem = $summary[$row['store_id']][$row['entity_pk_value']];
                 if ($summaryItem->getCount()) {
@@ -65,10 +65,10 @@ class Summary extends \Magento\Framework\Model\Resource\Db\AbstractDb
             } else {
                 $ratingSummary = 0;
             }
-            $adapter->update(
+            $connection->update(
                 $this->getMainTable(),
                 ['rating_summary' => $ratingSummary],
-                $adapter->quoteInto('primary_id = ?', $row['primary_id'])
+                $connection->quoteInto('primary_id = ?', $row['primary_id'])
             );
         }
         return $this;

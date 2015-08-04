@@ -18,7 +18,7 @@ use Magento\Quote\Model\Quote\Item;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Create extends \Magento\Framework\Object implements \Magento\Checkout\Model\Cart\CartInterface
+class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
 {
     /**
      * Xml default email domain path
@@ -118,7 +118,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
 
@@ -178,7 +178,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     protected $quoteItemUpdater;
 
     /**
-     * @var \Magento\Framework\Object\Factory
+     * @var \Magento\Framework\DataObject\Factory
      */
     protected $objectFactory;
 
@@ -226,7 +226,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Backend\Model\Session\Quote $quoteSession
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param Product\Quote\Initializer $quoteInitializer
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
@@ -238,7 +238,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param EmailSender $emailSender
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param Item\Updater $quoteItemUpdater
-     * @param \Magento\Framework\Object\Factory $objectFactory
+     * @param \Magento\Framework\DataObject\Factory $objectFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
@@ -256,7 +256,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Backend\Model\Session\Quote $quoteSession,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         Product\Quote\Initializer $quoteInitializer,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
@@ -268,7 +268,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         \Magento\Sales\Model\AdminOrder\EmailSender $emailSender,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Quote\Model\Quote\Item\Updater $quoteItemUpdater,
-        \Magento\Framework\Object\Factory $objectFactory,
+        \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
@@ -356,7 +356,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     {
         $this->_coreRegistry->register(
             'rule_data',
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'store_id' => $this->_session->getStore()->getId(),
                     'website_id' => $this->_session->getStore()->getWebsiteId(),
@@ -622,7 +622,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
 
             if ($additionalOptions = $orderItem->getProductOptionByCode('additional_options')) {
                 $item->addOption(
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'product' => $item->getProduct(),
                             'code' => 'additional_options',
@@ -787,11 +787,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
 
                         $info = $item->getOptionByCode('info_buyRequest');
                         if ($info) {
-                            $info = new \Magento\Framework\Object(unserialize($info->getValue()));
+                            $info = new \Magento\Framework\DataObject(unserialize($info->getValue()));
                             $info->setQty($qty);
                             $info->setOptions($this->_prepareOptionsForRequest($item));
                         } else {
-                            $info = new \Magento\Framework\Object(
+                            $info = new \Magento\Framework\DataObject(
                                 [
                                     'product_id' => $product->getId(),
                                     'qty' => $qty,
@@ -982,16 +982,16 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * $config can be either buyRequest config, or just qty
      *
      * @param int|\Magento\Catalog\Model\Product $product
-     * @param array|float|int|\Magento\Framework\Object $config
+     * @param array|float|int|\Magento\Framework\DataObject $config
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addProduct($product, $config = 1)
     {
-        if (!is_array($config) && !$config instanceof \Magento\Framework\Object) {
+        if (!is_array($config) && !$config instanceof \Magento\Framework\DataObject) {
             $config = ['qty' => $config];
         }
-        $config = new \Magento\Framework\Object($config);
+        $config = new \Magento\Framework\DataObject($config);
 
         if (!$product instanceof \Magento\Catalog\Model\Product) {
             $productId = $product;
@@ -1172,7 +1172,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $item->save();
         if (!empty($options['options'])) {
             $item->addOption(
-                new \Magento\Framework\Object(
+                new \Magento\Framework\DataObject(
                     [
                         'product' => $item->getProduct(),
                         'code' => 'option_ids',
@@ -1183,7 +1183,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
 
             foreach ($options['options'] as $optionId => $optionValue) {
                 $item->addOption(
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'product' => $item->getProduct(),
                             'code' => 'option_' . $optionId,
@@ -1195,7 +1195,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         }
         if (!empty($options['additional_options'])) {
             $item->addOption(
-                new \Magento\Framework\Object(
+                new \Magento\Framework\DataObject(
                     [
                         'product' => $item->getProduct(),
                         'code' => 'additional_options',

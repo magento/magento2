@@ -22,15 +22,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_adapterMock = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract',
-            [],
-            '',
-            false,
-            false,
-            false,
-            ['update']
-        );
+        $this->_adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['update'], [], '', false);
         $this->_model = new \Magento\Tools\Migration\Acl\Db\Writer($this->_adapterMock, 'dummy');
     }
 

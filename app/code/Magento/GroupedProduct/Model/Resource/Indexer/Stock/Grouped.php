@@ -24,9 +24,9 @@ class Grouped extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Def
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
         );
@@ -68,24 +68,24 @@ class Grouped extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Def
 
         // add limitation of status
         $productStatusExpr = $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id');
-        $productStatusCond = $adapter->quoteInto($productStatusExpr . '=?', ProductStatus::STATUS_ENABLED);
+        $productStatusCond = $connection->quoteInto($productStatusExpr . '=?', ProductStatus::STATUS_ENABLED);
 
         if ($this->_isManageStock()) {
-            $statusExpression = $adapter->getCheckSql(
+            $statusExpression = $connection->getCheckSql(
                 'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
                 1,
                 'cisi.is_in_stock'
             );
         } else {
-            $statusExpression = $adapter->getCheckSql(
+            $statusExpression = $connection->getCheckSql(
                 'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
                 'cisi.is_in_stock',
                 1
             );
         }
 
-        $optExpr = $adapter->getCheckSql("{$productStatusCond} AND le.required_options = 0", 'i.stock_status', 0);
-        $stockStatusExpr = $adapter->getLeastSql(["MAX({$optExpr})", "MIN({$statusExpression})"]);
+        $optExpr = $connection->getCheckSql("{$productStatusCond} AND le.required_options = 0", 'i.stock_status', 0);
+        $stockStatusExpr = $connection->getLeastSql(["MAX({$optExpr})", "MIN({$statusExpression})"]);
 
         $select->columns(['status' => $stockStatusExpr]);
 
