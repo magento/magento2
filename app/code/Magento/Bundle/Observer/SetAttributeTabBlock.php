@@ -25,7 +25,7 @@ class SetAttributeTabBlock
     /**
      * Setting attribute tab block for bundle
      *
-     * @param \Magento\Framework\Object $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function invoke($observer)
