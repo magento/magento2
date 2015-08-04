@@ -6,14 +6,29 @@
 /*global alert*/
 define(
     [
+        'jquery',
+        "underscore",
         'uiComponent',
         'ko',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/model/payment-service',
-        'Magento_Checkout/js/model/payment/method-converter'
+        'Magento_Checkout/js/model/payment/method-converter',
+        'Magento_Checkout/js/action/get-payment-information',
+        'Magento_Checkout/js/model/checkout-data-resolver'
     ],
-    function (Component, ko, quote, stepNavigator, paymentService, methodConverter) {
+    function (
+        $,
+        _,
+        Component,
+        ko,
+        quote,
+        stepNavigator,
+        paymentService,
+        methodConverter,
+        getPaymentInformation,
+        checkoutDataResolver
+    ) {
         'use strict';
 
         /** Set payment methods to collection */
@@ -32,8 +47,23 @@ define(
 
             initialize: function () {
                 this._super();
-                stepNavigator.registerStep('billing', 'Review & Payments', this.isVisible, 20);
+                checkoutDataResolver.resolvePaymentMethod();
+                stepNavigator.registerStep(
+                    'payment',
+                    null,
+                    'Review & Payments',
+                    this.isVisible,
+                    _.bind(this.navigate, this),
+                    20
+                );
                 return this;
+            },
+
+            navigate: function () {
+                var self = this;
+                getPaymentInformation().done(function () {
+                    self.isVisible(true);
+                });
             },
 
             getFormKey: function() {

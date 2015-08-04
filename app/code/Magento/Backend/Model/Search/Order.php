@@ -10,7 +10,7 @@ namespace Magento\Backend\Model\Search;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Order extends \Magento\Framework\Object
+class Order extends \Magento\Framework\DataObject
 {
     /**
      * Adminhtml data

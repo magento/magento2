@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Quick style file uploader
  */
-class ImageUploader extends \Magento\Framework\Object
+class ImageUploader extends \Magento\Framework\DataObject
 {
     /**
      * Quick style images path prefix

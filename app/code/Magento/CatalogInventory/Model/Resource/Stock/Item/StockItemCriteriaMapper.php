@@ -115,7 +115,7 @@ class StockItemCriteriaMapper extends GenericMapper
             ['status_table' => $this->getTable('cataloginventory_stock_status')],
             'main_table.product_id=status_table.product_id' .
             ' AND main_table.stock_id=status_table.stock_id' .
-            $this->getConnection()->quoteInto(
+            $this->connection->quoteInto(
                 ' AND status_table.website_id=?',
                 $websiteId
             ),
