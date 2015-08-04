@@ -14,11 +14,6 @@ namespace Magento\Framework\Model\Resource;
 abstract class AbstractResource
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected $_writeAdapter;
-
-    /**
      * Main constructor
      */
     public function __construct()
@@ -43,19 +38,6 @@ abstract class AbstractResource
      */
     abstract protected function _construct();
 
-    /**
-     * Retrieve connection for read data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    abstract protected function _getReadAdapter();
-
-    /**
-     * Retrieve connection for write data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    abstract protected function _getWriteAdapter();
 
     /**
      * Get connection
@@ -72,7 +54,7 @@ abstract class AbstractResource
      */
     public function beginTransaction()
     {
-        $this->_getWriteAdapter()->beginTransaction();
+        $this->getConnection()->beginTransaction();
         return $this;
     }
 
@@ -85,8 +67,8 @@ abstract class AbstractResource
      */
     public function addCommitCallback($callback)
     {
-        $adapterKey = spl_object_hash($this->_getWriteAdapter());
-        self::$_commitCallbacks[$adapterKey][] = $callback;
+        $connectionKey = spl_object_hash($this->getConnection());
+        self::$_commitCallbacks[$connectionKey][] = $callback;
         return $this;
     }
 
@@ -98,15 +80,15 @@ abstract class AbstractResource
      */
     public function commit()
     {
-        $this->_getWriteAdapter()->commit();
+        $this->getConnection()->commit();
         /**
          * Process after commit callbacks
          */
-        if ($this->_getWriteAdapter()->getTransactionLevel() === 0) {
-            $adapterKey = spl_object_hash($this->_getWriteAdapter());
-            if (isset(self::$_commitCallbacks[$adapterKey])) {
-                $callbacks = self::$_commitCallbacks[$adapterKey];
-                self::$_commitCallbacks[$adapterKey] = [];
+        if ($this->getConnection()->getTransactionLevel() === 0) {
+            $connectionKey = spl_object_hash($this->getConnection());
+            if (isset(self::$_commitCallbacks[$connectionKey])) {
+                $callbacks = self::$_commitCallbacks[$connectionKey];
+                self::$_commitCallbacks[$connectionKey] = [];
                 try {
                     foreach ($callbacks as $callback) {
                         call_user_func($callback);
@@ -128,9 +110,9 @@ abstract class AbstractResource
      */
     public function rollBack()
     {
-        $this->_getWriteAdapter()->rollBack();
-        $adapterKey = spl_object_hash($this->_getWriteAdapter());
-        self::$_commitCallbacks[$adapterKey] = [];
+        $this->getConnection()->rollBack();
+        $connectionKey = spl_object_hash($this->getConnection());
+        self::$_commitCallbacks[$connectionKey] = [];
         return $this;
     }
 
@@ -190,7 +172,7 @@ abstract class AbstractResource
     protected function _prepareDataForTable(\Magento\Framework\Object $object, $table)
     {
         $data = [];
-        $fields = $this->_getWriteAdapter()->describeTable($table);
+        $fields = $this->getConnection()->describeTable($table);
         foreach (array_keys($fields) as $field) {
             if ($object->hasData($field)) {
                 $fieldValue = $object->getData($field);
@@ -199,7 +181,7 @@ abstract class AbstractResource
                 } else {
                     if (null !== $fieldValue) {
                         $fieldValue = $this->_prepareTableValueForSave($fieldValue, $fields[$field]['DATA_TYPE']);
-                        $data[$field] = $this->_getWriteAdapter()->prepareColumnValue($fields[$field], $fieldValue);
+                        $data[$field] = $this->getConnection()->prepareColumnValue($fields[$field], $fieldValue);
                     } elseif (!empty($fields[$field]['NULLABLE'])) {
                         $data[$field] = null;
                     }
@@ -250,9 +232,9 @@ abstract class AbstractResource
     {
         $fieldsetColumns = $object->getFieldset();
         if (!empty($fieldsetColumns)) {
-            $readAdapter = $this->_getReadAdapter();
-            if ($readAdapter instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
-                $entityTableColumns = $readAdapter->describeTable($tableName);
+            $connection = $this->getConnection();
+            if ($connection instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
+                $entityTableColumns = $connection->describeTable($tableName);
                 $columns = array_intersect($fieldsetColumns, array_keys($entityTableColumns));
             }
         }

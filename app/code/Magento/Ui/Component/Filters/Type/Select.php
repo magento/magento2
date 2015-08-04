@@ -104,4 +104,14 @@ class Select extends AbstractFilter
             }
         }
     }
+
+    /**
+     * Returns options provider
+     *
+     * @return OptionSourceInterface
+     */
+    public function getOptionProvider()
+    {
+        return $this->optionsProvider;
+    }
 }
