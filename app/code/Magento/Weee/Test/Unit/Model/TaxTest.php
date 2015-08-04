@@ -161,7 +161,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $attribute = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
         $calculation = $this->getMock('Magento\Tax\Model\Calculation', [], [], '', false);
 
-        $obj = new \Magento\Framework\Object(['country' => 'US', 'region' => 'TX']);
+        $obj = new \Magento\Framework\DataObject(['country' => 'US', 'region' => 'TX']);
         $calculation->expects($this->once())
             ->method('getRateRequest')
             ->willReturn($obj);
