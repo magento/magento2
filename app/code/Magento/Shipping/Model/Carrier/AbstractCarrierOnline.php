@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
+use Magento\Framework\Xml\Security;
 
 /**
  * Abstract online shipping carrier model
@@ -98,14 +99,22 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Raw rate request data
      *
-     * @var \Magento\Framework\Object|null
+     * @var \Magento\Framework\DataObject|null
      */
     protected $_rawRequest = null;
+
+    /**
+     * The security scanner XML document
+     *
+     * @var Security
+     */
+    protected $xmlSecurity;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Security $xmlSecurity
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
@@ -125,6 +134,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
+        Security $xmlSecurity,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
@@ -150,6 +160,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         $this->_directoryData = $directoryData;
         $this->stockRegistry = $stockRegistry;
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
+        $this->xmlSecurity = $xmlSecurity;
     }
 
     /**
@@ -282,12 +293,12 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Processing additional validation to check if carrier applicable.
      *
-     * @param \Magento\Framework\Object $request
-     * @return $this|bool|\Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|bool|\Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function proccessAdditionalValidation(\Magento\Framework\Object $request)
+    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {
         //Skip by item validation if there is no items in request
         if (!count($this->getAllItems($request))) {
@@ -408,10 +419,10 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Prepare shipment request.
      * Validate and correct request information
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return void
      */
-    protected function _prepareShipmentRequest(\Magento\Framework\Object $request)
+    protected function _prepareShipmentRequest(\Magento\Framework\DataObject $request)
     {
         $phonePattern = '/[\s\_\-\(\)]+/';
         $phoneNumber = $request->getShipperContactPhoneNumber();
@@ -426,7 +437,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Do request to shipment
      *
      * @param Request $request
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function requestToShipment($request)
@@ -443,7 +454,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             $request->setPackageId($packageId);
             $request->setPackagingType($package['params']['container']);
             $request->setPackageWeight($package['params']['weight']);
-            $request->setPackageParams(new \Magento\Framework\Object($package['params']));
+            $request->setPackageParams(new \Magento\Framework\DataObject($package['params']));
             $request->setPackageItems($package['items']);
             $result = $this->_doShipmentRequest($request);
 
@@ -462,7 +473,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             }
         }
 
-        $response = new \Magento\Framework\Object(['info' => $data]);
+        $response = new \Magento\Framework\DataObject(['info' => $data]);
         if ($result->getErrors()) {
             $response->setErrors($result->getErrors());
         }
@@ -473,7 +484,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Do request to RMA shipment
      *
      * @param Request $request
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function returnOfShipment($request)
@@ -491,7 +502,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             $request->setPackageId($packageId);
             $request->setPackagingType($package['params']['container']);
             $request->setPackageWeight($package['params']['weight']);
-            $request->setPackageParams(new \Magento\Framework\Object($package['params']));
+            $request->setPackageParams(new \Magento\Framework\DataObject($package['params']));
             $request->setPackageItems($package['items']);
             $result = $this->_doShipmentRequest($request);
 
@@ -510,7 +521,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             }
         }
 
-        $response = new \Magento\Framework\Object(['info' => $data]);
+        $response = new \Magento\Framework\DataObject(['info' => $data]);
         if ($result->getErrors()) {
             $response->setErrors($result->getErrors());
         }
@@ -536,10 +547,10 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
      *
-     * @param \Magento\Framework\Object $request
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $request
+     * @return \Magento\Framework\DataObject
      */
-    abstract protected function _doShipmentRequest(\Magento\Framework\Object $request);
+    abstract protected function _doShipmentRequest(\Magento\Framework\DataObject $request);
 
     /**
      * Check is Country U.S. Possessions and Trust Territories
@@ -584,7 +595,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     }
 
     /**
-     * @param \Magento\Framework\Object|null $request
+     * @param \Magento\Framework\DataObject|null $request
      * @return $this
      * @api
      */
@@ -620,12 +631,19 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $xmlContent
      * @param string $customSimplexml
-     *
      * @return \SimpleXMLElement|bool
+     * @throws LocalizedException
+     *
      * @api
      */
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
-        return simplexml_load_string($xmlContent, $customSimplexml);
+        if (!$this->xmlSecurity->scan($xmlContent)) {
+            throw new LocalizedException(__('Security validation of XML document has been failed.'));
+        }
+
+        $xmlElement = simplexml_load_string($xmlContent, $customSimplexml);
+
+        return $xmlElement;
     }
 }

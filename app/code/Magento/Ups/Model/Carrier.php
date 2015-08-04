@@ -14,6 +14,7 @@ use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Ups\Helper\Config;
+use Magento\Framework\Xml\Security;
 
 /**
  * UPS shipping implementation
@@ -124,6 +125,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Security $xmlSecurity
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
@@ -145,6 +147,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
+        Security $xmlSecurity,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
@@ -166,6 +169,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $scopeConfig,
             $rateErrorFactory,
             $logger,
+            $xmlSecurity,
             $xmlElFactory,
             $rateFactory,
             $rateMethodFactory,
@@ -184,10 +188,10 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     /**
      * Collect and get rates
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return Result|bool|null
      */
-    public function collectRates(\Magento\Framework\Object $request)
+    public function collectRates(\Magento\Framework\DataObject $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;
@@ -214,7 +218,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $this->_request = $request;
 
-        $rowRequest = new \Magento\Framework\Object();
+        $rowRequest = new \Magento\Framework\DataObject();
 
         if ($request->getLimitMethod()) {
             $rowRequest->setAction($this->configHelper->getCode('action', 'single'));
@@ -1147,13 +1151,13 @@ XMLAuth;
     /**
      * Form XML for shipment request
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _formShipmentRequest(\Magento\Framework\Object $request)
+    protected function _formShipmentRequest(\Magento\Framework\DataObject $request)
     {
         $packageParams = $request->getPackageParams();
         $height = $packageParams->getHeight();
@@ -1165,7 +1169,7 @@ XMLAuth;
         $itemsDesc = [];
         $itemsShipment = $request->getPackageItems();
         foreach ($itemsShipment as $itemShipment) {
-            $item = new \Magento\Framework\Object();
+            $item = new \Magento\Framework\DataObject();
             $item->setData($itemShipment);
             $itemsDesc[] = $item->getName();
         }
@@ -1373,7 +1377,7 @@ XMLAuth;
      * Send and process shipment accept request
      *
      * @param Element $shipmentConfirmResponse
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _sendShipmentAcceptRequest(Element $shipmentConfirmResponse)
     {
@@ -1408,7 +1412,7 @@ XMLAuth;
             $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
         }
 
-        $result = new \Magento\Framework\Object();
+        $result = new \Magento\Framework\DataObject();
         if (isset($response->Error)) {
             $result->setErrors((string)$response->Error->ErrorDescription);
         } else {
@@ -1441,14 +1445,14 @@ XMLAuth;
     /**
      * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
      *
-     * @param \Magento\Framework\Object $request
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $request
+     * @return \Magento\Framework\DataObject
      * @throws \Exception
      */
-    protected function _doShipmentRequest(\Magento\Framework\Object $request)
+    protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
         $this->_prepareShipmentRequest($request);
-        $result = new \Magento\Framework\Object();
+        $result = new \Magento\Framework\DataObject();
         $xmlRequest = $this->_formShipmentRequest($request);
         $xmlResponse = $this->_getCachedQuotes($xmlRequest);
 
@@ -1522,11 +1526,11 @@ XMLAuth;
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Framework\Object|null $params
+     * @param \Magento\Framework\DataObject|null $params
      * @return array|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getContainerTypes(\Magento\Framework\Object $params = null)
+    public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
         if ($params === null) {
             return $this->_getAllowedContainers($params);
@@ -1602,10 +1606,10 @@ XMLAuth;
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Framework\Object|null $params
+     * @param \Magento\Framework\DataObject|null $params
      * @return array|bool
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\Object $params = null)
+    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
     {
         $countryRecipient = $params != null ? $params->getCountryRecipient() : null;
         $deliveryConfirmationTypes = [];

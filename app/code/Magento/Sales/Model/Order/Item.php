@@ -643,7 +643,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * Returns formatted buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getBuyRequest()
     {
@@ -651,7 +651,7 @@ class Item extends AbstractModel implements OrderItemInterface
         if (!$option) {
             $option = [];
         }
-        $buyRequest = new \Magento\Framework\Object($option);
+        $buyRequest = new \Magento\Framework\DataObject($option);
         $buyRequest->setQty($this->getQtyOrdered() * 1);
         return $buyRequest;
     }

@@ -5,7 +5,8 @@
  */
 namespace Magento\Fedex\Test\Unit\Model;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
+use Magento\Framework\Xml\Security;
 
 /**
  * Class CarrierTest
@@ -79,6 +80,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 'rateErrorFactory' =>
                     $this->getMock('Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory', [], [], '', false),
                 'logger' => $this->getMock('Psr\Log\LoggerInterface'),
+                'xmlSecurity' => new Security(),
                 'xmlElFactory' => $this->getMock('Magento\Shipping\Model\Simplexml\ElementFactory', [], [], '', false),
                 'rateFactory' => $rateFactory,
                 'rateMethodFactory' => $rateMethodFactory,
@@ -107,21 +109,21 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     public function testCollectRatesRateAmountOriginBased($amount, $rateType, $expected)
     {
         // @codingStandardsIgnoreStart
-        $netAmount = new \Magento\Framework\Object([]);
+        $netAmount = new \Magento\Framework\DataObject([]);
         $netAmount->Amount = $amount;
 
-        $totalNetCharge = new \Magento\Framework\Object([]);
+        $totalNetCharge = new \Magento\Framework\DataObject([]);
         $totalNetCharge->TotalNetCharge = $netAmount;
         $totalNetCharge->RateType = $rateType;
 
-        $ratedShipmentDetail = new \Magento\Framework\Object([]);
+        $ratedShipmentDetail = new \Magento\Framework\DataObject([]);
         $ratedShipmentDetail->ShipmentRateDetail = $totalNetCharge;
 
-        $rate = new \Magento\Framework\Object([]);
+        $rate = new \Magento\Framework\DataObject([]);
         $rate->ServiceType = 'ServiceType';
         $rate->RatedShipmentDetails = [$ratedShipmentDetail];
 
-        $response = new \Magento\Framework\Object([]);
+        $response = new \Magento\Framework\DataObject([]);
         $response->HighestSeverity = 'SUCCESS';
         $response->RateReplyDetails = $rate;
 
