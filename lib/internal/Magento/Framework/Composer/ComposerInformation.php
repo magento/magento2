@@ -33,11 +33,6 @@ class ComposerInformation
     /**#@-*/
 
     /**
-     * @var \Magento\Setup\Model\SystemPackage
-     */
-    private $systemPackage;
-
-    /**
      * @var \Magento\Composer\MagentoComposerApplication
      */
     private $application;
@@ -277,12 +272,15 @@ class ComposerInformation
     /**
      * Checks if the passed packaged is system package
      *
-     * @param $packageName
-     * @return int
+     * @param string $packageName
+     * @return bool
      */
     public function isSystemPackage($packageName = '')
     {
-        return(preg_match('/magento\/product-*/', $packageName));
+        if(preg_match('/magento\/product-*/', $packageName) == 1) {
+            return true;
+        }
+        return false;
     }
 
     /**
