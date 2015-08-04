@@ -49,8 +49,8 @@ class Shipping extends AbstractReport
     {
         $table = $this->getTable('sales_shipping_aggregated_order');
         $sourceTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
-        $adapter->beginTransaction();
+        $connection = $this->getConnection();
+        $connection->beginTransaction();
 
         try {
             if ($from !== null || $to !== null) {
@@ -61,11 +61,11 @@ class Shipping extends AbstractReport
 
             $this->_clearTableByDateRange($table, $from, $to, $subSelect);
             // convert dates to current admin timezone
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery($sourceTable, 'created_at', $from, $to)
             );
-            $shippingCanceled = $adapter->getIfNullSql('base_shipping_canceled', 0);
-            $shippingRefunded = $adapter->getIfNullSql('base_shipping_refunded', 0);
+            $shippingCanceled = $connection->getIfNullSql('base_shipping_canceled', 0);
+            $shippingRefunded = $connection->getIfNullSql('base_shipping_refunded', 0);
             $columns = [
                 'period' => $periodExpr,
                 'store_id' => 'store_id',
@@ -80,7 +80,7 @@ class Shipping extends AbstractReport
                 ),
             ];
 
-            $select = $adapter->select();
+            $select = $connection->select();
             $select->from(
                 $sourceTable,
                 $columns
@@ -98,7 +98,7 @@ class Shipping extends AbstractReport
             $select->group([$periodExpr, 'store_id', 'status', 'shipping_description']);
             $select->having('orders_count > 0');
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
             $select->reset();
 
             $columns = [
@@ -119,13 +119,13 @@ class Shipping extends AbstractReport
 
             $select->group(['period', 'order_status', 'shipping_description']);
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
 
-        $adapter->commit();
+        $connection->commit();
         return $this;
     }
 
@@ -143,8 +143,8 @@ class Shipping extends AbstractReport
         $table = $this->getTable('sales_shipping_aggregated');
         $sourceTable = $this->getTable('sales_invoice');
         $orderTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
-        $adapter->beginTransaction();
+        $connection = $this->getConnection();
+        $connection->beginTransaction();
 
         try {
             if ($from !== null || $to !== null) {
@@ -163,7 +163,7 @@ class Shipping extends AbstractReport
 
             $this->_clearTableByDateRange($table, $from, $to, $subSelect);
             // convert dates to current admin timezone
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $sourceTable],
                     'source_table.created_at',
@@ -171,8 +171,8 @@ class Shipping extends AbstractReport
                     $to
                 )
             );
-            $shippingCanceled = $adapter->getIfNullSql('order_table.base_shipping_canceled', 0);
-            $shippingRefunded = $adapter->getIfNullSql('order_table.base_shipping_refunded', 0);
+            $shippingCanceled = $connection->getIfNullSql('order_table.base_shipping_canceled', 0);
+            $shippingRefunded = $connection->getIfNullSql('order_table.base_shipping_refunded', 0);
             $columns = [
                 'period' => $periodExpr,
                 'store_id' => 'order_table.store_id',
@@ -189,20 +189,20 @@ class Shipping extends AbstractReport
                 ),
             ];
 
-            $select = $adapter->select();
+            $select = $connection->select();
             $select->from(
                 ['source_table' => $sourceTable],
                 $columns
             )->joinInner(
                 ['order_table' => $orderTable],
-                $adapter->quoteInto(
+                $connection->quoteInto(
                     'source_table.order_id = order_table.entity_id AND order_table.state != ?',
                     \Magento\Sales\Model\Order::STATE_CANCELED
                 ),
                 []
             )->useStraightJoin();
 
-            $filterSubSelect = $adapter->select()->from(
+            $filterSubSelect = $connection->select()->from(
                 ['filter_source_table' => $sourceTable],
                 'MIN(filter_source_table.entity_id)'
             )->where(
@@ -221,7 +221,7 @@ class Shipping extends AbstractReport
             );
 
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
             $select->reset();
 
             $columns = [
@@ -242,13 +242,13 @@ class Shipping extends AbstractReport
 
             $select->group(['period', 'order_status', 'shipping_description']);
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
 
-        $adapter->commit();
+        $connection->commit();
         return $this;
     }
 }

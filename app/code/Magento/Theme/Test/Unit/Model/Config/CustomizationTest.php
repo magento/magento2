@@ -171,26 +171,26 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function getAssignedTheme()
     {
-        return new \Magento\Framework\Object(['id' => 1, 'theme_path' => 'Magento/luma']);
+        return new \Magento\Framework\DataObject(['id' => 1, 'theme_path' => 'Magento/luma']);
     }
 
     /**
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function getUnassignedTheme()
     {
-        return new \Magento\Framework\Object(['id' => 2, 'theme_path' => 'Magento/blank']);
+        return new \Magento\Framework\DataObject(['id' => 2, 'theme_path' => 'Magento/blank']);
     }
 
     /**
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function getStore()
     {
-        return new \Magento\Framework\Object(['id' => 55]);
+        return new \Magento\Framework\DataObject(['id' => 55]);
     }
 }

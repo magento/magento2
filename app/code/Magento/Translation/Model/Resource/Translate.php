@@ -21,18 +21,18 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      * @param null|string $scope
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        $resourcePrefix = null,
+        $connectionName = null,
         $scope = null
     ) {
         $this->scopeResolver = $scopeResolver;
         $this->scope = $scope;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -58,12 +58,12 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
             $storeId = $this->getStoreId();
         }
 
-        $adapter = $this->_getReadAdapter();
-        if (!$adapter) {
+        $connection = $this->getConnection();
+        if (!$connection) {
             return [];
         }
 
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from($this->getMainTable(), ['string', 'translate'])
             ->where('store_id IN (0 , :store_id)')
             ->where('locale = :locale')
@@ -71,7 +71,7 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
 
         $bind = [':locale' => (string)$locale, ':store_id' => $storeId];
 
-        return $adapter->fetchPairs($select, $bind);
+        return $connection->fetchPairs($select, $bind);
     }
 
     /**
@@ -87,8 +87,8 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
             $storeId = $this->getStoreId();
         }
 
-        $adapter = $this->_getReadAdapter();
-        if (!$adapter) {
+        $connection = $this->getConnection();
+        if (!$connection) {
             return [];
         }
 
@@ -97,12 +97,12 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
         }
 
         $bind = [':store_id' => $storeId];
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from($this->getMainTable(), ['string', 'translate'])
             ->where('string IN (?)', $strings)
             ->where('store_id = :store_id');
 
-        return $adapter->fetchPairs($select, $bind);
+        return $connection->fetchPairs($select, $bind);
     }
 
     /**

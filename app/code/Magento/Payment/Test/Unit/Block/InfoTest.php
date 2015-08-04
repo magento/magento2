@@ -5,7 +5,7 @@
  */
 namespace Magento\Payment\Test\Unit\Block;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 class InfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -125,7 +125,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetInfoThrowException()
     {
-        $this->_object->setData('info', new \Magento\Framework\Object([]));
+        $this->_object->setData('info', new \Magento\Framework\DataObject([]));
         $this->_object->getInfo();
     }
 

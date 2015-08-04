@@ -71,12 +71,14 @@ class TranslatedListsTest extends \PHPUnit_Framework_TestCase
         $expectedResults = ['USD', 'EUR', 'GBP', 'UAH'];
 
         $currencyList = $this->listsModel->getOptionCurrencies();
+        $currencyCodes = array_map(
+            function ($data) {
+                return $data['value'];
+            },
+            $currencyList
+        );
         foreach ($expectedResults as $value) {
-            $found = false;
-            foreach ($currencyList as $item) {
-                $found = $found || ($value == $item['value']);
-            }
-            $this->assertTrue($found);
+            $this->assertContains($value, $currencyCodes);
         }
     }
 
