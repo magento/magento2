@@ -6,16 +6,17 @@
 namespace Magento\Framework\Amqp;
 
 /**
- * Consumers will process messages by connecting to a queue, read messages, and invoke a method to
- * process the message contents.
+ * Consumers will connect to a queue, read messages, and invoke a method to process the message contents.
  */
 interface ConsumerInterface
 {
     /**
-     * @param array $configuration
+     * Configure will be called before process to allow the consumer to setup itself.
+     *
+     * @param ConsumerConfigurationInterface
      * @return void
      */
-    public function configure($configuration);
+    public function configure(ConsumerConfigurationInterface $configuration);
 
     /**
      * Connects to a queue, consumes a message on the queue, and invoke a method to process the message contents.
