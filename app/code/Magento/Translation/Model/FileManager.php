@@ -21,11 +21,6 @@ class FileManager
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Asset\ContextInterface
-     */
-    private $staticContext;
-
-    /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      */
     public function __construct(
@@ -33,7 +28,6 @@ class FileManager
     )
     {
         $this->assetRepo = $assetRepo;
-        $this->staticContext = $assetRepo->getStaticViewFileContext();
     }
 
     /**
@@ -43,6 +37,9 @@ class FileManager
      */
     public function createTranslateConfigAsset()
     {
-        return $this->assetRepo->createArbitrary($this->staticContext->getConfigPath() . '/' . self::TRANSLATION_CONFIG_FILE_NAME, '');
+        return $this->assetRepo->createArbitrary(
+            $this->assetRepo->getStaticViewFileContext()->getConfigPath() . '/' . self::TRANSLATION_CONFIG_FILE_NAME,
+            ''
+        );
     }
 }
