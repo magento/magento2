@@ -40,6 +40,16 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
     protected $resourceModel;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $couponMassDeleteResultFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $couponMassDeleteResult;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
@@ -51,26 +61,30 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-
         $className = '\Magento\SalesRule\Model\CouponFactory';
         $this->couponFactory = $this->getMock($className, [], [], '', false);
-
 
         $className = '\Magento\SalesRule\Model\RuleFactory';
         $this->ruleFactory = $this->getMock($className, ['create'], [], '', false);
 
-
         $className = '\Magento\SalesRule\Model\Resource\Coupon\CollectionFactory';
         $this->collectionFactory = $this->getMock($className, ['create'], [], '', false);
-
 
         $className = '\Magento\SalesRule\Model\Coupon\Massgenerator';
         $this->couponGenerator = $this->getMock($className, [], [], '', false);
 
-
         $className = '\Magento\SalesRule\Model\Spi\CouponResourceInterface';
         $this->resourceModel = $this->getMock($className, [], [], '', false);
 
+        $className = '\Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface';
+        $this->couponMassDeleteResult = $this->getMock($className, [], [], '', false);
+
+        $className = '\Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory';
+        $this->couponMassDeleteResultFactory = $this->getMock($className, [], [], '', false);
+        $this->couponMassDeleteResultFactory
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($this->couponMassDeleteResult);
 
         $this->model = $this->objectManager->getObject(
             'Magento\SalesRule\Model\Service\CouponManagementService',
@@ -80,6 +94,7 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
                 'collectionFactory' => $this->collectionFactory,
                 'couponGenerator' => $this->couponGenerator,
                 'resourceModel' => $this->resourceModel,
+                'couponMassDeleteResultFactory' => $this->couponMassDeleteResultFactory,
             ]
         );
     }
@@ -256,6 +271,9 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $couponCollection->expects($this->once())->method('getItems')->willReturn([$coupon, $coupon, $coupon]);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($couponCollection);
 
+        $this->couponMassDeleteResult->expects($this->once())->method('setFailedItems')->willReturnSelf();
+        $this->couponMassDeleteResult->expects($this->once())->method('setMissingItems')->willReturnSelf();
+
         $this->model->deleteByIds($ids, true);
     }
 
@@ -282,34 +300,29 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * test DeleteByIds with not Ignore non existing
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testDeleteByAnyExceptionOnDelete()
     {
         $ids = [1, 2, 3];
 
-        $className = '\Magento\SalesRule\Model\Coupon';
         /**
          * @var   \Magento\SalesRule\Model\Coupon $coupon
          */
+        $className = '\Magento\SalesRule\Model\Coupon';
         $coupon = $this->getMock($className, [], [], '', false);
-        $coupon->expects($this->any())->method('delete')
-            ->willThrowException(
-                new \Magento\Framework\Exception\LocalizedException(
-                    __('Error occurred when deleting coupons: %1.', '1')
-                )
-            );
-        $className = '\Magento\SalesRule\Model\Resource\Coupon\Collection';
+        $coupon->expects($this->any())->method('delete')->willThrowException(new \Exception());
+
         /**
          * @var  \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
          */
+        $className = '\Magento\SalesRule\Model\Resource\Coupon\Collection';
         $couponCollection = $this->getMock($className, [], [], '', false);
-
         $couponCollection->expects($this->once())->method('addFieldToFilter')->willReturnSelf();
         $couponCollection->expects($this->once())->method('getItems')->willReturn([$coupon, $coupon, $coupon]);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($couponCollection);
-        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
 
+        $this->couponMassDeleteResult->expects($this->once())->method('setFailedItems')->willReturnSelf();
+        $this->couponMassDeleteResult->expects($this->once())->method('setMissingItems')->willReturnSelf();
 
         $this->model->deleteByIds($ids, true);
     }
@@ -337,6 +350,9 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $couponCollection->expects($this->once())->method('addFieldToFilter')->willReturnSelf();
         $couponCollection->expects($this->once())->method('getItems')->willReturn([$coupon, $coupon, $coupon]);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($couponCollection);
+
+        $this->couponMassDeleteResult->expects($this->once())->method('setFailedItems')->willReturnSelf();
+        $this->couponMassDeleteResult->expects($this->once())->method('setMissingItems')->willReturnSelf();
 
         $this->model->deleteByCodes($ids, true);
     }
