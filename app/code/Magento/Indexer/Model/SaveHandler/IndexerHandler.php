@@ -24,12 +24,12 @@ class IndexerHandler implements IndexerInterface
     /**
      * @var IndexStructureInterface
      */
-    private $indexStructure;
+    protected $indexStructure;
 
     /**
      * @var array
      */
-    private $data;
+    protected $data;
 
     /**
      * @var array
@@ -39,7 +39,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @var Resource|Resource
      */
-    private $resource;
+    protected $resource;
 
     /**
      * @var Batch
@@ -54,13 +54,13 @@ class IndexerHandler implements IndexerInterface
     /**
      * @var IndexScopeResolverInterface[]
      */
-    private $scopeResolvers;
+    protected $scopeResolvers;
 
     /**
      * @param IndexStructureInterface $indexStructure
      * @var AdapterInterface
      */
-    private $connection;
+    protected $connection;
 
     /**
      * @param IndexStructureInterface $indexStructure

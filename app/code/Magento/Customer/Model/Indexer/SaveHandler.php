@@ -39,7 +39,7 @@ class SaveHandler extends IndexerHandler
             }
         }
 
-        $this->getAdapter()->insertOnDuplicate(
+        $this->connection->insertOnDuplicate(
             $this->getTableName($this->dataTypes[1], $dimensions),
             $this->prepareFilterableFields($documents),
             $onDuplicate
@@ -71,7 +71,7 @@ class SaveHandler extends IndexerHandler
     public function deleteIndex($dimensions, \Traversable $ids)
     {
         foreach ($this->batch->getItems($ids, $this->batchSize) as $batchIds) {
-            $this->getAdapter()->delete(
+            $this->connection->delete(
                 $this->getTableName('filterable', $dimensions),
                 ['entity_id IN(?)' => $batchIds]
             );
