@@ -19,7 +19,10 @@ interface ConsumerInterface
 
     /**
      * Connects to a queue, consumes a message on the queue, and invoke a method to process the message contents.
-     * @return void
+     *
+     * @param int|null $numberOfMessages if not specified - wait for incoming messages forever,
+     *      otherwise terminate execution after processing the specified number of messages
+     * @return mixed
      */
-    public function process();
+    public function process($numberOfMessages = null);
 }
