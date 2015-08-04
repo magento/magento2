@@ -10,6 +10,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * Catalog image helper
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Image extends AbstractHelper
 {
@@ -772,7 +773,7 @@ class Image extends AbstractHelper
     }
 
     /**
-f     * Retrieve image height
+     * Retrieve image height
      *
      * @return string
      */

@@ -360,7 +360,9 @@ class Inline extends \Magento\Framework\View\Element\Template
         $imageHelper->init($product, $imageId);
 
         return $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Product\Image', '', ['imageHelper' => $imageHelper]
+            'Magento\Catalog\Block\Product\Image',
+            '',
+            ['imageHelper' => $imageHelper]
         );
     }
 }

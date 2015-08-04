@@ -84,7 +84,11 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
         $this->model = $this->_objectManager->getObject(
             'Magento\Checkout\Block\Cart\Sidebar',
-            ['context' => $contextMock, 'imageHelper' => $this->imageHelper, 'checkoutSession' => $this->checkoutSessionMock]
+            [
+                'context' => $contextMock,
+                'imageHelper' => $this->imageHelper,
+                'checkoutSession' => $this->checkoutSessionMock
+            ]
         );
     }
 
