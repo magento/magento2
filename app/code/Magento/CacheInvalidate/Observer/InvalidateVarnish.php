@@ -42,7 +42,7 @@ class InvalidateVarnish
     {
         if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
             $object = $observer->getEvent()->getObject();
-            if ($object instanceof \Magento\Framework\Object\IdentityInterface) {
+            if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
                 $tags = [];
                 $pattern = "((^|,)%s(,|$))";
                 foreach ($object->getIdentities() as $tag) {
