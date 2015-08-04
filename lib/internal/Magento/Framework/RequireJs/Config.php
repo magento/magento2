@@ -29,11 +29,6 @@ class Config
     const MIXINS_FILE_NAME = 'mage/requirejs/mixins.js';
 
     /**
-     * File name of RequireJs inline translation config
-     */
-    const TRANSLATION_CONFIG_FILE_NAME = 'Magento_Translation/js/i18n-config.js';
-
-    /**
      * File name of RequireJs
      */
     const REQUIRE_JS_FILE_NAME = 'requirejs/require.js';
@@ -180,16 +175,6 @@ config;
     public function getMixinsFileRelativePath()
     {
         return $this->staticContext->getConfigPath() . '/' . self::MIXINS_FILE_NAME;
-    }
-
-    /**
-     * Get path to config file relative to directory, where all config files with different context are located
-     *
-     * @return string
-     */
-    public function getTranslationConfigRelativePath()
-    {
-        return $this->staticContext->getConfigPath() . '/' . self::TRANSLATION_CONFIG_FILE_NAME;
     }
 
     /**
