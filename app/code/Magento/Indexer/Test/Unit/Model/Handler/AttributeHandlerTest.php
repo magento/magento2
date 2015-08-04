@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model\Handler;
+namespace Magento\Framework\Indexer\Test\Unit\Handler;
 
 use Magento\Customer\Model\Resource\Customer\Collection;
 
