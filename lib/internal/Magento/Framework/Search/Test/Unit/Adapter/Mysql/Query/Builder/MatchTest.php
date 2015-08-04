@@ -6,7 +6,7 @@
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query\Builder;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Search\Request\Query\Bool;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MatchTest extends \PHPUnit_Framework_TestCase
@@ -102,7 +102,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
         $this->scoreBuilder->expects($this->once())
             ->method('addCondition');
 
-        $result = $this->match->build($this->scoreBuilder, $select, $query, Bool::QUERY_CONDITION_NOT);
+        $result = $this->match->build($this->scoreBuilder, $select, $query, BoolExpression::QUERY_CONDITION_NOT);
 
         $this->assertEquals($select, $result);
     }

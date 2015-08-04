@@ -139,8 +139,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param Product $product
-     * @param null|false|\Magento\Framework\Object $shipping
-     * @param null|false|\Magento\Framework\Object $billing
+     * @param null|false|\Magento\Framework\DataObject $shipping
+     * @param null|false|\Magento\Framework\DataObject $billing
      * @param Website $website
      * @param bool $calculateTax
      * @return int
@@ -200,7 +200,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param null|false|\Magento\Quote\Model\Quote\Address $billing
      * @param Website $website
      * @param bool $calculateTax
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -237,10 +237,10 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                 $shippingAddressArray = $this->_customerSession->getDefaultTaxShippingAddress();
                 $billingAddressArray = $this->_customerSession->getDefaultTaxBillingAddress();
                 if (!empty($billingAddressArray)) {
-                    $billing = new \Magento\Framework\Object($billingAddressArray);
+                    $billing = new \Magento\Framework\DataObject($billingAddressArray);
                 }
                 if (!empty($shippingAddressArray)) {
-                    $shipping = new \Magento\Framework\Object($shippingAddressArray);
+                    $shipping = new \Magento\Framework\DataObject($shippingAddressArray);
                 }
                 $customerTaxClass = $this->_customerSession->getCustomerTaxClassId();
             }
@@ -258,7 +258,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         foreach ($productAttributes as $code => $attribute) {
             if (in_array($code, $allWeee)) {
 
-                $attributeSelect = $this->getResource()->getReadConnection()->select();
+                $attributeSelect = $this->getResource()->getConnection()->select();
                 $attributeSelect->from(
                     $this->getResource()->getTable('weee_tax'),
                     'value'
@@ -285,7 +285,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                     'website_id ' . \Magento\Framework\DB\Select::SQL_DESC];
                 $attributeSelect->order($order);
 
-                $value = $this->getResource()->getReadConnection()->fetchOne($attributeSelect);
+                $value = $this->getResource()->getConnection()->fetchOne($attributeSelect);
                 if ($value) {
                     $taxAmount = $amount = 0;
                     $amount = $value;
@@ -320,7 +320,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                         }
                     }
 
-                    $one = new \Magento\Framework\Object();
+                    $one = new \Magento\Framework\DataObject();
                     $one->setName(__($attribute->getFrontend()->getLabel()))
                         ->setAmount($amount)
                         ->setTaxAmount($taxAmount)

@@ -42,7 +42,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\TestFramework\Db\Adapter\Mysql
      */
-    protected function _getConnectionRead()
+    protected function _getConnection()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $reader = $objectManager->get('Magento\Framework\App\DeploymentConfig');
@@ -65,7 +65,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProfilerInit($selectQuery, $queryType)
     {
-        $connection = $this->_getConnectionRead();
+        $connection = $this->_getConnection();
 
         /** @var \Magento\Framework\App\Resource $resource */
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
@@ -122,7 +122,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     public function testProfilerDuringSqlException()
     {
         /** @var \Zend_Db_Adapter_Pdo_Abstract $connection */
-        $connection = $this->_getConnectionRead();
+        $connection = $this->_getConnection();
 
         try {
             $connection->query('SELECT * FROM unknown_table');
