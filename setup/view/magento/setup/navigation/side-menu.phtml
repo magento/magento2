@@ -20,13 +20,13 @@
     ng-show="<?php echo implode( '&&', $expressions); ?>"
     >
 <nav class="admin__menu" role="navigation" ng-controller="mainController">
-    <a
-        class="logo"
+    <span
+        class="logo logo-static"
         data-edition="Community Edition">
         <img class="logo-img"
              src="./pub/images/logo.svg"
              alt="Magento Admin Panel">
-    </a>
+    </span>
     <ul id="nav" role="menubar">
         <li class="item-home level-0" ng-class="{_active: $state.current.name === 'root.home'}">
             <a ui-sref="root.home">

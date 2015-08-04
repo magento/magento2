@@ -77,7 +77,7 @@ main.controller('navigationController',
         states: [],
         load: function () {
             var self = this;
-            var returnValue = $http.get('index.php/navigation').success(function (data) {
+            return $http.get('index.php/navigation').success(function (data) {
                 var currentState = $location.path().replace('/', '');
                 var isCurrentStateFound = false;
                 self.states = data.nav;
@@ -98,7 +98,6 @@ main.controller('navigationController',
                     $state.go(self.mainState.id);
                 }
             });
-            return returnValue;
         },
         getNextState: function () {
             var nItem = {};

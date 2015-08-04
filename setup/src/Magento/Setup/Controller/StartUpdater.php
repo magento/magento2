@@ -67,9 +67,9 @@ class StartUpdater extends AbstractActionController
     public function updateAction()
     {
         $postPayload = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
-        $packages = $postPayload['packages'];
         $errorMessage = '';
-        if (is_array($packages)) {
+        if (isset($postPayload['packages']) && is_array($postPayload['packages']) && isset($postPayload['type'])) {
+            $packages = $postPayload['packages'];
             foreach ($packages as $package) {
                 if (!isset($package['name']) || !isset($package['version'])) {
                     $errorMessage .= 'Missing package information';
