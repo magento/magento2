@@ -37,7 +37,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $customKey = 'key';
         $customVal = 'val';
-        $configObject = new \Magento\Framework\Object();
+        $configObject = new \Magento\Framework\DataObject();
         $configObject->setPlugins([[$customKey => $customVal]]);
 
         $variablePluginConfig = $model->getWysiwygPluginSettings($configObject)['plugins'];
