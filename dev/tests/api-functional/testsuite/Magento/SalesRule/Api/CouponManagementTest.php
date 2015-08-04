@@ -63,12 +63,14 @@ class CouponManagementTest extends WebapiAbstract
             }
         }
 
-        $this->assertEquals(true, $this->deleteCouponsByCodes($couponCodes));
+        $couponMassDeleteResult = $this->deleteCouponsByCodes($couponCodes);
+        $this->assertEmpty($couponMassDeleteResult['failed_items']);
 
         $couponList = $this->getList($ruleId);
         $this->assertTrue(count($couponList) == $cnt / 2);
 
-        $this->assertEquals(true, $this->deleteCouponsById($couponIds));
+        $couponMassDeleteResult = $this->deleteCouponsById($couponIds);
+        $this->assertEmpty($couponMassDeleteResult['failed_items']);
 
         $couponList = $this->getList($ruleId);
         $this->assertTrue(count($couponList) == 0);

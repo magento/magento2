@@ -39,24 +39,32 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
     protected $resourceModel;
 
     /**
+     * var \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory
+     */
+    protected $couponMassDeleteResultFactory;
+
+    /**
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $collectionFactory
      * @param \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator
      * @param \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel
+     * @param \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory $couponMassDeleteResultFactory
      */
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $collectionFactory,
         \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator,
-        \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel
+        \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel,
+        \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory $couponMassDeleteResultFactory
     ) {
         $this->couponFactory = $couponFactory;
         $this->ruleFactory = $ruleFactory;
         $this->collectionFactory = $collectionFactory;
         $this->couponGenerator = $couponGenerator;
         $this->resourceModel = $resourceModel;
+        $this->couponMassDeleteResultFactory = $couponMassDeleteResultFactory;
     }
 
     /**
@@ -131,7 +139,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      *
      * @param int[] $ids
      * @param bool $ignoreInvalidIds
-     * @return bool true on success
+     * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteByIds(array $ids, $ignoreInvalidIds = true)
@@ -144,7 +152,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      *
      * @param string[] codes
      * @param bool $ignoreInvalidCodes
-     * @return bool true on success
+     * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteByCodes(array $codes, $ignoreInvalidCodes = true)
@@ -158,7 +166,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      * @param string $fieldName
      * @param string[] fieldValues
      * @param bool $ignoreInvalid
-     * @return bool true on success
+     * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function massDelete($fieldName, array $fieldValues, $ignoreInvalid)
@@ -174,16 +182,22 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
                 throw new \Magento\Framework\Exception\LocalizedException(__('Some coupons are invalid.'));
             }
         }
-        try {
-            /** @var \Magento\SalesRule\Model\Coupon $coupon */
-            foreach ($couponsCollection->getItems() as $coupon) {
+
+        $results = $this->couponMassDeleteResultFactory->create();
+        $failedItems = [];
+        $fieldValues = array_flip($fieldValues);
+        /** @var \Magento\SalesRule\Model\Coupon $coupon */
+        foreach ($couponsCollection->getItems() as $coupon) {
+            $couponValue = ($fieldName == 'code') ? $coupon->getCode() : $coupon->getCouponId();
+            try {
                 $coupon->delete();
+            } catch (\Exception $e) {
+                $failedItems[] = $couponValue;
             }
-            return true;
-        } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Error occurred when deleting coupons: %1.', $e->getMessage())
-            );
+            unset($fieldValues[$couponValue]);
         }
+        $results->setFailedItems($failedItems);
+        $results->setMissingItems(array_flip($fieldValues));
+        return $results;
     }
 }

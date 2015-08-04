@@ -26,6 +26,8 @@
                 type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\SalesRule\Api\Data\CouponGenerationSpecInterface"
                 type="Magento\SalesRule\Model\Data\CouponGenerationSpec" />
+    <preference for="Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface"
+                type="Magento\SalesRule\Model\Data\CouponMassDeleteResult" />
     <preference for="Magento\SalesRule\Api\CouponManagementInterface"
                 type="Magento\SalesRule\Model\Service\CouponManagementService" />
     <type name="Magento\SalesRule\Helper\Coupon">
