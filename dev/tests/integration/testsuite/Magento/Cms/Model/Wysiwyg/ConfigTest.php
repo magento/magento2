@@ -33,7 +33,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetConfig()
     {
         $config = $this->_model->getConfig();
-        $this->assertInstanceOf('Magento\Framework\Object', $config);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $config);
     }
 
     /**

@@ -41,7 +41,7 @@ class FlushCacheByTags
     {
         if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->_config->isEnabled()) {
             $object = $observer->getEvent()->getObject();
-            if ($object instanceof \Magento\Framework\Object\IdentityInterface) {
+            if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
                 $tags = $object->getIdentities();
                 foreach ($tags as $tag) {
                     $tags[] = preg_replace("~_\\d+$~", '', $tag);
