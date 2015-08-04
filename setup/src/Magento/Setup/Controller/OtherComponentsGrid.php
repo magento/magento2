@@ -51,11 +51,11 @@ class OtherComponentsGrid extends AbstractActionController
             $components = $this->composerInformation->getInstalledMagentoPackages();
             $id = 0;
             foreach ($components as $component) {
-                if (!$this->composerInformation->checkPackageInJson($component['name'])) {
+                if (!$this->composerInformation->isPackageInComposerJson($component['name'])) {
                     unset($components[$component['name']]);
                     continue;
                 }
-                $vendor = explode('/', $component['name']);
+                $componentNameParts = explode('/', $component['name']);
 
                 $packageInfo = $this->infoCommand->run($component['name']);
                 if (!$packageInfo) {
@@ -84,10 +84,11 @@ class OtherComponentsGrid extends AbstractActionController
                         break;
                     }
                 }
-                $components[$component['name']]['vendor'] = $vendor[0];
+                $components[$component['name']]['vendor'] = $componentNameParts[0];
                 $components[$component['name']]['updates'] = $versions;
                 $components[$component['name']]['dropdownId'] = 'dd_' . $component['name'] . $id;
                 $components[$component['name']]['checkboxId'] = 'cb_' . $component['name'] . $id;
+                $id++;
             }
             return new JsonModel(
                 [
