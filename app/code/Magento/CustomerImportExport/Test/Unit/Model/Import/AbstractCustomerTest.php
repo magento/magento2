@@ -83,8 +83,14 @@ class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
 
         $modelMock = $this->getMockBuilder('Magento\CustomerImportExport\Model\Import\AbstractCustomer')
             ->disableOriginalConstructor()
-            ->setMethods(['getErrorAggregator', '_getCustomerCollection', '_validateRowForUpdate', '_validateRowForDelete'])
-            ->getMockForAbstractClass();
+            ->setMethods(
+                [
+                    'getErrorAggregator',
+                    '_getCustomerCollection',
+                    '_validateRowForUpdate',
+                    '_validateRowForDelete'
+                ]
+            )->getMockForAbstractClass();
         $modelMock->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $property = new \ReflectionProperty($modelMock, '_websiteCodeToId');
