@@ -27,7 +27,7 @@ class SystemPackage
     private $magentoComposerApplication;
 
     /**
-     * @var Magento\Framework\Composer\ComposerInformation
+     * @var ComposerInformation
      */
     private $composerInfo;
 
@@ -35,6 +35,7 @@ class SystemPackage
      * Constructor
      *
      * @param MagentoComposerApplicationFactory $composerAppFactory
+     * @param ComposerInformation $composerInfo
      */
     public function __construct(
         MagentoComposerApplicationFactory $composerAppFactory,
