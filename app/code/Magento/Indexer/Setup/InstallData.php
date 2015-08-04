@@ -8,6 +8,7 @@ namespace Magento\Indexer\Setup;
 
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -100,7 +101,7 @@ class InstallData implements InstallDataInterface
                 $state = $this->stateFactory->create();
                 $state->loadByIndexer($indexerId);
                 $state->setHashConfig($hash);
-                $state->setStatus(State::STATUS_INVALID);
+                $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
             }
         }

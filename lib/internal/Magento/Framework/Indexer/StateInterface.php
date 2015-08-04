@@ -8,6 +8,13 @@ namespace Magento\Framework\Indexer;
 interface StateInterface
 {
     /**
+     * Indexer statuses
+     */
+    const STATUS_WORKING = 'working';
+    const STATUS_VALID = 'valid';
+    const STATUS_INVALID = 'invalid';
+
+    /**
      * Return indexer id
      *
      * @return string

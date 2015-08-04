@@ -50,10 +50,11 @@ class IndexerState
                 ? Category::INDEXER_ID
                 : Product::INDEXER_ID;
 
-            $relatedIndexerState = $this->state->loadByIndexer($indexerId);
+            $relatedIndexerState = clone $state;
+            $relatedIndexerState->loadByIndexer($indexerId);
 
             if ($relatedIndexerState->getStatus() !== $state->getStatus()) {
-                $relatedIndexerState->setData('status', $state->getStatus());
+                $relatedIndexerState->setStatus($state->getStatus());
                 $relatedIndexerState->save();
             }
         }

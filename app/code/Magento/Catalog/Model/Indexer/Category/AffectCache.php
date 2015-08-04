@@ -12,15 +12,15 @@ namespace Magento\Catalog\Model\Indexer\Category;
 class AffectCache
 {
     /**
-     * @var \Magento\Indexer\Model\CacheContext
+     * @var \Magento\Framework\Indexer\CacheContext
      */
     protected $context;
 
     /**
-     * @param \Magento\Indexer\Model\CacheContext $context
+     * @param \Magento\Framework\Indexer\CacheContext $context
      */
     public function __construct(
-        \Magento\Indexer\Model\CacheContext $context
+        \Magento\Framework\Indexer\CacheContext $context
     ) {
         $this->context = $context;
     }

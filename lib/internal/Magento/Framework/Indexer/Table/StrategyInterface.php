@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Indexer\Model\Indexer\Table;
+namespace Magento\Framework\Indexer\Table;
 
 /**
  * Interface StrategyInterface

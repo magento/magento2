@@ -12,6 +12,7 @@ use Magento\Framework\Indexer\IndexerInterface as IdxInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
+use Magento\Framework\Profiler\Driver\Standard\Stat;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -299,7 +300,7 @@ class Indexer extends \Magento\Framework\Object implements IdxInterface
      */
     public function isValid()
     {
-        return $this->getState()->getStatus() == Indexer\State::STATUS_VALID;
+        return $this->getState()->getStatus() == StateInterface::STATUS_VALID;
     }
 
     /**
@@ -309,7 +310,7 @@ class Indexer extends \Magento\Framework\Object implements IdxInterface
      */
     public function isInvalid()
     {
-        return $this->getState()->getStatus() == Indexer\State::STATUS_INVALID;
+        return $this->getState()->getStatus() == StateInterface::STATUS_INVALID;
     }
 
     /**
@@ -319,7 +320,7 @@ class Indexer extends \Magento\Framework\Object implements IdxInterface
      */
     public function isWorking()
     {
-        return $this->getState()->getStatus() == Indexer\State::STATUS_WORKING;
+        return $this->getState()->getStatus() == StateInterface::STATUS_WORKING;
     }
 
     /**
@@ -330,7 +331,7 @@ class Indexer extends \Magento\Framework\Object implements IdxInterface
     public function invalidate()
     {
         $state = $this->getState();
-        $state->setStatus(Indexer\State::STATUS_INVALID);
+        $state->setStatus(StateInterface::STATUS_INVALID);
         $state->save();
     }
 
@@ -398,20 +399,20 @@ class Indexer extends \Magento\Framework\Object implements IdxInterface
      */
     public function reindexAll()
     {
-        if ($this->getState()->getStatus() != Indexer\State::STATUS_WORKING) {
+        if ($this->getState()->getStatus() != StateInterface::STATUS_WORKING) {
             $state = $this->getState();
-            $state->setStatus(Indexer\State::STATUS_WORKING);
+            $state->setStatus(StateInterface::STATUS_WORKING);
             $state->save();
             if ($this->getView()->isEnabled()) {
                 $this->getView()->suspend();
             }
             try {
                 $this->getActionInstance()->executeFull();
-                $state->setStatus(Indexer\State::STATUS_VALID);
+                $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
                 $this->getView()->resume();
             } catch (\Exception $exception) {
-                $state->setStatus(Indexer\State::STATUS_INVALID);
+                $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
                 $this->getView()->resume();
                 throw $exception;

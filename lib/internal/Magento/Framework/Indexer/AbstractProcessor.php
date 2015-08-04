@@ -6,7 +6,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Indexer\Model\Indexer;
+namespace Magento\Framework\Indexer;
 
 abstract class AbstractProcessor
 {
