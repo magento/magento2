@@ -53,6 +53,7 @@ class GroupRepositoryTest extends WebapiAbstract
      */
     public function tearDown()
     {
+        parent::tearDown();
     }
 
     /**
@@ -60,6 +61,7 @@ class GroupRepositoryTest extends WebapiAbstract
      */
     public static function tearDownAfterClass()
     {
+        parent::tearDownAfterClass();
     }
 
     /**

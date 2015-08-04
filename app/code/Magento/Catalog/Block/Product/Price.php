@@ -9,7 +9,7 @@ namespace Magento\Catalog\Block\Product;
 /**
  * Product price block
  */
-class Price extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
+class Price extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var null
@@ -36,7 +36,7 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
     protected $_catalogData = null;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -60,7 +60,7 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
@@ -70,7 +70,7 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,
         array $data = []

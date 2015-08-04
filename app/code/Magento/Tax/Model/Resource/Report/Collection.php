@@ -44,7 +44,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Report $resource,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $resource->init($this->_aggregationTable);
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
