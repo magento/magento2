@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Magento\Composer\MagentoComposerApplication;
 use Magento\Composer\InfoCommand;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class SystemPackage returns system package and available for update versions
@@ -26,18 +27,25 @@ class SystemPackage
     private $magentoComposerApplication;
 
     /**
+     * @var Magento\Framework\Composer\ComposerInformation
+     */
+    private $composerInfo;
+
+    /**
      * Constructor
      *
      * @param MagentoComposerApplicationFactory $composerAppFactory
      */
     public function __construct(
-        MagentoComposerApplicationFactory $composerAppFactory
+        MagentoComposerApplicationFactory $composerAppFactory,
+        ComposerInformation $composerInfo
     ) {
         $this->infoCommand = $composerAppFactory->createInfoCommand();
         $this->magentoComposerApplication = $composerAppFactory->create();
+        $this->composerInfo = $composerInfo;
     }
 
-    /**
+     /**
      * Returns system package and available versions
      *
      * @throws \RuntimeException
@@ -52,7 +60,7 @@ class SystemPackage
         foreach ($locker->getLockedRepository()->getPackages() as $package) {
             $packageName = $package->getName();
 
-            if (preg_match('/magento\/product-*/', $packageName)) {
+            if ($this->composerInfo->isSystemPackage($packageName)) {
                 $systemPackage = $packageName;
                 break;
             }

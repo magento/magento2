@@ -33,6 +33,10 @@ class ComposerInformation
     /**#@-*/
 
     /**
+     * @var Magento\Setup\Model\SystemPackage
+     */
+    private $systemPackage;
+    /**
      * @var \Magento\Composer\MagentoComposerApplication
      */
     private $application;
@@ -71,7 +75,8 @@ class ComposerInformation
         'magento2-language',
         'magento2-module',
         'magento2-library',
-        'magento2-component'
+        'magento2-component',
+        'metapackage'
     ];
 
     /**
@@ -108,6 +113,7 @@ class ComposerInformation
         $this->locker = $this->composer->getLocker();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->dateTime = $dateTime;
+        //$this->exclusionList[] = 'magento/product-community-edition';
     }
 
     /**
@@ -218,7 +224,7 @@ class ComposerInformation
         }
         /** @var PackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
-            if (in_array($package->getType(), $types)) {
+            if ((in_array($package->getType(), $types)) && (!$this->isSystemPackage($package->getPrettyName()))){
                 $packages[$package->getName()] = [
                     'name' => $package->getName(),
                     'type' => $package->getType(),
@@ -274,6 +280,16 @@ class ComposerInformation
         }
         $updatePackagesInfo['packages'] = $actualUpdatePackages;
         return $updatePackagesInfo;
+    }
+
+    /**
+     * Checks if the passed packaged is system package
+     * @param $packageName
+     * @return int
+     */
+    public function isSystemPackage($packageName = '')
+    {
+        return(preg_match('/magento\/product-*/', $packageName));
     }
 
     /**
