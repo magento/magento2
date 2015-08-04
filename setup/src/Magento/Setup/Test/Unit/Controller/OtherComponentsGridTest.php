@@ -79,8 +79,6 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
-        $this->assertArrayHasKey('success', $variables);
-        $this->assertEquals(true, $variables['success']);
         $this->assertArrayHasKey('components', $variables);
         $expected = [
             'magento/sample-module1' => [
@@ -92,8 +90,8 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
                     0 => '3.0.0 (latest)',
                     1 => '2.0.0'
                 ],
-                'dropdownId' => 'dd_magento/sample-module10',
-                'checkboxId' => 'cb_magento/sample-module10'
+                'dropdownId' => 'dd_magento/sample-module1',
+                'checkboxId' => 'cb_magento/sample-module1'
             ]
         ];
         $this->assertEquals($expected, $variables['components']);

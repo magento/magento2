@@ -44,33 +44,32 @@ angular.module('select-version', ['ngStorage'])
         });
 
         $scope.$watch('updateComponents.yes', function() {
-            if (angular.equals($scope.updateComponents.yes, true)
-                && !$scope.componentsProcessed && !$scope.componentsProcessError) {
-                $scope.readyForNext = false;
-                $http.get('index.php/other-components-grid/components', {'responseType' : 'json'}).
-                    success(function(data) {
-                        if (data.responseType != 'error') {
-                            $scope.components = data.components;
-                            $scope.total = data.total;
-                            var keys = Object.keys($scope.components);
-                            for (var i = 0; i < $scope.total; i++) {
-                                $scope.packages.push({
-                                    name: keys[i],
-                                    version: $scope.components[keys[i]].updates[0]
-                                });
-                            }
-                            $scope.readyForNext = true;
-                        } else {
-                            $scope.componentsProcessError = true;
-                        }
-                        $scope.componentsProcessed = true;
-                    })
-                    .error(function (data) {
-                        $scope.componentsProcessError = true;
-                    });
-            }
             if (angular.equals($scope.updateComponents.yes, true)) {
                 $scope.updateComponents.no = false;
+                if (!$scope.componentsProcessed && !$scope.componentsProcessError) {
+                    $scope.readyForNext = false;
+                    $http.get('index.php/other-components-grid/components', {'responseType': 'json'}).
+                        success(function (data) {
+                            if (data.responseType != 'error') {
+                                $scope.components = data.components;
+                                $scope.total = data.total;
+                                var keys = Object.keys($scope.components);
+                                for (var i = 0; i < $scope.total; i++) {
+                                    $scope.packages.push({
+                                        name: keys[i],
+                                        version: $scope.components[keys[i]].updates[0]
+                                    });
+                                }
+                                $scope.readyForNext = true;
+                            } else {
+                                $scope.componentsProcessError = true;
+                            }
+                            $scope.componentsProcessed = true;
+                        })
+                        .error(function (data) {
+                            $scope.componentsProcessError = true;
+                        });
+                }
             }
         });
 
@@ -83,7 +82,7 @@ angular.module('select-version', ['ngStorage'])
             }
         };
 
-        $scope.updateComponentList = function(name) {
+        $scope.AddRemoveComponentOnSliderMove = function(name) {
             var found = false;
             for (var i = 0; i < $scope.total; i++) {
                 if ($scope.packages[i + 1].name === name) {
