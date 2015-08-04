@@ -30,26 +30,6 @@ interface TransactionRepositoryInterface
     public function get($id);
 
     /**
-     * Get payment transaction by type
-     *
-     * @param string $transactionType
-     * @param int $paymentId
-     * @param int $orderId
-     * @return false|\Magento\Sales\Api\Data\TransactionInterface Transaction interface.
-     */
-    public function getByTransactionType($transactionType, $paymentId, $orderId);
-
-    /**
-     * Get payment transaction by transaction id
-     *
-     * @param string $transactionId
-     * @param int $paymentId
-     * @param int $orderId
-     * @return false|\Magento\Sales\Api\Data\TransactionInterface Transaction interface.
-     */
-    public function getByTransactionId($transactionId, $paymentId, $orderId);
-
-    /**
      * Deletes a specified transaction.
      *
      * @param \Magento\Sales\Api\Data\TransactionInterface $entity The transaction.
