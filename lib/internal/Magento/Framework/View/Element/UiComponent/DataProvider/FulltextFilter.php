@@ -24,7 +24,7 @@ class FulltextFilter implements FilterApplierInterface
      */
     protected function getFulltextIndexColumns(DbResource $resource, $indexTable)
     {
-        $indexes = $resource->getReadConnection()->getIndexList($indexTable);
+        $indexes = $resource->getConnection()->getIndexList($indexTable);
         foreach ($indexes as $index) {
             if (strtoupper($index['INDEX_TYPE']) == 'FULLTEXT') {
                 return $index['COLUMNS_LIST'];

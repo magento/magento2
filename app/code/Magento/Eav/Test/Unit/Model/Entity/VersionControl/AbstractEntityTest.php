@@ -70,7 +70,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         }
         $object->expects($this->any())->method('getOrigData')->will($this->returnValue($productOrigData));
 
-        $entityType = new \Magento\Framework\Object();
+        $entityType = new \Magento\Framework\DataObject();
         $entityType->setEntityTypeCode('test');
         $entityType->setEntityTypeId(0);
         $entityType->setEntityTable('table');
@@ -143,10 +143,12 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMockBuilder('Magento\Eav\Model\Entity\VersionControl\AbstractEntity')
             ->setConstructorArgs($arguments)
-            ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback'])
+            ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
 
         $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
+        $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getConnectionMock()));
+
 
         $eavConfig->expects($this->any())->method('getAttribute')->will(
             $this->returnCallback(
@@ -156,7 +158,6 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             )
         );
 
-        $model->setConnection($this->_getAdapterMock());
         $model->isPartialSave(true);
         $model->save($object);
     }

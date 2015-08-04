@@ -215,10 +215,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product'
         );
-        $buyRequest = new \Magento\Framework\Object(['qty' => 100, 'options' => ['option' => 'value']]);
+        $buyRequest = new \Magento\Framework\DataObject(['qty' => 100, 'options' => ['option' => 'value']]);
         $this->_helper->prepareProductOptions($product, $buyRequest);
         $result = $product->getPreconfiguredValues();
-        $this->assertInstanceOf('Magento\Framework\Object', $result);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $result);
         $this->assertEquals(100, $result->getQty());
         $this->assertEquals(['option' => 'value'], $result->getOptions());
     }

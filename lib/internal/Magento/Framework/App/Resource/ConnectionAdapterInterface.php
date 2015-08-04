@@ -15,7 +15,8 @@ interface ConnectionAdapterInterface
      * Get connection
      *
      * @param LoggerInterface $logger
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|null
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @throws \InvalidArgumentException
      */
     public function getConnection(LoggerInterface $logger);
 }

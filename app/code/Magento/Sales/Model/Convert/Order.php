@@ -12,7 +12,7 @@ namespace Magento\Sales\Model\Convert;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Order extends \Magento\Framework\Object
+class Order extends \Magento\Framework\DataObject
 {
     /**
      * Core event manager proxy
@@ -47,7 +47,7 @@ class Order extends \Magento\Framework\Object
     protected $_creditmemoItemFactory;
 
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
 
@@ -59,7 +59,7 @@ class Order extends \Magento\Framework\Object
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
      * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
      * @param \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -72,7 +72,7 @@ class Order extends \Magento\Framework\Object
         \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
         \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
         \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
