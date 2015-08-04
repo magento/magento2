@@ -17,38 +17,45 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Pair value separator.
      */
     const PAIR_VALUE_SEPARATOR = '=';
+
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $mediaDirectory;
+
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $uploaderFactory;
+
     /**
      * Media files uploader
      *
      * @var \Magento\CatalogImportExport\Model\Import\Uploader
      */
     protected $fileUploader;
+
     /**
      * Entity model parameters.
      *
      * @var array
      */
     protected $parameters = [];
+
     /**
      * Instance of database adapter.
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $connection;
+
     /**
      * Instance of application resource.
      *
      * @var \Magento\Framework\App\Resource
      */
     protected $resource;
+
     /**
      * Ids products
      *
@@ -62,6 +69,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @var array
      */
     protected $cachedOptions = [];
+
     /**
      * Instance of empty sample
      *
@@ -85,12 +93,12 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         'store_id' => Store::DEFAULT_STORE_ID,
         'title' => null
     ];
+
     /**
      * Instance of empty link
      *
      * @var array
      */
-
     protected $dataLink = [
         'product_id' => 0,
         'sort_order' => 0,
@@ -103,6 +111,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         'sample_file' => null,
         'sample_type' => null
     ];
+
     /**
      * Instance of empty link title
      *
@@ -113,6 +122,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         'store_id' => Store::DEFAULT_STORE_ID,
         'title' => null
     ];
+
     /**
      * Instance of empty link price
      *
@@ -135,6 +145,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         'url' => 'link_url',
         'file' => 'link_file',
     ];
+
     /**
      * Option sample mapping.
      *
@@ -145,6 +156,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         'url' => 'sample_url',
         'file' => 'sample_file',
     ];
+
     /*
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
@@ -195,6 +207,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         return $this;
     }
+
     /**
      * Prepare attributes with default value for save.
      *
@@ -249,6 +262,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         return $resultAttrs;
     }
+
     /*
      * Parse options for products
      *
@@ -259,6 +273,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->prepareLinkData($rowData['downloadble_links'], $entityId);
         $this->prepareSampleData($rowData['downloadble_samples'], $entityId);
     }
+
     /*
      * Get fill data options with key sample
      *
@@ -289,6 +304,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         return $_result;
     }
+
     /*
      * Get fill data options with key link
      *
@@ -314,7 +330,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $option['sample_file'] == $existingOption['sample_file'] &&
                     $option['sample_type'] == $existingOption['sample_type'] &&
                     $option['product_id'] == $existingOption['product_id']
-
                 ){
                     $_result['title'][] = array_replace($this->dataLinkTitle, $option, $existingOption);
                     $_result['price'][] = array_replace($this->dataLinkPrice, $option, $existingOption);
@@ -322,8 +337,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
         }
         return $_result;
-
     }
+
     /*
      * Fill array data options for base entity
      *
@@ -375,8 +390,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             );
         }
         return $this;
-
     }
+
     /*
      * Check type parameters - file or url
      *
@@ -412,6 +427,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         return $this;
     }
+
     /*
      * Prepare string to array data link
      *
@@ -433,6 +449,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         return $this;
     }
+
     /*
      * Delete options products
      *
@@ -442,7 +459,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->connection->delete(
             $this->_resource->getTableName('downloadable_link'),
             $this->_connection->quoteInto('product_id IN (?)', $this->productIds)
-
         );
         $this->connection->delete(
             $this->_resource->getTableName('downloadable_sample'),
@@ -450,6 +466,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         );
         return $this;
     }
+
     /**
      * Parse the link option.
      *
@@ -520,6 +537,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         return $option;
     }
+
     /**
      * Returns an object for upload a media files
      *
@@ -579,6 +597,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             return '';
         }
     }
+
     /**
      * Clear cached values between bunches
      *
@@ -590,5 +609,4 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->productIds = [];
         return $this;
     }
-
 }
