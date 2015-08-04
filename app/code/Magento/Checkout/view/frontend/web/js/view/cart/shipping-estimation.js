@@ -34,7 +34,6 @@ define(
 
                 if (!this.source.get('params.invalid')) {
                     addressData = this.source.get('shippingAddress');
-                    console.log(addressData);
                     selectShippingAddress(addressConverter.formAddressDataToQuoteAddress(addressData));
                 }
             }
