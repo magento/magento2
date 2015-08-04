@@ -27,6 +27,7 @@ define([
                 name: '${ $.name }_editor',
                 component: 'Magento_Ui/js/grid/editing/editor',
                 columnsProvider: '${ $.name }',
+                dataProvider: '${ $.provider }',
                 enabled: false
             },
             imports: {

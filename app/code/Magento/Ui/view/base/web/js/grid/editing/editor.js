@@ -34,11 +34,10 @@ define([
                 columnsProvider: '${ $.columnsProvider }'
             },
             imports: {
-                rowsData: '${ $.columnsProvider }:rows',
-                onRowsDataChange: 'rowsData'
+                rowsData: '${ $.dataProvider }:data.items'
             },
             listens: {
-                elems: 'onEditingChange',
+                '${ $.dataProvider }:reload': 'hide',
                 '${ $.selectProvider }:selected': 'onSelectionsChange'
             },
             modules: {
@@ -89,7 +88,9 @@ define([
         },
 
         /**
+         * Adds listeners on a new recrod.
          *
+         * @param {Record} record
          * @returns {Editor} Chainable.
          */
         initElement: function (record) {
@@ -98,13 +99,16 @@ define([
                 'errorsCount': this.countErros
             });
 
+            this.updateState();
+
             return this._super();
         },
 
         /**
+         * Creates new records' instance associated with a row data.
          *
-         * @param {(Number|String)} id - See definition of 'getId' method.
-         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
         createRecord: function (id, isIndex) {
@@ -122,7 +126,7 @@ define([
             });
 
             record.recordId = id;
-            record.rowData = this.getRowData(id);
+            record.data     = this.getRowData(id);
 
             layout([record]);
 
@@ -130,9 +134,11 @@ define([
         },
 
         /**
+         * Starts editing of a specfied record. If record doesn't
+         * exist, than it will be created.
          *
-         * @param {(Number|String)} id - See definition of 'getId' method.
-         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
         edit: function (id, isIndex, ignoreSelections) {
@@ -154,13 +160,13 @@ define([
         /**
          * Hides specified records and resets theirs data.
          *
-         * @param {(Number|String)} id - See definition of 'getId' method.
-         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
         cancel: function (id, isIndex) {
-            this.hide(id, isIndex)
-                .reset(id, isIndex);
+            this.reset(id, isIndex)
+                .hide(id, isIndex);
 
             return this;
         },
@@ -168,8 +174,8 @@ define([
         /**
          * Hides specified records.
          *
-         * @param {(Number|String)} id - See definition of 'getId' method.
-         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
         hide: function (id, isIndex) {
@@ -183,23 +189,28 @@ define([
         },
 
         /**
-         * Resets data of a specified records.
+         * Resets data of specified records.
          *
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        reset: function () {
-            var id;
+        reset: function (id, isIndex) {
+            id = this.getId(id, isIndex);
 
-            this.rowsData.forEach(function (rowData) {
-                id = rowData[this.indexField];
+            if (id !== false) {
+                this.resetRecord(id);
+            }
 
-                this.setRecordData(id, rowData);
+            this.getActive().forEach(function (record) {
+                this.resetRecord(record.recordId);
             }, this);
 
             return this;
         },
 
         /**
+         * STUBBED action.
          *
          * @returns {Editor} Chainable.
          */
@@ -210,6 +221,7 @@ define([
         },
 
         /**
+         * STUBBED action.
          *
          * @returns {Editor} Chainable.
          */
@@ -222,6 +234,7 @@ define([
         },
 
         /**
+         * Converts index of a row into the record id.
          *
          * @param {(Number|String)} id - Records' identifier or its' index in the rows array.
          * @param {Boolean} [isIndex=false] - Flag that indicates if first
@@ -241,10 +254,10 @@ define([
         },
 
         /**
-         * Returns specified record.
+         * Returns instance of a specified record.
          *
-         * @param {(Number|String)} id - See definition of 'getId' method.
-         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Record}
          */
         getRecord: function (id, isIndex) {
@@ -254,9 +267,10 @@ define([
         },
 
         /**
+         * Creates record name based on a provided id.
          *
-         * @param {(Number|String)} id - See definition of 'getId' method.
-         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {String}
          */
         formRecordName: function (id, isIndex) {
@@ -266,13 +280,14 @@ define([
         },
 
         /**
+         * Sets provided data to the record.
          *
-         * @param {(Number|String)} id - See definition of 'getId' method.
          * @param {Object} data - Records' data.
-         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        setRecordData: function (id, data, isIndex) {
+        setRecordData: function (data, id, isIndex) {
             var record = this.getRecord(id, isIndex);
 
             if (record) {
@@ -283,10 +298,31 @@ define([
         },
 
         /**
+         * Resets specific records' data
+         * to the data present in asscotiated row.
          *
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
+         * @returns {Editor} Chainable.
+         */
+        resetRecord: function (id, isIndex) {
+            var data = this.getRowData(id, isIndex);
+
+            this.setRecordData(data, id, isIndex);
+
+            return this;
+        },
+
+        /**
+         * Returns data of a specified row.
+         *
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Object}
          */
-        getRowData: function (id) {
+        getRowData: function (id, isIndex) {
+            id = this.getId(id, isIndex);
+
             return _.find(this.rowsData, function (row) {
                 return row[this.indexField] === id;
             }, this);
@@ -295,8 +331,8 @@ define([
         /**
          * Checks if specified record is active.
          *
-         * @param {(Number|String)} id - See definition of 'getId' method.
-         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See'getId' method.
          * @returns {Boolean}
          */
         isActive: function (id, isIndex) {
@@ -393,22 +429,15 @@ define([
 
             this.elems.each(function (record) {
                 if (!_.contains(selections, record.recordId)) {
-                    this.hide(record.recordId);
+                    record.active(false);
                 }
-            }, this);
+            });
 
             selections.forEach(function (id) {
                 this.edit(id, false, true);
             }, this);
 
             return this;
-        },
-
-        /**
-         * Listener of the records 'active' property.
-         */
-        onEditingChange: function () {
-            this.updateState();
         },
 
         /**
@@ -420,13 +449,6 @@ define([
             }
 
             this.editSelected();
-        },
-
-        /**
-         * Listener of the litings' rows data.
-         */
-        onRowsDataChange: function () {
-            this.hide();
         }
     });
 });

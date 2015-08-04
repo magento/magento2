@@ -22,7 +22,7 @@ define([
                         parent: '${ $.$data.record.name }',
                         name: '${ $.$data.column.index }',
                         provider: '${ $.$data.record.name }',
-                        dataScope: 'rowData.${ $.$data.column.index }',
+                        dataScope: 'data.${ $.$data.column.index }',
                         isEditor: true
                     },
                     text: {
@@ -38,8 +38,7 @@ define([
                         component: 'Magento_Ui/js/form/element/select',
                         template: 'ui/form/element/select',
                         options: '${ JSON.stringify($.$data.column.options) }'
-                    },
-                    multiselect: {}
+                    }
                 }
             },
             listens: {
@@ -54,6 +53,7 @@ define([
         },
 
         /**
+         * Initializes record component.
          *
          * @returns {Record} Chainable.
          */
@@ -64,6 +64,7 @@ define([
         },
 
         /**
+         * Initializes observable properties.
          *
          * @returns {Record} Chainable.
          */
@@ -75,6 +76,7 @@ define([
         },
 
         /**
+         * Adds listeners on a field.
          *
          * @returns {Record} Chainable.
          */
@@ -88,7 +90,7 @@ define([
          *
          * @returns {Record} Chainable.
          */
-        initEditor: function (column) {
+        createEditor: function (column) {
             var editors = this.templates.editors,
                 editor  = this.getColumnEditor(column);
 
@@ -96,7 +98,7 @@ define([
             editor = utils.template(editor, {
                 record: this,
                 column: column
-            }, true);
+            }, true, true);
 
             editor.visible = column.visible;
 
@@ -134,7 +136,7 @@ define([
         createEditors: function (columns) {
             columns.forEach(function (column) {
                 if (column.editor && !this.getEditor(column.index)) {
-                    this.initEditor(column);
+                    this.createEditor(column);
                 }
             }, this);
 
@@ -146,10 +148,9 @@ define([
          * @returns {Record} Chainable.
          */
         updateFields: function () {
-            var columns = this.columns().elems(),
-                fields;
+            var fields;
 
-            fields = columns.map(function (column) {
+            fields = this.columns().elems.map(function (column) {
                 return this.getEditor(column.index) || column;
             }, this);
 
@@ -173,7 +174,7 @@ define([
          * @returns {Record} Chainable.
          */
         setData: function (data) {
-            this.set('rowData', utils.copy(data));
+            this.set('data', utils.copy(data));
 
             return this;
         },
@@ -186,7 +187,9 @@ define([
         },
 
         /**
+         * Counts total errors ammount accros all fields.
          *
+         * @returns {Number}
          */
         countErrors: function () {
             var errorsCount = this.elems.filter('error').length;
