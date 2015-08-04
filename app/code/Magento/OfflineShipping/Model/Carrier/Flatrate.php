@@ -55,12 +55,12 @@ class Flatrate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implement
     }
 
     /**
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return Result|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function collectRates(\Magento\Framework\Object $request)
+    public function collectRates(\Magento\Framework\DataObject $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;

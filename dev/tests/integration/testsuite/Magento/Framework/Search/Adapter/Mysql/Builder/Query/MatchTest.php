@@ -6,7 +6,7 @@
 namespace Magento\Framework\Search\Adapter\Mysql\Builder\Query;
 
 use Magento\Framework\App\Resource\Config;
-use Magento\Framework\Search\Request\Query\Bool;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -54,7 +54,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\App\Resource $resource */
         $resource = $this->objectManager->create('Magento\Framework\App\Resource');
         /** @var \Magento\Framework\DB\Select $select */
-        $select = $resource->getConnection(Config::DEFAULT_SETUP_CONNECTION)->select();
+        $select = $resource->getConnection()->select();
         $select->from('someTable');
 
         $resultSelect = $match->build($scoreBuilder, $select, $query, $conditionType);
@@ -68,9 +68,9 @@ class MatchTest extends \PHPUnit_Framework_TestCase
     public function buildQueryProvider()
     {
         return [
-            [Bool::QUERY_CONDITION_MUST, '+'],
-            [Bool::QUERY_CONDITION_SHOULD, ''],
-            [Bool::QUERY_CONDITION_NOT, '-']
+            [BoolExpression::QUERY_CONDITION_MUST, '+'],
+            [BoolExpression::QUERY_CONDITION_SHOULD, ''],
+            [BoolExpression::QUERY_CONDITION_NOT, '-']
         ];
     }
 }

@@ -9,7 +9,7 @@ namespace Magento\CatalogInventory\Block\Stockqty;
 /**
  * Product stock qty default block
  */
-class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\Object\IdentityInterface
+class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Render block HTML

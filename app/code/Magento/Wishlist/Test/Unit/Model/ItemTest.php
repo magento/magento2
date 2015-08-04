@@ -186,7 +186,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         return [
             ['first_key', ['code' => 'first_key', 'value' => 'first_data']],
             ['second_key', $optionMock],
-            ['third_key', new \Magento\Framework\Object(['code' => 'third_key', 'product' => $productMock])],
+            ['third_key', new \Magento\Framework\DataObject(['code' => 'third_key', 'product' => $productMock])],
         ];
     }
 

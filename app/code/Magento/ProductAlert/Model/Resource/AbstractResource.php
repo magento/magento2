@@ -20,9 +20,9 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     protected function _getAlertRow(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         if ($object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()) {
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->getMainTable()
             )->where(
                 'customer_id = :customer_id'
@@ -36,7 +36,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
                 ':product_id' => $object->getProductId(),
                 ':website_id' => $object->getWebsiteId(),
             ];
-            return $adapter->fetchRow($select, $bind);
+            return $connection->fetchRow($select, $bind);
         }
         return false;
     }
@@ -67,13 +67,13 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function deleteCustomer(\Magento\Framework\Model\AbstractModel $object, $customerId, $websiteId = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $where = [];
-        $where[] = $adapter->quoteInto('customer_id=?', $customerId);
+        $where[] = $connection->quoteInto('customer_id=?', $customerId);
         if ($websiteId) {
-            $where[] = $adapter->quoteInto('website_id=?', $websiteId);
+            $where[] = $connection->quoteInto('website_id=?', $websiteId);
         }
-        $adapter->delete($this->getMainTable(), $where);
+        $connection->delete($this->getMainTable(), $where);
         return $this;
     }
 }

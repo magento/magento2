@@ -23,7 +23,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Currency objects cache
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected static $_currencies = [];
 
@@ -79,10 +79,10 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Renders grid column
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($data = (string)$this->_getValue($row)) {
             $currency_code = $this->_getCurrencyCode($row);
@@ -98,7 +98,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Returns currency code, false on error
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
     protected function _getCurrencyCode($row)
@@ -116,7 +116,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Get rate for current row, 1 by default
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return float|int
      */
     protected function _getRate($row)
