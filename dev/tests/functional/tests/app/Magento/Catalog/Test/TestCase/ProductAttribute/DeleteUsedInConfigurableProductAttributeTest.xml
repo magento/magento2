@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteUsedInConfigurableProductAttributeTest" summary="Delete Used in Configurable Product Attribute" zephyrId="MAGETWO-26652">
+    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteUsedInConfigurableProductAttributeTest" summary="Delete Used in Configurable Product Attribute" ticketId="MAGETWO-26652">
         <variation name="DeleteUsedInConfigurableProductAttributeTestVariation1">
             <data name="product/dataset" xsi:type="string">one_variation</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertUsedSuperAttributeImpossibleDeleteMessages" />

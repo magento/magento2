@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Customer\Test\TestCase\UpdateCustomerFrontendEntityTest" summary="Update Customer on Frontend" zephyrId="MAGETWO-25925">
+    <testCase name="Magento\Customer\Test\TestCase\UpdateCustomerFrontendEntityTest" summary="Update Customer on Frontend" ticketId="MAGETWO-25925">
         <variation name="UpdateCustomerFrontendEntityTestVariation1">
             <data name="description" xsi:type="string">Update customer information and add US address</data>
             <data name="customer/data/firstname" xsi:type="string">Jany %isolation%</data>
@@ -64,7 +64,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
         </variation>
-        <variation name="UpdateCustomerFrontendEntityTestVariation4" summary="Register Customer. Update address" zephyrId="MAGETWO-12394">
+        <variation name="UpdateCustomerFrontendEntityTestVariation4" summary="Register Customer. Update address" ticketId="MAGETWO-12394">
             <data name="customer/data/firstname" xsi:type="string">-</data>
             <data name="customer/data/lastname" xsi:type="string">-</data>
             <data name="customer/data/email" xsi:type="string">-</data>

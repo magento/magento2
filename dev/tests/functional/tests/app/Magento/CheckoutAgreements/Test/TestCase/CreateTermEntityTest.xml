@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CheckoutAgreements\Test\TestCase\CreateTermEntityTest" summary="Create Terms And Conditions" zephyrId="MAGETWO-29586">
+    <testCase name="Magento\CheckoutAgreements\Test\TestCase\CreateTermEntityTest" summary="Create Terms And Conditions" ticketId="MAGETWO-29586">
         <variation name="CreateTermEntityTestVariation1">
             <data name="description" xsi:type="string">Create enabled term entity with text value</data>
             <data name="product" xsi:type="string">catalogProductSimple::default</data>

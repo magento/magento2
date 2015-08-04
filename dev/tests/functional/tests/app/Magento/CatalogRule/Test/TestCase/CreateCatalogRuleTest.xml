@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CatalogRule\Test\TestCase\CreateCatalogRuleTest" summary="Applying Catalog Rule for Simple Product if Custom options with fixed price" zephyrId="MAGETWO-23036">
+    <testCase name="Magento\CatalogRule\Test\TestCase\CreateCatalogRuleTest" summary="Applying Catalog Rule for Simple Product if Custom options with fixed price" ticketId="MAGETWO-23036">
         <variation name="CreateCatalogRuleTestVariation1">
             <data name="product" xsi:type="string">MAGETWO-23036</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
@@ -27,7 +27,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
-        <variation name="CreateCatalogRuleTestVariation2" summary="Apply Catalog Price Rules to Specific Customer Group" zephyrId="MAGETWO-12908">
+        <variation name="CreateCatalogRuleTestVariation2" summary="Apply Catalog Price Rules to Specific Customer Group" ticketId="MAGETWO-12908">
             <data name="customer/dataset" xsi:type="string">customer_with_new_customer_group</data>
             <data name="product" xsi:type="string">simple_10_dollar</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>

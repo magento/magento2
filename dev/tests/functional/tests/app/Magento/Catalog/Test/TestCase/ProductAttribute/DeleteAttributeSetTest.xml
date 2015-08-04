@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteAttributeSetTest" summary="Delete Attribute Set (Product Template)" zephyrId="MAGETWO-25473">
+    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteAttributeSetTest" summary="Delete Attribute Set (Product Template)" ticketId="MAGETWO-25473">
         <variation name="DeleteAttributeSetTestVariation1">
             <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productTemplate/data/assigned_attributes/dataset" xsi:type="string">default</data>

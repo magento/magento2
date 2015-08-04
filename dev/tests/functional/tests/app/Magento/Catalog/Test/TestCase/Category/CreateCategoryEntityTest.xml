@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\Category\CreateCategoryEntityTest" summary="Create Category from Category Page" zephyrId="MAGETWO-23411">
+    <testCase name="Magento\Catalog\Test\TestCase\Category\CreateCategoryEntityTest" summary="Create Category from Category Page" ticketId="MAGETWO-23411">
         <variation name="CreateCategoryEntityTestVariation1">
             <data name="description" xsi:type="string">Create root category with required fields</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
@@ -129,7 +129,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
-        <variation name="CreateCategoryEntityTestVariation8" summary="Create Category from Category page with Required Fields Only" zephyrId="MAGETWO-12513">
+        <variation name="CreateCategoryEntityTestVariation8" summary="Create Category from Category page with Required Fields Only" ticketId="MAGETWO-12513">
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
@@ -140,7 +140,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
-        <variation name="CreateCategoryEntityTestVariation9" summary="Assign Products at the Category Level" zephyrId="MAGETWO-16351">
+        <variation name="CreateCategoryEntityTestVariation9" summary="Assign Products at the Category Level" ticketId="MAGETWO-16351">
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>

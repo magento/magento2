@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\UrlRewrite\Test\TestCase\CreateProductUrlRewriteEntityTest" summary="Create Product URL Rewrites" zephyrId="MAGETWO-25150">
-        <variation name="CreateProductUrlRewriteEntityTestVariation1" summary="Add Temporary Redirect for Product" zephyrId="MAGETWO-12409">
+    <testCase name="Magento\UrlRewrite\Test\TestCase\CreateProductUrlRewriteEntityTest" summary="Create Product URL Rewrites" ticketId="MAGETWO-25150">
+        <variation name="CreateProductUrlRewriteEntityTestVariation1" summary="Add Temporary Redirect for Product" ticketId="MAGETWO-12409">
             <data name="urlRewrite/data/entity_type" xsi:type="string">For product</data>
             <data name="product/dataset" xsi:type="string">product_with_category</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>

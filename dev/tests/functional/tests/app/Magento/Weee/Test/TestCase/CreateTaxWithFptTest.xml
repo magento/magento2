@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Weee\Test\TestCase\CreateTaxWithFptTest" summary="Apply FPT to Different Type Prices" zephyrId="MAGETWO-29551">
+    <testCase name="Magento\Weee\Test\TestCase\CreateTaxWithFptTest" summary="Apply FPT to Different Type Prices" ticketId="MAGETWO-29551">
         <variation name="CreateTaxWithFptTestVariation1" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
             <data name="description" xsi:type="string">Check not taxed FPT display set to Excluding, Description and Including FPT on product with custom option catalog price Excluding Tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_excl</data>

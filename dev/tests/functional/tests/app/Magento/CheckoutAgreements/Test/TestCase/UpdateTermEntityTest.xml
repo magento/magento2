@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CheckoutAgreements\Test\TestCase\UpdateTermEntityTest" summary="Update Terms And Conditions" zephyrId="MAGETWO-29635">
+    <testCase name="Magento\CheckoutAgreements\Test\TestCase\UpdateTermEntityTest" summary="Update Terms And Conditions" ticketId="MAGETWO-29635">
         <variation name="UpdateTermEntityTestVariation1">
             <data name="product" xsi:type="string">catalogProductSimple::default</data>
             <data name="agreementOrigin/dataset" xsi:type="string">term_disabled_text</data>

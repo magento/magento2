@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\User\Test\TestCase\UpdateAdminUserRoleEntityTest" summary="Update Admin User Role" zephyrId="MAGETWO-24768">
+    <testCase name="Magento\User\Test\TestCase\UpdateAdminUserRoleEntityTest" summary="Update Admin User Role" ticketId="MAGETWO-24768">
         <variation name="UpdateAdminUserRoleEntityTestVariation1">
             <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>
             <data name="role/data/rolename" xsi:type="string">NewAdminRole%isolation%</data>

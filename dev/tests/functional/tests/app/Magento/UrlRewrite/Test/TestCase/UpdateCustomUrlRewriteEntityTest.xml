@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\UrlRewrite\Test\TestCase\UpdateCustomUrlRewriteEntityTest" summary="Update Custom URL Rewrites" zephyrId="MAGETWO-25784">
+    <testCase name="Magento\UrlRewrite\Test\TestCase\UpdateCustomUrlRewriteEntityTest" summary="Update Custom URL Rewrites" ticketId="MAGETWO-25784">
         <variation name="UpdateCustomUrlRewriteEntityTestVariation1">
             <data name="initialRewrite/dataset" xsi:type="string">default</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>

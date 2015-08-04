@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CatalogSearch\Test\TestCase\DeleteSearchTermEntityTest" summary="Delete Search Term" zephyrId="MAGETWO-26491">
+    <testCase name="Magento\CatalogSearch\Test\TestCase\DeleteSearchTermEntityTest" summary="Delete Search Term" ticketId="MAGETWO-26491">
         <variation name="DeleteSearchTermEntityTestVariation1">
             <data name="searchTerm/dataset" xsi:type="string">default</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessDeleteMessage" />

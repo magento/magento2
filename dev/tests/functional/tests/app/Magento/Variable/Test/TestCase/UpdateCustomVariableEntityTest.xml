@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Variable\Test\TestCase\UpdateCustomVariableEntityTest" summary="Update Custom Variable" zephyrId="MAGETWO-26104">
+    <testCase name="Magento\Variable\Test\TestCase\UpdateCustomVariableEntityTest" summary="Update Custom Variable" ticketId="MAGETWO-26104">
         <variation name="UpdateCustomVariableEntityTestVariation1">
             <data name="customVariable/data/code" xsi:type="string">variableCode%isolation%</data>
             <data name="customVariable/data/name" xsi:type="string">variableName%isolation%</data>
