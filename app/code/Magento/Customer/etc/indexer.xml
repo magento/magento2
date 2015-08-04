@@ -47,7 +47,7 @@
             <field name="company" xsi:type="searchable" dataType="varchar"/>
         </fieldset>
 
-        <saveHandler class="Magento\Customer\Model\Indexer\SaveHandler"/>
-        <structure class="Magento\Customer\Model\Indexer\GridStructure"/>
+        <saveHandler class="Magento\Framework\Indexer\SaveHandler\Grid"/>
+        <structure class="Magento\Framework\Indexer\GridStructure"/>
     </indexer>
 </config>
