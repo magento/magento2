@@ -46,7 +46,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
         if (isset($dataSource['data']['items'])) {
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
-                $product = new \Magento\Framework\Object($item);
+                $product = new \Magento\Framework\DataObject($item);
                 $imageView = $this->imageFactory->create()
                     ->init($product, 'product_listing_thumbnail', 'Magento_Catalog');
                 $origImageView = $this->imageFactory->create()

@@ -18,7 +18,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $model = new \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status($context);
-        $obj = new \Magento\Framework\Object();
+        $obj = new \Magento\Framework\DataObject();
         $obj->setGetter(null);
         $obj->setDefault('');
         $obj->setValue('');

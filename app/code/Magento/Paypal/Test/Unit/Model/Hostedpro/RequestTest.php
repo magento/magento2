@@ -62,7 +62,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function addressesDataProvider()
     {
-        $billing = new \Magento\Framework\Object([
+        $billing = new \Magento\Framework\DataObject([
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
             'city' => 'City',
@@ -71,7 +71,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'country' => 'United States',
             'Street' => '1 Ln Ave',
         ]);
-        $shipping = new \Magento\Framework\Object([
+        $shipping = new \Magento\Framework\DataObject([
             'firstname' => 'ShipFirstname',
             'lastname' => 'ShipLastname',
             'city' => 'ShipCity',
@@ -80,7 +80,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'country' => 'United States',
             'Street' => '1 Ln Ave',
         ]);
-        $billing2 = new \Magento\Framework\Object([
+        $billing2 = new \Magento\Framework\DataObject([
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
             'city' => 'City',
@@ -89,7 +89,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'country' => 'United States',
             'Street' => '1 Ln Ave',
         ]);
-        $shipping2 = new \Magento\Framework\Object([
+        $shipping2 = new \Magento\Framework\DataObject([
             'firstname' => 'ShipFirstname',
             'lastname' => 'ShipLastname',
             'city' => 'ShipCity',

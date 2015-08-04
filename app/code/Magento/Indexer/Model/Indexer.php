@@ -12,12 +12,11 @@ use Magento\Framework\Indexer\IndexerInterface as IdxInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
-use Magento\Framework\Profiler\Driver\Standard\Stat;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Indexer extends \Magento\Framework\Object implements IdxInterface
+class Indexer extends \Magento\Framework\DataObject implements IdxInterface
 {
     /**
      * @var string

@@ -33,8 +33,8 @@ class ConnectionFactory implements \Magento\Framework\Model\Resource\Type\Db\Con
      */
     public function create(array $connectionConfig)
     {
-        $resourceInstance = new Mysql(new Stdlib\String(), new Stdlib\DateTime(), $connectionConfig);
+        $resourceInstance = new Mysql(new Stdlib\StringUtils(), new Stdlib\DateTime(), $connectionConfig);
 
-        return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Null::class));
+        return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));
     }
 }

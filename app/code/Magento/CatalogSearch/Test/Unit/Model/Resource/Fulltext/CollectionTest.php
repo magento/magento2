@@ -139,7 +139,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
             ->withConsecutive(['price_dynamic_algorithm', 1]);
         $requestBuilder->expects($this->once())
             ->method('setRequestName')
-            ->withConsecutive(['quick_search_container'])
+            ->withConsecutive(['catalog_view_container'])
             ->willThrowException(new \Exception('setRequestName', 333));
 
         return $requestBuilder;

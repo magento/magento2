@@ -10,13 +10,13 @@ use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
-use Magento\Framework\Stdlib\String as StdString;
+use Magento\Framework\Stdlib\StringUtils as StdString;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\FieldsetPool;
 use Magento\Framework\Indexer\HandlerPool;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandlerFactory;
-use Magento\Framework\App\Resource\SourceFactory;
+use Magento\Framework\App\Resource\SourcePool;
 use Magento\Framework\Indexer\HandlerInterface;
 
 /**
@@ -80,7 +80,7 @@ class Base implements ActionInterface
     protected $searchColumns;
 
     /**
-     * @var SourceFactory
+     * @var SourcePool
      */
     protected $sourceFactory;
 
@@ -126,7 +126,7 @@ class Base implements ActionInterface
 
     /**
      * @param AppResource $resource
-     * @param SourceFactory $sourceFactory
+     * @param SourcePool $sourceFactory
      * @param HandlerPool $handlerPool
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param FieldsetPool $fieldsetPool
@@ -136,7 +136,7 @@ class Base implements ActionInterface
      */
     public function __construct(
         AppResource $resource,
-        SourceFactory $sourceFactory,
+        SourcePool $sourceFactory,
         HandlerPool $handlerPool,
         SaveHandlerFactory $saveHandlerFactory,
         FieldsetPool $fieldsetPool,

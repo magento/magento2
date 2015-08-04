@@ -31,7 +31,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     private $attribute;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     private $magentoObject;
 
@@ -58,7 +58,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->magentoObject = $this->getMockBuilder('Magento\Framework\Object')
+        $this->magentoObject = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
