@@ -63,14 +63,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected $transactionCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Service\OrderFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\CreditmemoFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $serviceOrderFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Service\Order | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $serviceOrder;
+    protected $creditmemoFactoryMock;
 
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo | \PHPUnit_Framework_MockObject_MockObject
@@ -226,16 +221,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->serviceOrderFactory = $this->getMock(
-            'Magento\Sales\Model\Service\OrderFactory',
+        $this->creditmemoFactoryMock = $this->getMock(
+            'Magento\Sales\Model\Order\CreditmemoFactory',
             ['create'],
-            [],
-            '',
-            false
-        );
-        $this->serviceOrder = $this->getMock(
-            'Magento\Sales\Model\Service\Order',
-            [],
             [],
             '',
             false
@@ -1309,15 +1297,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->creditMemoMock->expects($this->any())->method('getGrandTotal')->willReturn($grandTotalCreditMemo);
         $this->payment->setParentTransactionId($this->transactionId);
         $this->mockInvoice($this->transactionId, 1);
-        $this->serviceOrderFactory->expects($this->once())->method('create')->with(
-            ['order' => $this->orderMock]
-        )->willReturn($this->serviceOrder);
-        $this->serviceOrder->expects($this->once())->method('prepareInvoiceCreditmemo')->with(
-            $this->invoiceMock,
-            ['adjustment_negative' => $invoiceBaseGrandTotal - $amount]
-        )->willReturn(
-            $this->creditMemoMock
-        );
+        $this->creditmemoFactoryMock->expects($this->once())
+            ->method('createByInvoice')
+            ->with($this->invoiceMock, ['adjustment_negative' => $invoiceBaseGrandTotal - $amount])
+            ->willReturn($this->creditMemoMock);
         $this->creditMemoMock->expects($this->once())->method('setPaymentRefundDisallowed')->willReturnSelf();
         $this->creditMemoMock->expects($this->once())->method('setAutomaticallyCreated')->willReturnSelf();
         $this->creditMemoMock->expects($this->once())->method('register')->willReturnSelf();
@@ -1434,7 +1417,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Order\Payment',
             [
                 'context' => $context,
-                'serviceOrderFactory' => $this->serviceOrderFactory,
+                'creditmemoFactory' => $this->creditmemoFactoryMock,
                 'paymentData' => $this->helperMock,
                 'priceCurrency' => $this->priceCurrencyMock,
                 'transactionRepository' => $this->transactionRepositoryMock,

@@ -71,17 +71,16 @@ $order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 /** @var $item \Magento\Sales\Model\Order\Item */
 $item = $order->getAllItems()[0];
 
-/** @var \Magento\Sales\Model\Service\Order $orderService */
-$orderService = $objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order]);
-
-/** @var \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory */
-$creditmemoFactory = $objectManager->get('Magento\Sales\Model\Order\CreditmemoFactory');
+/** @var \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory */
+$invoiceFactory = $objectManager->get('Magento\Sales\Model\Order\InvoiceFactory');
 
 /** @var $invoice \Magento\Sales\Model\Order\Invoice */
-$invoice = $orderService->prepareInvoice([$item->getId() => 10]);
+$invoice = $invoiceFactory->prepareInvoice($order->getId(), [$item->getId() => 10]);
 $invoice->register();
 $invoice->save();
 
+/** @var \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory */
+$creditmemoFactory = $objectManager->get('Magento\Sales\Model\Order\CreditmemoFactory');
 $creditmemo = $creditmemoFactory->createByInvoice($invoice, ['qtys' => [$item->getId() => 5]]);
 
 foreach ($creditmemo->getAllItems() as $creditmemoItem) {
