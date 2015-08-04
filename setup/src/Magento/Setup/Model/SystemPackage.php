@@ -46,7 +46,7 @@ class SystemPackage
         $this->composerInfo = $composerInfo;
     }
 
-     /**
+    /**
      * Returns system package and available versions
      *
      * @throws \RuntimeException
