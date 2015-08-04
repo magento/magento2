@@ -3,12 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Model\Indexer;
+namespace Magento\Framework\Indexer\SaveHandler;
 
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Framework\Indexer\SaveHandler\IndexerHandler;
 
-class SaveHandler extends IndexerHandler
+class Grid extends IndexerHandler
 {
     /**
      * @var string[]
