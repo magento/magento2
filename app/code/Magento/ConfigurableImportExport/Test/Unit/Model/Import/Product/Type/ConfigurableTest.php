@@ -81,6 +81,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->setCollectionFactory = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
             ['create'],
@@ -158,18 +160,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'isRowAllowedToImport',
                 'getConnection',
                 'getAttrSetIdToName',
+                'getErrorAggregator',
                 'getAttributeOptions'
             ],
             [],
             '',
             false
         );
+        $this->_entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
+
         $this->params = [
             0 => $this->_entityModel,
             1 => 'configurable'
         ];
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->_connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
@@ -612,5 +616,26 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setValue($object, $value);
 
         return $object;
+    }
+
+    /**
+     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected function getErrorAggregatorObject()
+    {
+        $errorFactory = $this->getMockBuilder(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $errorFactory->method('create')->willReturn(
+            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+        );
+        return $this->objectManagerHelper->getObject(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            [
+                'errorFactory' => $errorFactory
+            ]
+        );
     }
 }

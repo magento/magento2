@@ -10,9 +10,13 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\CustomerImportExport\Model\Import\AbstractCustomer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var ObjectManagerHelper */
+    protected $objectManagerHelper;
+
     /**
      * Abstract customer export model
      *
@@ -51,6 +55,8 @@ class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->_model = $this->_getModelMock();
     }
 
@@ -77,8 +83,9 @@ class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
 
         $modelMock = $this->getMockBuilder('Magento\CustomerImportExport\Model\Import\AbstractCustomer')
             ->disableOriginalConstructor()
-            ->setMethods(['_getCustomerCollection', '_validateRowForUpdate', '_validateRowForDelete'])
+            ->setMethods(['getErrorAggregator', '_getCustomerCollection', '_validateRowForUpdate', '_validateRowForDelete'])
             ->getMockForAbstractClass();
+        $modelMock->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $property = new \ReflectionProperty($modelMock, '_websiteCodeToId');
         $property->setAccessible(true);
@@ -238,5 +245,26 @@ class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
         $entitiesCount->setAccessible(true);
         $entitiesCount->setValue($this->_model, 0);
         $entitiesCount->setAccessible(false);
+    }
+
+    /**
+     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected function getErrorAggregatorObject()
+    {
+        $errorFactory = $this->getMockBuilder(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $errorFactory->method('create')->willReturn(
+            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+        );
+        return $this->objectManagerHelper->getObject(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            [
+                'errorFactory' => $errorFactory
+            ]
+        );
     }
 }
