@@ -209,6 +209,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     protected $_iteratorPageSize = 100;
 
     /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected $errorAggregator;
+
+    /**
      * Init entity adapter model
      */
     protected function setUp()
@@ -231,7 +236,6 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $modelClassName = '\Magento\CatalogImportExport\Model\Import\Product\Option';
         $modelClassArgs = [
             $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false),
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
@@ -258,6 +262,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
         ];
 
+        $modelClassName = '\Magento\CatalogImportExport\Model\Import\Product\Option';
         $class = new \ReflectionClass($modelClassName);
         $this->_model = $class->newInstanceArgs($modelClassArgs);
         // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
@@ -381,11 +386,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $this->_productEntity = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
-            null,
+            ['getErrorAggregator'],
             [],
             '',
             false
         );
+        $this->_productEntity->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $productModelMock = $this->getMock('stdClass', ['getProductEntitiesInfo']);
         $productModelMock->expects(
@@ -991,5 +997,26 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
+    }
+
+    /**
+     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected function getErrorAggregatorObject()
+    {
+        $errorFactory = $this->getMockBuilder(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $errorFactory->method('create')->willReturn(
+            $this->_helper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+        );
+        return $this->_helper->getObject(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            [
+                'errorFactory' => $errorFactory
+            ]
+        );
     }
 }
