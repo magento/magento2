@@ -9,10 +9,6 @@ use Magento\Backend\App\Action;
 
 class Cancel extends \Magento\Backend\App\Action
 {
-    /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
-     */
-    protected $creditmemoLoader;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
@@ -21,15 +17,12 @@ class Cancel extends \Magento\Backend\App\Action
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
-        $this->creditmemoLoader = $creditmemoLoader;
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
