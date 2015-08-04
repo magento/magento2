@@ -13,4 +13,8 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Backend\Model\Session" />
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <plugin name="customer-grid-custom-attribute-converter"
+                type="Magento\Customer\Model\Plugin\Grid\CustomAttribute"/>
+    </type>
 </config>
