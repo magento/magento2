@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Indexer;
 
+use Magento\Framework\Indexer\Handler\DefaultHandler;
 use Magento\Framework\ObjectManagerInterface;
 
 class HandlerPool
@@ -21,11 +22,11 @@ class HandlerPool
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param HandlerInterface $defaultHandler
+     * @param DefaultHandler $defaultHandler
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        HandlerInterface $defaultHandler
+        DefaultHandler $defaultHandler
     ) {
         $this->defaultHandler = $defaultHandler;
         $this->objectManager = $objectManager;
