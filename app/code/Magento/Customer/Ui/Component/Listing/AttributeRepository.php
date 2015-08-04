@@ -70,7 +70,7 @@ class AttributeRepository
             );
 
             /** @var Attribute $attribute */
-            foreach ($attributes as  $attribute) {
+            foreach ($attributes as $attribute) {
                 $entityTypeCode = $attribute->getEntityType()->getEntityTypeCode();
                 $attribute = $this->getAttributeMetadata($attribute);
                 $attributeCode = $attribute->getAttributeCode();
