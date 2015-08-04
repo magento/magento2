@@ -49,7 +49,11 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
             $helper = $this->_objectManager->get('Magento\Backend\Helper\Dashboard\Data');
             $newHash = $helper->getChartDataHash($gaData);
             if (Security::compareStrings($newHash, $gaHash)) {
-                $params = json_decode(base64_decode(urldecode($gaData)), true);
+                $params = null;
+                $paramsJson = base64_decode(urldecode($gaData));
+                if ($paramsJson) {
+                    $params = json_decode($paramsJson, true);
+                }
                 if ($params) {
                     try {
                         /** @var $httpClient \Magento\Framework\HTTP\ZendClient */

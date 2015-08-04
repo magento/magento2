@@ -17,6 +17,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Class StockIndex
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockIndex implements StockIndexInterface
 {
@@ -250,7 +251,7 @@ class StockIndex implements StockIndexInterface
     protected function getProductTypeInstances()
     {
         if (empty($this->productTypes)) {
-            $productEmulator = new \Magento\Framework\Object();
+            $productEmulator = new \Magento\Framework\DataObject();
             foreach (array_keys($this->productType->getTypes()) as $typeId) {
                 $productEmulator->setTypeId($typeId);
                 $this->productTypes[$typeId] = $this->productType->factory($productEmulator);

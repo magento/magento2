@@ -11,7 +11,7 @@ use \Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql;
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     private $string;
 
@@ -22,7 +22,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->string = $this->getMock('\Magento\Framework\Stdlib\String');
+        $this->string = $this->getMock('\Magento\Framework\Stdlib\StringUtils');
         $this->dateTime = $this->getMock('\Magento\Framework\Stdlib\DateTime');
     }
 

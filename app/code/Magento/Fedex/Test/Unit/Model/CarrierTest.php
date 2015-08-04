@@ -5,8 +5,8 @@
  */
 namespace Magento\Fedex\Test\Unit\Model;
 
-use Magento\Framework\Object;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Framework\DataObject;
 use Magento\Framework\Xml\Security;
 
 /**
@@ -157,21 +157,21 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->scope->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
 
         // @codingStandardsIgnoreStart
-        $netAmount = new \Magento\Framework\Object([]);
+        $netAmount = new \Magento\Framework\DataObject([]);
         $netAmount->Amount = $amount;
 
-        $totalNetCharge = new \Magento\Framework\Object([]);
+        $totalNetCharge = new \Magento\Framework\DataObject([]);
         $totalNetCharge->TotalNetCharge = $netAmount;
         $totalNetCharge->RateType = $rateType;
 
-        $ratedShipmentDetail = new \Magento\Framework\Object([]);
+        $ratedShipmentDetail = new \Magento\Framework\DataObject([]);
         $ratedShipmentDetail->ShipmentRateDetail = $totalNetCharge;
 
-        $rate = new \Magento\Framework\Object([]);
+        $rate = new \Magento\Framework\DataObject([]);
         $rate->ServiceType = 'ServiceType';
         $rate->RatedShipmentDetails = [$ratedShipmentDetail];
 
-        $response = new \Magento\Framework\Object([]);
+        $response = new \Magento\Framework\DataObject([]);
         $response->HighestSeverity = 'SUCCESS';
         $response->RateReplyDetails = $rate;
 
