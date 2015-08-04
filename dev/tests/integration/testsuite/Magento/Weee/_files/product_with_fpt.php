@@ -49,5 +49,5 @@ $product->setTypeId(
 )->setPrice(
     100
 )->setFptForAll(
-    [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 0.07, 'delete' => '']]
+    [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 12.70, 'delete' => '']]
 )->save();
