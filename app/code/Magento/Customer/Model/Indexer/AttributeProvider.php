@@ -89,7 +89,7 @@ class AttributeProvider implements FieldsetInterface
                         'handler' => 'Magento\Indexer\Model\Handler\AttributeHandler',
                         'origin' => $attribute->getName(),
                         'type' => $this->getType($attribute),
-                        'dataType' => $attribute->getBackendType(),
+                        'dataType' => $this->getBackendType($attribute),
                         'filters' => [],
                         'entity' => static::ENTITY,
                         'bind' => isset($fieldset['references']['customer']['to'])
@@ -100,11 +100,23 @@ class AttributeProvider implements FieldsetInterface
             } else {
                 $fields[$attribute->getName()] = [
                     'type' => $this->getType($attribute),
+                    'dataType' => $this->getBackendType($attribute),
                 ];
             }
         }
 
         return $fields;
+    }
+
+    /**
+     * Get backend type for attribute
+     *
+     * @param Attribute $attribute
+     * @return string
+     */
+    protected function getBackendType(Attribute $attribute)
+    {
+        return $attribute->getBackendTypeByInput($attribute->getFrontendInput());
     }
 
     /**
@@ -115,7 +127,10 @@ class AttributeProvider implements FieldsetInterface
      */
     protected function getType(Attribute $attribute)
     {
-        if ($attribute->getData('is_searchable_in_grid')) {
+        if (
+            in_array($this->getBackendType($attribute), ['varchar', 'text'])
+            && $attribute->getData('is_searchable_in_grid')
+        ) {
             $type = 'searchable';
         } elseif ($attribute->getData('is_filterable_in_grid')) {
             $type = 'filterable';
