@@ -35,8 +35,11 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->composerInformationMock->expects($this->once())
-            ->method('getRootRequiredPackageTypesByNameVersion')
+            ->method('getInstalledMagentoPackages')
             ->willReturn($this->componentData);
+        $this->composerInformationMock->expects($this->once())
+            ->method('getPackagesForUpdate')
+            ->willReturn([]);
     }
 
     public function testIndexAction()
