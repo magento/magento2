@@ -74,7 +74,7 @@ angular.module('select-version', ['ngStorage'])
             }
         });
 
-        $scope.updateOtherComponentsList = function(name, $version) {
+        $scope.setComponentVersion = function(name, $version) {
             for (var i = 0; i < $scope.total; i++) {
                 if ($scope.packages[i + 1].name === name) {
                     $scope.packages[i + 1].version = $version;
@@ -83,7 +83,7 @@ angular.module('select-version', ['ngStorage'])
             }
         };
 
-        $scope.removeComponentsFromList = function(name) {
+        $scope.updateComponentList = function(name) {
             var found = false;
             for (var i = 0; i < $scope.total; i++) {
                 if ($scope.packages[i + 1].name === name) {

@@ -382,7 +382,7 @@ class ComposerInformation
      * @param string $packageName
      * @return bool
      */
-    public function checkPackageInJson($packageName)
+    public function isPackageInComposerJson($packageName)
     {
         if (in_array($packageName, array_keys($this->composer->getPackage()->getRequires()))
             || in_array($packageName, array_keys($this->composer->getPackage()->getDevRequires()))
