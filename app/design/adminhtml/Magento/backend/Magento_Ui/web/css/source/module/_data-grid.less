@@ -53,6 +53,8 @@
 @data-grid-editable-row-actions__width: 25rem;
 @data-grid-editable-cell__border-color: @color-gray68;
 
+@data-grid-bulk-edit-panel__background-color: @color-lazy-sun-white;
+
 //
 
 .admin__data-grid-outer-wrap {
@@ -234,9 +236,9 @@
         padding: @data-grid-th__padding-vertical @data-grid-th__padding-horizontal;
         vertical-align: middle;
         &._draggable {
-            cursor:         grab;
-            cursor:    -moz-grab;
             cursor: -webkit-grab;
+            cursor:    -moz-grab;
+            cursor:         grab;
         }
         &._sortable {
             background-clip: padding-box; // Fix for border overlay in Firefox
@@ -289,51 +291,8 @@
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;
         padding-right: @data-grid-cell__padding-horizontal * 2;
+        text-align: center;
         width: 1%;
-    }
-    //  Nested rows
-    .data-grid-row-parent {
-        &._active {
-            > td {
-                background-color: @color-lazy-sunny;
-                border-bottom: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
-                border-left-color: transparent;
-                border-right-color: transparent;
-                border-top: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
-                &:first-child {
-                    border-left-color: @data-grid-td__border-color;
-                }
-                &:last-child {
-                    border-right-color: @data-grid-td__border-color;
-                }
-            }
-        }
-    }
-    .data-grid-row-child {
-        display: none;
-        &._active {
-            display: table-row;
-            + tr {
-                &:not(.data-grid-row-child) {
-                    td {
-                        border-top: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
-                    }
-                }
-            }
-        }
-    }
-    .data-grid-row-child,
-    .data-grid-row-parent ~ .data-grid-row-child {
-        td {
-            background-color: @color-lazy-sun-white;
-            border-color: transparent;
-            &:first-child {
-                border-left-color: @data-grid-td__border-color;
-            }
-            &:last-child {
-                border-right-color: @data-grid-td__border-color;
-            }
-        }
     }
     //  Draggable columns
     &._hidden {
@@ -356,9 +315,9 @@
         }
         .data-grid-th,
         .data-grid-th._sortable {
-            cursor:         grabbing;
-            cursor:    -moz-grabbing;
             cursor: -webkit-grabbing;
+            cursor:    -moz-grabbing;
+            cursor:         grabbing;
         }
         tbody {
             tr {
@@ -598,4 +557,82 @@
 
 .data-grid-info-panel-actions {
     text-align: right;
+}
+
+//  Data Grid Buld Editing panel
+.data-grid-bulk-edit-panel {
+    td {
+        background-color: @data-grid-bulk-edit-panel__background-color;
+        &:first-child {
+            border-left: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
+        }
+        &:last-child {
+            border-right: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
+        }
+    }
+    .data-grid-actions-cell {
+        vertical-align: bottom;
+    }
+    .admin__field-label-vertical {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: .5rem;
+        text-align: left;
+    }
+}
+
+//  Data Grid Inline Edit Validation
+.data-grid-editable-row {
+    @_field-error-triangle__width: 20px;
+    @_field-error-triangle__height: 10px;
+    @_field-error-input-triangle__width: 12px;
+    .admin__field-control {
+        position: relative;
+        &._error {
+            &:after {
+                border-color: transparent @field-error-message__border-color transparent transparent;
+                border-style: solid;
+                border-width: 0 @_field-error-input-triangle__width @_field-error-input-triangle__width 0;
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            .admin__control-text {
+                border-color: @field-error-message__border-color;
+            }
+        }
+        &._focus {
+            &:after {
+                display: none;
+            }
+        }
+    }
+    .admin__field-error {
+        bottom: 100%;
+        box-shadow: @component__box-shadow__base;
+        left: 0;
+        margin-bottom: 1.5rem;
+        position: absolute;
+        right: 0;
+        &:after,
+        &:before {
+            border-style: solid;
+            content: '';
+            left: 50%;
+            position: absolute;
+            top: 100%;
+        }
+        &:after {
+            border-color: @field-error-message__background-color transparent transparent transparent;
+            border-width: @_field-error-triangle__height (@_field-error-triangle__width / 2) 0 (@_field-error-triangle__width / 2);
+            margin-left: -(@_field-error-triangle__width / 2);
+            z-index: 1;
+        }
+        &:before {
+            border-color: @field-error-message__border-color transparent transparent transparent;
+            border-width: (@_field-error-triangle__width / 2 + 1) (@_field-error-triangle__width / 2 + 2) 0 (@_field-error-triangle__width / 2 + 2);
+            margin-left: -((@_field-error-triangle__width / 2 + 2));
+        }
+    }
 }
