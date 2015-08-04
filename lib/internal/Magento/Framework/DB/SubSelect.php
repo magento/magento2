@@ -62,7 +62,7 @@ class SubSelect extends \Zend_Db_Expr
         array $columns,
         $originColumn,
         $targetColumn,
-        $connectionName = Resource::DEFAULT_READ_RESOURCE
+        $connectionName = Resource::DEFAULT_CONNECTION
     ) {
         $this->resource = $resource;
         $this->connectionName = $connectionName;
