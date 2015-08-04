@@ -41,7 +41,7 @@ class CustomAttribute
 
     /**
      * @param AttributeMetadataInterface $attribute
-     * @param $optionId
+     * @param string $optionId
      * @return string
      */
     protected function getAttributeOptionLabelById(AttributeMetadataInterface $attribute, $optionId)
