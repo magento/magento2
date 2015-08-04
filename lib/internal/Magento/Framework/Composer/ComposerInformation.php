@@ -33,7 +33,7 @@ class ComposerInformation
     /**#@-*/
 
     /**
-     * @var Magento\Setup\Model\SystemPackage
+     * @var \Magento\Setup\Model\SystemPackage
      */
     private $systemPackage;
 
@@ -215,7 +215,7 @@ class ComposerInformation
         $packages = [];
         /** @var PackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
-            if ((in_array($package->getType(), self::$packageTypes)) 
+            if ((in_array($package->getType(), self::$packageTypes))
                 && (!$this->isSystemPackage($package->getPrettyName()))) {
                 $packages[$package->getName()] = [
                     'name' => $package->getName(),
@@ -276,6 +276,7 @@ class ComposerInformation
 
     /**
      * Checks if the passed packaged is system package
+     *
      * @param $packageName
      * @return int
      */

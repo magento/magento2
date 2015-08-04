@@ -61,18 +61,17 @@ class OtherComponentsGrid extends AbstractActionController
                 if (!$packageInfo) {
                     throw new \RuntimeException('Package info not found for ' . $component['name']);
                 }
-                //$currentVersion = $packageInfo[InfoCommand::CURRENT_VERSION];
-                $currentVersion = $component['version'];
+                $currentVersion = $packageInfo[InfoCommand::CURRENT_VERSION];
                 $components[$component['name']]['version'] = $currentVersion;
                 $allVersions = explode(' ', $packageInfo[InfoCommand::VERSIONS]);
                 $versions = [];
                 $first = true;
                 for ($i = 0; $i < count($allVersions); $i++) {
-                    if (strpos($allVersions[$i],'*') !== false) {
-                        unset($allVersions[$i]);
+                    $allVersions[$i] = trim($allVersions[$i], ',');
+                    $allVersions[$i] = trim(trim($allVersions[$i], '*'));
+                    if ($allVersions[$i] === '') {
                         continue;
                     }
-                    $allVersions[$i] = trim($allVersions[$i], ',');
                     if ($allVersions[$i] !== $currentVersion) {
                         if ($first) {
                             $versions[] = $allVersions[$i] . ' (latest)';
