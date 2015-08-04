@@ -48,7 +48,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Grid export types
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $_exportTypes = [];
 
@@ -151,7 +151,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * SubTotals
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $_subtotals = [];
 
@@ -266,7 +266,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      */
     public function addExportType($url, $label)
     {
-        $this->_exportTypes[] = new \Magento\Framework\Object(
+        $this->_exportTypes[] = new \Magento\Framework\DataObject(
             ['url' => $this->getUrl($url, ['_current' => true]), 'label' => $label]
         );
         return $this;
@@ -276,7 +276,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Add column to grid
      *
      * @param   string $columnId
-     * @param   array|\Magento\Framework\Object $column
+     * @param   array|\Magento\Framework\DataObject $column
      * @return  $this
      * @throws  \Exception
      */
@@ -321,7 +321,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Add column to grid after specified column.
      *
      * @param   string $columnId
-     * @param   array|\Magento\Framework\Object $column
+     * @param   array|\Magento\Framework\DataObject $column
      * @param   string $after
      * @return  $this
      */
@@ -613,7 +613,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Check whether should render cell
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
@@ -653,7 +653,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Return row url for js event handlers
      *
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Object $item
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $item
      * @return string
      */
     public function getRowUrl($item)
@@ -665,7 +665,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Get children of specified item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return array
      */
     public function getMultipleRows($item)
@@ -689,7 +689,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Check whether subtotal should be rendered
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return boolean
      */
     public function shouldRenderSubTotal($item)
@@ -700,7 +700,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Retrieve rowspan number
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return int|false
      */
@@ -734,7 +734,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Check whether should render empty cell
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
@@ -756,8 +756,8 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Retrieve subtotal item
      *
-     * @param \Magento\Framework\Object $item
-     * @return \Magento\Framework\Object|string
+     * @param \Magento\Framework\DataObject $item
+     * @return \Magento\Framework\DataObject|string
      */
     public function getSubTotalItem($item)
     {
@@ -975,12 +975,12 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Write item data to csv export file
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
      */
     protected function _exportCsvItem(
-        \Magento\Framework\Object $item,
+        \Magento\Framework\DataObject $item,
         \Magento\Framework\Filesystem\File\WriteInterface $stream
     ) {
         $row = [];
@@ -1116,10 +1116,10 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      *  Get a row data of the particular columns
      *
-     * @param \Magento\Framework\Object $data
+     * @param \Magento\Framework\DataObject $data
      * @return string[]
      */
-    public function getRowRecord(\Magento\Framework\Object $data)
+    public function getRowRecord(\Magento\Framework\DataObject $data)
     {
         $row = [];
         foreach ($this->getColumns() as $column) {
@@ -1220,7 +1220,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Retrieve grid export types
      *
-     * @return \Magento\Framework\Object[]|false
+     * @return \Magento\Framework\DataObject[]|false
      */
     public function getExportTypes()
     {
@@ -1274,7 +1274,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Set subtotal items
      *
-     * @param \Magento\Framework\Object[] $items
+     * @param \Magento\Framework\DataObject[] $items
      * @return $this
      */
     public function setSubTotals(array $items)
@@ -1286,7 +1286,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Retrieve subtotal items
      *
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getSubTotals()
     {

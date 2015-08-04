@@ -6,7 +6,7 @@
 
 namespace Magento\Quote\Model\Quote\Address;
 
-use Magento\Framework\Object\Copy;
+use Magento\Framework\DataObject\Copy;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Api\Data\OrderAddressInterfaceFactory as OrderAddressFactory;
 use Magento\Sales\Api\Data\OrderAddressInterface;

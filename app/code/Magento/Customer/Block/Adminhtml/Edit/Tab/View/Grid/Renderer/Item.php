@@ -115,10 +115,10 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     /**
      * Renders item product name and its configuration
      *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\Magento\Framework\Object $item
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\Magento\Framework\DataObject $item
      * @return string
      */
-    public function render(\Magento\Framework\Object $item)
+    public function render(\Magento\Framework\DataObject $item)
     {
         $this->setItem($item);
         $product = $this->getProduct();

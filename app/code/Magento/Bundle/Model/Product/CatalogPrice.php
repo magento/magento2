@@ -56,7 +56,7 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
         $this->coreRegistry->unregister('rule_data');
         $this->coreRegistry->register(
             'rule_data',
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'store_id' => $product->getStoreId(),
                     'website_id' => $product->getWebsiteId(),
