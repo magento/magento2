@@ -35,6 +35,9 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
         $this->attributeRepository = $attributeRepository;
     }
 
+    /**
+     * @return int
+     */
     protected function getDefaultSortOrder()
     {
         $max = 0;
@@ -47,6 +50,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
         return ++$max;
     }
 
+    /**
+     * Update actions column sort order
+     *
+     * @return void
+     */
     protected function updateActionColumnSortOrder()
     {
         if (isset($this->components['actions'])) {
@@ -88,7 +96,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
 
     /**
      * @param AttributeMetadataInterface $attribute
-     * @param $newAttributeCode
+     * @param string $newAttributeCode
      * @return void
      */
     public function updateColumn(AttributeMetadataInterface $attribute, $newAttributeCode)
@@ -116,8 +124,13 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                 $component->setData('config', $config);
             }
         } else {
-            $config = array_merge($component->getData('config'), ['type' => $this->getAttributeType($attribute),]);
-            $component->setData('config', $config);
+            $component->setData(
+                'config',
+                array_merge(
+                    $component->getData('config'),
+                    ['type' => $this->getAttributeType($attribute)]
+                )
+            );
         }
         $component->setData('config', array_merge(
             $component->getData('config'),

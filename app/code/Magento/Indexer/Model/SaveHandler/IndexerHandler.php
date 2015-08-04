@@ -58,6 +58,12 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @param IndexStructureInterface $indexStructure
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
+     * @param IndexStructureInterface $indexStructure
      * @param Resource $resource
      * @param Batch $batch
      * @param \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
@@ -76,6 +82,7 @@ class IndexerHandler implements IndexerInterface
     ) {
         $this->indexStructure = $indexStructure;
         $this->resource = $resource;
+        $this->connection = $resource->getConnection();
         $this->batch = $batch;
         $this->scopeResolvers[$this->dataTypes[0]] = $indexScopeResolver;
         $this->scopeResolvers[$this->dataTypes[1]] = $flatScopeResolver;
@@ -105,7 +112,7 @@ class IndexerHandler implements IndexerInterface
         foreach ($this->dataTypes as $dataType) {
             foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
                 $documentsId = array_column($batchDocuments, 'id');
-                $this->getAdapter()->delete($this->getTableName($dataType, $dimensions), ['id' => $documentsId]);
+                $this->connection->delete($this->getTableName($dataType, $dimensions), ['id' => $documentsId]);
             }
         }
     }
@@ -146,21 +153,13 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @return AdapterInterface
-     */
-    protected function getAdapter()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
-    }
-
-    /**
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
      */
     private function insertDocumentsForSearchable(array $documents, array $dimensions)
     {
-        $this->getAdapter()->insertOnDuplicate(
+        $this->connection->insertOnDuplicate(
             $this->getTableName($this->dataTypes[0], $dimensions),
             $this->prepareSearchableFields($documents),
             ['data_index']
@@ -181,7 +180,7 @@ class IndexerHandler implements IndexerInterface
             }
         }
 
-        $this->getAdapter()->insertOnDuplicate(
+        $this->connection->insertOnDuplicate(
             $this->getTableName($this->dataTypes[1], $dimensions),
             $this->prepareFilterableFields($documents),
             $onDuplicate

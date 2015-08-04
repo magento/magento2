@@ -94,7 +94,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param Product $productResource
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Psr\Log\LoggerInterface $logger
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -103,14 +103,14 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         Product $productResource,
         \Magento\Catalog\Model\Category $catalogCategory,
         \Psr\Log\LoggerInterface $logger,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
         $this->productResource = $productResource;
         $this->_catalogCategory = $catalogCategory;
         $this->_logger = $logger;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -150,7 +150,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getCategoryAttribute($attributeCode, $categoryIds, $storeId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         if (!isset($this->_categoryAttributes[$attributeCode])) {
             $attribute = $this->_catalogCategory->getResource()->getAttribute($attributeCode);
 
@@ -169,7 +169,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $attributeTable = $this->_categoryAttributes[$attributeCode]['table'];
-        $select = $adapter->select();
+        $select = $connection->select();
         $bind = [];
         if ($this->_categoryAttributes[$attributeCode]['is_static']) {
             $select->from(
@@ -194,7 +194,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
             );
             $bind['attribute_id'] = $this->_categoryAttributes[$attributeCode]['attribute_id'];
         } else {
-            $valueExpr = $adapter->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
+            $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
             $select->from(
                 ['t1' => $attributeTable],
                 ['entity_id', 'value' => $valueExpr]
@@ -216,7 +216,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $bind['store_id'] = $storeId;
         }
 
-        $rowSet = $adapter->fetchAll($select, $bind);
+        $rowSet = $connection->fetchAll($select, $bind);
 
         $attributes = [];
         foreach ($rowSet as $row) {
@@ -242,7 +242,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function _getProductAttribute($attributeCode, $productIds, $storeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         if (!isset($this->_productAttributes[$attributeCode])) {
             $attribute = $this->productResource->getAttribute($attributeCode);
 
@@ -259,7 +259,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $productIds = [$productIds];
         }
         $bind = ['attribute_id' => $this->_productAttributes[$attributeCode]['attribute_id']];
-        $select = $adapter->select();
+        $select = $connection->select();
         $attributeTable = $this->_productAttributes[$attributeCode]['table'];
         if ($this->_productAttributes[$attributeCode]['is_global'] || $storeId == 0) {
             $select->from(
@@ -275,7 +275,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $productIds
             );
         } else {
-            $valueExpr = $adapter->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
+            $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
             $select->from(
                 ['t1' => $attributeTable],
                 ['entity_id', 'value' => $valueExpr]
@@ -295,7 +295,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $bind['store_id'] = $storeId;
         }
 
-        $rowSet = $adapter->fetchAll($select, $bind);
+        $rowSet = $connection->fetchAll($select, $bind);
 
         $attributes = [];
         foreach ($rowSet as $row) {
@@ -372,13 +372,13 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $isActiveAttribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Category::ENTITY, 'is_active');
         $categories = [];
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         if (!is_array($categoryIds)) {
             $categoryIds = [$categoryIds];
         }
-        $isActiveExpr = $adapter->getCheckSql('c.value_id > 0', 'c.value', 'c.value');
-        $select = $adapter->select()->from(
+        $isActiveExpr = $connection->getCheckSql('c.value_id > 0', 'c.value', 'c.value');
+        $select = $connection->select()->from(
             ['main_table' => $this->getTable('catalog_category_entity')],
             [
                 'main_table.entity_id',
@@ -417,7 +417,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $bind = ['attribute_id' => (int)$isActiveAttribute->getId(), 'store_id' => (int)$storeId];
 
-        $rowSet = $adapter->fetchAll($select, $bind);
+        $rowSet = $connection->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
             if ($storeId !== null) {
                 // Check the category to be either store's root or its descendant
@@ -506,14 +506,14 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $products = [];
         $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         if ($productIds !== null) {
             if (!is_array($productIds)) {
                 $productIds = [$productIds];
             }
         }
         $bind = ['website_id' => (int)$websiteId, 'entity_id' => (int)$entityId];
-        $select = $adapter->select()->useStraightJoin(
+        $select = $connection->select()->useStraightJoin(
             true
         )->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -533,7 +533,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->where('e.entity_id IN(?)', $productIds);
         }
 
-        $rowSet = $adapter->fetchAll($select, $bind);
+        $rowSet = $connection->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
             $product = new \Magento\Framework\Object($row);
             $product->setId($row['entity_id']);
@@ -547,14 +547,14 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         unset($rowSet);
 
         if ($products) {
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->getTable('catalog_category_product'),
                 ['product_id', 'category_id']
             )->where(
                 'product_id IN(?)',
                 array_keys($products)
             );
-            $categories = $adapter->fetchAll($select);
+            $categories = $connection->fetchAll($select);
             foreach ($categories as $category) {
                 $productId = $category['product_id'];
                 $categoryIds = $products[$productId]->getCategoryIds();
@@ -623,9 +623,9 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (empty($products)) {
             return $result;
         }
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['i' => $this->getTable('catalog_category_product_index')],
             ['product_id', 'store_id', 'visibility']
         )->joinLeft(
@@ -655,7 +655,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->orWhere($cond);
         }
 
-        $rowSet = $adapter->fetchAll($select, $bind);
+        $rowSet = $connection->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
             $result[$row['product_id']] = [
                 'store_id' => $row['store_id'],
