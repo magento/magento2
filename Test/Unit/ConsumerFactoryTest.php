@@ -125,17 +125,28 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
                 ],
             ]));
 
+        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+            ->setMethods(['create'])
+            ->getMockForAbstractClass();
+
+        $consumerTypeName = 'Magento\Amqp\Model\TestConsumer';
         $consumerMock = $this->getMockBuilder('Magento\Framework\Amqp\ConsumerInterface')
             ->getMockForAbstractClass();
+
+        $objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with($consumerTypeName, [])
+            ->will($this->returnValue($consumerMock));
 
         $this->consumerFactory = $this->objectManager->getObject(
             'Magento\Framework\Amqp\ConsumerFactory',
             [
                 'queueConfig' => $this->queueConfigMock,
+                'objectManager' => $objectManagerMock,
                 'consumers' => [
                     [
-                        'type' => $consumerMock,
-                        'connectionName' => self::TEST_CONSUMER_CONNECTION
+                        'type' => $consumerTypeName,
+                        'connectionName' => self::TEST_CONSUMER_CONNECTION,
                     ]
                 ]
             ]

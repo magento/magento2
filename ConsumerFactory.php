@@ -8,6 +8,7 @@ namespace Magento\Framework\Amqp;
 use Magento\Framework\Amqp\Config\Data as QueueConfig;
 use Magento\Framework\Amqp\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -28,13 +29,20 @@ class ConsumerFactory
     private $consumers;
 
     /**
+     * Object Manager instance
+     *
+     * @var ObjectManagerInterface
+     */
+    private $objectManager = null;
+
+    /**
      * Initialize dependencies.
      *
      * <type name="Magento\Framework\Amqp\ConsumerFactory">
      *     <arguments>
      *         <argument name="consumers" xsi:type="array">
      *             <item name="rabbitmq" xsi:type="array">
-     *                 <item name="type" xsi:type="object">Magento\RabbitMq\Model\Consumer</item>
+     *                 <item name="type" xsi:type="string">Magento\RabbitMq\Model\Consumer</item>
      *                 <item name="connectionName" xsi:type="string">rabbitmq</item>
      *             </item>
      *         </argument>
@@ -42,13 +50,16 @@ class ConsumerFactory
      * </type>
      *
      * @param QueueConfig $queueConfig
+     * @param ObjectManagerInterface $objectManager
      * @param ConsumerInterface[] $consumers
      */
     public function __construct(
         QueueConfig $queueConfig,
+        ObjectManagerInterface $objectManager,
         $consumers = []
     ) {
         $this->queueConfig = $queueConfig;
+        $this->objectManager = $objectManager;
         $this->consumers = [];
 
         foreach ($consumers as $consumerConfig) {
@@ -66,7 +77,7 @@ class ConsumerFactory
     public function get($consumerName)
     {
         $consumerConfig = $this->getConsumerConfigForName($consumerName);
-        $consumer = $this->getConsumerForConnectionName($consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION]);
+        $consumer = $this->createConsumerForConnectionName($consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION]);
         return $consumer;
     }
 
@@ -74,12 +85,12 @@ class ConsumerFactory
      * Add consumer.
      *
      * @param string $name
-     * @param ConsumerInterface $consumer
+     * @param string $typeName
      * @return $this
      */
-    private function add($name, ConsumerInterface $consumer)
+    private function add($name, $typeName)
     {
-        $this->consumers[$name] = $consumer;
+        $this->consumers[$name] = $typeName;
         return $this;
     }
 
@@ -90,10 +101,11 @@ class ConsumerFactory
      * @return ConsumerInterface
      * @throws LocalizedException
      */
-    private function getConsumerForConnectionName($connectionName)
+    private function createConsumerForConnectionName($connectionName)
     {
         if (isset($this->consumers[$connectionName])) {
-            return $this->consumers[$connectionName];
+            $typeName =  $this->consumers[$connectionName];
+            return $this->objectManager->create($typeName, []);
         }
         throw new LocalizedException(
             new Phrase('Could not find an implementation type for connection "%name".', ['name' => $connectionName])
