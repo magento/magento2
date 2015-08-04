@@ -15,7 +15,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Indexer\Model\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
@@ -37,7 +37,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\ConfigInterface',
+            'Magento\Framework\Indexer\ConfigInterface',
             [],
             '',
             false,

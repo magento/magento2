@@ -8,7 +8,7 @@ namespace Magento\Indexer\Model\Config;
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\Config\Converter
+     * @var \Magento\Framework\Indexer\Config\Converter
      */
     protected $model;
 

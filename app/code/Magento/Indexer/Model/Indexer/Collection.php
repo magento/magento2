@@ -15,7 +15,7 @@ class Collection extends \Magento\Framework\Data\Collection
     protected $_itemObjectClass = 'Magento\Framework\Indexer\IndexerInterface';
 
     /**
-     * @var \Magento\Indexer\Model\ConfigInterface
+     * @var \Magento\Framework\Indexer\ConfigInterface
      */
     protected $config;
 
@@ -26,12 +26,12 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Magento\Indexer\Model\ConfigInterface $config
+     * @param \Magento\Framework\Indexer\ConfigInterface $config
      * @param \Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory $statesFactory
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Magento\Indexer\Model\ConfigInterface $config,
+        \Magento\Framework\Indexer\ConfigInterface $config,
         \Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory $statesFactory
     ) {
         $this->config = $config;

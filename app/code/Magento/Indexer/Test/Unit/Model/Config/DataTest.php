@@ -13,7 +13,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Indexer\Model\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $reader;
 

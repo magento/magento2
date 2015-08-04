@@ -12,7 +12,7 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Indexer\Model\ConfigInterface;
+use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\Indexer\StateFactory;
 use Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory;

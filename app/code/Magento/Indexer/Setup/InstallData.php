@@ -11,7 +11,7 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Indexer\Model\ConfigInterface;
+use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\Indexer\StateFactory;

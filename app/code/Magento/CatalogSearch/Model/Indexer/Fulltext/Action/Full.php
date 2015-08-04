@@ -162,7 +162,7 @@ class Full
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
-     * @param \Magento\Indexer\Model\ConfigInterface $indexerConfig
+     * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -182,7 +182,7 @@ class Full
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
-        \Magento\Indexer\Model\ConfigInterface $indexerConfig
+        \Magento\Framework\Indexer\ConfigInterface $indexerConfig
     ) {
         $this->resource = $resource;
         $this->catalogProductType = $catalogProductType;

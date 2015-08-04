@@ -3,11 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model\Config;
+namespace Magento\Framework\Indexer\Config;
 
-/**
- * @codeCoverageIgnore
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
@@ -32,11 +29,13 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
+     *
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Indexer\Model\Config\Converter $converter,
-        \Magento\Indexer\Model\Config\SchemaLocator $schemaLocator,
+        \Magento\Framework\Indexer\Config\Converter $converter,
+        \Magento\Framework\Indexer\Config\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'indexer.xml',
         $idAttributes = [],

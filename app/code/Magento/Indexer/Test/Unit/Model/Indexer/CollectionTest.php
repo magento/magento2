@@ -18,7 +18,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ['create']
         )->getMock();
 
-        $config = $this->getMockBuilder('Magento\Indexer\Model\ConfigInterface')->getMock();
+        $config = $this->getMockBuilder('Magento\Framework\Indexer\ConfigInterface')->getMock();
 
         $statesFactory = $this->getMockBuilder(
             'Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory'
