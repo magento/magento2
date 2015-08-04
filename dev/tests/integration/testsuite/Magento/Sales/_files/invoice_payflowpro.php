@@ -13,7 +13,7 @@ $orderService = \Magento\TestFramework\ObjectManager::getInstance()->create(
     'Magento\Sales\Api\InvoiceManagementInterface',
     ['order' => $order]
 );
-$invoice = $orderService->prepareInvoice();
+$invoice = $orderService->prepareInvoice($order->getEntityId());
 /** To allow invoice cancelling it should be created without capturing. */
 $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::NOT_CAPTURE)->register();
 $order->setIsInProcess(true);
