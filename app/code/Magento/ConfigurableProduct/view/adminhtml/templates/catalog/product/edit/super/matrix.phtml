@@ -52,7 +52,9 @@ if ($variations) {
             $productMatrix[] = [
                 'product_id' => $product->getId(),
                 'images' => [
-                    'preview' => $this->helper('Magento\Catalog\Helper\Image')->init($product, 'product_thumbnail_image')->getUrl()
+                    'preview' => $this->helper('Magento\Catalog\Helper\Image')
+                        ->init($product, 'product_thumbnail_image')
+                        ->getUrl()
                 ],
                 'sku' => $product->getSku(),
                 'name' => $product->getName(),
