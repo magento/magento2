@@ -117,8 +117,11 @@ class File implements MergeableInterface
     public function getRelativeSourceFilePath()
     {
         $path = $this->filePath;
-        if (strpos($this->source->findRelativeSourceFilePath($this), 'less')) {
-            $path = str_replace('.css', '.less', $this->filePath);
+        $sourcePath = $this->source->findRelativeSourceFilePath($this);
+        if ($sourcePath) {
+            $origExt = pathinfo($path, PATHINFO_EXTENSION);
+            $ext = pathinfo($sourcePath, PATHINFO_EXTENSION);
+            $path = str_replace('.' . $origExt, '.' . $ext, $this->filePath);
         }
         $result = '';
         $result = $this->join($result, $this->context->getPath());
