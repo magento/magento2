@@ -38,17 +38,17 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param DatabaseContext $context
      * @param MetaFactory $metaFactory
      * @param ResourceProfile $resourceProfile
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         DatabaseContext $context,
         MetaFactory $metaFactory,
         ResourceProfile $resourceProfile,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->metaFactory = $metaFactory;
         $this->resourceProfile = $resourceProfile;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -72,15 +72,15 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function loadByEntityTypeAndStore($entityType, $storeId)
     {
         $meta = $this->metaFactory->create();
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['entity_type' => $entityType, 'store_id' => $storeId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable(),
             [$this->getIdFieldName()]
         )->where(
             'entity_type = :entity_type AND store_id = :store_id'
         );
-        $metaId = $adapter->fetchOne($select, $bind);
+        $metaId = $connection->fetchOne($select, $bind);
 
         if ($metaId) {
             $this->load($meta, $metaId);

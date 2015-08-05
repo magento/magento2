@@ -20,10 +20,10 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
     protected $_tableAlias = 'update';
 
     /**
-     * @param \Zend_Db_Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Widget\Model\Resource\Layout\Link\Collection
      */
-    protected function _getCollection(\Zend_Db_Select $select)
+    protected function _getCollection(\Magento\Framework\DB\Select $select)
     {
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
@@ -44,13 +44,13 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
      */
     public function testAddTemporaryFilter($flag)
     {
-        $select = $this->getMock('Zend_Db_Select', [], ['where'], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], ['where'], '', false);
         $select->expects($this->once())->method('where')->with(self::TEST_WHERE_CONDITION);
 
         $collection = $this->_getCollection($select);
 
         /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
-        $connection = $collection->getResource()->getReadConnection();
+        $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()
         )->method(
@@ -81,7 +81,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
      */
     public function testJoinWithUpdate()
     {
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects(
             $this->once()
         )->method(

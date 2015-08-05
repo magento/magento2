@@ -14,7 +14,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Layer extends \Magento\Framework\Object
+class Layer extends \Magento\Framework\DataObject
 {
     /**
      * Product collections array

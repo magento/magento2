@@ -44,17 +44,17 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -114,10 +114,10 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getAttributesUsedInListing()
     {
-        $adapter = $this->_getReadAdapter();
-        $storeLabelExpr = $adapter->getCheckSql('al.value IS NOT NULL', 'al.value', 'main_table.frontend_label');
+        $connection = $this->getConnection();
+        $storeLabelExpr = $connection->getCheckSql('al.value IS NOT NULL', 'al.value', 'main_table.frontend_label');
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['main_table' => $this->getTable('eav_attribute')]
         )->join(
             ['additional_table' => $this->getTable('catalog_eav_attribute')],
@@ -133,7 +133,7 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'additional_table.used_in_product_listing = ?',
             1
         );
-        return $adapter->fetchAll($select);
+        return $connection->fetchAll($select);
     }
 
     /**
@@ -143,9 +143,9 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getAttributesUsedForSortBy()
     {
-        $adapter = $this->_getReadAdapter();
-        $storeLabelExpr = $adapter->getCheckSql('al.value IS NULL', 'main_table.frontend_label', 'al.value');
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $storeLabelExpr = $connection->getCheckSql('al.value IS NULL', 'main_table.frontend_label', 'al.value');
+        $select = $connection->select()->from(
             ['main_table' => $this->getTable('eav_attribute')]
         )->join(
             ['additional_table' => $this->getTable('catalog_eav_attribute')],
@@ -162,6 +162,6 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'additional_table.used_for_sort_by = ?',
             1
         );
-        return $adapter->fetchAll($select);
+        return $connection->fetchAll($select);
     }
 }

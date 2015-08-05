@@ -260,7 +260,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $value = '<a href="#hash_tag">my \'quoted\' string</a>';
         $expectedValue = '&lt;a href=&quot;#hash_tag&quot;&gt;my \'quoted\' string&lt;/a&gt;';
 
-        $filterMock = $this->getMock('Magento\Framework\Object', ['filter'], [], '', false);
+        $filterMock = $this->getMock('Magento\Framework\DataObject', ['filter'], [], '', false);
         $filterMock->expects($this->once())
             ->method('filter')
             ->with($value)

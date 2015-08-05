@@ -72,7 +72,7 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
         $this->mockConfig = $this->getMockBuilder('\Magento\Tax\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->addressRateRequest = new \Magento\Framework\Object();
+        $this->addressRateRequest = new \Magento\Framework\DataObject();
 
         $this->appliedTaxRate = $objectManager->getObject('Magento\Tax\Model\TaxDetails\AppliedTaxRate');
         $this->appliedTaxRateDataObjectFactoryMock = $this->getMock(
