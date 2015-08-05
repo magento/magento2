@@ -8,7 +8,7 @@ namespace Magento\Store\Model\Address;
 
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Filter\FilterManager;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Class Renderer used for formatting a store address
@@ -40,11 +40,11 @@ class Renderer
     /**
      * Format address in a specific way
      *
-     * @param Object $storeInfo
-     * @param $type
+     * @param DataObject $storeInfo
+     * @param string $type
      * @return string
      */
-    public function format(Object $storeInfo, $type = 'html')
+    public function format(DataObject $storeInfo, $type = 'html')
     {
         $this->eventManager->dispatch('store_address_format', ['type' => $type, 'store_info' => $storeInfo]);
         $address = $this->filterManager->template(

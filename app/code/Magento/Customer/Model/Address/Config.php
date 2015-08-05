@@ -6,7 +6,7 @@
 namespace Magento\Customer\Model\Address;
 
 use Magento\Framework\Config\Data;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -120,12 +120,9 @@ class Config extends Data
             $this->_types[$storeId] = [];
             foreach ($this->get() as $typeCode => $typeConfig) {
                 $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
-                $type = new \Magento\Framework\DataObject();
-                if (isset(
-                    $typeConfig['escapeHtml']
-                ) && ($typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1')
-                ) {
-                    $escapeHtml = true;
+                $type = new DataObject();
+                if (isset($typeConfig['escapeHtml'])) {
+                    $escapeHtml = $typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1';
                 } else {
                     $escapeHtml = false;
                 }
@@ -152,14 +149,14 @@ class Config extends Data
     /**
      * Retrieve default address format
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     protected function _getDefaultFormat()
     {
         $store = $this->getStore();
         $storeId = $store->getId();
         if (!isset($this->_defaultTypes[$storeId])) {
-            $this->_defaultTypes[$storeId] = new \Magento\Framework\DataObject();
+            $this->_defaultTypes[$storeId] = new DataObject();
             $this->_defaultTypes[$storeId]->setCode(
                 'default'
             )->setDefaultFormat(
@@ -179,7 +176,7 @@ class Config extends Data
      * Retrieve address format by code
      *
      * @param string $typeCode
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getFormatByCode($typeCode)
     {
