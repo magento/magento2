@@ -14,6 +14,10 @@ define([
             rowSelector: 'tbody tr.data-row',
             headerButtonsTmpl:
                 '<!-- ko template: headerButtonsTmpl --><!-- /ko -->',
+            bulkTmpl:
+                '<!-- ko scope: bulk -->' +
+                    '<!-- ko template: getTemplate() --><!-- /ko -->' +
+                '<!-- /ko -->',
             rowTmpl:
                 '<!-- ko with: _editor -->' +
                     '<!-- ko scope: formRecordName($index(), true) -->' +
@@ -58,7 +62,8 @@ define([
             ko.applyBindings(this.model, buttonsHtml[0]);
 
             if (table) {
-                this.initTable(table);
+                this.initTable(table)
+                    .initBulk(table);
             }
 
             return this;
@@ -83,6 +88,16 @@ define([
             }, ctx);
 
             domObserver.get(this.rowSelector, this.onRowAdd, table);
+
+            return this;
+        },
+
+        initBulk: function (table) {
+            var model = this.model,
+                bulkHtml = $(this.bulkTmpl);
+
+            bulkHtml.prependTo(table.tBodies[0]);
+            ko.applyBindings(model, bulkHtml[0]);
 
             return this;
         },

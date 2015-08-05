@@ -27,6 +27,12 @@ define([
                     active: true
                 }
             },
+            bulkConfig: {
+                component: 'Magento_Ui/js/grid/editing/bulk',
+                name: '${ $.name }_bulk',
+                editorProvider: '${ $.name }',
+                columnsProvider: '${ $.columnsProvider }'
+            },
             viewConfig: {
                 component: 'Magento_Ui/js/grid/editing/editor-view',
                 name: '${ $.name }_view',
@@ -41,7 +47,7 @@ define([
                 '${ $.selectProvider }:selected': 'onSelectionsChange'
             },
             modules: {
-                columns: '${ $.columnsProvider }',
+                bulk: '${ $.bulkConfig.name }',
                 selections: '${ $.selectProvider }'
             }
         },
@@ -55,6 +61,7 @@ define([
             _.bindAll(this, 'updateState', 'countErros');
 
             this._super()
+                .initBulk()
                 .initView();
 
             return this;
@@ -83,6 +90,17 @@ define([
          */
         initView: function () {
             layout([this.viewConfig]);
+
+            return this;
+        },
+
+        /**
+         * Initializes bulk editing component.
+         *
+         * @returns {Editor} Chainable.
+         */
+        initBulk: function () {
+            layout([this.bulkConfig]);
 
             return this;
         },

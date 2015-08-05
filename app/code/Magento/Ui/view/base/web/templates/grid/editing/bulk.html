@@ -4,46 +4,18 @@
  * See COPYING.txt for license details.
  */
 -->
-<tr class="data-grid-bulk-edit-panel">
-    <td></td>
-    <td></td>
-    <td>
-        <label
-            class="admin__field-label admin__field-label-vertical"
-            for="foo3"
-            data-bind="text: $t('All in column')"></label>
-        <input
-            id="foo3"
-            class="admin__control-text"
-            type="text">
-    </td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>
-        <label
-            class="admin__field-label admin__field-label-vertical"
-            for="foo2"
-            data-bind="text: $t('All in column')"></label>
-        <select
-            id="foo2"
-            class="admin__control-select">
-            <option value="1">Enabled</option>
-            <option value="0">Disabled</option>
-        </select>
-    </td>
-    <td>
-        <label
-            class="admin__field-label admin__field-label-vertical"
-            for="foo1"
-            data-bind="text: $t('All in column')"></label>
-        <input
-            id="foo1"
-            class="admin__control-text"
-            type="text">
-    </td>
-    <td class="data-grid-actions-cell">
-        <button class="action-default" type="button" disabled><span data-bind="text: $t('Apply')"></span></button>
+<tr class="data-grid-bulk-edit-panel" data-bind="visible: editor().isMultiEditing, foreach: fields">
+    <td data-bind="visible: visible, css: { 'data-grid-actions-cell': $parent.isActionsColumn($data) }">
+        <!-- ko if: $parent.isActionsColumn($data) -->
+            <!-- ko with: $parent -->
+                <button class="action-default" type="button" disabled>
+                    <span data-bind="text: $t('Apply')"></span>
+                </button>
+            <!-- /ko -->
+        <!-- /ko -->
+        
+        <!-- ko if: $data.isEditor -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
     </td>
 </tr>
