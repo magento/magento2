@@ -66,7 +66,7 @@
     max-width: 100%;
     overflow-x: auto;
     padding-bottom: 1rem;
-    padding-top: 0;
+    padding-top: @data-grid-header-row__indent;
 }
 
 .admin__data-grid-loading-mask {
@@ -459,6 +459,19 @@
                 }
             }
         }
+        &.data-grid-bulk-edit-panel {
+            td {
+                background-color: @data-grid-bulk-edit-panel__background-color;
+                &:before {
+                    background-color: @data-grid-bulk-edit-panel__background-color;
+                }
+            }
+            &:hover {
+                td {
+                    background-color: @data-grid-bulk-edit-panel__background-color;
+                }
+            }
+        }
     }
     .data-grid-editable-row-actions {
         left: 50%;
@@ -547,8 +560,7 @@
 //  Data Grid Info Panel
 .data-grid-info-panel {
     box-shadow: 0 0 5px rgba(0, 0, 0, .5);
-    margin-left: .1rem;
-    margin-right: .1rem;
+    margin: @data-grid-header-row__indent .1rem -(@data-grid-header-row__indent);
     padding: @data-grid-th__padding-vertical;
     .messages {
         margin-bottom: @indent__s;
@@ -558,29 +570,6 @@
 .data-grid-info-panel-actions {
     text-align: right;
 }
-
-//  Data Grid Buld Editing panel
-.data-grid-bulk-edit-panel {
-    td {
-        background-color: @data-grid-bulk-edit-panel__background-color;
-        &:first-child {
-            border-left: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
-        }
-        &:last-child {
-            border-right: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
-        }
-    }
-    .data-grid-actions-cell {
-        vertical-align: bottom;
-    }
-    .admin__field-label-vertical {
-        display: block;
-        font-size: 1.2rem;
-        margin-bottom: .5rem;
-        text-align: left;
-    }
-}
-
 //  Data Grid Inline Edit Validation
 .data-grid-editable-row {
     @_field-error-triangle__width: 20px;
@@ -612,7 +601,8 @@
         bottom: 100%;
         box-shadow: @component__box-shadow__base;
         left: 0;
-        margin-bottom: 1.5rem;
+        margin: 0 auto 1.5rem;
+        max-width: 32rem;
         position: absolute;
         right: 0;
         &:after,
@@ -636,3 +626,17 @@
         }
     }
 }
+
+//  Data Grid Buld Editing panel
+.data-grid-bulk-edit-panel {
+    .data-grid-actions-cell {
+        vertical-align: bottom;
+    }
+    .admin__field-label-vertical {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: .5rem;
+        text-align: left;
+    }
+}
+
