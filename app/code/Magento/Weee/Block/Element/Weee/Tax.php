@@ -66,20 +66,23 @@ class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
             return null;
         }
 
-
-
         foreach ($values as $key => $value) {
             if ($this->getEntityAttribute()) {
                 $format= $this->localeFormat->getPriceFormat();
                 $values[$key]['value'] = number_format(
-                    $value['value'],
+                    array_key_exists('price', $value) ? $value['price'] : $value['value'],
                     $format['precision'],
                     $format['decimalSymbol'],
                     $format['groupSymbol']
                 );
             } else {
                 // default format:  1234.56
-                $values[$key]['value'] = number_format($value['value'], 2, null, '');
+                $values[$key]['value'] = number_format(
+                    array_key_exists('price', $value) ? $value['price'] : $value['value'],
+                    2,
+                    null,
+                    ''
+                );
             }
         }
 
