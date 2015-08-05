@@ -21,6 +21,7 @@ use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
+use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
@@ -31,7 +32,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\ObjectFactory;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
@@ -40,7 +41,7 @@ use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Stdlib\String as StringHelper;
+use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -189,7 +190,7 @@ class AccountManagement implements AccountManagementInterface
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\ObjectFactory
+     * @var ObjectFactory
      */
     protected $objectFactory;
 
@@ -753,7 +754,7 @@ class AccountManagement implements AccountManagementInterface
         $rpToken = $customerSecureData->getRpToken();
         $rpTokenCreatedAt = $customerSecureData->getRpTokenCreatedAt();
 
-        if (strcmp($rpToken, $resetPasswordLinkToken) !== 0) {
+        if (!Security::compareStrings($rpToken, $resetPasswordLinkToken)) {
             throw new InputMismatchException(__('Reset password token mismatch.'));
         } elseif ($this->isResetPasswordLinkTokenExpired($rpToken, $rpTokenCreatedAt)) {
             throw new ExpiredException(__('Reset password token expired.'));

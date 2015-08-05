@@ -80,7 +80,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesAbsentOnProductPage" />
         </variation>
         <variation name="UpdateConfigurableProductEntityTestVariation4">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-34791</data>
             <data name="description" xsi:type="string">Delete attribute and add another with products qty = 0</data>
             <data name="attributeTypeAction" xsi:type="string">deleteAll</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>

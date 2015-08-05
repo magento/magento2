@@ -110,7 +110,11 @@ class Bookmark extends AbstractModel implements BookmarkInterface
      */
     public function getConfig()
     {
-        return $this->jsonDecoder->decode($this->getData(self::CONFIG));
+        $config = $this->getData(self::CONFIG);
+        if ($config) {
+            return $this->jsonDecoder->decode($config);
+        }
+        return [];
     }
 
     /**

@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ToOrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Object\Copy | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectCopyMock;
 
@@ -51,7 +51,7 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
+        $this->objectCopyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
         $this->orderInterfaceMock = $this->getMockForAbstractClass(
             'Magento\Sales\Api\Data\OrderInterface',
             [],

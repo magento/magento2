@@ -203,7 +203,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->filterFactory->method('create')
             ->will($this->returnValue($filterTemplate));
-        $designConfig = $this->getMockBuilder('Magento\Framework\Object')
+        $designConfig = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -363,7 +363,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'setTemplateText',
         ]);
 
-        $designConfig = $this->getMockBuilder('Magento\Framework\Object')
+        $designConfig = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -510,7 +510,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->expects($this->once())
             ->method('applyDesignConfig');
 
-        $designConfig = $this->getMockBuilder('Magento\Framework\Object')
+        $designConfig = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();

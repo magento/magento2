@@ -31,7 +31,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function getSelectUnnecessaryData()
     {
-        return $this->getWriteAdapter()->select()->from(
+        return $this->connection->select()->from(
             $this->getMainTable(),
             []
         )->joinLeft(
@@ -55,8 +55,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function removeUnnecessaryData()
     {
-        $this->getWriteAdapter()->query(
-            $this->getWriteAdapter()->deleteFromSelect($this->getSelectUnnecessaryData(), $this->getMainTable())
+        $this->connection->query(
+            $this->connection->deleteFromSelect($this->getSelectUnnecessaryData(), $this->getMainTable())
         );
     }
 
@@ -67,13 +67,13 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function publishData()
     {
-        $select = $this->getWriteAdapter()->select()->from($this->getMainTmpTable());
+        $select = $this->connection->select()->from($this->getMainTmpTable());
 
         $queries = $this->prepareSelectsByRange($select, 'category_id');
 
         foreach ($queries as $query) {
-            $this->getWriteAdapter()->query(
-                $this->getWriteAdapter()->insertFromSelect(
+            $this->connection->query(
+                $this->connection->insertFromSelect(
                     $query,
                     $this->getMainTable(),
                     ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
@@ -90,6 +90,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function clearTmpData()
     {
-        $this->getWriteAdapter()->delete($this->getMainTmpTable());
+        $this->connection->delete($this->getMainTmpTable());
     }
 }

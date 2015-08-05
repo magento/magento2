@@ -9,7 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
@@ -55,7 +55,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Configuration of design package for template
      *
-     * @var Object
+     * @var DataObject
      */
     private $designConfig;
 
@@ -76,7 +76,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Configuration of emulated design package.
      *
-     * @var Object|boolean
+     * @var DataObject|boolean
      */
     private $emulatedDesignConfig = false;
 
@@ -574,7 +574,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Get design configuration data
      *
-     * @return Object
+     * @return DataObject
      */
     public function getDesignConfig()
     {
@@ -585,7 +585,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             if ($this->store === null) {
                 $this->store = $this->storeManager->getStore()->getId();
             }
-            $this->designConfig = new Object(['area' => $this->area, 'store' => $this->store]);
+            $this->designConfig = new DataObject(
+                ['area' => $this->area, 'store' => $this->store]
+            );
         }
         return $this->designConfig;
     }

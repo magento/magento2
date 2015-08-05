@@ -63,7 +63,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     public function testGetValue()
     {
         $data = ['imported_file' => 'file.csv'];
-        $row = new \Magento\Framework\Object($data);
+        $row = new \Magento\Framework\DataObject($data);
         $this->assertEquals('<p> file.csv</p><a href="url">Download</a>', $this->download->_getValue($row));
     }
 }

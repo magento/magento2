@@ -140,7 +140,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get sales item (quote item, order item etc) price including tax based on row total and tax amount
      *
-     * @param   \Magento\Framework\Object $item
+     * @param   \Magento\Framework\DataObject $item
      * @return  float
      */
     public function getPriceInclTax($item)
@@ -157,7 +157,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get sales item (quote item, order item etc) row total price including tax
      *
-     * @param   \Magento\Framework\Object $item
+     * @param   \Magento\Framework\DataObject $item
      * @return  float
      */
     public function getSubtotalInclTax($item)
@@ -360,7 +360,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
 
         if ($guestCheckout == true) {
-            $result = new \Magento\Framework\Object();
+            $result = new \Magento\Framework\DataObject();
             $result->setIsAllowed($guestCheckout);
             $this->_eventManager->dispatch(
                 'checkout_allow_guest',
