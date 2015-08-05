@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Model;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
@@ -569,7 +569,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     /**
      * {inheritdoc}
      */
-    public function postRequest(Object $request, ConfigInterface $config)
+    public function postRequest(DataObject $request, ConfigInterface $config)
     {
         return $this->gateway->postRequest($request, $config);
     }
@@ -581,7 +581,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param float $amount
      * @return Object
      */
-    protected function _buildPlaceRequest(Object $payment, $amount)
+    protected function _buildPlaceRequest(DataObject $payment, $amount)
     {
         $request = $this->buildBasicRequest();
         $request->setAmt(round($amount, 2));
@@ -611,7 +611,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     public function buildBasicRequest()
     {
-        $request = new Object();
+        $request = new DataObject();
 
         /** @var \Magento\Paypal\Model\PayflowConfig $config */
         $config = $this->getConfig();
@@ -630,12 +630,12 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     /**
      * If response is failed throw exception
      *
-     * @param Object $response
+     * @param DataObject $response
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      */
-    public function processErrors(Object $response)
+    public function processErrors(DataObject $response)
     {
         if ($response->getResultCode() == self::RESPONSE_CODE_VOID_ERROR) {
             throw new \Magento\Framework\Exception\State\InvalidTransitionException(
@@ -704,12 +704,12 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
-     * @param Object $request
-     * @param Object $billing
+     * @param DataObject $request
+     * @param DataObject $billing
      *
      * @return Object
      */
-    public function setBilling(Object $request, $billing)
+    public function setBilling(DataObject $request, $billing)
     {
         $request->setFirstname(
             $billing->getFirstname()
@@ -730,8 +730,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
-     * @param Object $request
-     * @param Object $shipping
+     * @param DataObject $request
+     * @param DataObject $shipping
      *
      * @return Object
      */
@@ -759,11 +759,11 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Fill response with data.
      *
      * @param array $postData
-     * @param Object $response
+     * @param DataObject $response
      *
-     * @return Object
+     * @return DataObject
      */
-    public function mapGatewayResponse(array $postData, Object $response)
+    public function mapGatewayResponse(array $postData, DataObject $response)
     {
         $response->setData(array_change_key_case($postData));
         foreach ($this->_responseParamsMappings as $originKey => $key) {
@@ -788,8 +788,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
-     * @param Object $payment
-     * @param Object $response
+     * @param DataObject $payment
+     * @param DataObject $response
      *
      * @return Object
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -821,11 +821,11 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     }
 
     /**
-     * @param Object $order
-     * @param Object $request
-     * @return Object
+     * @param DataObject $order
+     * @param DataObject $request
+     * @return DataObject
      */
-    public function fillCustomerContacts(Object $order, Object $request)
+    public function fillCustomerContacts(DataObject $order, DataObject $request)
     {
         $customerId = $order->getCustomerId();
         if ($customerId) {

@@ -114,7 +114,7 @@ abstract class EntityAbstract extends AbstractDb
      * Perform actions before object save
      * Perform actions before object save, calculate next sequence value for increment Id
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)

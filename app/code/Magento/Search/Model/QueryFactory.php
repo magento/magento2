@@ -8,7 +8,7 @@ namespace Magento\Search\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Stdlib\String as StdlibString;
+use Magento\Framework\Stdlib\StringUtils as StdlibString;
 use Magento\Store\Model\ScopeInterface;
 
 class QueryFactory implements QueryFactoryInterface
