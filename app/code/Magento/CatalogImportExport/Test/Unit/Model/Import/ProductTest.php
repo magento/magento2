@@ -8,7 +8,6 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ProductTest
@@ -17,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     const MEDIA_DIRECTORY = 'media/import';
 
@@ -26,11 +25,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     const ENTITY_TYPE_CODE = 'catalog_product';
 
     const ENTITY_ID = 13;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
 
     /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_connection;
@@ -166,7 +160,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        parent::setUp();
 
         /* For parent object construct */
         $this->jsonHelper =
@@ -1633,26 +1627,5 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $importProduct->expects($this->once())->method('getOptionEntity')->willReturn($option);
 
         return $importProduct;
-    }
-
-    /**
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     */
-    protected function getErrorAggregatorObject()
-    {
-        $errorFactory = $this->getMockBuilder(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $errorFactory->method('create')->willReturn(
-            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
-        );
-        return $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            [
-                'errorFactory' => $errorFactory
-            ]
-        );
     }
 }

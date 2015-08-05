@@ -9,23 +9,17 @@ namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 use \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory as ResourceFactory;
 use \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
+class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
 
     /**
      * @var ResourceFactory |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceFactory;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Data |\PHPUnit_Framework_MockObject_MockObject
@@ -124,7 +118,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        parent::setUp();
 
         $this->jsonHelper = $this->getMock(
             '\Magento\Framework\Json\Helper\Data',
@@ -849,27 +843,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 $this->errorAggregator
             ],
             ''
-        );
-    }
-
-    /**
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     */
-    protected function getErrorAggregatorObject()
-    {
-        $errorFactory = $this->getMockBuilder(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $errorFactory->method('create')->willReturn(
-            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
-        );
-        return $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            [
-                'errorFactory' => $errorFactory
-            ]
         );
     }
 }
