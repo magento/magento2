@@ -99,7 +99,7 @@
             width: 100%;
             word-wrap: break-word;
 
-            .typography(
+            .mixin-typography(
             @_color: @checkout-progress-bar-item__background-color,
             @_font-family: false,
             @_font-size: @checkout-progress-bar__font-size,
@@ -130,7 +130,7 @@
                 .css(width, @checkout-progress-bar-item-element-inner__width);
                 content: counter(i);
                 counter-increment: i;
-                .typography(
+                .mixin-typography(
                 @_color: @checkout-progress-bar-item-element-inner__color,
                 @_font-family: false,
                 @_font-size: @checkout-progress-bar__font-size,

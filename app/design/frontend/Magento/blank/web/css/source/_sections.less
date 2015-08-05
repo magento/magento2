@@ -9,7 +9,7 @@
 
 & when (@media-common = true) {
     .product.data.items {
-        .data-accordion();
+        .mixin-data-accordion();
         margin-bottom: @indent__base;
     }
 }
@@ -32,7 +32,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .product.data.items {
-        .data-accordion();
+        .mixin-data-accordion();
         .data.item {
             display: block;
         }

@@ -12,7 +12,7 @@
 //  ---------------------------------------------
 
 .abs-reset-list {
-    .list-reset-styles();
+    .mixin-list-reset-styles();
     > li {
         margin: 0;
     }
@@ -149,7 +149,7 @@
     padding-bottom: 12px;
     margin-bottom: 15px;
     border-bottom: 1px solid @secondary__color;
-    .font-size(18);
+    .mixin-font-size(18);
 }
 
 //
@@ -158,7 +158,7 @@
 
 .abs-block-title {
     > strong {
-        .heading(h3);
+        .mixin-heading(h3);
     }
     margin-bottom: 15px;
 }
@@ -176,7 +176,7 @@
     }
     .box-title {
         > span {
-            .heading(h4);
+            .mixin-heading(h4);
         }
         display: inline-block;
         margin: 0 0 @indent__xs;
@@ -248,7 +248,7 @@
 .abs-product-link {
     font-weight: @font-weight__regular;
     > a {
-        .link(
+        .mixin-link(
         @_link-color: @product-name-link__color,
         @_link-text-decoration: @product-name-link__text-decoration,
         @_link-color-visited: @product-name-link__color__visited,
@@ -641,12 +641,12 @@
     .price-excluding-tax,
     .weee {
         display: inline-block;
-        .font-size(14);
+        .mixin-font-size(14);
         white-space: nowrap;
     }
     .price-including-tax + .price-excluding-tax {
         display: inline-block;
-        .font-size(11);
+        .mixin-font-size(11);
         &:before {
             content: "("attr(data-label)": ";
         }
@@ -696,7 +696,7 @@
 //  ---------------------------------------------
 
 .abs-methods-shipping-title {
-    .font-size(14);
+    .mixin-font-size(14);
     margin: 0 0 15px;
     font-weight: @font-weight__bold;
 }
@@ -940,7 +940,7 @@
 
 .abs-block-items-counter {
     .css(color, @primary__color__lighter);
-    .font-size(12px);
+    .mixin-font-size(12px);
     white-space: nowrap;
 }
 
@@ -1096,7 +1096,7 @@
 .abs-checkout-title {
     .css(border-bottom, @checkout-step-title__border);
     .css(padding-bottom, @checkout-step-title__padding);
-    .typography(
+    .mixin-typography(
     @_font-size: @checkout-step-title__font-size,
     @_font-weight: @checkout-step-title__font-weight,
     @_font-family: false,

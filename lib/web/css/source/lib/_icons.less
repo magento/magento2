@@ -294,9 +294,9 @@
         @_icon-image-height
     );
     .css(line-height, @_icon-image-height);
+    .css(margin, @_icon-image-margin);
     .css(vertical-align, @_icon-image-vertical-align);
     background: url(@_icon-image) no-repeat @_icon-image-position-x @_icon-image-position-y;
-    .css(margin, @_icon-image-margin);
 }
 
 ._icon-image-position(
@@ -310,8 +310,8 @@
     @icon__width,
     @icon__height
 ) {
-    .css(width, @icon__width);
     .css(height, @icon__height);
+    .css(width, @icon__width);
 }
 
 ._icon-sprite-position(
@@ -331,18 +331,18 @@
     @_icon-font-margin,
     @_icon-font-vertical-align
 ) {
-    .css(font-family, @_icon-font);
     .css(content, @_icon-font-content);
+    .css(font-family, @_icon-font);
     ._icon-font-size(@_icon-font-size, @_icon-font-line-height);
+    -webkit-font-smoothing: antialiased;
     .css(color, @_icon-font-color);
+    .css(margin, @_icon-font-margin);
+    .css(vertical-align, @_icon-font-vertical-align);
+    display: inline-block;
+    font-weight: normal;
     overflow: hidden;
     speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    display: inline-block;
-    .css(vertical-align, @_icon-font-vertical-align);
     text-align: center;
-    .css(margin, @_icon-font-margin);
 }
 
 ._icon-font-size(@_icon-font-size, @_icon-font-line-height) {

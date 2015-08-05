@@ -77,7 +77,7 @@
             .css(text-decoration, @_nav-level0-item-text-decoration);
         }
         .level0 {
-            .font-size(@_nav-level0-font-size);
+            .mixin-font-size(@_nav-level0-font-size);
             .css(border-top, @_nav-level0-item-border);
             > .level-top {
                 .css(background, @_nav-level0-item-background-color);
@@ -193,7 +193,7 @@
 
 //
 //  Desktop
-//  ---------------------------------------------
+//  _____________________________________________
 
 .mixin-main-navigation-desktop(
     @_nav-background-color: @navigation-desktop__background,
@@ -418,8 +418,8 @@
             &:before,
             &:after {
                 content: '';
-                overflow: hidden;
                 display: block;
+                overflow: hidden;
                 position: absolute;
             }
             &:before {
@@ -444,12 +444,12 @@
             .css(margin-top, @_size);
             &:before {
                 .css(color, @_bg);
+                .css(left, @_left);
+                .css(top, -@_size*2);
                 content: '';
                 display: block;
                 overflow: hidden;
                 position: absolute;
-                .css(top, -@_size*2);
-                .css(left, @_left);
                 z-index: 4;
                 .arrow(up, @_size, @_bg);
             }
@@ -461,12 +461,12 @@
             .css(margin-top, @_size);
             &:before {
                 .css(color, @_border);
+                .css(left, @_left);
+                .css(top, -@_size*2);
                 content: '';
                 display: block;
                 overflow: hidden;
                 position: absolute;
-                .css(top, -@_size*2);
-                .css(left, @_left);
                 z-index: 4;
                 .arrow(up, @_size, @_border);
             }

@@ -61,7 +61,7 @@
         .weee[data-label] {
             display: inline;
             .price {
-                .font-size(11);
+                .mixin-font-size(11);
             }
             &:before {
                 content: " +" attr(data-label) ": ";
@@ -134,13 +134,13 @@
         .notice {
             margin: @indent__s 0;
             .css(color, @text__color__muted);
-            .font-size(@font-size__s);
+            .mixin-font-size(@font-size__s);
         }
         .product.thumbs {
             margin: @indent__base 0 @indent__l;
         }
         .items.thumbs {
-            .list-inline();
+            .mixin-list-inline();
             .active {
                 display: block;
                 line-height: 1;
@@ -205,7 +205,7 @@
             margin-top: @indent__s;
         }
         .product-reviews-summary .reviews-actions {
-            .font-size(@font-size__base);
+            .mixin-font-size(@font-size__base);
         }
     }
 
@@ -216,7 +216,7 @@
                 .css(font-weight, @font-weight__bold);
                 .css(margin, 0 0 @indent__xs);
                 display: inline-block;
-                .font-size(14px);
+                .mixin-font-size(14px);
                 float: none;
                 padding: 0;
             }
@@ -224,7 +224,7 @@
                 .legend {
                     &:after {
                         content: '*';
-                        .typography(
+                        .mixin-typography(
                         @_font-size: @form-field-label-asterisk__font-size,
                         @_color: @form-field-label-asterisk__color,
                         @_font-family: @form-field-label-asterisk__font-family,
@@ -250,16 +250,16 @@
             .price-including-tax + .price-excluding-tax,
             .weee + .price-excluding-tax,
             .weee {
-                .font-size(12);
+                .mixin-font-size(12);
                 margin-bottom: @indent__xs;
                 line-height: 14px;
                 .price {
-                    .font-size(12);
+                    .mixin-font-size(12);
                     font-weight: @font-weight__bold;
                 }
             }
             .price-wrapper .price {
-                .font-size(18);
+                .mixin-font-size(18);
                 font-weight: @font-weight__bold;
             }
         }
@@ -267,7 +267,7 @@
             display: block;
             margin: @indent__s 0;
             .price-container {
-                .font-size(14);
+                .mixin-font-size(14);
             }
             .price-label + .price-wrapper {
                 display: inline-block;
@@ -321,7 +321,7 @@
         .weee {
             display: inline-block;
             .price {
-                .font-size(14);
+                .mixin-font-size(14);
                 font-weight: @font-weight__bold;
             }
         }
@@ -375,7 +375,7 @@
             }
             .counter {
                 .css(color, @primary__color__lighter);
-                .font-size(12);
+                .mixin-font-size(12);
                 white-space: nowrap;
             }
             .minilist {
@@ -634,7 +634,7 @@
                 }
             }
             &.attribute {
-                .font-size(13);
+                .mixin-font-size(13);
                 img {
                     max-width: 100%;
                     height: auto;

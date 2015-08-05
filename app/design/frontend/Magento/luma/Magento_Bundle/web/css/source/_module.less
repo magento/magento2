@@ -22,7 +22,7 @@
     margin-bottom: @indent__xl;
 
     .legend.title {
-        .heading(h1);
+        .mixin-heading(h1);
         border: 0;
         padding: 0;
     }
@@ -78,7 +78,7 @@
         > .title {
             margin-bottom: 15px;
             > strong {
-                .heading(h2);
+                .mixin-heading(h2);
             }
         }
         > .title,
@@ -101,7 +101,7 @@
                 display: none;
             }
             > .subtitle {
-                .heading(h2);
+                .mixin-heading(h2);
                 display: block;
             }
         }
@@ -201,14 +201,14 @@
                 .weee {
                     .css(color, @price-color);
                     .price {
-                        .font-size(12);
+                        .mixin-font-size(12);
                         font-weight: @font-weight__bold;
                     }
                 }
             }
             .price-including-tax + .price-excluding-tax {
                 .price {
-                    .font-size(14);
+                    .mixin-font-size(14);
                     line-height: 16px;
                 }
             }

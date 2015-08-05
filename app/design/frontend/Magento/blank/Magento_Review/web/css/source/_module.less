@@ -34,10 +34,10 @@
     &.add.review {
         margin-bottom: @indent__xl;
         > .title {
-            .heading(h2);
+            .mixin-heading(h2);
         }
         .legend {
-            .heading(h3);
+            .mixin-heading(h3);
             margin: 0 0 @indent__base;
         }
         .field.rating {
@@ -55,14 +55,14 @@
     }
     &.reviews.list {
         > .title {
-            .heading(h2);
+            .mixin-heading(h2);
         }
         .review {
             &.item {
                 margin-bottom: @indent__xl;
             }
             &.title {
-                .heading(h3);
+                .mixin-heading(h3);
             }
         }
     }
@@ -156,7 +156,7 @@
             }
         }
         .review-title {
-            .heading(h3);
+            .mixin-heading(h3);
             .css(font-weight, @font-weight__semibold);
             .css(margin-bottom, @indent__base);
         }
@@ -255,7 +255,7 @@
     }
     &-list {
         .block-title strong {
-            .heading(h2);
+            .mixin-heading(h2);
         }
         margin-bottom: @indent__l;
     }
@@ -284,7 +284,7 @@
         }
     }
     &-title {
-        .heading(h3);
+        .mixin-heading(h3);
         margin: 0 0 @indent__base;
     }
     &-content {

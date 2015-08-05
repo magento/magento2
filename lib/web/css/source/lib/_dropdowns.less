@@ -238,24 +238,27 @@
     @_dropdown-list-pointer-position-left-right
 ) {
     @{_options-selector} {
-        .list-reset-styles();
-        box-sizing: border-box;
         .css(background, @_dropdown-list-background);
         .css(border, @_dropdown-list-border);
-        position: absolute;
         .css(z-index, @_dropdown-list-z-index);
+        .mixin-list-reset-styles();
+        box-sizing: border-box;
+        position: absolute;
+
         ._dropdown-list-position(
             @_dropdown-list-position-top,
             @_dropdown-list-position-bottom,
             @_dropdown-list-position-left,
             @_dropdown-list-position-right
         );
-        .css(min-width, @_dropdown-list-min-width);
-        .css(width, @_dropdown-list-width);
+
         .css(height, @_dropdown-list-height);
         .css(margin-top, @_dropdown-list-margin-top);
+        .css(min-width, @_dropdown-list-min-width);
+        .css(width, @_dropdown-list-width);
         display: none;
         ._dropdown-list-shadow(@_dropdown-list-shadow);
+
         li {
             .css(margin, @_dropdown-list-item-margin);
             .css(padding, @_dropdown-list-item-padding);
@@ -267,6 +270,7 @@
                 cursor: pointer;
             }
         }
+
         ._dropdown-list-pointer(
             @_dropdown-list-background,
             @_dropdown-list-pointer-border,
@@ -354,6 +358,7 @@
         @_icon-font-position: @_icon-font-position,
         @_icon-font-text-hide: @_icon-font-text-hide
     );
+
     &.active {
         .mixin-icon-font(
             @_icon-font-content: @_dropdown-toggle-active-icon-content,
@@ -403,8 +408,8 @@
         @_icon-font-position: @_icon-font-position,
         @_icon-font-text-hide: @_icon-font-text-hide
     );
+
     &.active {
-        // ToDo IU: chack if it can be replaced to icon-symbol() mixin
         .mixin-button-icon(
             @_icon-font-content: @_dropdown-toggle-active-icon-content,
             @_icon-font: @_icon-font,
@@ -458,6 +463,7 @@
 //  Split dropdown toggle position = right
 //  and
 //  Dropdown-split-button-border-radius-fix = true
+
 ._dropdown-split-toggle-position(
     @_button-selector,
     @_toggle-selector,
@@ -465,19 +471,20 @@
     @_dropdown-split-button-border-radius-fix
 ) when (@_dropdown-split-toggle-position = right) and (@_dropdown-split-button-border-radius-fix = true) {
     button@{_button-selector} {
-        border-top-right-radius: 0;
         border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
     }
     button + @{_toggle-selector} {
+        border-bottom-left-radius: 0;
         border-left: 0;
         border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
     }
 }
 
 //  Split dropdown toggle position = left
 //  and
 //  Dropdown-split-button-border-radius-fix = true
+
 ._dropdown-split-toggle-position(
     @_button-selector,
     @_toggle-selector,
@@ -485,13 +492,13 @@
     @_dropdown-split-button-border-radius-fix
 ) when (@_dropdown-split-toggle-position = left) and (@_dropdown-split-button-border-radius-fix = true) {
     button@{_button-selector} {
-        border-top-left-radius: 0;
         border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
     }
     button + @{_toggle-selector} {
+        border-bottom-right-radius: 0;
         border-right: 0;
         border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
     }
 }
 
@@ -527,12 +534,12 @@
         @_dropdown-list-pointer-border
     );
     &:before {
-        .css(top, @_dropdown-list-pointer-position-top);
         .css(left, @_dropdown-list-pointer-position-left-right);
+        .css(top, @_dropdown-list-pointer-position-top);
     }
     &:after {
-        .css(top, @_dropdown-list-pointer-position-top - 2);
         .css(left, @_dropdown-list-pointer-position-left-right - 1);
+        .css(top, @_dropdown-list-pointer-position-top - 2);
     }
 }
 
@@ -548,12 +555,12 @@
         @_dropdown-list-pointer-border
     );
     &:before {
-        .css(top, @_dropdown-list-pointer-position-top);
         .css(right, @_dropdown-list-pointer-position-left-right);
+        .css(top, @_dropdown-list-pointer-position-top);
     }
     &:after {
-        .css(top, @_dropdown-list-pointer-position-top - 2);
         .css(right, @_dropdown-list-pointer-position-left-right - 1);
+        .css(top, @_dropdown-list-pointer-position-top - 2);
     }
 }
 
@@ -563,22 +570,22 @@
 ) {
     &:before,
     &:after {
-        content: "";
-        position: absolute;
-        display: block;
-        width: 0;
-        height: 0;
         border-bottom-style: solid;
+        content: '';
+        display: block;
+        height: 0;
+        position: absolute;
+        width: 0;
     }
     &:before {
-        z-index: 99;
-        border: solid 6px;
+        border: 6px solid;
         border-color: transparent transparent @_dropdown-list-background transparent;
+        z-index: 99;
     }
     &:after {
-        z-index: 98;
-        border: solid 7px;
+        border: 7px solid;
         border-color: transparent transparent @_dropdown-list-pointer-border transparent;
+        z-index: 98;
     }
 }
 
