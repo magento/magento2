@@ -51,7 +51,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connectionMock;
 
@@ -61,9 +61,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $selectMock;
+    protected $select;
 
     protected function setUp()
     {
@@ -84,16 +84,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnSelf());
 
-        $adapter = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', [], '', false);
-
-        $this->selectMock = $this->getMock('Zend_Db_Select', null, [$adapter]);
-
         $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'describeTable', 'quoteIdentifier', '_connect', '_quote'],
             [],
             '',
             false);
+
+        $this->select = new \Magento\Framework\DB\Select($this->connectionMock);
 
         $this->resourceMock = $this->getMockForAbstractClass(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
@@ -102,12 +100,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['__wakeup', 'getReadConnection', 'getMainTable', 'getTable']
+            ['__wakeup', 'getConnection', 'getMainTable', 'getTable']
         );
 
         $this->connectionMock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->will($this->returnValue($this->select));
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->will($this->returnArgument(0));
@@ -147,7 +145,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnArgument(0));
 
         $this->resourceMock->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($this->connectionMock));
         $this->resourceMock->expects($this->any())
             ->method('getMainTable')
@@ -190,10 +188,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         return [
             'main_table_expression' => [
                 'col2', '1',
-                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM "some_main_table" AS "main_table"' . "\n"
-                . ' INNER JOIN "some_extra_table" AS "additional_table"'
+                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM `some_main_table` AS `main_table`' . "\n"
+                . ' INNER JOIN `some_extra_table` AS `additional_table`'
                 . ' ON additional_table.attribute_id = main_table.attribute_id' . "\n"
-                . ' LEFT JOIN "some_extra_table" AS "scope_table"'
+                . ' LEFT JOIN `some_extra_table` AS `scope_table`'
                 . ' ON scope_table.attribute_id = main_table.attribute_id'
                 . ' AND scope_table.website_id = :scope_website_id'
                 . ' WHERE (main_table.entity_type_id = :mt_entity_type_id)'
@@ -201,10 +199,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ],
             'additional_table_expression' => [
                 'col3', '2',
-                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM "some_main_table" AS "main_table"' . "\n"
-                . ' INNER JOIN "some_extra_table" AS "additional_table"'
+                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM `some_main_table` AS `main_table`' . "\n"
+                . ' INNER JOIN `some_extra_table` AS `additional_table`'
                 . ' ON additional_table.attribute_id = main_table.attribute_id' . "\n"
-                . ' LEFT JOIN "some_extra_table" AS "scope_table"'
+                . ' LEFT JOIN `some_extra_table` AS `scope_table`'
                 . ' ON scope_table.attribute_id = main_table.attribute_id'
                 . ' AND scope_table.website_id = :scope_website_id'
                 . ' WHERE (main_table.entity_type_id = :mt_entity_type_id)'

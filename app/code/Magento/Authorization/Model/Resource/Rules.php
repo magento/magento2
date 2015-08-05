@@ -43,7 +43,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\CacheInterface $aclCache
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -51,10 +51,10 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\CacheInterface $aclCache,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_aclBuilder = $aclBuilder;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_rootResource = $rootResource;
         $this->_aclCache = $aclCache;
         $this->_logger = $logger;
@@ -80,13 +80,13 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function saveRel(\Magento\Authorization\Model\Rules $rule)
     {
         try {
-            $adapter = $this->_getWriteAdapter();
-            $adapter->beginTransaction();
+            $connection = $this->getConnection();
+            $connection->beginTransaction();
             $roleId = $rule->getRoleId();
 
             $condition = ['role_id = ?' => (int)$roleId];
 
-            $adapter->delete($this->getMainTable(), $condition);
+            $connection->delete($this->getMainTable(), $condition);
 
             $postedResources = $rule->getResources();
             if ($postedResources) {
@@ -99,9 +99,9 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
                 // If all was selected save it only and nothing else.
                 if ($postedResources === [$this->_rootResource->getId()]) {
-                    $insertData = $this->_prepareDataForTable(new \Magento\Framework\Object($row), $this->getMainTable());
+                    $insertData = $this->_prepareDataForTable(new \Magento\Framework\DataObject($row), $this->getMainTable());
 
-                    $adapter->insert($this->getMainTable(), $insertData);
+                    $connection->insert($this->getMainTable(), $insertData);
                 } else {
                     $acl = $this->_aclBuilder->getAcl();
                     /** @var $resource \Magento\Framework\Acl\Resource */
@@ -109,19 +109,19 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
                         $row['permission'] = in_array($resourceId, $postedResources) ? 'allow' : 'deny';
                         $row['resource_id'] = $resourceId;
 
-                        $insertData = $this->_prepareDataForTable(new \Magento\Framework\Object($row), $this->getMainTable());
-                        $adapter->insert($this->getMainTable(), $insertData);
+                        $insertData = $this->_prepareDataForTable(new \Magento\Framework\DataObject($row), $this->getMainTable());
+                        $connection->insert($this->getMainTable(), $insertData);
                     }
                 }
             }
 
-            $adapter->commit();
+            $connection->commit();
             $this->_aclCache->clean();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             $this->_logger->critical($e);
         }
     }

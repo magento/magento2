@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Model\Payflow;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Paypal\Model\Payflow\Service\Gateway;

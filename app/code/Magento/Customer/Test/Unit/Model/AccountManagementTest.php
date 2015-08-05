@@ -58,7 +58,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Config\Share|\PHPUnit_Framework_MockObject_MockObject */
     protected $share;
 
-    /** @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject */
     protected $string;
 
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -85,7 +85,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject */
     protected $customer;
 
-    /** @var \Magento\Framework\ObjectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObjectFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectFactory;
 
     /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
@@ -127,7 +127,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->encryptor = $this->getMock('Magento\Framework\Encryption\EncryptorInterface');
         $this->share = $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false);
-        $this->string = $this->getMock('Magento\Framework\Stdlib\String');
+        $this->string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         $this->customerRepository = $this->getMock('Magento\Customer\Api\CustomerRepositoryInterface');
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->transportBuilder = $this->getMock(
@@ -148,7 +148,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->customerViewHelper = $this->getMock('Magento\Customer\Helper\View', [], [], '', false);
         $this->dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
         $this->customer = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
-        $this->objectFactory = $this->getMock('Magento\Framework\ObjectFactory', [], [], '', false);
+        $this->objectFactory = $this->getMock('Magento\Framework\DataObjectFactory', [], [], '', false);
         $this->extensibleDataObjectConverter = $this->getMock(
             'Magento\Framework\Api\ExtensibleDataObjectConverter',
             [],
