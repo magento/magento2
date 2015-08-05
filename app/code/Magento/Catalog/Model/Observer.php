@@ -64,12 +64,6 @@ class Observer
      */
     protected $_categoryResource;
 
-    /**
-     * Factory for product resource
-     *
-     * @var \Magento\Catalog\Model\Resource\ProductFactory
-     */
-    protected $_productResourceFactory;
 
     /**
      * @var \Magento\Framework\Registry
@@ -85,7 +79,6 @@ class Observer
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Indexer\Category\Flat\State $categoryFlatState
-     * @param Resource\ProductFactory $productResourceFactory
      */
     public function __construct(
         \Magento\Framework\Registry $registry,
@@ -95,8 +88,7 @@ class Observer
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState,
-        \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
+        \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState
     ) {
         $this->_registry = $registry;
         $this->_categoryResource = $categoryResource;
@@ -106,7 +98,6 @@ class Observer
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogData = $catalogData;
         $this->categoryFlatConfig = $categoryFlatState;
-        $this->_productResourceFactory = $productResourceFactory;
     }
 
     /**
