@@ -53,6 +53,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $data = ['fields' => [$existentName => $existentField]];
         $attrName = 'attrName';
         $attrBackendType = 'b_type';
+        $attrFrontendInput = 'int';
 
         $entityType = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
             ->disableOriginalConstructor()
@@ -67,7 +68,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                     'setEntity',
                     'getName',
                     'getFrontendInput',
-                    'getBackendTypeByInput',
+                    'getBackendType',
                     'getData',
                 ]
             )
@@ -90,12 +91,11 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->willReturn($attrName);
         $attribute->expects($this->any())
-            ->method('getFrontendInput')
-            ->willReturn('frontendInput');
-        $attribute->expects($this->any())
-            ->method('getBackendTypeByInput')
-            ->with('frontendInput')
+            ->method('getBackendType')
             ->willReturn($attrBackendType);
+        $attribute->expects($this->any())
+            ->method('getFrontendInput')
+            ->willReturn($attrFrontendInput);
         $attribute->expects($this->any())
             ->method('getData')
             ->willReturnMap(
@@ -140,6 +140,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $data = ['fields' => [$existentName => $existentField]];
         $attrName = $existentName;
         $attrBackendType = 'static';
+        $attrFrontendInput = 'text';
 
         $entityType = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
             ->disableOriginalConstructor()
@@ -154,7 +155,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                     'setEntity',
                     'getName',
                     'getFrontendInput',
-                    'getBackendTypeByInput',
+                    'getBackendType',
                     'getData',
                 ]
             )
@@ -175,10 +176,9 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $attribute->expects($this->any())
             ->method('getFrontendInput')
-            ->willReturn('frontendInput');
+            ->willReturn($attrFrontendInput);
         $attribute->expects($this->any())
-            ->method('getBackendTypeByInput')
-            ->with('frontendInput')
+            ->method('getBackendType')
             ->willReturn($attrBackendType);
         $attribute->expects($this->once())
             ->method('getData')
@@ -226,6 +226,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         ];
         $attrName = $existentName;
         $attrBackendType = 'varchar';
+        $attrFrontendInput = 'text';
 
         $entityType = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
             ->disableOriginalConstructor()
@@ -240,7 +241,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                     'setEntity',
                     'getName',
                     'getFrontendInput',
-                    'getBackendTypeByInput',
+                    'getBackendType',
                     'getData',
                 ]
             )
@@ -264,10 +265,9 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($attrName);
         $attribute->expects($this->any())
             ->method('getFrontendInput')
-            ->willReturn('frontendInput');
+            ->willReturn($attrFrontendInput);
         $attribute->expects($this->any())
-            ->method('getBackendTypeByInput')
-            ->with('frontendInput')
+            ->method('getBackendType')
             ->willReturn($attrBackendType);
         $attribute->expects($this->any())
             ->method('getData')
