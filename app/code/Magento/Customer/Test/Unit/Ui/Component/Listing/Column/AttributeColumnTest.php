@@ -19,8 +19,8 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $uiComponentFactory;
 
-    /** @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerMetadata;
+    /** @var \Magento\Customer\Ui\Component\Listing\AttributeRepository|\PHPUnit_Framework_MockObject_MockObject */
+    protected $attributeRepository;
 
     /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeMetadata;
@@ -43,14 +43,15 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerMetadata = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\CustomerMetadataInterface',
+        $this->attributeRepository = $this->getMock(
+            'Magento\Customer\Ui\Component\Listing\AttributeRepository',
+            [],
             [],
             '',
             false
         );
         $this->attributeMetadata = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AttributeMetadataInterface',
+            '\Magento\Customer\Api\Data\AttributeMetadataInterface',
             [],
             '',
             false
@@ -65,7 +66,7 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
         $this->component = new AttributeColumn(
             $this->context,
             $this->uiComponentFactory,
-            $this->customerMetadata
+            $this->attributeRepository
         );
         $this->component->setData('name', 'gender');
     }
@@ -77,9 +78,8 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
 
             ]
         ];
-        $this->customerMetadata->expects($this->never())
-            ->method('getAttributeMetadata')
-            ->with('gender');
+        $this->attributeRepository->expects($this->never())
+            ->method('getMetadataByCode');
 
         $this->component->prepareDataSource($dataSource);
     }
@@ -114,12 +114,11 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-
-        $this->customerMetadata->expects($this->once())
-            ->method('getAttributeMetadata')
+        $this->attributeRepository->expects($this->once())
+            ->method('getMetadataByCode')
             ->with('gender')
             ->willReturn($this->attributeMetadata);
-        $this->attributeMetadata->expects($this->once())
+        $this->attributeMetadata->expects($this->atLeastOnce())
             ->method('getOptions')
             ->willReturn([$this->genderOption]);
         $this->genderOption->expects($this->once())
