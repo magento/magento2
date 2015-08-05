@@ -14,7 +14,7 @@ class StrategyTest extends \PHPUnit_Framework_TestCase
     /**
      * Strategy object
      *
-     * @var \Magento\Indexer\Model\Indexer\Table\Strategy
+     * @var \Magento\Framework\Indexer\Table\Strategy
      */
     protected $_model;
 
@@ -37,7 +37,7 @@ class StrategyTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_model = new \Magento\Indexer\Model\Indexer\Table\Strategy(
+        $this->_model = new \Magento\Framework\Indexer\Table\Strategy(
             $this->_resourceMock
         );
     }

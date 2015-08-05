@@ -10,7 +10,7 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Dummy element
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_dummyElement;
 
@@ -72,12 +72,12 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Get dummy element
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getDummyElement()
     {
         if (empty($this->_dummyElement)) {
-            $this->_dummyElement = new \Magento\Framework\Object(['showInDefault' => 1, 'showInWebsite' => 1]);
+            $this->_dummyElement = new \Magento\Framework\DataObject(['showInDefault' => 1, 'showInWebsite' => 1]);
         }
         return $this->_dummyElement;
     }

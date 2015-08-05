@@ -8,7 +8,7 @@ namespace Magento\Indexer\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Magento\Indexer\Model\IndexerFactory;
 use Magento\Indexer\Model\Indexer\CollectionFactory;
-use Magento\Indexer\Model\IndexerInterface;
+use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Store\Model\StoreManager;
 use Magento\Framework\App\ObjectManagerFactory;

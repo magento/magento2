@@ -62,6 +62,15 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
             ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setEntity',
+                    'getName',
+                    'getFrontendInput',
+                    'getBackendTypeByInput',
+                    'getData',
+                ]
+            )
             ->getMock();
         $this->collection->expects($this->once())
             ->method('getItems')
@@ -80,10 +89,14 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->exactly(3))
             ->method('getName')
             ->willReturn($attrName);
-        $attribute->expects($this->exactly(2))
-            ->method('getBackendType')
+        $attribute->expects($this->any())
+            ->method('getFrontendInput')
+            ->willReturn('frontendInput');
+        $attribute->expects($this->any())
+            ->method('getBackendTypeByInput')
+            ->with('frontendInput')
             ->willReturn($attrBackendType);
-        $attribute->expects($this->exactly(3))
+        $attribute->expects($this->any())
             ->method('getData')
             ->willReturnMap(
                 [
@@ -99,7 +112,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                     $existentName => $existentField,
                     $attrName => [
                         'name' => $attrName,
-                        'handler' => 'Magento\Indexer\Model\Handler\AttributeHandler',
+                        'handler' => 'Magento\Framework\Indexer\Handler\AttributeHandler',
                         'origin' => $attrName,
                         'type' => 'virtual',
                         'filters' => [],
@@ -120,7 +133,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             'name' => $existentName,
             'handler' => 'handler',
             'origin' => $existentName,
-            'type' => 'type',
+            'type' => 'searchable',
             'filters' => ['filter'],
             'dataType' => 'data_type',
         ];
@@ -136,6 +149,15 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
             ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setEntity',
+                    'getName',
+                    'getFrontendInput',
+                    'getBackendTypeByInput',
+                    'getData',
+                ]
+            )
             ->getMock();
         $this->collection->expects($this->once())
             ->method('getItems')
@@ -151,11 +173,12 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('setEntity')
             ->with($entity)
             ->willReturnSelf();
-        $attribute->expects($this->once())
-            ->method('getName')
-            ->willReturn($attrName);
-        $attribute->expects($this->once())
-            ->method('getBackendType')
+        $attribute->expects($this->any())
+            ->method('getFrontendInput')
+            ->willReturn('frontendInput');
+        $attribute->expects($this->any())
+            ->method('getBackendTypeByInput')
+            ->with('frontendInput')
             ->willReturn($attrBackendType);
         $attribute->expects($this->once())
             ->method('getData')
@@ -212,6 +235,15 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
             ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setEntity',
+                    'getName',
+                    'getFrontendInput',
+                    'getBackendTypeByInput',
+                    'getData',
+                ]
+            )
             ->getMock();
         $this->collection->expects($this->once())
             ->method('getItems')
@@ -230,10 +262,14 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->exactly(3))
             ->method('getName')
             ->willReturn($attrName);
-        $attribute->expects($this->exactly(2))
-            ->method('getBackendType')
+        $attribute->expects($this->any())
+            ->method('getFrontendInput')
+            ->willReturn('frontendInput');
+        $attribute->expects($this->any())
+            ->method('getBackendTypeByInput')
+            ->with('frontendInput')
             ->willReturn($attrBackendType);
-        $attribute->expects($this->exactly(3))
+        $attribute->expects($this->any())
             ->method('getData')
             ->willReturnMap(
                 [
@@ -248,7 +284,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     $attrName => [
                         'name' => $attrName,
-                        'handler' => 'Magento\Indexer\Model\Handler\AttributeHandler',
+                        'handler' => 'Magento\Framework\Indexer\Handler\AttributeHandler',
                         'origin' => $attrName,
                         'type' => 'filterable',
                         'filters' => [],

@@ -6,8 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../Indexer/etc/indexer.xsd">
-    <indexer id="customer_grid" view_id="dummy" class="Magento\Indexer\Model\Action\Entity" primary="customer">
+        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Indexer/etc/indexer.xsd">
+    <indexer id="customer_grid" view_id="dummy" class="Magento\Framework\Indexer\Action\Entity" primary="customer">
         <title translate="true">Customer Grid</title>
         <description translate="true">Rebuild Customer grid index</description>
 
@@ -47,7 +47,7 @@
             <field name="company" xsi:type="searchable" dataType="varchar"/>
         </fieldset>
 
-        <saveHandler class="Magento\Customer\Model\Indexer\SaveHandler"/>
-        <structure class="Magento\Customer\Model\Indexer\GridStructure"/>
+        <saveHandler class="Magento\Framework\Indexer\SaveHandler\Grid"/>
+        <structure class="Magento\Framework\Indexer\GridStructure"/>
     </indexer>
 </config>

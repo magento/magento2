@@ -23,7 +23,6 @@
         "magento/module-ui": "1.0.0-beta",
         "magento/module-config": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",
-        "magento/module-indexer": "1.0.0-beta",
         "magento/magento-composer-installer": "*"
     },
     "suggest": {

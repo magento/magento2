@@ -58,10 +58,10 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
     /**
      * Renders grid column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             switch ($this->getColumn()->getPeriodType()) {

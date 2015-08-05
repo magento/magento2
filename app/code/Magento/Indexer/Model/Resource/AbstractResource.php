@@ -19,7 +19,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     /**
      * Constructor
      *
-     * @var \Magento\Indexer\Model\Indexer\Table\StrategyInterface
+     * @var \Magento\Framework\Indexer\Table\StrategyInterface
      */
     protected $tableStrategy;
 
@@ -27,12 +27,12 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      * Class constructor
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         $connectionName = null
     ) {
         $this->tableStrategy = $tableStrategy;
