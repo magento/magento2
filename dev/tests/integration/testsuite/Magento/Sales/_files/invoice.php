@@ -16,6 +16,7 @@ $orderService = \Magento\TestFramework\ObjectManager::getInstance()->create(
 );
 $invoice = $orderService->prepareInvoice($order->getEntityId());
 $invoice->register();
+$order = $invoice->getOrder();
 $order->setIsInProcess(true);
 $transactionSave = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Framework\DB\Transaction');
