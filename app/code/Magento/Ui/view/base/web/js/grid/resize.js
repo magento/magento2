@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'ko',
@@ -26,18 +27,23 @@ define([
                     state: false,
                     promise: $.Deferred()
                 },
+                entryConfig: {
+                    state: false,
+                    promise: $.Deferred()
+                },
                 nameSpacing: {
                     cellsDataAttribute: 'data-cl-resize',
                     cellsDataAttrPrefix: 'column-',
                     divsResizableAttribute: 'data-cl-elem',
                     divsResizableAttrName: 'shadow-div'
                 },
-                columnsVisibility: [],
+                columnsVisibility: ['true'],
                 showLines: 4,
                 dragRange: 10,
                 resizable: false
             };
         },
+
         /**
          * @see event listener handlers
          * @returns Object with handlers methods
@@ -47,6 +53,7 @@ define([
                 cfg = t.resizeConfig;
 
             return {
+
                 /**
                  * @see resolve promise when mouse first time entry in the table
                  * @event mouse enter
@@ -65,48 +72,62 @@ define([
         },
         eventListener: function () {
             var t = this,
-                divAttrProp = Object.getOwnPropertyNames(t.divsAttrParams)[0],
-                divAttrPropValue = t.divsAttrParams[divAttrProp];
+                cfg = t.resizeConfig;
 
-            console.log(this);
             $(t.table).bind('mouseenter', t._handlers().entryInTable);
-            t.resizeConfig.entryTable.promise.done(function () {
-                $('['+divAttrProp+'='+divAttrPropValue+']').bind('mousedown', t.resizable().resizeMousedown);
+            cfg.entryTable.promise.done(function () {
                 t.initResizeConfig();
+                t.resizable();
             });
+
+
         },
         resizable: function () {
             var t = this,
                 cfg = t.resizeConfig,
-                curElement,
-                depElement;
-
-            return {
-                resizeMousedown: function (event) {
-                    var get = t._get(),
-                        columnId = get.columnId(event),
-                        depElement = get.depElement(columnId);
-
-                    console.log(columnId);
-                    console.log(depElement);
-
-                    curElement = $(event.target).parent();
+                cur = {
+                    element: null,
+                    id: null,
+                    position: null
+                },
+                divAttrProp = Object.getOwnPropertyNames(t.divsAttrParams)[0],
+                divAttrPropValue = t.divsAttrParams[divAttrProp],
+                dep,
+                returnObject = true,
+                lastWidth,
+                resizeMousedown = function (event) {
+                    var get = t._get();
+                    cur.id = get.columnId(event);
+                    cur.position = event.pageX;
+                    event.stopPropagation();
+                    dep = get.depElement(cur.id, returnObject);
+                    cur.element = $(event.target).parent().attr(cfg.nameSpacing.cellsDataAttribute);
                     cfg.resizable = true;
 
-                    $(window)
-                        .bind('mousemove', this.resizeMousemove)
-                        .bind('mouseup', this.resizeMouseup);
+                    $('body').bind('mousemove', resizeMousemove);
+                    $(window).bind('mouseup', resizeMouseup);
                 },
-                resizeMousemove: function (event) {
+                resizeMousemove = function (event) {
+                    if (cfg.resizable) {
+                        var width = event.pageX - cur.position;
 
+                        if (lastWidth !== width ) {
+                            cfg.columnsWidth[cur.id] = cfg.columnsWidth[cur.id] + width;
+                            cfg.columnsWidth[dep.id] = cfg.columnsWidth[dep.id] - width;
+                            t._set().updateWidth();
+                            lastWidth = width;
+                            cur.position = event.pageX;
+                        }
+                    }
                 },
-                resizeMouseup: function (event) {
+                resizeMouseup = function () {
                     cfg.resizable = false;
-                    $(window)
-                        .unbind('mousemove', this.resizeMousemove)
-                        .unbind('mouseup', this.resizeMouseup);
-                }
-            };
+
+                    $('body').unbind('mousemove', resizeMousemove);
+                    $(window).unbind('mouseup', resizeMouseup);
+                };
+
+            $('['+divAttrProp+'='+divAttrPropValue+']').bind('mousedown', resizeMousedown);
         },
         _get: function () {
             var t = this,
@@ -121,17 +142,20 @@ define([
                 depAttr: function (num) {
                     return cfg.nameSpacing.cellsDataAttrPrefix+num;
                 },
-                depElement: function (index) {
+                depElement: function (index, returnObject) {
                     var depIndex = index + 1;
-
                     if (t._is().columnVisible(depIndex)) {
-                        return this.depAttr(depIndex);
-                    } else {
-                        this.depElement.call(this, depIndex);
+                        return returnObject ? {
+                            element: this.depAttr(depIndex), id: depIndex
+                        } : this.depAttr(depIndex);
                     }
+
+                    return returnObject ? this.depElement.call(this, depIndex, returnObject)
+                                        : this.depElement.call(this, depIndex);
                 }
             };
         },
+
         /**
          * @see set property to config
          * @returns Object with add methods
@@ -141,6 +165,42 @@ define([
                 cfg = this.resizeConfig;
 
             return {
+
+                /**
+                 * @see take columns width and push to array
+                 * @param {Array} columnsElement - columns
+                 * @returns {Array} with width of all columns
+                 */
+                updateWidth: function (columnsElement, columnsWidth, columnsLength) {
+                    var ce = columnsElement || cfg.columnsElements || this.columnsElements(),
+                        cw = columnsWidth || cfg.columnsWidth || this.columnsWidth(),
+                        length = columnsLength || cfg.columnsLength || this.columnsLength(),
+                        i = 0;
+
+                    for (i; i < length; i++) {
+                        $(ce[i]).outerWidth(cw[i]);
+                    }
+                },
+
+                /**
+                 * @see take columns width and push to array
+                 * @param {Array} columnsElement - columns
+                 * @returns {Array} with width of all columns
+                 */
+                columnsWidth: function (columnsElement, columnsLength) {
+                    var ce = columnsElement || cfg.columnsElements || this.columnsElements(),
+                        length = columnsLength || cfg.columnsLength || this.columnsLength(),
+                        array = [],
+                        i = 0;
+
+                    for (i; i < length; i++) {
+                        array.push($(ce[i][0]).outerWidth());
+                    }
+                    cfg.columnsWidth = array;
+
+                    return array;
+                },
+
                 /**
                  * @see set height for rows
                  * @param {Array} rows rows elements, {Number} rows length
@@ -163,6 +223,7 @@ define([
 
                     return cfg.rowsMaxHeight;
                 },
+
                 /**
                  * @see add rows elements to current rows
                  * @params {Array} rows collections, {Number} rows length
@@ -183,6 +244,7 @@ define([
 
                     return cfg.rowsElements;
                 },
+
                 /**
                  * @see add cells elements to current column
                  * @param {Array} cells collection, {Number} columns length
@@ -210,6 +272,7 @@ define([
 
                     return cfg.columnsElements;
                 },
+
                 /**
                  * @see length cells in one column to config
                  * @param {Array} cells collection, {Number} columns length
@@ -223,6 +286,7 @@ define([
 
                     return cfg.cellsInColumn;
                 },
+
                 /**
                  * @see set cells collection property to config
                  * @returns {Array} cells collection
@@ -234,6 +298,7 @@ define([
 
                     return cfg.cellsCollection;
                 },
+
                 /**
                  * @see set rows collection property to config
                  * @returns {Array} rows collection
@@ -243,6 +308,7 @@ define([
 
                     return cfg.rowsCollection;
                 },
+
                 /**
                  * @see set columnsLength property to config
                  * @param {Array} cellsCollection - cells collection
@@ -257,6 +323,7 @@ define([
 
                     return cfg.columnsLength;
                 },
+
                 /**
                  * @see set rowLength property to config
                  * @param {Array} rowsCollection - rows collection
@@ -269,6 +336,7 @@ define([
                 }
             };
         },
+
         /**
          * @see check some property
          * @returns Object with add methods
@@ -278,6 +346,7 @@ define([
                 cfg = t.resizeConfig;
 
             return {
+
                 /**
                  * @see check rows property in object
                  * @param {Object} obj - object for check
@@ -291,6 +360,7 @@ define([
                 }
             };
         },
+
         /**
          * @see call when initialize cells collection
          * @see add function for manipulate with DOM tree
@@ -301,6 +371,7 @@ define([
                 cfg = t.resizeConfig;
 
             return {
+
                 /**
                  * @see add data attributes for cells collections
                  * @returns this
@@ -340,7 +411,8 @@ define([
         initResizeConfig: function () {
             var t = this,
                 set = t._set(),
-                add = t._add();
+                add = t._add(),
+                cfg = t.resizeConfig;
 
             set.cellsCollection();  //{Array}   - set to this.config.cellsCollection
             set.rowsCollection();   //{Array}   - set to this.config.rowsCollection
@@ -348,9 +420,13 @@ define([
             set.columnsLength();    //{Number}  - set to this.config.columnsLength
             set.cellsInColumn();    //{Number}  - set to this.config.cellsInColumn
             set.columnsElements();  //{Array}   - set to this.config.columnsElements
+            set.columnsWidth();     //{Array}   - set to this.config.columnsWidth
             set.rowsElements();     //{Array}   - set to this.config.rowsElements
             set.rowsMaxHeight();    //{Array}   - set to this.config.rowsMaxHeight
             add.dataAttribute();    //{Object}  - add data attribute to table cells
+
+            cfg.entryConfig.state = true;
+            cfg.entryConfig.promise.resolve();
 
             return this;
         },
