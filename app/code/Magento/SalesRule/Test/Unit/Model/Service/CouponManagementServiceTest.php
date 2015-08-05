@@ -80,7 +80,7 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $this->couponMassDeleteResult = $this->getMock($className, [], [], '', false);
 
         $className = '\Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory';
-        $this->couponMassDeleteResultFactory = $this->getMock($className, [], [], '', false);
+        $this->couponMassDeleteResultFactory = $this->getMock($className, ['create'], [], '', false);
         $this->couponMassDeleteResultFactory
             ->expects($this->any())
             ->method('create')

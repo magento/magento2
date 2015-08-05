@@ -144,3 +144,5 @@ FOUND,FOUND
 "Some coupons are invalid.","Some coupons are invalid."
 "Specified rule does not allow automatic coupon generation","Specified rule does not allow automatic coupon generation"
 "Specified rule does not allow coupons","Specified rule does not allow coupons"
+"Specified rule only allows auto generated coupons","Specified rule only allows auto generated coupons"
+"Specified rule does not allow auto generated coupons","Specified rule does not allow auto generated coupons"
