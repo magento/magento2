@@ -8,7 +8,7 @@ namespace Magento\Framework\Css\PreProcessor;
 
 use Magento\Framework\View\Asset\PreProcessorInterface;
 
-class Less implements PreProcessorInterface
+class Scss implements PreProcessorInterface
 {
     /**
      * @var \Magento\Framework\Css\PreProcessor\FileGenerator
@@ -37,7 +37,7 @@ class Less implements PreProcessorInterface
      */
     public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
     {
-        $chain->setContentType('less');
+        $chain->setContentType('scss');
         $tmpFile = $this->fileGenerator->generateFileTree($chain);
         $cssContent = $this->adapter->process($tmpFile);
         $cssTrimmedContent = trim($cssContent);
