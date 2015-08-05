@@ -233,7 +233,8 @@ class Bundle
         $bundlePath = '';
         foreach ($types as $parts) {
             /** @var FallbackContext $context */
-            $context = reset(reset($parts)['assets'])->getContext();
+            $assetsParts = reset($parts);
+            $context = reset($assetsParts['assets'])->getContext();
             $bundlePath = empty($bundlePath) ? $context->getPath() . Manager::BUNDLE_PATH : $bundlePath;
             $this->fillContent($parts, $context);
         }

@@ -273,7 +273,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Set template object for the collection
      *
-     * @param   \Magento\Framework\Object $object
+     * @param   \Magento\Framework\DataObject $object
      * @return $this
      */
     public function setObject($object = null)
@@ -289,11 +289,11 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Add an object to the collection
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @throws LocalizedException
      */
-    public function addItem(\Magento\Framework\Object $object)
+    public function addItem(\Magento\Framework\DataObject $object)
     {
         if (!$object instanceof $this->_itemObjectClass) {
             throw new LocalizedException(__('Attempt to add an invalid object'));

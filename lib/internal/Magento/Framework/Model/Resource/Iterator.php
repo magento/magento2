@@ -13,7 +13,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
-class Iterator extends \Magento\Framework\Object
+class Iterator extends \Magento\Framework\DataObject
 {
     /**
      * Walk over records fetched from query one by one using callback function

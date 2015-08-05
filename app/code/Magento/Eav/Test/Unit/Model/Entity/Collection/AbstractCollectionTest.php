@@ -219,6 +219,6 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function getMagentoObject()
     {
-        return new \Magento\Framework\Object();
+        return new \Magento\Framework\DataObject();
     }
 }

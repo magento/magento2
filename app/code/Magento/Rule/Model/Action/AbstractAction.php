@@ -11,7 +11,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 /**
  * Quote rule action abstract
  */
-abstract class AbstractAction extends \Magento\Framework\Object implements ActionInterface
+abstract class AbstractAction extends \Magento\Framework\DataObject implements ActionInterface
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository

@@ -113,7 +113,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function insertGallery($data)
     {
         $connection = $this->getConnection();
-        $data = $this->_prepareDataForTable(new \Magento\Framework\Object($data), $this->getMainTable());
+        $data = $this->_prepareDataForTable(new \Magento\Framework\DataObject($data), $this->getMainTable());
         $connection->insert($this->getMainTable(), $data);
 
         return $connection->lastInsertId($this->getMainTable());
@@ -147,7 +147,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function insertGalleryValueInStore($data)
     {
-        $data = $this->_prepareDataForTable(new \Magento\Framework\Object($data), $this->getTable(self::GALLERY_VALUE_TABLE));
+        $data = $this->_prepareDataForTable(new \Magento\Framework\DataObject($data), $this->getTable(self::GALLERY_VALUE_TABLE));
         $this->getConnection()->insert($this->getTable(self::GALLERY_VALUE_TABLE), $data);
 
         return $this;

@@ -195,7 +195,7 @@ abstract class AbstractEntity
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -239,7 +239,7 @@ abstract class AbstractEntity
      * @param \Magento\Eav\Model\Config $config
      * @param Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -248,7 +248,7 @@ abstract class AbstractEntity
         \Magento\Eav\Model\Config $config,
         Resource $resource,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\String $string
+        \Magento\Framework\Stdlib\StringUtils $string
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;

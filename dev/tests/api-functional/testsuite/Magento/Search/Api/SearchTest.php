@@ -64,7 +64,7 @@ class SearchTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['id']);
-        $this->assertEquals('relevance', $response['items'][0]['custom_attributes'][0]['attribute_code']);
+        $this->assertEquals('score', $response['items'][0]['custom_attributes'][0]['attribute_code']);
         $this->assertTrue($response['items'][0]['custom_attributes'][0]['value'] > 0);
     }
 }
