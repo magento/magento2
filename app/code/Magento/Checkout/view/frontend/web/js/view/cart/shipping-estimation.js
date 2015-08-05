@@ -6,19 +6,25 @@
 /*global alert*/
 define(
     [
+        'jquery',
         'Magento_Ui/js/form/form',
         'Magento_Checkout/js/action/select-shipping-address',
         'Magento_Checkout/js/model/address-converter',
         'Magento_Checkout/js/model/shipping-rate-service',
         'Magento_Checkout/js/model/shipping-service',
+        'Magento_Checkout/js/checkout-data',
+        'uiRegistry',
         'mage/validation'
     ],
     function(
+        $,
         Component,
         selectShippingAddress,
         addressConverter,
         shippingRateService,
-        shippingService
+        shippingService,
+        checkoutData,
+        registry
     ) {
         'use strict';
         return Component.extend({
@@ -26,6 +32,24 @@ define(
                 template: 'Magento_Checkout/cart/shipping-estimation'
             },
             isLoading: shippingService.isLoading,
+
+            initialize: function () {
+                var self = this;
+                this._super();
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    var shippingAddressData = checkoutData.getShippingAddressFromData();
+                    if (shippingAddressData) {
+                        checkoutProvider.set(
+                            'shippingAddress',
+                            $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                        );
+                        self.getEstimationInfo();
+                    }
+                    checkoutProvider.on('shippingAddress', function (shippingAddressData) {
+                        checkoutData.setShippingAddressFromData(shippingAddressData);
+                    });
+                });
+            },
 
             getEstimationInfo: function () {
                 var addressData = null;
