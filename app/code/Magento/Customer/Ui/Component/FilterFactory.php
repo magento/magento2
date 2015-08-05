@@ -44,7 +44,7 @@ class FilterFactory
             'label' => __($attribute->getFrontendLabel()),
         ];
         if ($attribute->getOptions()) {
-            $config['options'] = $attribute->getOptions();
+            $config['options'] = $this->getOptionsArray($attribute);
             $config['caption'] = __('Select...');
         }
         $arguments = [
@@ -55,6 +55,25 @@ class FilterFactory
         ];
 
         return $this->componentFactory->create($columnName, $this->getFilterType($attribute), $arguments);
+    }
+
+    /**
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     * @return array
+     */
+    protected function getOptionsArray($attribute)
+    {
+        $options = [];
+        foreach ($attribute->getOptions() as $option) {
+            array_push(
+                $options,
+                [
+                    'value' => $option->getValue(),
+                    'label' => $option->getLabel()
+                ]
+            );
+        }
+        return $options;
     }
 
     /**
