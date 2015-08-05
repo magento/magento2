@@ -196,19 +196,22 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\Framework\App\Resource $resource
      * @param array $params
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\Resource $resource,
         array $params,
-        \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory
+        \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory,
+        \Magento\Framework\Filesystem $filesystem
     ){
         $this->uploaderFactory = $uploaderFactory;
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->parameters = $this->_entityModel->getParameters();
         $this->_resource = $resource;
         $this->connection = $resource->getConnection('write');
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
     }
 
     /**
@@ -395,8 +398,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     public function parseOptions(array $rowData, $entityId){
         $this->productIds[] = $entityId;
-        $this->prepareLinkData($rowData['downloadble_links'], $entityId);
-        $this->prepareSampleData($rowData['downloadble_samples'], $entityId);
+        $this->prepareLinkData($rowData['downloadable_links'], $entityId);
+        $this->prepareSampleData($rowData['downloadable_samples'], $entityId);
         return $this;
     }
 
@@ -616,11 +619,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if ($key == 'downloads' && $value == 'unlimited'){
                     $value = 0;
                 }
-                if (isset($this->optionLinkMapping[$key])) {
-                    $key = $this->optionLinkMapping[$key];
-                }
                 if ($key == self::FILE_OPTION_VALUE){
                     $value = $this->uploadDownloadableFiles($value, 'links', true);
+                }
+                if (isset($this->optionLinkMapping[$key])) {
+                    $key = $this->optionLinkMapping[$key];
                 }
                 $option[$key] = $value;
 
@@ -646,11 +649,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE){
                     $option['sample_type'] = $key;
                 }
-                if (isset($this->optionSampleMapping[$key])) {
-                    $key = $this->optionSampleMapping[$key];
-                }
                 if ($key == self::FILE_OPTION_VALUE){
                     $value = $this->uploadDownloadableFiles($value, 'samples', true);
+                }
+                if (isset($this->optionSampleMapping[$key])) {
+                    $key = $this->optionSampleMapping[$key];
                 }
                 $option[$key] = $value;
             }
@@ -668,7 +671,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function getUploader($type)
     {
         if (is_null($this->fileUploader)) {
-            $this->_fileUploader = $this->uploaderFactory->create();
+            $this->fileUploader = $this->uploaderFactory->create();
 
             $this->fileUploader->init();
 
