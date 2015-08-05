@@ -99,6 +99,8 @@ class Cache
      * @param array $imageData
      * @param string $file
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function processImageData(Product $product, array $imageData, $file)
     {
