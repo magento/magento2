@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-use Magento\Catalog\Block\Product\ImageFactory;
 use Magento\Catalog\Helper\ImageFactory as HelperFactory;
 
 class ImageBuilder
@@ -130,6 +129,8 @@ class ImageBuilder
             ? 'Magento_Catalog::product/image.phtml'
             : 'Magento_Catalog::product/image_with_borders.phtml';
 
+        $imagesize = $helper->getResizedImageInfo();
+
         $data = [
             'data' => [
                 'template' => $template,
@@ -139,8 +140,8 @@ class ImageBuilder
                 'label' => $helper->getLabel(),
                 'ratio' =>  $this->getRatio($helper),
                 'custom_attributes' => $this->getCustomAttributes(),
-                'resized_image_width' => $helper->getResizedImageInfo()[0],
-                'resized_image_height' => $helper->getResizedImageInfo()[1],
+                'resized_image_width' => !empty($imagesize[0]) ? $imagesize[0] : $helper->getWidth(),
+                'resized_image_height' => !empty($imagesize[1]) ? $imagesize[1] : $helper->getHeight(),
             ],
         ];
 

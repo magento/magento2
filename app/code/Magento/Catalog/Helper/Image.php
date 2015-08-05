@@ -499,7 +499,13 @@ class Image extends AbstractHelper
      */
     public function getResizedImageInfo()
     {
-        return $this->_getModel()->getResizedImageInfo();
+        $model = $this->_getModel();
+        if ($this->getImageFile()) {
+            $model->setBaseFile($this->getImageFile());
+        } else {
+            $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+        }
+        return $model->getResizedImageInfo();
     }
 
     /**

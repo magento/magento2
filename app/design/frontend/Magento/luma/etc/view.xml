@@ -100,6 +100,10 @@
             <width>76</width>
             <height>76</height>
         </image>
+        <image id="product_small_image" type="small_image">
+            <width>135</width>
+            <height>135</height>
+        </image>
         <image id="product_thumbnail_image" type="thumbnail">
             <width>75</width>
             <height>75</height>
