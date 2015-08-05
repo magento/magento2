@@ -6,6 +6,8 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\Framework\Indexer\StateInterface;
+
 /**
  * Class Visitor
  * @package Magento\Customer\Model
@@ -56,14 +58,20 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     protected $dateTime;
 
     /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    protected $indexerRegistry;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\HTTP\Header $httpHeader
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
@@ -77,6 +85,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\HTTP\Header $httpHeader,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
@@ -90,6 +99,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         $this->ignores = $ignores;
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -147,6 +157,34 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
             $this->session->setVisitorData($this->getData());
         }
         return $this;
+    }
+
+    /**
+     * Processing object after save data
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        if ($indexer->getState()->getStatus() !== StateInterface::STATUS_INVALID) {
+            $this->_getResource()->addCommitCallback([$this, 'reindex']);
+        }
+        return parent::afterSave();
+    }
+
+    /**
+     * Init indexing process after visitor save
+     *
+     * @return void
+     */
+    public function reindex()
+    {
+        if ($this->getCustomerId()) {
+            /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
+            $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+            $indexer->reindexRow($this->getCustomerId());
+        }
     }
 
     /**
