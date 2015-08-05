@@ -70,6 +70,6 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
      */
     public function setInitData($initData)
     {
-        $this->initData = $initData;;
+        $this->initData = $initData;
     }
 }
