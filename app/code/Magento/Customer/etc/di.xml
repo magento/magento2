@@ -181,22 +181,22 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="CustomerNameHandler" type="Magento\Indexer\Model\Handler\ConcatHandler">
+    <virtualType name="CustomerNameHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
         <arguments>
             <argument name="concatExpression" xsi:type="object">CustomerNameExpression</argument>
         </arguments>
     </virtualType>
-    <virtualType name="ShippingAddressHandler" type="Magento\Indexer\Model\Handler\ConcatHandler">
+    <virtualType name="ShippingAddressHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
         <arguments>
             <argument name="concatExpression" xsi:type="object">ShippingAddressExpression</argument>
         </arguments>
     </virtualType>
-    <virtualType name="BillingAddressHandler" type="Magento\Indexer\Model\Handler\ConcatHandler">
+    <virtualType name="BillingAddressHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
         <arguments>
             <argument name="concatExpression" xsi:type="object">BillingAddressExpression</argument>
         </arguments>
     </virtualType>
-    <virtualType name="LastVisitAtHandler" type="Magento\Indexer\Model\Handler\ConcatHandler">
+    <virtualType name="LastVisitAtHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
         <arguments>
             <argument name="concatExpression" xsi:type="object">LastVisitAtSubSelect</argument>
         </arguments>

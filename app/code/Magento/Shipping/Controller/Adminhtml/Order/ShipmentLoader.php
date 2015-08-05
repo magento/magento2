@@ -6,7 +6,7 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Class ShipmentLoader
@@ -21,7 +21,7 @@ use Magento\Framework\Object;
  * @method array getShipment
  * @method array getTracking
  */
-class ShipmentLoader extends Object
+class ShipmentLoader extends DataObject
 {
     /**
      * @var \Magento\Framework\Message\ManagerInterface

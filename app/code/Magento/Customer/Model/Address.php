@@ -42,7 +42,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexerRegistry;
 
@@ -62,7 +62,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param CustomerFactory $customerFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
@@ -85,7 +85,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         CustomerFactory $customerFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -339,7 +339,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function reindex()
     {
-        /** @var \Magento\Indexer\Model\Indexer $indexer */
+        /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexRow($this->getCustomerId());
     }

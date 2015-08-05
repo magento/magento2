@@ -34,14 +34,14 @@ interface SearchResultProcessorInterface
     /**
      * Retrieve collection first item
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getFirstItem();
 
     /**
      * Retrieve collection last item
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getLastItem();
 
@@ -67,7 +67,7 @@ interface SearchResultProcessorInterface
      *
      * @param   string $column
      * @param   mixed $value
-     * @return  \Magento\Framework\Object || null
+     * @return  \Magento\Framework\DataObject || null
      */
     public function getItemByColumnValue($column, $value);
 
@@ -75,7 +75,7 @@ interface SearchResultProcessorInterface
      * Retrieve item by id
      *
      * @param   mixed $idValue
-     * @return  \Magento\Framework\Object
+     * @return  \Magento\Framework\DataObject
      */
     public function getItemById($idValue);
 
