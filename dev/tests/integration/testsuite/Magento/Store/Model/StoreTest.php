@@ -51,7 +51,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'sidResolver' => $objectManager->get('Magento\Framework\Session\SidResolverInterface'),
             'httpContext' => $objectManager->get('Magento\Framework\App\Http\Context'),
             'session' => $objectManager->get('Magento\Framework\Session\SessionManagerInterface'),
-            'currencyFactory' => $objectManager->get('Magento\Directory\Model\CurrencyFactory'),
+            'currencyFactory' => $objectManager->get('Magento\Framework\CurrencyFactory'),
             'information' => $objectManager->get('Magento\Store\Model\Information'),
             'currencyInstalled' => 'system/currency/installed',
             'groupRepository' => $objectManager->get('Magento\Store\Api\GroupRepositoryInterface'),
