@@ -144,7 +144,7 @@ class UiComponentFactory extends DataObject
                 $identifier,
                 $bundleComponents[$identifier]
             );
-            $componentArguments = array_merge($componentArguments, $arguments);
+            $componentArguments = array_replace_recursive($componentArguments, $arguments);
             if (!isset($componentArguments['context'])) {
                 $componentArguments['context'] = $this->contextFactory->create([
                     'namespace' => $identifier
