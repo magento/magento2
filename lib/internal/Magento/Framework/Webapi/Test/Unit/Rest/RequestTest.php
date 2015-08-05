@@ -93,7 +93,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function _prepareSutForGetBodyParamsTest($params)
     {
         $content = 'rawBody';
-        $this->_request->expects($this->once())->method('getContent')->will($this->returnValue($content));
+        $this->_request->expects($this->exactly(2))->method('getContent')->will($this->returnValue($content));
         $contentType = 'contentType';
         $this->_request->expects(
             $this->once()

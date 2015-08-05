@@ -102,7 +102,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->setCollection)
         );
 
-        $item = new \Magento\Framework\Object([
+        $item = new \Magento\Framework\DataObject([
             'id' => 1,
             'attribute_set_name' => 'Default',
             '_attribute_set' => 'Default'
@@ -258,7 +258,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
         foreach ($testProducts as $product) {
             $item = $this->getMock(
-                '\Magento\Framework\Object',
+                '\Magento\Framework\DataObject',
                 ['getAttributeSetId'],
                 [],
                 '',
