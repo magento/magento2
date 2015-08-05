@@ -6,6 +6,7 @@
 namespace Magento\Framework\Encryption;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Encryption\Helper\Security;
 
 /**
  * Provides basic logic for hashing passwords and encrypting/decrypting misc data
@@ -175,10 +176,11 @@ class Encryptor implements EncryptorInterface
         // look for salt
         $hashArr = explode(':', $hash, 2);
         if (1 === count($hashArr)) {
-            return $this->hash($password, $version) === $hash;
+            return Security::compareStrings($this->hash($password, $version), $hash);
         }
         list($hash, $salt) = $hashArr;
-        return $this->hash($salt . $password, $version) === $hash;
+
+        return Security::compareStrings($this->hash($salt . $password, $version), $hash);
     }
 
     /**
