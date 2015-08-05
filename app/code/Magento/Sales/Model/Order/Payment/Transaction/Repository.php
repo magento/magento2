@@ -112,6 +112,7 @@ class Repository implements TransactionRepositoryInterface
      * @param int $orderId
      * @return bool|\Magento\Framework\Model\AbstractModel|mixed
      * @throws \Magento\Framework\Exception\InputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getByTransactionType($transactionType, $paymentId, $orderId)
     {
