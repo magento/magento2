@@ -67,10 +67,10 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Check customer address before saving
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @return $this
      */
-    protected function _beforeSave(\Magento\Framework\Object $address)
+    protected function _beforeSave(\Magento\Framework\DataObject $address)
     {
         parent::_beforeSave($address);
 
@@ -82,7 +82,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Validate customer address entity
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @return void
      * @throws \Magento\Framework\Validator\Exception When validation failed
      */
@@ -112,7 +112,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * {@inheritdoc}
      */
-    protected function _afterDelete(\Magento\Framework\Object $address)
+    protected function _afterDelete(\Magento\Framework\DataObject $address)
     {
         if ($address->getId()) {
             $customer = $this->customerRepository->getById($address->getCustomerId());

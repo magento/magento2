@@ -111,8 +111,8 @@ class Vat
      * Retrieve customer group ID based on his VAT number
      *
      * @param string $customerCountryCode
-     * @param \Magento\Framework\Object $vatValidationResult
-     * @param Store|string|int $store
+     * @param \Magento\Framework\DataObject $vatValidationResult
+     * @param \Magento\Store\Model\Store|string|int $store
      * @return null|int
      */
     public function getCustomerGroupIdBasedOnVatNumber($customerCountryCode, $vatValidationResult, $store = null)
@@ -156,12 +156,12 @@ class Vat
      * @param string $requesterCountryCode
      * @param string $requesterVatNumber
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
     {
         // Default response
-        $gatewayResponse = new \Magento\Framework\Object([
+        $gatewayResponse = new \Magento\Framework\DataObject([
             'is_valid' => false,
             'request_date' => '',
             'request_identifier' => '',
@@ -244,8 +244,8 @@ class Vat
      * Get VAT class
      *
      * @param string $customerCountryCode
-     * @param \Magento\Framework\Object $vatValidationResult
-     * @param Store|string|int|null $store
+     * @param \Magento\Framework\DataObject $vatValidationResult
+     * @param \Magento\Store\Model\Store|string|int|null $store
      * @return null|string
      */
     public function getCustomerVatClass($customerCountryCode, $vatValidationResult, $store = null)

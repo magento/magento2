@@ -120,10 +120,12 @@ class Config extends Data
             $this->_types[$storeId] = [];
             foreach ($this->get() as $typeCode => $typeConfig) {
                 $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
-                $type = new Object();
-
-                if (isset($typeConfig['escapeHtml'])) {
-                    $escapeHtml = $typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1';
+                $type = new \Magento\Framework\DataObject();
+                if (isset(
+                    $typeConfig['escapeHtml']
+                ) && ($typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1')
+                ) {
+                    $escapeHtml = true;
                 } else {
                     $escapeHtml = false;
                 }
@@ -150,20 +152,21 @@ class Config extends Data
     /**
      * Retrieve default address format
      *
-     * @return Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getDefaultFormat()
     {
         $store = $this->getStore();
         $storeId = $store->getId();
         if (!isset($this->_defaultTypes[$storeId])) {
-            $this->_defaultTypes[$storeId] = new Object();
-            $this->_defaultTypes[$storeId]->setCode('default')
-                ->setDefaultFormat(
-                    '{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}' .
-                    '{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}, ' .
-                    '{{var street}}, {{var city}}, {{var region}} {{var postcode}}, {{var country}}'
-                );
+            $this->_defaultTypes[$storeId] = new \Magento\Framework\DataObject();
+            $this->_defaultTypes[$storeId]->setCode(
+                'default'
+            )->setDefaultFormat(
+                '{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}' .
+                '{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}, ' .
+                '{{var street}}, {{var city}}, {{var region}} {{var postcode}}, {{var country}}'
+            );
 
             $renderer = $this->_addressHelper->getRenderer(self::DEFAULT_ADDRESS_RENDERER)
                 ->setType($this->_defaultTypes[$storeId]);
@@ -176,7 +179,7 @@ class Config extends Data
      * Retrieve address format by code
      *
      * @param string $typeCode
-     * @return Object
+     * @return \Magento\Framework\DataObject
      */
     public function getFormatByCode($typeCode)
     {

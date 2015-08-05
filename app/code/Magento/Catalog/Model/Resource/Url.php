@@ -314,10 +314,10 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Prepare category parentId
      *
-     * @param \Magento\Framework\Object $category
+     * @param \Magento\Framework\DataObject $category
      * @return $this
      */
-    protected function _prepareCategoryParentId(\Magento\Framework\Object $category)
+    protected function _prepareCategoryParentId(\Magento\Framework\DataObject $category)
     {
         if ($category->getPath() != $category->getId()) {
             $split = explode('/', $category->getPath());
@@ -431,7 +431,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 }
             }
 
-            $category = new \Magento\Framework\Object($row);
+            $category = new \Magento\Framework\DataObject($row);
             $category->setId($row['entity_id']);
             $category->setEntityId($row['entity_id']);
             $category->setStoreId($storeId);
@@ -462,7 +462,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param int $categoryId
      * @param int $storeId
-     * @return \Magento\Framework\Object|false
+     * @return \Magento\Framework\DataObject|false
      */
     public function getCategory($categoryId, $storeId)
     {
@@ -535,7 +535,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $rowSet = $connection->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
-            $product = new \Magento\Framework\Object($row);
+            $product = new \Magento\Framework\DataObject($row);
             $product->setId($row['entity_id']);
             $product->setEntityId($row['entity_id']);
             $product->setCategoryIds([]);
@@ -578,7 +578,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param int $productId
      * @param int $storeId
-     * @return \Magento\Framework\Object|false
+     * @return \Magento\Framework\DataObject|false
      */
     public function getProduct($productId, $storeId)
     {

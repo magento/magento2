@@ -53,7 +53,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Configuration of design package for template
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     private $designConfig;
 
@@ -74,7 +74,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Configuration of emulated design package.
      *
-     * @var \Magento\Framework\Object|boolean
+     * @var \Magento\Framework\DataObject|boolean
      */
     private $emulatedDesignConfig = false;
 
@@ -577,7 +577,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Get design configuration data
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getDesignConfig()
     {
@@ -588,7 +588,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             if ($this->store === null) {
                 $this->store = $this->storeManager->getStore()->getId();
             }
-            $this->designConfig = new \Magento\Framework\Object(
+            $this->designConfig = new \Magento\Framework\DataObject(
                 ['area' => $this->area, 'store' => $this->store]
             );
         }
