@@ -66,21 +66,6 @@ define(
                 return this.getUrl(urls, params);
             },
 
-            /**
-             * Returns url of shipping method service based on current conditions.
-             * @param {Object} quote
-             * @returns String
-             */
-            getUrlForSetShippingMethod: function (quote) {
-                var params = this.getCheckoutMethod() === 'guest' ? {cartId: quote.getQuoteId()} : {},
-                    urls = {
-                    'guest': '/guest-carts/:cartId/selected-shipping-method',
-                    'customer': '/carts/mine/selected-shipping-method'
-                };
-
-                return this.getUrl(urls, params);
-            },
-
             /** Get url for service */
             getUrl: function(urls, urlParams) {
                 var url;
