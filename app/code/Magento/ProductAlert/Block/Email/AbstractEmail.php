@@ -44,23 +44,23 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Catalog\Helper\Image
      */
-    protected $imageHelper;
+    protected $imageBuilder;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         array $data = []
     ) {
-        $this->imageHelper = $imageHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->priceCurrency = $priceCurrency;
         $this->_maliciousCode = $maliciousCode;
         parent::__construct($context, $data);
@@ -216,18 +216,14 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string $imageId
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param array $attributes
      * @return \Magento\Catalog\Block\Product\Image
      */
-    public function getImage($product, $imageId)
+    public function getImage($product, $imageId, $attributes = [])
     {
-        $imageHelper = clone $this->imageHelper;
-        $imageHelper->init($product, $imageId);
-
-        return $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Product\Image',
-            '',
-            ['imageHelper' => $imageHelper]
-        );
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }

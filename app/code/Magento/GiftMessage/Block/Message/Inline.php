@@ -48,9 +48,9 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\Catalog\Helper\Image
+     * @var \Magento\Catalog\Block\Product\ImageBuilder
      */
-    protected $_imageHelper;
+    protected $imageBuilder;
 
     /**
      * @var \Magento\Framework\App\Http\Context
@@ -68,7 +68,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
@@ -76,11 +76,11 @@ class Inline extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\GiftMessage\Helper\Message $giftMessageMessage,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = []
     ) {
-        $this->_imageHelper = $imageHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->_giftMessageMessage = $giftMessageMessage;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
@@ -351,18 +351,14 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string $imageId
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param array $attributes
      * @return \Magento\Catalog\Block\Product\Image
      */
-    public function getImage($product, $imageId)
+    public function getImage($product, $imageId, $attributes = [])
     {
-        $imageHelper = clone $this->_imageHelper;
-        $imageHelper->init($product, $imageId);
-
-        return $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Product\Image',
-            '',
-            ['imageHelper' => $imageHelper]
-        );
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }

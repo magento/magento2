@@ -11,11 +11,6 @@ use Magento\Quote\Model\Quote\Item;
 class RendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_imageHelper;
-
-    /**
      * @var Renderer
      */
     protected $_renderer;
@@ -29,7 +24,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_imageHelper = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
         $this->layout = $this->getMock('Magento\Framework\View\LayoutInterface');
 
         $context = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
@@ -42,7 +36,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->_renderer = $objectManagerHelper->getObject(
             'Magento\Checkout\Block\Cart\Item\Renderer',
             [
-                'imageHelper' => $this->_imageHelper,
                 'context' => $context,
             ]
         );

@@ -72,9 +72,9 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     protected $messageManager;
 
     /**
-     * @var \Magento\Catalog\Helper\Image
+     * @var \Magento\Catalog\Block\Product\ImageBuilder
      */
-    protected $_imageHelper;
+    protected $imageBuilder;
 
     /**
      * @var PriceCurrencyInterface
@@ -90,7 +90,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
@@ -101,7 +101,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
@@ -109,7 +109,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
-        $this->_imageHelper = $imageHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->_urlHelper = $urlHelper;
         $this->_productConfig = $productConfig;
         $this->_checkoutSession = $checkoutSession;
@@ -149,16 +149,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     public function getProduct()
     {
         return $this->getItem()->getProduct();
-    }
-
-    /**
-     * Get product thumbnail image
-     *
-     * @return \Magento\Catalog\Model\Product\Image
-     */
-    public function getProductThumbnail()
-    {
-        return $this->_imageHelper->init($this->getProductForThumbnail(), 'thumbnail');
     }
 
     /**
@@ -592,18 +582,14 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string $imageId
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param array $attributes
      * @return \Magento\Catalog\Block\Product\Image
      */
-    public function getImage($product, $imageId)
+    public function getImage($product, $imageId, $attributes = [])
     {
-        $imageHelper = clone $this->_imageHelper;
-        $imageHelper->init($product, $imageId);
-
-        return $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Product\Image',
-            '',
-            ['imageHelper' => $imageHelper]
-        );
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }
