@@ -36,9 +36,13 @@ define([
             var key = data.variationKey;
             return 'variations-matrix-' + key + '-' + field;
         },
-        getVariationRowName: function(data, field) {
-            var key = data.variationKey;
-            return 'variations-matrix[' + key + '][' + field.split('/').join('][') + ']';
+        getVariationRowName: function(variation, field) {
+            if (variation.product_id) {
+                return 'configurations[' + variation.product_id + '][' + field.split('/').join('][') + ']';
+            } else {
+                var key = variation.variationKey;
+                return 'variations-matrix[' + key + '][' + field.split('/').join('][') + ']';
+            }
         },
         getAttributeRowName: function(attribute, field) {
             return 'product[configurable_attributes_data][' + attribute.id  + '][' + field + ']';
@@ -90,18 +94,19 @@ define([
             this.productMatrix.splice(rowIndex, 1);
         },
         toggleProduct: function (rowIndex) {
-            var row = $('[data-row-number=' + rowIndex + ']');
             var productChanged = {};
-            _.each('name,sku,qty,weight,price'.split(','), function(column) {
-                productChanged[column] = $(
-                    'input[type=text]',
-                    row.find($('[data-column="%s"]'.replace('%s', column)))
-                ).val();
-            });
-
+            if (!this.productMatrix()[rowIndex].readonly) {
+                var row = $('[data-row-number=' + rowIndex + ']');
+                _.each('name,sku,qty,weight,price'.split(','), function (column) {
+                    productChanged[column] = $(
+                        'input[type=text]',
+                        row.find($('[data-column="%s"]'.replace('%s', column)))
+                    ).val();
+                });
+            }
             var product = this.productMatrix.splice(rowIndex, 1)[0];
             product = _.extend(product, productChanged);
-            product.status = !product.status;
+            product.status = !product.status * 1;
             this.productMatrix.splice(rowIndex, 0, product);
         },
         toggleList: function (rowIndex) {

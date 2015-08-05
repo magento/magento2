@@ -138,7 +138,7 @@ if ($variations) {
                 </tr>
                 </thead>
                 <tbody data-bind="foreach: {data: productMatrix, as: 'variation'}">
-                <tr data-role="row" data-bind="attr: {class:  $index() % 2 ? 'even' : '', 'data-row-number': $index()}">
+                <tr data-role="row" data-bind="css: { _disabled: !variation.status, even: $index() % 2 }, attr: { 'data-row-number': $index() }">
                     <td class="col-image" data-column="image">
                         <div class="actions split actions-image-uploader">
                             <!-- ko if: variation.readonly -->
@@ -179,8 +179,8 @@ if ($variations) {
                         <!-- ko ifnot: variation.readonly -->
                         <input type="text" data-bind="attr: {id: $parent.getRowId(variation, 'name'), name: $parent.getVariationRowName(variation, 'name'), value: variation.sku}"/>
                         <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'configurable_attribute'), name: $parent.getVariationRowName(variation, 'configurable_attribute'), value: variation.attribute}"/>
-                        <input type="hidden" data-role="status" data-bind="attr: {name: $parent.getVariationRowName(variation, 'status'), value: variation.status}"/>
                         <!-- /ko -->
+                        <input type="hidden" data-role="status" data-bind="attr: {name: $parent.getVariationRowName(variation, 'status'), value: variation.status}"/>
                     </td>
                     <td class="col-sku" data-column="sku">
                         <!-- ko if: variation.readonly -->
@@ -214,7 +214,7 @@ if ($variations) {
                         <!-- ko ifnot: variation.readonly -->
                         <input type="text"
                                class="validate-number"
-                               data-bind="attr: {id: $parent.getRowId(variation, 'qty'), name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'), value: variation.quantity}"/>
+                               data-bind="attr: {id: $parent.getRowId(variation, 'qty'), name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'), value: variation.qty}"/>
                         <!-- /ko -->
 
                     </td>
@@ -247,13 +247,11 @@ if ($variations) {
                                     <a class="action-menu-item" data-bind="attr: {'data-attributes': variation.attribute}"
                                        data-action="choose" href="#"><?= __('Choose a different Product');?></a>
                                 </li>
-                                <!-- ko ifnot: variation.readonly -->
                                 <li>
                                     <a class="action-menu-item" data-bind="
                                     text: variation.status == 1 ? $t('Disable Product') : $t('Enable Product'),
                                     click: $parent.toggleProduct.bind($parent, $index())"></a>
                                 </li>
-                                <!-- /ko -->
                                 <li>
                                     <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
                                         <?= __('Remove Product');?>
