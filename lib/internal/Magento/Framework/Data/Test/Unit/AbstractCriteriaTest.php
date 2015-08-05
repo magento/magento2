@@ -376,7 +376,7 @@ class AbstractCriteriaTest extends \PHPUnit_Framework_TestCase
                 'type' => 'test-type',
                 'result' => [
                     'test-filter-name' => $objectManager->getObject(
-                        'Magento\Framework\Object',
+                        'Magento\Framework\DataObject',
                         [
                             'data' => [
                                 'name' => 'test-filter-name',

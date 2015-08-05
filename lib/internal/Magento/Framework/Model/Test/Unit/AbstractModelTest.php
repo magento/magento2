@@ -121,7 +121,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->isDeleted()
+     * Tests \Magento\Framework\DataObject->isDeleted()
      */
     public function testIsDeleted()
     {
@@ -133,7 +133,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->hasDataChanges()
+     * Tests \Magento\Framework\DataObject->hasDataChanges()
      */
     public function testHasDataChanges()
     {
@@ -153,7 +153,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->getId()
+     * Tests \Magento\Framework\DataObject->getId()
      */
     public function testSetGetId()
     {
@@ -169,7 +169,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->setOrigData()
+     * Tests \Magento\Framework\DataObject->setOrigData()
      */
     public function testOrigData()
     {
@@ -185,7 +185,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->setDataChanges()
+     * Tests \Magento\Framework\DataObject->setDataChanges()
      */
     public function testSetDataChanges()
     {

@@ -215,7 +215,7 @@ class Address extends AbstractCustomer
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
@@ -236,7 +236,7 @@ class Address extends AbstractCustomer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,

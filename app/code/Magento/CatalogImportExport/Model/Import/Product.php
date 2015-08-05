@@ -561,7 +561,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
@@ -601,7 +601,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\Resource $resource,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
