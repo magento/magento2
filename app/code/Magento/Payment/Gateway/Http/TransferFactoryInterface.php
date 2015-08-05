@@ -13,5 +13,5 @@ interface TransferFactoryInterface
      * @param array $request
      * @return TransferInterface
      */
-    public function create(array $request);
+    public function create($request);
 }
