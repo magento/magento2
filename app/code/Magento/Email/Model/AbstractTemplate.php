@@ -171,7 +171,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Framework\Url|\Magento\Framework\UrlInterface $urlModel
+     * @param \Magento\Framework\UrlInterface $urlModel
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -248,8 +248,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Load template by XML configuration path. Loads template from database if it exists and has been overridden in
-     * configuration. Otherwise loads from the filesystem.
+     * Load template from database when overridden in configuration or load default from relevant file system location.
      *
      * @param string $configPath
      * @return \Magento\Email\Model\AbstractTemplate

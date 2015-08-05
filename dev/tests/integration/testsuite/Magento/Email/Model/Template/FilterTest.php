@@ -16,6 +16,9 @@ use Magento\Framework\View\DesignInterface;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
