@@ -56,17 +56,17 @@ class Information
 
     /**
      * @param Renderer $renderer
-     * @param CountryFactory $countryFactory
      * @param RegionFactory $regionFactory
+     * @param CountryFactory $countryFactory
      */
     public function __construct(
         Renderer $renderer,
-        CountryFactory $countryFactory,
-        RegionFactory $regionFactory
+        RegionFactory $regionFactory,
+        CountryFactory $countryFactory
     ) {
         $this->renderer = $renderer;
-        $this->countryFactory = $countryFactory;
         $this->regionFactory = $regionFactory;
+        $this->countryFactory = $countryFactory;
     }
 
     /**
@@ -90,12 +90,12 @@ class Information
             'vat_number' => $store->getConfig(self::XML_PATH_STORE_INFO_VAT_NUMBER),
         ]);
 
-        if ($info->getCountryId()) {
-            $info->setCountry($this->countryFactory->create()->loadByCode($info->getCountryId())->getName());
-        }
-
         if ($info->getRegionId()) {
             $info->setRegion($this->regionFactory->create()->load($info->getRegionId())->getName());
+        }
+
+        if ($info->getCountryId()) {
+            $info->setCountry($this->countryFactory->create()->loadByCode($info->getCountryId())->getName());
         }
 
         return $info;
@@ -104,7 +104,7 @@ class Information
     /**
      * Retrieve formatted store address from config
      *
-     * @param \Magento\Store\Model\Store $store
+     * @param Store $store
      * @return string
      */
     public function getFormattedAddress(Store $store)
