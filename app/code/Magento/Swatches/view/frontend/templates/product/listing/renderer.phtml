@@ -14,7 +14,8 @@
             enableControlLabel: false,
             numberToShow: <?php echo $block->getNumberSwatchesPerProduct(); ?>,
             jsonConfig: <?php echo $swatchOptions = $block->getJsonConfig(); ?>,
-            jsonSwatchConfig: <?php echo $swatchOptions = $block->getJsonSwatchConfig(); ?>
+            jsonSwatchConfig: <?php echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
+            baseUrl: '<?php echo $block->getBaseUrl() ?>'
         });
     });
 </script>
