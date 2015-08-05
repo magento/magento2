@@ -131,7 +131,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return 'ExpectedValue';
         };
-        $this->subjectMock = $this->getMock('Magento\Framework\App\Action\Action',
+        $this->subjectMock = $this->getMock(
+            'Magento\Framework\App\Action\Action',
             [],
             [],
             '',
