@@ -5,12 +5,6 @@
  */
 namespace Magento\Framework\Amqp;
 
-use Magento\Framework\Amqp\Config\Data as QueueConfig;
-use Magento\Framework\Amqp\Config\Converter as QueueConfigConverter;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Phrase;
-
 /**
  * Value class which stores the configuration
  */
@@ -26,6 +20,8 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     private $data;
 
     /**
+     * Initialize dependencies.
+     *
      * @param array $data configuration data
      */
     public function __construct($data = [])
@@ -58,7 +54,9 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     }
 
     /**
-     * @param $key
+     * Get specified data item.
+     *
+     * @param string $key
      * @return string|null
      */
     private function getData($key)

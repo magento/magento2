@@ -13,7 +13,7 @@ interface ConsumerInterface
     /**
      * Configure will be called before process to allow the consumer to setup itself.
      *
-     * @param ConsumerConfigurationInterface
+     * @param ConsumerConfigurationInterface $configuration
      * @return void
      */
     public function configure(ConsumerConfigurationInterface $configuration);
@@ -21,9 +21,9 @@ interface ConsumerInterface
     /**
      * Connects to a queue, consumes a message on the queue, and invoke a method to process the message contents.
      *
-     * @param int|null $maxNumberOfMessages if not specified - wait for incoming messages forever,
+     * @param int|null $maxNumberOfMessages if not specified - process all queued incoming messages and terminate,
      *      otherwise terminate execution after processing the specified number of messages
      * @return mixed
      */
-    public function process($numberOfMessages = null);
+    public function process($maxNumberOfMessages = null);
 }
