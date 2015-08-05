@@ -176,23 +176,56 @@ define([
         },
 
         /**
-         * Replaces current records' with the provided one.
+         * Replaces current records' data with the provided one.
          *
+         * @param {Object} data
+         * @param {Boolean} [partial=false]
          * @returns {Record} Chainable.
          */
-        setData: function (data) {
-            this.set('data', utils.copy(data));
+        setData: function (data, partial) {
+            var currentData = this.data,
+                result;
+
+            result = partial ?
+                utils.extend({}, currentData, data) :
+                utils.copy(data);
+
+            this.set('data', result);
 
             return this;
         },
 
         /**
-         * Validate all of the available fields.
+         * Validates all of the available fields.
          *
          * @returns {Array} An array with validatation results.
          */
         validate: function () {
             return this.elems.map('validate');
+        },
+
+        /**
+         * Clears values of all fields.
+         *
+         * @returns {Record} Chainable.
+         */
+        clear: function () {
+            this.elems.each('clear');
+
+            return this;
+        },
+
+        /**
+         * Checks if all fields are valid.
+         *
+         * @returns {Boolean}
+         */
+        isValid: function () {
+            var result = this.validate();
+
+            return result.every(function (data) {
+                return data.valid;
+            });
         },
 
         /**

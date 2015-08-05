@@ -4,11 +4,20 @@
  * See COPYING.txt for license details.
  */
 -->
-<tr class="data-grid-bulk-edit-panel" data-bind="visible: editor().isMultiEditing, foreach: fields">
-    <td data-bind="visible: visible, css: { 'data-grid-actions-cell': $parent.isActionsColumn($data) }">
+<tr
+    class="data-grid-bulk-edit-panel"
+    data-bind="
+        visible: editor().isMultiEditing,
+        foreach: fields">
+    <td
+        data-bind="
+            visible: visible,
+            css: {
+                'data-grid-actions-cell': $parent.isActionsColumn($data)
+            }">
         <!-- ko if: $parent.isActionsColumn($data) -->
             <!-- ko with: $parent -->
-                <button class="action-default" type="button" disabled>
+                <button class="action-default" type="button" data-bind="click: apply">
                     <span data-bind="text: $t('Apply')"></span>
                 </button>
             <!-- /ko -->
@@ -17,7 +26,10 @@
         <!-- ko if: $data.isEditor -->
             <label
                 class="admin__field-label admin__field-label-vertical"
-                data-bind="text: $t('All in column'), attr: {for: uid}"></label>
+                data-bind="
+                    text: $t('All in column'),
+                    attr: {for: uid}
+                "></label>
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
     </td>
