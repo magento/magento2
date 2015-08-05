@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Newsletter\Test\Unit\Model;
+
 use Magento\Framework\App\TemplateTypesInterface;
 
 /**
