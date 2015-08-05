@@ -156,18 +156,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ],
             'referenceContainerNoRemove' => [
                 'elementCurrent' => $this->getElement(
-                    '<referenceContainer name="reference" remove="false" htmlTag="span"'
-                        . ' htmlId="id_add" htmlClass="new" label="Add"/>',
+                    '<referenceContainer name="reference" remove="false"/>',
                     'referenceContainer'
                 ),
                 'containerName' => 'reference',
                 'structureElement' => [],
                 'expectedData' => [
                     'attributes' => [
-                        Container::CONTAINER_OPT_HTML_TAG   => 'span',
-                        Container::CONTAINER_OPT_HTML_ID    => 'id_add',
-                        Container::CONTAINER_OPT_HTML_CLASS => 'new',
-                        Container::CONTAINER_OPT_LABEL      => 'Add',
+                        Container::CONTAINER_OPT_HTML_TAG   => null,
+                        Container::CONTAINER_OPT_HTML_ID    => null,
+                        Container::CONTAINER_OPT_HTML_CLASS => null,
+                        Container::CONTAINER_OPT_LABEL      => null,
                     ],
                 ],
                 'getStructureCondition' => $this->once(),
