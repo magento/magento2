@@ -89,21 +89,10 @@ define([
         /**
          * Creates new instance of an editor.
          *
-         * @param {Column} column - Column instance associtaed with an editor.
+         * @param {Object} editor - Editors' instance definition.
          * @returns {Record} Chainable.
          */
-        createEditor: function (column) {
-            var editors = this.templates.editors,
-                editor  = this.getColumnEditor(column);
-
-            editor = utils.extend({}, editors.base, editor);
-            editor = utils.template(editor, {
-                record: this,
-                column: column
-            }, true, true);
-
-            editor.visible = column.visible;
-
+        initEditor: function (editor) {
             layout([editor]);
 
             return this;
@@ -115,7 +104,7 @@ define([
          * @param {Column} column - Column instance which contains editor definition.
          * @returns {Object}
          */
-        getColumnEditor: function (column) {
+        buildColumnEditor: function (column) {
             var editors      = this.templates.editors,
                 columnEditor = column.editor,
                 editor;
@@ -130,6 +119,15 @@ define([
                 editor = editors[columnEditor];
             }
 
+            editor = utils.extend({}, editors.base, editor);
+            editor = utils.template(editor, {
+                record: this,
+                column: column
+            }, true, true);
+
+            editor.visible  = column.visible;
+            editor.disabled = column.disabled;
+
             return editor;
         },
 
@@ -138,9 +136,13 @@ define([
          * @returns {Record} Chainable.
          */
         createEditors: function (columns) {
+            var editor;
+
             columns.forEach(function (column) {
                 if (column.editor && !this.getEditor(column.index)) {
-                    this.createEditor(column);
+                    editor = this.buildColumnEditor(column);
+
+                    this.initEditor(editor);
                 }
             }, this);
 
@@ -173,6 +175,10 @@ define([
             return this.elems.findWhere({
                 index: index
             });
+        },
+
+        getColumn: function (index) {
+            return this.columns().getColumn(index);
         },
 
         /**
