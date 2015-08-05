@@ -9,7 +9,7 @@ use \Magento\Framework\Search\Adapter\Mysql\Mapper;
 
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\App\Resource;
-use Magento\Framework\Search\Request\Query\Bool;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -171,7 +171,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo($this->select),
                 $this->equalTo($query),
-                $this->equalTo(Bool::QUERY_CONDITION_MUST)
+                $this->equalTo(BoolExpression::QUERY_CONDITION_MUST)
             )
             ->will($this->returnValue($this->select));
 
@@ -342,7 +342,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
      */
     private function createBoolQuery(array $must, array $should, array $mustNot)
     {
-        $query = $this->getMockBuilder('Magento\Framework\Search\Request\Query\Bool')
+        $query = $this->getMockBuilder('Magento\Framework\Search\Request\Query\BoolExpression')
             ->setMethods(['getMust', 'getShould', 'getMustNot', 'getType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
