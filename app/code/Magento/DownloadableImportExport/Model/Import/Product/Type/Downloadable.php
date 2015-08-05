@@ -59,6 +59,49 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     const FILE_OPTION_VALUE = 'file';
 
     /**
+     * Column with downloadable samples
+     */
+    const COL_DOWNLOADABLE_SAMPLES = 'downloadable_samples';
+
+    /**
+     * Column with downloadable links
+     */
+    const COL_DOWNLOADABLE_LINKS = 'downloadable_links';
+
+    /**
+     * Default group title
+     */
+    const DEFAULT_GROUP_TITLE = '';
+
+    /**
+     * Default links can be purchased separately
+     */
+    const DEFAULT_PURCHASED_SEPARATELY = 1;
+
+    /**
+     * Error codes.
+     */
+    const ERROR_OPTIONS_NOT_FOUND = 'optionsNotFound';
+
+    const ERROR_GROUP_TITLE_NOT_FOUND = 'groupTitleNotFound';
+
+    const ERROR_OPTION_NO_TITLE = 'optionNoTitle';
+
+    const ERROR_MOVE_FILE = 'moveFile';
+
+    /**
+     * Validation failure message template definitions
+     *
+     * @var array
+     */
+    protected $_messageTemplates = [
+        self::ERROR_OPTIONS_NOT_FOUND => 'Options for downloadable products not found',
+        self::ERROR_GROUP_TITLE_NOT_FOUND => 'Group titles not found for downloadable products',
+        self::ERROR_OPTION_NO_TITLE => 'Option no title',
+        self::ERROR_MOVE_FILE => 'Error move file',
+    ];
+
+    /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $mediaDirectory;
@@ -191,6 +234,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $fileForDelete = [];
 
     /**
+     * Num row parsing file
+     */
+    protected $rowNum;
+
+    /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\Resource $resource
@@ -241,6 +289,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
+                    $this->rowNum = $rowNum;
+                    if ($this->isDownloadableValid($rowData)){
+                        continue;
+                    }
                     $this->parseOptions($rowData, $productData['entity_id']);
                 }
                 if (!empty($this->cachedOptions)) {
@@ -265,8 +317,43 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
     {
         $resultAttrs = parent::prepareAttributesWithDefaultValueForSave($rowData, $withDefaultValue);
-        $resultAttrs = array_merge($resultAttrs, $this->getGroupTitle($rowData));
+        $resultAttrs = array_merge($resultAttrs, $this->addAdditionalAttributes($rowData));
         return $resultAttrs;
+    }
+
+    /**
+     *
+     */
+    protected function isDownloadableValid(array $rowData){
+        $result = false;
+        if (!$this->isRowDownloadableNoValid($rowData)){
+            $this->_entityModel->addRowError(self::ERROR_OPTIONS_NOT_FOUND, $this->rowNum);
+            $result = true;
+        }
+        if (
+            $this->sampleGroupTitle($rowData) == '' &&
+            $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE)
+        ){
+            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
+            $result = true;
+
+        }
+        return $result;
+
+    }
+    /**
+     * Check whether the row is valid.
+     *
+     * @param array $rowData
+     * @param int $rowNum
+     * @param bool $isNewProduct
+     * @return bool
+     */
+    protected function isRowDownloadableNoValid(array $rowData)
+    {
+        $result = isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) ||
+            isset($rowData[self::COL_DOWNLOADABLE_LINKS]);
+        return $result;
     }
 
     /**
@@ -328,55 +415,59 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * Get group title for dowloadable product.
+     * Get additional attributes for dowloadable product.
      *
      * @param array $rowData
      * @return array
      */
-    protected function getGroupTitle(array $rowData)
+    protected function addAdditionalAttributes(array $rowData)
     {
         return [
             'samples_title' => $this->sampleGroupTitle($rowData),
-            'links_title' => $this->linkGroupTitle($rowData)
+            'links_title' => $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE),
+            'links_purchased_separately' => $this->linksAdditionalAttributes($rowData, 'purchased_separately', self::DEFAULT_PURCHASED_SEPARATELY)
         ];
+    }
+
+    /**
+     * Get additional attributes for links
+     *
+     * @param array $rowData
+     * @param string $attribute
+     * @param mixed $defaultValue
+     * @return string
+     */
+    protected function linksAdditionalAttributes(array $rowData, $attribute, $defaultValue){
+        $result = $defaultValue;
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])) {
+            $options = explode(
+                \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+                $rowData[self::COL_DOWNLOADABLE_LINKS]
+            );
+            foreach ($options as $option) {
+                $arr = $this->parseLinkOption(explode($this->_entityModel->getMultipleValueSeparator(), $option));
+                if (isset($arr[$attribute])){
+                    $result = $arr[$attribute];
+                    break;
+                }
+            }
+        }
+        return $result;
+
     }
 
     /**
      * Get group title for sample
      *
      * @param array $rowData
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return string
      */
     protected function sampleGroupTitle(array $rowData){
         $result = '';
-        if (isset($rowData['downloadable_samples'])) {
+        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
             $options = explode(
                 \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
-                $rowData['downloadable_samples']
-            );
-            foreach ($options as $option) {
-                $arr = $this->parseSampleOption(explode($this->_entityModel->getMultipleValueSeparator(), $option));
-                if (isset($arr['group_title'])){
-                    $result = $arr['group_title'];
-                    break;
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Get link group title
-     *
-     * @param array $rowData
-     * @return string
-     */
-    protected function linkGroupTitle(array $rowData){
-        $result = '';
-        if (isset($rowData['downloadable_links'])) {
-            $options = explode(
-                \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
-                $rowData['downloadable_samples']
+                $rowData[self::COL_DOWNLOADABLE_SAMPLES]
             );
             foreach ($options as $option) {
                 $arr = $this->parseSampleOption(explode($this->_entityModel->getMultipleValueSeparator(), $option));
@@ -398,8 +489,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function parseOptions(array $rowData, $entityId){
         $this->productIds[] = $entityId;
-        $this->prepareLinkData($rowData['downloadable_links'], $entityId);
-        $this->prepareSampleData($rowData['downloadable_samples'], $entityId);
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]))
+            $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS], $entityId);
+        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]))
+            $this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES], $entityId);
         return $this;
     }
 
@@ -626,8 +719,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $key = $this->optionLinkMapping[$key];
                 }
                 $option[$key] = $value;
-
             }
+        }
+        if (!array_key_exists('title', $option)){
+            $this->_entityModel->addRowError(self::ERROR_OPTION_NO_TITLE, $this->rowNum);
         }
         return $option;
     }
@@ -658,6 +753,9 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $option[$key] = $value;
             }
         }
+        if (!array_key_exists('title', $option)){
+            $this->_entityModel->addRowError(self::ERROR_OPTION_NO_TITLE, $this->rowNum);
+        }
         return $option;
     }
 
@@ -672,9 +770,9 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         if (is_null($this->fileUploader)) {
             $this->fileUploader = $this->uploaderFactory->create();
-
             $this->fileUploader->init();
-
+            $this->fileUploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png', 'mp4']);
+            $this->fileUploader->removeValidateCallback('catalog_product_image');
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
@@ -710,7 +808,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param string $fileName
      * @param string $type
      * @return string
-     * @todo Requirement integrity with error processing
      */
     protected function uploadDownloadableFiles($fileName, $type = 'links', $renameFileOff = false)
     {
@@ -718,6 +815,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $res = $this->getUploader($type)->move($fileName, $renameFileOff);
             return $res['file'];
         } catch (\Exception $e) {
+            $this->_entityModel->addRowError(self::ERROR_MOVE_FILE, $this->rowNum);
             return '';
         }
     }
