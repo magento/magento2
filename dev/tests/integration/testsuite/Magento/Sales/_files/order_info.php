@@ -89,4 +89,4 @@ foreach ($creditmemo->getAllItems() as $creditmemoItem) {
 }
 
 $creditmemoManagement = $objectManager->create('Magento\Sales\Api\CreditmemoManagementInterface');
-$creditmemoManagement->refund();
+$creditmemoManagement->refund($creditmemo);
