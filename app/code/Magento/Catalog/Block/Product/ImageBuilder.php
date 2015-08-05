@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+use Magento\Catalog\Block\Product\ImageFactory;
+use Magento\Catalog\Helper\ImageFactory as HelperFactory;
+
 class ImageBuilder
 {
     /**
@@ -13,9 +16,9 @@ class ImageBuilder
     protected $imageFactory;
 
     /**
-     * @var \Magento\Catalog\Helper\ImageFactory
+     * @var HelperFactory
      */
-    protected $catalogImageFactory;
+    protected $helperFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product
@@ -33,14 +36,14 @@ class ImageBuilder
     protected $attributes = [];
 
     /**
-     * @param \Magento\Catalog\Helper\ImageFactory $catalogImageFactory
+     * @param HelperFactory $helperFactory
      * @param ImageFactory $imageFactory
      */
     public function __construct(
-        \Magento\Catalog\Helper\ImageFactory $catalogImageFactory,
-        \Magento\Catalog\Block\Product\ImageFactory $imageFactory
+        HelperFactory $helperFactory,
+        ImageFactory $imageFactory
     ) {
-        $this->catalogImageFactory = $catalogImageFactory;
+        $this->helperFactory = $helperFactory;
         $this->imageFactory = $imageFactory;
     }
 
@@ -120,7 +123,7 @@ class ImageBuilder
     public function create()
     {
         /** @var \Magento\Catalog\Helper\Image $helper */
-        $helper = $this->catalogImageFactory->create()
+        $helper = $this->helperFactory->create()
             ->init($this->product, $this->imageId);
 
         $template = $helper->getFrame()
@@ -134,10 +137,10 @@ class ImageBuilder
                 'width' => $helper->getWidth(),
                 'height' => $helper->getHeight(),
                 'label' => $helper->getLabel(),
-                'resized_image_width' => $helper->getResizedImageInfo()[0],
-                'resized_image_height' => $helper->getResizedImageInfo()[1],
                 'ratio' =>  $this->getRatio($helper),
                 'custom_attributes' => $this->getCustomAttributes(),
+                'resized_image_width' => $helper->getResizedImageInfo()[0],
+                'resized_image_height' => $helper->getResizedImageInfo()[1],
             ],
         ];
 
