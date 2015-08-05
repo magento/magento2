@@ -56,7 +56,7 @@ class AbstractMassStatus extends \Magento\Backend\App\Action
         $excluded = $this->getRequest()->getParam('excluded');
         try {
             if (isset($excluded)) {
-                if (!empty($excluded)) {
+                if (!empty($excluded) && is_array($excluded)) {
                     $this->excludedSetStatus($excluded);
                 } else {
                     $this->setStatusAll();
@@ -128,7 +128,7 @@ class AbstractMassStatus extends \Magento\Backend\App\Action
     {
         foreach ($collection->getAllIds() as $id) {
             /** @var \Magento\Framework\Model\AbstractModel $model */
-            $model = $this->_objectManager->get($this->model);
+            $model = $this->_objectManager->create($this->model);
             $model->load($id);
             $model->setIsActive($this->status);
             $model->save();
