@@ -86,6 +86,9 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGenerate()
     {
         $imageFile = 'image.jpg';

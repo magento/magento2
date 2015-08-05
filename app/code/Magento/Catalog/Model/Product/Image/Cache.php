@@ -78,7 +78,6 @@ class Cache
      *
      * @param Product $product
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function generate(Product $product)
     {
@@ -86,34 +85,50 @@ class Cache
         if ($galleryImages) {
             foreach ($galleryImages as $image) {
                 foreach ($this->getData() as $imageData) {
-                    $this->imageHelper->init($product, $imageData['id'], $imageData);
-                    $this->imageHelper->setImageFile($image->getFile());
-
-                    if (isset($imageData['aspect_ratio'])) {
-                        $this->imageHelper->keepAspectRatio($imageData['aspect_ratio']);
-                    }
-                    if (isset($imageData['frame'])) {
-                        $this->imageHelper->keepFrame($imageData['frame']);
-                    }
-                    if (isset($imageData['transparency'])) {
-                        $this->imageHelper->keepTransparency($imageData['transparency']);
-                    }
-                    if (isset($imageData['constrain'])) {
-                        $this->imageHelper->constrainOnly($imageData['constrain']);
-                    }
-                    if (isset($imageData['background'])) {
-                        $this->imageHelper->backgroundColor($imageData['background']);
-                    }
-
-                    $width = isset($imageData['width']) ? $imageData['width'] : null;
-                    $height = isset($imageData['height']) ? $imageData['height'] : null;
-                    if ($width || $height) {
-                        $this->imageHelper->resize($width, $height);
-                    }
-                    $this->imageHelper->save();
+                    $this->processImageData($product, $imageData, $image->getFile());
                 }
             }
         }
+        return $this;
+    }
+
+    /**
+     * Process image data
+     *
+     * @param Product $product
+     * @param array $imageData
+     * @param string $file
+     * @return $this
+     */
+    protected function processImageData(Product $product, array $imageData, $file)
+    {
+        $this->imageHelper->init($product, $imageData['id'], $imageData);
+        $this->imageHelper->setImageFile($file);
+
+        if (isset($imageData['aspect_ratio'])) {
+            $this->imageHelper->keepAspectRatio($imageData['aspect_ratio']);
+        }
+        if (isset($imageData['frame'])) {
+            $this->imageHelper->keepFrame($imageData['frame']);
+        }
+        if (isset($imageData['transparency'])) {
+            $this->imageHelper->keepTransparency($imageData['transparency']);
+        }
+        if (isset($imageData['constrain'])) {
+            $this->imageHelper->constrainOnly($imageData['constrain']);
+        }
+        if (isset($imageData['background'])) {
+            $this->imageHelper->backgroundColor($imageData['background']);
+        }
+
+        $width = isset($imageData['width']) ? $imageData['width'] : null;
+        $height = isset($imageData['height']) ? $imageData['height'] : null;
+        if ($width || $height) {
+            $this->imageHelper->resize($width, $height);
+        }
+
+        $this->imageHelper->save();
+
         return $this;
     }
 }
