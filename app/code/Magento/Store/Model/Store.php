@@ -284,7 +284,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     protected $_httpContext;
 
     /**
-     * @var \Magento\Framework\CurrencyFactory
+     * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $currencyFactory;
 
@@ -318,7 +318,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\Session\SessionManagerInterface $session
-     * @param \Magento\Framework\CurrencyFactory $currencyFactory
+     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param Information $information
      * @param string $currencyInstalled
      * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
@@ -344,7 +344,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Session\SessionManagerInterface $session,
-        \Magento\Framework\CurrencyFactory $currencyFactory,
+        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\Information $information,
         $currencyInstalled,
         \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
