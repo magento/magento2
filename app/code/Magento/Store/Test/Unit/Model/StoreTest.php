@@ -436,7 +436,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $currency->expects($this->any())->method('load')->with($currencyCode)->will($this->returnSelf());
 
         $currencyFactory = $this->getMock(
-            '\Magento\Framework\CurrencyFactory',
+            '\Magento\Directory\Model\CurrencyFactory',
             ['create'],
             [],
             '',
