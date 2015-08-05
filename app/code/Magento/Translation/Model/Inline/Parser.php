@@ -123,14 +123,14 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * Initialize base inline translation model
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Translation\Model\Resource\StringFactory $resource
+     * @param \Magento\Translation\Model\Resource\StringUtilsFactory $resource
      * @param \Zend_Filter_Interface $inputFilter
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\App\Cache\TypeListInterface $appCache,
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      */
     public function __construct(
-        \Magento\Translation\Model\Resource\StringFactory $resource,
+        \Magento\Translation\Model\Resource\StringUtilsFactory $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
         \Magento\Framework\App\State $appState,
@@ -164,7 +164,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         /** @var $validStoreId int */
         $validStoreId = $this->_storeManager->getStore()->getId();
 
-        /** @var $resource \Magento\Translation\Model\Resource\String */
+        /** @var $resource \Magento\Translation\Model\Resource\StringUtils */
         $resource = $this->_resourceFactory->create();
         foreach ($translateParams as $param) {
             if ($this->_appState->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {

@@ -75,8 +75,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddAttributeGrouping()
     {
         $select = $this->_model->getSelect();
-        $this->assertEmpty($select->getPart(\Zend_Db_Select::GROUP));
+        $this->assertEmpty($select->getPart(\Magento\Framework\DB\Select::GROUP));
         $this->_model->addAttributeGrouping();
-        $this->assertEquals(['main_table.attribute_id'], $select->getPart(\Zend_Db_Select::GROUP));
+        $this->assertEquals(['main_table.attribute_id'], $select->getPart(\Magento\Framework\DB\Select::GROUP));
     }
 }

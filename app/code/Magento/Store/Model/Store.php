@@ -29,7 +29,7 @@ use Magento\Framework\Model\AbstractModel;
 class Store extends AbstractModel implements
     \Magento\Framework\App\ScopeInterface,
     \Magento\Framework\Url\ScopeInterface,
-    \Magento\Framework\Object\IdentityInterface,
+    \Magento\Framework\DataObject\IdentityInterface,
     \Magento\Store\Api\Data\StoreInterface
 {
     /**
@@ -422,7 +422,7 @@ class Store extends AbstractModel implements
      */
     protected function _getValidationRulesBeforeSave()
     {
-        $validator = new \Magento\Framework\Validator\Object();
+        $validator = new \Magento\Framework\Validator\DataObject();
 
         $storeLabelRule = new \Zend_Validate_NotEmpty();
         $storeLabelRule->setMessage(__('Name is required'), \Zend_Validate_NotEmpty::IS_EMPTY);
