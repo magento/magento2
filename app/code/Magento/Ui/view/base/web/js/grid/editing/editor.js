@@ -176,50 +176,34 @@ define([
         },
 
         /**
-         * Hides specified records and resets theirs data.
+         * Hides records and resets theirs data.
          *
-         * @param {(Number|String)} id - See 'getId' method.
-         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        cancel: function (id, isIndex) {
-            this.reset(id, isIndex)
-                .hide(id, isIndex);
+        cancel: function () {
+            this.reset()
+                .hide();
 
             return this;
         },
 
         /**
-         * Hides specified records.
+         * Hides records.
          *
-         * @param {(Number|String)} id - See 'getId' method.
-         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        hide: function (id, isIndex) {
-            var record = this.getRecord(id, isIndex);
-
-            !record ?
-                this.elems.each('active', false) :
-                record.active(false);
+        hide: function () {
+            this.elems.each('active', false);
 
             return this;
         },
 
         /**
-         * Resets data of specified records.
+         * Resets active records.
          *
-         * @param {(Number|String)} id - See 'getId' method.
-         * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        reset: function (id, isIndex) {
-            id = this.getId(id, isIndex);
-
-            if (id !== false) {
-                this.resetRecord(id);
-            }
-
+        reset: function () {
             this.getActive().forEach(function (record) {
                 this.resetRecord(record.recordId);
             }, this);
@@ -421,6 +405,10 @@ define([
         updateState: function () {
             var activeRecords = this.countActive();
 
+            if (activeRecords <= 1 && this.isMultiEditing()) {
+                this.bulk('clear');
+            }
+
             this.isMultiEditing(activeRecords > 1);
             this.isSingleEditing(activeRecords === 1);
 
@@ -462,11 +450,9 @@ define([
          * Listener of the multiselect selections data.
          */
         onSelectionsChange: function () {
-            if (!this.hasActive()) {
-                return;
+            if (this.hasActive()) {
+                this.editSelected();
             }
-
-            this.editSelected();
         }
     });
 });

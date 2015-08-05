@@ -168,6 +168,12 @@ define([
 
             return this;
         },
+        
+        getColumn: function (index) {
+            return this.elems.findWhere({
+                index: index
+            });
+        },
 
         /**
          * Hides loader.

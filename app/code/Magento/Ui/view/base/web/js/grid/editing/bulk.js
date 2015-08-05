@@ -28,9 +28,26 @@ define([
                     }
                 }
             },
+            listens: {
+                data: 'onDataChange'
+            },
             modules: {
                 editor: '${ $.editorProvider }'
             }
+        },
+
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Bulk} Chainable.
+         */
+        initObservable: function () {
+            this._super()
+                .observe({
+                    hasData: false
+                });
+
+            return this;
         },
 
         /**
@@ -39,13 +56,15 @@ define([
          *
          * @returns {Object} Columns' editor definition.
          */
-        getColumnEditor: function () {
+        buildColumnEditor: function () {
             var editor = this._super(),
                 rules = editor && editor.validation;
 
             if (rules) {
                 delete rules['required-entry'];
             }
+
+            editor.disabled = false;
 
             return editor;
         },
@@ -60,7 +79,8 @@ define([
                 return this;
             }
 
-            this.applyData();
+            this.applyData()
+                .clear();
 
             return this;
         },
@@ -100,6 +120,28 @@ define([
          */
         isActionsColumn: function (column) {
             return column.dataType === 'actions';
+        },
+
+        /**
+         * Listener of the 'data' object changes.
+         */
+        onDataChange: function () {
+            var data = this.getData(),
+                keys = Object.keys(data),
+                hasData = !!keys.length;
+
+            this.hasData(hasData);
+
+            this.elems.each(function (field) {
+                var index = field.index,
+                    column = this.getColumn(index);
+
+                if (!column) {
+                    return;
+                }
+
+                column.disabled(_.contains(keys, index));
+            }, this);
         }
     });
 });

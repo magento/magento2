@@ -17,7 +17,14 @@
             }">
         <!-- ko if: $parent.isActionsColumn($data) -->
             <!-- ko with: $parent -->
-                <button class="action-default" type="button" data-bind="click: apply">
+                <button
+                    class="action-default"
+                    type="button"
+                    data-bind="
+                        click: apply,
+                        attr: {
+                            disabled: !hasData()
+                        }">
                     <span data-bind="text: $t('Apply')"></span>
                 </button>
             <!-- /ko -->
@@ -28,7 +35,9 @@
                 class="admin__field-label admin__field-label-vertical"
                 data-bind="
                     text: $t('All in column'),
-                    attr: {for: uid}
+                    attr: {
+                        for: uid
+                    }
                 "></label>
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
