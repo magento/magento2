@@ -48,7 +48,7 @@ class Info extends \Magento\Payment\Block\Info
      * Prepare information specific to current payment method
      *
      * @param null | array $transport
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _prepareSpecificInformation($transport = null)
     {

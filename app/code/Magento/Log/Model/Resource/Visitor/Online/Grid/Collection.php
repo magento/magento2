@@ -31,7 +31,7 @@ class Collection extends \Magento\Log\Model\Resource\Visitor\Online\Collection
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Helper\Data $eavHelper,
         \Magento\Log\Model\Visitor\OnlineFactory $onlineFactory,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_onlineFactory = $onlineFactory;

@@ -139,18 +139,18 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormDataNotNullFormData()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $this->_block->setData(self::FORM_DATA, $data);
         $this->assertSame($data, $this->_block->getFormData());
     }
 
     /**
      * Form data has not been set on the block and there is no customer data in the customer session. So
-     * we expect an empty \Magento\Framework\Object.
+     * we expect an empty \Magento\Framework\DataObject.
      */
     public function testGetFormDataNullFormData()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $this->_customerSession->expects($this->once())->method('getCustomerFormData')->will($this->returnValue(null));
         $this->assertEquals($data, $this->_block->getFormData());
         $this->assertEquals($data, $this->_block->getData(self::FORM_DATA));
@@ -162,7 +162,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormDataNullFormDataCustomerFormData()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $data->setFirstname('John');
         $data->setCustomerData(1);
         $customerFormData = ['firstname' => 'John'];
@@ -183,7 +183,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormDataCustomerFormDataRegionId()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
@@ -207,7 +207,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCountryIdFormData()
     {
-        $formData = new \Magento\Framework\Object();
+        $formData = new \Magento\Framework\DataObject();
         $formData->setCountryId(self::COUNTRY_ID);
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertEquals(self::COUNTRY_ID, $this->_block->getCountryId());
@@ -245,7 +245,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRegionByRegion()
     {
-        $formData = new \Magento\Framework\Object();
+        $formData = new \Magento\Framework\DataObject();
         $formData->setRegion(self::REGION_ATTRIBUTE_VALUE);
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertSame(self::REGION_ATTRIBUTE_VALUE, $this->_block->getRegion());
@@ -257,7 +257,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRegionByRegionId()
     {
-        $formData = new \Magento\Framework\Object();
+        $formData = new \Magento\Framework\DataObject();
         $formData->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertSame(self::REGION_ID_ATTRIBUTE_VALUE, $this->_block->getRegion());
@@ -269,7 +269,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRegionNull()
     {
-        $formData = new \Magento\Framework\Object();
+        $formData = new \Magento\Framework\DataObject();
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertNull($this->_block->getRegion());
     }
@@ -308,7 +308,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testRestoreSessionData()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;

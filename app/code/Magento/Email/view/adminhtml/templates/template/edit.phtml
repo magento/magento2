@@ -217,7 +217,7 @@ require([
         renderPaths: function(paths, fieldId) {
             var field = $(fieldId);
             if (field) {
-                field.down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
+                field.down('div').down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
             }
         },
 

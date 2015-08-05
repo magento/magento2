@@ -225,7 +225,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Instantiate state and set it to state object
      *
      * @param string $paymentAction
-     * @param \Magento\Framework\Object $stateObject
+     * @param \Magento\Framework\DataObject $stateObject
      * @return void
      */
     public function initialize($paymentAction, $stateObject)
@@ -407,7 +407,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Build request for getting token
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _buildTokenRequest(\Magento\Sales\Model\Order\Payment $payment)
     {
@@ -528,7 +528,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * If response is failed throw exception
      * Set token data in payment object
      *
-     * @param \Magento\Framework\Object $response
+     * @param \Magento\Framework\DataObject $response
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException

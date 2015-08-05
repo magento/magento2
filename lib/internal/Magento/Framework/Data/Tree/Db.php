@@ -26,7 +26,7 @@ class Db extends \Magento\Framework\Data\Tree
     /**
      * DB connection
      *
-     * @var \Zend_Db_Adapter_Abstract
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_conn;
 
@@ -40,7 +40,7 @@ class Db extends \Magento\Framework\Data\Tree
     /**
      * SQL select object
      *
-     * @var \Zend_Db_Select
+     * @var \Magento\Framework\DB\Select
      */
     protected $_select;
 
@@ -82,12 +82,12 @@ class Db extends \Magento\Framework\Data\Tree
      *      \Magento\Framework\Data\Tree\Db::ORDER_FIELD    => string
      * )
      *
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $table
      * @param array $fields
      * @throws \Exception
      */
-    public function __construct($connection, $table, $fields)
+    public function __construct(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $table, $fields)
     {
         parent::__construct();
 
@@ -121,7 +121,7 @@ class Db extends \Magento\Framework\Data\Tree
     }
 
     /**
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getDbSelect()
     {
@@ -129,7 +129,7 @@ class Db extends \Magento\Framework\Data\Tree
     }
 
     /**
-     * @param \Zend_Db_Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @return void
      */
     public function setDbSelect($select)

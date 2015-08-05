@@ -49,7 +49,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stringMock;
 
@@ -92,7 +92,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
-        $this->stringMock = $this->getMockBuilder('Magento\Framework\Stdlib\String')
+        $this->stringMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
             ->disableOriginalConstructor()
             ->getMock();
 

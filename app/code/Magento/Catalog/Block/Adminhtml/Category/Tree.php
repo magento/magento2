@@ -368,7 +368,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * Get category name
      *
-     * @param \Magento\Framework\Object $node
+     * @param \Magento\Framework\DataObject $node
      * @return string
      */
     public function buildNodeName($node)
@@ -386,7 +386,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     protected function _isCategoryMoveable($node)
     {
-        $options = new \Magento\Framework\Object(['is_moveable' => true, 'category' => $node]);
+        $options = new \Magento\Framework\DataObject(['is_moveable' => true, 'category' => $node]);
 
         $this->_eventManager->dispatch('adminhtml_catalog_category_tree_is_moveable', ['options' => $options]);
 
@@ -426,7 +426,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function canAddRootCategory()
     {
-        $options = new \Magento\Framework\Object(['is_allow' => true]);
+        $options = new \Magento\Framework\DataObject(['is_allow' => true]);
         $this->_eventManager->dispatch(
             'adminhtml_catalog_category_tree_can_add_root_category',
             ['category' => $this->getCategory(), 'options' => $options, 'store' => $this->getStore()->getId()]
@@ -442,7 +442,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function canAddSubCategory()
     {
-        $options = new \Magento\Framework\Object(['is_allow' => true]);
+        $options = new \Magento\Framework\DataObject(['is_allow' => true]);
         $this->_eventManager->dispatch(
             'adminhtml_catalog_category_tree_can_add_sub_category',
             ['category' => $this->getCategory(), 'options' => $options, 'store' => $this->getStore()->getId()]
