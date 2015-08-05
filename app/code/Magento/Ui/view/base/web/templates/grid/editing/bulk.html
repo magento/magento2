@@ -15,6 +15,9 @@
         <!-- /ko -->
         
         <!-- ko if: $data.isEditor -->
+            <label
+                class="admin__field-label admin__field-label-vertical"
+                data-bind="text: $t('All in column'), attr: {for: uid}"></label>
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
     </td>
