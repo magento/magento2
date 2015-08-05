@@ -15,49 +15,49 @@ class ScheduledStructure
      *
      * @var array
      */
-    protected $scheduledStructure;
+    protected $scheduledStructure = [];
 
     /**
      * Scheduled structure data
      *
      * @var array
      */
-    protected $scheduledData;
+    protected $scheduledData = [];
 
     /**
      * Full information about elements to be populated in the layout structure after generating structure
      *
      * @var array
      */
-    protected $scheduledElements;
+    protected $scheduledElements = [];
 
     /**
      * Scheduled structure elements moves
      *
      * @var array
      */
-    protected $scheduledMoves;
+    protected $scheduledMoves = [];
 
     /**
      * Scheduled structure elements removes
      *
      * @var array
      */
-    protected $scheduledRemoves;
+    protected $scheduledRemoves = [];
 
     /**
      * Scheduled structure elements with ifconfig attribute
      *
      * @var array
      */
-    protected $scheduledIfconfig;
+    protected $scheduledIfconfig = [];
 
     /**
      * Materialized paths for overlapping workaround of scheduled structural elements
      *
      * @var array
      */
-    protected $scheduledPaths;
+    protected $scheduledPaths = [];
 
     /**
      * Elements with reference to non-existing parent element
