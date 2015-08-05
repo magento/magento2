@@ -10,12 +10,12 @@
 //
 //  Convert values to unit specified in typography variables
 //  ---------------------------------------------
-.font-size-value(
+.mixin-font-size-value(
     @_value
 ) when not (@_value = false) and not (@_value = '') and (@font-size-unit-convert) {
     @fontValue: unit(((@_value) * 1), @font-size-unit) / @font-size-unit-ratio;
 }
-.font-size-value(
+.mixin-font-size-value(
     @_value
 ) when (@font-size-unit-convert = false) {
     @fontValue: @_value;
@@ -256,7 +256,7 @@
     @_font-size: @font-size__base,
     @_line-height: normal
 ) {
-    .font-size(@_font-size);
+    .mixin-font-size(@_font-size);
     font-size: @_font-size;
     line-height: @_line-height;
     letter-spacing: normal;

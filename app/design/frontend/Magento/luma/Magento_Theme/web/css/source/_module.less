@@ -99,7 +99,7 @@
 
     .header.panel {
         > .header.links {
-            .list-inline();
+            .mixin-list-inline();
             float: right;
             font-size: 0;
             margin-left: auto;
@@ -108,7 +108,7 @@
                 font-size: @font-size__base;
                 margin: 0 0 0 15px;
                 > a {
-                    .link(
+                    .mixin-link(
                     @_link-color: @header-panel__text-color,
                     @_link-text-decoration: none,
                     @_link-color-visited: @header-panel__text-color,
@@ -219,7 +219,7 @@
             .links {
                 > li {
                     .css(background, @footer__background-color);
-                    .font-size(16);
+                    .mixin-font-size(16);
                     border-top: 1px solid @footer-links-separator-border-color;
                     margin: 0 -@layout__width-xs-indent;
                     padding: 0 @layout__width-xs-indent;
@@ -234,7 +234,7 @@
                     font-weight: normal;
                 }
                 a {
-                    .link(
+                    .mixin-link(
                     @_link-color: @footer-links-color,
                     @_link-text-decoration: none,
                     @_link-color-visited: @footer-links-color,
@@ -273,7 +273,7 @@
                 );
                 ul.dropdown {
                     a {
-                        .link(
+                        .mixin-link(
                         @_link-color: @color-gray20,
                         @_link-text-decoration: none,
                         @_link-color-visited: @color-gray20,
@@ -307,19 +307,19 @@
         display: none;
     }
     .nav-sections .switcher-trigger strong:after {
-        .font-size(16);
+        .mixin-font-size(16);
         right: -25px;
         top: 2px;
     }
     .navigation .parent .level-top:after {
-        .font-size(16);
+        .mixin-font-size(16);
         right: 10px;
         top: 7px;
     }
     .page-footer .footer.content {
         .switcher-store {
             .css(background, @footer__background-color);
-            .font-size(16);
+            .mixin-font-size(16);
             margin: 0 -@layout__width-xs-indent;
             .switcher-options {
                 display: block;
@@ -448,7 +448,7 @@
         );
         li:extend(.switcher li all) {
             a {
-                .link(
+                .mixin-link(
                 @_link-color: @color-gray20,
                 @_link-text-decoration: none,
                 @_link-color-visited: @color-gray20,
@@ -493,7 +493,7 @@
         &.panel {
             > .header.links {
                 float: right;
-                .list-inline();
+                .mixin-list-inline();
                 margin-left: auto;
                 > li {
                     margin: 0 0 0 15px;

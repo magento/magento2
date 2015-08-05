@@ -28,7 +28,7 @@
     .options {
         margin: 0;
         > dt {
-            .heading(h4);
+            .mixin-heading(h4);
             margin: 0 0 10px;
         }
         > dd {
@@ -41,10 +41,10 @@
         .count {
             .css(color, @text__color__muted);
             &:before {
-                content: "(";
+                content: '(';
             }
             &:after {
-                content: ")";
+                content: ')';
             }
         }
     }

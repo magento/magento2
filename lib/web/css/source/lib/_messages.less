@@ -34,11 +34,11 @@
     @_message-margin: @message__margin,
     @_message-border-radius: @message__border-radius
 ) {
-    display: block;
+    .css(border-radius, @_message-border-radius);
     .css(margin, @_message-margin);
     .css(padding, @_message-padding);
-    .css(border-radius, @_message-border-radius);
-    .typography(
+    display: block;
+    .mixin-typography(
         @_color: @message__color,
         @_font-size: @message__font-size,
         @_font-family: @message__font-family,
@@ -137,22 +137,22 @@ and not (@_message-border-style = false) {
 ) {
     position: relative;
     &:before {
-        content: '';
-        position: absolute;
+        .css(background, @_message-icon-background);
         .css(width, @message-icon__lateral-width);
+        content: '';
+        display: block;
+        height: 100%;
+        padding: 0;
+        position: absolute;
         text-align: center;
         top: 0;
-        height: 100%;
-        display: block;
-        padding: 0;
-        .css(background, @_message-icon-background);
     }
     > *:first-child:before {
-        content: '';
-        position: absolute;
-        overflow: hidden;
-        top: 50%;
         .css(margin-top, -@message-icon__lateral-arrow-size);
+        content: '';
+        overflow: hidden;
+        position: absolute;
+        top: 50%;
     }
     > *:first-child:after {
         ._icon-font(
@@ -164,13 +164,13 @@ and not (@_message-border-style = false) {
             @_icon-font-margin: -@message-icon__font-size/2 0 0,
             @_icon-font-vertical-align: @icon-font__vertical-align
         );
-        position: absolute;
-        .css(top, @_message-icon-top);
-        .css(right, @_message-icon-right);
         .css(bottom, @_message-icon-bottom);
         .css(left, @_message-icon-left);
-        text-align: center;
+        .css(right, @_message-icon-right);
+        .css(top, @_message-icon-top);
         .css(width, @message-icon__lateral-width);
+        position: absolute;
+        text-align: center;
     }
     ._message-icon-lateral-position(
         @_message-icon-position,
@@ -237,6 +237,7 @@ and not (@_message-border-style = false) {
 ) {
     position: relative;
     .css(padding-left, @message-icon__inner-padding-left);
+
     > *:first-child:before {
         ._icon-font(
             @_icon-font-content: @_message-icon,
@@ -247,12 +248,12 @@ and not (@_message-border-style = false) {
             @_icon-font-margin: -@message-icon__font-size/2 0 0,
             @_icon-font-vertical-align: @icon-font__vertical-align
         );
-        position: absolute;
-        .css(top, @_message-icon-top);
-        .css(right, @_message-icon-right);
         .css(bottom, @_message-icon-bottom);
         .css(left, @_message-icon-left);
-        text-align: center;
+        .css(right, @_message-icon-right);
+        .css(top, @_message-icon-top);
         .css(width, @message-icon__inner-padding-left);
+        position: absolute;
+        text-align: center;
     }
 }

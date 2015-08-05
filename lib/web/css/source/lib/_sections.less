@@ -81,7 +81,7 @@
     > .item.title {
         .css(margin, 0 @_tab-control-margin-right 0 0);
         > .switch {
-            .typography(
+            .mixin-typography(
                 @_color: @_tab-control-color,
                 @_font-size: @_tab-control-font-size,
                 @_font-family: @_tab-control-font-family,
@@ -89,7 +89,7 @@
                 @_font-style: @_tab-control-font-style,
                 @_line-height: @_tab-control-line-height
             );
-            .link(
+            .mixin-link(
                 @_link-color: @_tab-control-color,
                 @_link-text-decoration: @_tab-control-text-decoration,
                 @_link-color-visited: @_tab-control-color-visited,
@@ -171,7 +171,7 @@
     }
 }
 
-.data-accordion(
+.mixin-data-accordion(
     @_accordion-control-font-family: @accordion-control__font-family,
     @_accordion-control-font-size: @accordion-control__font-size,
     @_accordion-control-font-style: @accordion-control__font-style,
@@ -232,7 +232,7 @@
             .css(border-top,@_accordion-control-border-top);
             .css(height, @_accordion-control-height);
             .css(padding, @_accordion-control-padding-top @_accordion-control-padding-right @_accordion-control-padding-bottom @_accordion-control-padding-left);
-            .typography(
+            .mixin-typography(
                 @_color: @_accordion-control-color,
                 @_font-family: @_accordion-control-font-family,
                 @_font-size: @_accordion-control-font-size,
@@ -240,7 +240,7 @@
                 @_font-weight: @_accordion-control-font-weight,
                 @_line-height: @_accordion-control-line-height
             );
-            .link(
+            .mixin-link(
                 @_link-color: @_accordion-control-color,
                 @_link-text-decoration: @_accordion-control-text-decoration,
                 @_link-color-visited: @_accordion-control-color-visited,

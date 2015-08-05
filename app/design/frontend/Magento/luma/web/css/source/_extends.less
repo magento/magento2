@@ -8,7 +8,7 @@
 //  ---------------------------------------------
 
 .abs-reset-list {
-    .list-reset-styles();
+    .mixin-list-reset-styles();
     > li {
         margin: 0;
     }
@@ -206,7 +206,7 @@
     padding-bottom: 12px;
     margin-bottom: 15px;
     .css(border-bottom, 1px solid @secondary__color);
-    .font-size(18);
+    .mixin-font-size(18);
 }
 
 //
@@ -271,7 +271,7 @@
 .abs-product-link {
     font-weight: @font-weight__regular;
     > a {
-        .link(
+        .mixin-link(
         @_link-color: @product-name-link__color,
         @_link-text-decoration: @product-name-link__text-decoration,
         @_link-color-visited: @product-name-link__color__visited,
@@ -289,7 +289,7 @@
 //  ---------------------------------------------
 
 .abs-like-link {
-    .link();
+    .mixin-link();
     cursor: pointer;
 }
 
@@ -637,7 +637,7 @@
 //  ---------------------------------------------
 
 .abs-methods-shipping-title {
-    .font-size(16);
+    .mixin-font-size(16);
     margin-bottom: 15px;
     .css(font-weight, @font-weight__semibold);
 }
@@ -835,7 +835,7 @@
 
 .abs-checkout-cart-price {
     .css(color, @primary__color__lighter);
-    .font-size(16);
+    .mixin-font-size(16);
     font-weight: @font-weight__bold;
 }
 
@@ -844,7 +844,7 @@
 //  ---------------------------------------------
 
 .abs-checkout-product-name {
-    .font-size(18);
+    .mixin-font-size(18);
     font-weight: @font-weight__light;
     margin: 0;
 }
@@ -873,7 +873,7 @@
                 text-align: left;
             }
             .grand.totals {
-                .font-size(16);
+                .mixin-font-size(16);
                 .mark {
                     padding-top: @indent__xs;
                     padding-bottom: 0;
@@ -897,7 +897,7 @@
 .abs-account-title {
     > strong,
     > span {
-        .font-size(22);
+        .mixin-font-size(22);
         .css(font-weight, @font-weight__light);
     }
     .css(margin-bottom, @indent__m);
@@ -911,7 +911,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-account-block-font-size {
-        .font-size(16);
+        .mixin-font-size(16);
     }
 }
 
@@ -998,7 +998,7 @@
     .price-excluding-tax {
         .css(color, @cart-price-color);
         display: block;
-        .font-size(18);
+        .mixin-font-size(18);
         line-height: 1;
         white-space: nowrap;
         .price {
@@ -1011,11 +1011,11 @@
     .price-including-tax,
     .price-excluding-tax {
         display: inline-block;
-        .font-size(14);
+        .mixin-font-size(14);
     }
     .price-including-tax + .price-excluding-tax {
         display: inline-block;
-        .font-size(11);
+        .mixin-font-size(11);
         &:before {
             content: "("attr(data-label)": ";
         }
@@ -1118,7 +1118,7 @@
     }
     .box-title {
         > span {
-            .font-size(16);
+            .mixin-font-size(16);
         }
         display: inline-block;
         margin: 0 0 @indent__s;
@@ -1343,7 +1343,7 @@
 
 .abs-block-items-counter {
     .css(color, @primary__color__lighter);
-    .font-size(12px);
+    .mixin-font-size(12px);
     white-space: nowrap;
 }
 
@@ -1483,7 +1483,7 @@
 
 .abs-checkout-title {
     .css(padding-bottom, @checkout-step-title__padding);
-    .typography(
+    .mixin-typography(
     @_font-size: @checkout-step-title__font-size,
     @_font-weight: @checkout-step-title__font-weight,
     @_font-family: false,
@@ -1528,12 +1528,12 @@
         }
         .mark {
             border-top: 1px solid @border-color__base;
-            .font-size(18);
+            .mixin-font-size(18);
             padding-right: @indent__s;
         }
         .amount {
             border-top: 1px solid @border-color__base;
-            .font-size(18);
+            .mixin-font-size(18);
         }
     }
     .msrp {

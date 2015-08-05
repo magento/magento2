@@ -54,7 +54,7 @@
                 .mark,
                 .amount {
                     border-top: 0;
-                    .font-size(14);
+                    .mixin-font-size(14);
                     padding-top: 0;
                     strong {
                         font-weight: @font-weight__regular;
@@ -94,7 +94,7 @@
                     top: @indent__s;
                 }
                 strong {
-                    .font-size(18);
+                    .mixin-font-size(18);
                     font-weight: @font-weight__light;
                     margin: 0;
                 }
@@ -141,14 +141,14 @@
                 text-align: right;
             }
             .price {
-                .font-size(16);
+                .mixin-font-size(16);
                 font-weight: @font-weight__regular;
             }
             .price-including-tax {
                 & + .price-excluding-tax {
                     margin: 0;
                     .price {
-                        .font-size(10);
+                        .mixin-font-size(10);
                     }
                 }
             }

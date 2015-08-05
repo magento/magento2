@@ -42,22 +42,20 @@
 ) {
     box-sizing: border-box;
     .css(background, @_background);
+    .css(background-clip, @_background-clip);
     .css(border, @_border);
     .css(border-radius, @_border-radius);
-    .css(height, @_height);
-    .css(width, @_width);
-    .css(padding, @_padding);
-    .css(margin, @_margin);
-
-    .css(font-size, @_font-size);
-    .css(font-family, @_font-family);
-    .css(font-weight, @_font-weight);
-    .css(line-height, @_line-height);
-    .css(font-style, @_font-style);
     .css(color, @_color);
-
-    .css(background-clip, @_background-clip);
+    .css(font-family, @_font-family);
+    .css(font-size, @_font-size);
+    .css(font-style, @_font-style);
+    .css(font-weight, @_font-weight);
+    .css(height, @_height);
+    .css(line-height, @_line-height);
+    .css(margin, @_margin);
+    .css(padding, @_padding);
     .css(vertical-align, @_vertical-align);
+    .css(width, @_width);
 
     ._form-element-focus(
         @_background,
@@ -96,8 +94,8 @@
     @_margin: ~"@{@{_type}__margin}",
     @_disabled-opacity: ~"@{@{_type}__disabled__opacity}"
 ) {
-    .css(vertical-align, @_vertical-align);
     .css(margin, @_margin);
+    .css(vertical-align, @_vertical-align);
     &:disabled {
         ._form-element-add-opacity(@_disabled-opacity);
     }
@@ -209,7 +207,7 @@
     @_note-icon-font-position: @form-validation-note-icon__font-position,
     @_note-icon-font-text-hide: @form-validation-note-icon__font-text-hide
 ) {
-    .typography(
+    .mixin-typography(
         @_font-size: @_note-font-size,
         @_color: @_note-color,
         @_font-family: @_note-font-family,
@@ -453,9 +451,9 @@
     @_legend-padding: @form-fieldset-legend__padding,
     @_legend-width: @form-fieldset-legend__width
 ) {
-    .css(padding, @_padding);
-    .css(margin, @_margin);
     .css(border, @_border);
+    .css(margin, @_margin);
+    .css(padding, @_padding);
     letter-spacing: -.31em;
     //word-spacing: -.43em;
 
@@ -467,7 +465,8 @@
     > .legend {
         .css(margin, @_legend-margin);
         .css(padding, @_legend-padding);
-        .typography(
+
+        .mixin-typography(
             @_font-size: @_legend-font-size,
             @_color: @_legend-color,
             @_font-family: @_legend-font-family,
@@ -475,6 +474,7 @@
             @_line-height: @_legend-line-height,
             @_font-style: @_legend-font-style
         );
+
         box-sizing: border-box;
         float: left;
         .css(width, @_legend-width);
@@ -571,7 +571,7 @@
     );
 
     > .label {
-        .typography(
+        .mixin-typography(
             @_font-size: @_label-font-size,
             @_color: @_label-color,
             @_font-family: @_label-font-family,
@@ -615,6 +615,7 @@
         .vendor-prefix-flex-wrap(nowrap);
         padding: 0;
         width: 100%;
+
         textarea,
         select,
         input {
@@ -624,6 +625,7 @@
             margin: 0;
             width: auto;
         }
+
         .addbefore,
         .addafter {
             .vendor-prefix-order(3);
@@ -633,6 +635,7 @@
             white-space: nowrap;
             vertical-align: middle;
         }
+
         .addbefore {
             float: left;
             .vendor-prefix-order(1);
@@ -733,38 +736,38 @@
     @_type-inline-label-align,
     @_vertical-indent
 ) {
-    box-sizing: border-box;
     .clearfix();
     .css(margin, @_type-inline-margin);
+    box-sizing: border-box;
 
     &.choice:before,
     &.no-label:before {
-        box-sizing: border-box;
-        content: " ";
-        height: 1px;
-        float: left;
         .css(padding, @_type-inline-label-padding);
         .css(width, @_type-inline-label-width);
+        box-sizing: border-box;
+        content: ' ';
+        float: left;
+        height: 1px;
     }
     .description {
-        box-sizing: border-box;
-        float: left;
         .css(padding, @_type-inline-label-padding);
         .css(text-align, @_type-inline-label-align);
         .css(width, @_type-inline-label-width);
+        box-sizing: border-box;
+        float: left;
     }
     &:not(.choice) {
         > .label {
-            box-sizing: border-box;
-            float: left;
             .css(margin, @_type-inline-label-margin);
             .css(padding, @_type-inline-label-padding);
             .css(text-align, @_type-inline-label-align);
             .css(width, @_type-inline-label-width);
+            box-sizing: border-box;
+            float: left;
         }
         > .control {
-            float: left;
             .css(width, @_type-inline-control-width);
+            float: left;
         }
     }
 }
@@ -777,10 +780,10 @@
 ) {
     .css(margin, @_type-block-margin);
     > .label {
-        display: inline-block;
-        .css(text-align, @_type-block-label-align);
         .css(margin, @_type-block-label-margin);
         .css(padding, @_type-block-label-padding);
+        .css(text-align, @_type-block-label-align);
+        display: inline-block;
     }
 }
 
@@ -795,7 +798,7 @@
 ) {
     &.required > .label:after {
         content: '*';
-        .typography(
+        .mixin-typography(
             @_font-size: @_font-size,
             @_color: @_color,
             @_font-family: @_font-family,
@@ -830,7 +833,7 @@
     @_note-icon-font-text-hide
 ) {
     .note {
-        .typography(
+        .mixin-typography(
             @_font-size: @_note-font-size,
             @_color: @_note-color,
             @_font-family: @_note-font-family,
@@ -838,8 +841,10 @@
             @_line-height: @_note-line-height,
             @_font-style: @_note-font-style
         );
+
         .css(margin, @_note-margin);
         .css(padding, @_note-padding);
+
         .mixin-icon-font(
             @_icon-font-content: @_note-icon-font-content,
             @_icon-font: @_note-icon-font,
@@ -872,12 +877,14 @@
 ) when (@_type = block) and not (@_type = false) {
     &:not(.choice) {
         > .label {
-            width: auto;
-            float: none;
             box-sizing: content-box;
+            float: none;
+            width: auto;
+
             ._revert-type-block-label-align(
                 @_type-block-label-align
             );
+
             ._revert-type-block-label-padding(
                 @_type-block-label-padding
             );
@@ -887,12 +894,14 @@
             float: none;
         }
     }
+
     ._form-field-type-block(
         @_type-block-margin,
         @_type-block-label-margin,
         @_type-block-label-padding,
         @_type-block-label-align
     );
+
     &.choice:before,
     &.no-label:before {
         display: none;
@@ -934,10 +943,11 @@
     @_column-padding: @form-field-column__padding,
     @_column-number: @form-field-column__number
 ) when (@_column = true) {
-    box-sizing: border-box;
-    //float: left;
-    display: inline-block;
+
     .css(padding, @_column-padding);
+    box-sizing: border-box;
+    display: inline-block;
+
     .mixin-form-field-column-number(@_column-number);
     vertical-align: top;
 
@@ -1061,7 +1071,7 @@
 ) {
     content: attr(data-hasrequired);
     display: block;
-    .typography(
+    .mixin-typography(
         @_font-size: @_font-size,
         @_color: @_color,
         @_font-family: @_font-family,
@@ -1072,7 +1082,6 @@
     .css(border, @_border);
     .css(margin, @_margin);
     .css(padding, @_padding);
-
     letter-spacing: normal;
     word-spacing: normal;
 }

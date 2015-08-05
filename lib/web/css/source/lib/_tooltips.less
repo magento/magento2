@@ -7,7 +7,7 @@
 //  Tooltips
 //  _____________________________________________
 
-.tooltip(
+.mixin-tooltip(
     @_tooltip-position: top,
     @_tooltip-selector-toggle: ~".tooltip-toggle",
     @_tooltip-selector-content: ~".tooltip-content",
@@ -31,21 +31,20 @@
     @_tooltip-z-index: @tooltip__z-index
 ) {
     position: relative;
-    //display: inline-block;
 
     @{_tooltip-selector-content} {
-        .css(z-index, @_tooltip-z-index);
         .css(background, @_tooltip-background);
-        .css(min-width, @_tooltip-min-width);
-        .css(max-width, @_tooltip-max-width);
-        .css(margin, @_tooltip-margin);
-        .css(padding, @_tooltip-padding);
         .css(border-radius, @_tooltip-border-radius);
+        .css(margin, @_tooltip-margin);
+        .css(max-width, @_tooltip-max-width);
+        .css(min-width, @_tooltip-min-width);
+        .css(padding, @_tooltip-padding);
+        .css(z-index, @_tooltip-z-index);
         display: none;
         position: absolute;
         text-align: left;
 
-        .typography(
+        .mixin-typography(
             @_color: @_tooltip-color,
             @_font-size: @_tooltip-font-size,
             @_font-family: @_tooltip-font-family,
@@ -64,18 +63,18 @@
             border: solid transparent;
             content: '';
             height: 0;
-            width: 0;
             position: absolute;
+            width: 0;
         }
 
         &:after {
-            border-color: transparent;
             .css(border-width, @_tooltip-arrow-size);
+            border-color: transparent;
         }
 
         &:before {
-            border-color: transparent;
             .css(border-width, @_tooltip-arrow-before-margin * -1);
+            border-color: transparent;
         }
 
         ._tooltip-arrow-position(
@@ -116,9 +115,9 @@
     @_tooltip-arrow-offset,
     @_tooltip-border-color
 ) when (@_tooltip-position = top) {
+    .css(margin-bottom, @_tooltip-arrow-size);
     bottom: 100%;
     left: 0;
-    .css(margin-bottom, @_tooltip-arrow-size);
 
     &:after,
     &:before {
@@ -126,14 +125,14 @@
     }
     &:after {
         .css(border-top-color, @_tooltip-background);
-        .css(margin-left, @_tooltip-arrow-after-margin);
         .css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .css(margin-left, @_tooltip-arrow-after-margin);
     }
 
     &:before {
         .css(border-top-color, @_tooltip-border-color);
-        .css(margin-left, @_tooltip-arrow-before-margin);
         .css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .css(margin-left, @_tooltip-arrow-before-margin);
     }
 }
 
@@ -146,9 +145,9 @@
     @_tooltip-arrow-offset,
     @_tooltip-border-color
 ) when (@_tooltip-position = left) {
+    .css(margin-right, @_tooltip-arrow-size);
     right: 100%;
     top: 0;
-    .css(margin-right, @_tooltip-arrow-size);
 
     &:after,
     &:before {
@@ -176,9 +175,9 @@
     @_tooltip-arrow-offset,
     @_tooltip-border-color
 ) when (@_tooltip-position = right) {
+    .css(margin-left, @_tooltip-arrow-size);
     left: 100%;
     top: 0;
-    .css(margin-left, @_tooltip-arrow-size);
 
     &:after,
     &:before {
@@ -206,9 +205,9 @@
     @_tooltip-arrow-offset,
     @_tooltip-border-color
 ) when (@_tooltip-position = bottom) {
-    top: 100%;
-    left: 0;
     .css(margin-top, @_tooltip-arrow-size);
+    left: 0;
+    top: 100%;
 
     &:after,
     &:before {
@@ -216,12 +215,12 @@
     }
     &:after {
         .css(border-bottom-color, @_tooltip-background);
-        .css(margin-left, @_tooltip-arrow-after-margin);
         .css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .css(margin-left, @_tooltip-arrow-after-margin);
     }
     &:before {
         .css(border-bottom-color, @_tooltip-border-color);
-        .css(margin-left, @_tooltip-arrow-before-margin);
         .css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .css(margin-left, @_tooltip-arrow-before-margin);
     }
 }

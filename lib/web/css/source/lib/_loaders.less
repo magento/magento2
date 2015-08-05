@@ -25,27 +25,27 @@
     @_loader-text-font-style: @loader-text__font-style,
     @_loader-text-padding: @loader-text__padding
 ) {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
     .css(background-color, @_loader-overlay-background-color);
     .css(z-index, @_loader-overlay-z-index);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
     &:before {
-        .css(border-radius, @_loader-icon-border-radius);
         .css(background, @_loader-icon-background-color @_loader-icon-background-image no-repeat @_loader-icon-background-position);
-        box-sizing: border-box;
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        margin: auto;
+        .css(border-radius, @_loader-icon-border-radius);
+        .css(height, @_loader-icon-height);
         .css(padding, @_loader-icon-padding);
         .css(width, @_loader-icon-width);
-        .css(height, @_loader-icon-height);
+        bottom: 0;
+        box-sizing: border-box;
+        content: '';
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
         ._loader-text(@_loader-text);
     }
 }
@@ -53,11 +53,12 @@
 ._loader-text(
     @_loader-text
 ) when (@_loader-text = true) {
-    content: attr(data-text);
     .css(padding, @_loader-text-padding);
-    vertical-align: baseline;
+    content: attr(data-text);
     text-align: center;
-    .typography(
+    vertical-align: baseline;
+
+    .mixin-typography(
         @_color: @_loader-text-color,
         @_font-size: @_loader-text-font-size,
         @_font-family: @_loader-text-font-family,
@@ -72,13 +73,13 @@
 ) {
     position: relative;
     &:before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
         .css(background, @_loading-background-color @_loading-background-image no-repeat 50% 50%);
+        bottom: 0;
+        content: '';
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 }
 

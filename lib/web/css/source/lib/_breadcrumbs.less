@@ -75,9 +75,9 @@
 ) {
     .css(margin, @_breadcrumbs-container-margin);
     .items {
-        .font-size(@_breadcrumbs-font-size);
+        .mixin-font-size(@_breadcrumbs-font-size);
         .css(color, @_breadcrumbs-current-color);
-        .list-inline();
+        .mixin-list-inline();
     }
     .item {
         margin: 0;
@@ -91,9 +91,9 @@
             @_breadcrumbs-link-gradient
         );
         .css(border, @_breadcrumbs-link-border);
+        .css(color, @_breadcrumbs-link-color);
         .css(display, @_breadcrumbs-display);
         .css(padding, @_breadcrumbs-padding);
-        .css(color, @_breadcrumbs-link-color);
         .css(text-decoration, @_breadcrumbs-link-text-decoration);
         &:visited {
             .css(background, @_breadcrumbs-link-background-visited);
@@ -142,8 +142,8 @@
         );
         .css(border, @_breadcrumbs-current-border);
         .css(display, @_breadcrumbs-display);
-        .css(padding, @_breadcrumbs-padding);
         .css(font-weight, @_breadcrumbs-current-font-weight);
+        .css(padding, @_breadcrumbs-padding);
     }
 
     & when not (@_breadcrumbs-separator-symbol = '') and not (@_breadcrumbs-separator-symbol = false) {  // Insert separating symbol to "content"

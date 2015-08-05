@@ -67,7 +67,7 @@
     > tfoot {
         > tr {
             > td {
-                .typography (
+                .mixin-typography(
                     @_font-size: @_table-td-font-size,
                     @_color: @_table-td-color,
                     @_font-family: @_table-td-font-family,
@@ -77,7 +77,7 @@
                 );
             }
             > th {
-                .typography (
+                .mixin-typography(
                     @_font-size: @_table-th-font-size,
                     @_color: @_table-th-color,
                     @_font-family: @_table-th-font-family,
@@ -452,7 +452,7 @@
     @_table-caption-margin-bottom: @table-caption__margin-bottom
 ) when (@_table-caption-hide = false){
     > caption {
-        .typography (
+        .mixin-typography(
             @_table-caption-font-size,
             @_table-caption-color,
             @_table-caption-font-family,
@@ -506,7 +506,7 @@
                     content: attr(data-th)": ";
                     display: inline-block;
                     .css(padding-right, @table-cell__padding-horizontal);
-                    .typography (
+                    .mixin-typography(
                         @_font-size: @table-th__font-size,
                         @_color: @table-th__color,
                         @_font-family: @table-th__font-family,
