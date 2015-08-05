@@ -7,6 +7,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Object;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use \Magento\Sales\Model\Order\CreditmemoFactory;
 
