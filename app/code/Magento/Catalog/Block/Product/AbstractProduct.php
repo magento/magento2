@@ -101,6 +101,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     public function __construct(\Magento\Catalog\Block\Product\Context $context, array $data = [])
     {
         $this->_imageHelper = $context->getImageHelper();
+        $this->imageBuilder = $context->getImageBuilder();
         $this->_compareProduct = $context->getCompareProduct();
         $this->_wishlistHelper = $context->getWishlistHelper();
         $this->_cartHelper = $context->getCartHelper();
@@ -494,18 +495,14 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string $imageId
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param array $attributes
      * @return \Magento\Catalog\Block\Product\Image
      */
-    public function getImage($product, $imageId)
+    public function getImage($product, $imageId, $attributes = [])
     {
-        $imageHelper = clone $this->_imageHelper;
-        $imageHelper->init($product, $imageId);
-
-        return $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Product\Image',
-            '',
-            ['imageHelper' => $imageHelper]
-        );
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }

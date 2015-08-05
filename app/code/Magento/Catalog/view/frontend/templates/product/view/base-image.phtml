@@ -16,7 +16,7 @@
 $product = $block->getProduct();
 $_hasImage = ($product->getImage() && $product->getImage() != "no_selection") ? true : false;
 
-$imageMain = $block->getImage($product, 'product_page_main_image')->setAttribute('itemprop', 'image');
+$imageMain = $block->getImage($product, 'product_page_main_image', ['itemprop' => 'image']);
 $imageThumbnail = $block->getImage($product, 'product_page_more_views');
 ?>
 <div data-role="media-gallery">

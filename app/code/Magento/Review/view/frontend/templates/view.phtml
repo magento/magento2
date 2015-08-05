@@ -6,6 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Review\Block\View $block */
 ?>
 <?php if ($block->getProductData()->getId()): ?>
 <div class="product-review">
@@ -14,7 +15,7 @@
     </div>
     <div class="product-img-box">
         <a href="<?php echo $block->getProductData()->getProductUrl() ?>">
-            <?php echo $block->getImage($block->getProductData(), 'product_base_image')->setAttribute('class', 'product-image')->toHtml(); ?>
+            <?php echo $block->getImage($block->getProductData(), 'product_base_image', ['class' => 'product-image'])->toHtml(); ?>
         </a>
         <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
           <p><?php echo __('Average Customer Rating') ?>:</p>
