@@ -158,10 +158,15 @@ class Block implements Layout\ReaderInterface
         Layout\Element $currentElement
     ) {
         $elementName = $currentElement->getAttribute('name');
-        $data = $scheduledStructure->getStructureElementData($elementName, []);
-        $this->updateScheduledData($currentElement, $data);
-        $this->evaluateArguments($currentElement, $data);
-        $scheduledStructure->setStructureElementData($elementName, $data);
+        $elementRemove = (bool)$currentElement->getAttribute('remove');
+        if ($elementRemove) {
+            $scheduledStructure->setElementToRemoveList($elementName);
+        } else {
+            $data = $scheduledStructure->getStructureElementData($elementName, []);
+            $this->updateScheduledData($currentElement, $data);
+            $this->evaluateArguments($currentElement, $data);
+            $scheduledStructure->setStructureElementData($elementName, $data);
+        }
     }
 
     /**
