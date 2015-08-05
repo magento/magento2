@@ -1,11 +1,17 @@
-<form id="co-shipping-method-form">
+<form id="co-shipping-method-form" data-bind="visible: (shippingRates().length > 0)">
     <fieldset class="fieldset rate">
         <dl class="items methods" data-bind="foreach: shippingRateGroups">
             <dt class="item-title"><span data-bind="text: $data"></span></dt>
             <dd class="item-options"  data-bind="foreach: $parent.getRatesForGroup($data)">
-                <div class="field choice item">
+                <div class="field choice item" data-bind="click: $parents[1].selectShippingMethod">
                     <!--<div>Error message</div>-->
-                    <input name="estimate_method" type="radio" class="radio" data-bind="checked: $parents[1].selectShippingMethod(method_code, carrier_code), attr: {value: method_code, id: 's_method_' + method_code}" />
+                    <input name="estimate_method"
+                           type="radio"
+                           class="radio"
+                           data-bind="
+                                checked: $parents[1].selectedShippingMethod,
+                                attr: {value: carrier_code + '_' + method_code, id: 's_method_' + method_code}"
+                            />
                     <label class="label" data-bind="attr: {for: 's_method_' + method_code}">
                         <!-- ko text: method_title --><!-- /ko -->
                         <!-- ko text: $parents[1].getFormattedPrice(amount) --><!-- /ko -->
