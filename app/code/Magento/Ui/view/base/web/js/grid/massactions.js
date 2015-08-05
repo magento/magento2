@@ -55,7 +55,7 @@ define([
                 return this;
             }
 
-            action   = this.getAction(actionIndex),
+            action   = this.getAction(actionIndex);
             callback = this._getCallback(action, data);
 
             action.confirm ?
