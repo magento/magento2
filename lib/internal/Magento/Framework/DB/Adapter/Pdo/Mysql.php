@@ -177,10 +177,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @var DateTime
      */
     protected $dateTime;
+
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils|String $string
