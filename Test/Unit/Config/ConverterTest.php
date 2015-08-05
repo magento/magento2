@@ -176,6 +176,10 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'class' => 'Other\Type',
                     'method' => 'processMessage2'
                 ],
+            ],
+            'binds' => [
+                ['queue' => "test-queue-1", 'exchange' => "magento",  'topic' => "customer.created"],
+                ['queue' => "test-queue-2", 'exchange' => "magento",  'topic' => "customer.created"]
             ]
         ];
     }

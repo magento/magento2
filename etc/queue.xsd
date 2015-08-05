@@ -12,6 +12,7 @@
                 <xs:element name="publisher" type="publisherType" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element name="topic" type="topicType" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element name="consumer" type="consumerType" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element name="bind" type="bindType" maxOccurs="unbounded" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
         <xs:unique name="topic-unique-name">
@@ -30,6 +31,10 @@
             <xs:selector xpath="topic"/>
             <xs:field xpath="@publisher"/>
         </xs:keyref>
+        <xs:keyref name="topic-ref" refer="topic-unique-name">
+            <xs:selector xpath="bind"/>
+            <xs:field xpath="@topic"/>
+        </xs:keyref>
     </xs:element>
     <xs:complexType name="publisherType">
         <xs:attribute type="xs:string" name="name" use="required"/>
@@ -47,5 +52,10 @@
         <xs:attribute type="xs:string" name="connection" use="required"/>
         <xs:attribute type="xs:string" name="class" use="required"/>
         <xs:attribute type="xs:string" name="method" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="bindType">
+        <xs:attribute type="xs:string" name="queue" use="required"/>
+        <xs:attribute type="xs:string" name="exchange" use="required"/>
+        <xs:attribute type="xs:string" name="topic" use="required"/>
     </xs:complexType>
 </xs:schema>

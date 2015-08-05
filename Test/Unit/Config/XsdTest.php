@@ -225,6 +225,24 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 ["Element 'consumer': Duplicate key-sequence ['customer_created_listener'] in unique "
                 . "identity-constraint 'consumer-unique-name'."],
             ],
+            'bind without queue' => [
+                '<config>
+                    <bind exchange="magento" topic="customer.created"/>
+                </config>',
+                ["Element 'bind': The attribute 'queue' is required but missing."],
+            ],
+            'bind without exchange' => [
+                '<config>
+                    <bind queue="test-queue" topic="customer.created"/>
+                </config>',
+                ["Element 'bind': The attribute 'exchange' is required but missing."],
+            ],
+            'bind without topic' => [
+                '<config>
+                    <bind queue="test-queue" exchange="magento"/>
+                </config>',
+                ["Element 'bind': The attribute 'topic' is required but missing."],
+            ],
         ];
     }
 }

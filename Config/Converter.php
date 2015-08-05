@@ -30,6 +30,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const CONSUMER_CLASS = 'class';
     const CONSUMER_METHOD = 'method';
 
+    const BINDS = 'binds';
+    const BIND_QUEUE = 'queue';
+    const BIND_EXCHANGE = 'exchange';
+    const BIND_TOPIC = 'topic';
+
     const ENV_QUEUE = 'queue';
     const ENV_TOPICS = 'topics';
     const ENV_CONSUMERS = 'consumers';
@@ -68,7 +73,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $this->overridePublishersForTopics($topics, $publishers);
         $consumers = $this->extractConsumers($source);
         $this->overrideConnectionsForConsumers($consumers);
-        return [self::PUBLISHERS => $publishers, self::TOPICS => $topics, self::CONSUMERS => $consumers ];
+        $binds = $this->extractBinds($source);
+        return [
+            self::PUBLISHERS => $publishers,
+            self::TOPICS => $topics,
+            self::CONSUMERS => $consumers,
+            self::BINDS => $binds
+        ];
     }
 
     /**
@@ -122,7 +133,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     protected function extractConsumers($config)
     {
         $output = [];
-        /** @var $publisherNode \DOMNode */
+        /** @var $consumerNode \DOMNode */
         foreach ($config->getElementsByTagName('consumer') as $consumerNode) {
             $consumerName = $consumerNode->attributes->getNamedItem('name')->nodeValue;
             $output[$consumerName] = [
@@ -131,6 +142,26 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 self::CONSUMER_CONNECTION => $consumerNode->attributes->getNamedItem('connection')->nodeValue,
                 self::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
                 self::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
+            ];
+        }
+        return $output;
+    }
+
+    /**
+     * Extract binds configuration.
+     *
+     * @param \DOMDocument $config
+     * @return array
+     */
+    protected function extractBinds($config)
+    {
+        $output = [];
+        /** @var $bindNode \DOMNode */
+        foreach ($config->getElementsByTagName('bind') as $bindNode) {
+            $output[] = [
+                self::BIND_QUEUE => $bindNode->attributes->getNamedItem('queue')->nodeValue,
+                self::BIND_EXCHANGE => $bindNode->attributes->getNamedItem('exchange')->nodeValue,
+                self::BIND_TOPIC => $bindNode->attributes->getNamedItem('topic')->nodeValue,
             ];
         }
         return $output;

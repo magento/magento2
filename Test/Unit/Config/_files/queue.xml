@@ -13,4 +13,6 @@
     <topic name="customer.deleted" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-2"/>
     <consumer name="customer_created_listener" queue="test-queue-1" connection="rabbitmq" class="Data\Type" method="processMessage"/>
     <consumer name="customer_deleted_listener" queue="test-queue-2" connection="db" class="Other\Type" method="processMessage2"/>
+    <bind queue="test-queue-1" exchange="magento" topic="customer.created" />
+    <bind queue="test-queue-2" exchange="magento"  topic="customer.created" />
 </config>
