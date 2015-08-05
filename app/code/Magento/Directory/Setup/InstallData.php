@@ -844,11 +844,19 @@ class InstallData implements InstallDataInterface
         );
 
         /**
+         * @var $countriesToExclude array
+         */
+        $countriesToExclude = ['FR'];
+
+        /**
          * @var $countries array
          */
         $countries = [];
         foreach ($this->directoryData->getCountryCollection() as $country) {
-            if ($country->getRegionCollection()->getSize() > 0) {
+            if (
+                $country->getRegionCollection()->getSize() > 0
+                && !in_array($country->getId(), $countriesToExclude)
+            ) {
                 $countries[] = $country->getId();
             }
         }
