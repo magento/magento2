@@ -13,7 +13,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Zend_Db_Select | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $selectMock;
 
@@ -28,7 +28,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Zend_Db_Adapter_Abstract | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $readerAdapterMock;
 
@@ -46,20 +46,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this));
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
             ->disableOriginalConstructor()
-            ->setMethods(['getReadConnection', 'getMainTable', 'getTable'])
+            ->setMethods(['getConnection', 'getMainTable', 'getTable'])
             ->getMockForAbstractClass();
-        $this->readerAdapterMock = $this->getMockBuilder('\Zend_Db_Adapter_Abstract')
+        $this->readerAdapterMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\Pdo\Mysql')
             ->disableOriginalConstructor()
             ->setMethods(['select', 'prepareSqlCondition', 'quoteInto'])
             ->getMockForAbstractClass();
-        $this->selectMock = $this->getMockBuilder('\Zend_Db_Select')
+        $this->selectMock = $this->getMockBuilder('\Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
             ->getMock();
         $this->readerAdapterMock->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
         $this->resourceMock->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->willReturn($this->readerAdapterMock);
         $this->resourceMock->expects($this->any())
             ->method('getMainTable')

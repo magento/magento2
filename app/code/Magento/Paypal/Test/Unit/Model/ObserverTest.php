@@ -25,7 +25,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_observer;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_event;
 
@@ -71,7 +71,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_event = new \Magento\Framework\Object();
+        $this->_event = new \Magento\Framework\DataObject();
 
         $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);
@@ -190,7 +190,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
             ->disableOriginalConstructor()
             ->getMock();
-        $resultMock = $this->getMockBuilder('Magento\Framework\Object')
+        $resultMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
         $layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
