@@ -164,7 +164,10 @@ class UiComponentFactory extends DataObject
             $componentArguments['components'] = $components;
 
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
-            $component = $this->objectManager->create($className, array_merge($componentArguments, $arguments));
+            $component = $this->objectManager->create(
+                $className,
+                array_replace_recursive($componentArguments, $arguments)
+            );
 
             return $component;
         } else {
@@ -173,7 +176,7 @@ class UiComponentFactory extends DataObject
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create(
                 $className,
-                array_merge($componentArguments, $arguments)
+                array_replace_recursive($componentArguments, $arguments)
             );
 
             return $component;
