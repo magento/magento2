@@ -104,7 +104,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_createSourceAdapterMock(['']);
         $errorAggregator = $this->_model->validateData();
         $this->assertArrayHasKey(
-            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER, $errorAggregator->getRowsGroupedByCode()
+            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER, $errorAggregator->getRowsGroupedByErrorCode()
         );
     }
 
@@ -144,7 +144,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_createSourceAdapterMock(['  ']);
         $errorAggregator = $this->_model->validateData();
         $this->assertArrayHasKey(
-            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER, $errorAggregator->getRowsGroupedByCode()
+            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER, $errorAggregator->getRowsGroupedByErrorCode()
         );
     }
 
@@ -158,7 +158,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_createSourceAdapterMock(['_test1']);
         $errorAggregator = $this->_model->validateData();
         $this->assertArrayHasKey(
-            AbstractEntity::ERROR_CODE_COLUMN_NAME_INVALID, $errorAggregator->getRowsGroupedByCode()
+            AbstractEntity::ERROR_CODE_COLUMN_NAME_INVALID, $errorAggregator->getRowsGroupedByErrorCode()
         );
     }
 
