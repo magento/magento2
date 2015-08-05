@@ -99,7 +99,10 @@ class ScheduledStructure
      */
     public function getListToRemove()
     {
-        return array_keys(array_intersect_key($this->_scheduledElements, $this->_scheduledRemoves));
+        return array_keys(array_intersect_key(
+            $this->_scheduledElements,
+            array_merge($this->_scheduledRemoves, $this->_brokenParent)
+        ));
     }
 
     /**

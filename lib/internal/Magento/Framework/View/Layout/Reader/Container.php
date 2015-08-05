@@ -81,7 +81,7 @@ class Container implements Layout\ReaderInterface
                 break;
 
             case self::TYPE_REFERENCE_CONTAINER:
-                $this->mergeContainerAttributes($readerContext->getScheduledStructure(), $currentElement);
+                $this->containerReference($readerContext->getScheduledStructure(), $currentElement);
                 break;
 
             default:
@@ -121,5 +121,28 @@ class Container implements Layout\ReaderInterface
             ];
         }
         $scheduledStructure->setStructureElementData($containerName, $elementData);
+    }
+
+    /**
+     * Handling reference of container
+     *
+     * If attribute remove="true" then add the element to list remove,
+     * else merge container attributes and invoke setStructureElementData
+     *
+     * @param Layout\ScheduledStructure $scheduledStructure
+     * @param Layout\Element $currentElement
+     */
+    protected function containerReference(
+        Layout\ScheduledStructure $scheduledStructure,
+        Layout\Element $currentElement
+    ) {
+        $containerName = $currentElement->getAttribute('name');
+        $containerRemove = (bool)$currentElement->getAttribute('remove');
+
+        if ($containerRemove) {
+            $scheduledStructure->setElementToRemoveList($containerName);
+        } else {
+            $this->mergeContainerAttributes($scheduledStructure, $currentElement);
+        }
     }
 }
