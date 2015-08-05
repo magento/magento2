@@ -38,7 +38,7 @@ class PayflowExpressTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $this->transactionRepository = $this->getMockBuilder('\Magento\Sales\Api\TransactionRepositoryInterface')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['getByTransactionType'])
             ->getMockForAbstractClass();
         $paypalPro->expects($this->any())->method('getApi')->will($this->returnValue($api));
 
