@@ -127,17 +127,18 @@ class Container implements Layout\ReaderInterface
      * Handling reference of container
      *
      * If attribute remove="true" then add the element to list remove,
-     * else merge container attributes and invoke setStructureElementData
+     * else merge container attributes
      *
      * @param Layout\ScheduledStructure $scheduledStructure
      * @param Layout\Element $currentElement
+     * @return void
      */
     protected function containerReference(
         Layout\ScheduledStructure $scheduledStructure,
         Layout\Element $currentElement
     ) {
         $containerName = $currentElement->getAttribute('name');
-        $containerRemove = (bool)$currentElement->getAttribute('remove');
+        $containerRemove = filter_var($currentElement->getAttribute('remove'), FILTER_VALIDATE_BOOLEAN);
 
         if ($containerRemove) {
             $scheduledStructure->setElementToRemoveList($containerName);

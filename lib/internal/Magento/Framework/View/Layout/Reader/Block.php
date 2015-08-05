@@ -158,7 +158,7 @@ class Block implements Layout\ReaderInterface
         Layout\Element $currentElement
     ) {
         $elementName = $currentElement->getAttribute('name');
-        $elementRemove = (bool)$currentElement->getAttribute('remove');
+        $elementRemove = filter_var($currentElement->getAttribute('remove'), FILTER_VALIDATE_BOOLEAN);
         if ($elementRemove) {
             $scheduledStructure->setElementToRemoveList($elementName);
         } else {
@@ -280,6 +280,7 @@ class Block implements Layout\ReaderInterface
      *
      * @param Layout\Element $blockElement
      * @param array $data
+     * @return void
      */
     protected function evaluateArguments(Layout\Element $blockElement, array &$data)
     {
