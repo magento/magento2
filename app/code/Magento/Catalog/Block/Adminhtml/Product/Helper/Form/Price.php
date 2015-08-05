@@ -125,6 +125,10 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
     {
         $value = $this->getValue();
 
+        if (!is_numeric($value)) {
+            return null;
+        }
+
         try {
             if ($attribute = $this->getEntityAttribute()) {
                 // honor the currency format of the store
