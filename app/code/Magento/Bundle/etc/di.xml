@@ -90,4 +90,13 @@
             <argument name="stockState" xsi:type="object">Magento\CatalogInventory\Api\StockStateInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Helper\Product">
+        <arguments>
+            <argument name="reindexPriceIndexerData" xsi:type="array">
+                <item name="byDataResult" xsi:type="array">
+                    <item name="is_relations_changed" xsi:type="string">is_relations_changed</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

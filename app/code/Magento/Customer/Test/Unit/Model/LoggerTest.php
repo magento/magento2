@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Customer log data logger test.
  */
@@ -32,17 +34,17 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * DB connection instance.
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapter;
+    protected $connection;
 
     /**
      * @return void
      */
     protected function setUp()
     {
-        $this->adapter = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo',
+        $this->connection = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'insertOnDuplicate', 'fetchRow'],
             [],
             '',
@@ -81,13 +83,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->with('write')
-            ->willReturn($this->adapter);
+            ->willReturn($this->connection);
         $this->resource->expects($this->once())
             ->method('getTableName')
             ->with('customer_log')
             ->willReturn($tableName);
-        $this->adapter->expects($this->once())
+        $this->connection->expects($this->once())
             ->method('insertOnDuplicate')
             ->with($tableName, array_merge(['customer_id' => $customerId], $data), array_keys($data));
 
@@ -128,15 +129,14 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->any())->method('order')->willReturnSelf();
         $select->expects($this->any())->method('limit')->willReturnSelf();
 
-        $this->adapter->expects($this->any())
+        $this->connection->expects($this->any())
             ->method('select')
             ->willReturn($select);
 
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->with('read')
-            ->willReturn($this->adapter);
-        $this->adapter->expects($this->any())
+            ->willReturn($this->connection);
+        $this->connection->expects($this->any())
             ->method('fetchRow')
             ->with($select)
             ->willReturn($data);

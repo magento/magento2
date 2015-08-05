@@ -91,7 +91,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     public function testImportToPayment($mapping, $expectation)
     {
         // we create $from object, based on mapping
-        $from = new \Magento\Framework\Object($mapping);
+        $from = new \Magento\Framework\DataObject($mapping);
         /** @var \Magento\Payment\Model\InfoInterface $paymentInfo */
         $paymentInfo = $this->objectManagerHelper->getObject('Magento\Payment\Model\Info');
         $this->info->importToPayment($from, $paymentInfo);
@@ -110,7 +110,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $paymentInfo->setAdditionalInformation($expectation);
 
         // we create $to empty object
-        $to = new \Magento\Framework\Object();
+        $to = new \Magento\Framework\DataObject();
         $this->info->exportFromPayment($paymentInfo, $to);
         $this->assertEquals($mapping, $to->getData());
     }
@@ -127,7 +127,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $paymentInfo->setAdditionalInformation($expectation);
 
         // we create $to empty object
-        $to = new \Magento\Framework\Object();
+        $to = new \Magento\Framework\DataObject();
         $this->info->exportFromPayment($paymentInfo, $to, array_flip($mapping));
         $this->assertEquals($mapping, $to->getData());
     }

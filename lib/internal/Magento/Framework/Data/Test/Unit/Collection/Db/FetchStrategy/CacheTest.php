@@ -37,7 +37,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_select = $this->getMock('Zend_Db_Select', ['assemble'], [], '', false);
+        $this->_select = $this->getMock('Magento\Framework\DB\Select', ['assemble'], [], '', false);
         $this->_select->expects(
             $this->once()
         )->method(

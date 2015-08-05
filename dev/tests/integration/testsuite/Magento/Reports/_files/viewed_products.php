@@ -23,9 +23,9 @@ foreach ([1, 2, 1, 21, 1, 21] as $productId) {
     $reportObserver->catalogProductView(
         new \Magento\Framework\Event\Observer(
             [
-                'event' => new \Magento\Framework\Object(
+                'event' => new \Magento\Framework\DataObject(
                         [
-                            'product' => new \Magento\Framework\Object(['id' => $productId]),
+                            'product' => new \Magento\Framework\DataObject(['id' => $productId]),
                         ]
                     ),
             ]

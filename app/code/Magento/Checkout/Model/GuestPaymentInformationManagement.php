@@ -25,18 +25,34 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     protected $cartManagement;
 
     /**
+     * @var \Magento\Checkout\Model\PaymentInformationManagement
+     */
+    protected $paymentInformationManagement;
+
+    /**
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory
+     */
+    protected $quoteIdMaskFactory;
+
+    /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
+     * @param PaymentInformationManagement $paymentInformationManagement
+     * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
         \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement,
         \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement,
-        \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
+        \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
+        \Magento\Checkout\Model\PaymentInformationManagement $paymentInformationManagement,
+        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartManagement = $cartManagement;
+        $this->paymentInformationManagement = $paymentInformationManagement;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
     /**
@@ -65,5 +81,14 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $this->billingAddressManagement->assign($cartId, $billingAddress);
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPaymentInformation($cartId)
+    {
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        return $this->paymentInformationManagement->getPaymentInformation($quoteIdMask->getQuoteId());
     }
 }
