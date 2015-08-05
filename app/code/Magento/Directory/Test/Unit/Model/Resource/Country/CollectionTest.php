@@ -18,7 +18,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
 
         $resource = $this->getMockForAbstractClass('Magento\Framework\Model\Resource\Db\AbstractDb',
@@ -27,9 +27,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getReadConnection', 'getMainTable', 'getTable', '__wakeup']
+            ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $resource->expects($this->any())->method('getReadConnection')->will($this->returnValue($connection));
+        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
 
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
@@ -79,7 +79,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray($optionsArray, $emptyLabel, $foregroundCountries, $expectedResults)
     {
         foreach ($optionsArray as $itemData) {
-            $this->_model->addItem(new \Magento\Framework\Object($itemData));
+            $this->_model->addItem(new \Magento\Framework\DataObject($itemData));
         }
 
         $this->_model->setForegroundCountries($foregroundCountries);

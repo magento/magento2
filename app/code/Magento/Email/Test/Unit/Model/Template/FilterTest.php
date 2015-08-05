@@ -16,7 +16,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     private $string;
 
@@ -79,7 +79,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')
+        $this->string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')
             ->disableOriginalConstructor()
             ->getMock();
 

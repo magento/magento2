@@ -22,7 +22,7 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
     protected $orderPaymentRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Object\Copy | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectCopyMock;
 
@@ -50,9 +50,10 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
-        $this->orderPaymentRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\OrderPaymentRepositoryInterface',
+        $this->objectCopyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
+        $this->orderPaymentFactoryMock = $this->getMock(
+            'Magento\Sales\Api\Data\OrderPaymentInterfaceFactory',
+            ['create'],
             [],
             '',
             false,

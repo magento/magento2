@@ -110,7 +110,7 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
         $productTypeCustomOption = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option')
             ->disableOriginalConstructor()
             ->getMock();
-        $result = $this->getMockBuilder('Magento\Framework\Object')
+        $result = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(
                 [
                     'getItemIsQtyDecimal',
@@ -206,7 +206,7 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
         $productTypeCustomOption = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option')
             ->disableOriginalConstructor()
             ->getMock();
-        $result = $this->getMockBuilder('Magento\Framework\Object')
+        $result = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(
                 ['getItemIsQtyDecimal', 'getHasQtyOptionUpdate', 'getItemUseOldQty', 'getMessage', 'getItemBackorders']
             )

@@ -25,7 +25,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     protected function setUp()
     {
@@ -35,28 +35,23 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
 
-        $this->adapterMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($this->selectMock);
 
         $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
-        $this->resourceMock->expects($this->at(0))
+        $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->with('core_write')
-            ->willReturn($this->adapterMock);
+            ->willReturn($this->connectionMock);
 
-        $this->resourceMock->expects($this->at(1))
-            ->method('getConnection')
-            ->with('core_read')
-            ->willReturn($this->adapterMock);
 
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->willReturn('table_name');
 
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
-        $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
+        $contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceMock);
 
         $this->model = $this->objectManager->getObject(
             'Magento\Weee\Model\Resource\Tax',

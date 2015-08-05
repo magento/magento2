@@ -47,17 +47,17 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_taxData = $taxData;
         $this->_storeManager = $storeManager;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -78,7 +78,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteByRuleId($ruleId)
     {
-        $conn = $this->_getWriteAdapter();
+        $conn = $this->getConnection();
         $where = $conn->quoteInto('tax_calculation_rule_id = ?', (int)$ruleId);
         $conn->delete($this->getMainTable(), $where);
 
@@ -94,16 +94,16 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCalculationsById($field, $ruleId)
     {
-        $select = $this->_getReadAdapter()->select();
+        $select = $this->getConnection()->select();
         $select->from($this->getMainTable(), $field)->where('tax_calculation_rule_id = ?', (int)$ruleId);
 
-        return $this->_getReadAdapter()->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
      * Get tax rate information: calculation process data and tax rate
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return array
      */
     public function getRateInfo($request)
@@ -118,7 +118,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Get tax rate for specific tax rate request
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return int
      */
     public function getRate($request)
@@ -129,7 +129,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Retrieve Calculation Process
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @param array|null $rates
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -265,7 +265,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Returns tax rates for request - either pereforms SELECT from DB, or returns already cached result
      * Notice that productClassId due to optimization can be array of ids
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -298,7 +298,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if (!isset($this->_ratesCache[$cacheKey])) {
             // Make SELECT and get data
-            $select = $this->_getReadAdapter()->select();
+            $select = $this->getConnection()->select();
             $select->from(
                 ['main_table' => $this->getMainTable()],
                 [
@@ -314,12 +314,12 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
             if ($productClassId) {
                 $select->where('product_tax_class_id IN (?)', $productClassId);
             }
-            $ifnullTitleValue = $this->_getReadAdapter()->getCheckSql(
+            $ifnullTitleValue = $this->getConnection()->getCheckSql(
                 'title_table.value IS NULL',
                 'rate.code',
                 'title_table.value'
             );
-            $ruleTableAliasName = $this->_getReadAdapter()->quoteIdentifier('rule.tax_calculation_rule_id');
+            $ruleTableAliasName = $this->getConnection()->quoteIdentifier('rule.tax_calculation_rule_id');
             $select->join(
                 ['rule' => $this->getTable('tax_calculation_rule')],
                 $ruleTableAliasName . ' = main_table.tax_calculation_rule_id',
@@ -385,7 +385,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
              * @see ZF-7592 issue http://framework.zend.com/issues/browse/ZF-7592
              */
             if ($postcodeIsNumeric || $postcodeIsRange) {
-                $select = $this->_getReadAdapter()->select()->union(
+                $select = $this->getConnection()->select()->union(
                     ['(' . $select . ')', '(' . $selectClone . ')']
                 );
             }
@@ -404,7 +404,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'value ' . \Magento\Framework\DB\Select::SQL_DESC
             );
 
-            $fetchResult = $this->_getReadAdapter()->fetchAll($select);
+            $fetchResult = $this->getConnection()->fetchAll($select);
             $filteredRates = [];
             if ($fetchResult) {
                 foreach ($fetchResult as $rate) {
@@ -458,7 +458,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Retrieve rate ids
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return array
      */
     public function getRateIds($request)

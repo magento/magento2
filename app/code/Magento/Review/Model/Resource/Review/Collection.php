@@ -93,7 +93,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_reviewData = $reviewData;
@@ -301,14 +301,14 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _addStoreData()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $reviewsIds = $this->getColumnValues('review_id');
         $storesToReviews = [];
         if (count($reviewsIds) > 0) {
-            $inCond = $adapter->prepareSqlCondition('review_id', ['in' => $reviewsIds]);
-            $select = $adapter->select()->from($this->getReviewStoreTable())->where($inCond);
-            $result = $adapter->fetchAll($select);
+            $inCond = $connection->prepareSqlCondition('review_id', ['in' => $reviewsIds]);
+            $select = $connection->select()->from($this->getReviewStoreTable())->where($inCond);
+            $result = $connection->fetchAll($select);
             foreach ($result as $row) {
                 if (!isset($storesToReviews[$row['review_id']])) {
                     $storesToReviews[$row['review_id']] = [];

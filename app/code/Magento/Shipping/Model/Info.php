@@ -10,7 +10,7 @@ namespace Magento\Shipping\Model;
 
 use Magento\Sales\Model\Order\Shipment;
 
-class Info extends \Magento\Framework\Object
+class Info extends \Magento\Framework\DataObject
 {
     /**
      * Tracking info
