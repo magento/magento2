@@ -127,6 +127,11 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         $data['suffix'] = $couponSpec->getSuffix();
         $data['dash'] = $couponSpec->getDelimiterAtEvery();
 
+        //ensure we have a format
+        if (empty($data['format'])) {
+            $data['format'] = $couponSpec::COUPON_FORMAT_ALPHANUMERIC;
+        }
+
         //if specified, use the supplied delimiter
         if ($couponSpec->getDelimiter()) {
             $data['delimiter'] = $couponSpec->getDelimiter();
