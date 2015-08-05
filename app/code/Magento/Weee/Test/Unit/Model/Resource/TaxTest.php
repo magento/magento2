@@ -27,6 +27,11 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     protected $connectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $selectMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -86,7 +91,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->model->isWeeeInLocation('US', 0, 1);
     }
 
-    public function testFetchWeeTaxCalculationsByEntity()
+    public function testFetchWeeeTaxCalculationsByEntity()
     {
         $this->selectMock->expects($this->any())
             ->method('where')
@@ -111,6 +116,6 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('joinInner')
             ->willReturn($this->selectMock);
 
-        $this->model->fetchWeeTaxCalculationsByEntity('US', 0, 1, 3, 4);
+        $this->model->fetchWeeeTaxCalculationsByEntity('US', 0, 1, 3, 4);
     }
 }

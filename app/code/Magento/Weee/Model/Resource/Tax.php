@@ -95,7 +95,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param int $entityId
      * @return array[]
      */
-    public function fetchWeeTaxCalculationsByEntity($countryId, $regionId, $websiteId, $storeId, $entityId)
+    public function fetchWeeeTaxCalculationsByEntity($countryId, $regionId, $websiteId, $storeId, $entityId)
     {
         $attributeSelect = $this->getConnection()->select();
         $attributeSelect->from(
