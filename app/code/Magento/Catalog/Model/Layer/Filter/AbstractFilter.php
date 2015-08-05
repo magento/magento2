@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
 /**
  * Layer category filter abstract model
  */
-abstract class AbstractFilter extends \Magento\Framework\Object implements FilterInterface
+abstract class AbstractFilter extends \Magento\Framework\DataObject implements FilterInterface
 {
     const ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS = 1;
 

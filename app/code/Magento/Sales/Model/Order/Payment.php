@@ -310,7 +310,7 @@ class Payment extends Info implements OrderPaymentInterface
 
         if ($action) {
             if ($methodInstance->isInitializeNeeded()) {
-                $stateObject = new \Magento\Framework\Object();
+                $stateObject = new \Magento\Framework\DataObject();
                 // For method initialization we have to use original config value for payment action
                 $methodInstance->initialize($methodInstance->getConfigData('payment_action'), $stateObject);
                 $orderState = $stateObject->getData('state') ?: $orderState;
@@ -532,11 +532,11 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Void payment online
      *
-     * @param \Magento\Framework\Object $document
+     * @param \Magento\Framework\DataObject $document
      * @return $this
      * @see self::_void()
      */
-    public function void(\Magento\Framework\Object $document)
+    public function void(\Magento\Framework\DataObject $document)
     {
         $this->_void(true);
         $this->_eventManager->dispatch('sales_order_payment_void', ['payment' => $this, 'invoice' => $document]);

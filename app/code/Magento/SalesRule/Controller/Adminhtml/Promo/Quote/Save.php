@@ -42,7 +42,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 
                 $session = $this->_objectManager->get('Magento\Backend\Model\Session');
 
-                $validateResult = $model->validateData(new \Magento\Framework\Object($data));
+                $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
                         $this->messageManager->addError($errorMessage);

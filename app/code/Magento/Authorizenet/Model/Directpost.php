@@ -213,7 +213,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * Send authorize request to gateway
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @param  float $amount
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -226,7 +226,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * Send capture request to gateway
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -306,7 +306,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * Void the payment through gateway
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -350,7 +350,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Refund the amount
      * Need to decode last 4 digits for request.
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Exception
@@ -372,12 +372,12 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * Refund the amount with transaction id
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function processRefund(\Magento\Framework\Object $payment, $amount)
+    protected function processRefund(\Magento\Framework\DataObject $payment, $amount)
     {
         if ($amount <= 0) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid amount for refund.'));
@@ -458,7 +458,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Instantiate state and set it to state object
      *
      * @param string $paymentAction
-     * @param \Magento\Framework\Object $stateObject
+     * @param \Magento\Framework\DataObject $stateObject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -588,10 +588,10 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * Fill payment with credit card data from response from Authorize.net.
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @return void
      */
-    protected function fillPaymentByResponse(\Magento\Framework\Object $payment)
+    protected function fillPaymentByResponse(\Magento\Framework\DataObject $payment)
     {
         $response = $this->getResponse();
         $payment->setTransactionId($response->getXTransId())
@@ -886,13 +886,13 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
 
     /**
      * @param \Magento\Sales\Model\Order\Payment $payment
-     * @param \Magento\Framework\Object $response
+     * @param \Magento\Framework\DataObject $response
      * @param string $transactionId
      * @return $this
      */
     protected function addStatusCommentOnUpdate(
         \Magento\Sales\Model\Order\Payment $payment,
-        \Magento\Framework\Object $response,
+        \Magento\Framework\DataObject $response,
         $transactionId
     ) {
         if ($payment->getIsTransactionApproved()) {

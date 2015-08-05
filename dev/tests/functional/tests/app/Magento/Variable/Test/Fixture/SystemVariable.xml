@@ -10,6 +10,7 @@
              module="Magento_Variable"
              type="composite"
              collection="Magento\Variable\Model\Resource\Variable\Collection"
+             repository_class="Magento\Variable\Test\Repository\SystemVariable"
              handler_interface="Magento\Variable\Test\Handler\SystemVariable\SystemVariableInterface"
              class="Magento\Variable\Test\Fixture\SystemVariable">
         <field name="variable_id" is_required="" />

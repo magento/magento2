@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Bundle model
  */
 class Bundle
 {
@@ -38,15 +38,23 @@ class Bundle
     protected $content = [];
 
     /**
+     * @var Minification
+     */
+    protected $minification;
+
+    /**
      * @param Filesystem $filesystem
      * @param Bundle\ConfigInterface $bundleConfig
+     * @param Minification $minification
      */
     public function __construct(
         Filesystem $filesystem,
-        Bundle\ConfigInterface $bundleConfig
+        Bundle\ConfigInterface $bundleConfig,
+        Minification $minification
     ) {
         $this->filesystem = $filesystem;
         $this->bundleConfig = $bundleConfig;
+        $this->minification = $minification;
     }
 
     /**
@@ -153,7 +161,9 @@ class Bundle
      */
     protected function getAssetKey(LocalInterface $asset)
     {
-        return ($asset->getModule() == '') ? $asset->getFilePath() : $asset->getModule() . '/' . $asset->getFilePath();
+        $result = (($asset->getModule() == '') ? '' : $asset->getModule() . '/') . $asset->getFilePath();
+        $result = $this->minification->addMinifiedSign($result);
+        return $result;
     }
 
     /**
@@ -223,21 +233,17 @@ class Bundle
         $bundlePath = '';
         foreach ($types as $parts) {
             /** @var FallbackContext $context */
-            $context = reset(reset($parts)['assets'])->getContext();
+            $assetsParts = reset($parts);
+            $context = reset($assetsParts['assets'])->getContext();
             $bundlePath = empty($bundlePath) ? $context->getPath() . Manager::BUNDLE_PATH : $bundlePath;
             $this->fillContent($parts, $context);
         }
 
-        $this->content[count($this->content) > 0 ? count($this->content) - 1 : 0] .= $this->getInitJs();
+        $this->content[max(0, count($this->content) - 1)] .= $this->getInitJs();
 
-        if (count($this->content) > 1) {
-            foreach ($this->content as $partIndex => $content) {
-                $dir->writeFile($bundlePath . "$partIndex.js", $content);
-            }
-            return;
+        foreach ($this->content as $partIndex => $content) {
+            $dir->writeFile($this->minification->addMinifiedSign($bundlePath . $partIndex . '.js'), $content);
         }
-
-        $dir->writeFile($bundlePath . '0.js', $this->content[0]);
     }
 
     /**

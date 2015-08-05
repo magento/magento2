@@ -6,6 +6,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Object;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use \Magento\Sales\Model\Order\CreditmemoFactory;
@@ -23,7 +24,7 @@ use \Magento\Sales\Model\Order\CreditmemoFactory;
  * @method int getInvoiceId
  * @method int getOrderId
  */
-class CreditmemoLoader extends Object
+class CreditmemoLoader extends DataObject
 {
     /**
      * @var CreditmemoRepositoryInterface;
