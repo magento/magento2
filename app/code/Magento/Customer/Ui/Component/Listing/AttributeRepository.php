@@ -34,7 +34,7 @@ class AttributeRepository
     protected $customerMetadata;
 
     /**
-     * @var \Magento\Customer\Api\AddressMetadataInterface
+     * @var \Magento\Customer\Model\Metadata\AddressMetadata
      */
     protected $addressMetadata;
 
@@ -42,13 +42,13 @@ class AttributeRepository
      * @param \Magento\Customer\Model\Resource\Attribute\Collection $attributeCollection
      * @param \Magento\Customer\Model\Resource\Address\Attribute\Collection $addressAttributeCollection
      * @param \Magento\Customer\Model\Metadata\CustomerMetadata $customerMetadata
-     * @param AddressMetadataInterface $addressMetadata
+     * @param \Magento\Customer\Model\Metadata\AddressMetadata $addressMetadata
      */
     public function __construct(
         \Magento\Customer\Model\Resource\Attribute\Collection $attributeCollection,
         \Magento\Customer\Model\Resource\Address\Attribute\Collection $addressAttributeCollection,
         \Magento\Customer\Model\Metadata\CustomerMetadata $customerMetadata,
-        \Magento\Customer\Api\AddressMetadataInterface $addressMetadata
+        \Magento\Customer\Model\Metadata\AddressMetadata $addressMetadata
     ) {
         $this->attributeCollection = $attributeCollection;
         $this->addressAttributeCollection = $addressAttributeCollection;

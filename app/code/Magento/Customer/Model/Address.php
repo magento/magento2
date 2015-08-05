@@ -9,6 +9,7 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Framework\Indexer\StateInterface;
 
 /**
  * Customer address model
@@ -317,7 +318,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function afterSave()
     {
-        $this->_getResource()->addCommitCallback([$this, 'reindex']);
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        if ($indexer->getState()->getStatus() !== StateInterface::STATUS_INVALID) {
+            $this->_getResource()->addCommitCallback([$this, 'reindex']);
+        }
         return parent::afterSave();
     }
 

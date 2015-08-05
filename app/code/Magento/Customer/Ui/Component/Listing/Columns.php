@@ -96,6 +96,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         $config['sortOrder'] = ++$this->columnSortOrder;
         $column = $this->columnFactory->create($attribute, $this->getContext(), $config);
+        $column->prepare();
         $this->addComponent($attribute->getAttributeCode(), $column);
     }
 
