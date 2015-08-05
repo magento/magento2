@@ -8,8 +8,7 @@ namespace Magento\Store\Model;
 
 use Magento\Directory\Model\CountryFactory;
 use Magento\Directory\Model\RegionFactory;
-use Magento\Framework\Object;
-use Magento\Store\Model\Store;
+use Magento\Framework\DataObject;
 use Magento\Store\Model\Address\Renderer;
 
 class Information
@@ -73,12 +72,12 @@ class Information
     /**
      * Retrieve generic object with all the misc store information values
      *
-     * @param \Magento\Store\Model\Store $store
-     * @return Object
+     * @param Store $store
+     * @return DataObject
      */
-    public function getStoreInformation(Store $store)
+    public function getStoreInformationObject(Store $store)
     {
-        $info = new Object([
+        $info = new DataObject([
             'name' => $store->getConfig(self::XML_PATH_STORE_INFO_NAME),
             'phone' => $store->getConfig(self::XML_PATH_STORE_INFO_PHONE),
             'hours' => $store->getConfig(self::XML_PATH_STORE_INFO_HOURS),
@@ -110,6 +109,6 @@ class Information
      */
     public function getFormattedAddress(Store $store)
     {
-        return $this->renderer->format($this->getStoreInformation($store), 'html');
+        return $this->renderer->format($this->getStoreInformationObject($store), 'html');
     }
 }

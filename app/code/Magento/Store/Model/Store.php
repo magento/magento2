@@ -12,13 +12,11 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface as AppScopeInterface;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Object;
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Store model
@@ -286,7 +284,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     protected $_httpContext;
 
     /**
-     * @var \Magento\Directory\Model\CurrencyFactory
+     * @var \Magento\Framework\CurrencyFactory
      */
     protected $currencyFactory;
 
@@ -320,7 +318,8 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\Session\SessionManagerInterface $session
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * @param \Magento\Framework\CurrencyFactory $currencyFactory
+     * @param Information $information
      * @param string $currencyInstalled
      * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
@@ -345,7 +344,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Session\SessionManagerInterface $session,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
+        \Magento\Framework\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\Information $information,
         $currencyInstalled,
         \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
