@@ -15,7 +15,6 @@
         "magento/module-directory": "1.0.0-beta",
         "magento/module-gift-message": "1.0.0-beta",
         "magento/module-catalog-inventory": "1.0.0-beta",
-        "magento/module-msrp": "1.0.0-beta",
         "magento/module-config": "1.0.0-beta",
         "magento/module-media-storage": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",

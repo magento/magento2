@@ -322,12 +322,12 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param mixed $value
      * @param Attribute $row
-     * @param \Magento\Framework\Object $column
+     * @param \Magento\Framework\DataObject $column
      * @param boolean $isExport
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function decorateFilter($value, Attribute $row, \Magento\Framework\Object $column, $isExport)
+    public function decorateFilter($value, Attribute $row, \Magento\Framework\DataObject $column, $isExport)
     {
         $value = null;
         $values = $column->getValues();

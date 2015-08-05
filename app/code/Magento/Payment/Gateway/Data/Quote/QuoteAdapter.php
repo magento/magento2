@@ -120,4 +120,24 @@ class QuoteAdapter implements OrderAdapterInterface
     {
         return null;
     }
+
+    /**
+     * Returns list of line items in the cart
+     *
+     * @return \Magento\Quote\Api\Data\CartItemInterface[]|null
+     */
+    public function getItems()
+    {
+        return $this->quote->getItems();
+    }
+
+    /**
+     * Gets the remote IP address for the order.
+     *
+     * @return string|null Remote IP address.
+     */
+    public function getRemoteIp()
+    {
+        return null;
+    }
 }

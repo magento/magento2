@@ -101,10 +101,10 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
     /**
      * Save tier price object
      *
-     * @param \Magento\Framework\Object $priceObject
+     * @param \Magento\Framework\DataObject $priceObject
      * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice
      */
-    public function savePriceData(\Magento\Framework\Object $priceObject)
+    public function savePriceData(\Magento\Framework\DataObject $priceObject)
     {
         $connection = $this->getConnection();
         $data = $this->_prepareDataForTable($priceObject, $this->getMainTable());

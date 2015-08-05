@@ -304,7 +304,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->_addOrderStatusFilter($totalsCollection, $filterData);
 
             if ($totalsCollection->load()->getSize() < 1 || !$filterData->getData('from')) {
-                $this->setTotals(new \Magento\Framework\Object());
+                $this->setTotals(new \Magento\Framework\DataObject());
                 $this->setCountTotals(false);
             } else {
                 foreach ($totalsCollection->getItems() as $item) {
@@ -387,7 +387,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Add order status filter
      *
      * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
-     * @param \Magento\Framework\Object $filterData
+     * @param \Magento\Framework\DataObject $filterData
      * @return $this
      */
     protected function _addOrderStatusFilter($collection, $filterData)
@@ -401,7 +401,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Can be overridden in child classes if custom filter needed
      *
      * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
-     * @param \Magento\Framework\Object $filterData
+     * @param \Magento\Framework\DataObject $filterData
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore

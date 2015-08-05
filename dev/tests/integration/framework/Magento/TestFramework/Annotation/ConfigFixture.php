@@ -94,6 +94,7 @@ class ConfigFixture
      * Assign required config values and save original ones
      *
      * @param \PHPUnit_Framework_TestCase $test
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _assignConfigData(\PHPUnit_Framework_TestCase $test)
     {
@@ -106,7 +107,7 @@ class ConfigFixture
                 /* Store-scoped config value */
                 $storeCode = $matches[0] != 'current' ? $matches[0] : null;
                 $parts = preg_split('/\s+/', $configPathAndValue, 3);
-                list(, $configPath, $requiredValue) = $parts + ['', '', ''];
+                list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
                 $originalValue = $this->_getConfigValue($configPath, $storeCode);
                 $this->_storeConfigValues[$storeCode][$configPath] = $originalValue;
                 $this->_setConfigValue($configPath, $requiredValue, $storeCode);

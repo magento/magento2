@@ -11,7 +11,7 @@ use Magento\Store\Model\ScopeInterface;
  * Cms page content block
  */
 class Page extends \Magento\Framework\View\Element\AbstractBlock implements
-    \Magento\Framework\Object\IdentityInterface
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider

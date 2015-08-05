@@ -30,7 +30,7 @@ class BackendTest extends \PHPUnit_Framework_TestCase
     public function testisValidIfProvidedModelIsIncorrect()
     {
         $this->model->isValid(
-            $this->getMock('\Magento\Framework\Object', [], [], '', false)
+            $this->getMock('\Magento\Framework\DataObject', [], [], '', false)
         );
     }
 
@@ -40,7 +40,7 @@ class BackendTest extends \PHPUnit_Framework_TestCase
      */
     public function testisValidIfProvidedResourceModelIsIncorrect()
     {
-        $resourceMock = $this->getMock('\Magento\Framework\Object', [], [], '', false);
+        $resourceMock = $this->getMock('\Magento\Framework\DataObject', [], [], '', false);
         $this->entityMock->expects($this->once())->method('getResource')->willReturn($resourceMock);
         $this->model->isValid($this->entityMock);
     }
