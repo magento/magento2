@@ -15,6 +15,10 @@
             <height>75</height>
         </image>
         <image id="product_listing_thumbnail_preview" type="thumbnail"/>
+        <image id="product_thumbnail_image" type="thumbnail">
+            <width>75</width>
+            <height>75</height>
+        </image>
     </images>
     <exclude>
         <item type="file">Lib::mage/common.js</item>
