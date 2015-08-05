@@ -100,6 +100,14 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Specified rule does not allow coupons')
                 );
+            } elseif ($rule->getUseAutoGeneration() && $coupon->getType() == $coupon::TYPE_MANUAL) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Specified rule only allows auto generated coupons')
+                );
+            } elseif (!$rule->getUseAutoGeneration() && $coupon->getType() == $coupon::TYPE_GENERATED) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Specified rule does not allow auto generated coupons')
+                );
             }
             $coupon->setExpirationDate($rule->getToDate());
             $coupon->setUsageLimit($rule->getUsesPerCoupon());
