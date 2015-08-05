@@ -11,17 +11,12 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Path to csv file to import
      */
     const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
-
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $_helper;
 
     /**
      * Test store parametes
@@ -218,7 +213,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        parent::setUp();
+
         $addExpectations = false;
         $deleteBehavior = false;
         $testName = $this->getName(true);
@@ -939,15 +935,15 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $model = $this->_helper->getObject(
+        $model = $this->objectManagerHelper->getObject(
             'Magento\CatalogImportExport\Model\Import\Product\Option',
             [
                 'data' => [
                     'data_source_model' => $modelData,
                     'product_model' => $productModel,
-                    'option_collection' => $this->_helper->getObject('stdClass'),
+                    'option_collection' => $this->objectManagerHelper->getObject('stdClass'),
                     'product_entity' => $productEntity,
-                    'collection_by_pages_iterator' => $this->_helper->getObject('stdClass'),
+                    'collection_by_pages_iterator' => $this->objectManagerHelper->getObject('stdClass'),
                     'page_size' => 5000,
                     'stores' => []
                 ]
@@ -1010,9 +1006,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $errorFactory->method('create')->willReturn(
-            $this->_helper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
         );
-        return $this->_helper->getObject(
+        return $this->objectManagerHelper->getObject(
             'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
             [
                 'errorFactory' => $errorFactory

@@ -12,9 +12,8 @@
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
 use Magento\ImportExport\Model\Import\AbstractEntity;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class EntityAbstractTest extends \PHPUnit_Framework_TestCase
+class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Abstract import entity model
@@ -22,11 +21,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
 
     /**
      * List of available behaviors
@@ -41,7 +35,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        parent::setUp();
+
         $this->_model = $this->getMockBuilder('Magento\ImportExport\Model\Import\AbstractEntity')
             ->setConstructorArgs($this->_getModelDependencies())
             ->setMethods(['_saveValidatedBunches'])
@@ -85,27 +80,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         ];
 
         return $data;
-    }
-
-    /**
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     */
-    protected function getErrorAggregatorObject()
-    {
-        $errorFactory = $this->getMockBuilder(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $errorFactory->method('create')->willReturn(
-            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
-        );
-        return $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            [
-                'errorFactory' => $errorFactory
-            ]
-        );
     }
 
     /**
