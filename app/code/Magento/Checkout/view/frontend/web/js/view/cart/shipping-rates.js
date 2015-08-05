@@ -11,9 +11,9 @@ define(
         'Magento_Catalog/js/price-utils',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/action/select-shipping-method',
-        'Magento_Checkout/js/action/set-shipping-method'
+        'Magento_Checkout/js/action/set-shipping-information'
     ],
-    function (ko, _, Component, shippingService, priceUtils, quote, selectShippingMethod, setShippingMethod) {
+    function (ko, _, Component, shippingService, priceUtils, quote, selectShippingMethod, setShippingInformation) {
         'use strict';
 
         return Component.extend({
@@ -24,7 +24,7 @@ define(
             shippingRateGroups: ko.observableArray([]),
 
             /**
-             * @inheritdoc
+             * @override
              */
             initProperties: function () {
                 var self = this;
@@ -79,7 +79,11 @@ define(
              * @returns void
              */
             setShippingMethod: function () {
-                setShippingMethod();
+                setShippingInformation().done(
+                    function () {
+                        console.log(ko.unwrap(quote.getTotals()));
+                    }
+                );
             }
         });
     }
