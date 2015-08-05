@@ -255,7 +255,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         );
         $defaultRateRequest = $calculator->getDefaultRateRequest($store);
 
-        $productAttributes = $this->getResource()->fetchWeeTaxCalculationsByEntity(
+        $productAttributes = $this->getResource()->fetchWeeeTaxCalculationsByEntity(
             $rateRequest->getCountryId(),
             $rateRequest->getRegionId(),
             $websiteId,

@@ -224,7 +224,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->willReturn(0.25);
 
         $this->resource->expects($this->any())
-            ->method('fetchWeeTaxCalculationsByEntity')
+            ->method('fetchWeeeTaxCalculationsByEntity')
             ->willReturn([
                 0 => [
                     'weee_value' => 1,
