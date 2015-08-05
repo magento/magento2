@@ -144,7 +144,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 
         $this->assertGreaterThan(0, $this->_model->getErrorAggregator()->getErrorsCount());
 
-        $errors = $this->_model->getErrorAggregator()->getRowsGroupedByCode();
+        $errors = $this->_model->getErrorAggregator()->getRowsGroupedByErrorCode();
         $this->assertArrayHasKey($errorCode . ' ' . $errorColumnName, $errors);
     }
 
@@ -181,7 +181,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model->addMessageTemplate($errorCode, $message);
 
         $this->_model->addRowError($errorCode, 0);
-        $errors = $this->_model->getErrorAggregator()->getRowsGroupedByCode();
+        $errors = $this->_model->getErrorAggregator()->getRowsGroupedByErrorCode();
 
         $this->assertArrayHasKey($message, $errors);
     }

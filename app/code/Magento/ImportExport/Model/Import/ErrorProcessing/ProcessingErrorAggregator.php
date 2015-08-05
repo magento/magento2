@@ -214,7 +214,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param array $excludedCodes
      * @return array
      */
-    public function getRowsGroupedByCode(array $errorCode = [], array $excludedCodes = [])
+    public function getRowsGroupedByErrorCode(array $errorCode = [], array $excludedCodes = [])
     {
         $result = [];
         foreach ($this->items as $error) {

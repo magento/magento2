@@ -278,7 +278,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $messages[] = __('Data validation is failed. Please fix errors and re-upload the file.');
 
                 // errors info
-                foreach ($validationResult->getRowsGroupedByCode() as $errorMessage => $rows) {
+                foreach ($validationResult->getRowsGroupedByErrorCode() as $errorMessage => $rows) {
                     $error = $errorMessage . ' ' . __('in rows') . ': ' . implode(', ', $rows);
                     $messages[] = $error;
                 }
