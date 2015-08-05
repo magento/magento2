@@ -176,17 +176,25 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $literal
+     * @param string $remove
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getCondition
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCondition
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setRemoveCondition
      * @dataProvider processReferenceDataProvider
      */
     public function testProcessReference(
         $literal,
+        $remove,
         $getCondition,
-        $setCondition
+        $setCondition,
+        $setRemoveCondition
     ) {
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->will($this->returnValue($this->scheduledStructure));
+
+        $this->scheduledStructure->expects($setRemoveCondition)
+            ->method('setElementToRemoveList')
+            ->with($literal);
 
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
@@ -209,7 +217,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->prepareReaderPool(
-            '<' . $literal . ' name="' . $literal . '">'
+            '<' . $literal . ' name="' . $literal . '" remove="' . $remove . '">'
             . '<action method="someMethod" ifconfig="action_config_path" />'
             . '</' . $literal . '>',
             $literal
@@ -231,8 +239,10 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function processReferenceDataProvider()
     {
         return [
-            ['referenceBlock', $this->once(), $this->once()],
-            ['page', $this->never(), $this->never()]
+            ['referenceBlock', 'false', $this->once(), $this->once(), $this->never()],
+            ['referenceBlock', 'true', $this->never(), $this->never(), $this->once()],
+            ['page', 'false', $this->never(), $this->never(), $this->never()],
+            ['page', 'true', $this->never(), $this->never(), $this->never()],
         ];
     }
 }
