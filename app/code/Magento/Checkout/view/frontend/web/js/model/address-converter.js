@@ -6,11 +6,12 @@ define(
     [
         'jquery',
         'Magento_Checkout/js/model/new-customer-address',
+        'Magento_Customer/js/customer-data',
         'mage/utils/objects'
     ],
-    function($, address, mageUtils) {
+    function($, address, customerData, mageUtils) {
         'use strict';
-        var countryData = window.checkoutConfig.countryData;
+        var countryData = customerData.get('directory-data');
 
         return {
             /**
@@ -33,8 +34,8 @@ define(
                     region: regionName
                 };
 
-                if (addressData.region_id && countryData[addressData.country_id]['regions']) {
-                    region = countryData[addressData.country_id]['regions'][addressData.region_id];
+                if (addressData.region_id && countryData()[addressData.country_id]['regions']) {
+                    region = countryData()[addressData.country_id]['regions'][addressData.region_id];
                     if (region) {
                         addressData.region.region_id = addressData['region_id'];
                         addressData.region.region_code = region['code'];

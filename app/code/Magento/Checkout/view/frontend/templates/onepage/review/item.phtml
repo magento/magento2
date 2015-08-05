@@ -16,7 +16,9 @@
 $_item = $block->getItem();
 ?>
 <tr>
-    <td class="col item" data-th="<?php echo $block->escapeHtml(__('Product Name'));?>"><strong class="product name product-item-name"><?php echo $block->escapeHtml($block->getProductName()) ?></strong>
+    <td class="col item" data-th="<?php echo $block->escapeHtml(__('Product Name'));?>">
+        <strong class="product name product-item-name"><?php echo $block->escapeHtml($block->getProductName()) ?></strong>
+        <?php echo $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml(); ?>
         <?php if ($_options = $block->getOptionList()):?>
         <dl class="item-options">
             <?php foreach ($_options as $_option) : ?>
