@@ -44,6 +44,7 @@ define([
     });
 
     return Collapsible.extend({
+        stepInitialized: false,
         attributes: ko.observableArray([]),
         createOption: function () {
             // this - current attribute
@@ -136,10 +137,33 @@ define([
                 showLoader: true
             }).done(function(attributes){
                 this.attributes(saveAttributes.call(this, attributes));
+                this.doInitSavedOptions();
             }.bind(this));
+        },
+        doInitSavedOptions: function() {
+            if (false === this.stepInitialized) {
+                this.stepInitialized = true;
+                _.each(this.attributes(), function(attribute) {
+                    var selectedAttribute = _.findWhere(this.initData.attributes, {id: attribute.id});
+                    if (selectedAttribute) {
+                        var selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
+                        var selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
+                            return _.contains(selectedOptions, option.value)
+                        }), 'id');
+                        attribute.chosenOptions(selectedOptionsIds);
+                    }
+                }.bind(this));
+            }
         },
         render: function(wizard) {
             this.wizard = wizard;
+            if (this.initData) {
+                this.wizard.notifyMessage(
+                    $.mage.__('When you remove or add an attribute, we automatically ' +
+                    'update all configurations and you will need to manually recreate the current configurations.'),
+                    false
+                );
+            }
             this.requestAttributes(wizard.data.attributesIds());
         },
         force: function(wizard) {
