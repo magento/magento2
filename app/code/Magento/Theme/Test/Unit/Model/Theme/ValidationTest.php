@@ -21,8 +21,8 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate(array $data, $result, array $messages)
     {
-        /** @var $themeMock \Magento\Framework\Object */
-        $themeMock = new \Magento\Framework\Object();
+        /** @var $themeMock \Magento\Framework\DataObject */
+        $themeMock = new \Magento\Framework\DataObject();
         $themeMock->setData($data);
 
         $validator = new \Magento\Framework\View\Design\Theme\Validator();
