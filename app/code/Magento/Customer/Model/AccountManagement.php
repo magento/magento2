@@ -22,6 +22,7 @@ use Magento\Customer\Model\Metadata\Validator;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
+use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
@@ -770,7 +771,7 @@ class AccountManagement implements AccountManagementInterface
         $rpToken = $customerSecureData->getRpToken();
         $rpTokenCreatedAt = $customerSecureData->getRpTokenCreatedAt();
 
-        if (strcmp($rpToken, $resetPasswordLinkToken) !== 0) {
+        if (!Security::compareStrings($rpToken, $resetPasswordLinkToken)) {
             throw new InputMismatchException(__('Reset password token mismatch.'));
         } elseif ($this->isResetPasswordLinkTokenExpired($rpToken, $rpTokenCreatedAt)) {
             throw new ExpiredException(__('Reset password token expired.'));

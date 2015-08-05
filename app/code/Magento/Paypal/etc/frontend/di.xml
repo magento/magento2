@@ -45,13 +45,13 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="PaypalCcConfigProvider" type="Magento\Payment\Model\CcGenericConfigProvider">
+    <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
                 <item name="payflowpro" xsi:type="const">Magento\Paypal\Model\Config::METHOD_PAYFLOWPRO</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
     <virtualType name="PaypalIframeCcConfigProvider" type="Magento\Payment\Model\IframeConfigProvider">
         <arguments>
             <argument name="methodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_PAYFLOWPRO</argument>
@@ -63,7 +63,6 @@
                 <item name="paypal_express_config_provider" xsi:type="object">Magento\Paypal\Model\ExpressConfigProvider</item>
                 <item name="paypal_iframe_config_provider" xsi:type="object">Magento\Paypal\Model\IframeConfigProvider</item>
                 <item name="paypal_billing_agreement_config_provider" xsi:type="object">Magento\Paypal\Model\BillingAgreementConfigProvider</item>
-                <item name="paypal_cc_config_provider" xsi:type="object">PaypalCcConfigProvider</item>
                 <item name="paypal_iframe_cc_config_provider" xsi:type="object">PaypalIframeCcConfigProvider</item>
             </argument>
         </arguments>
