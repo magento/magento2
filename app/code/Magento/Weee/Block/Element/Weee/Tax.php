@@ -17,7 +17,6 @@ class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Catalog\Helper\Product $helper
      * @param \Magento\Framework\Locale\Format $localeFormat
      * @param array $data
      */
