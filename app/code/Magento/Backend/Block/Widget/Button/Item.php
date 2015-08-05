@@ -14,7 +14,7 @@ namespace Magento\Backend\Block\Widget\Button;
  * @method int getSortOrder
  * @method string getTitle
  */
-class Item extends \Magento\Framework\Object
+class Item extends \Magento\Framework\DataObject
 {
     /**
      * Object delete flag

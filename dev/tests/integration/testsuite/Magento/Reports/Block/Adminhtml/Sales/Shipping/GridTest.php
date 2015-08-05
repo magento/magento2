@@ -24,7 +24,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             'Magento\Reports\Block\Adminhtml\Sales\Shipping\Grid'
         );
 
-        $filterData = new \Magento\Framework\Object();
+        $filterData = new \Magento\Framework\DataObject();
         if ($reportType) {
             $filterData->setReportType($reportType);
         }
