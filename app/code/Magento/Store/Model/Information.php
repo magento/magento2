@@ -109,6 +109,6 @@ class Information
      */
     public function getFormattedAddress(Store $store)
     {
-        return $this->renderer->format($this->getStoreInformationObject($store), 'html');
+        return $this->renderer->format($this->getStoreInformationObject($store));
     }
 }
