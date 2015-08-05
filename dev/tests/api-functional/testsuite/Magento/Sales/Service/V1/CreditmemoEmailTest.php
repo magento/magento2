@@ -23,6 +23,7 @@ class CreditmemoEmailTest extends WebapiAbstract
      */
     public function testCreditmemoEmail()
     {
+        $this->markTestSkipped('You can not cancel Credit Memo');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Sales\Model\Resource\Order\Creditmemo\Collection $creditmemoCollection */
