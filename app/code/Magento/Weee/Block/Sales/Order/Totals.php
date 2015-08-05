@@ -50,7 +50,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         $weeeTotal = $this->weeeData->getTotalAmounts($items, $store);
         if ($weeeTotal) {
             // Add our total information to the set of other totals
-            $total = new \Magento\Framework\Object(
+            $total = new \Magento\Framework\DataObject(
                 [
                     'code' => $this->getNameInLayout(),
                     'label' => __('FPT'),

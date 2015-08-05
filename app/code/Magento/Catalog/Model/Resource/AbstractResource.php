@@ -77,7 +77,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Check whether the attribute is Applicable to the object
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @return boolean
      */
@@ -102,7 +102,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             && ($method == 'beforeSave' || $method = 'afterSave')
         ) {
             $attributeCode = $instance->getAttribute()->getAttributeCode();
-            if (isset($args[0]) && $args[0] instanceof \Magento\Framework\Object && $args[0]->getData($attributeCode) === false) {
+            if (isset($args[0]) && $args[0] instanceof \Magento\Framework\DataObject && $args[0]->getData($attributeCode) === false) {
                 return false;
             }
         }
@@ -114,7 +114,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Retrieve select object for loading entity attributes values
      * Join attribute store value
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param string $table
      * @return \Magento\Framework\DB\Select
      */
@@ -239,7 +239,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             );
         }
 
-        $data = new \Magento\Framework\Object(
+        $data = new \Magento\Framework\DataObject(
             [
                 'attribute_id' => $attribute->getAttributeId(),
                 'store_id' => $storeId,
@@ -277,7 +277,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Insert entity attribute value
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param AbstractAttribute $attribute
      * @param mixed $value
      * @return $this
@@ -300,7 +300,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 $row = $this->getConnection()->fetchOne($select);
 
                 if (!$row) {
-                    $data = new \Magento\Framework\Object(
+                    $data = new \Magento\Framework\DataObject(
                         [
                             'attribute_id' => $attribute->getAttributeId(),
                             'store_id' => $this->getDefaultStoreId(),
@@ -320,7 +320,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Update entity attribute value
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param AbstractAttribute $attribute
      * @param mixed $valueId
      * @param mixed $value
@@ -382,7 +382,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Delete entity attribute values
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param string $table
      * @param array $info
      * @return $this
@@ -451,8 +451,8 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Retrieve Object instance with original data
      *
-     * @param \Magento\Framework\Object $object
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getOrigObject($object)
     {
@@ -624,7 +624,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Reset firstly loaded attributes
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this
