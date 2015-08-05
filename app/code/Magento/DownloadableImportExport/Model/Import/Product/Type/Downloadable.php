@@ -49,6 +49,16 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     const DOWNLOADABLE_PATCH_LINK_SAMPLES = 'downloadable/files/link_samples';
 
     /**
+     * Type option for url
+     */
+    const URL_OPTION_VALUE = 'url';
+
+    /**
+     * Type option for file
+     */
+    const FILE_OPTION_VALUE = 'file';
+
+    /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $mediaDirectory;
@@ -464,12 +474,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     public function getNormalData(array $base, array $replacement){
         $result = [];
-        $keys = array_intersect_key($base, current($replacement));
         foreach($replacement as $item){
-            foreach($keys as $key => $value){
-                $base[$key] = $item[$key];
-            }
-            $result[] = $base;
+            $result[] = array_intersect_key($item, $base);
         }
         return $result;
     }
@@ -515,9 +521,9 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @return string
      */
     protected function getTypeByValue($option){
-        $result = 'file';
+        $result = self::FILE_OPTION_VALUE;
         if (preg_match('/\bhttps?:\/\//i', $option)) {
-            $result = 'url';
+            $result = self::URL_OPTION_VALUE;
         }
         return $result;
     }
@@ -600,11 +606,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if ($key == 'sample') {
                     $option['sample_type'] = $this->getTypeByValue($value);
                     $option['sample_' . $option['sample_type']] = $value;
-                    if ($option['sample_type'] == 'file'){
+                    if ($option['sample_type'] == self::FILE_OPTION_VALUE){
                         $value = $this->uploadDownloadableFiles($value, 'link_samples', true);
                     }
                 }
-                if ($key == 'url' || $key == 'file'){
+                if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE){
                     $option['link_type'] = $key;
                 }
                 if ($key == 'downloads' && $value == 'unlimited'){
@@ -613,7 +619,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (isset($this->optionLinkMapping[$key])) {
                     $key = $this->optionLinkMapping[$key];
                 }
-                if ($key == 'file'){
+                if ($key == self::FILE_OPTION_VALUE){
                     $value = $this->uploadDownloadableFiles($value, 'links', true);
                 }
                 $option[$key] = $value;
@@ -637,13 +643,13 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             if ($pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR)) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
-                if ($key == 'url' || $key == 'file'){
+                if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE){
                     $option['sample_type'] = $key;
                 }
                 if (isset($this->optionSampleMapping[$key])) {
                     $key = $this->optionSampleMapping[$key];
                 }
-                if ($key == 'file'){
+                if ($key == self::FILE_OPTION_VALUE){
                     $value = $this->uploadDownloadableFiles($value, 'samples', true);
                 }
                 $option[$key] = $value;
