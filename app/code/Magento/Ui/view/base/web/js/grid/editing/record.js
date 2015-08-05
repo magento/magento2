@@ -87,7 +87,9 @@ define([
         },
 
         /**
+         * Creates new instance of an editor.
          *
+         * @param {Column} column - Column instance associtaed with an editor.
          * @returns {Record} Chainable.
          */
         createEditor: function (column) {
@@ -108,7 +110,9 @@ define([
         },
 
         /**
+         * Builds editors configuration described in a provided column.
          *
+         * @param {Column} column - Column instance which contains editor definition.
          * @returns {Object}
          */
         getColumnEditor: function (column) {
@@ -160,7 +164,9 @@ define([
         },
 
         /**
+         * Returns instance of an editor found by provided identifier.
          *
+         * @param {String} index - Identifier of an editor inside record.
          * @returns {Object}
          */
         getEditor: function (index) {
@@ -170,6 +176,7 @@ define([
         },
 
         /**
+         * Replaces current records' with the provided one.
          *
          * @returns {Record} Chainable.
          */
@@ -180,7 +187,9 @@ define([
         },
 
         /**
+         * Validate all of the available fields.
          *
+         * @returns {Array} An array with validatation results.
          */
         validate: function () {
             return this.elems.map('validate');
@@ -200,7 +209,9 @@ define([
         },
 
         /**
+         * Listner of columns provider child array changes.
          *
+         * @param {Array} columns - Modified child elements array.
          */
         onColumnsUpdate: function (columns) {
             this.createEditors(columns)
