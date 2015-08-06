@@ -95,6 +95,7 @@ define([
                 dep,
                 returnObject = true,
                 lastWidth,
+                lst,
                 resizeMousedown = function (event) {
                     var get = t._get();
                     cur.id = get.columnId(event);
@@ -108,16 +109,26 @@ define([
                     $(window).bind('mouseup', resizeMouseup);
                 },
                 resizeMousemove = function (event) {
-                    if (cfg.resizable) {
-                        var width = event.pageX - cur.position;
+                    var width = event.pageX - cur.position;
 
+                    if (cfg.resizable
+                        && cfg.columnsMinWidth[cur.id] < cfg.columnsWidth[cur.id] + width
+                        && cfg.columnsMinWidth[dep.id] < cfg.columnsWidth[dep.id] - width ) {
                         if (lastWidth !== width ) {
                             cfg.columnsWidth[cur.id] = cfg.columnsWidth[cur.id] + width;
                             cfg.columnsWidth[dep.id] = cfg.columnsWidth[dep.id] - width;
-                            t._set().updateWidth();
+                            $(cfg.columnsElements[cur.id][0]).outerWidth(cfg.columnsWidth[cur.id]);
+                            $(cfg.columnsElements[dep.id][0]).outerWidth(cfg.columnsWidth[dep.id]);
+                            //t._set().updateWidth();
                             lastWidth = width;
                             cur.position = event.pageX;
                         }
+                    } else if (width <= -(cfg.columnsWidth[cur.id] - cfg.columnsMinWidth[cur.id]) ) {
+                        $(cfg.columnsElements[cur.id][0]).outerWidth(cfg.columnsMinWidth[cur.id]);
+                        $(cfg.columnsElements[dep.id][0]).outerWidth(cfg.columnsWidth[dep.id] + cfg.columnsWidth[cur.id] - cfg.columnsMinWidth[cur.id]);
+                    } else if (width >= cfg.columnsWidth[dep.id] - cfg.columnsMinWidth[dep.id]) {
+                        $(cfg.columnsElements[dep.id][0]).outerWidth(cfg.columnsMinWidth[dep.id]);
+                        $(cfg.columnsElements[cur.id][0]).outerWidth(cfg.columnsWidth[cur.id] + cfg.columnsWidth[dep.id] - cfg.columnsMinWidth[dep.id]);
                     }
                 },
                 resizeMouseup = function () {
@@ -165,9 +176,25 @@ define([
                 cfg = this.resizeConfig;
 
             return {
+                columnsMinWidth: function (columnsElement, columnsLength, columnsWidth) {
+                    var ce = columnsElement || cfg.columnsElements || this.columnsElements(),
+                        cw = columnsWidth || cfg.columnsWidth || this.columnsWidth(),
+                        length = columnsLength || cfg.columnsLength || this.columnsLength(),
+                        i = 0,
+                        array = [];
+
+                    for (i; i < length; i++) {
+                        array.push($(ce[i]).width(1).outerWidth());
+                        //$(ce[i]).css('width', 'auto');
+                        $(ce[i]).outerWidth(ce[i]);
+                    }
+                    cfg.columnsMinWidth = array;
+                    console.log(cfg.columnsMinWidth);
+                    return array;
+                },
 
                 /**
-                 * @see take columns width and push to array
+                 * @see update columns width and push to array
                  * @param {Array} columnsElement - columns
                  * @returns {Array} with width of all columns
                  */
@@ -180,6 +207,8 @@ define([
                     for (i; i < length; i++) {
                         $(ce[i]).outerWidth(cw[i]);
                     }
+
+                    return columnsWidth;
                 },
 
                 /**
@@ -421,6 +450,7 @@ define([
             set.cellsInColumn();    //{Number}  - set to this.config.cellsInColumn
             set.columnsElements();  //{Array}   - set to this.config.columnsElements
             set.columnsWidth();     //{Array}   - set to this.config.columnsWidth
+            set.columnsMinWidth();     //{Array}   - set to this.config.columnsWidth
             set.rowsElements();     //{Array}   - set to this.config.rowsElements
             set.rowsMaxHeight();    //{Array}   - set to this.config.rowsMaxHeight
             add.dataAttribute();    //{Object}  - add data attribute to table cells
