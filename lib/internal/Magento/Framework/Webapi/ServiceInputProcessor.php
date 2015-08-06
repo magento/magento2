@@ -84,6 +84,7 @@ class ServiceInputProcessor
      * @param array $inputArray data to send to method in key-value format
      * @return array list of parameters that can be used to call the service method
      * @throws InputException if no value is provided for required parameters
+     * @throws WebapiException
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
     {
@@ -97,7 +98,11 @@ class ServiceInputProcessor
                     ? $inputArray[$paramName]
                     : $inputArray[$snakeCaseParamName];
 
-                $inputData[] = $this->_convertValue($paramValue, $param['type']);
+                try {
+                    $inputData[] = $this->convertValue($paramValue, $param['type']);
+                } catch (SerializationException $e) {
+                    throw new WebapiException(new Phrase($e->getMessage()));
+                }
             } else {
                 if ($param['isDefaultValueAvailable']) {
                     $inputData[] = $param['defaultValue'];
@@ -106,17 +111,7 @@ class ServiceInputProcessor
                 }
             }
         }
-
-        if (!empty($inputError)) {
-            $exception = new InputException();
-            foreach ($inputError as $errorParamField) {
-                $exception->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
-            }
-            if ($exception->wasErrorAdded()) {
-                throw $exception;
-            }
-        }
-
+        $this->processInputError($inputError);
         return $inputData;
     }
 
@@ -159,7 +154,7 @@ class ServiceInputProcessor
                 if ($camelCaseProperty === 'CustomAttributes') {
                     $setterValue = $this->convertCustomAttributeValue($value, $className);
                 } else {
-                    $setterValue = $this->_convertValue($value, $returnType);
+                    $setterValue = $this->convertValue($value, $returnType);
                 }
                 $object->{$setterName}($setterValue);
             }
@@ -206,7 +201,7 @@ class ServiceInputProcessor
                     $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
                 }
             } else {
-                $attributeValue = $this->_convertValue($customAttributeValue, $type);
+                $attributeValue = $this->convertValue($customAttributeValue, $type);
             }
             //Populate the attribute value data object once the value for custom attribute is derived based on type
             $result[$customAttributeCode] = $this->attributeValueFactory->create()
@@ -245,21 +240,16 @@ class ServiceInputProcessor
      * @param mixed $value
      * @param string $type Convert given value to the this type
      * @return mixed
-     * @throws WebapiException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _convertValue($value, $type)
+    public function convertValue($value, $type)
     {
         $isArrayType = $this->typeProcessor->isArrayType($type);
         if ($isArrayType && isset($value['item'])) {
             $value = $this->_removeSoapItemNode($value);
         }
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
-            try {
-                $result = $this->typeProcessor->processSimpleAndAnyType($value, $type);
-            } catch (SerializationException $e) {
-                throw new WebapiException(new Phrase($e->getMessage()));
-            }
+            $result = $this->typeProcessor->processSimpleAndAnyType($value, $type);
         } else {
             /** Complex type or array of complex types */
             if ($isArrayType) {
@@ -335,5 +325,25 @@ class ServiceInputProcessor
         }
         $this->cache->save(serialize($params), $cacheId, [WebapiCache::CACHE_TAG]);
         return $params;
+    }
+
+    /**
+     * Process an input error
+     *
+     * @param array $inputError
+     * @return void
+     * @throws InputException
+     */
+    protected function processInputError($inputError)
+    {
+        if (!empty($inputError)) {
+            $exception = new InputException();
+            foreach ($inputError as $errorParamField) {
+                $exception->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
+            }
+            if ($exception->wasErrorAdded()) {
+                throw $exception;
+            }
+        }
     }
 }
