@@ -12,8 +12,6 @@ use Magento\Framework\App\State;
  */
 class Oyejorge implements \Magento\Framework\Css\PreProcessor\AdapterInterface
 {
-    const ERROR_MESSAGE_PREFIX = 'CSS compilation from LESS ';
-
     /**
      * @var \Psr\Log\LoggerInterface
      */
