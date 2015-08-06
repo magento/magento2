@@ -42,5 +42,4 @@ class AssertConfigurableProductInCategory extends AssertProductInCategory
             );
         }
     }
-
 }
