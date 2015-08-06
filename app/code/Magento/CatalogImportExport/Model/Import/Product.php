@@ -2294,7 +2294,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $source = $this->_getSource();
         $source->rewind();
         while ($source->valid()) {
-            $rowData = $source->current();
+            try {
+                $rowData = $source->current();
+            } catch (\InvalidArgumentException $e) {
+                $this->addRowError($e->getMessage(), $this->_processedRowsCount);
+                $this->_processedRowsCount++;
+                $source->next();
+                continue;
+            }
 
             $rowData = $this->_customFieldsMapping($rowData);
 
