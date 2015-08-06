@@ -25,8 +25,7 @@ class FileManager
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo
-    )
-    {
+    ) {
         $this->assetRepo = $assetRepo;
     }
 
