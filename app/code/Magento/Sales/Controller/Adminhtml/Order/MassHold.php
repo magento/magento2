@@ -18,12 +18,12 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
     protected function massAction(AbstractCollection $collection)
     {
         $countHoldOrder = 0;
+        $orderManagement = $this->_objectManager->get('Magento\Sales\Api\OrderManagementInterface');
         foreach ($collection->getItems() as $order) {
             if (!$order->canHold()) {
                 continue;
             }
-            $order->hold();
-            $order->save();
+            $orderManagement->hold($order->getEntityId());
             $countHoldOrder++;
         }
         $countNonHoldOrder = $collection->count() - $countHoldOrder;
