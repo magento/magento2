@@ -55,4 +55,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Block\Cart\Shipping">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="addressFormAttributes" xsi:type="object">Magento\Checkout\Block\Cart\LayoutProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

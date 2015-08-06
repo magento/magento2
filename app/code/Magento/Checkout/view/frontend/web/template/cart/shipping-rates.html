@@ -1,4 +1,10 @@
-<form id="co-shipping-method-form" data-bind="visible: (shippingRates().length > 0)">
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form id="co-shipping-method-form" data-bind="visible: (shippingRates().length > 0), blockLoader: isLoading">
     <fieldset class="fieldset rate">
         <dl class="items methods" data-bind="foreach: shippingRateGroups">
             <dt class="item-title"><span data-bind="text: $data"></span></dt>
@@ -21,7 +27,7 @@
         </dl>
         <div class="actions-toolbar">
             <div class="primary">
-                <button class="action primary update" data-bind="click: setShippingMethod"><span>Update Total</span></button>
+                <button class="action primary update" data-bind="click: setShippingMethod"><span data-bind="text: $t('Update Total')"></span></button>
             </div>
         </div>
     </fieldset>
