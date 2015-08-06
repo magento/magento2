@@ -1,0 +1,231 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\ImportExport\Test\Unit\Model\Import\ErrorProcessing;
+
+class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
+{
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError
+     */
+    protected $model;
+
+    public function setUp()
+    {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject('\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError');
+    }
+
+    /**
+     * @dataProvider errorMessageInfo
+     */
+    public function testInit($initData)
+    {
+        $errorLevel = isset($initData['errorLevel']) ? $initData['errorLevel'] : null;
+        $rowNumber = isset($initData['rowNumber']) ? $initData['rowNumber'] : null;
+        $columnName = isset($initData['columnName']) ? $initData['columnName'] : null;
+        $errorMessage = isset($initData['errorMessage']) ? $initData['errorMessage'] : null;
+        $errorDescription = isset($initData['errorDescription']) ? $initData['errorDescription'] : null;
+
+        $this->model->init(
+            $initData['errorCode'],
+            $errorLevel,
+            $rowNumber,
+            $columnName,
+            $errorMessage,
+            $errorDescription
+        );
+    }
+
+    public function errorMessageInfo()
+    {
+        return [
+            [
+                [
+                    'errorCode' => 5,
+                    'errorLevel' => 'critical',
+                    'rowNumber' => 7,
+                    'columnName' => 25,
+                    'errorMessage' => 'some error message',
+                    'errorDescription' => 'some error description'
+                ]
+            ],
+            [
+                [
+                    'errorCode' => 5,
+                    'errorLevel' => null,
+                    'rowNumber' => null,
+                    'columnName' => null,
+                    'errorMessage' => null,
+                    'errorDescription' => null
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider errorCodeData
+     */
+    public function testGetErrorCode($data, $expectedValue)
+    {
+        $this->testInit($data);
+        $result = $this->model->getErrorCode();
+        $this->assertEquals($result, $expectedValue);
+    }
+
+    public function errorCodeData()
+    {
+        return [
+            [
+                ['errorCode' => 5],
+                5
+            ],
+            [
+                ['errorCode' => null],
+                null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider errorMessageData
+     */
+    public function testGetErrorMessage($data, $expectedValue)
+    {
+        $this->testInit($data);
+        $result = $this->model->getErrorMessage();
+        $this->assertEquals($result, $expectedValue);
+    }
+
+    public function errorMessageData()
+    {
+        return [
+            [
+                ['errorCode' => 5, 'errorMessage' => 'Some error message'],
+                'Some error message'
+            ],
+            [
+                ['errorCode' => 5],
+                null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider rowNumberData
+     */
+    public function testGetRowNumber($data, $expectedValue)
+    {
+        $this->testInit($data);
+        $result = $this->model->getRowNumber();
+        $this->assertEquals($result, $expectedValue);
+    }
+
+    public function rowNumberData()
+    {
+        return [
+            [
+                ['errorCode' => 5, 'errorMessage' => 'Some error message', 'rowNumber' => 43],
+                43
+            ],
+            [
+                ['errorCode' => 5],
+                null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider columnNameData
+     */
+    public function testGetColumnName($data, $expectedValue)
+    {
+        $this->testInit($data);
+        $result = $this->model->getColumnName();
+        $this->assertEquals($result, $expectedValue);
+    }
+
+    public function columnNameData()
+    {
+        return [
+            [
+                [
+                    'errorCode' => 5,
+                    'errorMessage' => 'Some error message',
+                    'rowNumber' => 43,
+                    'columnName' => 'Some column name'
+                ],
+                'Some column name'
+            ],
+            [
+                ['errorCode' => 5],
+                null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider errorLevelData
+     */
+    public function testGetErrorLevel($data, $expectedValue)
+    {
+        $this->testInit($data);
+        $result = $this->model->getErrorLevel();
+        $this->assertEquals($result, $expectedValue);
+    }
+
+    public function errorLevelData()
+    {
+        return [
+            [
+                [
+                    'errorCode' => 5,
+                    'errorMessage' => 'Some error message',
+                    'rowNumber' => 43,
+                    'columnName' => 'Some column name',
+                    'errorLevel' => 'critical'
+                ],
+                'critical'
+            ],
+            [
+                ['errorCode' => 5],
+                null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider errorDescriptionData
+     */
+    public function testGetErrorDescription($data, $expectedValue)
+    {
+        $this->testInit($data);
+        $result = $this->model->getErrorDescription();
+        $this->assertEquals($result, $expectedValue);
+    }
+
+    public function errorDescriptionData()
+    {
+        return [
+            [
+                [
+                    'errorCode' => 5,
+                    'errorMessage' => 'Some error message',
+                    'rowNumber' => 43,
+                    'columnName' => 'Some column name',
+                    'errorLevel' => 'critical',
+                    'errorDescription' => 'Some error description'
+                ],
+                'Some error description'
+            ],
+            [
+                ['errorCode' => 5],
+                null
+            ],
+        ];
+    }
+}
+ 
