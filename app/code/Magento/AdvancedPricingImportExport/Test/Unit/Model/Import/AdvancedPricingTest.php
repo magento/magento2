@@ -230,7 +230,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             false
         );
         $this->stringObject = $this->getMock(
-            '\Magento\Framework\Stdlib\String',
+            '\Magento\Framework\Stdlib\StringUtils',
             [],
             [],
             '',

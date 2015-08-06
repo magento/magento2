@@ -87,9 +87,14 @@ interface ProcessingErrorAggregatorInterface
     /**
      * @param array $errorCode
      * @param array $excludedCodes
-     * @return array
+     * @param bool|true $replaceCodeWithMessage
+     * @return mixed
      */
-    public function getRowsGroupedByErrorCode(array $errorCode = [], array $excludedCodes = []);
+    public function getRowsGroupedByErrorCode(
+        array $errorCode = [],
+        array $excludedCodes = [],
+        $replaceCodeWithMessage = true
+    );
 
     /**
      * @return int

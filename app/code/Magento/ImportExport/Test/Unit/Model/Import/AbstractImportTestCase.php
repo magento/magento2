@@ -6,6 +6,7 @@
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 abstract class AbstractImportTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -22,9 +23,10 @@ abstract class AbstractImportTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     * @param array|null $methods
+     * @return ProcessingErrorAggregatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getErrorAggregatorObject()
+    protected function getErrorAggregatorObject($methods = null)
     {
         $errorFactory = $this->getMockBuilder(
             'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
@@ -34,11 +36,9 @@ abstract class AbstractImportTestCase extends \PHPUnit_Framework_TestCase
         $errorFactory->method('create')->willReturn(
             $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
         );
-        return $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            [
-                'errorFactory' => $errorFactory
-            ]
-        );
+        return $this->getMockBuilder('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator')
+            ->setMethods($methods)
+            ->setConstructorArgs(['errorFactory' => $errorFactory])
+            ->getMock();
     }
 }
