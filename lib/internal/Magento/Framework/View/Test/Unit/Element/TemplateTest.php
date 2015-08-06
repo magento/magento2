@@ -132,7 +132,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testSetTemplateContext()
     {
         $template = 'themedir/template.phtml';
-        $context = new \Magento\Framework\Object();
+        $context = new \Magento\Framework\DataObject();
         $this->_validator->expects($this->once())
             ->method('isValid')
             ->with($template)

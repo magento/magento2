@@ -315,7 +315,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $wishlist
             ->expects($this->once())
             ->method('updateItem')
-            ->with(3, new \Magento\Framework\Object([]))
+            ->with(3, new \Magento\Framework\DataObject([]))
             ->willReturnSelf();
         $wishlist
             ->expects($this->once())
@@ -443,7 +443,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $wishlist
             ->expects($this->once())
             ->method('updateItem')
-            ->with(3, new \Magento\Framework\Object([]))
+            ->with(3, new \Magento\Framework\DataObject([]))
             ->willReturnSelf();
         $wishlist
             ->expects($this->once())
