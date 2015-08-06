@@ -42,6 +42,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     const EMPTY_IMAGE_VALUE = 'no_selection';
 
     /**
+     * Action name for ajax request
+     */
+    const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
+
+    /**
      * @var Product
      */
     protected $product;
@@ -368,5 +373,12 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     protected function getHtmlOutput()
     {
         return parent::_toHtml();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMediaCallback() {
+        return $this->getBaseUrl() . self::MEDIA_CALLBACK_ACTION;
     }
 }

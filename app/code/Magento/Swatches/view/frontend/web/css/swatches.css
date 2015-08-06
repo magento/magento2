@@ -274,5 +274,5 @@ div[class^="swatch-opt-"] {
 }
 
 .swatch-option-loading {
-    content: url("/pub/static/frontend/Magento/blank/en_US/images/loader-2.gif");
+    content: url("../../images/loader-2.gif");
 }
