@@ -31,8 +31,10 @@ class Renderer
      * @param AddressConfig $addressConfig
      * @param EventManager $eventManager
      */
-    public function __construct(AddressConfig $addressConfig, EventManager $eventManager)
-    {
+    public function __construct(
+        AddressConfig $addressConfig,
+        EventManager $eventManager
+    ) {
         $this->addressConfig = $addressConfig;
         $this->eventManager = $eventManager;
     }

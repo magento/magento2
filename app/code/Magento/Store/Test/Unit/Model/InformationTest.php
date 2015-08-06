@@ -16,7 +16,7 @@ class InformationTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $store;
 
@@ -54,7 +54,7 @@ class InformationTest extends \PHPUnit_Framework_TestCase
             Information::XML_PATH_STORE_INFO_CITY => 'Aldburg',
             Information::XML_PATH_STORE_INFO_POSTCODE => '65804',
             Information::XML_PATH_STORE_INFO_REGION_CODE => 1989,
-            Information::XML_PATH_STORE_INFO_COUNTRY_CODE => 'US',
+            Information::XML_PATH_STORE_INFO_COUNTRY_CODE => 'ED',
             Information::XML_PATH_STORE_INFO_VAT_NUMBER => '123456789',
         ];
 
@@ -85,8 +85,8 @@ class InformationTest extends \PHPUnit_Framework_TestCase
         $this->regionFactory->expects($this->once())->method('create')->willReturn($region);
 
         $country = $this->getMock('Magento\Framework\DataObject', ['loadByCode', 'getName']);
-        $country->expects($this->once())->method('loadByCode')->with('US')->willReturnSelf();
-        $country->expects($this->once())->method('getName')->willReturn('United States');
+        $country->expects($this->once())->method('loadByCode')->with('ED')->willReturnSelf();
+        $country->expects($this->once())->method('getName')->willReturn('Edoras');
 
         $this->countryFactory = $this->getMock('Magento\Directory\Model\CountryFactory', [], [], '', false);
         $this->countryFactory->expects($this->once())->method('create')->willReturn($country);
@@ -104,7 +104,7 @@ class InformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormattedAddress()
     {
-        $expected = implode("\n", $this->mockConfigData + ['country' => 'Rohan', 'region' => 'United States']);
+        $expected = implode("\n", $this->mockConfigData + ['country' => 'Rohan', 'region' => 'Edoras']);
         $result = $this->model->getFormattedAddress($this->store);
         $this->assertEquals($expected, $result);
     }
