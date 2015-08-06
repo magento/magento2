@@ -8,7 +8,7 @@ namespace Magento\Framework\Composer;
 
 use Composer\Factory as ComposerFactory;
 use Composer\Package\Link;
-use Composer\Package\PackageInterface;
+use Composer\Package\CompletePackageInterface;
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -107,9 +107,9 @@ class ComposerInformation
             $requiredPhpVersion = $allPlatformReqs['php']->getPrettyConstraint();
         } else {
             $packages = $this->locker->getLockedRepository()->getPackages();
-            /** @var PackageInterface $package */
+            /** @var CompletePackageInterface $package */
             foreach ($packages as $package) {
-                if ($package instanceof PackageInterface) {
+                if ($package instanceof CompletePackageInterface) {
                     $packageName = $package->getPrettyName();
                     if ($packageName === 'magento/product-community-edition') {
                         $phpRequirementLink = $package->getRequires()['php'];
@@ -141,7 +141,7 @@ class ComposerInformation
         $allPlatformReqs = array_keys($this->locker->getPlatformRequirements(true));
 
         if (!$this->isMagentoRoot()) {
-            /** @var \Composer\Package\CompletePackage $package */
+            /** @var CompletePackageInterface $package */
             foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
                 $requires = array_merge($requires, array_keys($package->getDevRequires()));
@@ -164,7 +164,7 @@ class ComposerInformation
     public function getRootRequiredPackages()
     {
         $packages = [];
-        /** @var PackageInterface $package */
+        /** @var CompletePackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             $packages[] = $package->getName();
         }
@@ -179,7 +179,7 @@ class ComposerInformation
     public function getRootRequiredPackageTypesByName()
     {
         $packages = [];
-        /** @var PackageInterface $package */
+        /** @var CompletePackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             $packages[$package->getName()] = $package->getType();
         }
@@ -194,14 +194,22 @@ class ComposerInformation
     public function getInstalledMagentoPackages()
     {
         $packages = [];
-        /** @var PackageInterface $package */
+        /** @var CompletePackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             if ((in_array($package->getType(), self::$packageTypes))
                 && (!$this->isSystemPackage($package->getPrettyName()))) {
+                $moduleName = '';
+                $extra = $package->getExtra();
+                if (isset($extra['map'])) {
+                    $modulePath = $extra['map'][0][1];
+                    $moduleName = substr($modulePath, strpos($modulePath, '/')+1);
+                }
                 $packages[$package->getName()] = [
                     'name' => $package->getName(),
                     'type' => $package->getType(),
-                    'version' => $package->getPrettyVersion()
+                    'version' => $package->getPrettyVersion(),
+                    'author' => $this->getAuthors($package),
+                    'moduleName' => $moduleName
                 ];
             }
         }
@@ -334,7 +342,7 @@ class ComposerInformation
     private function savePackagesForUpdateToCache($availableVersions)
     {
         $syncInfo = [];
-        $syncInfo['lastSyncDate'] = $this->dateTime->formatDate(true);
+        $syncInfo['lastSyncDate'] = str_replace('-', '/', $this->dateTime->formatDate(true));
         $syncInfo['packages'] = $availableVersions;
         $data = json_encode($syncInfo, JSON_UNESCAPED_SLASHES);
         try {
@@ -373,5 +381,18 @@ class ComposerInformation
         return (in_array($packageName, array_keys($this->composer->getPackage()->getRequires()))
             || in_array($packageName, array_keys($this->composer->getPackage()->getDevRequires()))
         );
+    }
+
+    /**
+     * Return authors
+     *
+     * @param CompletePackageInterface $package
+     * @return string
+     */
+    private function getAuthors(CompletePackageInterface $package)
+    {
+        return $package->getAuthors()
+            ? implode(', ', array_column($package->getAuthors(), 'name'))
+            : strtok($package->getName(), '/');
     }
 }
