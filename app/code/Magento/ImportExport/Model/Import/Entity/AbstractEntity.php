@@ -35,6 +35,9 @@ abstract class AbstractEntity
     const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
     const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
     const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
+    const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
+    const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
+    const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
 
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
@@ -43,6 +46,9 @@ abstract class AbstractEntity
         self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%1" are invalid',
         self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
         self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
+        self::ERROR_CODE_ILLEGAL_CHARACTERS => "Illegal character used for attribute %s",
+        self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
+        self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
     ];
 
     /**
@@ -342,7 +348,14 @@ abstract class AbstractEntity
                 $nextRowBackup = [];
             }
             if ($source->valid()) {
-                $rowData = $source->current();
+                try {
+                    $rowData = $source->current();
+                } catch (\InvalidArgumentException $e) {
+                    $this->addRowError($e->getMessage(), $this->_processedRowsCount);
+                    $this->_processedRowsCount++;
+                    $source->next();
+                    continue;
+                }
 
                 $this->_processedRowsCount++;
 

@@ -48,6 +48,9 @@ abstract class AbstractEntity
     const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
     const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
     const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
+    const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
+    const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
+    const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
 
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
@@ -56,6 +59,9 @@ abstract class AbstractEntity
         self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%1" are invalid',
         self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
         self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
+        self::ERROR_CODE_ILLEGAL_CHARACTERS => "Illegal character used for attribute %s",
+        self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
+        self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
     ];
 
     /**#@-*/
@@ -348,7 +354,24 @@ abstract class AbstractEntity
                 $startNewBunch = false;
             }
             if ($source->valid()) {
-                $rowData = $source->current();
+                $valid = true;
+                try {
+                    $rowData = $source->current();
+                    foreach ($rowData as $attrName => $element) {
+                        if (!mb_check_encoding($element, 'UTF-8')) {
+                            $valid = false;
+                            $this->addRowError(AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS, $this->_processedRowsCount, $attrName);
+                        }
+                    }
+                } catch (\InvalidArgumentException $e) {
+                    $valid = false;
+                    $this->addRowError($e->getMessage(), $this->_processedRowsCount);
+                }
+                if (!$valid) {
+                    $this->_processedRowsCount++;
+                    $source->next();
+                    continue;
+                }
 
                 if (isset($rowData[$masterAttributeCode]) && trim($rowData[$masterAttributeCode])) {
                     /* Add entity group that passed validation to bunch */
@@ -633,7 +656,7 @@ abstract class AbstractEntity
      * @param int $rowNumber
      * @return bool
      */
-    abstract public function validateRow(array $rowData, $rowNumber);
+    abstract function validateRow(array $rowData, $rowNumber);
 
     /**
      * Set data from outside to change behavior

@@ -94,13 +94,18 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
         $this->_rowData = $rowData;
-        if ($attrParams['is_required']) {
+        if ($attrCode == Product::COL_SKU || $attrParams['is_required']
+            && ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
+                || ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
+                    && !isset($this->context->getOldSku()[$rowData[$attrCode]])))
+        ) {
             if (!isset($rowData[$attrCode]) && !strlen(trim($rowData[$attrCode]))) {
                 $valid = false;
                 $this->_addMessages([RowValidatorInterface::ERROR_VALUE_IS_REQUIRED]);
                 return $valid;
             }
         }
+
         if (!isset($rowData[$attrCode])) {
             return true;
         }
