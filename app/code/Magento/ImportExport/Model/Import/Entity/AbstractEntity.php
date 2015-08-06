@@ -653,6 +653,16 @@ abstract class AbstractEntity
     }
 
     /**
+     * Get data from outside to change behavior. I.e. for setting some default parameters etc.
+     *
+     * @return array $params
+     */
+    public function getParameters()
+    {
+        return $this->_parameters;
+    }
+
+    /**
      * Source model setter.
      *
      * @param AbstractSource $source
