@@ -69,7 +69,15 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
 
-    const ERROR_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicatedUniqueAttribute'; //Duplicate Unique Attribute
+    const ERROR_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicatedUniqueAttribute';
+
+    const ERROR_INVALID_VARIATIONS_CUSTOM_OPTIONS = 'invalidVariationsCustomOptions';
+
+    const ERROR_INVALID_MEDIA_URL = 'invalidMediaUrl';
+
+    const ERROR_MEDIA_URL_NOT_ACCESSIBLE = 'mediaUrlNotAvailable';
+
+    const ERROR_MEDIA_PATH_NOT_ACCESSIBLE = 'mediaPathNotAvailable';
 
     /**
      * Value that means all entities (e.g. websites, groups etc.)
