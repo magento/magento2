@@ -31,11 +31,16 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected $_uniqueAttributes;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @var array
+     */
+    protected $_rowData;
+
+    /**
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param RowValidatorInterface[] $validators
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         $validators = []
     ) {
         $this->string = $string;
@@ -43,13 +48,13 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * @param mixed $value
+     * @param mixed $attrCode
      * @param string $type
      * @return bool
      */
-    protected function textValidation($value, $type)
+    protected function textValidation($attrCode, $type)
     {
-        $val = $this->string->cleanString($value);
+        $val = $this->string->cleanString($this->_rowData[$attrCode]);
         if ($type == 'text') {
             $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
         } else {
@@ -62,20 +67,20 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * @param mixed $value
+     * @param mixed $attrCode
      * @param string $type
      * @return bool
      */
-    protected function numericValidation($value, $type)
+    protected function numericValidation($attrCode, $type)
     {
-        $val = trim($value);
+        $val = trim($this->_rowData[$attrCode]);
         if ($type == 'int') {
             $valid = (string)(int)$val === $val;
         } else {
             $valid = is_numeric($val);
         }
         if (!$valid) {
-            $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
+            $this->_addMessages([sprintf($this->context->retrieveMessageTemplate(RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE), $attrCode, $type)]);
         }
         return $valid;
     }
@@ -88,6 +93,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
+        $this->_rowData = $rowData;
         if ($attrParams['is_required']) {
             if (!isset($rowData[$attrCode]) && !strlen(trim($rowData[$attrCode]))) {
                 $valid = false;
@@ -101,17 +107,17 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         switch ($attrParams['type']) {
             case 'varchar':
             case 'text':
-                $valid = $this->textValidation($rowData[$attrCode], $attrParams['type']);
+                $valid = $this->textValidation($attrCode, $attrParams['type']);
                 break;
             case 'decimal':
             case 'int':
-                $valid = $this->numericValidation($rowData[$attrCode], $attrParams['type']);
+                $valid = $this->numericValidation($attrCode, $attrParams['type']);
                 break;
             case 'select':
             case 'multiselect':
                 $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
                 if (!$valid) {
-                    $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION]);
+                    $this->_addMessages([sprintf($this->context->retrieveMessageTemplate(RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION), $attrCode)]);
                 }
                 break;
             case 'datetime':
@@ -138,11 +144,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * @param array $rowData
      * @return bool
      */
-    public function isValidAttributes($rowData)
+    protected function isValidAttributes()
     {
+        $rowData = $this->_rowData;
         $this->_clearMessages();
         $sku = $rowData['sku'];
         $newSku = $this->context->getNewSku($sku);
@@ -164,6 +170,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     public function isValid($value)
     {
+        $this->_rowData = $value;
         $returnValue = true;
         $this->_clearMessages();
         foreach ($this->validators as $validator) {
