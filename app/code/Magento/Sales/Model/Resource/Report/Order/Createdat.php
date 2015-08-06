@@ -47,9 +47,9 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
      */
     protected function _aggregateByField($aggregationField, $from, $to)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
-        $adapter->beginTransaction();
+        $connection->beginTransaction();
         try {
             if ($from !== null || $to !== null) {
                 $subSelect = $this->_getTableDateRangeSelect(
@@ -64,7 +64,7 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
             }
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
 
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['o' => $this->getTable('sales_order')],
                     'o.' . $aggregationField,
@@ -83,116 +83,116 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
                 'total_income_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM((%s - %s) * %s)',
-                        $adapter->getIfNullSql('o.base_grand_total', 0),
-                        $adapter->getIfNullSql('o.base_total_canceled', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_grand_total', 0),
+                        $connection->getIfNullSql('o.base_total_canceled', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_revenue_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM((%s - %s - %s - (%s - %s - %s)) * %s)',
-                        $adapter->getIfNullSql('o.base_total_invoiced', 0),
-                        $adapter->getIfNullSql('o.base_tax_invoiced', 0),
-                        $adapter->getIfNullSql('o.base_shipping_invoiced', 0),
-                        $adapter->getIfNullSql('o.base_total_refunded', 0),
-                        $adapter->getIfNullSql('o.base_tax_refunded', 0),
-                        $adapter->getIfNullSql('o.base_shipping_refunded', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_total_invoiced', 0),
+                        $connection->getIfNullSql('o.base_tax_invoiced', 0),
+                        $connection->getIfNullSql('o.base_shipping_invoiced', 0),
+                        $connection->getIfNullSql('o.base_total_refunded', 0),
+                        $connection->getIfNullSql('o.base_tax_refunded', 0),
+                        $connection->getIfNullSql('o.base_shipping_refunded', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_profit_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM((%s - %s - %s - %s - %s) * %s)',
-                        $adapter->getIfNullSql('o.base_total_paid', 0),
-                        $adapter->getIfNullSql('o.base_total_refunded', 0),
-                        $adapter->getIfNullSql('o.base_tax_invoiced', 0),
-                        $adapter->getIfNullSql('o.base_shipping_invoiced', 0),
-                        $adapter->getIfNullSql('o.base_total_invoiced_cost', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_total_paid', 0),
+                        $connection->getIfNullSql('o.base_total_refunded', 0),
+                        $connection->getIfNullSql('o.base_tax_invoiced', 0),
+                        $connection->getIfNullSql('o.base_shipping_invoiced', 0),
+                        $connection->getIfNullSql('o.base_total_invoiced_cost', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_invoiced_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM(%s * %s)',
-                        $adapter->getIfNullSql('o.base_total_invoiced', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_total_invoiced', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_canceled_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM(%s * %s)',
-                        $adapter->getIfNullSql('o.base_total_canceled', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_total_canceled', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_paid_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM(%s * %s)',
-                        $adapter->getIfNullSql('o.base_total_paid', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_total_paid', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_refunded_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM(%s * %s)',
-                        $adapter->getIfNullSql('o.base_total_refunded', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_total_refunded', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_tax_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM((%s - %s) * %s)',
-                        $adapter->getIfNullSql('o.base_tax_amount', 0),
-                        $adapter->getIfNullSql('o.base_tax_canceled', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_tax_amount', 0),
+                        $connection->getIfNullSql('o.base_tax_canceled', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_tax_amount_actual' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM((%s -%s) * %s)',
-                        $adapter->getIfNullSql('o.base_tax_invoiced', 0),
-                        $adapter->getIfNullSql('o.base_tax_refunded', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_tax_invoiced', 0),
+                        $connection->getIfNullSql('o.base_tax_refunded', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_shipping_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM((%s - %s) * %s)',
-                        $adapter->getIfNullSql('o.base_shipping_amount', 0),
-                        $adapter->getIfNullSql('o.base_shipping_canceled', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_shipping_amount', 0),
+                        $connection->getIfNullSql('o.base_shipping_canceled', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_shipping_amount_actual' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM((%s - %s) * %s)',
-                        $adapter->getIfNullSql('o.base_shipping_invoiced', 0),
-                        $adapter->getIfNullSql('o.base_shipping_refunded', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_shipping_invoiced', 0),
+                        $connection->getIfNullSql('o.base_shipping_refunded', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_discount_amount' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM((ABS(%s) - %s) * %s)',
-                        $adapter->getIfNullSql('o.base_discount_amount', 0),
-                        $adapter->getIfNullSql('o.base_discount_canceled', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_discount_amount', 0),
+                        $connection->getIfNullSql('o.base_discount_canceled', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
                 'total_discount_amount_actual' => new \Zend_Db_Expr(
                     sprintf(
                         'SUM((%s - %s) * %s)',
-                        $adapter->getIfNullSql('o.base_discount_invoiced', 0),
-                        $adapter->getIfNullSql('o.base_discount_refunded', 0),
-                        $adapter->getIfNullSql('o.base_to_global_rate', 0)
+                        $connection->getIfNullSql('o.base_discount_invoiced', 0),
+                        $connection->getIfNullSql('o.base_discount_refunded', 0),
+                        $connection->getIfNullSql('o.base_to_global_rate', 0)
                     )
                 ),
             ];
 
-            $select = $adapter->select();
-            $selectOrderItem = $adapter->select();
+            $select = $connection->select();
+            $selectOrderItem = $connection->select();
 
-            $qtyCanceledExpr = $adapter->getIfNullSql('qty_canceled', 0);
+            $qtyCanceledExpr = $connection->getIfNullSql('qty_canceled', 0);
             $cols = [
                 'order_id' => 'order_id',
                 'total_qty_ordered' => new \Zend_Db_Expr("SUM(qty_ordered - {$qtyCanceledExpr})"),
@@ -225,7 +225,7 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
 
             $select->group([$periodExpr, 'o.store_id', 'o.status']);
 
-            $adapter->query($select->insertFromSelect($this->getMainTable(), array_keys($columns)));
+            $connection->query($select->insertFromSelect($this->getMainTable(), array_keys($columns)));
 
             // setup all columns to select SUM() except period, store_id and order_status
             foreach ($columns as $k => $v) {
@@ -243,10 +243,10 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
             }
 
             $select->group(['period', 'order_status']);
-            $adapter->query($select->insertFromSelect($this->getMainTable(), array_keys($columns)));
-            $adapter->commit();
+            $connection->query($select->insertFromSelect($this->getMainTable(), array_keys($columns)));
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
 

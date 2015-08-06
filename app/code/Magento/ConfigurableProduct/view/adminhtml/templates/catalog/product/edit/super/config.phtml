@@ -19,7 +19,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
         </div>
 
         <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php echo $block->getId() ?>-content">
-            <div class="product-create-configuration">
+            <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
                 <div class="product-create-configuration-info">
                     <div class="note">
                         <?= __('Configurable products allow customers to choose options (Ex: shirt color).
@@ -28,8 +28,14 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                 </div>
                 <div class="product-create-configuration-actions">
                     <button data-action="open-steps-wizard" title="Create Product Configurations"
-                            class="action-secondary" onclick="return openVariationsWizard();">
-                        <span><?= __('Create Configurations') ?></span>
+                            class="action-secondary" data-bind="click: open">
+                        <span data-role="button-label" data-edit-label="<?= __('Edit Configurations') ?>">
+                            <?= $block->getProduct()->getId()
+                                && $block->getProduct()->getTypeId() === 'configurable'
+                                ? __('Edit Configurations')
+                                : __('Create Configurations')
+                            ?>
+                        </span>
                     </button>
                 </div>
             </div>
@@ -47,15 +53,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
     </div>
 </div>
 <script>
-var openVariationsWizard = function() {
-    var $form = jQuery('[data-form=edit-product]');
-    if (!$form.valid()) {
-        $form.data('validator').focusInvalid();
-        return false;
-    }
-    jQuery('[data-role=step-wizard-dialog]').trigger('openModal');
-    return false;
-};
 require([
     'jquery',
     'mage/template',

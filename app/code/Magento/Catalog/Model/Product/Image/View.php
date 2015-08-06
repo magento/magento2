@@ -9,7 +9,7 @@
  */
 namespace Magento\Catalog\Model\Product\Image;
 
-class View extends \Magento\Framework\Object
+class View extends \Magento\Framework\DataObject
 {
     /**
      * Index of width image information

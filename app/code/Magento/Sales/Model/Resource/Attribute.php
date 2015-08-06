@@ -45,7 +45,7 @@ class Attribute
     protected function getConnection()
     {
         if (!$this->connection) {
-            $this->connection = $this->resource->getConnection('sales_write');
+            $this->connection = $this->resource->getConnection('sales');
         }
         return $this->connection;
     }

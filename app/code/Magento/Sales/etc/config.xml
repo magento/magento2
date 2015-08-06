@@ -21,6 +21,9 @@
             <minimum_order>
                 <tax_including>1</tax_including>
             </minimum_order>
+            <orders>
+                <delete_pending_after>480</delete_pending_after>
+            </orders>
         </sales>
         <sales_email>
             <general>

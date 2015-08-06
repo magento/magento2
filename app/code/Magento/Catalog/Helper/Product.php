@@ -222,7 +222,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     /**
      * Retrieve base image url
      *
-     * @param ModelProduct|\Magento\Framework\Object $product
+     * @param ModelProduct|\Magento\Framework\DataObject $product
      * @return string|bool
      */
     public function getImageUrl($product)
@@ -240,7 +240,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     /**
      * Retrieve small image url
      *
-     * @param ModelProduct|\Magento\Framework\Object $product
+     * @param ModelProduct|\Magento\Framework\DataObject $product
      * @return string|bool
      */
     public function getSmallImageUrl($product)
@@ -258,7 +258,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     /**
      * Retrieve thumbnail image url
      *
-     * @param ModelProduct|\Magento\Framework\Object $product
+     * @param ModelProduct|\Magento\Framework\DataObject $product
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -398,7 +398,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param int $productId
      * @param \Magento\Framework\App\Action\Action $controller
-     * @param \Magento\Framework\Object $params
+     * @param \Magento\Framework\DataObject $params
      *
      * @return false|ModelProduct
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -408,7 +408,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     {
         // Prepare data for routine
         if (!$params) {
-            $params = new \Magento\Framework\Object();
+            $params = new \Magento\Framework\DataObject();
         }
 
         // Init and load product
@@ -479,7 +479,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Also parses and adds product management related values - e.g. qty
      *
      * @param ModelProduct $product
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @return Product
      */
     public function prepareProductOptions($product, $buyRequest)
@@ -496,30 +496,30 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * This method is used to attach additional parameters to processed buyRequest.
      *
      * $params holds parameters of what operation must be performed:
-     * - 'current_config', \Magento\Framework\Object or array - current buyRequest that configures product in this item,
-     *   used to restore currently attached files
+     * - 'current_config', \Magento\Framework\DataObject or array - current buyRequest
+     *   that configures product in this item, used to restore currently attached files
      * - 'files_prefix': string[a-z0-9_] - prefix that was added at frontend to names of file inputs,
      *   so they won't intersect with other submitted options
      *
-     * @param \Magento\Framework\Object|array $buyRequest
-     * @param \Magento\Framework\Object|array $params
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject|array $buyRequest
+     * @param \Magento\Framework\DataObject|array $params
+     * @return \Magento\Framework\DataObject
      */
     public function addParamsToBuyRequest($buyRequest, $params)
     {
         if (is_array($buyRequest)) {
-            $buyRequest = new \Magento\Framework\Object($buyRequest);
+            $buyRequest = new \Magento\Framework\DataObject($buyRequest);
         }
         if (is_array($params)) {
-            $params = new \Magento\Framework\Object($params);
+            $params = new \Magento\Framework\DataObject($params);
         }
 
-        // Ensure that currentConfig goes as \Magento\Framework\Object - for easier work with it later
+        // Ensure that currentConfig goes as \Magento\Framework\DataObject - for easier work with it later
         $currentConfig = $params->getCurrentConfig();
         if ($currentConfig) {
             if (is_array($currentConfig)) {
-                $params->setCurrentConfig(new \Magento\Framework\Object($currentConfig));
-            } elseif (!$currentConfig instanceof \Magento\Framework\Object) {
+                $params->setCurrentConfig(new \Magento\Framework\DataObject($currentConfig));
+            } elseif (!$currentConfig instanceof \Magento\Framework\DataObject) {
                 $params->unsCurrentConfig();
             }
         }
@@ -529,8 +529,8 @@ class Product extends \Magento\Framework\Url\Helper\Data
          * where '_processing_params' comes in $buyRequest as array from user input
          */
         $processingParams = $buyRequest->getData('_processing_params');
-        if (!$processingParams || !$processingParams instanceof \Magento\Framework\Object) {
-            $processingParams = new \Magento\Framework\Object();
+        if (!$processingParams || !$processingParams instanceof \Magento\Framework\DataObject) {
+            $processingParams = new \Magento\Framework\DataObject();
             $buyRequest->setData('_processing_params', $processingParams);
         }
         $processingParams->addData($params->getData());
