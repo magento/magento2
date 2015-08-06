@@ -80,12 +80,14 @@ class Attribute extends Form
      */
     protected $attributeOptionByName = '[data-attribute-option-title="%s"]';
 
+    // @codingStandardsIgnoreStart
     /**
      * Selector for attribute block
      *
      * @var string
      */
-    protected $attributeBlock = '//div[@id="configurable-attributes-container"]/div[contains(@class,"entry-edit")][%d]';
+    protected $attributeBlock = '//div[@data-role="configurable-attributes-container"]/div[@data-role="attribute-info"][%d]';
+    // @codingStandardsIgnoreEnd
 
     /**
      * Selector for "Create New Value" button
@@ -144,6 +146,13 @@ class Attribute extends Form
     protected $configContent = '#super_config-content';
 
     /**
+     * Backend abstract block.
+     *
+     * @var string
+     */
+    protected $templateBlock = './ancestor::body';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
@@ -164,6 +173,7 @@ class Attribute extends Form
         }
 
         $this->browser->find($this->nextButton)->click();
+        $this->getTemplateBlock()->waitLoader();
         $this->browser->find($this->nextButton)->click();
     }
 
@@ -194,6 +204,7 @@ class Attribute extends Form
         $this->browser->find($this->createNewVariationSet)->click();
         $this->getEditAttributeForm()->fill($attributeFixture);
         $this->getEditAttributeForm()->saveAttributeForm();
+        $this->waitBlock($this->newAttributeFrame);
     }
 
     /**
@@ -228,7 +239,6 @@ class Attribute extends Form
         );
         $count = 0;
 
-        $this->showAttributeContent($attributeBlock);
         if (isset($attribute['label'])) {
             $attributeBlock->find($this->attributeLabel)->setValue($attribute['label']);
         }
@@ -320,6 +330,7 @@ class Attribute extends Form
     /**
      * Get attributes data
      *
+     * @deprecated
      * @return array
      */
     public function getAttributesData()
@@ -331,7 +342,6 @@ class Attribute extends Form
         /** @var SimpleElement $attributeBlock */
         $attributeBlock = $this->_rootElement->find(sprintf($this->attributeBlock, $count), Locator::SELECTOR_XPATH);
         while ($attributeBlock->isVisible()) {
-            $this->showAttributeContent($attributeBlock);
             $attribute = [
                 'frontend_label' => $attributeBlock->find($this->attributeTitle)->getText(),
                 'label' => $attributeBlock->find($this->attributeLabel)->getValue(),
@@ -410,5 +420,18 @@ class Attribute extends Form
         }
 
         return $data;
+    }
+
+    /**
+     * Get backend abstract block.
+     *
+     * @return \Magento\Backend\Test\Block\Template
+     */
+    protected function getTemplateBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Backend\Test\Block\Template',
+            ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
+        );
     }
 }

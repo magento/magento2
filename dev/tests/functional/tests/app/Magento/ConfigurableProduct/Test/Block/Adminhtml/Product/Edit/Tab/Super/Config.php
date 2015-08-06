@@ -194,7 +194,6 @@ class Config extends Tab
         $data = [];
 
         $this->showContent();
-        $data['attributes_data'] = $this->getAttributeBlock()->getAttributesData();
         $data['matrix'] = $this->getVariationsBlock()->getVariationsData();
 
         return ['configurable_attributes_data' => $data];
