@@ -333,7 +333,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $this->_entityModel->addRowError(self::ERROR_OPTIONS_NOT_FOUND, $this->rowNum);
             $error = true;
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])&&
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
             $rowData[self::COL_DOWNLOADABLE_LINKS] != '' &&
             $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == '')
         {
