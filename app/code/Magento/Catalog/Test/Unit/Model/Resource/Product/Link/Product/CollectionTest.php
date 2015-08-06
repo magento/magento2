@@ -85,8 +85,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->entityFactoryMock2 = $this->getMock('Magento\Eav\Model\EntityFactory', [], [], '', false);
         $this->helperMock = $this->getMock('Magento\Catalog\Model\Resource\Helper', [], [], '', false);
         $entity = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
-        $adapter = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', [], '', false);
-        $entity->expects($this->any())->method('getReadConnection')->will($this->returnValue($adapter));
+        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', null, [], '', false);
+        $entity->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
         $this->universalFactoryMock = $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false);
         $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
@@ -96,7 +96,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnCallback(
                 function ($store) {
-                    return is_object($store) ? $store : new \Magento\Framework\Object(['id' => 42]);
+                    return is_object($store) ? $store : new \Magento\Framework\DataObject(['id' => 42]);
                 }
             ));
         $this->catalogHelperMock = $this->getMock('Magento\Catalog\Helper\Data', [], [], '', false);
@@ -138,7 +138,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $product->expects($this->any())->method('getId')->will($this->returnValue('5'));
-        $productStore = new \Magento\Framework\Object(['id' => 33]);
+        $productStore = new \Magento\Framework\DataObject(['id' => 33]);
         $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));
         $this->collection->setProduct($product);
         $this->assertEquals(33, $this->collection->getStoreId());

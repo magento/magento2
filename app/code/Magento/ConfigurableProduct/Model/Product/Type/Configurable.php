@@ -250,11 +250,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Return relation info about used products
      *
-     * @return \Magento\Framework\Object Object with information data
+     * @return \Magento\Framework\DataObject Object with information data
      */
     public function getRelationInfo()
     {
-        $info = new \Magento\Framework\Object();
+        $info = new \Magento\Framework\DataObject();
         $info->setTable(
             'catalog_product_super_link'
         )->setParentFieldName(
@@ -750,14 +750,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Prepare product and its configuration to be added to some products list.
      * Perform standard preparation process and then add Configurable specific options.
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
+    protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
         $attributes = $buyRequest->getSuperAttribute();
         if ($attributes || !$this->_isStrictProcessMode($processMode)) {
@@ -783,7 +783,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $subProduct = true;
                 if ($this->_isStrictProcessMode($processMode)) {
                     foreach ($this->getConfigurableAttributes($product) as $attributeItem) {
-                        /* @var $attributeItem \Magento\Framework\Object */
+                        /* @var $attributeItem \Magento\Framework\DataObject */
                         $attrId = $attributeItem->getData('attribute_id');
                         if (!isset($attributes[$attrId]) || empty($attributes[$attrId])) {
                             $subProduct = null;
@@ -860,7 +860,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         parent::checkProductBuyState($product);
         $option = $product->getCustomOption('info_buyRequest');
         if ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
-            $buyRequest = new \Magento\Framework\Object(unserialize($option->getValue()));
+            $buyRequest = new \Magento\Framework\DataObject(unserialize($option->getValue()));
             $attributes = $buyRequest->getSuperAttribute();
             if (is_array($attributes)) {
                 foreach ($attributes as $key => $val) {
@@ -1028,7 +1028,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Prepare selected options for configurable product
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\Object $buyRequest
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -1097,7 +1097,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
-            $configurableAttribute = $this->jsonHelper->jsonDecode($simpleProductData['configurable_attribute']);
+            $configurableAttribute = [];
+            $attributeData = $simpleProductData['configurable_attribute'];
+            if ($attributeData) {
+                $configurableAttribute = $this->jsonHelper->jsonDecode($attributeData);
+            }
             unset($simpleProductData['configurable_attribute']);
 
             $this->_fillSimpleProductData(

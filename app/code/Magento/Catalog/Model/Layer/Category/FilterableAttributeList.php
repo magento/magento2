@@ -22,25 +22,17 @@ class FilterableAttributeList implements FilterableAttributeListInterface
     protected $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Layer
-     */
-    protected $layer;
-
-    /**
      * FilterableAttributeList constructor
      *
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;
-        $this->layer = $layerResolver->get();
     }
 
     /**
@@ -50,14 +42,9 @@ class FilterableAttributeList implements FilterableAttributeListInterface
      */
     public function getList()
     {
-        $setIds = $this->layer->getProductCollection()->getSetIds();
-        if (!$setIds) {
-            return [];
-        }
         /** @var $collection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
         $collection = $this->collectionFactory->create();
         $collection->setItemObjectClass('Magento\Catalog\Model\Resource\Eav\Attribute')
-            ->setAttributeSetFilter($setIds)
             ->addStoreLabel($this->storeManager->getStore()->getId())
             ->setOrder('position', 'ASC');
         $collection = $this->_prepareAttributeCollection($collection);

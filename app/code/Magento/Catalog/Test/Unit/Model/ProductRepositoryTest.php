@@ -578,7 +578,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $filterGroupFilterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
-        $itemsMock = $this->getMock('\Magento\Framework\Object', [], [], '', false);
+        $itemsMock = $this->getMock('\Magento\Framework\DataObject', [], [], '', false);
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')

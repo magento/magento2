@@ -75,10 +75,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getQuoteIdentifierSymbol()
     {
-        /** @var \Zend_Db_Adapter_Abstract $adapter */
-        $adapter = $this->_collection->getConnection();
-        $quote = $adapter->getQuoteIdentifierSymbol();
-        return $quote;
+        return $this->_collection->getConnection()->getQuoteIdentifierSymbol();
     }
 
     public function testToOptionArrayHash()

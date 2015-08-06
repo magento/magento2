@@ -155,12 +155,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $buyRequest = $this->getMockBuilder('Magento\Framework\Object')
+        $buyRequest = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['setQty'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $infoData = $this->getMockBuilder('Magento\Framework\Object')
+        $infoData = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();

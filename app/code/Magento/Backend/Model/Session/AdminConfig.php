@@ -42,7 +42,7 @@ class AdminConfig extends Config
     /**
      * @param \Magento\Framework\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\String $stringHelper
+     * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
      * @param \Magento\Framework\App\RequestInterface $request
      * @param Filesystem $filesystem
      * @param DeploymentConfig $deploymentConfig
@@ -57,7 +57,7 @@ class AdminConfig extends Config
     public function __construct(
         \Magento\Framework\ValidatorFactory $validatorFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\String $stringHelper,
+        \Magento\Framework\Stdlib\StringUtils $stringHelper,
         \Magento\Framework\App\RequestInterface $request,
         Filesystem $filesystem,
         DeploymentConfig $deploymentConfig,
