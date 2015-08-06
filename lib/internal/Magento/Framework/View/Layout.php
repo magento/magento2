@@ -470,9 +470,11 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     {
         $this->build();
         if (!isset($this->_renderElementCache[$name]) || !$useCache) {
-            $this->_renderElementCache[$name] = $this->displayElement($name)
-                ? $this->renderNonCachedElement($name)
-                : '';
+            if ($this->displayElement($name)) {
+                $this->_renderElementCache[$name] = $this->renderNonCachedElement($name);
+            } else {
+                return $this->_renderElementCache[$name] = '';
+            }
         }
         $this->_renderingOutput->setData('output', $this->_renderElementCache[$name]);
         $this->_eventManager->dispatch(
