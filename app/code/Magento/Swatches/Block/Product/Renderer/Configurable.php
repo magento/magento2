@@ -378,7 +378,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * @return string
      */
-    public function getMediaCallback() {
+    public function getMediaCallback()
+    {
         return $this->getBaseUrl() . self::MEDIA_CALLBACK_ACTION;
     }
 }
