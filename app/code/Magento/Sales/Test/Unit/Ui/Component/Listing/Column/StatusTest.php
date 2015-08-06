@@ -33,7 +33,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
         $collectionFactoryMock = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Status\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false

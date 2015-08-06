@@ -196,18 +196,22 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess')
             ->with('You canceled the invoice.');
 
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn($invoiceMock);
+
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->with('Magento\Sales\Model\Order\Invoice')
-            ->willReturn($invoiceMock);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with('Magento\Framework\DB\Transaction')
             ->will($this->returnValue($transactionMock));
 
-        $invoiceMock->expects($this->once())
-            ->method('load')
-            ->willReturnSelf();
         $invoiceMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($invoiceId));
@@ -237,17 +241,17 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->with('invoice_id')
             ->will($this->returnValue($invoiceId));
 
-        $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $invoiceMock->expects($this->once())
-            ->method('load')
+        $invoiceRepository->expects($this->any())
+            ->method('get')
             ->willReturn(null);
+
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->with('Magento\Sales\Model\Order\Invoice')
-            ->willReturn($invoiceMock);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
 
         $resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()
@@ -290,16 +294,20 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->with($message);
 
         $invoiceMock->expects($this->once())
-            ->method('load')
-            ->willReturnSelf();
-        $invoiceMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($invoiceId));
 
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn($invoiceMock);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Order\Invoice')
-            ->willReturn($invoiceMock);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
 
         $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
@@ -342,16 +350,20 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->with($message);
 
         $invoiceMock->expects($this->once())
-            ->method('load')
-            ->willReturnSelf();
-        $invoiceMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($invoiceId));
 
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn($invoiceMock);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Order\Invoice')
-            ->willReturn($invoiceMock);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
 
         $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
