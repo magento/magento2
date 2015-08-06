@@ -68,7 +68,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     private function addInlineTranslationConfig()
     {
-        if($this->inline->isAllowed()) {
+        if ($this->inline->isAllowed()) {
             $after = RequireJsConfig::REQUIRE_JS_FILE_NAME;
             $tConfig = $this->fileManager->createTranslateConfigAsset();
             $assetCollection = $this->pageConfig->getAssetCollection();
