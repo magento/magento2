@@ -37,6 +37,7 @@
             <div id="iframe-warning" class="message notice">
                 <div><!-- ko text: $t('Please do not refresh the page until you complete payment.') --><!-- /ko --></div>
             </div>
+            <!-- ko if: isPaymentReady() -->
             <iframe data-bind="attr: {id: getCode() + '-iframe', src: getActionUrl()}"
                     data-container="paypal-iframe"
                     class="paypal iframe"
@@ -45,9 +46,9 @@
                     border="0"
                     height="610"
                     width="100%"
-            >
+                    >
             </iframe>
+            <!-- /ko -->
         </div>
     </div>
 </div>
-
