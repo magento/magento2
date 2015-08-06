@@ -14,7 +14,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
-use Magento\Framework\ObjectFactory;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
@@ -53,7 +53,7 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param DataObjectHelper $dataObjectHelper
-     * @param ObjectFactory $objectFactory
+     * @param DataObjectFactory $objectFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -82,7 +82,7 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         DataObjectHelper $dataObjectHelper,
-        ObjectFactory $objectFactory,
+        DataObjectFactory $objectFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,

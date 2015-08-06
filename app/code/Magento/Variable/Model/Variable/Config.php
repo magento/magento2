@@ -38,7 +38,7 @@ class Config
     /**
      * Prepare variable wysiwyg config
      *
-     * @param \Magento\Framework\Object $config
+     * @param \Magento\Framework\DataObject $config
      * @return array
      */
     public function getWysiwygPluginSettings($config)
