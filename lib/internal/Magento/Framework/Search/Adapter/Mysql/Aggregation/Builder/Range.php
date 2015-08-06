@@ -6,6 +6,7 @@
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
 use Magento\Framework\App\Resource;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\Aggregation\Range as AggregationRange;
@@ -22,6 +23,7 @@ class Range implements BucketInterface
      * @var Metrics
      */
     private $metricsBuilder;
+
     /**
      * @var Resource
      */
@@ -50,13 +52,11 @@ class Range implements BucketInterface
         DataProviderInterface $dataProvider,
         array $dimensions,
         RequestBucketInterface $bucket,
-        array $entityIds
+        Table $entityIdsTable
     ) {
         /** @var RangeBucket $bucket */
-        $select = $dataProvider->getDataSet($bucket, $dimensions);
+        $select = $dataProvider->getDataSet($bucket, $dimensions, $entityIdsTable);
         $metrics = $this->metricsBuilder->build($bucket);
-
-        $select->where('main_table.entity_id IN (?)', $entityIds);
 
         /** @var Select $fullQuery */
         $fullQuery = $this->connection
