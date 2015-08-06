@@ -90,7 +90,9 @@
         </div>
     </div>
 
+    <div class="paypal-review-discount">
     <?php echo $block->getChildHtml('paypal.additional.actions') ?>
+    </div>
 
     <div class="paypal-review-items">
         <div class="paypal-review-title">
@@ -99,9 +101,7 @@
                class="action edit"><span><?php echo __('Edit Shopping Cart') ?></span></a>
         </div>
 
-        <div id="details-reload" class="table-wrapper order-items">
-            <?php echo $block->getChildHtml('details') ?>
-        </div>
+        <?php echo $block->getChildHtml('details') ?>
 
         <form method="post" id="order-review-form" action="<?php echo $block->getPlaceOrderUrl() ?>" class="form">
             <?php echo $block->getChildHtml('agreements'); ?>
