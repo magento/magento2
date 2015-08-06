@@ -112,7 +112,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     public function testIsRowInvalidTrue()
     {
         $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
-        $result = $this->model->isRowInvalid(8);
+        $result = $this->model->isRowInvalid(7);
         $this->assertTrue($result);
     }
 
@@ -131,7 +131,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetInvalidRowsCountOne()
     {
-        $this->model->addError('systemException');
+        $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
         $rowsNumber = $this->model->getInvalidRowsCount();
         $this->assertEquals($rowsNumber, 1);
     }
@@ -139,6 +139,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     public function testGetInvalidRowsCountTwo()
     {
         $this->model->addError('systemException');
+        $this->model->addError('systemException', 'critical', 8, 'Some column name', 'Message', 'Description');
         $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
         $rowsNumber = $this->model->getInvalidRowsCount();
         $this->assertEquals($rowsNumber, 2);
