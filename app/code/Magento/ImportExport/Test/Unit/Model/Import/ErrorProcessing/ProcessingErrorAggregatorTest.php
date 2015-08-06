@@ -3,9 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ImportExport\Test\Unit\Model\Import\ErrorProcessing;
-
 
 class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +22,17 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $processingErrorMock;
+    protected $processingErrorMock1;
+
+    /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $processingErrorMock2;
+
+    /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $processingErrorMock3;
 
     public function setUp()
     {
@@ -36,7 +44,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->processingErrorMock = $this->getMock(
+        $this->processingErrorMock1 = $this->getMock(
             '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError',
             null,
             [],
@@ -44,8 +52,26 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->processingErrorFactoryMock->expects($this->any())->method('create')->willReturn(
-            $this->processingErrorMock
+        $this->processingErrorMock2 = $this->getMock(
+            '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError',
+            null,
+            [],
+            '',
+            false
+        );
+
+        $this->processingErrorMock3 = $this->getMock(
+            '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError',
+            null,
+            [],
+            '',
+            false
+        );
+
+        $this->processingErrorFactoryMock->expects($this->any())->method('create')->willReturnOnConsecutiveCalls(
+            $this->processingErrorMock1,
+            $this->processingErrorMock2,
+            $this->processingErrorMock3
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -63,15 +89,24 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
         $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
     }
 
-    public function testAddErrorNullError()
+    public function testAddErrorNullMessageError()
     {
         $this->model->addErrorMessageTemplate('systemException', 'template');
-        $this->model->addError('systemException', 'critical', 7, 'Some column name');
+        $this->model->addError('systemException', 'critical', 7, 'Some column name', null, null);
     }
 
     public function testAddErrorMessageTemplate()
     {
-        $this->model->addErrorMessageTemplate('systemException', 'template');
+        $this->model->addErrorMessageTemplate('columnNotFound', 'Template: No column');
+        $this->model->addError('systemException');
+        $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', null, 'Description');
+        $this->model->addError('columnEmptyHeader', 'not-critical', 4, 'Some column name', 'No header', 'Description');
+        $result = $this->model->getRowsGroupedByErrorCode(['systemException']);
+        $expectedResult = [
+            'Template: No column' => [8],
+            'No header' => [5]
+        ];
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function testIsRowInvalidTrue()
@@ -111,7 +146,18 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
 
     public function testInitValidationStrategy()
     {
-        $this->model->initValidationStrategy('validation-skip-errors');
+        $this->model->initValidationStrategy('validation-stop-on-errors', 5);
+        $this->assertEquals(5, $this->model->getAllowedErrorsCount());
+    }
+
+    public function testInitValidationStrategyExceed()
+    {
+        $this->model->addError('systemException', 'not-critical', 7, 'Some column name', 'Message', 'Description');
+        $this->model->addError('systemException', 'not-critical', 4, 'Some column name', 'Message', 'Description');
+        $this->model->addError('systemException', 'not-critical', 2, 'Some column name', 'Message', 'Description');
+        $this->model->initValidationStrategy('validation-stop-on-errors', 2);
+        $result = $this->model->isErrorLimitExceeded();
+        $this->assertTrue($result);
     }
 
     public function testInitValidationStrategyException()
@@ -141,8 +187,8 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     public function testHasFatalExceptionsTrue()
     {
         $this->model->addError('systemException');
-        $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
-        $this->model->addError('systemException', 'not-critical', 4, 'Some column name', 'Message', 'Description');
+        $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', 'Message', 'Description');
+        $this->model->addError('columnEmptyHeader', 'not-critical', 4, 'Some column name', 'Message', 'Description');
         $result = $this->model->hasFatalExceptions();
         $this->assertTrue($result);
     }
@@ -173,36 +219,48 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
         $this->model->addError('systemException', 'not-critical', 5, 'Some column name', 'Message', 'Description');
         $this->model->addError('systemException', 'not-critical', 6, 'Some column name', 'Message', 'Description');
         $result = $this->model->getAllErrors();
-        $this->assertEquals(count($result), 3);
+        //check if is array of objects
+        $this->assertInternalType('array', $result);
+        $this->assertCount(3, $result);
+        $this->assertInstanceOf('\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError', $result[0]);
     }
 
     public function testGetErrorsByCodeInArray()
     {
         $this->model->addError('systemException', 'not-critical', 4, 'Some column name', 'Message', 'Description');
-        $this->model->getErrorsByCode(['systemException']);
+        $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', 'No column', 'Description');
+        $this->model->addError('systemException', 'not-critical', 9, 'Some column name', 'Message', 'Description');
+        $result = $this->model->getErrorsByCode(['systemException']);
+        $this->assertCount(2, $result);
     }
 
     public function testGetErrorsByCodeNotInArray()
     {
         $this->model->addError('columnNotFound', 'not-critical', 4, 'Some column name', 'Message', 'Description');
-        $this->model->getErrorsByCode(['systemException']);
+        $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', 'No column', 'Description');
+        $this->model->addError('columnEmptyHeader', 'not-critical', 5, 'Some column name', 'No header', 'Description');
+        $result = $this->model->getErrorsByCode(['systemException']);
+        $this->assertCount(0, $result);
     }
 
-    public function testGetRowsGroupedByErrorCodeWithErrorsWithoutCode()
+    public function testGetRowsGroupedByErrorCodeWithErrors()
     {
-        $this->model->addError('systemException', 'not-critical', 4, 'Some column name', 'Message', 'Description');
-        $this->model->getRowsGroupedByErrorCode();
-    }
-
-    public function testGetRowsGroupedByErrorCodeWithErrorsWithCode()
-    {
-        $this->model->addError('systemException', 'not-critical', 4, 'Some column name', 'Message', 'Description');
-        $this->model->getRowsGroupedByErrorCode(['systemException']);
+        $this->model->addError('systemException');
+        $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', 'No column', 'Description');
+        $this->model->addError('columnEmptyHeader', 'not-critical', 4, 'Some column name', 'No header', 'Description');
+        $result = $this->model->getRowsGroupedByErrorCode(['systemException']);
+        $expectedResult = [
+            'No column' => [8],
+            'No header' => [5]
+        ];
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function testGetRowsGroupedByErrorCodeNoErrors()
     {
-        $this->model->getRowsGroupedByErrorCode();
+        $result = $this->model->getRowsGroupedByErrorCode();
+        $this->assertInternalType('array', $result);
+        $this->assertCount(0, $result);
     }
 
     public function testGetAllowedErrorsCount()
@@ -212,7 +270,20 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
 
     public function testClear()
     {
+        $this->model->addError('systemException', 'not-critical', 4, 'Some column name', 'Message', 'Description');
+        $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', 'No column', 'Description');
         $this->model->clear();
+        $result = $this->model->getAllErrors();
+        $this->assertEquals([], $result);
+    }
+
+    public function testGetErrorsCount()
+    {
+        $this->model->addError('systemException', 'not-critical', 4, 'Some column name', 'Message', 'Description');
+        $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', 'No column', 'Description');
+        $this->model->addError('systemException', 'not-critical', 9, 'Some column name', 'Message', 'Description');
+        $result = $this->model->getErrorsCount(['critical']);
+        $this->assertEquals($result, 1);
     }
 }
  
