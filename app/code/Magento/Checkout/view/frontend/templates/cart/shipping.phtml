@@ -25,6 +25,7 @@
         <script>
             window.checkoutConfig = <?php echo \Zend_Json::encode($block->getCheckoutConfig()); ?>;
             window.customerData = window.checkoutConfig.customerData;
+            window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
             require([
                 'mage/url',
                 'Magento_Ui/js/block-loader'
