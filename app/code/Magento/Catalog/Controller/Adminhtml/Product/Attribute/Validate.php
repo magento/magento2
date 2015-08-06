@@ -46,7 +46,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setError(false);
 
         $attributeCode = $this->getRequest()->getParam('attribute_code');

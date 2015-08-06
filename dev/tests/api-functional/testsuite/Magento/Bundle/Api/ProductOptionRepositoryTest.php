@@ -147,13 +147,29 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
      */
     public function testUpdate()
     {
+        /** TODO: Remove after MAGETWO-40822 */
+        $isPhpVersionSupported = version_compare(
+            '7.0.0',
+            preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION),
+            '>'
+        );
+        if (!$isPhpVersionSupported) {
+            $this->markTestSkipped('MAGETWO-40822');
+        }
+
         $productSku = 'bundle-product';
         $request = [
             'title' => 'someTitle',
             'sku' => $productSku,
         ];
 
-        $optionId = $this->getList($productSku)[0]['option_id'];
+        $options = $this->getList($productSku);
+
+        $this->assertGreaterThan(0, count($options));
+        $this->assertArrayHasKey('option_id', $options[0]);
+
+        $optionId = $options[0]['option_id'];
+
         $result = $this->update($optionId, $request);
 
         $this->assertEquals($result, $optionId);

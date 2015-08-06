@@ -40,7 +40,7 @@ class Scoped extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCol
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Config\Model\Resource\Config\Data $resource,
         $scope,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $scopeId = null
     ) {
         $this->_scope = $scope;
