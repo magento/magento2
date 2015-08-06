@@ -11,6 +11,8 @@ use Composer\Package\Link;
 use Composer\Package\PackageInterface;
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Class ComposerInformation uses Composer to determine dependency information.
@@ -77,32 +79,16 @@ class ComposerInformation
      *
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param BufferIoFactory $bufferIoFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @throws \Exception
      */
     public function __construct(
         MagentoComposerApplicationFactory $applicationFactory,
-        \Magento\Framework\Filesystem $filesystem,
-        BufferIoFactory $bufferIoFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        Filesystem $filesystem,
+        DateTime $dateTime
     ) {
-        // composer.json is in same directory as vendor
-        $vendorPath = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
-        $vendorDir = require "{$vendorPath}";
-        $composerJson = $filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath()
-            . "/{$vendorDir}/../composer.json";
-
-        $composerJsonRealPath = realpath($composerJson);
-        if ($composerJsonRealPath === false) {
-            throw new \Exception('Composer file not found: ' . $composerJson);
-        }
-
-        putenv('COMPOSER_HOME=' . $filesystem->getDirectoryRead(DirectoryList::COMPOSER_HOME)->getAbsolutePath());
-
-        // Create Composer
         $this->application = $applicationFactory->create();
-        $this->composer = ComposerFactory::create($bufferIoFactory->create(), $composerJson);
+        $this->composer = $this->application->createComposer();
         $this->locker = $this->composer->getLocker();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->dateTime = $dateTime;
