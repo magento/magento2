@@ -5,6 +5,8 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -228,6 +230,7 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory
      * @param \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -248,6 +251,7 @@ class Address extends AbstractCustomer
         \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory,
         \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_customerFactory = $customerFactory;
@@ -272,6 +276,7 @@ class Address extends AbstractCustomer
             $collectionFactory,
             $eavConfig,
             $storageFactory,
+            $errorAggregator,
             $data
         );
 
@@ -388,7 +393,10 @@ class Address extends AbstractCustomer
             foreach ($bunch as $rowNumber => $rowData) {
                 // check row data
                 if (!$this->validateRow($rowData, $rowNumber)) {
-                    continue;
+                    if (!$this->getErrorAggregator()->hasToBeTerminated()) {
+                        continue;
+                    }
+                    break 2;
                 }
 
                 if ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
