@@ -147,9 +147,11 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     {
         $orderId = 10000031;
         $orderClassName = 'Magento\Sales\Model\Order';
-        $orderNotifierClassName = 'Magento\Sales\Model\OrderNotifier';
+        $orderNotifierClassName = 'Magento\Sales\Api\OrderManagementInterface';
         $order = $this->getMock($orderClassName, ['load', 'getId', '__wakeup'], [], '', false);
-        $cmNotifier = $this->getMock($orderNotifierClassName, ['notify', '__wakeup'], [], '', false);
+        $cmNotifier = $this->getMockBuilder('Magento\Sales\Api\OrderManagementInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->request->expects($this->once())
             ->method('getParam')
