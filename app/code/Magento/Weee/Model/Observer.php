@@ -129,7 +129,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getSelect()
     {
-        return $this->_weeeTax->getResource()->getReadConnection()->select();
+        return $this->_weeeTax->getResource()->getConnection()->select();
     }
 
     /**

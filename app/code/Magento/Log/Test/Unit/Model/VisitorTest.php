@@ -151,8 +151,8 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $this->resource->expects($this->once())->method('save')->will($this->returnSelf());
         $this->resource->expects($this->never())->method('beginTransaction');
 
-        $event = new \Magento\Framework\Object(['visitor' => $visitor]);
-        $observer = new \Magento\Framework\Object(['event' => $event]);
+        $event = new \Magento\Framework\DataObject(['visitor' => $visitor]);
+        $observer = new \Magento\Framework\DataObject(['event' => $event]);
         $this->assertSame($this->visitor, $this->visitor->logNewVisitor($observer));
     }
 
@@ -166,8 +166,8 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $this->resource->expects($this->once())->method('save')->will($this->returnSelf());
         $this->resource->expects($this->never())->method('beginTransaction');
 
-        $event = new \Magento\Framework\Object(['visitor' => $visitor]);
-        $observer = new \Magento\Framework\Object(['event' => $event]);
+        $event = new \Magento\Framework\DataObject(['visitor' => $visitor]);
+        $observer = new \Magento\Framework\DataObject(['event' => $event]);
         $this->assertSame($this->visitor, $this->visitor->logVisitorActivity($observer));
     }
 }

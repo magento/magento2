@@ -86,9 +86,9 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             [$data, 'existing key', $data, true, false],
             [$data, 'existing key', $data, false, true],
             [
-                new \Magento\Framework\Object($data),
+                new \Magento\Framework\DataObject($data),
                 'existing key',
-                new \Magento\Framework\Object($data),
+                new \Magento\Framework\DataObject($data),
                 true,
                 false
             ],

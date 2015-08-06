@@ -93,7 +93,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     {
         $identifier = trim($request->getPathInfo(), '/');
 
-        $condition = new \Magento\Framework\Object(['identifier' => $identifier, 'continue' => true]);
+        $condition = new \Magento\Framework\DataObject(['identifier' => $identifier, 'continue' => true]);
         $this->_eventManager->dispatch(
             'cms_controller_router_match_before',
             ['router' => $this, 'condition' => $condition]

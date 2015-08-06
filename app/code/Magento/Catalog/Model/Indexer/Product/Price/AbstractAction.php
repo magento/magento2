@@ -98,7 +98,7 @@ abstract class AbstractAction
         $this->_catalogProductType = $catalogProductType;
         $this->_indexerPriceFactory = $indexerPriceFactory;
         $this->_defaultIndexerResource = $defaultIndexerResource;
-        $this->_connection = $this->_defaultIndexerResource->getWriteConnection();
+        $this->_connection = $this->_defaultIndexerResource->getConnection();
     }
 
     /**

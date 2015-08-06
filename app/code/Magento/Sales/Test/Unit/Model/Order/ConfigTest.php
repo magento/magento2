@@ -46,28 +46,28 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetInvisibleOnFrontStatuses()
     {
         $statuses = [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'canceled',
                     'is_default' => 1,
                     'visible_on_front' => 1,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'complete',
                     'is_default' => 1,
                     'visible_on_front' => 0,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'processing',
                     'is_default' => 1,
                     'visible_on_front' => 1,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'pending_payment',
                     'is_default' => 1,
