@@ -15,35 +15,35 @@
     </div>
 
     <div class="admin__data-grid-wrap">
-        <table class="data-grid data-grid-configurable">
-            <thead>
-            <tr>
-                <!-- ko foreach: attributesName -->
-                <th class="data-grid-th" data-bind="text: $data"></th>
-                <!-- /ko -->
-            </tr>
-            </thead>
+        <!-- ko if: gridNew().length -->
+        <div class="grid-wrapper">
+            <h3><?= __('New Product Review') ?></h3>
+            <div class="note">
+                <?= __('Here are the products you\'re about to create.'); ?>
+            </div>
+            <!-- ko template: {name: getGridTemplate(), data: gridNew} --><!-- /ko -->
+        </div>
+        <!-- /ko -->
 
-            <tbody data-bind="foreach: grid">
-                <tr>
-                    <!-- ko foreach: $data -->
-                    <!-- ko if: $data && $data.preview -->
-                    <td class="data-grid-thumbnail-cell">
-                        <div class="images-uploaded">
-                            <img data-bind="attr: {src: $data.preview}" />
-                            <span data-bind="text: $data.images.length"></span>
-                        </div>
-                    </td>
-                    <!-- /ko -->
-                    <!-- ko ifnot: $data && $data.preview -->
-                    <td>
-                        <span data-bind='text: $data'></span>
-                    </td>
-                    <!-- /ko -->
-                    <!-- /ko -->
-                </tr>
-            </tbody>
-        </table>
+        <!-- ko if: gridExisting().length -->
+        <div class="grid-wrapper">
+            <h3><?= __('Associated Products') ?></h3>
+            <div class="note">
+                <?= __('You created these products for this configuration'); ?>
+            </div>
+            <!-- ko template: {name: getGridTemplate(), data: gridExisting} --><!-- /ko -->
+        </div>
+        <!-- /ko -->
+
+        <!-- ko if: gridDeleted().length -->
+        <div class="grid-wrapper">
+            <h3><?= __('Disassociated Products') ?></h3>
+            <div class="note">
+                <?= __('These products are not associated'); ?>
+            </div>
+            <!-- ko template: {name: getGridTemplate(), data: gridDeleted} --><!-- /ko -->
+        </div>
+        <!-- /ko -->
     </div>
 </div>
 
