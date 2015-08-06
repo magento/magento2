@@ -214,7 +214,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param array $excludedCodes
      * @return array
      */
-    public function getRowsGroupedByCode(array $errorCode = [], array $excludedCodes = [])
+    public function getRowsGroupedByErrorCode(array $errorCode = [], array $excludedCodes = [])
     {
         $result = [];
         foreach ($this->items as $error) {
@@ -280,8 +280,11 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         if (null === $errorMessage && isset($this->messageTemplate[$errorCode])) {
             $errorMessage = (string)__($this->messageTemplate[$errorCode]);
         }
-        if ($columnName) {
+        if ($columnName && $errorMessage) {
             $errorMessage = sprintf($errorMessage, $columnName);
+        }
+        if (!$errorMessage) {
+            $errorMessage = $errorCode;
         }
 
         return $errorMessage;

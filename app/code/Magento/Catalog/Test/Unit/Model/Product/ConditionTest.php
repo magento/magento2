@@ -28,10 +28,10 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdsSelect()
     {
-        $adapter = $this->getMockedAdapterInterface();
-        $this->assertInstanceOf('\Magento\Framework\DB\Select', $this->model->getIdsSelect($adapter));
+        $connection = $this->getMockedAdapterInterface();
+        $this->assertInstanceOf('\Magento\Framework\DB\Select', $this->model->getIdsSelect($connection));
         $this->model->setTable(null);
-        $this->assertEmpty($this->model->getIdsSelect($adapter));
+        $this->assertEmpty($this->model->getIdsSelect($connection));
     }
 
     protected function setUp()

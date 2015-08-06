@@ -6,19 +6,12 @@
 
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
-class BundleTest extends \PHPUnit_Framework_TestCase
+class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * @var \Magento\BundleImportExport\Model\Import\Product\Type\Bundle
      */
     protected $bundle;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
 
     /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
@@ -35,8 +28,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     protected $params;
 
-    /** @var
-     * \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connection;
 
@@ -57,12 +49,25 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->entityModel = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
-            ['getBehavior', 'getNewSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope', 'getConnection'],
+            [
+                'getErrorAggregator',
+                'getBehavior',
+                'getNewSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getRowScope',
+                'getConnection'
+            ],
             [],
             '',
             false
+        );
+        $this->entityModel->method('getErrorAggregator')->willReturn(
+            $this->getErrorAggregatorObject()
         );
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
@@ -75,9 +80,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
         $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $select->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
         $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
             '1' => '1', '2' => '2'
@@ -136,7 +141,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             0 => $this->entityModel,
             1 => 'bundle'
         ];
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->bundle = $this->objectManagerHelper->getObject(
             'Magento\BundleImportExport\Model\Import\Product\Type\Bundle',
@@ -168,11 +172,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             $allowImport
         ));
 
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
 
         $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $select->expects($this->any())->method('getConnection')->willReturn($connection);
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
         $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());

@@ -241,7 +241,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             'store_in_vault' => $storeInVault,
             'device_data' => $deviceData,
         ];
-        $data = new \Magento\Framework\Object($data);
+        $data = new \Magento\Framework\DataObject($data);
         $this->model->setInfoInstance($this->infoInstanceMock);
         $this->configMock->expects($this->once())
             ->method('getConfigData')
@@ -318,9 +318,9 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $ccType,
         $ccToken = null
     ) {
-        $quoteObj = new \Magento\Framework\Object(
+        $quoteObj = new \Magento\Framework\DataObject(
             [
-                'billing_address' => new \Magento\Framework\Object(
+                'billing_address' => new \Magento\Framework\DataObject(
                     [
                         'country_id' => $countryId,
                     ]
@@ -513,13 +513,13 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         return $orderMock;
     }
     /**
-     * @param \Magento\Framework\Object $paymentObject
+     * @param \Magento\Framework\DataObject $paymentObject
      * @param int $storeId
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setupPaymentObject(
-        \Magento\Framework\Object $paymentObject,
+        \Magento\Framework\DataObject $paymentObject,
         $storeId
     ) {
         $customerId = '12';
@@ -552,11 +552,11 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             'address_type' => 'billing',
         ];
 
-        $billingAddress = new \Magento\Framework\Object(
+        $billingAddress = new \Magento\Framework\DataObject(
             $addressData
         );
         $addressData['address_type'] = 'shipping';
-        $shippingAddress = new \Magento\Framework\Object(
+        $shippingAddress = new \Magento\Framework\DataObject(
             $addressData
         );
 

@@ -7,7 +7,7 @@
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
 use Magento\Reports\Controller\Adminhtml\Report\Product\Sold;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 
 class SoldTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
@@ -58,8 +58,8 @@ class SoldTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Ab
             ->expects($this->once())
             ->method('getPage')
             ->willReturn(
-                new Object(
-                    ['config' => new Object(
+                new DataObject(
+                    ['config' => new DataObject(
                         ['title' => $titleMock]
                     )]
                 )

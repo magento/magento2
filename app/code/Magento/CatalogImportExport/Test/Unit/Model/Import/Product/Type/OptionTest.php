@@ -11,17 +11,12 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Path to csv file to import
      */
     const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
-
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $_helper;
 
     /**
      * Test store parametes
@@ -209,11 +204,17 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     protected $_iteratorPageSize = 100;
 
     /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected $errorAggregator;
+
+    /**
      * Init entity adapter model
      */
     protected function setUp()
     {
-        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        parent::setUp();
+
         $addExpectations = false;
         $deleteBehavior = false;
         $testName = $this->getName(true);
@@ -231,7 +232,6 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $modelClassName = '\Magento\CatalogImportExport\Model\Import\Product\Option';
         $modelClassArgs = [
             $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false),
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
@@ -258,6 +258,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
         ];
 
+        $modelClassName = '\Magento\CatalogImportExport\Model\Import\Product\Option';
         $class = new \ReflectionClass($modelClassName);
         $this->_model = $class->newInstanceArgs($modelClassArgs);
         // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
@@ -381,11 +382,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $this->_productEntity = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
-            null,
+            ['getErrorAggregator'],
             [],
             '',
             false
         );
+        $this->_productEntity->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $productModelMock = $this->getMock('stdClass', ['getProductEntitiesInfo']);
         $productModelMock->expects(
@@ -408,7 +410,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['reset', 'addProductToFilter', 'getSelect', 'getNewEmptyItem'])
             ->getMockForAbstractClass();
 
-        $select = $this->getMock('Zend_Db_Select', ['join', 'where'], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', ['join', 'where'], [], '', false);
         $select->expects($this->any())->method('join')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
 
@@ -933,15 +935,15 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $model = $this->_helper->getObject(
+        $model = $this->objectManagerHelper->getObject(
             'Magento\CatalogImportExport\Model\Import\Product\Option',
             [
                 'data' => [
                     'data_source_model' => $modelData,
                     'product_model' => $productModel,
-                    'option_collection' => $this->_helper->getObject('stdClass'),
+                    'option_collection' => $this->objectManagerHelper->getObject('stdClass'),
                     'product_entity' => $productEntity,
-                    'collection_by_pages_iterator' => $this->_helper->getObject('stdClass'),
+                    'collection_by_pages_iterator' => $this->objectManagerHelper->getObject('stdClass'),
                     'page_size' => 5000,
                     'stores' => []
                 ]
@@ -991,5 +993,26 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
+    }
+
+    /**
+     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected function getErrorAggregatorObject()
+    {
+        $errorFactory = $this->getMockBuilder(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $errorFactory->method('create')->willReturn(
+            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+        );
+        return $this->objectManagerHelper->getObject(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            [
+                'errorFactory' => $errorFactory
+            ]
+        );
     }
 }

@@ -278,7 +278,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $messages[] = __('Data validation is failed. Please fix errors and re-upload the file.');
 
                 // errors info
-                foreach ($validationResult->getRowsGroupedByCode() as $errorMessage => $rows) {
+                foreach ($validationResult->getRowsGroupedByErrorCode() as $errorMessage => $rows) {
                     $error = $errorMessage . ' ' . __('in rows') . ': ' . implode(', ', $rows);
                     $messages[] = $error;
                 }
@@ -434,13 +434,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected function processImport()
     {
         $errorAggregator = $this->_getEntityAdapter()->getErrorAggregator();
+        $errorAggregator->initValidationStrategy(
+            $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
+            $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
+        );
         try {
-            $this->_getEntityAdapter()
-                ->getErrorAggregator()
-                ->initValidationStrategy(
-                    $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
-                    $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
-                );
             $this->_getEntityAdapter()->importData();
         } catch (\Exception $e) {
             $errorAggregator->addError(

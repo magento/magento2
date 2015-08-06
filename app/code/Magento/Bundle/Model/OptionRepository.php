@@ -230,7 +230,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
                 }
             }
             /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToDelete */
-            $linksToDelete = array_udiff($existingLinks, $linksToUpdate, [$this, 'compareLinks']);
+            $linksToDelete = $this->compareLinks($linksToUpdate, $existingLinks);
         }
         foreach ($linksToUpdate as $linkedProduct) {
             $this->linkManagement->saveChild($product->getSku(), $linkedProduct);
@@ -263,21 +263,34 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * Compare two links and determine if they are equal
+     * Computes the difference of arrays
      *
-     * @param \Magento\Bundle\Api\Data\LinkInterface $firstLink
-     * @param \Magento\Bundle\Api\Data\LinkInterface $secondLink
-     * @return int
+     * @param array $firstArray of \Magento\Bundle\Api\Data\LinkInterface
+     * @param array $secondArray of \Magento\Bundle\Api\Data\LinkInterface
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function compareLinks(
-        \Magento\Bundle\Api\Data\LinkInterface $firstLink,
-        \Magento\Bundle\Api\Data\LinkInterface $secondLink
+        array $firstArray,
+        array $secondArray
     ) {
-        if ($firstLink->getId() == $secondLink->getId()) {
-            return 0;
-        } else {
-            return 1;
+        $result = [];
+        if (count($firstArray) < count($secondArray)) {
+            $holder = $firstArray;
+            $firstArray = $secondArray;
+            $secondArray = $holder;
         }
+        foreach ($firstArray as $obj) {
+            foreach ($secondArray as $objToCompare) {
+                if (
+                    $obj->getId() != $objToCompare->getId()
+                    && $obj instanceof \Magento\Bundle\Api\Data\LinkInterface
+                    && $objToCompare instanceof \Magento\Bundle\Api\Data\LinkInterface
+                ) {
+                    $result[] = $obj;
+                }
+            }
+        }
+        return $result;
     }
 }
