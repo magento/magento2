@@ -6,8 +6,6 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-use \Magento\Framework\Currency;
-
 /**
  * Product form price field helper
  */
@@ -129,18 +127,14 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
             return null;
         }
 
-        try {
-            if ($attribute = $this->getEntityAttribute()) {
-                // honor the currency format of the store
-                $store = $this->getStore($attribute);
-                $currency = $this->_localeCurrency->getCurrency($store->getBaseCurrencyCode());
-                $value = $currency->toCurrency($value, ['display' => Currency::NO_SYMBOL]);
-            } else {
-                // default format:  1234.56
-                $value = number_format($value, 2, null, '');
-            }
-        } catch (\Exception $e) {
-            return $value;
+        if ($attribute = $this->getEntityAttribute()) {
+            // honor the currency format of the store
+            $store = $this->getStore($attribute);
+            $currency = $this->_localeCurrency->getCurrency($store->getBaseCurrencyCode());
+            $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+        } else {
+            // default format:  1234.56
+            $value = number_format($value, 2, null, '');
         }
 
         return $value;
