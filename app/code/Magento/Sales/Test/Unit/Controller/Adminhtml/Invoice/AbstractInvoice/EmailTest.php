@@ -84,6 +84,11 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultForwardFactory;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoiceManagement;
+
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -128,6 +133,9 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactory);
 
+        $this->invoiceManagement = $this->getMockBuilder('Magento\Sales\Api\InvoiceManagementInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,9 +158,11 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $invoiceId = 10000031;
         $orderId = 100000030;
         $invoiceClassName = 'Magento\Sales\Model\Order\Invoice';
-        $cmNotifierClassName = 'Magento\Sales\Model\Order\InvoiceNotifier';
+        $cmNotifierClassName = 'Magento\Sales\Api\InvoiceManagementInterface';
         $invoice = $this->getMock($invoiceClassName, [], [], '', false);
-        $notifier = $this->getMock($cmNotifierClassName, [], [], '', false);
+        $invoice->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($invoiceId);
         $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
         $order->expects($this->once())
             ->method('getId')
@@ -162,23 +172,28 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('invoice_id')
             ->willReturn($invoiceId);
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn($invoice);
         $this->objectManager->expects($this->at(0))
             ->method('create')
-            ->with($invoiceClassName)
-            ->willReturn($invoice);
-        $invoice->expects($this->once())
-            ->method('load')
-            ->with($invoiceId)
-            ->willReturnSelf();
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
+
         $invoice->expects($this->once())
             ->method('getOrder')
             ->willReturn($order);
         $this->objectManager->expects($this->at(1))
             ->method('create')
             ->with($cmNotifierClassName)
-            ->willReturn($notifier);
-        $notifier->expects($this->once())
+            ->willReturn($this->invoiceManagement);
+
+        $this->invoiceManagement->expects($this->once())
             ->method('notify')
+            ->with($invoiceId)
             ->willReturn(true);
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
@@ -214,21 +229,22 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     public function testEmailNoInvoice()
     {
         $invoiceId = 10000031;
-        $invoiceClassName = 'Magento\Sales\Model\Order\Invoice';
-        $invoice = $this->getMock($invoiceClassName, [], [], '', false);
-
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
             ->willReturn($invoiceId);
+
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn(null);
         $this->objectManager->expects($this->at(0))
             ->method('create')
-            ->with($invoiceClassName)
-            ->willReturn($invoice);
-        $invoice->expects($this->once())
-            ->method('load')
-            ->with($invoiceId)
-            ->willReturn(null);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
+
         $this->resultForwardFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->resultForward);

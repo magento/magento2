@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Ui\Component\Listing\Column;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -53,8 +55,10 @@ class CustomerGroup extends Column
                 try {
                     $item[$this->getData('name')] = $this->groupRepository->getById($item[$this->getData('name')])
                         ->getCode();
-                } catch (\Exception $e) {
-
+                } catch (NoSuchEntityException $exception) {
+                    $item[$this->getData('name')] = __('Group was removed');
+                } catch (\Exception $exception) {
+                    $item[$this->getData('name')] = '';
                 }
             }
         }
