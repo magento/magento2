@@ -10,8 +10,7 @@ require 'order_paid_with_payflowpro.php';
 /** @var \Magento\Sales\Model\Order $order */
 
 $orderService = \Magento\TestFramework\ObjectManager::getInstance()->create(
-    'Magento\Sales\Api\InvoiceManagementInterface',
-    ['order' => $order]
+    'Magento\Sales\Api\InvoiceManagementInterface'
 );
 $invoice = $orderService->prepareInvoice($order->getEntityId());
 /** To allow invoice cancelling it should be created without capturing. */

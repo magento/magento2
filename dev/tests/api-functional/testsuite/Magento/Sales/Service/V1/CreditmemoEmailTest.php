@@ -23,7 +23,6 @@ class CreditmemoEmailTest extends WebapiAbstract
      */
     public function testCreditmemoEmail()
     {
-        $this->markTestSkipped('You can not cancel Credit Memo');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Sales\Model\Resource\Order\Creditmemo\Collection $creditmemoCollection */
@@ -31,8 +30,8 @@ class CreditmemoEmailTest extends WebapiAbstract
         $creditmemo = $creditmemoCollection->getFirstItem();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId(),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId() . '/emails',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

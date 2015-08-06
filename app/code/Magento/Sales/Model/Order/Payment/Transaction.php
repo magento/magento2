@@ -637,7 +637,7 @@ class Transaction extends AbstractModel implements TransactionInterface
         if (!$this->getOrderId() && $this->getOrder()) {
             $this->setOrderId($this->getOrder()->getId());
         }
-        if (!$this->getPaymentId() && $this->getOrder()) {
+        if (!$this->getPaymentId() && $this->getOrder() && $this->getOrder()->getPayment()) {
             $this->setPaymentId($this->getOrder()->getPayment()->getId());
         }
         // set parent id
