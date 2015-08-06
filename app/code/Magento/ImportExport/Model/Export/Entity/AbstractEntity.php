@@ -347,6 +347,20 @@ abstract class AbstractEntity
     }
 
     /**
+     * Retrieve message template
+     *
+     * @param string $errorCode
+     * @return null|string
+     */
+    public function retrieveMessageTemplate($errorCode)
+    {
+        if (isset($this->_messageTemplates[$errorCode])) {
+            return $this->_messageTemplates[$errorCode];
+        }
+        return null;
+    }
+
+    /**
      * Export process.
      *
      * @return string
