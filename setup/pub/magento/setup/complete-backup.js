@@ -6,10 +6,17 @@
 'use strict';
 angular.module('complete-backup', ['ngStorage'])
     .constant('BACKUPCOUNTER', 1)
-    .controller('completeBackupController', ['$rootScope', '$scope', '$http', '$timeout', 'BACKUPCOUNTER', '$localStorage', '$q', function ($rootScope, $scope, $http, $timeout, BACKUPCOUNTER, $localStorage, $q) {
+    .controller('completeBackupController', ['$rootScope', '$scope', '$state', '$http', '$timeout', 'BACKUPCOUNTER', '$localStorage', '$q', function ($rootScope, $scope, $state, $http, $timeout, BACKUPCOUNTER, $localStorage, $q) {
         if ($localStorage.backupInfo) {
             $scope.backupInfoPassed = $localStorage.backupInfo;
         }
+
+        if ($state.current.type === 'cm') {
+            $scope.type = 'update';
+        } else if ($state.current.type === 'su') {
+            $scope.type = 'upgrade';
+        }
+
         $scope.progressCounter = BACKUPCOUNTER;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
