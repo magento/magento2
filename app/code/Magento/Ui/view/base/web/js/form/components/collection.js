@@ -93,7 +93,7 @@ define([
         hasChanged: function () {
             var initial = this.initialItems,
                 current = this.elems.pluck('index'),
-                changed = !utils.identical(initial, current);
+                changed = !utils.equalArrays(initial, current);
 
             return changed || this.elems.some(function (elem) {
                 return _.some(elem.delegate('hasChanged'));
