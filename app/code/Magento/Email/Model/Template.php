@@ -105,21 +105,22 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     private $filterFactory;
 
     /**
-     * Initialize dependencies
+     * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Template\Config $emailConfig
-     * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param TemplateFactory $templateFactory
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
-     * @param array $data optional generic object data
+     * @param Template\FilterFactory $filterFactory
+     * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
