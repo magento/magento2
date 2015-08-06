@@ -80,7 +80,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Renderer list for block "" is not defined
      */
-    public function te1stGetItemRendererThrowsExceptionForNonexistentRenderer()
+    public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
         $layout = $this->getMock(
             'Magento\Framework\View\Layout',

@@ -6,22 +6,13 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
-use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Sales\Model\Resource\Order\CollectionFactory;
 
-class MassUnhold extends AbstractMassAction
+class MassUnhold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
-     * @param Context $context
-     * @param Filter $filter
-     * @param CollectionFactory $collectionFactory
+     * @var string
      */
-    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
-    {
-        parent::__construct($context, $filter);
-        $this->collectionFactory = $collectionFactory;
-    }
+    protected $collection = 'Magento\Sales\Model\Resource\Order\Collection';
 
     /**
      * Unhold selected orders
@@ -33,14 +24,12 @@ class MassUnhold extends AbstractMassAction
     {
         $countUnHoldOrder = 0;
 
-        /** @var \Magento\Sales\Model\Order $order */
+        $orderManagement = $this->_objectManager->get('Magento\Sales\Api\OrderManagementInterface');
         foreach ($collection->getItems() as $order) {
-            $order->load($order->getId());
             if (!$order->canUnhold()) {
                 continue;
             }
-            $order->unhold();
-            $order->save();
+            $orderManagement->unHold($order->getEntityId());
             $countUnHoldOrder++;
         }
 
@@ -60,7 +49,7 @@ class MassUnhold extends AbstractMassAction
             );
         }
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath($this->getComponentRefererUrl());
+        $resultRedirect->setPath('sales/*/');
         return $resultRedirect;
     }
 }

@@ -151,6 +151,13 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     protected $_queryParamsResolver;
 
     /**
+     * Cache urls requested by getUrl method
+     *
+     * @var array
+     */
+    private $cacheUrl = [];
+
+    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
@@ -770,7 +777,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * Build url by requested path and parameters
+     * Build and cache url by requested path and parameters
      *
      * @param   string|null $routePath
      * @param   array|null $routeParams
@@ -784,6 +791,34 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             return $routePath;
         }
 
+        if(isset($routeParams['_scope']) && is_object($routeParams['_scope'])) {
+            return $this->createUrl($routePath, $routeParams);
+        }
+
+        $cashedParams = $routeParams;
+        if (is_array($cashedParams)) {
+            ksort($cashedParams);
+        }
+
+        $cacheKey = md5($routePath . serialize($cashedParams));
+        if (!isset($this->cacheUrl[$cacheKey])) {
+            $this->cacheUrl[$cacheKey] = $this->createUrl($routePath, $routeParams);
+        }
+
+        return $this->cacheUrl[$cacheKey];
+    }
+
+    /**
+     * Build url by requested path and parameters
+     *
+     * @param   string|null $routePath
+     * @param   array|null $routeParams
+     * @return  string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function createUrl($routePath = null, $routeParams = null)
+    {
         $escapeQuery = false;
 
         /**
@@ -846,6 +881,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $url .= '#' . $fragment;
         }
         $this->getRouteParamsResolver()->unsetData('secure');
+
         return $this->escape($url);
     }
 
