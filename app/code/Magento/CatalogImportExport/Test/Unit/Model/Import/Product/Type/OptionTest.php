@@ -744,7 +744,6 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->assertFalse($this->_modelMock->validateAmbiguousData());
         }
         $resultErrors = $this->_productEntity->getErrorAggregator()->getRowsGroupedByErrorCode([], [], false);
-//        var_dump($resultErrors); die();
         $this->assertEquals($errors, $resultErrors);
     }
 
@@ -857,7 +856,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             'ambiguity_several_input_rows' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_AMBIGUOUS_NEW_NAMES => [1, 2]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_AMBIGUOUS_NEW_NAMES => [2, 2]
                 ],
                 '$behavior' => null,
                 '$numberOfValidations' => 2
