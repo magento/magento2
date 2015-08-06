@@ -2401,4 +2401,7 @@ return [
     ['getStoreCodeFromCookie', '\Magento\Store\Model\Store'],
     ['deleteCookie', '\Magento\Store\Model\Store'],
     ['setCookie', '\Magento\Store\Model\Store'],
+    ['prepareShipment', 'Magento\Sales\Model\Order'],
+    ['prepareShipment', 'Magento\Sales\Model\Service\Order'],
+    ['prepareInvoice', 'Magento\Sales\Model\Service\Order'],
 ];
