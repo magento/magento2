@@ -152,7 +152,7 @@ expected;
             ->willReturnArgument(0);
 
         $actual = $this->object->getConfig();
-        $this->assertStringMatchesFormat($expected, $actual);
+        $this->assertEquals($actual, $expected);
     }
 
     public function testGetMinResolverCode()
