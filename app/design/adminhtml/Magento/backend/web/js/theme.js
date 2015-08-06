@@ -10,7 +10,6 @@ define('globalNavigationScroll', [
 
     var win = $(window),
         subMenuClass = '.submenu',
-        overlapClassName = '_overlap',
         fixedClassName = '_fixed',
         menu = $('.menu-wrapper'),
         content = $('.page-wrapper'),
@@ -18,7 +17,7 @@ define('globalNavigationScroll', [
         subMenus = menuItems.children(subMenuClass),
         winHeight,
         menuHeight = menu.height(),
-        menuHeightRest,
+        menuHeightRest = 0,
         menuScrollMax = 0,
         submenuHeight = 0,
         contentHeight,
@@ -82,17 +81,17 @@ define('globalNavigationScroll', [
                     nextTop < (menuScrollMax - scrollStep) ?
                         nextTop += scrollStep : nextTop = menuScrollMax;
 
-                    menu.css('top', -nextTop * 2);
+                    menu.css('top', -nextTop);
 
-
-                } else if (winTop < winTopLast) { // scroll up
+                } else if (winTop <= winTopLast) { // scroll up
 
                     nextTop > -scrollStep ?
                         nextTop += scrollStep : nextTop = 0;
 
-                    menu.css('top', -nextTop * 2);
+                    menu.css('top', -nextTop);
 
                 }
+
             }
 
         } else { // static menu cases
@@ -118,20 +117,27 @@ define('globalNavigationScroll', [
         //  Reset position if fixed and out of smart scroll
         if ((menuHeight < contentHeight) && (menuHeight <= winHeight)) {
             menu.removeAttr('style');
-            //  Remove overlap classes from submenus and clear overlap adding event
-            subMenus.removeClass(overlapClassName);
             menuItems.off();
         }
 
     });
 
     //  Add event to menuItems to check submenu overlap
-    menuItems.on('click', function () {
+    menuItems.on('click', function (e) {
 
-        var submenu = $(this).children(subMenuClass);
+        var submenu = $(this).children(subMenuClass),
+            delta;
+
         submenuHeight = submenu.height();
-        if (isMenuFixed() && (submenuHeight > winHeight)) {
-            checkAddClass(submenu, overlapClassName);
+
+        if (submenuHeight > menuHeight && menuHeight > winHeight) {
+            menu.height(submenuHeight - $('.logo')[0].offsetHeight);
+            delta = -menu.position().top;
+            window.scrollTo(0, 0);
+            positionMenu();
+            window.scrollTo(0, delta);
+            positionMenu();
+            menuHeight = submenuHeight;
         }
     });
 
@@ -245,6 +251,7 @@ define('globalNavigation', [
                 close = this._closeSubmenu.bind(this),
                 closeBtn = subMenu.find(selectors.closeSubmenuBtn);
 
+
             if (subMenu.length) {
                 e.preventDefault();
             }
@@ -254,7 +261,9 @@ define('globalNavigation', [
                 .removeClass('_show');
 
             subMenu.attr('aria-expanded', 'true');
-            subMenu.css('height', 765);
+
+            //subMenu.css('height', subMenu.find('ul.menu')[0].height() + subMenu.find('strong.submenu-title').height());
+
             closeBtn.on('click', close);
 
             this.overlay.show(0).on('click', close);
