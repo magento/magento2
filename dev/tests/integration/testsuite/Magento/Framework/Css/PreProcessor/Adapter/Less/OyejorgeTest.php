@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Css\PreProcessor\Adapter;
+namespace Magento\Framework\Css\PreProcessor\Adapter\Less;
 
 use Magento\Framework\App\State;
 
@@ -25,7 +25,7 @@ class OyejorgeTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $objectManager->create('Magento\Framework\Css\PreProcessor\Adapter\Oyejorge');
+        $this->model = $objectManager->create('Magento\Framework\Css\PreProcessor\Adapter\Less\Oyejorge');
         $this->state = $objectManager->get('Magento\Framework\App\State');
     }
 

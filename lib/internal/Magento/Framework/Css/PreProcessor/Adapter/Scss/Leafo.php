@@ -12,8 +12,6 @@ use Magento\Framework\App\State;
  */
 class Leafo implements \Magento\Framework\Css\PreProcessor\AdapterInterface
 {
-    const ERROR_MESSAGE_PREFIX = 'CSS compilation from SCSS ';
-
     /**
      * @var \Psr\Log\LoggerInterface
      */
