@@ -50,23 +50,50 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected $checkoutSession;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * @var \Magento\Customer\Api\Data\CustomerInterface
+     */
+    protected $customer;
+
+    /**
+     * @var \Magento\Customer\Api\Data\AddressInterface
+     */
+    protected $defaultShippingAddress = null;
+
+    /**
      * @param \Magento\Checkout\Block\Checkout\AttributeMerger $merger
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
      * @param \Magento\Directory\Model\Resource\Region\Collection $regionCollection
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
         \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
         \Magento\Directory\Model\Resource\Region\Collection $regionCollection,
         \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         $this->merger = $merger;
         $this->countryCollection = $countryCollection;
         $this->regionCollection = $regionCollection;
         $this->carrierFactory = $carrierFactory;
         $this->checkoutSession = $checkoutSession;
+        $this->customerSession = $customerSession;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -74,7 +101,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return array
      */
-    public function getCarriers()
+    protected function getCarriers()
     {
         if (null === $this->carriers) {
             $this->carriers = [];
@@ -95,7 +122,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return \Magento\Quote\Model\Quote\Address
      */
-    public function getAddress()
+    protected function getAddress()
     {
         if (empty($this->address)) {
             $this->address = $this->getQuote()->getShippingAddress();
@@ -108,7 +135,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return \Magento\Quote\Model\Quote
      */
-    public function getQuote()
+    protected function getQuote()
     {
         if (null === $this->quote) {
             $this->quote = $this->checkoutSession->getQuote();
@@ -117,11 +144,26 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
+     * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     */
+    protected function getCustomer()
+    {
+        if (!$this->customer) {
+            if ($this->customerSession->isLoggedIn()) {
+                $this->customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
+            } else {
+                return null;
+            }
+        }
+        return $this->customer;
+    }
+
+    /**
      * Get Estimate Rates
      *
      * @return array
      */
-    public function getEstimateRates()
+    protected function getEstimateRates()
     {
         if (empty($this->rates)) {
             $groups = $this->getAddress()->getGroupedAllShippingRates();
@@ -135,7 +177,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return string
      */
-    public function getEstimateCountryId()
+    protected function getEstimateCountryId()
     {
         return $this->getAddress()->getCountryId();
     }
@@ -146,7 +188,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getCityActive()
+    protected function getCityActive()
     {
         return false;
     }
@@ -157,7 +199,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getStateActive()
+    protected function getStateActive()
     {
         return false;
     }
@@ -167,7 +209,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return bool
      */
-    public function isCityRequired()
+    protected function isCityRequired()
     {
         foreach ($this->getCarriers() as $carrier) {
             if ($carrier->isCityRequired()) {
@@ -182,7 +224,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return bool
      */
-    public function isStateProvinceRequired()
+    protected function isStateProvinceRequired()
     {
         foreach ($this->getCarriers() as $carrier) {
             if ($carrier->isStateProvinceRequired()) {
@@ -197,7 +239,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return bool
      */
-    public function isZipCodeRequired()
+    protected function isZipCodeRequired()
     {
         foreach ($this->getCarriers() as $carrier) {
             if ($carrier->isZipCodeRequired($this->getEstimateCountryId())) {
@@ -208,6 +250,25 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
+     * @return \Magento\Customer\Api\Data\AddressInterface|null
+     */
+    protected function getDefaultShippingAddress()
+    {
+        if ($this->defaultShippingAddress == null) {
+            $customer = $this->getCustomer();
+            if ($customer && $customer->getAddresses()) {
+                foreach ($customer->getAddresses() as $address) {
+                    if ($address->isDefaultShipping()) {
+                        $this->defaultShippingAddress = $address;
+                        break;
+                    }
+                }
+            }
+        }
+        return $this->defaultShippingAddress;
+    }
+
+    /**
      * Process js Layout of block
      *
      * @param array $jsLayout
@@ -215,31 +276,36 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      */
     public function process($jsLayout)
     {
+        $defaultAddress = $this->getDefaultShippingAddress();
         $elements = [
             'city' => [
                 'visible' => $this->getCityActive(),
                 'formElement' => 'input',
                 'label' => __('City'),
-                'validation' => $this->isCityRequired() ? ['required-entry' => true] : null
+                'validation' => $this->isCityRequired() ? ['required-entry' => true] : null,
+                'value' => $defaultAddress ? $defaultAddress->getCity() : null
             ],
             'country_id' => [
                 'visible' => true,
                 'formElement' => 'select',
                 'label' => __('Country'),
-                'options' => $this->countryCollection->load()->toOptionArray()
+                'options' => $this->countryCollection->load()->toOptionArray(),
+                'value' => $defaultAddress ? $defaultAddress->getCountryId() : null
             ],
             'region_id' => [
                 'visible' => true,
                 'formElement' => 'select',
                 'label' => __('State/Province'),
                 'options' => $this->regionCollection->load()->toOptionArray(),
-                'validation' => $this->isStateProvinceRequired() ? ['required-entry' => true] : null
+                'validation' => $this->isStateProvinceRequired() ? ['required-entry' => true] : null,
+                'value' => $defaultAddress ? $defaultAddress->getRegionId() : null
             ],
             'postcode' => [
                 'visible' => true,
                 'formElement' => 'input',
                 'label' => __('Zip/Postal Code'),
-                'validation' => $this->isZipCodeRequired() ? ['required-entry' => true] : null
+                'validation' => $this->isZipCodeRequired() ? ['required-entry' => true] : null,
+                'value' => $defaultAddress ? $defaultAddress->getPostcode() : null
             ]
         ];
 
