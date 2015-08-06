@@ -265,7 +265,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Downloadable\Helper\File $fileHelper
-
     ){
         $this->uploaderFactory = $uploaderFactory;
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
@@ -787,9 +786,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if ($key == 'sample') {
                     $option['sample_type'] = $this->getTypeByValue($value);
                     $option['sample_' . $option['sample_type']] = $value;
-//                    if ($option['sample_type'] == self::FILE_OPTION_VALUE){
-//                        $value = $this->uploadDownloadableFiles($value, 'link_samples', true);
-//                    }
                 }
                 if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE){
                     $option['link_type'] = $key;
@@ -797,9 +793,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if ($key == 'downloads' && $value == 'unlimited'){
                     $value = 0;
                 }
-//                if ($key == self::FILE_OPTION_VALUE){
-//                    $value = $this->uploadDownloadableFiles($value, 'links', true);
-//                }
                 if (isset($this->optionLinkMapping[$key])) {
                     $key = $this->optionLinkMapping[$key];
                 }
@@ -826,9 +819,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE){
                     $option['sample_type'] = $key;
                 }
-//                if ($key == self::FILE_OPTION_VALUE){
-//                    $value = $this->uploadDownloadableFiles($value, 'samples', true);
-//                }
                 if (isset($this->optionSampleMapping[$key])) {
                     $key = $this->optionSampleMapping[$key];
                 }
