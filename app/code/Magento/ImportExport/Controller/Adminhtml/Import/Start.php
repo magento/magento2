@@ -26,20 +26,29 @@ class Start extends ImportController
             /** @var $importModel \Magento\ImportExport\Model\Import */
             $importModel = $this->_objectManager->create('Magento\ImportExport\Model\Import');
 
-            try {
-                $importModel->setData($data);
-                $importModel->importSource();
+            $importModel->setData($data);
+            $result = $importModel->importSource();
+
+            if ($result) {
                 $importModel->invalidateIndex();
-                $resultBlock->addAction('show', 'import_validation_container')
-                    ->addAction('innerHTML', 'import_validation_container_header', __('Status'));
-            } catch (\Exception $e) {
-                $resultBlock->addError($e->getMessage());
-                return $resultLayout;
+                $resultBlock
+                    ->addNotice($this->getImportProcessingMessages($importModel->getErrorAggregator()))
+                    ->addAction('show', 'import_validation_container')
+                    ->addAction('innerHTML', 'import_validation_container_header', __('Status'))
+                    ->addAction('hide', ['edit_form', 'upload_button', 'messages'])
+                    ->addSuccess(__('Import successfully done'));
+            } else {
+                $systemsExceptions = $this->getSystemExceptions($importModel->getErrorAggregator());
+                foreach ($systemsExceptions as $error) {
+                    $resultBlock->addError(
+                        $error->getErrorMessage() . '<br>Additional data: ' . $error->getErrorDescription()
+                    );
+                }
             }
-            $resultBlock->addAction('hide', ['edit_form', 'upload_button', 'messages'])
-                ->addSuccess(__('Import successfully done'));
+
             return $resultLayout;
         }
+
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');

@@ -6,19 +6,12 @@
 
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
-class BundleTest extends \PHPUnit_Framework_TestCase
+class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * @var \Magento\BundleImportExport\Model\Import\Product\Type\Bundle
      */
     protected $bundle;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
 
     /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
@@ -56,12 +49,25 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->entityModel = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
-            ['getBehavior', 'getNewSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope', 'getConnection'],
+            [
+                'getErrorAggregator',
+                'getBehavior',
+                'getNewSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getRowScope',
+                'getConnection'
+            ],
             [],
             '',
             false
+        );
+        $this->entityModel->method('getErrorAggregator')->willReturn(
+            $this->getErrorAggregatorObject()
         );
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
@@ -135,7 +141,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             0 => $this->entityModel,
             1 => 'bundle'
         ];
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->bundle = $this->objectManagerHelper->getObject(
             'Magento\BundleImportExport\Model\Import\Product\Type\Bundle',
