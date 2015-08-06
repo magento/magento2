@@ -17,7 +17,7 @@ define([
         attributes: ko.observableArray([]),
         grid: ko.observableArray([]),
         attributesName: ko.observableArray([]),
-        nextLabel: $.mage.__('Generate Products'),
+        nextLabelText: $.mage.__('Generate Products'),
         variationsComponent: uiRegistry.async('configurableVariations'),
         variations: [],
         /**
@@ -71,6 +71,7 @@ define([
             }, this);
         },
         render: function (wizard) {
+            this.wizard = wizard;
             this.sections(wizard.data.sections());
             this.attributes(wizard.data.attributes());
 
