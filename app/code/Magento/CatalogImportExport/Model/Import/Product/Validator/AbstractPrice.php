@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use Magento\Framework\Validator\AbstractValidator;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
-abstract class AbstractPrice extends AbstractValidator implements RowValidatorInterface
+abstract class AbstractPrice extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
@@ -42,11 +42,11 @@ abstract class AbstractPrice extends AbstractValidator implements RowValidatorIn
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init($context)
     {
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getId()] = true;
         }
-        return $this;
+        return parent::init($context);
     }
 }

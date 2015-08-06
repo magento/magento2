@@ -11,17 +11,12 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Path to csv file to import
      */
     const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
-
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $_helper;
 
     /**
      * Test store parametes
@@ -218,7 +213,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        parent::setUp();
+
         $addExpectations = false;
         $deleteBehavior = false;
         $testName = $this->getName(true);
@@ -700,13 +696,13 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     public function testValidateRow(array $rowData, array $errors)
     {
         $this->_bypassModelMethodGetMultiRowFormat($rowData);
-
         if (empty($errors)) {
             $this->assertTrue($this->_modelMock->validateRow($rowData, 0));
         } else {
             $this->assertFalse($this->_modelMock->validateRow($rowData, 0));
         }
-        $this->assertAttributeEquals($errors, '_errors', $this->_productEntity);
+        $resultErrors = $this->_productEntity->getErrorAggregator()->getRowsGroupedByErrorCode([], [], false);
+        $this->assertEquals($errors, $resultErrors);
     }
 
     /**
@@ -747,7 +743,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertFalse($this->_modelMock->validateAmbiguousData());
         }
-        $this->assertAttributeEquals($errors, '_errors', $this->_productEntity);
+        $resultErrors = $this->_productEntity->getErrorAggregator()->getRowsGroupedByErrorCode([], [], false);
+//        var_dump($resultErrors); die();
+        $this->assertEquals($errors, $resultErrors);
     }
 
     /**
@@ -766,73 +764,55 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'main_invalid_store' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_store.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_STORE => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_STORE => [1]
                 ]
             ],
             'main_incorrect_type' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_incorrect_type.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_TYPE => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_TYPE => [1]
                 ]
             ],
             'main_no_title' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_no_title.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_EMPTY_TITLE => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_EMPTY_TITLE => [1]
                 ]
             ],
             'main_empty_title' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_empty_title.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_EMPTY_TITLE => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_EMPTY_TITLE => [1]
                 ]
             ],
             'main_invalid_price' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_price.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_PRICE => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_PRICE => [1]
                 ]
             ],
             'main_invalid_max_characters' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_max_characters.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_MAX_CHARACTERS => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_MAX_CHARACTERS => [1]
                 ]
             ],
             'main_max_characters_less_zero' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_max_characters_less_zero.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_MAX_CHARACTERS => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_MAX_CHARACTERS => [1]
                 ]
             ],
             'main_invalid_sort_order' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_sort_order.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_SORT_ORDER => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_SORT_ORDER => [1]
                 ]
             ],
             'main_sort_order_less_zero' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_sort_order_less_zero.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_SORT_ORDER => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_SORT_ORDER => [1]
                 ]
             ],
             'secondary_valid' => [
@@ -842,33 +822,25 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'secondary_invalid_store' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_secondary_invalid_store.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_STORE => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_STORE => [1]
                 ]
             ],
             'secondary_incorrect_price' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_price.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_ROW_PRICE => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_ROW_PRICE => [1]
                 ]
             ],
             'secondary_incorrect_row_sort' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_row_sort.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_ROW_SORT => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_ROW_SORT => [1]
                 ]
             ],
             'secondary_row_sort_less_zero' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_secondary_row_sort_less_zero.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_ROW_SORT => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_INVALID_ROW_SORT => [1]
                 ]
             ]
         ];
@@ -885,10 +857,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'ambiguity_several_input_rows' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_AMBIGUOUS_NEW_NAMES => [
-                        [1, null],
-                        [2, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_AMBIGUOUS_NEW_NAMES => [1, 2]
                 ],
                 '$behavior' => null,
                 '$numberOfValidations' => 2
@@ -896,18 +865,14 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'ambiguity_different_type' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_ambiguity_different_type.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_AMBIGUOUS_TYPES => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_AMBIGUOUS_TYPES => [1]
                 ],
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
             ],
             'ambiguity_several_db_rows' => [
                 '$rowData' => include __DIR__ . '/_files/row_data_ambiguity_several_db_rows.php',
                 '$errors' => [
-                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_AMBIGUOUS_OLD_NAMES => [
-                        [1, null]
-                    ]
+                    \Magento\CatalogImportExport\Model\Import\Product\Option::ERROR_AMBIGUOUS_OLD_NAMES => [1]
                 ],
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
             ]
@@ -939,15 +904,15 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $model = $this->_helper->getObject(
+        $model = $this->objectManagerHelper->getObject(
             'Magento\CatalogImportExport\Model\Import\Product\Option',
             [
                 'data' => [
                     'data_source_model' => $modelData,
                     'product_model' => $productModel,
-                    'option_collection' => $this->_helper->getObject('stdClass'),
+                    'option_collection' => $this->objectManagerHelper->getObject('stdClass'),
                     'product_entity' => $productEntity,
-                    'collection_by_pages_iterator' => $this->_helper->getObject('stdClass'),
+                    'collection_by_pages_iterator' => $this->objectManagerHelper->getObject('stdClass'),
                     'page_size' => 5000,
                     'stores' => []
                 ]
@@ -997,26 +962,5 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
-    }
-
-    /**
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     */
-    protected function getErrorAggregatorObject()
-    {
-        $errorFactory = $this->getMockBuilder(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $errorFactory->method('create')->willReturn(
-            $this->_helper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
-        );
-        return $this->_helper->getObject(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            [
-                'errorFactory' => $errorFactory
-            ]
-        );
     }
 }

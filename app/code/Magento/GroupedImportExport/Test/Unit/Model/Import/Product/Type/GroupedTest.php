@@ -6,16 +6,12 @@
 
 namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\GroupedImportExport;
 
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /** @var GroupedImportExport\Model\Import\Product\Type\Grouped */
     protected $grouped;
-
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
 
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -64,7 +60,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        parent::setUp();
 
         $this->setCollectionFactory = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
@@ -277,26 +273,5 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $this->links->expects($this->once())->method('saveLinksData');
         $this->grouped->saveData();
-    }
-
-    /**
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     */
-    protected function getErrorAggregatorObject()
-    {
-        $errorFactory = $this->getMockBuilder(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $errorFactory->method('create')->willReturn(
-            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
-        );
-        return $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            [
-                'errorFactory' => $errorFactory
-            ]
-        );
     }
 }

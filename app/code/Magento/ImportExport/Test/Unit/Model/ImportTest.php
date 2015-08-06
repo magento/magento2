@@ -5,15 +5,13 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
 /**
  * Class ImportTest
  * @package Magento\ImportExport\Test\Unit\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
 
     /**
@@ -106,18 +104,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected $_driver;
 
     /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
-
-    /**
      * Set up
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        parent::setUp();
 
         $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
@@ -217,27 +210,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
 
-    }
-
-    /**
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     */
-    protected function getErrorAggregatorObject()
-    {
-        $errorFactory = $this->getMockBuilder(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $errorFactory->method('create')->willReturn(
-            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
-        );
-        return $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            [
-                'errorFactory' => $errorFactory
-            ]
-        );
     }
 
     /**
