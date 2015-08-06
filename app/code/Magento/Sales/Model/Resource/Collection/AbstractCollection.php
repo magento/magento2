@@ -17,6 +17,11 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\V
     protected $_countSelect;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteriaInterface
+     */
+    protected $searchCriteria;
+
+    /**
      * Set select count sql
      *
      * @param \Magento\Framework\DB\Select $countSelect
@@ -157,7 +162,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\V
      */
     public function getSearchCriteria()
     {
-        return null;
+        return $this->searchCriteria;
     }
 
     /**
@@ -169,6 +174,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\V
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
+        $this->searchCriteria = $searchCriteria;
         return $this;
     }
 
@@ -199,10 +205,15 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\V
      *
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setItems(array $items = null)
     {
+        if (!$items) {
+            return $this;
+        }
+        foreach ($items as $item) {
+            $this->addItem($item);
+        }
         return $this;
     }
 }
