@@ -15,6 +15,7 @@ define([
             rowButtonsTmpl: 'ui/grid/editing/row-buttons',
             headerButtonsTmpl: 'ui/grid/editing/header-buttons',
             errorsCount: 0,
+            canSave: true,
             isMultiEditing: false,
             isSingleEditing: false,
             rowsData: [],
@@ -47,6 +48,7 @@ define([
                 '${ $.selectProvider }:selected': 'onSelectionsChange'
             },
             modules: {
+                columns: '${ $.columnsProvider }',
                 bulk: '${ $.bulkConfig.name }',
                 selections: '${ $.selectProvider }'
             }
@@ -58,7 +60,7 @@ define([
          * @returns {Editor} Chainable.
          */
         initialize: function () {
-            _.bindAll(this, 'updateState', 'countErros');
+            _.bindAll(this, 'updateState', 'countErrors');
 
             this._super()
                 .initBulk()
@@ -75,10 +77,14 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
+                    'canSave',
                     'errorsCount',
                     'isMultiEditing',
                     'isSingleEditing'
-                ]);
+                ])
+                .observe({
+                    active: []
+                });
 
             return this;
         },
@@ -114,7 +120,7 @@ define([
         initElement: function (record) {
             record.on({
                 'active': this.updateState,
-                'errorsCount': this.countErros
+                'errorsCount': this.countErrors
             });
 
             this.updateState();
@@ -152,8 +158,8 @@ define([
         },
 
         /**
-         * Starts editing of a specfied record. If record doesn't
-         * exist, than it will be created.
+         * Starts editing of a specfied record. If records'
+         * instance doesn't exist, than it will be created.
          *
          * @param {(Number|String)} id - See 'getId' method.
          * @param {Boolean} [isIndex=false] - See 'getId' method.
@@ -204,7 +210,7 @@ define([
          * @returns {Editor} Chainable.
          */
         reset: function () {
-            this.getActive().forEach(function (record) {
+            this.active.each(function (record) {
                 this.resetRecord(record.recordId);
             }, this);
 
@@ -217,19 +223,53 @@ define([
          * @returns {Editor} Chainable.
          */
         save: function () {
-            this.validate();
+            if (!this.isValid()) {
+                return this;
+            }
 
             return this;
         },
 
         /**
-         * STUBBED action.
+         * Validates all active records.
          *
-         * @returns {Editor} Chainable.
+         * @returns {Array} An array of records and theirs validation results.
          */
         validate: function () {
-            this.getActive().forEach(function (record) {
-                record.validate();
+            return this.active.map(function (record) {
+                return {
+                    target: record,
+                    valid: record.isValid()
+                };
+            });
+        },
+
+        /**
+         * Checks if all active records are valid.
+         *
+         * @returns {Boolean}
+         */
+        isValid: function () {
+            return this.validate.every(function (result) {
+                return result.valid;
+            });
+        },
+
+        /**
+         * Disables editing of specfied fields.
+         *
+         * @param {Array} fields - An array of fields indeces to be disabled.
+         * @returns {Editor} Chainable.
+         */
+        disableFields: function (fields) {
+            var columns = this.columns().elems();
+
+            if (typeof fields == 'string') {
+                fields = fields.split(' ');
+            }
+
+            columns.forEach(function (column) {
+                column.disabled(_.contains(fields, column.index));
             });
 
             return this;
@@ -240,7 +280,7 @@ define([
          *
          * @param {(Number|String)} id - Records' identifier or its' index in the rows array.
          * @param {Boolean} [isIndex=false] - Flag that indicates if first
-         *      parameter is index or identifier.
+         *      parameter is an index or identifier.
          * @returns {Number|String} Records' id.
          */
         getId: function (id, isIndex) {
@@ -282,19 +322,14 @@ define([
         },
 
         /**
-         * Sets provided data to the record.
+         * Sets provided data to all active records.
          *
-         * @param {Object} data - Records' data.
-         * @param {(Number|String)} id - See 'getId' method.
-         * @param {Boolean} [isIndex=false] - See 'getId' method.
+         * @param {Object} data - See 'setData' method of a 'Record'.
+         * @param {Boolean} partial - See 'setData' method of a 'Record'.
          * @returns {Editor} Chainable.
          */
-        setRecordData: function (data, id, isIndex) {
-            var record = this.getRecord(id, isIndex);
-
-            if (record) {
-                record.setData(data);
-            }
+        setRecordsData: function (data, partial) {
+            this.active.each('setData', data, partial);
 
             return this;
         },
@@ -308,9 +343,12 @@ define([
          * @returns {Editor} Chainable.
          */
         resetRecord: function (id, isIndex) {
-            var data = this.getRowData(id, isIndex);
+            var record = this.getRecord(id, isIndex),
+                data = this.getRowData(id, isIndex);
 
-            this.setRecordData(data, id, isIndex);
+            if (record) {
+                record.setData(data);
+            }
 
             return this;
         },
@@ -344,21 +382,12 @@ define([
         },
 
         /**
-         * Returns array of currently active records.
-         *
-         * @returns {Array}
-         */
-        getActive: function () {
-            return this.elems.filter('active');
-        },
-
-        /**
          * Checks if editor has active records.
          *
          * @returns {Boolean}
          */
         hasActive: function () {
-            return !!this.countActive();
+            return !!this.active().length;
         },
 
         /**
@@ -367,7 +396,7 @@ define([
          * @returns {Number}
          */
         countActive: function () {
-            return this.getActive().length;
+            return this.active().length;
         },
 
         /**
@@ -375,10 +404,10 @@ define([
          *
          * @returns {Number}
          */
-        countErros: function () {
+        countErrors: function () {
             var errorsCount = 0;
 
-            this.getActive().forEach(function (record) {
+            this.active.each(function (record) {
                 errorsCount += record.errorsCount();
             });
 
@@ -393,7 +422,7 @@ define([
          * @returns {Boolean}
          */
         hasErrors: function () {
-            return this.countErros() > 0;
+            return !!this.countErrors();
         },
 
         /**
@@ -403,14 +432,12 @@ define([
          * @returns {Editor} Chainable.
          */
         updateState: function () {
-            var activeRecords = this.countActive();
+            var active = this.elems.filter('active');
 
-            if (activeRecords <= 1 && this.isMultiEditing()) {
-                this.bulk('clear');
-            }
+            this.isMultiEditing(active.length > 1);
+            this.isSingleEditing(active.length === 1);
 
-            this.isMultiEditing(activeRecords > 1);
-            this.isSingleEditing(activeRecords === 1);
+            this.active(active);
 
             return this;
         },
@@ -447,7 +474,7 @@ define([
         },
 
         /**
-         * Listener of the multiselect selections data.
+         * Listener of the selections data changes.
          */
         onSelectionsChange: function () {
             if (this.hasActive()) {

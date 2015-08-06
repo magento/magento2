@@ -175,7 +175,7 @@ define([
          * @param {HTMLElement} node
          */
         initRoot: function (node) {
-            var table = node.querySelector(':scope > table.data-grid');
+            var table = $('> table.data-grid', node)[0];
 
             this.initTable(table);
         },
