@@ -333,17 +333,26 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $this->_entityModel->addRowError(self::ERROR_OPTIONS_NOT_FOUND, $this->rowNum);
             $error = true;
         }
-        if (
-            $this->sampleGroupTitle($rowData) == '' &&
-            $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE)
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])&&
+            $rowData[self::COL_DOWNLOADABLE_LINKS] != '' &&
+            $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == '')
+        {
+            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
+            $error = true;
+        }
+        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) &&
+            $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '' &&
+            $this->sampleGroupTitle($rowData) == ''
         ){
             $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
             $error = true;
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])){
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
+            $rowData[self::COL_DOWNLOADABLE_LINKS] != ''){
             $error = $this->isTitle($this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]));
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])){
+        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) &&
+            $rowData[self::COL_DOWNLOADABLE_SAMPLES] != ''){
             $error = $this->isTitle($this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES]));
         }
         return !$error;
@@ -842,31 +851,31 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $this->fileUploader->init();
             $this->fileUploader->setAllowedExtensions($this->getAllowedExtensions());
             $this->fileUploader->removeValidateCallback('catalog_product_image');
-            $dirConfig = DirectoryList::getDefaultConfig();
-            $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
+        }
+        $dirConfig = DirectoryList::getDefaultConfig();
+        $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
-            $DS = DIRECTORY_SEPARATOR;
+        $DS = DIRECTORY_SEPARATOR;
 
-            if (!empty($this->parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR])) {
-                $tmpPath = $this->parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR];
-            } else {
-                $tmpPath = $dirAddon . $DS . $this->mediaDirectory->getRelativePath('import');
-            }
+        if (!empty($this->parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR])) {
+            $tmpPath = $this->parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR];
+        } else {
+            $tmpPath = $dirAddon . $DS . $this->mediaDirectory->getRelativePath('import');
+        }
 
-            if (!$this->fileUploader->setTmpDir($tmpPath)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('File directory \'%1\' is not readable.', $tmpPath)
-                );
-            }
-            $destinationDir = "downloadable/files/" . $type;
-            $destinationPath = $dirAddon . $DS . $this->mediaDirectory->getRelativePath($destinationDir);
+        if (!$this->fileUploader->setTmpDir($tmpPath)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('File directory \'%1\' is not readable.', $tmpPath)
+            );
+        }
+        $destinationDir = "downloadable/files/" . $type;
+        $destinationPath = $dirAddon . $DS . $this->mediaDirectory->getRelativePath($destinationDir);
 
-            $this->mediaDirectory->create($destinationDir);
-            if (!$this->fileUploader->setDestDir($destinationPath)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('File directory \'%1\' is not writable.', $destinationPath)
-                );
-            }
+        $this->mediaDirectory->create($destinationDir);
+        if (!$this->fileUploader->setDestDir($destinationPath)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('File directory \'%1\' is not writable.', $destinationPath)
+            );
         }
         return $this->fileUploader;
     }
