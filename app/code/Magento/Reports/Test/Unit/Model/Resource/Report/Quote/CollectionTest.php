@@ -5,6 +5,7 @@
  */
 namespace Magento\Reports\Test\Unit\Model\Resource\Report\Quote;
 
+use Magento\Framework\App\Resource;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use \Magento\Reports\Model\Resource\Quote\Collection as Collection;
 
@@ -78,8 +79,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $constructArgs = $this->objectManager
             ->getConstructArguments('Magento\Reports\Model\Resource\Quote\Item\Collection');
         $constructArgs['eventManager'] = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $readConnectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
         $resourceMock = $this->getMock('\Magento\Quote\Model\Resource\Quote', [], [], '', false);
+        $resourceMock
+            ->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false));
         $constructArgs['resource'] = $resourceMock;
         $productResourceMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
         $constructArgs['productResource'] = $productResourceMock;
@@ -100,7 +105,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 '_initSelect',
                 'getTable',
                 'getItems',
-                'getOrdersData',
+                'getOrdersData'
             ],
             $constructArgs
         );
@@ -130,8 +135,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $productResourceMock->expects($this->once())
             ->method('getConnection')
-            ->with('read')
-            ->willReturn($readConnectionMock);
+            ->willReturn($connectionMock);
         $productResourceMock->expects($this->any())
             ->method('getAttribute')
             ->willReturnMap([['name', $productAttributeMock], ['price', $priceAttributeMock]]);
@@ -144,7 +148,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $productAttributeMock->expects($this->once())->method('getBackend')->willReturnSelf();
         $priceAttributeMock->expects($this->once())->method('getBackend')->willReturnSelf();
-        $readConnectionMock->expects($this->once())->method('fetchAssoc')->willReturn([1, 2, 3]);
+        $connectionMock->expects($this->once())->method('fetchAssoc')->willReturn([1, 2, 3]);
 
         //_afterLoad()
         $collection->expects($this->once())->method('getItems')->willReturn([]);

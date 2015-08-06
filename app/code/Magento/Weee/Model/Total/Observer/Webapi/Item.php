@@ -35,7 +35,7 @@ class Item
     }
 
     /**
-     * @param \Magento\Framework\Object $observer
+     * @param \Magento\Framework\DataObject $observer
      * @return \Magento\Quote\Model\Quote\Item
      */
     public function processTaxData($observer)

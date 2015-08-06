@@ -8,7 +8,6 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\DateTime;
-use Zend\Server\Reflection\ReflectionClass;
 
 /**
  * Class ProductTest
@@ -17,7 +16,7 @@ use Zend\Server\Reflection\ReflectionClass;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     const MEDIA_DIRECTORY = 'media/import';
 
@@ -42,7 +41,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\ImportExport\Model\Resource\Helper|\PHPUnit_Framework_MockObject_MockObject */
     protected $_resourceHelper;
 
-    /** @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject */
     protected $string;
 
     /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -152,10 +151,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $importProduct;
 
     /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     */
+    protected $errorAggregator;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
+        parent::setUp();
+
         /* For parent object construct */
         $this->jsonHelper =
             $this->getMockBuilder('\Magento\Framework\Json\Helper\Data')
@@ -182,7 +188,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->string =
-            $this->getMockBuilder('\Magento\Framework\Stdlib\String')
+            $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -309,6 +315,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
+        $this->errorAggregator = $this->getErrorAggregatorObject();
+
         $this->data = [];
 
         $this->_objectConstructor()
@@ -351,6 +359,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->objectRelationProcessor,
             $this->transactionManager,
             $this->taxClassProcessor,
+            $this->errorAggregator,
             $this->data
         );
     }
@@ -528,7 +537,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')->setMethods(null)->getMock();
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
@@ -542,7 +551,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')->setMethods(null)->getMock();
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
@@ -721,12 +730,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['getBehavior', 'getRowScope'])
+            ->setMethods(['getBehavior', 'getRowScope', 'getErrorAggregator'])
             ->getMock();
         $importProduct
             ->expects($this->once())
             ->method('getBehavior')
             ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
+        $importProduct
+            ->method('getErrorAggregator')
+            ->willReturn($this->getErrorAggregatorObject());
         $importProduct->expects($this->once())->method('getRowScope')->willReturn($rowScope);
         $skuKey = \Magento\CatalogImportExport\Model\Import\Product::COL_SKU;
         $rowData = [
@@ -1012,8 +1024,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['addRowError', 'getOptionEntity'])
+            ->setMethods(['getErrorAggregator', 'getOptionEntity'])
             ->getMock();
+        $importProduct->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
 
@@ -1165,8 +1178,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['addRowError', 'getOptionEntity'])
+            ->setMethods(['getErrorAggregator', 'getOptionEntity'])
             ->getMock();
+        $importProduct->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
         $this->skuProcessor->expects($this->any())->method('getNewSku')->willReturn($newSku);

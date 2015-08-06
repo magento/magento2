@@ -10,7 +10,7 @@ namespace Magento\Backend\Model\Widget\Grid\Row;
 interface GeneratorInterface
 {
     /**
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      * @api
      */

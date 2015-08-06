@@ -8,7 +8,7 @@ namespace Magento\Indexer\Model;
 /**
  * Class Context
  */
-class CacheContext implements \Magento\Framework\Object\IdentityInterface
+class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var array

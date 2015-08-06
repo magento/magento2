@@ -151,7 +151,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWeeAttributesForBundle()
     {
-        $weeObject = new \Magento\Framework\Object(
+        $weeObject = new \Magento\Framework\DataObject(
             [
                 'code' => 'fpt',
                 'amount' => '15.0000',

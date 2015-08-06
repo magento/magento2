@@ -16,7 +16,7 @@ use Magento\Backend\Test\Page\Adminhtml\AdminCache;
  * 3. Click a button.
  * 4. Perform asserts.
  *
- * @ZephyrId MAGETWO-34502 MAGETWO-34503 MAGETWO-39934
+ * @ZephyrId MAGETWO-34502, MAGETWO-34503, MAGETWO-39934
  */
 class CacheManagementTest extends Injectable
 {
@@ -26,16 +26,15 @@ class CacheManagementTest extends Injectable
     /* end tags */
 
     /**
-     * Open admin cache management page
+     * Open admin cache management page.
      *
      * @param AdminCache $adminCache
-     * @param string $button
+     * @param string $flushButtonName
      * @return void
      */
-    public function test(AdminCache $adminCache, $button)
+    public function test(AdminCache $adminCache, $flushButtonName)
     {
-        $selector = "//div/button[normalize-space(.)= '" . $button . "']";
         $adminCache->open();
-        $adminCache->getAdditionalBlock()->click($selector);
+        $adminCache->getAdditionalBlock()->clickFlushCache($flushButtonName);
     }
 }

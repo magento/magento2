@@ -31,7 +31,7 @@ abstract class Import extends Action
     protected function getImportProcessingMessages(ProcessingErrorAggregatorInterface $errorAggregator)
     {
         $messages = [];
-        $rowMessages = $errorAggregator->getRowsGroupedByCode([], [AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
+        $rowMessages = $errorAggregator->getRowsGroupedByErrorCode([], [AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
         foreach ($rowMessages as $errorCode => $rows) {
             $messages[] = $errorCode . ' ' . __('in rows:') . ' ' . implode(', ', $rows);
         }

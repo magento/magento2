@@ -24,15 +24,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    /**
-     * @var array
-     */
-    protected $existingCookies;
-
     protected function setUp()
     {
         $this->model = $this->_getStoreModel();
-        $this->existingCookies = $_COOKIE;
     }
 
     /**
@@ -54,12 +48,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'config' => $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface'),
             'storeManager' => $objectManager->get('Magento\Store\Model\StoreManager'),
             'sidResolver' => $objectManager->get('Magento\Framework\Session\SidResolverInterface'),
-            'cookieMetadataFactory' => $objectManager->get('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'),
-            'cookieManager' => $objectManager->get('Magento\Framework\Stdlib\CookieManagerInterface'),
             'httpContext' => $objectManager->get('Magento\Framework\App\Http\Context'),
             'session' => $objectManager->get('Magento\Framework\Session\SessionManagerInterface'),
             'currencyFactory' => $objectManager->get('Magento\Directory\Model\CurrencyFactory'),
             'currencyInstalled' => 'system/currency/installed',
+            'groupRepository' => $objectManager->get('Magento\Store\Api\GroupRepositoryInterface'),
+            'websiteRepository' => $objectManager->get('Magento\Store\Api\WebsiteRepositoryInterface'),
         ];
 
         return $this->getMock('Magento\Store\Model\Store', ['getUrl'], $this->modelParams);
@@ -68,36 +62,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->model = null;
-        $_COOKIE = $this->existingCookies;
-    }
-
-    public function testSetCookie()
-    {
-        $model = $this->getMock('Magento\Store\Model\Store', ['getStorePath'], $this->modelParams);
-        $model->expects($this->once())
-            ->method('getStorePath')
-            ->will($this->returnValue('/'));
-        $storeCode = 'store code';
-        $this->assertArrayNotHasKey(Store::COOKIE_NAME, $_COOKIE);
-        $model->setCode($storeCode);
-        $model->setCookie();
-        $this->assertEquals($storeCode, $_COOKIE[Store::COOKIE_NAME]);
-    }
-
-    public function testGetStoreCodeFromCookie()
-    {
-        $storeCode = 'store code';
-        $_COOKIE[Store::COOKIE_NAME] = $storeCode;
-        $this->assertEquals($storeCode, $this->model->getStoreCodeFromCookie());
-    }
-
-    public function testDeleteCookie()
-    {
-        $storeCode = 'store code';
-        $_COOKIE[Store::COOKIE_NAME] = $storeCode;
-        $this->assertArrayHasKey(Store::COOKIE_NAME, $_COOKIE);
-        $this->model->deleteCookie();
-        $this->assertArrayNotHasKey(Store::COOKIE_NAME, $_COOKIE);
     }
 
     /**
