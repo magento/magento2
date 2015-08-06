@@ -7,6 +7,7 @@
 namespace Magento\Setup\Fixtures;
 
 use Magento\Setup\Model\Generator;
+use Magento\ImportExport\Model\Import;
 
 /**
  * Class CustomersFixture
@@ -98,6 +99,10 @@ class CustomersFixture extends Fixture
         );
         // it is not obvious, but the validateSource() will actually save import queue data to DB
         $import->validateSource($generator);
+        $import->setData(
+            Import::FIELD_NAME_VALIDATION_STRATEGY,
+            Import\ErrorProcessing\ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR
+        );
         // this converts import queue into actual entities
         $import->importSource();
     }

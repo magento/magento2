@@ -8,6 +8,7 @@ namespace Magento\Setup\Fixtures;
 
 use Magento\Setup\Model\Complex\Pattern;
 use Magento\Setup\Model\Complex\Generator;
+use Magento\ImportExport\Model\Import;
 
 /**
  * Class ConfigurableProductsFixture
@@ -660,6 +661,10 @@ class ConfigurableProductsFixture extends Fixture
         $source = new Generator($pattern, $configurablesCount);
         // it is not obvious, but the validateSource() will actually save import queue data to DB
         $import->validateSource($source);
+        $import->setData(
+            Import::FIELD_NAME_VALIDATION_STRATEGY,
+            Import\ErrorProcessing\ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR
+        );
         // this converts import queue into actual entities
         $import->importSource();
 
