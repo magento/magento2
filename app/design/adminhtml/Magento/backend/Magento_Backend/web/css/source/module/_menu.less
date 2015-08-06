@@ -449,6 +449,14 @@
     z-index: @menu-overlay__z-index;
 }
 
+//  Hide submenu group section title for only one group in submenu
+.submenu-group-title {
+    .column:only-child .level-1:only-child > &,
+    .submenu-title ~ ul > .level-1:only-child > & {
+        display: none;
+    }
+}
+
 //
 //  Tablets
 //  _____________________________________________
