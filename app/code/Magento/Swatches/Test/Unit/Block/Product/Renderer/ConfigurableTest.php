@@ -55,6 +55,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
     private $imageHelper;
 
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject  */
+    private $urlBuilder;
+
     public function setUp()
     {
         $this->context = $this->getMock('\Magento\Catalog\Block\Product\Context', [], [], '', false);
@@ -70,9 +73,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->typeInstance = $this->getMock('\Magento\Catalog\Model\Product\Type\AbstractType', [], [], '', false);
         $this->scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
         $this->imageHelper = $this->getMock('\Magento\Catalog\Helper\Image', [], [], '', false);
+        $this->urlBuilder = $this->getMock('\Magento\Framework\UrlInterface');
 
         $this->context->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfig);
         $this->context->expects($this->any())->method('getImageHelper')->willReturn($this->imageHelper);
+        $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->configurable = $objectManager->getObject(
@@ -294,5 +299,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->jsonEncoder->expects($this->once())->method('encode');
 
         $this->configurable->getJsonSwatchConfig();
+    }
+
+    public function testGetMediaCallback()
+    {
+        $this->urlBuilder->expects($this->once())->method('getBaseUrl')->willReturn('http://magento.com/');
+        $this->assertContains(Configurable::MEDIA_CALLBACK_ACTION, $this->configurable->getMediaCallback());
     }
 }

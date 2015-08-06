@@ -181,8 +181,7 @@ define(["jquery", "jquery/ui"], function ($) {
             onlySwatches: false,                            // show only swatch controls
             enableControlLabel: true,                       // enable label for control
             moreButtonText: 'More',                         // text for more button
-            mediaCallback: 'swatches/ajax/media',           // Callback url for media
-            baseUrl: ''
+            mediaCallback: ''                               // Callback url for media
         },
 
         /**
@@ -614,7 +613,7 @@ define(["jquery", "jquery/ui"], function ($) {
                 attributes = {},
                 productId = 0;
 
-            if (!$widget.options.baseUrl || !$widget.options.mediaCallback) {
+            if (!$widget.options.mediaCallback) {
                 return;
             }
 
@@ -637,7 +636,7 @@ define(["jquery", "jquery/ui"], function ($) {
             $widget._XhrKiller();
             $widget._EnableProductMediaLoader($this);
             $widget.xhr = $.post(
-                $widget.options.baseUrl + $widget.options.mediaCallback,
+                $widget.options.mediaCallback,
                 {product_id: productId, attributes: attributes, isAjax: true, additional: additional},
                 function (data) {
                     $widget._ProductMediaCallback($this, data);
