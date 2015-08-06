@@ -91,39 +91,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        // base fieldset
-        $fieldsets['error_limit'] = $form->addFieldset('error_limit_fieldset', ['legend' => __('Errors limit')]);
-        $fieldsets['error_limit']->addField(
-            \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
-            'select',
-            [
-                'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
-                'title' => __('Validation strategy'),
-                'label' => __('Validation strategy'),
-                'required' => true,
-                'values' => [
-                    ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => 'Skip error entries',
-                    ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR => 'Stop on Error'
-                ],
-                'after_element_html' => $this->getDownloadSampleFileHtml(),
-            ]
-        );
-
-        $fieldsets['error_limit']->addField(
-            \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
-            'text',
-            [
-                'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
-                'label' => __('Allowed Error Count'),
-                'title' => __('Allowed Error Count'),
-                'required' => false,
-                'class' => 'validate-number validate-greater-than-zero input-text',
-                'note' => __(
-                    'Please specify number of errors to halt import process'
-                ),
-            ]
-        );
-
         // add behaviour fieldsets
         $uniqueBehaviors = $this->_importModel->getUniqueEntityBehaviors();
         foreach ($uniqueBehaviors as $behaviorCode => $behaviorClass) {
@@ -143,6 +110,34 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'disabled' => true,
                     'values' => $this->_behaviorFactory->create($behaviorClass)->toOptionArray(),
                     'class' => $behaviorCode,
+                ]
+            );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+                'select',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+                    'required' => true,
+                    'values' => [
+                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR => 'Stop on Error',
+                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => 'Skip error entries'
+                    ],
+                    'after_element_html' => $this->getDownloadSampleFileHtml(),
+                ]
+            );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+                'text',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+                    'label' => __('Allowed Errors Count'),
+                    'title' => __('Allowed Errors Count'),
+                    'required' => true,
+                    'value' => 10,
+                    'class' => 'validate-number validate-greater-than-zero input-text',
+                    'note' => __(
+                        'Please specify number of errors to halt import process'
+                    ),
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
