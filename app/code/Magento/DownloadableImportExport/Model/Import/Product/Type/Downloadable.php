@@ -322,7 +322,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
+     * Check empty columns and empty group title
      *
+     * @param array $rowData
+     * @return bool
      */
     protected function isDownloadableValid(array $rowData){
         $result = false;
@@ -345,8 +348,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Check whether the row is valid.
      *
      * @param array $rowData
-     * @param int $rowNum
-     * @param bool $isNewProduct
      * @return bool
      */
     protected function isRowDownloadableNoValid(array $rowData)
@@ -502,7 +503,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $options
      * @return array
      */
-    protected function getTitleSample(array $options){
+    protected function fillDataTitleSample(array $options){
         $result = [];
         $existingOptions = $this->connection->fetchAll(
             $this->connection->select()->from(
@@ -533,7 +534,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $options
      * @return array
      */
-    protected function getDataLink(array $options){
+    protected function fillDataLink(array $options){
         $result = [];
         $existingOptions = $this->connection->fetchAll(
             $this->connection->select()->from(
@@ -568,7 +569,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $replacement
      * @return array
      */
-    protected function getNormalData(array $base, array $replacement){
+    protected function prepareDataForSave(array $base, array $replacement){
         $result = [];
         foreach($replacement as $item){
             $result[] = array_intersect_key($item, $base);
@@ -585,26 +586,26 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $options = $this->cachedOptions;
         $this->connection->insertOnDuplicate(
             $this->_resource->getTableName('downloadable_sample'),
-            $this->getNormalData($this->dataSample, $options['sample'])
+            $this->prepareDataForSave($this->dataSample, $options['sample'])
         );
-        $titleSample = $this->getTitleSample($options['sample']);
+        $titleSample = $this->fillDataTitleSample($options['sample']);
         $this->connection->insertOnDuplicate(
             $this->_resource->getTableName('downloadable_sample_title'),
-            $this->getNormalData($this->dataSampleTitle, $titleSample)
+            $this->prepareDataForSave($this->dataSampleTitle, $titleSample)
         );
         $this->connection->insertOnDuplicate(
             $this->_resource->getTableName('downloadable_link'),
-            $this->getNormalData($this->dataLink, $options['link'])
+            $this->prepareDataForSave($this->dataLink, $options['link'])
         );
-        $dataLink = $this->getDataLink($options['link']);
+        $dataLink = $this->fillDataLink($options['link']);
         $this->connection->insertOnDuplicate(
             $this->_resource->getTableName('downloadable_link_title'),
-            $this->getNormalData($this->dataLinkTitle, $dataLink['title'])
+            $this->prepareDataForSave($this->dataLinkTitle, $dataLink['title'])
         );
         if (count($dataLink['price'])) {
             $this->connection->insertOnDuplicate(
                 $this->_resource->getTableName('downloadable_link_price'),
-                $this->getNormalData($this->dataLinkPrice, $dataLink['price'])
+                $this->prepareDataForSave($this->dataLinkPrice, $dataLink['price'])
             );
         }
         return $this;
@@ -771,7 +772,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if (is_null($this->fileUploader)) {
             $this->fileUploader = $this->uploaderFactory->create();
             $this->fileUploader->init();
-            $this->fileUploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png', 'mp4']);
+            $this->fileUploader->setAllowedExtensions([]);
             $this->fileUploader->removeValidateCallback('catalog_product_image');
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
