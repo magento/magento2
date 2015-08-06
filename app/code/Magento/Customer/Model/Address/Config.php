@@ -115,7 +115,7 @@ class Config extends \Magento\Framework\Config\Data
             $this->_types[$storeId] = [];
             foreach ($this->get() as $typeCode => $typeConfig) {
                 $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
-                $type = new \Magento\Framework\Object();
+                $type = new \Magento\Framework\DataObject();
                 if (isset(
                     $typeConfig['escapeHtml']
                 ) && ($typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1')
@@ -152,14 +152,14 @@ class Config extends \Magento\Framework\Config\Data
     /**
      * Retrieve default address format
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getDefaultFormat()
     {
         $store = $this->getStore();
         $storeId = $store->getId();
         if (!isset($this->_defaultTypes[$storeId])) {
-            $this->_defaultTypes[$storeId] = new \Magento\Framework\Object();
+            $this->_defaultTypes[$storeId] = new \Magento\Framework\DataObject();
             $this->_defaultTypes[$storeId]->setCode(
                 'default'
             )->setDefaultFormat(
@@ -183,7 +183,7 @@ class Config extends \Magento\Framework\Config\Data
      * Retrieve address format by code
      *
      * @param string $typeCode
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getFormatByCode($typeCode)
     {

@@ -30,7 +30,6 @@
         margin: 0 0 @indent__s;
     }
     .admin__control-select {
-        width: 13rem;
         &.measures {
             width: 9rem;
         }
@@ -82,10 +81,15 @@
             }
         }
     }
-    .col-total-weight {
-        .admin__control-text {
-            margin: 0 0 .5rem;
+    .admin__control-table {
+        input {
+            line-height: 2.2rem;
+            width: 8rem;
         }
+    }
+    .col-total-weight,
+    .col-custom {
+        white-space: nowrap;
     }
     .col-qty-edit {
         .admin__control-text {
@@ -93,7 +97,8 @@
         }
     }
     .col-actions {
-        width: 13rem;
+        padding-right: 1.5rem;
+        white-space: nowrap;
         .action-delete {
             padding-top: 0;
         }

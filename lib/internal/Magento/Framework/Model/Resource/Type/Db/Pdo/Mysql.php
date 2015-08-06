@@ -15,7 +15,7 @@ use Magento\Framework\Stdlib;
 class Mysql extends \Magento\Framework\Model\Resource\Type\Db implements ConnectionAdapterInterface
 {
     /**
-     * @var Stdlib\String
+     * @var Stdlib\StringUtils
      */
     protected $string;
 
@@ -30,12 +30,12 @@ class Mysql extends \Magento\Framework\Model\Resource\Type\Db implements Connect
     protected $connectionConfig;
 
     /**
-     * @param Stdlib\String $string
+     * @param Stdlib\StringUtils $string
      * @param Stdlib\DateTime $dateTime
      * @param array $config
      */
     public function __construct(
-        Stdlib\String $string,
+        Stdlib\StringUtils $string,
         Stdlib\DateTime $dateTime,
         array $config
     ) {

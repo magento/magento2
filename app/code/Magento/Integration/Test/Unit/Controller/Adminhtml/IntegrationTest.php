@@ -296,11 +296,11 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * Return sample Integration Data
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getSampleIntegrationData()
     {
-        return new \Magento\Framework\Object(
+        return new \Magento\Framework\DataObject(
             [
                 Info::DATA_NAME => 'nameTest',
                 Info::DATA_ID => self::INTEGRATION_ID,

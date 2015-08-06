@@ -15,7 +15,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
     /**
      * {@inheritdoc}
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         return '<a title="' . __(
             'Edit Web Site'
