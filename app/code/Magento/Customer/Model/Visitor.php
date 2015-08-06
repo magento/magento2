@@ -11,6 +11,7 @@ use Magento\Framework\Indexer\StateInterface;
 /**
  * Class Visitor
  * @package Magento\Customer\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
 {
