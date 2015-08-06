@@ -61,6 +61,16 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_INVALID_WEIGHT = 'invalidWeight';
 
+    const ERROR_EXCEEDED_MAX_LENGTH = 'exceededMaxLength';
+
+    const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
+
+    const ERROR_ABSENT_REQUIRED_ATTRIBUTE = 'absentRequiredAttribute';
+
+    const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
+
+    const ERROR_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicatedUniqueAttribute'; //Duplicate Unique Attribute
+
     /**
      * Value that means all entities (e.g. websites, groups etc.)
      */
@@ -69,7 +79,8 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
     /**
      * Initialize validator
      *
+     * @param \Magento\CatalogImportExport\Model\Import\Product $context
      * @return $this
      */
-    public function init();
+    public function init($context);
 }

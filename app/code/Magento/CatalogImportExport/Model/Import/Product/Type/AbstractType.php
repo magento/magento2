@@ -185,6 +185,21 @@ abstract class AbstractType
     }
 
     /**
+     * Retrieve product Attribute
+     *
+     * @param string $attributeCode
+     * @param string $attributeSet
+     * @return array
+     */
+    public function retrieveAttribute($attributeCode, $attributeSet)
+    {
+        if (isset($this->_attributes[$attributeSet]) && isset($this->_attributes[$attributeSet][$attributeCode])) {
+            return $this->_attributes[$attributeSet][$attributeCode];
+        }
+        return [];
+    }
+
+    /**
      * Return product attributes for its attribute set specified in row data.
      *
      * @param array|string $attrSetData Product row data or simply attribute set name.
@@ -378,8 +393,9 @@ abstract class AbstractType
     {
         $error = false;
         $rowScope = $this->_entityModel->getRowScope($rowData);
-
         if (\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope) {
+
+
             foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
                 // check value for non-empty in the case of required attribute?
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {

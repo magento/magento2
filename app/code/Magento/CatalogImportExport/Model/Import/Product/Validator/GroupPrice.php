@@ -31,9 +31,9 @@ class GroupPrice extends AbstractPrice implements RowValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init($context)
     {
-        return parent::init();
+        return parent::init($context);
     }
 
     /**

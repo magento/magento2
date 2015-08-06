@@ -227,6 +227,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_SUPER_PRODUCTS_SKU_NOT_FOUND => 'Product with specified super products SKU not found',
         ValidatorInterface::ERROR_MEDIA_DATA_INCOMPLETE => 'Media data is incomplete',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
+        ValidatorInterface::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
+        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE => 'Attribute %s type should be %s',
+        ValidatorInterface::ERROR_ABSENT_REQUIRED_ATTRIBUTE => 'Attribute %s is required',
+        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION => 'Attribute option is invalid',
+        ValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE => 'Duplicated unique attribute',
     ];
 
     /**
@@ -675,7 +680,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus();
-        $this->validator->init();
+        $this->validator->init($this);
     }
 
     /**
@@ -685,53 +690,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $attrParams Attribute params
      * @param array $rowData Row data
      * @param int $rowNum
-     *
-     * @return boolean
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @return bool
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum)
     {
-        switch ($attrParams['type']) {
-            case 'varchar':
-                $val = $this->string->cleanString($rowData[$attrCode]);
-                $valid = $this->string->strlen($val) < self::DB_MAX_VARCHAR_LENGTH;
-                break;
-            case 'decimal':
-                $val = trim($rowData[$attrCode]);
-                $valid = is_numeric($val);
-                break;
-            case 'select':
-            case 'multiselect':
-                $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
-                break;
-            case 'int':
-                $val = trim($rowData[$attrCode]);
-                $valid = (string)(int)$val === $val;
-                break;
-            case 'datetime':
-                $val = trim($rowData[$attrCode]);
-                $valid = strtotime($val) !== false;
-                break;
-            case 'text':
-                $val = $this->string->cleanString($rowData[$attrCode]);
-                $valid = $this->string->strlen($val) < self::DB_MAX_TEXT_LENGTH;
-                break;
-            default:
-                $valid = true;
-                break;
-        }
-
-        if (!$valid) {
-            $this->addRowError(__("Please correct the value for '%s'."), $rowNum, $attrCode);
-        } elseif (!empty($attrParams['is_unique'])) {
-            if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]]) && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[self::COL_SKU])) {
-                $this->addRowError(__("Duplicate Unique Attribute for '%s'"), $rowNum, $attrCode);
-                return false;
+        if (!$this->validator->isAttributeValid($attrCode, $attrParams, $rowData)) {
+            foreach ($this->validator->getMessages() as $message) {
+                $this->addRowError($message, $rowNum, $attrCode);
             }
-            $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[self::COL_SKU];
+            return false;
         }
-        return (bool)$valid;
+        return true;
     }
 
     /**
@@ -770,6 +739,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_mediaGalleryAttributeId = $resource->getAttribute(self::MEDIA_GALLERY_ATTRIBUTE_CODE)->getId();
         }
         return $this->_mediaGalleryAttributeId;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function retrieveProductTypeByName($name)
+    {
+        return $this->_productTypeModels[$name];
     }
 
     /**
@@ -2080,9 +2058,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function getRowScope(array $rowData)
     {
-        if (empty($rowData[self::COL_SKU])) {
-            return self::SCOPE_NULL;
-        }
         if (empty($rowData[self::COL_STORE])) {
             return self::SCOPE_DEFAULT;
         }
