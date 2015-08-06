@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Indexer\Test\Unit\Table;
+namespace Magento\Framework\Indexer\Test\Unit;
 
 /**
  * Class StrategyTest
