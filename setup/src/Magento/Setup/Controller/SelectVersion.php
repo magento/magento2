@@ -30,6 +30,7 @@ class SelectVersion extends AbstractActionController
     ) {
         $this->systemPackage = $systemPackage;
     }
+
     /**
      * @return ViewModel|\Zend\Http\Response
      */
@@ -54,8 +55,10 @@ class SelectVersion extends AbstractActionController
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         } catch (\Exception $e) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['error'] = $e->getMessage();
         }
         $data['responseType'] = $responseType;
+
         return new JsonModel($data);
     }
 }

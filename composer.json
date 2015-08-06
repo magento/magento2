@@ -8,10 +8,14 @@
         "AFL-3.0"
     ],
     "repositories": [
-      {
-        "type": "composer",
-        "url": "http://packages.magento.com/"
-      }
+        {
+            "type": "git",
+            "url": "git@github.corp.ebay.com:magento-ogre/composer.git"
+        },
+        {
+            "type": "composer",
+            "url": "http://packages.magento.com/"
+        }
     ],
     "require": {
         "php": "~5.5.0|~5.6.0",
