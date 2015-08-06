@@ -101,7 +101,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Config                                                        $taxConfig
      * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
      * @param \Magento\Framework\Locale\FormatInterface                     $localeFormat
-     * @param \Magento\Sales\Model\Resource\Order\Tax\ItemFactory           $taxItemFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
      * @param \Magento\Framework\Locale\ResolverInterface                   $localeResolver
      * @param \Magento\Catalog\Helper\Data                                  $catalogHelper
@@ -112,7 +111,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Framework\Registry $coreRegistry,
         Config $taxConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
