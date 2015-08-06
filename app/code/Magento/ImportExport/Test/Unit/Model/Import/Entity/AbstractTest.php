@@ -9,10 +9,9 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Entity;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Abstract import entity model
@@ -21,16 +20,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
-
     protected function setUp()
     {
         parent::setUp();
-
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->_model = $this->getMockBuilder('Magento\ImportExport\Model\Import\Entity\AbstractEntity')
             ->disableOriginalConstructor()
@@ -39,27 +31,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->method('getErrorAggregator')->willReturn(
             $this->getErrorAggregatorObject()
-        );
-    }
-
-    /**
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     */
-    protected function getErrorAggregatorObject()
-    {
-        $errorFactory = $this->getMockBuilder(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $errorFactory->method('create')->willReturn(
-            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
-        );
-        return $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            [
-                'errorFactory' => $errorFactory
-            ]
         );
     }
 

@@ -72,7 +72,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $errorMessage = null,
         $errorDescription = null
     ) {
-        $rowNumber++;
         $this->processErrorStatistics($errorLevel);
         $this->processInvalidRow($rowNumber);
         $errorMessage = $this->getErrorMessage($errorCode, $errorMessage, $columnName);
@@ -212,10 +211,14 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param array $errorCode
      * @param array $excludedCodes
+     * @param bool $replaceCodeWithMessage
      * @return array
      */
-    public function getRowsGroupedByErrorCode(array $errorCode = [], array $excludedCodes = [])
-    {
+    public function getRowsGroupedByErrorCode(
+        array $errorCode = [],
+        array $excludedCodes = [],
+        $replaceCodeWithMessage = true
+    ) {
         $result = [];
         foreach ($this->items as $error) {
             if ((!empty($errorCode) && in_array($error->getErrorCode(), $errorCode))
@@ -223,15 +226,12 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
             ) {
                 continue;
             }
-            $message = $error->getErrorMessage() !== null ? $error->getErrorMessage() : $error->getErrorCode();
-            if (null !== $message) {
-                if (!isset($result[$message])) {
-                    $result[$message] = [];
-                }
-                $result[$message][] = $error->getRowNumber();
+            $message = $replaceCodeWithMessage ? $error->getErrorMessage() : $error->getErrorCode();
+            if (!isset($result[$message])) {
+                $result[$message] = [];
             }
+            $result[$message][] = $error->getRowNumber()+1;
         }
-
         return $result;
     }
 
