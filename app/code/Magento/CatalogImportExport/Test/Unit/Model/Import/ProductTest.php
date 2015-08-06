@@ -718,7 +718,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         $rowNum = 0;
         $this->setPropertyValue($this->importProduct, '_validatedRows', [$rowNum => true]);
-        $this->setPropertyValue($this->importProduct, '_invalidRows', [$rowNum => $isInvalidRow]);
         $result = $this->importProduct->validateRow([], $rowNum);
         $this->assertEquals($expectedResult, $result);
     }
@@ -771,10 +770,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     public function testValidateRowValidatorCheck()
     {
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError', 'getOptionEntity'])
-            ->getMock();
+        $importProduct = $this->createModelMockWithErrorAggregator(
+            ['addRowError', 'getOptionEntity'],
+            ['isRowInvalid' => true]
+        );
 
         $this->validator->expects($this->once())->method('isValid')->willReturn(false);
         $messages = ['validator message'];
@@ -787,7 +786,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => 'sku',
         ];
         $rowNum = 0;
-        $this->setPropertyValue($importProduct, '_invalidRows', [$rowNum => '']);
 
         $importProduct->validateRow($rowData, $rowNum);
     }
@@ -899,10 +897,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     public function testValidateRowCheckSpecifiedSku($sku, $expectedError)
     {
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError', 'getOptionEntity', 'getRowScope'])
-            ->getMock();
+        $importProduct = $this->createModelMockWithErrorAggregator(
+            [ 'addRowError', 'getOptionEntity', 'getRowScope'],
+            ['isRowInvalid' => true]
+        );
 
         $rowNum = 0;
         $rowData = [
@@ -929,8 +927,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         $count = 0;
         $rowNum = 0;
+        $errorAggregator = $this->getErrorAggregatorObject(['isRowInvalid']);
+        $errorAggregator->method('isRowInvalid')->willReturn(true);
         $this->setPropertyValue($this->importProduct, '_processedEntitiesCount', $count);
-        $rowData = [\Magento\CatalogImportExport\Model\Import\Product::COL_SKU => ''];
+        $this->setPropertyValue($this->importProduct, 'errorAggregator', $errorAggregator);
+        $rowData = [\Magento\CatalogImportExport\Model\Import\Product::COL_SKU => false];
         //suppress validator
         $this->_setValidatorMockInImportProduct($this->importProduct);
         $this->importProduct->validateRow($rowData, $rowNum);
@@ -939,10 +940,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     public function testValidateRowValidateExistingProductTypeAddNewSku()
     {
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError', 'getOptionEntity'])
-            ->getMock();
+        $importProduct = $this->createModelMockWithErrorAggregator(
+            [ 'addRowError', 'getOptionEntity'],
+            ['isRowInvalid' => true]
+        );
+
         $sku = 'sku';
         $rowNum = 0;
         $rowData = [
@@ -994,10 +996,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'type_id' => 'type_id_val',
             ],
         ];
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError', 'getOptionEntity'])
-            ->getMock();
+        $importProduct = $this->createModelMockWithErrorAggregator(
+            ['addRowError', 'getOptionEntity'],
+            ['isRowInvalid' => true]
+        );
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
         $importProduct->expects($this->once())->method('addRowError')->with(
@@ -1022,11 +1024,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'type_id' => 'type_id_val',
             ],
         ];
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['getErrorAggregator', 'getOptionEntity'])
-            ->getMock();
-        $importProduct->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
+        $importProduct = $this->createModelMockWithErrorAggregator(['getOptionEntity']);
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
 
@@ -1078,11 +1076,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $oldSku = [
             $sku => null,
         ];
-
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError', 'getOptionEntity'])
-            ->getMock();
+        $importProduct = $this->createModelMockWithErrorAggregator(
+            ['addRowError', 'getOptionEntity'],
+            ['isRowInvalid' => true]
+        );
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
         $this->setPropertyValue($importProduct, '_productTypeModels', $_productTypeModels);
@@ -1123,10 +1120,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 $_attrSetNameToId[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET]],
             'attr_set_code' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET],//value
         ];
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError', 'getOptionEntity'])
-            ->getMock();
+        $importProduct = $this->createModelMockWithErrorAggregator(
+            ['addRowError', 'getOptionEntity'],
+            ['isRowInvalid' => true]
+        );
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
         $this->setPropertyValue($importProduct, '_productTypeModels', $_productTypeModels);
@@ -1176,11 +1173,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'type_id' => 'type_id_val',
             ],
         ];
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['getErrorAggregator', 'getOptionEntity'])
-            ->getMock();
-        $importProduct->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
+        $importProduct = $this->createModelMockWithErrorAggregator(['getOptionEntity']);
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
         $this->skuProcessor->expects($this->any())->method('getNewSku')->willReturn($newSku);
@@ -1215,16 +1208,15 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'type_id' => 'type_id_val',
             ],
         ];
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError', 'getOptionEntity'])
-            ->getMock();
+        $importProduct = $this->createModelMockWithErrorAggregator(
+            ['addRowError', 'getOptionEntity'],
+            ['isRowInvalid' => true]
+        );
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
 
         //suppress validator
         $this->_setValidatorMockInImportProduct($importProduct);
-        $this->setPropertyValue($importProduct, '_invalidRows', [0 => '']);
 
         $option = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Option')
             ->disableOriginalConstructor()
@@ -1591,7 +1583,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->_rewriteGetOptionEntityInImportProduct($importProduct);
         //suppress validator
         $this->_setValidatorMockInImportProduct($importProduct);
-        $this->setPropertyValue($importProduct, '_invalidRows', [0 => '']);
 
         return $importProduct;
     }
@@ -1625,6 +1616,28 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->disableOriginalConstructor()
             ->getMock();
         $importProduct->expects($this->once())->method('getOptionEntity')->willReturn($option);
+
+        return $importProduct;
+    }
+
+    /**
+     * @param array $methods
+     * @param array $errorAggregatorMethods
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createModelMockWithErrorAggregator(array $methods = [], array $errorAggregatorMethods = [])
+    {
+        $methods[] = 'getErrorAggregator';
+        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
+            ->disableOriginalConstructor()
+            ->setMethods($methods)
+            ->getMock();
+        $errorMethods = array_keys($errorAggregatorMethods);
+        $errorAggregator = $this->getErrorAggregatorObject($errorMethods);
+        foreach ($errorAggregatorMethods as $method => $result) {
+            $errorAggregator->method($method)->willReturn($result);
+        }
+        $importProduct->method('getErrorAggregator')->willReturn($errorAggregator);
 
         return $importProduct;
     }
