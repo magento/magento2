@@ -48,9 +48,14 @@ define([
                 + field + ']';
         },
         render: function(variations, attributes) {
+            this.changeButtonWizard();
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
             this.initImageUpload();
+        },
+        changeButtonWizard: function () {
+            var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
+            $button.text($button.attr('data-edit-label'));
         },
         getAttributesOptions: function() {
             return this.showVariations() ? this.productMatrix()[0].options : [];
