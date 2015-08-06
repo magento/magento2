@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use \Magento\Framework\Validator\AbstractValidator;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
-class Website extends AbstractValidator implements RowValidatorInterface
+class Website extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
@@ -26,9 +26,9 @@ class Website extends AbstractValidator implements RowValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init($context)
     {
-        return $this;
+        return parent::init($context);
     }
 
     /**
