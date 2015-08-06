@@ -61,7 +61,9 @@ class Review extends \Magento\Braintree\Controller\PayPal
     {
         $paymentMethodNonce = $this->getRequest()->getParam('payment_method_nonce');
         $details = $this->getRequest()->getParam('details');
-        $details = $this->jsonHelper->jsonDecode($details);
+        if (!empty($details)) {
+            $details = $this->jsonHelper->jsonDecode($details);
+        }
         try {
             $this->initCheckout();
 

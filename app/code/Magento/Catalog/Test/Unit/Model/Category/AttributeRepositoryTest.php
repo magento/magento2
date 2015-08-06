@@ -69,7 +69,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
                 false);
         $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
-            ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 3]));
+            ->willReturn(new \Magento\Framework\DataObject(['default_attribute_set_id' => 3]));
         $this->model = (new ObjectManager($this))->getObject(
             'Magento\Catalog\Model\Category\AttributeRepository',
             [
@@ -117,7 +117,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchBuilderMock->expects($this->once())->method('addFilters')->with([$filterMock])->willReturnSelf();
         $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $this->searchBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
-        $itemMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
+        $itemMock = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
         $this->attributeRepositoryMock->expects($this->once())->method('getList')->with(
             \Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE,
             $searchCriteriaMock

@@ -15,7 +15,7 @@ class PriceBackend
     /**
      * @param \Magento\Catalog\Model\Product\Attribute\Backend\Price $subject
      * @param \Closure $proceed
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Object $object
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $object
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

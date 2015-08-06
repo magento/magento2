@@ -13,7 +13,7 @@ use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainerFactory;
 use Magento\Framework\Search\EntityMetadata;
-use Magento\Framework\Search\Request\Query\Bool as BoolQuery;
+use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
 use Magento\Framework\Search\Request\Query\Match as MatchQuery;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
@@ -141,7 +141,7 @@ class Mapper
         );
 
         $select->limit($request->getSize());
-        $select->order('relevance ' . Select::SQL_DESC);
+        $select->order('score ' . Select::SQL_DESC);
         return $select;
     }
 
@@ -159,9 +159,7 @@ class Mapper
                 $this->entityMetadata->getEntityId() => 'entity_id',
                 'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
             ]
-        )->group(
-            $this->entityMetadata->getEntityId()
-        );
+        )->group($this->entityMetadata->getEntityId());
         return $parentSelect;
     }
 
@@ -361,7 +359,7 @@ class Mapper
                     ['main_select' => $subSelect],
                     [
                         $this->entityMetadata->getEntityId() => 'entity_id',
-                        'relevance' => sprintf('(%s)', $relevance),
+                        'score' => sprintf('(%s)', $relevance),
                     ]
                 );
 
