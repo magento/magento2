@@ -227,9 +227,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
                 continue;
             }
             $message = $replaceCodeWithMessage ? $error->getErrorMessage() : $error->getErrorCode();
-            if (!isset($result[$message])) {
-                $result[$message] = [];
-            }
             $result[$message][] = $error->getRowNumber()+1;
         }
         return $result;
