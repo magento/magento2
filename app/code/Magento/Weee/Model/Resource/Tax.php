@@ -110,8 +110,8 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'weeeTax.attribute_id = eavTable.attribute_id',
             'weeeTax.value as weee_value'
         )->where(
-            'eavTable.backend_model = (?)',
-            'Magento\\Weee\\Model\\Attribute\\Backend\\Weee\\Tax'
+            'eavTable.frontend_input = ?',
+            'weee'
         )->where(
             'weeeTax.website_id IN(?)',
             [$websiteId, 0]
