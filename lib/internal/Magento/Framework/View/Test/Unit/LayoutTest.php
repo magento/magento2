@@ -902,16 +902,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->method('getAttribute')
             ->willReturnMap([[$name, 'display', $displayValue]]);
 
-        $renderingOutput = new \Magento\Framework\DataObject();
-        $renderingOutput->setData('output', $blockHtml);
-
-        $this->eventManagerMock->expects($this->at(0))
-            ->method('dispatch')
-            ->with(
-                'core_layout_render_element',
-                ['element_name' => $name, 'layout' => $this->model, 'transport' => $renderingOutput]
-            );
-
         $this->assertEquals($blockHtml, $this->model->renderElement($name, false));
     }
 
