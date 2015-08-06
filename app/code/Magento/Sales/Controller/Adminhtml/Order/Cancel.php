@@ -19,7 +19,8 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($order) {
             try {
-                $order->cancel()->save();
+                $orderManagement = $this->_objectManager->get('Magento\Sales\Api\OrderManagementInterface');
+                $orderManagement->cancel($order->getEntityId());
                 $this->messageManager->addSuccess(__('You canceled the order.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
