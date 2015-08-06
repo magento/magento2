@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Msrp\Test\TestCase\ApplyMapTest" summary="Apply Minimum Advertised Price Setting to Simple Product" ticketId="MAGETWO-12430">
         <variation name="ApplyMapTestVariation1" summary="Apply Minimum Advertised Price Setting to Simple Product" ticketId="MAGETWO-12430">
+            <data name="product" xsi:type="string">catalogProductSimple::msrp_on_gesture</data>
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
