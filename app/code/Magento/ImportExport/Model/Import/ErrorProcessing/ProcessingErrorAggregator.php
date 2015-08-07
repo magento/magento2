@@ -34,6 +34,11 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @var int[]
      */
+    protected $skippedRows = [];
+
+    /**
+     * @var int[]
+     */
     protected $errorStatistics = [];
 
     /**
@@ -88,6 +93,20 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @param int $rowNumber
      * @return $this
      */
+    public function addRowToSkip($rowNumber)
+    {
+        $rowNumber = (int)$rowNumber;
+        if (!in_array($rowNumber, $this->skippedRows)) {
+            $this->skippedRows[] = $rowNumber;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param int $rowNumber
+     * @return $this
+     */
     protected function processInvalidRow($rowNumber)
     {
         if (null !== $rowNumber) {
@@ -118,7 +137,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     public function isRowInvalid($rowNumber)
     {
-        return in_array((int)$rowNumber, $this->invalidRows);
+        return in_array((int)$rowNumber, array_merge($this->invalidRows, $this->skippedRows));
     }
 
     /**
@@ -167,7 +186,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     {
         $isExceeded = false;
         if ($this->validationStrategy == self::VALIDATION_STRATEGY_STOP_ON_ERROR
-            && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) > $this->allowedErrorsCount
+            && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) >= $this->allowedErrorsCount
         ) {
             $isExceeded = true;
         }
