@@ -117,7 +117,9 @@
             <data name="description" xsi:type="string">MAGETWO-13361: Create Configurable Product with Creating New Category and New Attribute (Required Fields Only)</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_searchable_options</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/price/dataset" xsi:type="string">default</data>
             <data name="product/data/category_ids/new_category" xsi:type="string">no</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
