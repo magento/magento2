@@ -12,6 +12,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 {
     const CONSUMER_NAME = "consumer_name";
     const QUEUE_NAME = "queue_name";
+    const MAX_MESSAGES = "max_messages";
     const CALLBACK = "callback";
 
     /**
@@ -35,6 +36,14 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     public function getConsumerName()
     {
         return $this->getData(self::CONSUMER_NAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMaxMessages()
+    {
+        return $this->getData(self::MAX_MESSAGES);
     }
 
     /**
