@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Cron\ComponentUninstallerFactory;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
 
@@ -30,6 +31,16 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
      */
     private $componentUninstallerFactory;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+     */
+    private $objectManagerProvider;
+
     public function setUp()
     {
         $this->output = $this->getMockForAbstractClass(
@@ -46,10 +57,38 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->objectManager = $this->getMockForAbstractClass(
+            'Magento\Framework\ObjectManagerInterface',
+            [],
+            '',
+            false
+        );
+        $this->objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
+    }
+
+    private function setUpCleanup()
+    {
+        $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
+        $cache->expects($this->once())->method('clean');
+        $cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses');
+        $cleanupFiles->expects($this->once())->method('clearMaterializedViewFiles');
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['Magento\Framework\App\Cache', $cache],
+                        ['Magento\Framework\App\State\CleanupFiles', $cleanupFiles]
+                    ]
+                )
+            );
     }
 
     public function testExecuteModule()
     {
+        $this->setUpCleanup();
         $uninstaller = $this->getMockForAbstractClass(
             'Magento\Framework\Composer\AbstractComponentUninstaller',
             [],
@@ -64,6 +103,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
         $this->job = new JobComponentUninstall(
             $this->componentUninstallerFactory,
+            $this->objectManagerProvider,
             $this->output,
             $this->status,
             'setup:component:uninstall',
@@ -77,6 +117,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteLanguage()
     {
+        $this->setUpCleanup();
         $uninstaller = $this->getMockForAbstractClass(
             'Magento\Framework\Composer\AbstractComponentUninstaller',
             [],
@@ -91,6 +132,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
         $this->job = new JobComponentUninstall(
             $this->componentUninstallerFactory,
+            $this->objectManagerProvider,
             $this->output,
             $this->status,
             'setup:component:uninstall',
@@ -104,6 +146,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteTheme()
     {
+        $this->setUpCleanup();
         $uninstaller = $this->getMockForAbstractClass(
             'Magento\Framework\Composer\AbstractComponentUninstaller',
             [],
@@ -118,6 +161,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
         $this->job = new JobComponentUninstall(
             $this->componentUninstallerFactory,
+            $this->objectManagerProvider,
             $this->output,
             $this->status,
             'setup:component:uninstall',
@@ -138,6 +182,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
         $this->componentUninstallerFactory->expects($this->never())->method($this->anything());
         $this->job = new JobComponentUninstall(
             $this->componentUninstallerFactory,
+            $this->objectManagerProvider,
             $this->output,
             $this->status,
             'setup:component:uninstall',
@@ -160,6 +205,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
         $this->componentUninstallerFactory->expects($this->never())->method($this->anything());
         $this->job = new JobComponentUninstall(
             $this->componentUninstallerFactory,
+            $this->objectManagerProvider,
             $this->output,
             $this->status,
             'setup:component:uninstall',

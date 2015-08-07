@@ -6,6 +6,7 @@
 namespace Magento\Setup\Model\Cron;
 
 use Magento\Setup\Model\ModuleUninstaller;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -29,6 +30,11 @@ class JobComponentUninstall extends AbstractJob
     const COMPONENT_LANGUAGE = 'language';
 
     /**
+     * @var ObjectManagerProvider
+     */
+    private $objectManagerProvider;
+
+    /**
      * @var ComponentUninstallerFactory
      */
     private $componentUninstallerFactory;
@@ -37,6 +43,7 @@ class JobComponentUninstall extends AbstractJob
      * Constructor
      *
      * @param ComponentUninstallerFactory $componentUninstallerFactory
+     * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
      * @param Status $status
      * @param array $name
@@ -44,11 +51,13 @@ class JobComponentUninstall extends AbstractJob
      */
     public function __construct(
         ComponentUninstallerFactory $componentUninstallerFactory,
+        ObjectManagerProvider $objectManagerProvider,
         OutputInterface $output,
         Status $status,
         $name,
         $params = []
     ) {
+        $this->objectManagerProvider = $objectManagerProvider;
         $this->componentUninstallerFactory = $componentUninstallerFactory;
         parent::__construct($output, $status, $name, $params);
     }
@@ -86,12 +95,13 @@ class JobComponentUninstall extends AbstractJob
                 break;
         }
         $this->createAndRunUninstaller($type, $component, $options);
+        $this->cleanUp();
     }
 
     /**
      * Create the command and run it
      *
-     * @param $type
+     * @param string $type
      * @param array $component
      * @param array $options
      * @return void
@@ -100,5 +110,25 @@ class JobComponentUninstall extends AbstractJob
     {
         $uninstaller = $this->componentUninstallerFactory->create($type);
         $uninstaller->uninstall($this->output, $component, $options);
+    }
+
+    /**
+     * Perform cleanup
+     *
+     * @return void
+     */
+    private function cleanUp()
+    {
+        $objectManager = $this->objectManagerProvider->get();
+        $this->output->writeln('Cleaning cache');
+        /** @var \Magento\Framework\App\Cache $cache */
+        $cache = $objectManager->get('Magento\Framework\App\Cache');
+        $cache->clean();
+        /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
+        $cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
+        $this->output->writeln('Cleaning generated files');
+        $cleanupFiles->clearCodeGeneratedClasses();
+        $this->output->writeln('Cleaning static view files');
+        $cleanupFiles->clearMaterializedViewFiles();
     }
 }

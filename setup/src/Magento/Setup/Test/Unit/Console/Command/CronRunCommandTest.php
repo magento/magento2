@@ -47,7 +47,12 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
         $this->queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
         $this->readinessCheck = $this->getMock('Magento\Setup\Model\Cron\ReadinessCheck', [], [], '', false);
         $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $this->command = new CronRunCommand($this->deploymentConfig, $this->queue, $this->readinessCheck, $this->status);
+        $this->command = new CronRunCommand(
+            $this->deploymentConfig,
+            $this->queue,
+            $this->readinessCheck,
+            $this->status
+        );
         $this->commandTester = new CommandTester($this->command);
     }
 
