@@ -298,6 +298,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                         continue;
                     }
+                    if ($this->_entityModel->getErrorAggregator()->hasToBeTerminated()) {
+                        $this->_entityModel->getErrorAggregator()->addRowToSkip($rowNum);
+                        continue;
+                    }
                     $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
                     if ($this->_type != $productData['type_id']) {
                         continue;

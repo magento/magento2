@@ -275,9 +275,13 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $listSku = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             foreach ($bunch as $rowNum => $rowData) {
-                if ($this->validateRow($rowData, $rowNum)) {
+                $this->validateRow($rowData, $rowNum);
+                if (!$this->getErrorAggregator()->isRowInvalid($rowNum)) {
                     $rowSku = $rowData[self::COL_SKU];
                     $listSku[] = $rowSku;
+                }
+                if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                    $this->getErrorAggregator()->addRowToSkip($rowNum);
                 }
             }
         }
@@ -321,6 +325,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                     $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
                     continue;
                 }
+                if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                    $this->getErrorAggregator()->addRowToSkip($rowNum);
+                    continue;
+                }
+
                 $rowSku = $rowData[self::COL_SKU];
                 $listSku[] = $rowSku;
                 if (!empty($rowData[self::COL_TIER_PRICE_WEBSITE])) {

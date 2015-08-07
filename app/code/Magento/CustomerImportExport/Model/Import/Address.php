@@ -393,10 +393,11 @@ class Address extends AbstractCustomer
             foreach ($bunch as $rowNumber => $rowData) {
                 // check row data
                 if (!$this->validateRow($rowData, $rowNumber)) {
-                    if (!$this->getErrorAggregator()->hasToBeTerminated()) {
-                        continue;
-                    }
-                    break 2;
+                    continue;
+                }
+                if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                    $this->getErrorAggregator()->addRowToSkip($rowNumber);
+                    continue;
                 }
 
                 if ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
