@@ -87,7 +87,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
             if (isset($value[$attribute]) && strlen($value[$attribute])) {
                 if (!$this->checkPath($value[$attribute]) && !$this->checkValidUrl($value[$attribute])) {
                     $this->_addMessages([
-                        sprintf($this->context->retrieveMessageTemplate(self::ERROR_INVALID_MEDIA_URL), $attribute)
+                        sprintf($this->context->retrieveMessageTemplate(self::ERROR_INVALID_MEDIA_URL_OR_PATH), $attribute)
                     ]);
                     $valid = false;
                 }
@@ -114,7 +114,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
             foreach (explode(self::ADDITIONAL_IMAGES_DELIMITER, $value[self::ADDITIONAL_IMAGES]) as $image) {
                 if (!$this->checkPath($image) && !$this->checkValidUrl($image)) {
                     $this->_addMessages([
-                        sprintf($this->context->retrieveMessageTemplate(self::ERROR_INVALID_MEDIA_URL), self::ADDITIONAL_IMAGES)
+                        sprintf($this->context->retrieveMessageTemplate(self::ERROR_INVALID_MEDIA_URL_OR_PATH), self::ADDITIONAL_IMAGES)
                     ]);
                     $valid = false;
                 }
