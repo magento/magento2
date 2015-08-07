@@ -219,7 +219,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
         );
         $this->_eventManager->dispatch(
             'sales_quote_item_collection_products_after_load',
-            ['product_collection' => $productCollection]
+            ['collection' => $productCollection]
         );
 
         $recollectQuote = false;
