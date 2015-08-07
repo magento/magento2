@@ -247,19 +247,19 @@
         <arguments>
             <argument name="columns" xsi:type="array">
                 <item name="prefix" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">shipping_address</item>
+                    <item name="tableAlias" xsi:type="string">shipping</item>
                     <item name="columnName" xsi:type="string">street</item>
                 </item>
                 <item name="firstname" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">shipping_address</item>
+                    <item name="tableAlias" xsi:type="string">shipping</item>
                     <item name="columnName" xsi:type="string">city</item>
                 </item>
                 <item name="middlename" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">shipping_address</item>
+                    <item name="tableAlias" xsi:type="string">shipping</item>
                     <item name="columnName" xsi:type="string">region</item>
                 </item>
                 <item name="lastname" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">shipping_address</item>
+                    <item name="tableAlias" xsi:type="string">shipping</item>
                     <item name="columnName" xsi:type="string">postcode</item>
                 </item>
             </argument>
@@ -269,19 +269,19 @@
         <arguments>
             <argument name="columns" xsi:type="array">
                 <item name="prefix" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">billing_address</item>
+                    <item name="tableAlias" xsi:type="string">billing</item>
                     <item name="columnName" xsi:type="string">street</item>
                 </item>
                 <item name="firstname" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">billing_address</item>
+                    <item name="tableAlias" xsi:type="string">billing</item>
                     <item name="columnName" xsi:type="string">city</item>
                 </item>
                 <item name="middlename" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">billing_address</item>
+                    <item name="tableAlias" xsi:type="string">billing</item>
                     <item name="columnName" xsi:type="string">region</item>
                 </item>
                 <item name="lastname" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">billing_address</item>
+                    <item name="tableAlias" xsi:type="string">billing</item>
                     <item name="columnName" xsi:type="string">postcode</item>
                 </item>
             </argument>
