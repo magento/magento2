@@ -12,7 +12,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
 {
     const URL_REGEXP = '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i';
 
-    const PATH_REGEXP = '#^(\w+/){1,2}\w+\.\w+$#';
+    const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\\/]+$#';
 
     const ADDITIONAL_IMAGES = 'additional_images';
 
@@ -33,7 +33,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      * @param $string
      * @return bool
      */
-    public function checkValidUrl($string)
+    protected function checkValidUrl($string)
     {
         return preg_match(self::URL_REGEXP, $string);
     }
@@ -42,9 +42,38 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      * @param $string
      * @return bool
      */
-    public function checkPath($string)
+    protected function checkPath($string)
     {
         return preg_match(self::PATH_REGEXP, $string);
+    }
+
+    /**
+     * @param $path
+     * @return bool
+     */
+    protected function checkFileExists($path)
+    {
+        return file_exists($path);
+    }
+
+    /**
+     * @param $url
+     * @return bool
+     */
+    protected function checkUrlExists($url)
+    {
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_NOBODY, true);
+        $result = curl_exec($curl);
+        $ret = false;
+        if ($result !== false) {
+            $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            if ($statusCode == 200) {
+                $ret = true;
+            }
+        }
+        curl_close($curl);
+        return $ret;
     }
 
     /**
@@ -62,6 +91,23 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
                     ]);
                     $valid = false;
                 }
+                if ($valid) {
+                    if ($this->checkValidUrl($attribute)) {
+                        $valid = $this->checkUrlExists($attribute);
+                        if (!$valid) {
+                            $this->_addMessages([
+                                sprintf($this->context->retrieveMessageTemplate(self::ERROR_MEDIA_URL_NOT_ACCESSIBLE), $attribute)
+                            ]);
+                        }
+                    } else {
+                        $valid = $this->checkUrlExists($attribute);
+                        if (!$valid) {
+                            $this->_addMessages([
+                                sprintf($this->context->retrieveMessageTemplate(self::ERROR_MEDIA_PATH_NOT_ACCESSIBLE), $attribute)
+                            ]);
+                        }
+                    }
+                }
             }
         }
         if (isset($value[self::ADDITIONAL_IMAGES]) && strlen($value[self::ADDITIONAL_IMAGES])) {
@@ -70,6 +116,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
                     $this->_addMessages([
                         sprintf($this->context->retrieveMessageTemplate(self::ERROR_INVALID_MEDIA_URL), self::ADDITIONAL_IMAGES)
                     ]);
+                    $valid = false;
                 }
                 break;
             }
