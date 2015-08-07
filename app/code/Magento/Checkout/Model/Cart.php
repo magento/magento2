@@ -9,13 +9,13 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Checkout\Model\Cart\CartInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Shopping cart model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart extends Object implements CartInterface
+class Cart extends DataObject implements CartInterface
 {
     /**
      * Shopping cart items summary quantity(s)
@@ -256,7 +256,7 @@ class Cart extends Object implements CartInterface
                 return $this;
             }
             $info = $orderItem->getProductOptionByCode('info_buyRequest');
-            $info = new \Magento\Framework\Object($info);
+            $info = new \Magento\Framework\DataObject($info);
             if ($qtyFlag === null) {
                 $info->setQty($orderItem->getQtyOrdered());
             } else {
@@ -303,17 +303,17 @@ class Cart extends Object implements CartInterface
     /**
      * Get request for product add to cart procedure
      *
-     * @param   \Magento\Framework\Object|int|array $requestInfo
-     * @return  \Magento\Framework\Object
+     * @param   \Magento\Framework\DataObject|int|array $requestInfo
+     * @return  \Magento\Framework\DataObject
      */
     protected function _getProductRequest($requestInfo)
     {
-        if ($requestInfo instanceof \Magento\Framework\Object) {
+        if ($requestInfo instanceof \Magento\Framework\DataObject) {
             $request = $requestInfo;
         } elseif (is_numeric($requestInfo)) {
-            $request = new \Magento\Framework\Object(['qty' => $requestInfo]);
+            $request = new \Magento\Framework\DataObject(['qty' => $requestInfo]);
         } else {
-            $request = new \Magento\Framework\Object($requestInfo);
+            $request = new \Magento\Framework\DataObject($requestInfo);
         }
 
         if (!$request->hasQty()) {
@@ -327,7 +327,7 @@ class Cart extends Object implements CartInterface
      * Add product to shopping cart (quote)
      *
      * @param int|Product $productInfo
-     * @param \Magento\Framework\Object|int|array $requestInfo
+     * @param \Magento\Framework\DataObject|int|array $requestInfo
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -479,7 +479,7 @@ class Cart extends Object implements CartInterface
      */
     public function updateItems($data)
     {
-        $infoDataObject = new \Magento\Framework\Object($data);
+        $infoDataObject = new \Magento\Framework\DataObject($data);
         $this->_eventManager->dispatch(
             'checkout_cart_update_items_before',
             ['cart' => $this, 'info' => $infoDataObject]
@@ -650,12 +650,12 @@ class Cart extends Object implements CartInterface
 
     /**
      * Update item in shopping cart (quote)
-     * $requestInfo - either qty (int) or buyRequest in form of array or \Magento\Framework\Object
+     * $requestInfo - either qty (int) or buyRequest in form of array or \Magento\Framework\DataObject
      * $updatingParams - information on how to perform update, passed to Quote->updateItem() method
      *
      * @param int $itemId
-     * @param int|array|\Magento\Framework\Object $requestInfo
-     * @param null|array|\Magento\Framework\Object $updatingParams
+     * @param int|array|\Magento\Framework\DataObject $requestInfo
+     * @param null|array|\Magento\Framework\DataObject $updatingParams
      * @return \Magento\Quote\Model\Quote\Item|string
      * @throws \Magento\Framework\Exception\LocalizedException
      *

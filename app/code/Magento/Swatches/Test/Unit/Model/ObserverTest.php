@@ -122,7 +122,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->willReturn($eventMock);
 
-        $response = $this->getMock('\Magento\Framework\Object', ['getTypes'], [], '', false);
+        $response = $this->getMock('\Magento\Framework\DataObject', ['getTypes'], [], '', false);
         $eventMock
             ->expects($this->exactly($exp['methods_count']))
             ->method('getResponse')

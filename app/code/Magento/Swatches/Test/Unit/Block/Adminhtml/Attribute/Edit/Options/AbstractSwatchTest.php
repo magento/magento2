@@ -133,7 +133,7 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
                 ->with(1, false)
                 ->will($this->returnSelf());
 
-            $zendDbSelectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
+            $zendDbSelectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
             $attrOptionCollectionMock->expects($this->once())->method('getSelect')->willReturn($zendDbSelectMock);
             $zendDbSelectMock->expects($this->once())->method('joinLeft')->will($this->returnSelf());
 

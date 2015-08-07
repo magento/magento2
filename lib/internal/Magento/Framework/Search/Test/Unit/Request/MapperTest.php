@@ -30,7 +30,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     private $queryMatch;
 
     /**
-     * @var \Magento\Framework\Search\Request\Query\Bool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Query\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
      */
     private $queryBool;
 
@@ -69,7 +69,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->queryBool = $this->getMockBuilder('Magento\Framework\Search\Request\Query\Bool')
+        $this->queryBool = $this->getMockBuilder('Magento\Framework\Search\Request\Query\BoolExpression')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -85,7 +85,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterBool = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\Bool')
+        $this->filterBool = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\BoolExpression')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -310,7 +310,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->at(1))->method('create')
             ->with(
-                $this->equalTo('Magento\Framework\Search\Request\Query\Bool'),
+                $this->equalTo('Magento\Framework\Search\Request\Query\BoolExpression'),
                 $this->equalTo(
                     [
                         'name' => $query['name'],
@@ -624,7 +624,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $filter = $filters['someFilter'];
         $this->objectManager->expects($this->at(1))->method('create')
             ->with(
-                $this->equalTo('Magento\Framework\Search\Request\Filter\Bool'),
+                $this->equalTo('Magento\Framework\Search\Request\Filter\BoolExpression'),
                 $this->equalTo(
                     [
                         'name' => $filter['name'],

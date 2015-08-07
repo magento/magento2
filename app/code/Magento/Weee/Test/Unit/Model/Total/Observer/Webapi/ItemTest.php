@@ -79,7 +79,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $expectedPrice,
         $expectedPriceInclTax
     ) {
-        $observerMock = $this->getMock('Magento\Framework\Object', ['getEvent'], [], '', false);
+        $observerMock = $this->getMock('Magento\Framework\DataObject', ['getEvent'], [], '', false);
         $eventMock = $this->getMock('Magento\Framework\Event', ['getItem'], [], '', false);
         $itemMock = $this->getMock(
             'Magento\Quote\Model\Quote\Item',

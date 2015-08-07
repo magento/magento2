@@ -31,7 +31,7 @@ try {
 
     $dbAdapterFactory = new \Magento\Tools\Migration\Acl\Db\Adapter\Factory();
 
-    $dbAdapter = $dbAdapterFactory->getAdapter(
+    $dbAdapter = $dbAdapterFactory->getConnection(
         $dbConfig = [
             'host' => $options->getOption('dbhost'),
             'username' => $options->getOption('dbuser'),

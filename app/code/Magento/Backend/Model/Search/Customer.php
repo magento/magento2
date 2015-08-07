@@ -20,7 +20,7 @@ namespace Magento\Backend\Model\Search;
  * @method Customer setResults(array $results)
  * @method array getResults()
  */
-class Customer extends \Magento\Framework\Object
+class Customer extends \Magento\Framework\DataObject
 {
     /**
      * Adminhtml data
