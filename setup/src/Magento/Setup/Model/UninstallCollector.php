@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\UninstallInterface;
+use Magento\Setup\Module\DataSetupFactory;
 
 /**
  * Class for collecting all Uninstall interfaces in all modules
@@ -22,14 +23,24 @@ class UninstallCollector
     private $objectManager;
 
     /**
+     * DataSetup Factory
+     *
+     * @var DataSetupFactory
+     */
+    private $dataSetupFactory;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param DataSetupFactory $dataSetupFactory
      */
     public function __construct(
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        DataSetupFactory $dataSetupFactory
     ) {
         $this->objectManager = $objectManagerProvider->get();
+        $this->dataSetupFactory = $dataSetupFactory;
     }
 
     /**
@@ -41,7 +52,7 @@ class UninstallCollector
     {
         $uninstallList = [];
         /** @var \Magento\Setup\Module\DataSetup $setup */
-        $setup = $this->objectManager->get('Magento\Setup\Module\DataSetup');
+        $setup = $this->dataSetupFactory->create();
         $result = $setup->getConnection()->select()->from($setup->getTable('setup_module'), ['module']);
         // go through modules
         foreach ($setup->getConnection()->fetchAll($result) as $row) {
