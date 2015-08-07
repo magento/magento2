@@ -7,7 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <remove name="legal"/>
+        <referenceContainer name="legal" remove="true"/>
         <referenceContainer name="content">
             <block template="Magento_Catalog::catalog/product/attribute/form.phtml" class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit" name="attribute_edit_content">
                 <container name="form" label="Form">
