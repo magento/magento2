@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Order extends \Magento\Backend\App\Action
 {
