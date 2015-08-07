@@ -143,6 +143,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'connection' => 'db',
                     'exchange' => 'magento',
                 ],
+                'test-publisher-3' => [
+                    'name' => 'test-publisher-3',
+                    'connection' => 'rabbitmq',
+                    'exchange' => 'test-exchange-1',
+                ],
             ],
             'topics' => [
                 'customer.created' => [
@@ -160,6 +165,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
                     'publisher' => 'test-publisher-2',
                 ],
+                'cart.created' => [
+                    'name' => 'cart.created',
+                    'schema' => 'Magento\\Quote\\Api\\Data\\CartInterface',
+                    'publisher' => 'test-publisher-3',
+                ],
             ],
             'consumers' => [
                 'customer_created_listener' => [
@@ -176,10 +186,18 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'class' => 'Other\Type',
                     'method' => 'processMessage2'
                 ],
+                'cart_created_listener' => [
+                    'name' => 'cart_created_listener',
+                    'queue' => 'test-queue-3',
+                    'connection' => 'rabbitmq',
+                    'class' => 'Other\Type',
+                    'method' => 'processMessage3'
+                ],
             ],
             'binds' => [
                 ['queue' => "test-queue-1", 'exchange' => "magento",  'topic' => "customer.created"],
-                ['queue' => "test-queue-2", 'exchange' => "magento",  'topic' => "customer.created"]
+                ['queue' => "test-queue-2", 'exchange' => "magento",  'topic' => "customer.deleted"],
+                ['queue' => "test-queue-3", 'exchange' => "test-exchange-1",  'topic' => "cart.created"]
             ]
         ];
     }

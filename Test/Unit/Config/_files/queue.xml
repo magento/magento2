@@ -8,11 +8,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Amqp/etc/queue.xsd">
     <publisher name="test-publisher-1" connection="rabbitmq" exchange="magento"/>
     <publisher name="test-publisher-2" connection="db" exchange="magento"/>
+    <publisher name="test-publisher-3" connection="rabbitmq" exchange="test-exchange-1"/>
     <topic name="customer.created" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-1"/>
     <topic name="customer.updated" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-2"/>
     <topic name="customer.deleted" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-2"/>
+    <topic name="cart.created" schema="Magento\\Quote\\Api\\Data\\CartInterface" publisher="test-publisher-3"/>
     <consumer name="customer_created_listener" queue="test-queue-1" connection="rabbitmq" class="Data\Type" method="processMessage"/>
     <consumer name="customer_deleted_listener" queue="test-queue-2" connection="db" class="Other\Type" method="processMessage2"/>
+    <consumer name="cart_created_listener" queue="test-queue-3" connection="rabbitmq" class="Other\Type" method="processMessage3"/>
     <bind queue="test-queue-1" exchange="magento" topic="customer.created" />
-    <bind queue="test-queue-2" exchange="magento"  topic="customer.created" />
+    <bind queue="test-queue-2" exchange="magento" topic="customer.deleted" />
+    <bind queue="test-queue-3" exchange="test-exchange-1" topic="cart.created" />
 </config>
