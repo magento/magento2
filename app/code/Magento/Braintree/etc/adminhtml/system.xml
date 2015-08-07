@@ -19,9 +19,17 @@
                     <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.]]></comment>
                     <attribute type="activity_path">payment/braintree/active</attribute>
                     <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Enabled</label>
+                        <label>Enabled Braintree</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/braintree/active</config_path>
+                        <requires>
+                            <group id="braintree_required"/>
+                        </requires>
+                    </field>
+                    <field id="activePayPal" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enabled PayPal through Braintree</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/braintree_paypal/active</config_path>
                         <requires>
                             <group id="braintree_required"/>
                         </requires>
@@ -151,14 +159,11 @@
                             <config_path>payment/braintree/countrycreditcard</config_path>
                         </field>
                     </group>
+
                     <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" sortOrder="40">
+
                         <label>PayPal through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                        <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Enabled</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>payment/braintree_paypal/active</config_path>
-                        </field>
                         <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Title</label>
                             <config_path>payment/braintree_paypal/title</config_path>
