@@ -30,7 +30,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct()
     {
-        $this->schema = realpath(__DIR__ . '/../etc/queue.xsd');
+        $this->schema = realpath(__DIR__ . '/../etc/queue_merged.xsd');
+        $this->perFileSchema = realpath(__DIR__ . '/../etc/queue.xsd');
     }
 
     /**
@@ -50,6 +51,6 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return null;
+        return $this->perFileSchema;
     }
 }

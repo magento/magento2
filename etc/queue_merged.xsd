@@ -28,5 +28,9 @@
             <xs:selector xpath="publisher"/>
             <xs:field xpath="@name"/>
         </xs:key>
+        <xs:keyref name="publisher-ref" refer="publisher-name">
+            <xs:selector xpath="topic"/>
+            <xs:field xpath="@publisher"/>
+        </xs:keyref>
     </xs:element>
 </xs:schema>

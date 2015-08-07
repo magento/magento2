@@ -7,6 +7,9 @@ namespace Magento\Framework\Amqp\Test\Unit\Config;
 
 use Magento\Framework\Amqp\Config\Converter;
 
+/**
+ * @codingStandardsIgnoreFile
+ */
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -104,11 +107,12 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertWithConsumersEnvOverride()
     {
-        $customizedConsumer = 'customer_deleted_listener';
+        $customizedConsumer = 'customerDeletedListener';
         $customConnection = 'test-queue-3';
+        $customMaxMessages = 5255;
         $envConsumersConfig = [
             'consumers' => [
-                $customizedConsumer => ['connection' => $customConnection],
+                $customizedConsumer => ['connection' => $customConnection, 'max_messages' => $customMaxMessages],
             ]
         ];
         $this->deploymentConfigMock->expects($this->once())
@@ -117,6 +121,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($envConsumersConfig);
         $expected = $this->getConvertedQueueConfig();
         $expected[Converter::CONSUMERS][$customizedConsumer][Converter::CONSUMER_CONNECTION] = $customConnection;
+        $expected[Converter::CONSUMERS][$customizedConsumer][Converter::CONSUMER_MAX_MESSAGES] = $customMaxMessages;
         $xmlFile = __DIR__ . '/_files/queue.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
@@ -172,26 +177,29 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'consumers' => [
-                'customer_created_listener' => [
-                    'name' => 'customer_created_listener',
+                'customerCreatedListener' => [
+                    'name' => 'customerCreatedListener',
                     'queue' => 'test-queue-1',
                     'connection' => 'rabbitmq',
                     'class' => 'Data\Type',
-                    'method' => 'processMessage'
+                    'method' => 'processMessage',
+                    'max_messages' => null
                 ],
-                'customer_deleted_listener' => [
-                    'name' => 'customer_deleted_listener',
+                'customerDeletedListener' => [
+                    'name' => 'customerDeletedListener',
                     'queue' => 'test-queue-2',
                     'connection' => 'db',
                     'class' => 'Other\Type',
-                    'method' => 'processMessage2'
+                    'method' => 'processMessage2',
+                    'max_messages' => '98765'
                 ],
-                'cart_created_listener' => [
-                    'name' => 'cart_created_listener',
+                'cartCreatedListener' => [
+                    'name' => 'cartCreatedListener',
                     'queue' => 'test-queue-3',
                     'connection' => 'rabbitmq',
                     'class' => 'Other\Type',
-                    'method' => 'processMessage3'
+                    'method' => 'processMessage3',
+                    'max_messages' => null
                 ],
             ],
             'binds' => [

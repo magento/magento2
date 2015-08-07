@@ -29,6 +29,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const CONSUMER_CONNECTION = 'connection';
     const CONSUMER_CLASS = 'class';
     const CONSUMER_METHOD = 'method';
+    const CONSUMER_MAX_MESSAGES = 'max_messages';
 
     const BINDS = 'binds';
     const BIND_QUEUE = 'queue';
@@ -39,6 +40,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const ENV_TOPICS = 'topics';
     const ENV_CONSUMERS = 'consumers';
     const ENV_CONSUMER_CONNECTION = 'connection';
+    const ENV_CONSUMER_MAX_MESSAGES = 'max_messages';
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
@@ -72,7 +74,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $topics = $this->extractTopics($source);
         $this->overridePublishersForTopics($topics, $publishers);
         $consumers = $this->extractConsumers($source);
-        $this->overrideConnectionsForConsumers($consumers);
+        $this->overrideConsumersData($consumers);
         $binds = $this->extractBinds($source);
         return [
             self::PUBLISHERS => $publishers,
@@ -136,12 +138,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var $consumerNode \DOMNode */
         foreach ($config->getElementsByTagName('consumer') as $consumerNode) {
             $consumerName = $consumerNode->attributes->getNamedItem('name')->nodeValue;
+            $maxMessages = $consumerNode->attributes->getNamedItem('max_messages');
             $output[$consumerName] = [
                 self::CONSUMER_NAME => $consumerName,
                 self::CONSUMER_QUEUE => $consumerNode->attributes->getNamedItem('queue')->nodeValue,
                 self::CONSUMER_CONNECTION => $consumerNode->attributes->getNamedItem('connection')->nodeValue,
                 self::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
                 self::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
+                self::CONSUMER_MAX_MESSAGES => $maxMessages ? $maxMessages->nodeValue : null,
             ];
         }
         return $output;
@@ -211,7 +215,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Override connections declared for consumers in queue.xml using values specified in the etc/env.php
+     * Override consumer connections and max messages declared in queue.xml using values specified in the etc/env.php
      *
      * Note that $consumers argument is modified by reference.
      *
@@ -220,7 +224,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * 'queue' =>
      *     [
      *         'consumers' => [
-     *             'customer_created_listener' => ['connection => 'database'],
+     *             'customerCreatedListener' => [
+     *                  'connection => 'database',
+     *                  'max_messages' => '321'
+     *              ],
      *         ],
      *     ],
      * </code>
@@ -229,7 +236,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @return void
      * @throws LocalizedException
      */
-    protected function overrideConnectionsForConsumers(array &$consumers)
+    protected function overrideConsumersData(array &$consumers)
     {
         $queueConfig = $this->getQueueConfig();
         if (!isset($queueConfig[self::ENV_CONSUMERS]) || !is_array($queueConfig[self::ENV_CONSUMERS])) {
@@ -240,6 +247,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 if (isset($consumerConfig[self::ENV_CONSUMER_CONNECTION])) {
                     $consumers[$consumerName][self::CONSUMER_CONNECTION]
                         = $consumerConfig[self::ENV_CONSUMER_CONNECTION];
+                }
+                if (isset($consumerConfig[self::ENV_CONSUMER_MAX_MESSAGES])) {
+                    $consumers[$consumerName][self::CONSUMER_MAX_MESSAGES]
+                        = $consumerConfig[self::ENV_CONSUMER_MAX_MESSAGES];
                 }
             }
         }
