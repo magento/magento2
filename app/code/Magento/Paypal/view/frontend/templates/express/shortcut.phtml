@@ -21,7 +21,7 @@ if ($block->isOrPositionBefore()) {
 }
 ?>
 <?php $shortcutHtmlId = $block->getShortcutHtmlId() ?>
-<div data-label="<?php echo __('or'); ?>"
+<div data-label="<?php echo $block->escapeHtml(__('or')); ?>"
      class="paypal checkout <?php echo $labelPosition ?> paypal-logo <?php echo $shortcutHtmlId ?>">
     <input type="image" data-action="checkout-form-submit" data-checkout-url="<?php echo $block->getCheckoutUrl() ?>"
            src="<?php echo $block->getImageUrl() ?>"
