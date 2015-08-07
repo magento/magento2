@@ -84,7 +84,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
         $childrenList = [];
         foreach ($this->getOptions($product) as $option) {
-            if ($optionId !== null && $option->getOptionId() != $optionId) {
+            if (!$option->getSelections() || ($optionId !== null && $option->getOptionId() != $optionId)) {
                 continue;
             }
             /** @var \Magento\Catalog\Model\Product $selection */

@@ -15,7 +15,7 @@ class Child extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Set store id to the attribute
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function beforeSave($object)

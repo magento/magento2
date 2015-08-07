@@ -8,7 +8,7 @@ namespace Magento\Paypal\Controller\Adminhtml\Billing;
 /**
  * Adminhtml billing agreement controller
  */
-class Agreement extends \Magento\Backend\App\Action
+abstract class Agreement extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

@@ -18,7 +18,11 @@ class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($order) {
             try {
-                $order->unhold()->save();
+                $orderManagement = $this->_objectManager->get('Magento\Sales\Api\OrderManagementInterface');
+                if (!$order->canUnhold()) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t unhold order.'));
+                }
+                $orderManagement->unhold($order->getEntityId());
                 $this->messageManager->addSuccess(__('You released the order from holding status.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());

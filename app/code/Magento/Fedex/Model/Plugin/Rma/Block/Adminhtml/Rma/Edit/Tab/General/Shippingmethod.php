@@ -24,11 +24,11 @@ class Shippingmethod
     }
 
     /**
-     * @param \Magento\Framework\Object $subject
+     * @param \Magento\Framework\DataObject $subject
      * @param bool $result
      * @return bool
      */
-    public function afterCanDisplayCustomValue(\Magento\Framework\Object $subject, $result)
+    public function afterCanDisplayCustomValue(\Magento\Framework\DataObject $subject, $result)
     {
         $carrierCode = $subject->getShipment()->getCarrierCode();
         if (!$carrierCode) {

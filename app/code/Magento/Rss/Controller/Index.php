@@ -9,7 +9,7 @@ namespace Magento\Rss\Controller;
  * Class Index
  * @package Magento\Rss\Controller
  */
-class Index extends \Magento\Framework\App\Action\Action
+abstract class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

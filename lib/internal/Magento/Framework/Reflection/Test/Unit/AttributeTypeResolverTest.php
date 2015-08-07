@@ -65,18 +65,18 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
         $config = [
             'Some\Class' => [
                 'some_code' => [
-                    'type' => '\Magento\Framework\Object',
+                    'type' => '\Magento\Framework\DataObject',
                 ],
             ]
         ];
 
         $this->typeProcessor->expects($this->once())
             ->method('getArrayItemType')
-            ->with('\Magento\Framework\Object')
-            ->willReturn('\Magento\Framework\Object');
+            ->with('\Magento\Framework\DataObject')
+            ->willReturn('\Magento\Framework\DataObject');
 
         $this->configMock->expects($this->once())->method('get')->willReturn($config);
-        $this->assertEquals('\Magento\Framework\Object', $this->model->resolveObjectType($code, $value, $context));
+        $this->assertEquals('\Magento\Framework\DataObject', $this->model->resolveObjectType($code, $value, $context));
     }
 
     /**
