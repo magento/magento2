@@ -17,10 +17,10 @@
         <empty_text></empty_text>
     </is_test>
     <class_test>
-        <class>Magento\Catalog\Model\Observer</class>
+        <class>Magento\ModuleName\Model\ClassName</class>
     </class_test>
     <model_test>
-        <model>Magento\Catalog\Model\Observer</model>
+        <model>Magento\ModuleName\Model\ClassName</model>
     </model_test>
     <no_classname_test>
         <none/>

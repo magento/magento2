@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Downloadable\Test\TestCase\UpdateDownloadableProductEntityTest">
+    <testCase name="Magento\Downloadable\Test\TestCase\UpdateDownloadableProductEntityTest" summary="Update Downloadable Product" ticketId="MAGETWO-24775">
         <variation name="UpdateDownloadableProductEntityTestVariation1">
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
