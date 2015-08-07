@@ -113,6 +113,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
             unset($this->components[$attribute->getAttributeCode()]);
             $this->components[$newAttributeCode] = $component;
             $component->setData('name', $newAttributeCode);
+            $component->prepare();
         }
 
         if ($attribute->getBackendType() != 'static') {
