@@ -43,15 +43,14 @@ class ColumnFactory
 
     /**
      * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     * @param string $columnName
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param array $config
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
      */
-    public function create($attribute, $context, array $config = [])
+    public function create($attribute, $columnName, $context, array $config = [])
     {
-        $columnName = $attribute->getAttributeCode();
         $config = array_merge([
-            'origin' => $columnName,
             'label' => __($attribute->getFrontendLabel()),
             'dataType' => $this->getDataType($attribute),
             'align' => 'left',

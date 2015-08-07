@@ -32,19 +32,18 @@ class Filters extends \Magento\Ui\Component\Filters
     public function prepare()
     {
         /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute */
-        foreach ($this->attributeRepository->getList() as $newAttributeCode => $attribute) {
-            if (!isset($this->components[$attribute->getAttributeCode()])
-            ) {
+        foreach ($this->attributeRepository->getList() as $attributeCode => $attribute) {
+            if (!isset($this->components[$attributeCode])) {
                 if ($attribute->getBackendType() !== 'static'
                     && $attribute->getIsUsedInGrid()
                     && $attribute->getIsFilterableInGrid()
                 ) {
-                    $filter = $this->filterFactory->create($newAttributeCode, $attribute, $this->getContext());
+                    $filter = $this->filterFactory->create($attributeCode, $attribute, $this->getContext());
                     $filter->prepare();
                     $this->addComponent($attribute->getAttributeCode(), $filter);
                 }
-            } elseif (!$attribute->getIsFilterableInGrid()) {
-                unset($this->components[$attribute->getAttributeCode()]);
+            } elseif ($attribute->getIsUsedInGrid() && !$attribute->getIsFilterableInGrid()) {
+                unset($this->components[$attributeCode]);
             }
         }
         parent::prepare();
