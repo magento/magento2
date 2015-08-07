@@ -9,10 +9,6 @@
     ],
     "repositories": [
         {
-            "type": "git",
-            "url": "git@github.corp.ebay.com:magento-ogre/composer.git"
-        },
-        {
             "type": "composer",
             "url": "http://packages.magento.com/"
         }
