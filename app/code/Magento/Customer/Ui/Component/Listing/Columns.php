@@ -126,7 +126,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                 'config',
                 array_merge(
                     $component->getData('config'),
-                    ['visible' => $attribute->getIsVisibleInGrid(),]
+                    ['visible' => $attribute->getIsVisibleInGrid()]
                 )
             );
         }
