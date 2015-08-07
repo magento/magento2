@@ -104,7 +104,7 @@ define([
                 selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
             }
 
-            //Unset selected shipping shipping method if not available
+            //Unset selected shipping method if not available
             if (!rateIsAvailable) {
                 selectShippingMethodAction(null);
             }

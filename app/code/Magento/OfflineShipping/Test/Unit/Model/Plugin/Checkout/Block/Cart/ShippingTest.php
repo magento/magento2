@@ -39,8 +39,8 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGetStateActive($scopeConfigMockReturnValue, $result, $assertResult)
     {
-        /** @var \Magento\Checkout\Block\Cart\Shipping $subjectMock */
-        $subjectMock = $this->getMockBuilder('Magento\Checkout\Block\Cart\Shipping')
+        /** @var \Magento\Checkout\Block\Cart\LayoutProcessor $subjectMock */
+        $subjectMock = $this->getMockBuilder('\Magento\Checkout\Block\Cart\LayoutProcessor')
             ->disableOriginalConstructor()
             ->getMock();
 
