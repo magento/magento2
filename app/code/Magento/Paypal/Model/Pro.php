@@ -9,6 +9,7 @@
 namespace Magento\Paypal\Model;
 
 use Magento\Paypal\Model\Api\AbstractApi;
+use Magento\Sales\Api\TransactionRepositoryInterface;
 
 /**
  * PayPal Website Payments Pro implementation for payment method instances
@@ -74,18 +75,26 @@ class Pro
     protected $_infoFactory;
 
     /**
+     * @var TransactionRepositoryInterface
+     */
+    protected $transactionRepository;
+
+    /**
      * @param \Magento\Paypal\Model\Config\Factory $configFactory
      * @param \Magento\Paypal\Model\Api\Type\Factory $apiFactory
      * @param \Magento\Paypal\Model\InfoFactory $infoFactory
+     * @param TransactionRepositoryInterface $transactionRepository
      */
     public function __construct(
         \Magento\Paypal\Model\Config\Factory $configFactory,
         \Magento\Paypal\Model\Api\Type\Factory $apiFactory,
-        \Magento\Paypal\Model\InfoFactory $infoFactory
+        \Magento\Paypal\Model\InfoFactory $infoFactory,
+        TransactionRepositoryInterface $transactionRepository
     ) {
         $this->_configFactory = $configFactory;
         $this->_apiFactory = $apiFactory;
         $this->_infoFactory = $infoFactory;
+        $this->transactionRepository = $transactionRepository;
     }
 
     /**

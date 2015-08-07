@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="customer_login">
-        <observer name="loadCustomerQuote" instance="Magento\Checkout\Model\Observer" method="loadCustomerQuote" />
+        <observer name="loadCustomerQuote" instance="Magento\Checkout\Observer\LoadCustomerQuote" method="invoke" />
     </event>
     <event name="customer_logout">
-        <observer name="unsetAll" instance="Magento\Checkout\Model\Observer" method="unsetAll" />
+        <observer name="unsetAll" instance="Magento\Checkout\Observer\UnsetAll" method="invoke" />
     </event>
 </config>
