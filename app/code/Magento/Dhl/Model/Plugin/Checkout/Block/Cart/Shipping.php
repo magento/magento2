@@ -30,7 +30,7 @@ class Shipping
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetStateActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
+    public function afterIsStateActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
     {
         return (bool)$result || (bool)$this->_scopeConfig->getValue(
             'carriers/dhl/active',
@@ -44,7 +44,7 @@ class Shipping
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetCityActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
+    public function afterIsCityActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
     {
         return (bool)$result || (bool)$this->_scopeConfig->getValue(
             'carriers/dhl/active',

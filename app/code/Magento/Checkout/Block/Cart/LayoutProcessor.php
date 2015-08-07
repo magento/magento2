@@ -177,7 +177,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @return string
      */
-    protected function getEstimateCountryId()
+    protected function getEstimatedCountryId()
     {
         return $this->getAddress()->getCountryId();
     }
@@ -188,7 +188,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    protected function getCityActive()
+    protected function isCityActive()
     {
         return false;
     }
@@ -197,9 +197,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Show State in Shipping Estimation
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    protected function getStateActive()
+    protected function isStateActive()
     {
         return false;
     }
@@ -242,7 +241,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected function isZipCodeRequired()
     {
         foreach ($this->getCarriers() as $carrier) {
-            if ($carrier->isZipCodeRequired($this->getEstimateCountryId())) {
+            if ($carrier->isZipCodeRequired($this->getEstimatedCountryId())) {
                 return true;
             }
         }
@@ -260,7 +259,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 foreach ($customer->getAddresses() as $address) {
                     if ($address->isDefaultShipping()) {
                         $this->defaultShippingAddress = $address;
-                        break;
+                        return $this->defaultShippingAddress;
                     }
                 }
             }
@@ -279,7 +278,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         $defaultAddress = $this->getDefaultShippingAddress();
         $elements = [
             'city' => [
-                'visible' => $this->getCityActive(),
+                'visible' => $this->isCityActive(),
                 'formElement' => 'input',
                 'label' => __('City'),
                 'validation' => $this->isCityRequired() ? ['required-entry' => true] : null,
