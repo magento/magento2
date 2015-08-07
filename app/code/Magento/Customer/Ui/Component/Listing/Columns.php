@@ -109,13 +109,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         $component = $this->components[$attribute->getAttributeCode()];
 
-        if ($attribute->getAttributeCode() !== $newAttributeCode) {
-            unset($this->components[$attribute->getAttributeCode()]);
-            $this->components[$newAttributeCode] = $component;
-            $component->setData('name', $newAttributeCode);
-            $component->prepare();
-        }
-
         if ($attribute->getBackendType() != 'static') {
             if ($attribute->getIsUsedInGrid()) {
                 $config = array_merge(
@@ -124,8 +117,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                         'name' => $newAttributeCode,
                         'type' => $this->getAttributeType($attribute),
                         'dataType' => $attribute->getBackendType(),
-                        'visible' => $attribute->getIsVisibleInGrid(),
-                        'filters' => [],
+                        'visible' => $attribute->getIsVisibleInGrid()
                     ]
                 );
                 $component->setData('config', $config);
@@ -135,14 +127,10 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                 'config',
                 array_merge(
                     $component->getData('config'),
-                    ['type' => $this->getAttributeType($attribute)]
+                    ['visible' => $attribute->getIsVisibleInGrid(),]
                 )
             );
         }
-        $component->setData('config', array_merge(
-            $component->getData('config'),
-            ['origin' => $attribute->getAttributeCode()]
-        ));
     }
 
     /**
