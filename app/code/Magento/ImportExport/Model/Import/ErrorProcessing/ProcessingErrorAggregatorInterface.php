@@ -33,6 +33,12 @@ interface ProcessingErrorAggregatorInterface
     );
 
     /**
+     * @param int $rowNumber
+     * @return $this
+     */
+    public function addRowToSkip($rowNumber);
+
+    /**
      * @param string $code
      * @param string|object $template
      * @return $this
