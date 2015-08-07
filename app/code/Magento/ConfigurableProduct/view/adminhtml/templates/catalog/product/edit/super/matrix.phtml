@@ -141,10 +141,10 @@ if ($variations) {
                 <tr data-role="row" data-bind="css: { _disabled: !variation.status, even: $index() % 2 }, attr: { 'data-row-number': $index() }">
                     <td class="col-image" data-column="image">
                         <div class="actions split actions-image-uploader">
-                            <!-- ko if: variation.readonly -->
+                            <!-- ko ifnot: variation.editable -->
                                 <img data-bind='attr: {src: variation.images.preview}' class="variation" data-role="image"/>
                             <!-- /ko -->
-                            <!-- ko ifnot: variation.readonly -->
+                            <!-- ko if: variation.editable -->
                                 <!-- ko ifnot: variation.images.file-->
                                 <div class="action-upload action split" data-action="upload-image">
                                     <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
@@ -171,31 +171,31 @@ if ($variations) {
                         </div>
                     </td>
                     <td class="col-name" data-column="name">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                         <a target="_blank" data-bind="text: variation.name,
                             attr: {href: variation.productUrl}">
                         </a>
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
+                        <!-- ko if: variation.editable -->
                         <input type="text" data-bind="attr: {id: $parent.getRowId(variation, 'name'), name: $parent.getVariationRowName(variation, 'name'), value: variation.sku}"/>
                         <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'configurable_attribute'), name: $parent.getVariationRowName(variation, 'configurable_attribute'), value: variation.attribute}"/>
                         <!-- /ko -->
                         <input type="hidden" data-role="status" data-bind="attr: {name: $parent.getVariationRowName(variation, 'status'), value: variation.status}"/>
                     </td>
                     <td class="col-sku" data-column="sku">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                             <!-- ko text: variation.sku --><!--/ko-->
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
+                        <!-- ko if: variation.editable -->
                         <input type="text"
                                data-bind="attr: {id: $parent.getRowId(variation, 'sku'), name: $parent.getVariationRowName(variation, 'sku'), value: variation.sku}"/>
                         <!-- /ko -->
                     </td>
                     <td class="col-price" data-column="price">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                             <!-- ko text: variation.price --><!--/ko-->
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
+                        <!-- ko if: variation.editable -->
                         <div class="addon">
                             <input type="text"
                                    id=""
@@ -208,21 +208,21 @@ if ($variations) {
 
                     </td>
                     <td class="col-qty" data-column="qty">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                             <!-- ko text: variation.quantity --><!--/ko-->
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
+                        <!-- ko if: variation.editable -->
                         <input type="text"
                                class="validate-number"
-                               data-bind="attr: {id: $parent.getRowId(variation, 'qty'), name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'), value: variation.qty}"/>
+                               data-bind="attr: {id: $parent.getRowId(variation, 'qty'), name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'), value: variation.quantity}"/>
                         <!-- /ko -->
 
                     </td>
                     <td class="col-weight" data-column="weight">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                             <!-- ko text: variation.weight --><!--/ko-->
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
+                        <!-- ko if: variation.editable -->
                         <input type="text"
                                data-bind="attr: {id: $parent.getRowId(variation, 'weight'), name: $parent.getVariationRowName(variation, 'weight'), value: variation.weight}"/>
                         <!-- /ko -->
@@ -274,7 +274,8 @@ if ($variations) {
      class="no-display">
     <?php
     echo $block->getVariationWizard([
-        'attributes' => $attributes
+        'attributes' => $attributes,
+        'configurations' => $productMatrix
     ]);
     ?>
 </div>

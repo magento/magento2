@@ -81,21 +81,18 @@ define([
                     weight: variation.weight || this.getProductValue('weight'),
                     attribute: JSON.stringify(attributes),
                     variationKey: _.values(attributes).join('-'),
-                    readonly: variation.product_id > 0,
+                    editable: variation.editable === undefined ? !variation.product_id : variation.editable,
                     productUrl: this.productUrl.replace('%id%', variation.product_id),
                     status: variation.status === undefined ? 1 : parseInt(variation.status)
                 }));
             }, this);
-        },
-        isReadonly: function (variation) {
-            return variation.productId !== null;
         },
         removeProduct: function (rowIndex) {
             this.productMatrix.splice(rowIndex, 1);
         },
         toggleProduct: function (rowIndex) {
             var productChanged = {};
-            if (!this.productMatrix()[rowIndex].readonly) {
+            if (this.productMatrix()[rowIndex].editable) {
                 var row = $('[data-row-number=' + rowIndex + ']');
                 _.each('name,sku,qty,weight,price'.split(','), function (column) {
                     productChanged[column] = $(
