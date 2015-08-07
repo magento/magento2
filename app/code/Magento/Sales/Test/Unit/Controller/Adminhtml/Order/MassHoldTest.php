@@ -85,9 +85,16 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
      */
     protected $filterMock;
 
+    /**
+     * @var \Magento\Sales\Api\OrderManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderManagementMock;
+
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->orderManagementMock = $this->getMockBuilder('Magento\Sales\Api\OrderManagementInterface')
+            ->getMockForAbstractClass();
         $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
         $resultRedirectFactory = $this->getMock(
             'Magento\Backend\Model\View\Result\RedirectFactory',
@@ -162,7 +169,8 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
-                'collectionFactory' => $this->orderCollectionFactoryMock
+                'collectionFactory' => $this->orderCollectionFactoryMock,
+                'orderManagement' => $this->orderManagementMock
             ]
         );
     }
@@ -186,11 +194,8 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
         $order1->expects($this->once())
             ->method('canHold')
             ->willReturn(true);
-        $order1->expects($this->once())
+        $this->orderManagementMock->expects($this->once())
             ->method('hold');
-        $order1->expects($this->once())
-            ->method('save');
-
         $this->orderCollectionMock->expects($this->once())
             ->method('count')
             ->willReturn($countOrders);
