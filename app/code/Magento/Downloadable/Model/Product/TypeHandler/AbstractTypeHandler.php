@@ -133,9 +133,10 @@ abstract class AbstractTypeHandler
      */
     protected function getFiles(array $item)
     {
-        $files = isset($item[self::FIELD_FILE])
-            ? $this->jsonHelper->jsonDecode($item[self::FIELD_FILE])
-            : [];
+        $files = [];
+        if (isset($item[self::FIELD_FILE]) && $item[self::FIELD_FILE]) {
+            $files = $this->jsonHelper->jsonDecode($item[self::FIELD_FILE]);
+        }
         return $files;
     }
 

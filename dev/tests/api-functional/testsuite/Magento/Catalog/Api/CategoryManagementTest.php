@@ -40,6 +40,9 @@ class CategoryManagementTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, $requestData);
 
         for ($i = 0; $i < $expectedLevel; $i++) {
+            if (!array_key_exists(0, $result['children_data'])) {
+                $this->fail('Category "' . $result['name'] . '" doesn\'t have children but expected to have');
+            }
             $result = $result['children_data'][0];
         }
         $this->assertEquals($expectedId, $result['id']);

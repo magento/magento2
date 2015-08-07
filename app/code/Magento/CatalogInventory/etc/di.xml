@@ -31,7 +31,7 @@
     <preference for="Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface" type="Magento\CatalogInventory\Model\StockRegistryProvider" />
     <preference for="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface" type="Magento\CatalogInventory\Model\StockStateProvider" />
 
-    <type name="Magento\CatalogInventory\Model\Observer">
+    <type name="Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver">
         <arguments>
             <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Stock\Proxy</argument>
         </arguments>

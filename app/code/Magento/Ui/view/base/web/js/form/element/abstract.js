@@ -29,7 +29,6 @@ define([
             additionalClasses: {},
 
             listens: {
-                value: 'onUpdate',
                 visible: 'setPreview',
                 '${ $.provider }:data.reset': 'reset',
                 '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
@@ -48,11 +47,8 @@ define([
             _.bindAll(this, 'reset');
 
             this._super()
+                .setInitialValue()
                 ._setClasses();
-
-            this.initialValue = this.getInitialValue();
-
-            this.value(this.initialValue);
 
             return this;
         },
@@ -90,6 +86,20 @@ define([
                 'noticeId': 'notice-' + uid,
                 'inputName': utils.serializeName(this.dataScope)
             });
+
+            return this;
+        },
+
+        /**
+         * Sets initial value of the element and subscribes to it's changes.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        setInitialValue: function () {
+            this.initialValue = this.getInitialValue();
+
+            this.value(this.initialValue);
+            this.on('value', this.onUpdate.bind(this));
 
             return this;
         },
