@@ -9,25 +9,35 @@
         <dl class="items methods" data-bind="foreach: shippingRateGroups">
             <dt class="item-title"><span data-bind="text: $data"></span></dt>
             <dd class="item-options"  data-bind="foreach: $parent.getRatesForGroup($data)">
-                <div class="field choice item" data-bind="click: $parents[1].selectShippingMethod">
-                    <!--<div>Error message</div>-->
+                <div data-bind="click: $parents[1].selectShippingMethod,
+                                css: {'field choice item': available, 'message error': !available} ">
+                    <!-- ko ifnot: (available) -->
+                    <div data-bind="text: error_message"></div>
+                    <!-- /ko -->
+                    <!-- ko if: (available) -->
                     <input name="estimate_method"
                            type="radio"
                            class="radio"
                            data-bind="
                                 checked: $parents[1].selectedShippingMethod,
-                                attr: {value: carrier_code + '_' + method_code, id: 's_method_' + method_code}"
-                            />
+                                attr: {
+                                        value: carrier_code + '_' + method_code,
+                                        id: 's_method_' + method_code
+                                        }
+                                "/>
                     <label class="label" data-bind="attr: {for: 's_method_' + method_code}">
                         <!-- ko text: method_title --><!-- /ko -->
                         <!-- ko text: $parents[1].getFormattedPrice(amount) --><!-- /ko -->
                     </label>
+                    <!-- /ko -->
                 </div>
             </dd>
         </dl>
         <div class="actions-toolbar">
             <div class="primary">
-                <button class="action primary update" data-bind="click: setShippingMethod"><span data-bind="text: $t('Update Total')"></span></button>
+                <button class="action primary update" data-bind="click: setShippingMethod">
+                    <span data-bind="text: $t('Update Total')"></span>
+                </button>
             </div>
         </div>
     </fieldset>
