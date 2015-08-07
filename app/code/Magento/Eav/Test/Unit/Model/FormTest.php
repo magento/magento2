@@ -32,7 +32,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $_userAttribute = null;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_entity = null;
 
@@ -47,10 +47,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ['_getFilteredFormAttributeCollection', '_getValidator', 'getEntity']
         )->disableOriginalConstructor()->getMock();
 
-        $this->_userAttribute = new \Magento\Framework\Object(
+        $this->_userAttribute = new \Magento\Framework\DataObject(
             ['is_user_defined' => true, 'attribute_code' => 'attribute_visible_user', 'is_visible' => true]
         );
-        $this->_systemAttribute = new \Magento\Framework\Object(
+        $this->_systemAttribute = new \Magento\Framework\DataObject(
             ['is_user_defined' => false, 'attribute_code' => 'attribute_invisible_system', 'is_visible' => false]
         );
         $this->_attributes = [$this->_userAttribute, $this->_systemAttribute];
@@ -62,7 +62,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_attributes)
         );
 
-        $this->_entity = new \Magento\Framework\Object(['id' => 1, 'attribute_visible_user' => 'abc']);
+        $this->_entity = new \Magento\Framework\DataObject(['id' => 1, 'attribute_visible_user' => 'abc']);
         $this->_model->expects($this->any())->method('getEntity')->will($this->returnValue($this->_entity));
     }
 

@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Cms\Test\TestCase\DeleteCmsPageUrlRewriteEntityTest">
+    <testCase name="Magento\Cms\Test\TestCase\DeleteCmsPageUrlRewriteEntityTest" summary="Delete Cms Page URL Rewrites" ticketId="MAGETWO-25915">
         <variation name="DeleteCmsPageUrlRewriteEntityTestVariation1">
             <data name="urlRewrite/dataset" xsi:type="string">cms_default_no_redirect</data>
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage" />

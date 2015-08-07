@@ -84,7 +84,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             []
         )->getMock();
         $objectFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Validator\ObjectFactory'
+            'Magento\Framework\Validator\DataObjectFactory'
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();

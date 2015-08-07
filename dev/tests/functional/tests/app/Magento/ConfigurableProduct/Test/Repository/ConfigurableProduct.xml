@@ -296,7 +296,7 @@
                 <item name="dataset" xsi:type="string">custom_attribute_set</item>
             </field>
             <field name="checkout_data" xsi:type="array">
-                <item name="dataset" xsi:type="string">two_options_by_one_dollar</item>
+                <item name="dataset" xsi:type="string">configurable_two_options_by_one_dollar</item>
             </field>
         </dataset>
 
@@ -356,7 +356,7 @@
                 <item name="dataset" xsi:type="string">custom_attribute_set</item>
             </field>
             <field name="checkout_data" xsi:type="array">
-                <item name="dataset" xsi:type="string">two_options_by_one_dollar</item>
+                <item name="dataset" xsi:type="string">configurable_two_options_by_one_dollar</item>
             </field>
         </dataset>
     </repository>

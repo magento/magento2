@@ -13,6 +13,17 @@ class CodeMessDetectorTest extends \PHPUnit_Framework_TestCase
             'some/ruleset/file.xml',
             'some/report/file.xml'
         );
-        $this->assertEquals(class_exists('PHPMD\TextUI\Command'), $messDetector->canRun());
+
+        /** TODO: Remove provided check after PHPMD will support PHP version 7 */
+        $isPhpVersionSupported = version_compare(
+            '7.0.0',
+            preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION),
+            '>'
+        );
+
+        $this->assertEquals(
+            class_exists('PHPMD\TextUI\Command') && $isPhpVersionSupported,
+            $messDetector->canRun()
+        );
     }
 }

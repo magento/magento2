@@ -30,8 +30,8 @@ class CreditmemoEmailTest extends WebapiAbstract
         $creditmemo = $creditmemoCollection->getFirstItem();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId(),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId() . '/emails',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

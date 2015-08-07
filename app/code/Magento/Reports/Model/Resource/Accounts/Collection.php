@@ -22,7 +22,7 @@ class Collection extends \Magento\Reports\Model\Resource\Customer\Collection
      */
     protected function _joinFields($fromDate = '', $toDate = '')
     {
-        $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
+        $this->getSelect()->reset(\Magento\Framework\DB\Select::COLUMNS);
         $this->addAttributeToFilter(
             'created_at',
             ['from' => $fromDate, 'to' => $toDate, 'datetime' => true]

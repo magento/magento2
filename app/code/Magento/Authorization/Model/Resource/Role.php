@@ -35,16 +35,16 @@ class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->dateTime = $dateTime;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_cache = $cache->getFrontend();
     }
 
@@ -82,7 +82,7 @@ class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if (!$role->getTreeLevel()) {
             if ($role->getPid() > 0) {
-                $select = $this->_getReadAdapter()->select()->from(
+                $select = $this->getConnection()->select()->from(
                     $this->getMainTable(),
                     ['tree_level']
                 )->where(
@@ -91,7 +91,7 @@ class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
                 $binds = ['pid' => (int)$role->getPid()];
 
-                $treeLevel = $this->_getReadAdapter()->fetchOne($select, $binds);
+                $treeLevel = $this->getConnection()->fetchOne($select, $binds);
             } else {
                 $treeLevel = 0;
             }
@@ -126,11 +126,11 @@ class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $role)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
-        $adapter->delete($this->getMainTable(), ['parent_id = ?' => (int)$role->getId()]);
+        $connection->delete($this->getMainTable(), ['parent_id = ?' => (int)$role->getId()]);
 
-        $adapter->delete($this->_ruleTable, ['role_id = ?' => (int)$role->getId()]);
+        $connection->delete($this->_ruleTable, ['role_id = ?' => (int)$role->getId()]);
 
         return $this;
     }
@@ -143,16 +143,16 @@ class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getRoleUsers(\Magento\Authorization\Model\Role $role)
     {
-        $read = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         $binds = ['role_id' => $role->getId(), 'role_type' => RoleUser::ROLE_TYPE];
 
-        $select = $read->select()
+        $select = $connection->select()
             ->from($this->getMainTable(), ['user_id'])
             ->where('parent_id = :role_id')
             ->where('role_type = :role_type')
             ->where('user_id > 0');
 
-        return $read->fetchCol($select, $binds);
+        return $connection->fetchCol($select, $binds);
     }
 }
