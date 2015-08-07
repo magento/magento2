@@ -48,7 +48,8 @@
                 "components": {
                     "<?= $block->getComponentName()?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/summary",
-                        "appendTo": "<?= $block->getParentComponentName()?>"
+                        "appendTo": "<?= $block->getParentComponentName()?>",
+                        "variationsComponent": "configurableVariations"
                     }
                 }
             }
