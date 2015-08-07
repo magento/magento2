@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+require __DIR__ . '/order_fixture_store.php';
+/** @var \Magento\Catalog\Model\Product $product */
+
+/** @var \Magento\Sales\Model\Order $order */
+$order = $objectManager->create('Magento\Sales\Model\Order');
+$order->load('100000004', 'increment_id');
+$order->setStatus(
+    $order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT)
+)->setStoreId(
+    $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore('default')->getId()
+);
+$order->save();
