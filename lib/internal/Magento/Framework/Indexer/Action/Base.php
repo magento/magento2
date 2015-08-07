@@ -323,9 +323,9 @@ class Base implements ActionInterface
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['origin'] =
                     $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['origin']
                         ?: $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'];
-                if ($this->data['fieldsets'][$fieldsetName]['prefix']) {
+                if ($fieldsetName != 0) {
                     $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'] =
-                        $this->data['fieldsets'][$fieldsetName]['prefix'] . '_'
+                        $this->data['fieldsets'][$fieldsetName]['name'] . '_'
                         . $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'];
                 }
                 $this->saveFieldByType($field);
