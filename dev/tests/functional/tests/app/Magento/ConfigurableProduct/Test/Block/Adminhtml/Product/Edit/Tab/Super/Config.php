@@ -39,7 +39,7 @@ class Config extends Tab
      *
      * @var string
      */
-    protected $generateVariations = '[data-role=step-wizard-next]';
+    protected $generateVariations = '[data-role=step-wizard-next] button';
 
     /**
      * Selector for variations matrix.

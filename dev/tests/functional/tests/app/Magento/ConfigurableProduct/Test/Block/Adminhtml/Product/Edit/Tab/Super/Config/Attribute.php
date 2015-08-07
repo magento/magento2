@@ -101,7 +101,7 @@ class Attribute extends Form
      *
      * @var string
      */
-    protected $nextButton = '[data-role=step-wizard-next]';
+    protected $nextButton = '[data-role=step-wizard-next] button';
 
     /**
      * Selector for option container
@@ -167,6 +167,7 @@ class Attribute extends Form
             $this->getAttributesGrid()->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
         }
         $this->browser->find($this->nextButton)->click();
+        $this->getTemplateBlock()->waitLoader();
 
         foreach ($attributes as $attribute) {
             $this->updateOptions($attribute);
