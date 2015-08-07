@@ -197,7 +197,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'binds' => [
                 ['queue' => "test-queue-1", 'exchange' => "magento",  'topic' => "customer.created"],
                 ['queue' => "test-queue-2", 'exchange' => "magento",  'topic' => "customer.deleted"],
-                ['queue' => "test-queue-3", 'exchange' => "test-exchange-1",  'topic' => "cart.created"]
+                ['queue' => "test-queue-3", 'exchange' => "test-exchange-1", 'topic' => "cart.created"]
             ]
         ];
     }
