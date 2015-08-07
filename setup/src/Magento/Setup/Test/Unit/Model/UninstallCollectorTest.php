@@ -42,11 +42,10 @@ class UninstallCollectorTest extends \PHPUnit_Framework_TestCase
                     ['Magento\B\Setup\Uninstall', [], $uninstallB],
                 ])
             );
-        $objectManager->expects($this->any())->method('get')
-            ->with('Magento\Setup\Module\DataSetup')
-            ->willReturn($setup);
+        $setupFactory = $this->getMock('Magento\Setup\Module\DataSetupFactory', [], [], '', false);
+        $setupFactory->expects($this->once())->method('create')->willReturn($setup);
 
-        $collector = new UninstallCollector($objectManagerProvider);
+        $collector = new UninstallCollector($objectManagerProvider, $setupFactory);
         $this->assertEquals(['Magento_A' => 'Uninstall Class A'], $collector->collectUninstall());
     }
 }

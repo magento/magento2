@@ -17,6 +17,7 @@ class JobFactory
      */
     const NAME_UPGRADE = 'setup:upgrade';
     const DB_ROLLBACK = 'setup:rollback';
+    const COMPONENT_UNINSTALL = 'setup:component:uninstall';
 
     /**
      * @var ServiceLocatorInterface
@@ -62,17 +63,22 @@ class JobFactory
                 );
                 break;
             case self::DB_ROLLBACK:
-
-                return $objectManager->create(
-                    '\Magento\Setup\Model\Cron\JobDbRollback',
-                    [
-                        'output' => $multipleStreamOutput,
-                        'cronStatus' => $cronStatus,
-                        'name' => $name,
-                        'params' => $params
-                    ]
+                return new JobDbRollback(
+                    $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory'),
+                    $multipleStreamOutput,
+                    $cronStatus,
+                    $name,
+                    $params
                 );
                 break;
+            case self::COMPONENT_UNINSTALL:
+                return new JobComponentUninstall(
+                    $this->serviceLocator->get('Magento\Setup\Model\Cron\ComponentUninstallerFactory'),
+                    $multipleStreamOutput,
+                    $cronStatus,
+                    $name,
+                    $params
+                );
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));
         }

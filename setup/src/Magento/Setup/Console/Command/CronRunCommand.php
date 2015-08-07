@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\Cron\Queue;
 use Magento\Setup\Model\Cron\ReadinessCheck;
 use Magento\Setup\Model\Cron\Status;
@@ -16,6 +17,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CronRunCommand extends AbstractSetupCommand
 {
+    /**
+     * @var DeploymentConfig
+     */
+    protected $deploymentConfig;
+
     /**
      * @var Queue
      */
@@ -39,10 +45,12 @@ class CronRunCommand extends AbstractSetupCommand
      * @param Status $status
      */
     public function __construct(
+        DeploymentConfig $deploymentConfig,
         Queue $queue,
         ReadinessCheck $readinessCheck,
         Status $status
     ) {
+        $this->deploymentConfig = $deploymentConfig;
         $this->queue = $queue;
         $this->readinessCheck = $readinessCheck;
         $this->status = $status;
@@ -67,7 +75,8 @@ class CronRunCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->readinessCheck->runReadinessCheck()
+        if (!$this->deploymentConfig->isAvailable()
+            || !$this->readinessCheck->runReadinessCheck()
             || $this->status->isUpdateInProgress()
             || $this->status->isUpdateError()
         ) {

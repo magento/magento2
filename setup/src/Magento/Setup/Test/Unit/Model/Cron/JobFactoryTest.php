@@ -10,6 +10,11 @@ use Magento\Setup\Model\Cron\JobFactory;
 class JobFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @var JobFactory
      */
     private $jobFactory;
@@ -23,19 +28,24 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $status->expects($this->once())->method('getLogFilePath')->willReturn('path_b');
         $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
-        $objectManagerProvider->expects($this->atLeastOnce())->method('get')->willReturn($objectManager);
-        $objectManager->expects($this->any())->method('create')->willReturn($jobDbRollback);
+        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
+        $objectManagerProvider->expects($this->atLeastOnce())->method('get')->willReturn($this->objectManager);
 
         $upgradeCommand = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
-        $rollbackCommand = $this->getMock('Magento\Setup\Console\Command\RollbackCommand', [], [], '', false);
+        $componentUninstallerFactory = $this->getMock(
+            'Magento\Setup\Model\Cron\ComponentUninstallerFactory',
+            [],
+            [],
+            '',
+            false
+        );
 
         $returnValueMap =[
             ['Magento\Setup\Model\Cron\Status', $status],
             ['Magento\Setup\Console\Command\UpgradeCommand', $upgradeCommand],
-            ['Magento\Setup\Console\Command\RollbackCommand', $rollbackCommand],
             ['Magento\Framework\App\MaintenanceMode', $maintenanceMode],
-            ['Magento\Setup\Model\ObjectManagerProvider', $objectManagerProvider]
+            ['Magento\Setup\Model\ObjectManagerProvider', $objectManagerProvider],
+            ['Magento\Setup\Model\Cron\ComponentUninstallerFactory', $componentUninstallerFactory],
         ];
 
         $serviceManager->expects($this->atLeastOnce())
@@ -52,11 +62,24 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testRollback()
     {
+        $this->objectManager->expects($this->once())
+            ->method('get')
+            ->with('Magento\Framework\Setup\BackupRollbackFactory')
+            ->willReturn($this->getMock('Magento\Framework\Setup\BackupRollbackFactory', [], [], '', false));
         $this->assertInstanceOf(
             'Magento\Setup\Model\Cron\AbstractJob',
             $this->jobFactory->create('setup:rollback', [])
         );
     }
+
+    public function testComponentUninstall()
+    {
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\JobComponentUninstall',
+            $this->jobFactory->create('setup:component:uninstall', [])
+        );
+    }
+
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage job is not supported
