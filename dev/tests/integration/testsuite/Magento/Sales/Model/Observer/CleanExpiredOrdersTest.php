@@ -18,10 +18,14 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
         if (!$order->getId()) {
             $this->fail('Fixture failed to create order');
         }
-        $updateTime = strtotime($order->getUpdatedAt());
-        $currentTime = time();
+        $updateTimestamp = strtotime($order->getUpdatedAt());
+
+        /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone */
+        $timezone = Bootstrap::getObjectManager()->create('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $currentTime = $timezone->date(time())->format('Y-m-d H:i:s');
+        $currentTimestamp = strtotime($currentTime);
         //if difference is more than 5 minutes, server DB server is configured to another time zone
-        if (abs($updateTime - $currentTime) > 300) {
+        if (abs($updateTimestamp - $currentTimestamp) > 300) {
             $this->markTestSkipped('Wrong timezone on DB server');
         }
     }
