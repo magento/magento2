@@ -18,9 +18,9 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
     protected $objectCopyMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderAddressInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\AddressRepository | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderAddressFactoryMock;
+    protected $orderAddressRepositoryMock;
 
     /**
      * @var \Magento\Sales\Api\Data\OrderInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -39,8 +39,8 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderAddressFactoryMock = $this->getMock(
-            'Magento\Sales\Api\Data\OrderAddressInterfaceFactory',
+        $this->orderAddressRepositoryMock = $this->getMock(
+            'Magento\Sales\Model\Order\AddressRepository',
             ['create'],
             [],
             '',
@@ -53,7 +53,7 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
         $this->converter = $objectManager->getObject(
             'Magento\Quote\Model\Quote\Address\ToOrderAddress',
             [
-                'orderAddressFactory' => $this->orderAddressFactoryMock,
+                'orderAddressRepository' => $this->orderAddressRepositoryMock,
                 'objectCopyService' => $this->objectCopyMock,
                 'dataObjectHelper' => $this->dataObjectHelper
             ]
@@ -76,7 +76,7 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper->expects($this->once())->method('populateWithArray')
             ->with($this->orderInterfaceMock, ['test' => 'beer'], '\Magento\Sales\Api\Data\OrderAddressInterface')
             ->willReturnSelf();
-        $this->orderAddressFactoryMock->expects($this->once())
+        $this->orderAddressRepositoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->orderInterfaceMock);
         $this->assertSame($this->orderInterfaceMock, $this->converter->convert($object, $data));
