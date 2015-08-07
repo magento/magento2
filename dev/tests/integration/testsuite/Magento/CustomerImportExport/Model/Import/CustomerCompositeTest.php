@@ -148,16 +148,18 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         // set fixture CSV file
         $result = $this->_entityAdapter->setSource(
             \Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $rootDirectory)
-        )->isDataValid();
+        )
+            ->validateData()
+            ->hasToBeTerminated();
         if ($errors) {
-            $this->assertFalse($result);
-        } else {
             $this->assertTrue($result);
+        } else {
+            $this->assertFalse($result);
         }
 
         // assert validation errors
         // can't use error codes because entity adapter gathers only error messages from aggregated adapters
-        $actualErrors = array_values($this->_entityAdapter->getErrorMessages());
+        $actualErrors = array_values($this->_entityAdapter->getErrorAggregator()->getRowsGroupedByErrorCode());
         $this->assertEquals($errors, $actualErrors);
 
         // assert data before import
