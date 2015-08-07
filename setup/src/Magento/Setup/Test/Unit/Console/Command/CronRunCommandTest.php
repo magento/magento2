@@ -5,11 +5,17 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Console\Command\CronRunCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CronRunCommandTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DeploymentConfig
+     */
+    private $deploymentConfig;
+
     /**
      * @var CronRunCommand
      */
@@ -37,15 +43,26 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
         $this->readinessCheck = $this->getMock('Magento\Setup\Model\Cron\ReadinessCheck', [], [], '', false);
         $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $this->command = new CronRunCommand($this->queue, $this->readinessCheck, $this->status);
+        $this->command = new CronRunCommand($this->deploymentConfig, $this->queue, $this->readinessCheck, $this->status);
         $this->commandTester = new CommandTester($this->command);
+    }
+
+    public function testExecuteNotInstalled()
+    {
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
+        $this->status->expects($this->never())->method($this->anything());
+        $this->queue->expects($this->never())->method($this->anything());
+        $this->readinessCheck->expects($this->never())->method($this->anything());
+        $this->commandTester->execute([]);
     }
 
     public function testExecuteFailedReadinessCheck()
     {
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->status->expects($this->never())->method($this->anything());
         $this->queue->expects($this->never())->method($this->anything());
         $this->readinessCheck->expects($this->once())->method('runReadinessCheck')->willReturn(false);
@@ -54,6 +71,7 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteUpdateInProgress()
     {
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->queue->expects($this->never())->method($this->anything());
         $this->readinessCheck->expects($this->once())->method('runReadinessCheck')->willReturn(true);
         $this->status->expects($this->once())->method('isUpdateInProgress')->willReturn(true);
@@ -64,6 +82,7 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteUpdateError()
     {
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->queue->expects($this->never())->method($this->anything());
         $this->readinessCheck->expects($this->once())->method('runReadinessCheck')->willReturn(true);
         $this->status->expects($this->once())->method('isUpdateInProgress')->willReturn(false);
@@ -74,6 +93,7 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteErrorOnToggleInProgress()
     {
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->queue->expects($this->never())->method($this->anything());
         $this->readinessCheck->expects($this->once())->method('runReadinessCheck')->willReturn(true);
         $this->status->expects($this->once())->method('isUpdateInProgress')->willReturn(false);
@@ -87,6 +107,7 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUpPreliminarySuccess()
     {
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->readinessCheck->expects($this->once())->method('runReadinessCheck')->willReturn(true);
         $this->status->expects($this->once())->method('isUpdateInProgress')->willReturn(false);
         $this->status->expects($this->once())->method('isUpdateError')->willReturn(false);
