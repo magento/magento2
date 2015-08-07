@@ -13,10 +13,10 @@ namespace Magento\Log\Block\Adminhtml\Online\Grid\Renderer;
 class Ip extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         return long2ip($row->getData($this->getColumn()->getIndex()));
     }

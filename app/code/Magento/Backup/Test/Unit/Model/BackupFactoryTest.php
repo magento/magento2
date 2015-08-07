@@ -47,7 +47,7 @@ class BackupFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getIterator'
         )->will(
-            $this->returnValue(new \ArrayIterator([new \Magento\Framework\Object($this->_data)]))
+            $this->returnValue(new \ArrayIterator([new \Magento\Framework\DataObject($this->_data)]))
         );
 
         $this->_backupModel = $this->getMock('Magento\Backup\Model\Backup', [], [], '', false);

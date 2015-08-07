@@ -62,6 +62,11 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $aggregatioBuilder;
 
+    /**
+     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $temporaryStorage;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -72,6 +77,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+            ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
@@ -84,7 +90,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_READ_RESOURCE)
             ->will($this->returnValue($this->connectionAdapter));
 
         $this->mapper = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Mapper')
@@ -107,13 +112,27 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->temporaryStorage = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\TemporaryStorage')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $temporaryStorageFactoryName = 'Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory';
+        $temporaryStorageFactory = $this->getMockBuilder($temporaryStorageFactoryName)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $temporaryStorageFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->temporaryStorage);
+
         $this->adapter = $this->objectManager->getObject(
             'Magento\Framework\Search\Adapter\Mysql\Adapter',
             [
                 'mapper' => $this->mapper,
                 'responseFactory' => $this->responseFactory,
                 'resource' => $this->resource,
-                'aggregationBuilder' => $this->aggregatioBuilder
+                'aggregationBuilder' => $this->aggregatioBuilder,
+                'temporaryStorageFactory' => $temporaryStorageFactory,
             ]
         );
     }
@@ -135,7 +154,22 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->connectionAdapter->expects($this->at(0))
+        $select = $this->getMockBuilder('Magento\Framework\DB\Select')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connectionAdapter->expects($this->once())
+            ->method('select')
+            ->willReturn($select);
+
+        $table = $this->getMockBuilder('Magento\Framework\DB\Ddl\Table')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->temporaryStorage->expects($this->any())
+            ->method('storeDocumentsFromSelect')
+            ->willReturn($table);
+
+        $this->connectionAdapter->expects($this->any())
             ->method('fetchAssoc')
             ->will($this->returnValue($selectResult['documents']));
         $this->mapper->expects($this->once())

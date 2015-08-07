@@ -31,11 +31,11 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $result
-     * @param \Magento\Framework\Object $response
+     * @param \Magento\Framework\DataObject $response
      *
      * @dataProvider validationDataProvider
      */
-    public function testValidation($result, \Magento\Framework\Object $response)
+    public function testValidation($result, \Magento\Framework\DataObject $response)
     {
         $this->assertEquals($result, $this->validator->validate($response));
     }
@@ -48,7 +48,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'result' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'securetoken' => 'kcsakc;lsakc;lksa;kcsa;',
                         'result' => 0 // - good code
@@ -57,7 +57,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'result' => false,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'securetoken' => 'kcsakc;lsakc;lksa;kcsa;',
                         'result' => SecureToken::ST_ALREADY_USED
@@ -66,7 +66,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'result' => false,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'securetoken' => 'kcsakc;lsakc;lksa;kcsa;',
                         'result' => SecureToken::ST_EXPIRED
@@ -75,7 +75,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'result' => false,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'securetoken' => 'kcsakc;lsakc;lksa;kcsa;',
                         'result' => SecureToken::ST_TRANSACTION_IN_PROCESS
@@ -84,7 +84,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'result' => false,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'securetoken' => 'kcsakc;lsakc;lksa;kcsa;',
                         'result' => 'BAD_CODE'
@@ -93,7 +93,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'result' => false,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'securetoken' => null, // -
                         'result' => SecureToken::ST_TRANSACTION_IN_PROCESS

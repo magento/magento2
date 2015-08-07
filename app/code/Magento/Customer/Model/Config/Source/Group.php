@@ -20,17 +20,17 @@ class Group implements \Magento\Framework\Option\ArrayInterface
     protected $_groupManagement;
 
     /**
-     * @var \Magento\Framework\Convert\Object
+     * @var \Magento\Framework\Convert\DataObject
      */
     protected $_converter;
 
     /**
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\Convert\Object $converter
+     * @param \Magento\Framework\Convert\DataObject $converter
      */
     public function __construct(
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\Convert\Object $converter
+        \Magento\Framework\Convert\DataObject $converter
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;

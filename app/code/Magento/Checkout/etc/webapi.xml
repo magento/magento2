@@ -33,9 +33,26 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <!-- Guest place order with payment information saving -->
+    <route url="/V1/guest-carts/:cartId/payment-information" method="GET">
+        <service class="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" method="getPaymentInformation"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
     <!-- My place order with payment information saving -->
     <route url="/V1/carts/mine/payment-information" method="POST">
         <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <!-- Get payment information -->
+    <route url="/V1/carts/mine/payment-information" method="GET">
+        <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="getPaymentInformation"/>
         <resources>
             <resource ref="self" />
         </resources>
