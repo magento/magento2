@@ -37,9 +37,11 @@ class Virtual extends \Magento\CatalogImportExport\Model\Import\Product\Type\Sim
      * @param array $rowData
      * @return array
      */
-    protected function setWeightVirtualProduct(array $rowData){
+    protected function setWeightVirtualProduct(array $rowData)
+    {
         $result = [];
-        if ($rowData['product_type'] == self::TYPE_VIRTUAL_PRODUCT){
+        if ($rowData['product_type'] == self::TYPE_VIRTUAL_PRODUCT)
+        {
             $result['weight'] = null;
         }
         return $result;
