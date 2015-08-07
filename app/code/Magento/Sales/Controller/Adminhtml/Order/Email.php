@@ -17,7 +17,8 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
         $order = $this->_initOrder();
         if ($order) {
             try {
-                $this->_objectManager->create('Magento\Sales\Model\OrderNotifier')->notify($order);
+                $orderManagement = $this->_objectManager->create('Magento\Sales\Api\OrderManagementInterface');
+                $orderManagement->notify($order->getEntityId());
                 $this->messageManager->addSuccess(__('You sent the order email.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
