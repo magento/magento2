@@ -21,9 +21,6 @@ class ComponentGrid extends AbstractActionController
      */
     private $composerInformation;
 
-    /** @var array */
-    private static $componentTypes = ['magento2-theme', 'magento2-language', 'magento2-module'];
-
     /**
      * @param ComposerInformation $composerInformation
      */
@@ -51,11 +48,8 @@ class ComponentGrid extends AbstractActionController
      */
     public function componentsAction()
     {
-        $components = $this->filterComponentsList($this->composerInformation->getInstalledMagentoPackages());
+        $components = $this->composerInformation->getInstalledMagentoPackages();
         $lastSyncData = $this->composerInformation->getPackagesForUpdate();
-        if (is_array($lastSyncData)) {
-            $lastSyncData = $this->filterComponentsList($lastSyncData);
-        }
         return new JsonModel(
             [
                 'success' => true,
@@ -64,22 +58,6 @@ class ComponentGrid extends AbstractActionController
                 'lastSyncData' => $lastSyncData
             ]
         );
-    }
-
-    /**
-     * Filter components list for the grid
-     *
-     * @param array $components
-     * @return array
-     */
-    private function filterComponentsList($components)
-    {
-        foreach ($components as $component) {
-            if (!in_array($component['type'], self::$componentTypes)) {
-                unset($components[$component['name']]);
-            }
-        }
-        return $components;
     }
 
     /**
