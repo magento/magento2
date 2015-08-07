@@ -81,7 +81,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
             if (isset($this->components[$attribute->getAttributeCode()])) {
                 $this->updateColumn($attribute, $newAttributeCode);
             } elseif ($attribute->getBackendType() != 'static' && $attribute->getIsUsedInGrid()) {
-                $this->addColumn($attribute);
+                $this->addColumn($attribute, $newAttributeCode);
             }
         }
         $this->updateActionColumnSortOrder();
@@ -90,12 +90,13 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
 
     /**
      * @param AttributeMetadataInterface $attribute
+     * @param string $columnName
      * @return void
      */
-    public function addColumn(AttributeMetadataInterface $attribute)
+    public function addColumn(AttributeMetadataInterface $attribute, $columnName)
     {
         $config['sortOrder'] = ++$this->columnSortOrder;
-        $column = $this->columnFactory->create($attribute, $this->getContext(), $config);
+        $column = $this->columnFactory->create($attribute, $columnName, $this->getContext(), $config);
         $column->prepare();
         $this->addComponent($attribute->getAttributeCode(), $column);
     }
