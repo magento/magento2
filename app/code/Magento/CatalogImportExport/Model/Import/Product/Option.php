@@ -10,6 +10,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Resource;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -305,7 +306,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Store\Model\StoreManagerInterface $_storeManager
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -314,7 +315,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -329,6 +332,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_resource = $resource;
@@ -358,6 +362,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         } else {
             $this->_isPriceGlobal = $this->_catalogData->isPriceGlobal();
         }
+
+        $this->errorAggregator = $errorAggregator;
 
         $this->_initSourceEntities($data)->_initTables($data)->_initStores($data);
 
