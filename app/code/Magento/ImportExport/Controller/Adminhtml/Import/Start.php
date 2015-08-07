@@ -38,6 +38,10 @@ class Start extends ImportController
                     ->addAction('hide', ['edit_form', 'upload_button', 'messages'])
                     ->addSuccess(__('Import successfully done'));
             } else {
+                $exceptions = $this->getImportProcessingMessages($importModel->getErrorAggregator());
+                foreach ($exceptions as $error) {
+                    $resultBlock->addError($error);
+                }
                 $systemsExceptions = $this->getSystemExceptions($importModel->getErrorAggregator());
                 foreach ($systemsExceptions as $error) {
                     $resultBlock->addError(
