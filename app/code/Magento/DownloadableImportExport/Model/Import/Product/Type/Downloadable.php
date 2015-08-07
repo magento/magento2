@@ -911,7 +911,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function clear()
     {
-        $this->cachedOptions = [];
+        $this->cachedOptions = [
+            'link' => [],
+            'sample' => []
+        ];
         $this->productIds = [];
         return $this;
     }
