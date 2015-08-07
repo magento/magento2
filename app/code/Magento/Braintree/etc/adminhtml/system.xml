@@ -26,7 +26,7 @@
                             <group id="braintree_required"/>
                         </requires>
                     </field>
-                    <field id="activePayPal" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="active_braintree_pay_pal" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Enabled PayPal through Braintree</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/braintree_paypal/active</config_path>
@@ -159,9 +159,7 @@
                             <config_path>payment/braintree/countrycreditcard</config_path>
                         </field>
                     </group>
-
                     <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" sortOrder="40">
-
                         <label>PayPal through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
