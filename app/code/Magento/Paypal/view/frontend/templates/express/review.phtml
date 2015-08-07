@@ -77,7 +77,9 @@
             <div class="box box-order-billing-address">
                 <strong class="box-title"><span><?php echo __('Payment Method') ?></span></strong>
                 <div class="box-content">
-                    <?php echo $block->escapeHtml($block->getPaymentMethodTitle()) ?>
+                    <?php echo $block->escapeHtml($block->getPaymentMethodTitle()) ?><br>
+                    <?php echo $block->escapeHtml($block->getEmail()) ?> <br>
+                    <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png" alt="<?php echo __('Buy now with PayPal') ?>"/>
                 </div>
             <?php if ($block->getEditUrl()): ?>
                 <div class="box-actions">
