@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Block\Cart;
 
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 
 class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
 {
@@ -30,10 +31,16 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_salesConfig;
 
     /**
+     * @var LayoutProcessorInterface[]
+     */
+    protected $layoutProcessors;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
+     * @param array $layoutProcessors
      * @param array $data
      */
     public function __construct(
@@ -41,11 +48,24 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\Config $salesConfig,
+        array $layoutProcessors = [],
         array $data = []
     ) {
         $this->_salesConfig = $salesConfig;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
+        $this->layoutProcessors = $layoutProcessors;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJsLayout()
+    {
+        foreach ($this->layoutProcessors as $processor) {
+            $this->jsLayout = $processor->process($this->jsLayout);
+        }
+        return parent::getJsLayout();
     }
 
     /**

@@ -55,6 +55,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Block\Cart\Totals">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="totalsSortOrder" xsi:type="object">Magento\Checkout\Block\Cart\CartTotalsProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Checkout\Block\Cart\Shipping">
         <arguments>
             <argument name="layoutProcessors" xsi:type="array">
