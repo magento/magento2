@@ -9,7 +9,7 @@
      data-bind="afterRender: setModalElement, blockLoader: isLoading"
      style="display: none">
     <div class="block block-new-customer"
-         data-bind="attr: {'data-label': 'or'}">
+         data-bind="attr: {'data-label': $t('or')}">
         <div class="block-title">
             <strong id="block-new-customer-heading"
                     role="heading"
@@ -34,7 +34,7 @@
     </div>
 
     <div class="block block-customer-login"
-         data-bind="attr: {'data-label': 'or'}">
+         data-bind="attr: {'data-label': $t('or')}">
         <div class="block-title">
             <strong id="block-customer-login-heading"
                     role="heading"
@@ -52,7 +52,7 @@
                   method="post"
                   data-bind="submit:login"
                   id="login-form">
-                <div class="fieldset login" data-bind="attr: {'data-hasrequired': '* Required Fields'}">
+                <div class="fieldset login" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
                     <div class="field email required">
                         <label class="label" for="email"><span data-bind="text: $t('Email Address')"></span></label>
                         <div class="control">

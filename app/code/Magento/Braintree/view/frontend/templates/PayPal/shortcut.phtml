@@ -18,7 +18,7 @@ $paymentMethodNonceId = $block->getPaymentMethodNonceId();
 $paymentDetailsId = $block->getPaymentDetailsId();
 $labelPosition = $block->getShowOrPosition();
 ?>
-<div data-label="<?php echo __('or'); ?>" class="paypal checkout <?php echo $labelPosition ?> paypal-logo">
+<div data-label="<?php echo $block->escapeHtml(__('or')); ?>" class="paypal checkout <?php echo $labelPosition ?> paypal-logo">
     <fieldset class="fieldset paypal items" id="braintree_paypal_shortcut">
         <div id="<?php echo $containerId ?>"></div>
         <form id="<?php echo $submitFormId ?>" action="<?php echo $url ?>" method="post" >
