@@ -77,7 +77,7 @@ class StartUpdater extends AbstractActionController
                 }
             }
             if (empty($errorMessage)) {
-                $this->createTypeFlag($postPayload['type']);
+                $this->createTypeFlag($postPayload['type'], $postPayload['headerTitle']);
                 $errorMessage .= $this->updater->createUpdaterTask($packages);
             }
         } else {
@@ -91,12 +91,14 @@ class StartUpdater extends AbstractActionController
      * Create flag to be used in Updater
      *
      * @param string $type
+     * @param string $title
      * @return void
      */
-    private function createTypeFlag($type)
+    private function createTypeFlag($type, $title)
     {
         $data = [];
         $data['type'] = $type;
+        $data['headerTitle'] = $title;
 
         $menuItems = $this->navigation->getMenuItems();
         $titles = [];

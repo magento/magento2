@@ -91,7 +91,8 @@ angular.module('component-grid', ['ngStorage'])
     $scope.uninstall = function(component) {
         $localStorage.packages = [
             {
-                name: component.name
+                name: component.name,
+                version: component.version
             }
         ];
         if ($localStorage.titles['uninstall'].indexOf(component.moduleName) < 0 ) {

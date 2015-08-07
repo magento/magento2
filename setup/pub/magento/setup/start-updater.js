@@ -20,6 +20,9 @@ angular.module('start-updater', ['ngStorage'])
         if ($localStorage.backupInfo) {
             $scope.backupInfoPassed = $localStorage.backupInfo;
         }
+        if ($localStorage.titles) {
+            $scope.title = $localStorage.titles[$state.current.type];
+        }
         if (!$scope.backupInfoPassed.options.code && !$scope.backupInfoPassed.options.media && !$scope.backupInfoPassed.options.db) {
             $scope.maintenanceCalled = true;
             $http.post('index.php/maintenance/index', $scope.backupInfoPassed)
@@ -39,7 +42,8 @@ angular.module('start-updater', ['ngStorage'])
         $scope.errorMessage = '';
         $scope.update = function() {
             $scope.started = true;
-            $http.post('index.php/start-updater/update', {'packages': $scope.packages, 'type': $state.current.type})
+            $http.post('index.php/start-updater/update', {
+                'packages': $scope.packages, 'type': $state.current.type, 'headerTitle': $scope.title})
                 .success(function (data) {
                     if (data['success']) {
                         $window.location.href = '../update/index.php';
