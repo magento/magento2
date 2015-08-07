@@ -24,9 +24,9 @@
             <xs:selector xpath="consumer"/>
             <xs:field xpath="@name"/>
         </xs:unique>
-        <xs:key name="publisher-name">
+        <xs:unique name="publisher-unique-name">
             <xs:selector xpath="publisher"/>
             <xs:field xpath="@name"/>
-        </xs:key>
+        </xs:unique>
     </xs:element>
 </xs:schema>

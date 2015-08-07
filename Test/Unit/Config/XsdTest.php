@@ -66,7 +66,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <topic name="customer.deleted" schema="Data\Type" publisher="test-publisher-2"/>
                 </config>',
                 [
-                    "Element 'topic': Duplicate key-sequence ['customer.created'] in unique identity-constraint 'topic-unique-name'."
+                    "Element 'topic': Duplicate key-sequence ['customer.created'] in key identity-constraint 'topic-name'."
                 ],
             ],
             'non unique publishers' => [
@@ -156,7 +156,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <topic name="customer.updated" schema="Data\Type" publisher="test-publisher-2"/>
                     <topic name="customer.deleted" schema="Data\Type" publisher="test-publisher-2"/>
                 </config>',
-                ["Element 'topic': The attribute 'name' is required but missing."],
+                [
+                    "Element 'topic': The attribute 'name' is required but missing.",
+                    "Element 'topic': Not all fields of key identity-constraint 'topic-name' evaluate to a node."
+                ],
             ],
             'topic without schema' => [
                 '<config>
@@ -237,13 +240,19 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 '<config>
                     <bind exchange="magento" topic="customer.created"/>
                 </config>',
-                ["Element 'bind': The attribute 'queue' is required but missing."],
+                [
+                    "Element 'bind': The attribute 'queue' is required but missing.",
+                    "Element 'bind': No match found for key-sequence ['customer.created'] of keyref 'topic-ref'."
+                ],
             ],
             'bind without exchange' => [
                 '<config>
                     <bind queue="test-queue" topic="customer.created"/>
                 </config>',
-                ["Element 'bind': The attribute 'exchange' is required but missing."],
+                [
+                    "Element 'bind': The attribute 'exchange' is required but missing.",
+                    "Element 'bind': No match found for key-sequence ['customer.created'] of keyref 'topic-ref'."
+                ],
             ],
             'bind without topic' => [
                 '<config>

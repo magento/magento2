@@ -16,10 +16,6 @@
                 <xs:element name="bind" type="bindType" maxOccurs="unbounded" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
-        <xs:unique name="topic-unique-name">
-            <xs:selector xpath="topic"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
         <xs:unique name="consumer-unique-name">
             <xs:selector xpath="consumer"/>
             <xs:field xpath="@name"/>
@@ -31,6 +27,14 @@
         <xs:keyref name="publisher-ref" refer="publisher-name">
             <xs:selector xpath="topic"/>
             <xs:field xpath="@publisher"/>
+        </xs:keyref>
+        <xs:key name="topic-name">
+            <xs:selector xpath="topic"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:keyref name="topic-ref" refer="topic-name">
+            <xs:selector xpath="bind"/>
+            <xs:field xpath="@topic"/>
         </xs:keyref>
     </xs:element>
 </xs:schema>
