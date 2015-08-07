@@ -195,9 +195,9 @@
                         <span class="data-grid-data">{{component.version}}</span>
                     </td>
                     <td>
-                        <select ng-model="component.dropdownId" ng-init="component.dropdownId=component.updates[0]"
-                                ng-options="upgrade as upgrade for upgrade in component.updates"
-                                ng-change="updateOtherComponentsList(component.name, component.dropdownId)">
+                        <select ng-model="component.dropdownId" ng-init="component.dropdownId=component.updates[0].id"
+                                ng-options="item.id as item.name for item in component.updates"
+                                ng-change="setComponentVersion(component.name, component.dropdownId)">
                         </select>
                     </td>
                 </tr>
