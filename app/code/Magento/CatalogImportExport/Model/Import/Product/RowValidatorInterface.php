@@ -73,7 +73,7 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_INVALID_VARIATIONS_CUSTOM_OPTIONS = 'invalidVariationsCustomOptions';
 
-    const ERROR_INVALID_MEDIA_URL = 'invalidMediaUrl';
+    const ERROR_INVALID_MEDIA_URL_OR_PATH = 'invalidMediaUrlPath';
 
     const ERROR_MEDIA_URL_NOT_ACCESSIBLE = 'mediaUrlNotAvailable';
 
