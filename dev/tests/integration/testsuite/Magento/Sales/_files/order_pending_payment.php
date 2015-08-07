@@ -5,7 +5,6 @@
  */
 
 require __DIR__ . '/order_fixture_store.php';
-/** @var \Magento\Catalog\Model\Product $product */
 
 /** @var \Magento\Sales\Model\Order $order */
 $order = $objectManager->create('Magento\Sales\Model\Order');
