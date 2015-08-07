@@ -32,15 +32,15 @@ class FilterFactory
     }
 
     /**
+     * @param string $filterName
      * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
      */
-    public function create($attribute, $context)
+    public function create($filterName, $attribute, $context)
     {
-        $columnName = $attribute->getAttributeCode();
         $config = [
-            'dataScope' => $columnName,
+            'dataScope' => $filterName,
             'label' => __($attribute->getFrontendLabel()),
         ];
         if ($attribute->getOptions()) {
@@ -54,7 +54,7 @@ class FilterFactory
             'context' => $context,
         ];
 
-        return $this->componentFactory->create($columnName, $this->getFilterType($attribute), $arguments);
+        return $this->componentFactory->create($filterName, $this->getFilterType($attribute), $arguments);
     }
 
     /**

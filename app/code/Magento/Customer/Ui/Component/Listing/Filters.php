@@ -35,31 +35,19 @@ class Filters extends \Magento\Ui\Component\Filters
         foreach ($this->attributeRepository->getList() as $newAttributeCode => $attribute) {
             if (!isset($this->components[$attribute->getAttributeCode()])
             ) {
-                if ($attribute->getIsUsedInGrid()
+                if ($attribute->getBackendType() !== 'static'
+                    && $attribute->getIsUsedInGrid()
                     && $attribute->getIsFilterableInGrid()
                 ) {
-                    $filter = $this->filterFactory->create($attribute, $this->getContext());
+                    $filter = $this->filterFactory->create($newAttributeCode, $attribute, $this->getContext());
                     $filter->prepare();
                     $this->addComponent($attribute->getAttributeCode(), $filter);
                 }
-            } elseif ($attribute->getAttributeCode() !== $newAttributeCode) {
-                $this->updateFilterConfiguration($attribute, $newAttributeCode);
+            } elseif (!$attribute->getIsFilterableInGrid()) {
+                unset($this->components[$attribute->getAttributeCode()]);
             }
         }
         parent::prepare();
     }
 
-    /**
-     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
-     * @param string $newAttributeCode
-     * @return void
-     */
-    protected function updateFilterConfiguration($attribute, $newAttributeCode)
-    {
-        $component = $this->components[$attribute->getAttributeCode()];
-        $config  = $component->getData('config');
-        $component->setData('name', $newAttributeCode);
-        $component->setData('config', array_merge($config, ['dataScope'=> $newAttributeCode]));
-        $component->prepare();
-    }
 }
