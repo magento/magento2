@@ -171,6 +171,8 @@
 
 ###########################################
 ## Deny access to root files to hide sensitive application information
+    RedirectMatch 404 /\.git
+
     <Files composer.json>
         order allow,deny
         deny from all
