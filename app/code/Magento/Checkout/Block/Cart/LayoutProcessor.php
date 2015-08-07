@@ -260,7 +260,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 foreach ($customer->getAddresses() as $address) {
                     if ($address->isDefaultShipping()) {
                         $this->defaultShippingAddress = $address;
-                        break;
+                        return $this->defaultShippingAddress;
                     }
                 }
             }
