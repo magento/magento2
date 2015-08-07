@@ -74,6 +74,7 @@ class JobFactory
             case self::COMPONENT_UNINSTALL:
                 return new JobComponentUninstall(
                     $this->serviceLocator->get('Magento\Setup\Model\Cron\ComponentUninstallerFactory'),
+                    $objectManagerProvider,
                     $multipleStreamOutput,
                     $cronStatus,
                     $name,

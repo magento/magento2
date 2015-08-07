@@ -38,8 +38,7 @@ class CronRunCommand extends AbstractSetupCommand
     protected $readinessCheck;
 
     /**
-     * Constructor
-     *
+     * @param DeploymentConfig $deploymentConfig
      * @param Queue $queue
      * @param ReadinessCheck $readinessCheck
      * @param Status $status
@@ -75,11 +74,7 @@ class CronRunCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->deploymentConfig->isAvailable()
-            || !$this->readinessCheck->runReadinessCheck()
-            || $this->status->isUpdateInProgress()
-            || $this->status->isUpdateError()
-        ) {
+        if (!$this->checkRun()) {
             return;
         }
         try {
@@ -111,5 +106,18 @@ class CronRunCommand extends AbstractSetupCommand
         } finally {
             $this->status->toggleUpdateInProgress(false);
         }
+    }
+
+    /**
+     * Check if Cron job can be run
+     *
+     * @return bool
+     */
+    private function checkRun()
+    {
+        return $this->deploymentConfig->isAvailable()
+        && $this->readinessCheck->runReadinessCheck()
+        && !$this->status->isUpdateInProgress()
+        && !$this->status->isUpdateError();
     }
 }
