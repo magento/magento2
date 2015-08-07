@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest">
+    <testCase name="Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest" summary="Create Credit Memo for Offline Payment Methods" ticketId="MAGETWO-29116">
         <variation name="CreateCreditMemoEntityTestVariation1">
             <data name="description" xsi:type="string">Assert items return to stock (partial refund)</data>
             <data name="data/items_data/0/back_to_stock" xsi:type="string">Yes</data>
