@@ -27,11 +27,6 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
     private $objectManager;
 
     /**
-     * @var ObjectManagerProvider
-     */
-    private $objectManagerProvider;
-
-    /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
@@ -45,11 +40,6 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
      * @var \Magento\Framework\Module\ModuleList\Loader
      */
     private $loader;
-
-    /**
-     * @var \Magento\Framework\Module\PackageInfo
-     */
-    private $packageInfo;
 
     /**
      * @var \Magento\Framework\Composer\Remove
@@ -93,7 +83,7 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
         \Magento\Setup\Module\DataSetupFactory $dataSetupFactory,
         \Magento\Setup\Module\SetupFactory $setupFactory
     ) {
-        $this->objectManagerProvider = $objectManagerProvider;
+        $this->objectManager = $objectManagerProvider->get();
         $this->deploymentConfig = $deploymentConfig;
         $this->writer = $writer;
         $this->loader = $loader;
@@ -113,7 +103,6 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
      */
     public function uninstall(OutputInterface $output, array $modules, array $options)
     {
-        $this->objectManager = $this->objectManagerProvider->get();
         if (isset($options[self::OPTION_REMOVE_DATA]) && $options[self::OPTION_REMOVE_DATA]) {
             $this->removeData($output, $modules);
         }
@@ -162,9 +151,10 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
     {
         $output->writeln('<info>Removing code from Magento codebase:</info>');
         $packages = [];
-        $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        /** @var \Magento\Framework\Module\PackageInfo $packageInfo */
+        $packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         foreach ($modules as $module) {
-            $packages[] = $this->packageInfo->getPackageName($module);
+            $packages[] = $packageInfo->getPackageName($module);
         }
         $this->remove->remove($packages);
     }
