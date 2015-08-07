@@ -2404,4 +2404,10 @@ return [
     ['prepareShipment', 'Magento\Sales\Model\Order'],
     ['prepareShipment', 'Magento\Sales\Model\Service\Order'],
     ['prepareInvoice', 'Magento\Sales\Model\Service\Order'],
+    ['getEstimatePostCode', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['getEstimateCity', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['getEstimateRegionId', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['getEstimateRegion', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['formatPrice', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['isMultipleCountriesAllowed', 'Magento\Checkout\Block\Cart\Shipping'],
 ];

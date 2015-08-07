@@ -27,7 +27,6 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
      * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
