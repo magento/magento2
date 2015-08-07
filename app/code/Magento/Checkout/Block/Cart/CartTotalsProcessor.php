@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Block\Checkout;
+namespace Magento\Checkout\Block\Cart;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Checkout\Model\Layout\AbstractTotalsProcessor;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 
-class TotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessorInterface
+class CartTotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessorInterface
 {
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -25,10 +25,8 @@ class TotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessor
      */
     public function process($jsLayout)
     {
-        $totals = $jsLayout['components']['checkout']['children']['sidebar']['children']['summary']
-        ['children']['totals']['children'];
-        $jsLayout['components']['checkout']['children']['sidebar']['children']['summary']
-        ['children']['totals']['children'] = $this->sortTotals($totals);
+        $totals = $jsLayout['components']['block-totals']['children'];
+        $jsLayout['components']['block-totals']['children'] = $this->sortTotals($totals);
         return $jsLayout;
     }
 }
