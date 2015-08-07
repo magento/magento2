@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <div class="nav-bar-outer-actions">
     <div class="outer-actions-inner-wrap">
@@ -14,9 +12,9 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="goToStartUpdater()"
-                ng-disabled="checkingInProgress() || (hasErrors && ($state.is('root.create-backup-cm.progress')
-                || $state.is('root.create-backup-su.progress')))
-                || (!nextButtonStatus && ($state.is('root.create-backup-cm') || $state.is('root.create-backup-su')))"
+                ng-disabled="checkingInProgress()
+                || (hasErrors && ($state.is('root.create-backup-' + $state.current.type + '.progress')))
+                || (!nextButtonStatus && ($state.is('root.create-backup-' + $state.current.type)))"
                 >Next</button>
         </div>
         <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
@@ -27,8 +25,8 @@
                 ng-disabled="checkingInProgress() && !hasErrors"
                 >Back</button>
         </div>
-        <div class="btn-wrap btn-wrap-try-again" ng-show="$state.is('root.create-backup-cm.progress')
-        || $state.is('root.create-backup-su.progress')">
+        <div class="btn-wrap btn-wrap-try-again"
+             ng-show="$state.is('root.create-backup-' + $state.current.type + '.progress')">
             <button
                 type="button"
                 class="btn btn-secondary"
@@ -41,7 +39,7 @@
 
 <h2 class="page-title">{{$state.current.header}}</h2>
 
-<div ng-show="$state.is('root.create-backup-cm') || $state.is('root.create-backup-su')">
+<div ng-show="$state.is('root.create-backup-' + $state.current.type)">
     <form
         novalidate
         name="backup"
@@ -102,7 +100,7 @@
         </fieldset>
     </form>
 </div>
-<div ng-show="($state.is('root.create-backup-cm') || $state.is('root.create-backup-su')) && (backupInfo.options.code
+<div ng-show="$state.is('root.create-backup-' + $state.current.type) && (backupInfo.options.code
 || backupInfo.options.media || backupInfo.options.db)" class="accent-box">
     <p>Let's check your disk space availability for taking selected backups, and then create the backups.</p>
     <button
@@ -113,7 +111,9 @@
 </div>
 <div class="message message-warning" ng-show="optionsSelected()">
     <span class="message-text">
-        <strong>We noticed you didn’t select anything to back up. We strongly recommend you back up before continuing.</strong>
+        <strong>
+            We noticed you didn’t select anything to back up. We strongly recommend you back up before continuing.
+        </strong>
     </span>
 </div>
 <div ui-view></div>

@@ -255,7 +255,7 @@ class ComposerInformation
             $packageName = $package['name'];
             if (array_key_exists($packageName, $availablePackages)) {
                 if (version_compare($availablePackages[$packageName]['version'], $package['latestVersion'], '<')) {
-                    $actualUpdatePackages[$packageName] = $package;
+                    $actualUpdatePackages[$packageName] = $availablePackages[$packageName];
                 }
             }
         }

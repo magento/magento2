@@ -96,11 +96,8 @@ class StartUpdater extends AbstractActionController
     private function createTypeFlag($type)
     {
         $data = [];
-        if ($type === 'cm') {
-            $data['type'] = 'update';
-        } elseif ($type === 'su') {
-            $data['type'] = 'upgrade';
-        }
+        $data['type'] = $type;
+
         $menuItems = $this->navigation->getMenuItems();
         $titles = [];
         foreach ($menuItems as $menuItem) {

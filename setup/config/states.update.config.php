@@ -8,21 +8,21 @@ $base = basename($_SERVER['SCRIPT_FILENAME']);
 
 return [
     'navUpdaterTitles' => [
-        'cm'    => 'Component Manager',
+        'update'    => 'Update ',
     ],
     'navUpdater' => [
         [
-            'id'          => 'root.readiness-check-cm',
+            'id'          => 'root.readiness-check-update',
             'url'         => 'readiness-check-updater',
             'templateUrl' => "{$base}/readiness-check-updater",
             'title'       => "Readiness \n Check",
             'header'      => 'Step 1: Readiness Check',
             'nav'         => true,
             'order'       => 2,
-            'type'        => 'cm'
+            'type'        => 'update'
         ],
         [
-            'id'          => 'root.readiness-check-cm.progress',
+            'id'          => 'root.readiness-check-update.progress',
             'url'         => 'readiness-check-updater/progress',
             'templateUrl' => "$base/readiness-check-updater/progress",
             'title'       => 'Readiness Check',
@@ -30,10 +30,10 @@ return [
             'controller'  => 'readinessCheckController',
             'nav'         => false,
             'order'       => 3,
-            'type'        => 'cm'
+            'type'        => 'update'
         ],
         [
-            'id'          => 'root.create-backup-cm',
+            'id'          => 'root.create-backup-update',
             'url'         => 'create-backup',
             'templateUrl' => "$base/create-backup",
             'title'       => "Create \n Backup",
@@ -42,10 +42,10 @@ return [
             'nav'         => true,
             'validate'    => true,
             'order'       => 4,
-            'type'        => 'cm'
+            'type'        => 'update'
         ],
         [
-            'id'          => 'root.create-backup-cm.progress',
+            'id'          => 'root.create-backup-update.progress',
             'url'         => 'create-backup/progress',
             'templateUrl' => "$base/complete-backup/progress",
             'title'       => "Create \n Backup",
@@ -53,10 +53,10 @@ return [
             'controller'  => 'completeBackupController',
             'nav'         => false,
             'order'       => 5,
-            'type'        => 'cm'
+            'type'        => 'update'
         ],
         [
-            'id'          => 'root.start-updater-cm',
+            'id'          => 'root.start-updater-update',
             'url'         => 'start-updater',
             'templateUrl' => "$base/start-updater",
             'controller'  => 'startUpdaterController',
@@ -64,7 +64,7 @@ return [
             'header'      => 'Step 3: Component Update',
             'nav'         => true,
             'order'       => 6,
-            'type'        => 'cm'
+            'type'        => 'update'
         ],
     ],
 ];

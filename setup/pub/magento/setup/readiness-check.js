@@ -7,6 +7,8 @@
 angular.module('readiness-check', [])
     .constant('COUNTER', 1)
     .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, COUNTER) {
+        $scope.titles = $localStorage.titles;
+        $scope.moduleName = $localStorage.moduleName;
         $scope.progressCounter = COUNTER;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
@@ -287,10 +289,7 @@ angular.module('readiness-check', [])
         };
 
         $scope.$on('$stateChangeSuccess', function (event, nextState) {
-            if ((nextState.id == 'root.readiness-check-cm.progress')
-                || (nextState.id == 'root.readiness-check-su.progress')
-                || (nextState.id == 'root.readiness-check-installer.progress')
-            ) {
+            if (nextState.id == 'root.readiness-check-' + nextState.type +'.progress') {
                 $scope.progress();
             }
         });

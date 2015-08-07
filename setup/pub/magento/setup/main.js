@@ -34,8 +34,9 @@ main.controller('navigationController',
     ]
 )
 .controller('mainController', [
-    '$scope', '$state', 'navigationService',
-    function ($scope, $state, navigationService) {
+    '$scope', '$state', 'navigationService', '$localStorage',
+    function ($scope, $state, navigationService, $localStorage) {
+        $scope.moduleName = $localStorage.moduleName;
         $scope.$on('$stateChangeSuccess', function (event, state) {
             $scope.valid = true;
         });
@@ -68,6 +69,10 @@ main.controller('navigationController',
             $scope.valid = data;
             event.stopPropagation();
         });
+
+        $scope.endsWith = function(str, suffix) {
+            return str.indexOf(suffix, str.length - suffix.length) !== -1;
+        }
     }
 ])
 .service('navigationService', ['$location', '$state', '$http', '$localStorage',

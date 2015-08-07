@@ -33,13 +33,14 @@
             <span>Home</span>
             </a>
         </li>
-        <li class="item-component level-0"   ng-class="{_active: $state.current.type === 'cm'}">
-            <a ui-sref="root.cm">
+        <li class="item-component level-0"   ng-class="{_active: $state.current.type === 'update'
+        || $state.current.type === 'uninstall'}">
+            <a ui-sref="root.update">
             <span>Component Manager</span>
             </a>
         </li>
-        <li class="item-upgrade level-0" ng-class="{_active: $state.current.type === 'su'}">
-            <a ui-sref="root.su">
+        <li class="item-upgrade level-0" ng-class="{_active: $state.current.type === 'upgrade'}">
+            <a ui-sref="root.upgrade">
                 <span>System Upgrade</span>
             </a>
         </li>

@@ -30,7 +30,9 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <span class="message-text">We're making sure your server environment is ready for Magento to be {{$state.current.type === 'cm' ? 'updated' : $state.current.type === 'su' ? 'upgraded' : 'installed'}}.</span>
+        <span class="message-text">We're making sure your server environment is ready for
+        {{typeOf(moduleName) !== 'undefined' ? moduleName : title[$state.current.type]}}
+            to be {{$state.current.type}}{{endsWith($state.current.type, 'e') ? 'd' : 'ed'}}.</span>
     </div>
 
 </div>
@@ -445,6 +447,8 @@
                             <span>"{{name}}" writable directory permission.</span>
                         </li>
                     </ul>
+
+
                 </div>
 
             </div>

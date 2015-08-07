@@ -175,7 +175,7 @@ angular.module('complete-backup', ['ngStorage'])
         };
 
         $scope.$on('$stateChangeSuccess', function (event, nextState) {
-            if (nextState.id == 'root.create-backup-cm.progress' || nextState.id == 'root.create-backup-su.progress') {
+            if (nextState.id == 'root.create-backup-' + nextState.type +'.progress') {
                 $scope.progress();
             }
         });
