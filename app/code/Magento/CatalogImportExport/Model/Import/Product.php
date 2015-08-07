@@ -1343,18 +1343,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
-                    if (!$this->getErrorAggregator()->hasToBeTerminated()) {
-                        continue;
-                    }
-                    break 2;
+                    continue;
+                }
+                if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                    $this->getErrorAggregator()->addRowToSkip($rowNum);
+                    continue;
                 }
                 $rowScope = $this->getRowScope($rowData);
 
                 $rowSku = $rowData[self::COL_SKU];
 
                 if (null === $rowSku) {
-                    $this->_rowsToSkip[$rowNum] = true;
-                    // skip rows when SKU is NULL
+                    $this->getErrorAggregator()->addRowToSkip($rowNum);
                     continue;
                 } elseif (self::SCOPE_STORE == $rowScope) {
                     // set necessary data from SCOPE_DEFAULT row
@@ -1384,7 +1384,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     } else {
                         $rowSku = null;
                         // sign for child rows to be skipped
-                        $this->_rowsToSkip[$rowNum] = true;
+                        $this->getErrorAggregator()->addRowToSkip($rowNum);
                         continue;
                     }
                 }

@@ -136,17 +136,6 @@ abstract class AbstractEntity
     protected $_processedRowsCount = 0;
 
     /**
-     * Rows to skip. Valid rows but we have some reasons to skip them.
-     *
-     * [Row number 1] => true,
-     * ...
-     * [Row number N] => true
-     *
-     * @var array
-     */
-    protected $_rowsToSkip = [];
-
-    /**
      * Array of numbers of validated rows as keys and boolean TRUE as values.
      *
      * @var array
@@ -631,7 +620,8 @@ abstract class AbstractEntity
      */
     public function isRowAllowedToImport(array $rowData, $rowNum)
     {
-        return $this->validateRow($rowData, $rowNum) && !isset($this->_rowsToSkip[$rowNum]);
+        $this->validateRow($rowData, $rowNum);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNum);
     }
 
     /**
