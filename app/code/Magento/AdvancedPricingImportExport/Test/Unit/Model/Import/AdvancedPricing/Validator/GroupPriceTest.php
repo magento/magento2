@@ -70,7 +70,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
     public function testInitInternalCalls()
     {
         $searchCriteria = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
+        $this->searchCriteriaBuilder->expects($this->any())->method('create')->willReturn($searchCriteria);
         $groupSearchResult = $this->getMockForAbstractClass(
             '\Magento\Customer\Api\Data\GroupSearchResultsInterface',
             [],
@@ -78,7 +78,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->groupRepository
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getList')
             ->with($searchCriteria)
             ->willReturn($groupSearchResult);
@@ -88,17 +88,17 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
         $groupTest->expects($this->once())->method('getCode');
-        $groupTest->expects($this->once())->method('getId');
+        $groupTest->expects($this->any())->method('getId');
         $groups = [$groupTest];
-        $groupSearchResult->expects($this->once())->method('getItems')->willReturn($groups);
+        $groupSearchResult->expects($this->any())->method('getItems')->willReturn($groups);
 
-        $this->groupPrice->init();
+        $this->groupPrice->init(null);
     }
 
     public function testInitAddToCustomerGroups()
     {
         $searchCriteria = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
+        $this->searchCriteriaBuilder->expects($this->any())->method('create')->willReturn($searchCriteria);
         $groupSearchResult = $this->getMockForAbstractClass(
             '\Magento\Customer\Api\Data\GroupSearchResultsInterface',
             [],
@@ -106,7 +106,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->groupRepository
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getList')
             ->with($searchCriteria)
             ->willReturn($groupSearchResult);
@@ -122,11 +122,10 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             $expectedCode => $expectedId,
         ];
         $groupTest->expects($this->once())->method('getCode')->willReturn($expectedCode);
-        $groupTest->expects($this->once())->method('getId')->willReturn($expectedId);
+        $groupTest->expects($this->any())->method('getId')->willReturn($expectedId);
         $groups = [$groupTest];
-        $groupSearchResult->expects($this->once())->method('getItems')->willReturn($groups);
-
-        $this->groupPrice->init();
+        $groupSearchResult->expects($this->any())->method('getItems')->willReturn($groups);
+        $this->groupPrice->init(null);
         $this->assertEquals($expectedCustomerGroups, $this->getPropertyValue($this->groupPrice, 'customerGroups'));
     }
 
