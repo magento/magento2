@@ -9,7 +9,7 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="cacheEnableCommand" xsi:type="object">Magento\Amqp\Console\StartConsumerCommand</item>
+                <item name="startConsumerCommand" xsi:type="object">Magento\Amqp\Console\StartConsumerCommand</item>
             </argument>
         </arguments>
     </type>
