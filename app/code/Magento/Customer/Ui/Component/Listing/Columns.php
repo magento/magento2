@@ -115,7 +115,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                     $component->getData('config'),
                     [
                         'name' => $newAttributeCode,
-                        'type' => $this->getAttributeType($attribute),
                         'dataType' => $attribute->getBackendType(),
                         'visible' => $attribute->getIsVisibleInGrid()
                     ]
@@ -131,22 +130,5 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                 )
             );
         }
-    }
-
-    /**
-     * @param AttributeMetadataInterface $attribute
-     * @return string
-     */
-    protected function getAttributeType(AttributeMetadataInterface $attribute)
-    {
-        if ($attribute->getIsSearchableInGrid()) {
-            $type = 'searchable';
-        } elseif ($attribute->getIsFilterableInGrid()) {
-            $type = 'filterable';
-        } else {
-            $type = 'virtual';
-        }
-
-        return $type;
     }
 }
