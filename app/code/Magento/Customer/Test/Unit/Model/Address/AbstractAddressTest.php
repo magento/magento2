@@ -281,11 +281,11 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
     public function testSetDataWithObject()
     {
         $value = [
-            'key' => new \Magento\Framework\Object(),
+            'key' => new \Magento\Framework\DataObject(),
         ];
         $expected = [
             'key' => [
-                'key' => new \Magento\Framework\Object()
+                'key' => new \Magento\Framework\DataObject()
             ]
         ];
         $this->model->setData('key', $value);

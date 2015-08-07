@@ -93,10 +93,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
             $attribute = $this->getMock(
-                'Magento\Framework\Object', ['getProductAttribute'], [], '', false
+                'Magento\Framework\DataObject', ['getProductAttribute'], [], '', false
             );
             $productAttribute = $this->getMock(
-                'Magento\Framework\Object',
+                'Magento\Framework\DataObject',
                 ['getId', 'getAttributeCode'],
                 [],
                 '',

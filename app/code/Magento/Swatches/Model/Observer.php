@@ -84,7 +84,7 @@ class Observer
             return;
         }
 
-        /** @var \Magento\Framework\Object $response */
+        /** @var \Magento\Framework\DataObject $response */
         $response = $observer->getEvent()->getResponse();
         $types = $response->getTypes();
         $types[] = [

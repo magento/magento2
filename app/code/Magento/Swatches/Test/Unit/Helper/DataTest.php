@@ -338,7 +338,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'http://full_path_to_image/magento1.png'
         );
 
-        $mediaObject = $this->getMock('\Magento\Framework\Object', [], [], '', false);
+        $mediaObject = $this->getMock('\Magento\Framework\DataObject', [], [], '', false);
         $iterator = new \ArrayIterator([$mediaObject]);
         $mediaCollectionMock = $this->getMock('\Magento\Framework\Data\Collection', [], [], '', false);
         $mediaCollectionMock->expects($this->any())->method('getIterator')->willReturn($iterator);
@@ -453,7 +453,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with('catalog_product_relation')
             ->willReturn('catalog_product_relation');
 
-        $zendDbSelectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $zendDbSelectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
 
         $this->productCollectionMock->method('getSelect')->willReturn($zendDbSelectMock);
         $zendDbSelectMock->method('join')->willReturn($zendDbSelectMock);

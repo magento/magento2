@@ -32,7 +32,7 @@ class Swatch extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($defaultValue !== null) {
             $bind = ['default_value' => $defaultValue];
             $where = ['attribute_id = ?' => $id];
-            $this->_getWriteAdapter()->update($this->getTable('eav_attribute'), $bind, $where);
+            $this->getConnection()->update($this->getTable('eav_attribute'), $bind, $where);
         }
     }
 }

@@ -129,7 +129,7 @@ class StockState implements StockStateInterface
      * @param int $productId
      * @param float $qty
      * @param int $websiteId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function checkQtyIncrements($productId, $qty, $websiteId = null)
     {
@@ -146,7 +146,7 @@ class StockState implements StockStateInterface
      * @param float $qtyToCheck
      * @param float $origQty
      * @param int $websiteId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $websiteId = null)
     {
