@@ -32,16 +32,34 @@ class Filters extends \Magento\Ui\Component\Filters
     public function prepare()
     {
         /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute */
-        foreach ($this->attributeRepository->getList() as $attribute) {
+        foreach ($this->attributeRepository->getList() as $newAttributeCode => $attribute) {
             if (!isset($this->components[$attribute->getAttributeCode()])
-                && $attribute->getIsUsedInGrid()
-                && $attribute->getIsFilterableInGrid()
             ) {
-                $filter = $this->filterFactory->create($attribute, $this->getContext());
-                $filter->prepare();
-                $this->addComponent($attribute->getAttributeCode(), $filter);
+                if ($attribute->getIsUsedInGrid()
+                    && $attribute->getIsFilterableInGrid()
+                ) {
+                    $filter = $this->filterFactory->create($attribute, $this->getContext());
+                    $filter->prepare();
+                    $this->addComponent($attribute->getAttributeCode(), $filter);
+                }
+            } elseif ($attribute->getAttributeCode() !== $newAttributeCode) {
+                $this->updateFilterConfiguration($attribute, $newAttributeCode);
             }
         }
         parent::prepare();
+    }
+
+    /**
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     * @param string $newAttributeCode
+     * @return void
+     */
+    protected function updateFilterConfiguration($attribute, $newAttributeCode)
+    {
+        $component = $this->components[$attribute->getAttributeCode()];
+        $config  = $component->getData('config');
+        $component->setData('name', $newAttributeCode);
+        $component->setData('config', array_merge($config, ['dataScope'=> $newAttributeCode]));
+        $component->prepare();
     }
 }

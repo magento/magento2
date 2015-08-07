@@ -47,7 +47,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     public function render(\Magento\Framework\DataObject $row)
     {
         $this->_actions = [];
-        /**  */
         if ($this->_salesReorder->canReorder($row->getId())) {
             $reorderAction = [
                 '@' => [

@@ -81,7 +81,7 @@ class Matrix extends Form
      *
      * @var string
      */
-    protected $matrixTitle = 'h3.title';
+    protected $matrixTitle = 'h3';
 
     /**
      * Selector for template block.
