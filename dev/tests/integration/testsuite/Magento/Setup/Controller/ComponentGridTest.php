@@ -9,7 +9,7 @@ namespace Magento\Setup\Controller;
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento\Framework\Composer\ComposerInformation
+     * @var \Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformationMock;
 
