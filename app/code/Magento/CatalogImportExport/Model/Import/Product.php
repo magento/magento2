@@ -13,6 +13,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -233,8 +234,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE => 'Duplicated unique attribute',
         ValidatorInterface::ERROR_INVALID_VARIATIONS_CUSTOM_OPTIONS => 'Value for \'%s\' sub attribute in \'%s\' attribute contains incorrect value, acceptable values are: \'dropdown\', \'checkbox\', \'radio\', \'text\'',
         ValidatorInterface::ERROR_INVALID_MEDIA_URL_OR_PATH => 'Wrong URL/path used for attribute %s',
-        ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage for attribute %s',
-        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions for attribute %s',
+        ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
+        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
     ];
 
     /**
@@ -1482,7 +1483,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             if ($uploadedFile) {
                                 $uploadedGalleryFiles[$mediaImage] = $uploadedFile;
                             } else {
-                                $this->addRowError(ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE, $rowNum);
+                                $this->addRowError(ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE, $rowNum, null, null, ProcessingError::ERROR_LEVEL_NOT_CRITICAL);
                             }
                         }
                     } elseif (!isset($existingImages[$imagePath])) {
@@ -1496,20 +1497,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 $newImagePath = $uploadedGalleryFiles[$mediaImage];
                                 $existingImages[$newImagePath][] = $rowSku;
                             } else {
-                                $this->addRowError(ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE, $rowNum);
+                                $this->addRowError(ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE, $rowNum, null, null, ProcessingError::ERROR_LEVEL_NOT_CRITICAL);
                             }
                         }
-                        $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
-                        if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
-                            $position = array_search($mediaImage, $mediaGalleryImages);
-                            foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
-                                $mediaGallery[$rowSku][] = [
-                                    'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                    'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
-                                    'position' => $position,
-                                    'disabled' => '',
-                                    'value' => $mediaImage,
-                                ];
+                        if (isset($uploadedGalleryFiles[$mediaImage])) {
+                            $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
+                            if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
+                                $position = array_search($mediaImage, $mediaGalleryImages);
+                                foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
+                                    $mediaGallery[$rowSku][] = [
+                                        'attribute_id' => $this->getMediaGalleryAttributeId(),
+                                        'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
+                                        'position' => $position,
+                                        'disabled' => '',
+                                        'value' => $mediaImage,
+                                    ];
+                                }
                             }
                         }
                     }
@@ -1795,6 +1798,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         }
         return $this->_fileUploader;
+    }
+
+    public function getDestinationDir()
+    {
+        /*$dirConfig = DirectoryList::getDefaultConfig();
+        $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
+        $DS = DIRECTORY_SEPARATOR;
+        $destinationDir = "catalog/product";
+        $destinationPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath($destinationDir);*/
     }
 
     /**
