@@ -93,14 +93,6 @@
 </div>
 
 <div ng-show="updateComponents.yes && !upgradeProcessError">
-    <div class="row" ng-show="!upgradeProcessError">
-        <label class="form-label">
-            The other components below will be upgraded. <br/>
-            If you don't want some components updated, please de-select them.
-        </label>
-        <br/>
-        <br/>
-    </div>
     <div class="message message-spinner" ng-show="!componentsProcessed">
         <span class="spinner">
             <span></span><span></span><span></span><span></span>
@@ -113,12 +105,25 @@
                 Sorry, we can't retrieve data for the table right now.
             </span>
     </div>
-    <div class="admin__data-grid-outer-wrap" ng-show="componentsProcessed">
+    <div class="row" ng-show="componentsProcessed && totalComponents == 0">
+        <label class="form-label">
+            <b>We didn't find any components to upgrade. Click "Next" to continue.<br/>
+        </label>
+    </div>
+    <div class="admin__data-grid-outer-wrap" ng-show="componentsProcessed && totalComponents > 0">
+        <div class="row" ng-show="!upgradeProcessError">
+            <label class="form-label">
+                The other components below will be upgraded. <br/>
+                If you don't want some components updated, please de-select them.
+            </label>
+            <br/>
+            <br/>
+        </div>
         <div class="admin__data-grid-header">
             <div class="admin__data-grid-header-row row row-gutter">
                 <div class="col-xs-3">
                     <div class="admin__control-support-text">
-                        <span>{{total}}</span> records found
+                        <span>{{totalForGrid}}</span> records found
                     </div>
                 </div>
                 <div class="col-xs-9 admin__data-grid-pager-wrap">
@@ -195,9 +200,9 @@
                         <span class="data-grid-data">{{component.version}}</span>
                     </td>
                     <td>
-                        <select ng-model="component.dropdownId" ng-init="component.dropdownId=component.updates[0]"
-                                ng-options="upgrade as upgrade for upgrade in component.updates"
-                                ng-change="updateOtherComponentsList(component.name, component.dropdownId)">
+                        <select ng-model="component.dropdownId" ng-init="component.dropdownId=component.updates[0].id"
+                                ng-options="item.id as item.name for item in component.updates"
+                                ng-change="setComponentVersion(component.name, component.dropdownId)">
                         </select>
                     </td>
                 </tr>
