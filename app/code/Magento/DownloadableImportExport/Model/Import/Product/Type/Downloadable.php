@@ -304,7 +304,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     }
                     $this->parseOptions($rowData, $productData['entity_id']);
                 }
-                if (!empty($this->cachedOptions)) {
+                if (!empty($this->cachedOptions['sample']) || !empty($this->cachedOptions['link'])) {
                     if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE) {
                         $this->deleteOptions();
                     }
@@ -430,7 +430,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             )
         );
         foreach($existingOptions as $option){
-            if (!is_null($option['sample_file'])){
+            if ($option['sample_file'] !== null){
                 unlink(self::DOWNLOADABLE_PATCH_SAMPLES . $option['sample_file']);
             }
         }
@@ -452,10 +452,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             )
         );
         foreach($existingOptions as $option){
-            if (!is_null($option['sample_file'])){
+            if ($option['sample_file'] !== null){
                 unlink(self::DOWNLOADABLE_PATCH_LINK_SAMPLES . $option['sample_file']);
             }
-            if (!is_null($option['link_file'])){
+            if ($option['link_file'] !== null){
                 unlink(self::DOWNLOADABLE_PATCH_LINKS . $option['link_file']);
             }
         }
@@ -639,7 +639,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function uploadSampleFiles(array $options){
         $result = [];
         foreach($options as $option){
-            if (!is_null($option['sample_file'])){
+            if ($option['sample_file'] !== null){
                 $option['sample_file'] = $this->uploadDownloadableFiles($option['sample_file'], 'samples', true);
             }
             $result[] = $option;
@@ -656,10 +656,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function uploadLinkFiles(array $options){
         $result = [];
         foreach($options as $option){
-            if (!is_null($option['sample_file'])){
+            if ($option['sample_file'] !== null){
                 $option['sample_file'] = $this->uploadDownloadableFiles($option['sample_file'], 'link_samples', true);
             }
-            if (!is_null($option['link_file'])){
+            if ($option['link_file'] !== null){
                 $option['link_file'] = $this->uploadDownloadableFiles($option['link_file'], 'links', true);
             }
             $result[] = $option;
@@ -674,31 +674,35 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function saveOptions(){
         $options = $this->cachedOptions;
-        $options['sample'] = $this->uploadSampleFiles($options['sample']);
-        $this->connection->insertOnDuplicate(
-            $this->_resource->getTableName('downloadable_sample'),
-            $this->prepareDataForSave($this->dataSample, $options['sample'])
-        );
-        $titleSample = $this->fillDataTitleSample($options['sample']);
-        $this->connection->insertOnDuplicate(
-            $this->_resource->getTableName('downloadable_sample_title'),
-            $this->prepareDataForSave($this->dataSampleTitle, $titleSample)
-        );
-        $options['link'] = $this->uploadLinkFiles($options['link']);
-        $this->connection->insertOnDuplicate(
-            $this->_resource->getTableName('downloadable_link'),
-            $this->prepareDataForSave($this->dataLink, $options['link'])
-        );
-        $dataLink = $this->fillDataLink($options['link']);
-        $this->connection->insertOnDuplicate(
-            $this->_resource->getTableName('downloadable_link_title'),
-            $this->prepareDataForSave($this->dataLinkTitle, $dataLink['title'])
-        );
-        if (count($dataLink['price'])) {
+        if (!empty($options['sample'])) {
+            $options['sample'] = $this->uploadSampleFiles($options['sample']);
             $this->connection->insertOnDuplicate(
-                $this->_resource->getTableName('downloadable_link_price'),
-                $this->prepareDataForSave($this->dataLinkPrice, $dataLink['price'])
+                $this->_resource->getTableName('downloadable_sample'),
+                $this->prepareDataForSave($this->dataSample, $options['sample'])
             );
+            $titleSample = $this->fillDataTitleSample($options['sample']);
+            $this->connection->insertOnDuplicate(
+                $this->_resource->getTableName('downloadable_sample_title'),
+                $this->prepareDataForSave($this->dataSampleTitle, $titleSample)
+            );
+        }
+        if (!empty($options['link'])) {
+            $options['link'] = $this->uploadLinkFiles($options['link']);
+            $this->connection->insertOnDuplicate(
+                $this->_resource->getTableName('downloadable_link'),
+                $this->prepareDataForSave($this->dataLink, $options['link'])
+            );
+            $dataLink = $this->fillDataLink($options['link']);
+            $this->connection->insertOnDuplicate(
+                $this->_resource->getTableName('downloadable_link_title'),
+                $this->prepareDataForSave($this->dataLinkTitle, $dataLink['title'])
+            );
+            if (count($dataLink['price'])) {
+                $this->connection->insertOnDuplicate(
+                    $this->_resource->getTableName('downloadable_link_price'),
+                    $this->prepareDataForSave($this->dataLinkPrice, $dataLink['price'])
+                );
+            }
         }
         return $this;
     }
@@ -848,7 +852,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function getUploader($type)
     {
-        if (is_null($this->fileUploader)) {
+        if ($this->fileUploader === null) {
             $this->fileUploader = $this->uploaderFactory->create();
             $this->fileUploader->init();
             $this->fileUploader->setAllowedExtensions($this->getAllowedExtensions());
