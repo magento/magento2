@@ -18,12 +18,10 @@ class AttributeProvider extends \Magento\Customer\Model\Indexer\AttributeProvide
 
     /**
      * @param Config $eavConfig
-     * @param Collection $collection
      */
     public function __construct(
-        Config $eavConfig,
-        Collection $collection
+        Config $eavConfig
     ) {
-        parent::__construct($eavConfig, $collection);
+        parent::__construct($eavConfig);
     }
 }
