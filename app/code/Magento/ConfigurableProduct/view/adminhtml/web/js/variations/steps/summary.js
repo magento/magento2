@@ -109,6 +109,9 @@ define([
         getGridTemplate: function() {
             return this.gridTemplate;
         },
+        getGridId: function() {
+            return _.uniqueId('grid_');
+        },
         getVariationKey: function (options) {
             return _.pluck(options, 'value').sort().join('-');
         },
