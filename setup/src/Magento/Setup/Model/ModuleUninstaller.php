@@ -5,13 +5,11 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Composer\AbstractComponentUninstaller;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Setup\Module\Setup;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ModuleUninstaller extends AbstractComponentUninstaller
+class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUninstaller
 {
     const OPTION_REMOVE_DATA = 'data';
     const OPTION_REMOVE_CODE = 'code';
@@ -208,7 +206,10 @@ class ModuleUninstaller extends AbstractComponentUninstaller
             $newModules[$module] = $existingModules[$module];
         }
         $this->writer->saveConfig(
-            [ConfigFilePool::APP_CONFIG => [ConfigOptionsListConstants::KEY_MODULES => $newModules]],
+            [
+                \Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG =>
+                    [ConfigOptionsListConstants::KEY_MODULES => $newModules]
+            ],
             true
         );
     }
