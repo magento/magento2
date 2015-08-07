@@ -58,8 +58,11 @@ class Information
      * @param RegionFactory $regionFactory
      * @param CountryFactory $countryFactory
      */
-    public function __construct(Renderer $renderer, RegionFactory $regionFactory, CountryFactory $countryFactory)
-    {
+    public function __construct(
+        Renderer $renderer,
+        RegionFactory $regionFactory,
+        CountryFactory $countryFactory
+    ) {
         $this->renderer = $renderer;
         $this->regionFactory = $regionFactory;
         $this->countryFactory = $countryFactory;
