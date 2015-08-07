@@ -6,14 +6,20 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Setup\Module\Setup;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class to uninstall a module component
+ */
 class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUninstaller
 {
+    /**#@+
+     * Module uninstall options
+     */
     const OPTION_REMOVE_DATA = 'data';
     const OPTION_REMOVE_CODE = 'code';
     const OPTION_REMOVE_REGISTRY = 'registry';
+    /**#@-*/
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -49,11 +55,6 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
      * @var \Magento\Framework\Composer\Remove
      */
     private $remove;
-
-    /**
-     * @var \Magento\Framework\Module\Resource
-     */
-    private $resource;
 
     /**
      * @var UninstallCollector
@@ -136,13 +137,13 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
     {
         $uninstalls = $this->collector->collectUninstall();
         $setupModel = $this->setupFactory->create();
-        $this->resource = $this->objectManager->get('Magento\Framework\Module\Resource');
+        $resource = $this->objectManager->get('Magento\Framework\Module\Resource');
         foreach ($modules as $module) {
             if (isset($uninstalls[$module])) {
                 $output->writeln("<info>Removing data of $module</info>");
                 $uninstalls[$module]->uninstall(
                     $setupModel,
-                    new ModuleContext($this->resource->getDbVersion($module) ?: '')
+                    new ModuleContext($resource->getDbVersion($module) ?: '')
                 );
             } else {
                 $output->writeln("<info>No data to clear in $module</info>");
