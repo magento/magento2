@@ -56,7 +56,7 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
         );
         $this->collectionFactoryMock = $this->getMock(
             '\Magento\Sales\Model\Resource\Order\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
@@ -68,31 +68,15 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->timeZoneMock = $this->getMock(
-            '\Magento\Framework\Stdlib\DateTime\TimezoneInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->timeZoneMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
 
-        $this->loggerMock = $this->getMock(
-            '\Psr\Log\LoggerInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->loggerMock = $this->getMock('\Psr\Log\LoggerInterface');
 
-        $this->objectManager = new ObjectManager($this);
-        $this->model = $this->objectManager->getObject(
-            '\Magento\Sales\Model\Observer\CleanExpiredOrders',
-            [
-                'collectionFactory' => $this->collectionFactoryMock,
-                'storesConfig' => $this->storesConfigMock,
-                'timeZone' => $this->timeZoneMock,
-                'logger' => $this->loggerMock,
-            ]
+        $this->model = new \Magento\Sales\Model\Observer\CleanExpiredOrders(
+            $this->storesConfigMock,
+            $this->timeZoneMock,
+            $this->loggerMock,
+            $this->collectionFactoryMock
         );
     }
 
@@ -113,6 +97,34 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
         $this->timeZoneMock->expects($this->exactly(2))->method('getConfigTimezone');
         $this->timeZoneMock->expects($this->exactly(2))->method('date');
         $this->orderCollectionMock->expects($this->exactly(4))->method('walk');
+        $this->loggerMock->expects($this->never())->method('error');
+        $this->model->execute();
+    }
+
+    public function testExecuteWithException()
+    {
+        $schedule = [
+            1 => 20,
+        ];
+        $exceptionMessage = 'Error500';
+
+        $this->storesConfigMock->expects($this->once())
+            ->method('getStoresConfigByPath')
+            ->with('sales/orders/delete_pending_after')
+            ->willReturn($schedule);
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionMock->expects($this->exactly(3))->method('addFieldToFilter');
+        $this->timeZoneMock->expects($this->once())->method('getConfigTimezone');
+        $this->timeZoneMock->expects($this->once())->method('date');
+        $this->orderCollectionMock->expects($this->once())
+            ->method('walk')
+            ->willThrowException(new \Exception($exceptionMessage));
+        $this->loggerMock->expects($this->once())
+            ->method('error')
+            ->with('Error cancelling deprecated orders: ' . $exceptionMessage);
+
         $this->model->execute();
     }
 }
