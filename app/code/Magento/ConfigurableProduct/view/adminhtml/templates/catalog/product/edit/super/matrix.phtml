@@ -160,7 +160,7 @@ if ($variations) {
                                 <!-- /ko -->
                             <!-- ko if: variation.images.file -->
                                 <img data-bind='attr: {src: variation.images.preview}' class="variation" data-role="image"/>
-                                <span data-bind="html: $parent.generateImageGallery(variation)"></span>
+                                <span data-bind="html: $parent.generateImageGallery(variation)" data-block="variation-images"></span>
                             <!-- /ko -->
                             <!-- /ko -->
                             <ul class="dropdown">

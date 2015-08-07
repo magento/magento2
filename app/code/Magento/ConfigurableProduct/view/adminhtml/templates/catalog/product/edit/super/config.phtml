@@ -173,8 +173,6 @@ require([
                         target[target.is('input') ? 'val' : 'text'](value);//.append(button);
                     });
 
-//                    $matrixRow.find('[data-action=no-image]').trigger('click');
-
                     var parentElement = $matrixRow.find('[data-column=image]'),
                         uploaderControl = parentElement.find('[data-action=upload-image]', parentElement),
                         imageElement = $matrixRow.find('[data-role=image]'),
@@ -201,6 +199,7 @@ require([
                         .prop({disabled: true});
 
                     $matrixRow.find('[name$="[image]"]').remove();
+                    $matrixRow.find('[data-block="variation-images"]').remove();
                 }
                 $gridDialog.dialog('close');
             };
