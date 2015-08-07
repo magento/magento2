@@ -72,8 +72,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     public function addSortOrder($field, $direction)
     {
         $this->sortOrderBuilder->setDirection($direction)
-            ->setField($field)
-        ->create();
+            ->setField($field);
         return $this;
     }
 

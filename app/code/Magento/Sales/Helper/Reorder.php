@@ -65,7 +65,9 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param $orderId
+     * Check is it possible to reorder
+     *
+     * @param int $orderId
      * @return bool
      */
     public function canReorder($orderId)

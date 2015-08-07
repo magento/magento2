@@ -160,7 +160,7 @@
             <filterInput name="telephone">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">telephone</item>
+                        <item name="dataScope" xsi:type="string">billing_telephone</item>
                         <item name="label" xsi:type="string" translate="true">Phone</item>
                     </item>
                 </argument>
@@ -168,7 +168,7 @@
             <filterInput name="postcode">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">postcode</item>
+                        <item name="dataScope" xsi:type="string">billing_postcode</item>
                         <item name="label" xsi:type="string" translate="true">ZIP</item>
                     </item>
                 </argument>
@@ -179,7 +179,7 @@
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">country_id</item>
+                        <item name="dataScope" xsi:type="string">billing_country_id</item>
                         <item name="label" xsi:type="string" translate="true">Country</item>
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
                     </item>
@@ -188,7 +188,7 @@
             <filterInput name="region">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">region</item>
+                        <item name="dataScope" xsi:type="string">billing_region</item>
                         <item name="label" xsi:type="string" translate="true">State/Province</item>
                     </item>
                 </argument>
@@ -337,6 +337,7 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                     <item name="sortOrder" xsi:type="number">20</item>
@@ -349,6 +350,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Name</item>
@@ -362,9 +364,9 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Email</item>
                     <item name="sortOrder" xsi:type="number">40</item>
                 </item>
@@ -376,6 +378,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Group</item>
@@ -389,9 +392,9 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Phone</item>
                     <item name="sortOrder" xsi:type="number">60</item>
                 </item>
@@ -403,9 +406,9 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ZIP</item>
                     <item name="sortOrder" xsi:type="number">70</item>
                 </item>
@@ -419,7 +422,6 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Country</item>
                     <item name="sortOrder" xsi:type="number">80</item>
                 </item>
@@ -431,6 +433,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">State/Province</item>
@@ -444,6 +447,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Customer Since</item>
@@ -470,6 +474,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="align" xsi:type="string">left</item>
@@ -484,6 +489,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -498,6 +504,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -540,6 +547,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="align" xsi:type="string">left</item>
@@ -554,6 +562,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -596,6 +605,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -610,6 +620,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -624,6 +635,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -638,6 +650,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>

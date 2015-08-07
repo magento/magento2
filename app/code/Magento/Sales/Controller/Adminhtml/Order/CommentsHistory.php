@@ -7,6 +7,9 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -24,6 +27,9 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface $logger
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -37,6 +43,9 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        OrderManagementInterface $orderManagement,
+        OrderRepositoryInterface $orderRepository,
+        LoggerInterface $logger,
         \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
         $this->layoutFactory = $layoutFactory;
@@ -48,7 +57,10 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
             $resultPageFactory,
             $resultJsonFactory,
             $resultLayoutFactory,
-            $resultRawFactory
+            $resultRawFactory,
+            $orderManagement,
+            $orderRepository,
+            $logger
         );
     }
 
