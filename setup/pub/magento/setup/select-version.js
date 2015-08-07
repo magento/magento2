@@ -52,12 +52,13 @@ angular.module('select-version', ['ngStorage'])
                         success(function (data) {
                             if (data.responseType != 'error') {
                                 $scope.components = data.components;
-                                $scope.total = data.total;
+                                $scope.totalComponents = data.total;
+                                $scope.totalForGrid = data.total;
                                 var keys = Object.keys($scope.components);
-                                for (var i = 0; i < $scope.total; i++) {
+                                for (var i = 0; i < $scope.totalForGrid; i++) {
                                     $scope.packages.push({
                                         name: keys[i],
-                                        version: $scope.components[keys[i]].updates[0]
+                                        version: $scope.components[keys[i]].updates[0].id
                                     });
                                 }
                                 $scope.readyForNext = true;
@@ -74,43 +75,36 @@ angular.module('select-version', ['ngStorage'])
         });
 
         $scope.setComponentVersion = function(name, $version) {
-            for (var i = 0; i < $scope.total; i++) {
+            for (var i = 0; i < $scope.totalForGrid; i++) {
                 if ($scope.packages[i + 1].name === name) {
                     $scope.packages[i + 1].version = $version;
-                    $scope.components[i].version = $version;
                 }
             }
         };
 
         $scope.AddRemoveComponentOnSliderMove = function(name) {
             var found = false;
-            for (var i = 0; i < $scope.total; i++) {
+            for (var i = 0; i < $scope.totalForGrid; i++) {
                 if ($scope.packages[i + 1].name === name) {
                     $scope.packages.splice(i + 1, 1);
-                    $scope.total = $scope.total - 1;
+                    $scope.totalForGrid = $scope.totalForGrid - 1;
                     found = true;
                 }
             }
             if (!found) {
                 $scope.packages.push({
                     name: name,
-                    version: $scope.components[name].updates[0]
+                    version: $scope.components[name].dropdownId
                 });
-                $scope.total = $scope.total + 1;
+                $scope.totalForGrid = $scope.totalForGrid + 1;
             }
         };
 
         $scope.update = function() {
             $scope.packages[0].version = $scope.selectedOption;
             if (angular.equals($scope.updateComponents.no, true)) {
-                if ($scope.total > 0) {
-                    $scope.packages.splice(1, $scope.total);
-                }
-            } else {
-                for (var i = 0; i < $scope.total; i++) {
-                    if ($scope.packages[i + 1].version.indexOf(" (latest)") > -1) {
-                        $scope.packages[i + 1].version = $scope.packages[i + 1].version.replace(" (latest)", "");
-                    }
+                if ($scope.totalForGrid > 0) {
+                    $scope.packages.splice(1, $scope.totalForGrid);
                 }
             }
             $localStorage.packages = $scope.packages;
