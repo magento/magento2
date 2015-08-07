@@ -8,21 +8,21 @@ $base = basename($_SERVER['SCRIPT_FILENAME']);
 
 return [
     'navUpdaterTitles' => [
-        'su'    => 'System Upgrade',
+        'upgrade'    => 'System Upgrade',
     ],
     'navUpdater' => [
         [
-            'id'          => 'root.readiness-check-su',
+            'id'          => 'root.readiness-check-upgrade',
             'url'         => 'readiness-check-updater',
             'templateUrl' => "$base/readiness-check-updater",
             'title'       => "Readiness \n Check",
             'header'      => 'Step 2: Readiness Check',
             'order'       => 2,
             'nav'         => true,
-            'type'        => 'su'
+            'type'        => 'upgrade'
         ],
         [
-            'id'          => 'root.readiness-check-su.progress',
+            'id'          => 'root.readiness-check-upgrade.progress',
             'url'         => 'readiness-check-updater/progress',
             'templateUrl' => "$base/readiness-check-updater/progress",
             'title'       => 'Readiness Check',
@@ -30,10 +30,10 @@ return [
             'controller'  => 'readinessCheckController',
             'nav'         => false,
             'order'       => 3,
-            'type'        => 'su'
+            'type'        => 'upgrade'
         ],
         [
-            'id'          => 'root.create-backup-su',
+            'id'          => 'root.create-backup-upgrade',
             'url'         => 'create-backup',
             'templateUrl' => "$base/create-backup",
             'title'       => 'Create Backup',
@@ -41,10 +41,10 @@ return [
             'header'      => 'Step 3: Create Backup',
             'order'       => 4,
             'nav'         => true,
-            'type'        => 'su'
+            'type'        => 'upgrade'
         ],
         [
-            'id'          => 'root.create-backup-su.progress',
+            'id'          => 'root.create-backup-upgrade.progress',
             'url'         => 'create-backup/progress',
             'templateUrl' => "$base/complete-backup/progress",
             'title'       => "Create \n Backup",
@@ -52,10 +52,10 @@ return [
             'controller'  => 'completeBackupController',
             'nav'         => false,
             'order'       => 5,
-            'type'        => 'su'
+            'type'        => 'upgrade'
         ],
         [
-            'id'          => 'root.start-updater-su',
+            'id'          => 'root.start-updater-upgrade',
             'url'         => 'start-updater',
             'templateUrl' => "$base/start-updater",
             'title'       => "System \n Upgrade",
@@ -63,7 +63,7 @@ return [
             'header'      => 'Step 4: System Upgrade',
             'order'       => 6,
             'nav'         => true,
-            'type'        => 'su'
+            'type'        => 'upgrade'
         ],
         [
             'id'          => 'root.updater-success',

@@ -33,6 +33,7 @@ return [
             'Magento\Setup\Controller\BackupActionItems',
             'Magento\Setup\Controller\Maintenance',
             'Magento\Setup\Controller\OtherComponentsGrid',
+            'Magento\Setup\Controller\DataOption',
         ],
         'instance' => [
             'preference' => [

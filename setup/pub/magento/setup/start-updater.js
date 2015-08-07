@@ -8,15 +8,12 @@ angular.module('start-updater', ['ngStorage'])
     .controller('startUpdaterController', ['$scope', '$state', '$localStorage', '$http', '$window', function ($scope, $state, $localStorage, $http, $window) {
         $scope.maintenanceCalled = false;
         $scope.maintenanceStatus = false;
-        if ($state.current.type === 'cm') {
-            $scope.type = 'update';
-            $scope.buttonText = 'Update';
-            $localStorage.successPageAction = 'updated';
-        } else if ($state.current.type === 'su') {
-            $scope.type = 'upgrade';
-            $scope.buttonText = 'Upgrade';
-            $localStorage.successPageAction = 'upgraded';
-        }
+
+        $scope.type = $state.current.type;
+        $scope.buttonText = $scope.type.charAt(0).toUpperCase() + $scope.type.slice(1);
+        $scope.successPageAction = $state.current.type + ($scope.endsWith($state.current.type, 'e')  ? 'd' : 'ed');
+        $localStorage.successPageAction = $scope.successPageAction;
+
         if ($localStorage.packages) {
             $scope.packages = $localStorage.packages;
         }
@@ -55,10 +52,6 @@ angular.module('start-updater', ['ngStorage'])
                 });
         }
         $scope.goToCreateBackup = function() {
-            if ($state.current.type === 'cm') {
-                $state.go('root.create-backup-cm');
-            } else if ($state.current.type === 'su') {
-                $state.go('root.create-backup-su');
-            }
+            $state.go('root.create-backup-'. $state.current.type);
         }
     }]);

@@ -17,7 +17,6 @@ return [
             'id'          => 'root.home',
             'url'         => 'home',
             'templateUrl' => "$base/home",
-            'title'       => 'Home',
             'header'      => 'Home',
             'nav'         => false,
             'default'     => true,
@@ -25,18 +24,18 @@ return [
             'order'       => -1,
         ],
         [
-            'id'          => 'root.cm',
+            'id'          => 'root.update',
             'url'         => 'component-grid',
             'templateUrl' => "$base/component-grid",
-            'title'       => "Component Grid",
+            'title'       => "Component Manager",
             'controller'  => 'componentGridController',
             'nav'         => false,
             'noMenu'      => true,
             'order'       => 1,
-            'type'        => 'cm'
+            'type'        => 'update'
         ],
         [
-            'id'          => 'root.su',
+            'id'          => 'root.upgrade',
             'url'         => 'select-version',
             'templateUrl' => "$base/select-version",
             'title'       => 'Select Version',
@@ -44,7 +43,7 @@ return [
             'header'      => 'Step 1: Select Version',
             'order'       => 1,
             'nav'         => true,
-            'type'        => 'su'
+            'type'        => 'upgrade'
         ],
     ],
 ];

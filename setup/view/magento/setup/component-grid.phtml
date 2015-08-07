@@ -78,7 +78,7 @@
             </div>
         </div>
     </div>
-    <div class="admin__data-grid-wrap" ng-show="$state.is('root.cm')">
+    <div class="admin__data-grid-wrap" ng-show="$state.is('root.update')">
         <table class="data-grid">
             <thead data-part="head">
             <tr>
@@ -145,16 +145,20 @@
                             <span>Select</span>
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(component)}">
-                            <li>
+                            <!--  will be covered in MAGETWO-34698 <li>
                                 <a class="action-menu-item">Enable</a>
                             </li>
                             <li>
                                 <a class="action-menu-item">Disable</a>
                             </li>
-
+                            -->
                             <li ng-class="{'hide' : !isAvailableUpdatePackage(component.name)}"
                                 ng-mousedown="update(component)">
                                 <a class="action-menu-item">Update</a>
+                            </li>
+                            <li ng-class="hide"
+                                ng-mousedown="uninstall(component)">
+                                <a class="action-menu-item">Uninstall</a>
                             </li>
                         </ul>
                     </div>

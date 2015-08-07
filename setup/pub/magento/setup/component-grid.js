@@ -5,7 +5,8 @@
 
 'use strict';
 angular.module('component-grid', ['ngStorage'])
-    .controller('componentGridController', ['$scope', '$http', '$localStorage', function ($scope, $http, $localStorage) {
+    .controller('componentGridController', ['$scope', '$http', '$localStorage', '$state',
+        function ($scope, $http, $localStorage, $state) {
 
       $http.get('index.php/componentGrid/components').success(function(data) {
           $scope.components = data.components;
@@ -80,8 +81,25 @@ angular.module('component-grid', ['ngStorage'])
                   version: $scope.availableUpdatePackages[component.name]['latestVersion']
               }
           ];
+          if ($localStorage.titles['update'].indexOf(component.moduleName) < 0 ) {
+              $localStorage.titles['update'] += ' ' + component.moduleName;
+          }
+          $localStorage.moduleName = component.moduleName;
           $scope.nextState();
       };
+
+    $scope.uninstall = function(component) {
+        $localStorage.packages = [
+            {
+                name: component.name
+            }
+        ];
+        if ($localStorage.titles['uninstall'].indexOf(component.moduleName) < 0 ) {
+            $localStorage.titles['uninstall'] += ' ' + component.moduleName;
+        }
+        $localStorage.moduleName = component.moduleName;
+        $state.go('root.readiness-check-uninstall');
+    };
 
       $scope.convertDate = function(date) {
           return new Date(date);
