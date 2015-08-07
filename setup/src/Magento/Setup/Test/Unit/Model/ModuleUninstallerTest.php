@@ -68,7 +68,8 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = $this->getMockForAbstractClass(
             'Magento\Framework\ObjectManagerInterface',
-            [],'',
+            [],
+            '',
             false
         );
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
