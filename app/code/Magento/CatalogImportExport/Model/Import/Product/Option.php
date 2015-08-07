@@ -376,32 +376,32 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // @codingStandardsIgnoreStart
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_STORE,
-            __('Please enter a correct value for "store."')
+            __('Value for \'price\' sub attribute in \'store\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_TYPE,
-            __('Please enter a correct value for "type."')
+            __('Value for \'type\' sub attribute in \'custom_options\' attribute contains incorrect value, acceptable values are: \'dropdown\', \'checkbox\'')
         );
         $this->_productEntity->addMessageTemplate(self::ERROR_EMPTY_TITLE, __('Please enter a value for title.'));
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_PRICE,
-            __('Please enter a correct value for "price."')
+            __('Value for \'price\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_MAX_CHARACTERS,
-            __('Please enter a correct value for "maximum characters."')
+            __('Value for \'maximum characters\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_SORT_ORDER,
-            __('Please enter a correct value for "sort order."')
+            __('Value for \'sort order\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_ROW_PRICE,
-            __('Please enter a correct value for "value price."')
+            __('Value for \'value price\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_ROW_SORT,
-            __('Please enter a correct value for "sort order."')
+            __('Value for \'sort order\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_NEW_NAMES,

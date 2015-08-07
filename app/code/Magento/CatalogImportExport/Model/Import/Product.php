@@ -226,7 +226,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE => 'Product with specified SKU not found',
         ValidatorInterface::ERROR_SUPER_PRODUCTS_SKU_NOT_FOUND => 'Product with specified super products SKU not found',
         ValidatorInterface::ERROR_MEDIA_DATA_INCOMPLETE => 'Media data is incomplete',
-        ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
         ValidatorInterface::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
         ValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE => 'Value for \'%s\' attribute contains incorrect value, acceptable values are in %s format',
         ValidatorInterface::ERROR_ABSENT_REQUIRED_ATTRIBUTE => 'Attribute %s is required',
@@ -234,8 +233,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE => 'Duplicated unique attribute',
         ValidatorInterface::ERROR_INVALID_VARIATIONS_CUSTOM_OPTIONS => 'Value for \'%s\' sub attribute in \'%s\' attribute contains incorrect value, acceptable values are: \'dropdown\', \'checkbox\', \'radio\', \'text\'',
         ValidatorInterface::ERROR_INVALID_MEDIA_URL => 'Wrong URL used for attribute %s',
-        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
-        ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
+        ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
+        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
     ];
 
     /**
@@ -1476,19 +1475,29 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $imagePath = $allImagesFromBunch[$mediaImage];
                     if (isset($existingImages[$imagePath]) && in_array($rowSku, $existingImages[$imagePath])) {
                         if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
-                            $uploadedGalleryFiles[$mediaImage] = $this->_uploadMediaFiles(
+                            $uploadedFile = $this->_uploadMediaFiles(
                                 trim($mediaImage),
                                 true
                             );
+                            if ($uploadedFile) {
+                                $uploadedGalleryFiles[$mediaImage] = $uploadedFile;
+                            } else {
+                                $this->addRowError(ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE, $rowNum);
+                            }
                         }
                     } elseif (!isset($existingImages[$imagePath])) {
                         if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
-                            $uploadedGalleryFiles[$mediaImage] = $this->_uploadMediaFiles(
+                            $uploadedFile = $this->_uploadMediaFiles(
                                 trim($mediaImage),
                                 true
                             );
-                            $newImagePath = $uploadedGalleryFiles[$mediaImage];
-                            $existingImages[$newImagePath][] = $rowSku;
+                            if ($uploadedFile) {
+                                $uploadedGalleryFiles[$mediaImage] = $uploadedFile;
+                                $newImagePath = $uploadedGalleryFiles[$mediaImage];
+                                $existingImages[$newImagePath][] = $rowSku;
+                            } else {
+                                $this->addRowError(ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE, $rowNum);
+                            }
                         }
                         $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
                         if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
