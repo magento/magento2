@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class EmailTest
- *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @package Magento\Sales\Controller\Adminhtml\Order
  */
 class EmailTest extends \PHPUnit_Framework_TestCase

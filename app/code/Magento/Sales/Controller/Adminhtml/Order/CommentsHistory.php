@@ -33,6 +33,7 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         Action\Context $context,

@@ -87,8 +87,12 @@ abstract class Order extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface $logger
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         Action\Context $context,
