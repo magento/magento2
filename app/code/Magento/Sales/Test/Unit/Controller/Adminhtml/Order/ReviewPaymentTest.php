@@ -77,6 +77,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->getMockForAbstractClass();
         $this->orderMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+            ->setMethods(['getPayment'])
             ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMock(
             'Magento\Framework\Message\Manager',
