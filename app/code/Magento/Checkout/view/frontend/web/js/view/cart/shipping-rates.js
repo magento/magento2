@@ -26,6 +26,7 @@ define(
         checkoutData
     ) {
         'use strict';
+
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/cart/shipping-rates'
@@ -34,9 +35,9 @@ define(
             shippingRates: shippingService.getShippingRates(),
             shippingRateGroups: ko.observableArray([]),
             selectedShippingMethod: ko.computed(function () {
-                    return quote.shippingMethod()
-                        ? quote.shippingMethod().carrier_code + '_' + quote.shippingMethod().method_code
-                        : null;
+                    return quote.shippingMethod() ?
+                        quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
+                        null;
                 }
             ),
 
@@ -84,11 +85,8 @@ define(
              * @returns void
              */
             selectShippingMethod: function (methodData) {
-                selectShippingMethodAction({
-                    'carrier_code': methodData.carrier_code,
-                    'method_code': methodData.method_code
-                });
-                checkoutData.setSelectedShippingRate(methodData.carrier_code + '_' + methodData.method_code);
+                selectShippingMethodAction(methodData);
+                checkoutData.setSelectedShippingRate(methodData['carrier_code'] + '_' + methodData['method_code']);
             },
 
             /**
