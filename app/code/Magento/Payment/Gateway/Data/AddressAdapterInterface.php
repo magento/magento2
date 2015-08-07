@@ -107,4 +107,11 @@ interface AddressAdapterInterface
      * @return string
      */
     public function getSuffix();
+
+    /**
+     * Get company
+     *
+     * @return string
+     */
+    public function getCompany();
 }

@@ -13,7 +13,7 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Message\Error;
-use Magento\Framework\ObjectFactory;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
@@ -24,7 +24,7 @@ use Magento\Framework\Api\DataObjectHelper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Index extends \Magento\Backend\App\Action
+abstract class Index extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Validator
@@ -70,7 +70,7 @@ class Index extends \Magento\Backend\App\Action
     /** @var \Magento\Framework\Math\Random */
     protected $_random;
 
-    /** @var \Magento\Framework\ObjectFactory */
+    /** @var ObjectFactory */
     protected $_objectFactory;
 
     /**

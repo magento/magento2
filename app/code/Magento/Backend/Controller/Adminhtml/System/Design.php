@@ -7,7 +7,7 @@ namespace Magento\Backend\Controller\Adminhtml\System;
 
 use Magento\Backend\App\Action;
 
-class Design extends Action
+abstract class Design extends Action
 {
     /**
      * Core registry

@@ -10,7 +10,7 @@ use Magento\Backend\App\Action;
 /**
  * Class Widget
  */
-class Widget extends Action
+abstract class Widget extends Action
 {
     /**
      * @return bool

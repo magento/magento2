@@ -21,14 +21,14 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_cache = $cache;
     }
 
@@ -57,10 +57,10 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
     ) {
         $bind = ['layout_update_handle' => $handle, 'theme_id' => $theme->getId(), 'store_id' => $store->getId()];
         $result = '';
-        $readAdapter = $this->_getReadAdapter();
-        if ($readAdapter) {
+        $connection = $this->getConnection();
+        if ($connection) {
             $select = $this->_getFetchUpdatesByHandleSelect();
-            $result = join('', $readAdapter->fetchCol($select, $bind));
+            $result = join('', $connection->fetchCol($select, $bind));
         }
         return $result;
     }
@@ -77,7 +77,7 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
         //If 0 means 'all stores' why it then refers by foreign key to Admin in `store` and not to something named
         // 'All Stores'?
 
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['layout_update' => $this->getMainTable()],
             ['xml']
         )->join(
@@ -111,7 +111,7 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $data = $object->getData();
         if (isset($data['store_id']) && isset($data['theme_id'])) {
-            $this->_getWriteAdapter()->insertOnDuplicate(
+            $this->getConnection()->insertOnDuplicate(
                 $this->getTable('layout_link'),
                 [
                     'store_id' => $data['store_id'],

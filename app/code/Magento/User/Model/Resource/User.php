@@ -50,16 +50,16 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Acl\CacheInterface $aclCache
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Acl\CacheInterface $aclCache,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_aclCache = $aclCache;
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
@@ -98,7 +98,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function recordLogin(ModelUser $user)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
         $data = [
             'logdate' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
@@ -107,7 +107,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $condition = ['user_id = ?' => (int)$user->getUserId()];
 
-        $adapter->update($this->getMainTable(), $data, $condition);
+        $connection->update($this->getMainTable(), $data, $condition);
 
         return $this;
     }
@@ -120,13 +120,13 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByUsername($username)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from($this->getMainTable())->where('username=:username');
+        $select = $connection->select()->from($this->getMainTable())->where('username=:username');
 
         $binds = ['username' => $username];
 
-        return $adapter->fetchRow($select, $binds);
+        return $connection->fetchRow($select, $binds);
     }
 
     /**
@@ -146,14 +146,14 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if ($userId > 0) {
-            $adapter = $this->_getReadAdapter();
+            $connection = $this->getConnection();
 
-            $select = $adapter->select();
+            $select = $connection->select();
             $select->from($this->getTable('authorization_role'))->where('parent_id > :parent_id')->where('user_id = :user_id');
 
             $binds = ['parent_id' => 0, 'user_id' => $userId];
 
-            return $adapter->fetchAll($select, $binds);
+            return $connection->fetchAll($select, $binds);
         } else {
             return null;
         }
@@ -200,7 +200,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function _clearUserRoles(ModelUser $user)
     {
         $conditions = ['user_id = ?' => (int)$user->getId()];
-        $this->_getWriteAdapter()->delete($this->getTable('authorization_role'), $conditions);
+        $this->getConnection()->delete($this->getTable('authorization_role'), $conditions);
     }
 
     /**
@@ -216,12 +216,12 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
             /** @var \Magento\Authorization\Model\Role $parentRole */
             $parentRole = $this->_roleFactory->create()->load($parentId);
         } else {
-            $role = new \Magento\Framework\Object();
+            $role = new \Magento\Framework\DataObject();
             $role->setTreeLevel(0);
         }
 
         if ($parentRole->getId()) {
-            $data = new \Magento\Framework\Object(
+            $data = new \Magento\Framework\DataObject(
                 [
                     'parent_id' => $parentRole->getId(),
                     'tree_level' => $parentRole->getTreeLevel() + 1,
@@ -234,7 +234,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
             );
 
             $insertData = $this->_prepareDataForTable($data, $this->getTable('authorization_role'));
-            $this->_getWriteAdapter()->insert($this->getTable('authorization_role'), $insertData);
+            $this->getConnection()->insert($this->getTable('authorization_role'), $insertData);
             $this->_aclCache->clean();
         }
     }
@@ -263,23 +263,23 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function delete(\Magento\Framework\Model\AbstractModel $user)
     {
         $this->_beforeDelete($user);
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
         $uid = $user->getId();
-        $adapter->beginTransaction();
+        $connection->beginTransaction();
         try {
             $conditions = ['user_id = ?' => $uid];
 
-            $adapter->delete($this->getMainTable(), $conditions);
-            $adapter->delete($this->getTable('authorization_role'), $conditions);
+            $connection->delete($this->getMainTable(), $conditions);
+            $connection->delete($this->getTable('authorization_role'), $conditions);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             throw $e;
             return false;
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             return false;
         }
-        $adapter->commit();
+        $connection->commit();
         $this->_afterDelete($user);
         return true;
     }
@@ -297,9 +297,9 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $table = $this->getTable('authorization_role');
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $table,
             []
         )->joinLeft(
@@ -312,7 +312,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $binds = ['user_id' => (int)$user->getId()];
 
-        $roles = $adapter->fetchCol($select, $binds);
+        $roles = $connection->fetchCol($select, $binds);
 
         if ($roles) {
             return $roles;
@@ -336,7 +336,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $dbh = $this->_getWriteAdapter();
+        $dbh = $this->getConnection();
 
         $condition = ['user_id = ?' => (int)$user->getId(), 'parent_id = ?' => (int)$user->getRoleId()];
 
@@ -355,7 +355,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($user->getUserId() > 0) {
             $roleTable = $this->getTable('authorization_role');
 
-            $dbh = $this->_getReadAdapter();
+            $dbh = $this->getConnection();
 
             $binds = ['parent_id' => $user->getRoleId(), 'user_id' => $user->getUserId()];
 
@@ -375,8 +375,8 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function userExists(\Magento\Framework\Model\AbstractModel $user)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
 
         $binds = [
             'username' => $user->getUsername(),
@@ -392,7 +392,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'user_id <> :user_id'
         );
 
-        return $adapter->fetchRow($select, $binds);
+        return $connection->fetchRow($select, $binds);
     }
 
     /**
@@ -416,7 +416,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function saveExtra($object, $data)
     {
         if ($object->getId()) {
-            $this->_getWriteAdapter()->update(
+            $this->getConnection()->update(
                 $this->getMainTable(),
                 ['extra' => $data],
                 ['user_id = ?' => (int)$object->getId()]
@@ -433,10 +433,10 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function countAll()
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
         $select->from($this->getMainTable(), 'COUNT(*)');
-        $result = (int)$adapter->fetchOne($select);
+        $result = (int)$connection->fetchOne($select);
         return $result;
     }
 
@@ -464,14 +464,14 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function updateRoleUsersAcl(\Magento\Authorization\Model\Role $role)
     {
-        $write = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $users = $role->getRoleUsers();
         $rowsCount = 0;
 
         if (sizeof($users) > 0) {
             $bind = ['reload_acl_flag' => 1];
             $where = ['user_id IN(?)' => $users];
-            $rowsCount = $write->update($this->_usersTable, $bind, $where);
+            $rowsCount = $connection->update($this->_usersTable, $bind, $where);
         }
 
         return $rowsCount > 0;

@@ -5,11 +5,16 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Handler;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflowpro;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Xml\Security;
 
+/**
+ * Class FraudHandler
+ */
 class FraudHandler implements HandlerInterface
 {
     /**
@@ -28,17 +33,28 @@ class FraudHandler implements HandlerInterface
     private $paypalInfoManager;
 
     /**
-     * @param Info $paypalInfoManager
+     * The security scanner XML document
+     *
+     * @var Security
      */
-    public function __construct(Info $paypalInfoManager)
+    private $xmlSecurity;
+
+    /**
+     * Constructor
+     *
+     * @param Info $paypalInfoManager
+     * @param Security $xmlSecurity
+     */
+    public function __construct(Info $paypalInfoManager, Security $xmlSecurity)
     {
         $this->paypalInfoManager = $paypalInfoManager;
+        $this->xmlSecurity = $xmlSecurity;
     }
 
     /**
      * {inheritdoc}
      */
-    public function handle(InfoInterface $payment, Object $response)
+    public function handle(InfoInterface $payment, DataObject $response)
     {
         if (
         !in_array(
@@ -76,11 +92,16 @@ class FraudHandler implements HandlerInterface
      *
      * @param string $rulesString
      * @return array
+     * @throws LocalizedException
      */
     private function getFraudRulesDictionary($rulesString)
     {
-        libxml_use_internal_errors(true);
         $rules = [];
+
+        if (!$this->xmlSecurity->scan($rulesString)) {
+            return $rules;
+        }
+
         try {
             $rulesXml = new \SimpleXMLElement($rulesString);
             foreach ($rulesXml->{'rule'} as $rule) {

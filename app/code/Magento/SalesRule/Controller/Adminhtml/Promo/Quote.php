@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo;
 
-class Quote extends \Magento\Backend\App\Action
+abstract class Quote extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

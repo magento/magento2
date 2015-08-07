@@ -23,6 +23,7 @@ switch ($type = $block->getType()) {
             $items = $block->getAllItems();
             $limit = $block->getPositionLimit();
             $shuffle = (int) $block->isShuffled();
+            $canItemsAddToCart = $block->canItemsAddToCart();
 
             $showWishlist = true;
             $showCompare = true;
@@ -44,6 +45,7 @@ switch ($type = $block->getType()) {
             $items = $block->getItems();
             $limit = 0;
             $shuffle = 0;
+            $canItemsAddToCart = $block->canItemsAddToCart();
 
             $showWishlist = true;
             $showCompare = true;
@@ -70,6 +72,7 @@ switch ($type = $block->getType()) {
             $showCart = false;
             $templateType = null;
             $description = false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -91,6 +94,7 @@ switch ($type = $block->getType()) {
             $showCart = false;
             $templateType = null;
             $description = false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -110,6 +114,7 @@ switch ($type = $block->getType()) {
             $showCart = true;
             $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
             $description = false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -129,6 +134,7 @@ switch ($type = $block->getType()) {
             $showCart = true;
             $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
             $description = false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -150,6 +156,7 @@ switch ($type = $block->getType()) {
             $showCart = true;
             $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
             $description = ($mode == 'list') ? true : false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -173,7 +180,7 @@ switch ($type = $block->getType()) {
         <strong id="block-<?php echo $class?>-heading" role="heading" aria-level="2"><?php echo $title; ?></strong>
     </div>
     <div class="block-content content" aria-labelledby="block-<?php echo $class?>-heading">
-        <?php if ($type == 'related'): ?>
+        <?php if ($type == 'related' && $canItemsAddToCart): ?>
         <div class="block-actions">
             <?php echo __('Check items to add to the cart or') ?>
             <button type="button" class="action select" role="select-all"><span><?php echo __('select all') ?></span></button>

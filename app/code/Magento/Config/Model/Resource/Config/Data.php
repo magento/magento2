@@ -49,7 +49,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             [$this->getIdFieldName()]
         )->where(
@@ -65,7 +65,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'path' => $object->getPath(),
         ];
 
-        $configId = $this->_getReadAdapter()->fetchOne($select, $bind);
+        $configId = $this->getConnection()->fetchOne($select, $bind);
         if ($configId) {
             $object->setId($configId);
         }
@@ -85,7 +85,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!is_array($scopeIds)) {
             $scopeIds = [$scopeIds];
         }
-        $this->_getWriteAdapter()->delete(
+        $this->getConnection()->delete(
             $this->getMainTable(),
             ['scope = ?' => $scopeCode, 'scope_id IN (?)' => $scopeIds]
         );

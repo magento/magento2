@@ -107,7 +107,7 @@ class Onepage
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
 
@@ -184,7 +184,7 @@ class Onepage
      * @param \Magento\Customer\Model\FormFactory $customerFormFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param CustomerDataFactory $customerDataFactory
@@ -214,7 +214,7 @@ class Onepage
         \Magento\Customer\Model\FormFactory $customerFormFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         CustomerDataFactory $customerDataFactory,
