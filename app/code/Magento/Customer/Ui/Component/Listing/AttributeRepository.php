@@ -89,14 +89,7 @@ class AttributeRepository
      */
     public function getMetadataByCode($code)
     {
-        $result = null;
-        foreach ($this->getList() as $attribute) {
-            if ($attribute->getAttributeCode() == $code) {
-                $result = $attribute;
-                break;
-            }
-        }
-        return $result;
+        return isset($this->getList()[$code]) ? $this->getList()[$code] : null;
     }
 
     /**

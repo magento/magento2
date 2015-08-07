@@ -45,10 +45,7 @@ class AttributeColumn extends Column
             return;
         }
 
-        $attributeCode = isset($this->getData('config')['origin'])
-            ? $this->getData('config')['origin']
-            : $this->getName();
-        $metaData = $this->attributeRepository->getMetadataByCode($attributeCode);
+        $metaData = $this->attributeRepository->getMetadataByCode($this->getName());
         if ($metaData && count($metaData->getOptions())) {
             foreach ($dataSource['data']['items'] as &$item) {
                 if (!isset($item[$this->getName()])) {

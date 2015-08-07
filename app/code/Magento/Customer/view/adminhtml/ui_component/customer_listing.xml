@@ -157,7 +157,7 @@
                     </item>
                 </argument>
             </filterSelect>
-            <filterInput name="telephone">
+            <filterInput name="billing_telephone">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">billing_telephone</item>
@@ -165,7 +165,7 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterInput name="postcode">
+            <filterInput name="billing_postcode">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">billing_postcode</item>
@@ -173,7 +173,7 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterSelect name="country_id">
+            <filterSelect name="billing_country_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Directory\Model\Resource\Country\Collection</argument>
                 </argument>
@@ -185,7 +185,7 @@
                     </item>
                 </argument>
             </filterSelect>
-            <filterInput name="region">
+            <filterInput name="billing_region">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">billing_region</item>
@@ -386,7 +386,7 @@
                 </item>
             </argument>
         </column>
-        <column name="telephone">
+        <column name="billing_telephone">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -400,7 +400,7 @@
                 </item>
             </argument>
         </column>
-        <column name="postcode">
+        <column name="billing_postcode">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -414,7 +414,7 @@
                 </item>
             </argument>
         </column>
-        <column name="country_id" class="Magento\Customer\Ui\Component\Listing\Column\AttributeColumn">
+        <column name="billing_country_id" class="Magento\Customer\Ui\Component\Listing\Column\AttributeColumn">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -427,7 +427,7 @@
                 </item>
             </argument>
         </column>
-        <column name="region" >
+        <column name="billing_region">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -513,7 +513,7 @@
                 </item>
             </argument>
         </column>
-        <column name="billing_address_full">
+        <column name="billing_full">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -527,7 +527,7 @@
                 </item>
             </argument>
         </column>
-        <column name="shipping_address_full">
+        <column name="shipping_full">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -585,7 +585,7 @@
                 </item>
             </argument>
         </column>
-        <column name="street">
+        <column name="billing_street">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -599,7 +599,7 @@
                 </item>
             </argument>
         </column>
-        <column name="city">
+        <column name="billing_city">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -614,7 +614,7 @@
                 </item>
             </argument>
         </column>
-        <column name="fax">
+        <column name="billing_fax">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -629,7 +629,7 @@
                 </item>
             </argument>
         </column>
-        <column name="vat_id">
+        <column name="billing_vat_id">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -644,7 +644,7 @@
                 </item>
             </argument>
         </column>
-        <column name="company">
+        <column name="billing_company">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
