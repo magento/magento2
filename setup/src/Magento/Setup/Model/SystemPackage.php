@@ -79,6 +79,13 @@ class SystemPackage
             $versions[] = ['id' => $version, 'name' => 'Version ' . $version];
         }
 
+        if ($systemPackageInfo[InfoCommand::CURRENT_VERSION]) {
+            $versions[] = [
+                'id' => $systemPackageInfo[InfoCommand::CURRENT_VERSION],
+                'name' => 'Version ' . $systemPackageInfo[InfoCommand::CURRENT_VERSION]
+            ];
+        }
+
         if (count($versions) > 1) {
             $versions[0]['name'] .= ' (latest)';
         }
