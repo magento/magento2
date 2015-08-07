@@ -16,14 +16,16 @@
                                 <item name="subtotal" xsi:type="array">
                                     <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/subtotal</item>
                                     <item name="config" xsi:type="array">
-                                        <item name="excludingTaxMessage" xsi:type="string">Excl. Tax</item>
-                                        <item name="includingTaxMessage" xsi:type="string">Incl. Tax</item>
+                                        <item name="template" xsi:type="string">Magento_Tax/checkout/summary/subtotal</item>
+                                        <item name="excludingTaxMessage" xsi:type="string">(Excl. Tax)</item>
+                                        <item name="includingTaxMessage" xsi:type="string">(Incl. Tax)</item>
                                     </item>
                                 </item>
                                 <item name="shipping" xsi:type="array">
-                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/shipping</item>
+                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/cart/totals/shipping</item>
                                     <item name="sortOrder" xsi:type="string">20</item>
                                     <item name="config" xsi:type="array">
+                                        <item name="template" xsi:type="string">Magento_Tax/checkout/cart/totals/shipping</item>
                                         <item name="excludingTaxMessage" xsi:type="string">Excl. Tax</item>
                                         <item name="includingTaxMessage" xsi:type="string">Incl. Tax</item>
                                     </item>
@@ -36,8 +38,9 @@
                                     </item>
                                 </item>
                                 <item name="tax" xsi:type="array">
-                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/tax</item>
+                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/cart/totals/tax</item>
                                     <item name="config" xsi:type="array">
+                                        <item name="template" xsi:type="string">Magento_Tax/checkout/cart/totals/tax</item>
                                         <item name="title" xsi:type="string">Tax</item>
                                     </item>
                                 </item>

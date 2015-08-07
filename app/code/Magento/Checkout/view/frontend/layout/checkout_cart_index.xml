@@ -129,7 +129,7 @@
                                             <item name="component" xsi:type="string">uiComponent</item>
                                             <item name="displayArea" xsi:type="string">totals</item>
                                             <item name="config" xsi:type="array">
-                                                <item name="template" xsi:type="string">Magento_Checkout/summary/totals</item>
+                                                <item name="template" xsi:type="string">Magento_Checkout/cart/totals</item>
                                             </item>
                                             <item name="children" xsi:type="array">
                                                 <!-- sort order for this totals is configured on admin panel-->
@@ -144,7 +144,7 @@
                                                 <item name="shipping" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Checkout/js/view/cart/totals/shipping</item>
                                                     <item name="config" xsi:type="array">
-                                                        <item name="title" xsi:type="string">Shipping &amp; Handling </item>
+                                                        <item name="title" xsi:type="string">Shipping</item>
                                                         <item name="template" xsi:type="string">Magento_Checkout/cart/totals/shipping</item>
                                                     </item>
                                                 </item>
