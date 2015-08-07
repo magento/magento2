@@ -49,6 +49,13 @@ class Reader
     protected $fileIteratorFactory;
 
     /**
+     * Cache storage
+     *
+     * @var array
+     */
+    protected $cache = [];
+
+    /**
      * @param Dir $moduleDirs
      * @param ModuleListInterface $moduleList
      * @param Filesystem $filesystem
@@ -74,6 +81,9 @@ class Reader
      */
     public function getConfigurationFiles($filename)
     {
+        if (isset($this->cache[$filename])) {
+            return $this->cache[$filename];
+        }
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
             $file = $this->getModuleDir('etc', $moduleName) . '/' . $filename;
@@ -82,7 +92,7 @@ class Reader
                 $result[] = $path;
             }
         }
-        return $this->fileIteratorFactory->create($this->modulesDirectory, $result);
+        return $this->cache[$filename] = $this->fileIteratorFactory->create($this->modulesDirectory, $result);
     }
 
     /**
