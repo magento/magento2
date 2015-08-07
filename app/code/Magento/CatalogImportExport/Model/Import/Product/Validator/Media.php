@@ -91,23 +91,6 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
                     ]);
                     $valid = false;
                 }
-                if ($valid) {
-                    if ($this->checkValidUrl($attribute)) {
-                        $valid = $this->checkUrlExists($attribute);
-                        if (!$valid) {
-                            $this->_addMessages([
-                                sprintf($this->context->retrieveMessageTemplate(self::ERROR_MEDIA_URL_NOT_ACCESSIBLE), $attribute)
-                            ]);
-                        }
-                    } else {
-                        $valid = $this->checkUrlExists($attribute);
-                        if (!$valid) {
-                            $this->_addMessages([
-                                sprintf($this->context->retrieveMessageTemplate(self::ERROR_MEDIA_PATH_NOT_ACCESSIBLE), $attribute)
-                            ]);
-                        }
-                    }
-                }
             }
         }
         if (isset($value[self::ADDITIONAL_IMAGES]) && strlen($value[self::ADDITIONAL_IMAGES])) {
