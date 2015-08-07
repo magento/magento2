@@ -134,4 +134,34 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($qty, $this->_block->getProductStockQty($productMock));
     }
+
+    /**
+     * @dataProvider getVariationWizardDataProvider
+     * @param string $wizardBlockName
+     * @param string $wizardHtml
+     */
+    public function testGetVariationWizard($wizardBlockName, $wizardHtml)
+    {
+        $initData = ['some-key' => 'some-value'];
+
+        $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
+        $wizardBlock = $this->getMock('Magento\Ui\Block\Component\StepsWizard', [], [], '', false);
+        $layout->expects($this->any())->method('getChildName')->with(null, 'variation-steps-wizard')
+            ->willReturn($wizardBlockName);
+        $layout->expects($this->any())->method('getBlock')->with($wizardBlockName)->willReturn($wizardBlock);
+        $wizardBlock->expects($this->any())->method('setInitData')->with($initData);
+        $wizardBlock->expects($this->any())->method('toHtml')->willReturn($wizardHtml);
+
+        $this->_block->setLayout($layout);
+
+        $this->assertEquals($wizardHtml, $this->_block->getVariationWizard($initData));
+    }
+
+    /**
+     * @return array
+     */
+    public function getVariationWizardDataProvider()
+    {
+        return [['WizardBlockName', 'WizardHtml'], ['', '']];
+    }
 }

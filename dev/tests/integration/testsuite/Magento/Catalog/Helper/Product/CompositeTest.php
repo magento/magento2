@@ -45,7 +45,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderConfigureResult()
     {
-        $configureResult = new \Magento\Framework\Object();
+        $configureResult = new \Magento\Framework\DataObject();
         $configureResult->setOk(true)
             ->setProductId(1)
             ->setCurrentCustomerId(1);
@@ -60,7 +60,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderConfigureResultNotOK()
     {
-        $configureResult = new \Magento\Framework\Object();
+        $configureResult = new \Magento\Framework\DataObject();
         $configureResult->setError(true)
             ->setMessage('Test Message');
 

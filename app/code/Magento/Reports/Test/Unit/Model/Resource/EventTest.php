@@ -215,11 +215,11 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->connectionMock
-            ->expects($this->at(3))
+            ->expects($this->at(1))
             ->method('fetchCol')
             ->willReturn(1);
         $this->connectionMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('delete');
         $this->connectionMock
             ->expects($this->any())
@@ -227,11 +227,11 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->willReturn($selectMock);
 
         $selectMock
-            ->expects($this->exactly(2))
+            ->expects($this->any())
             ->method('from')
             ->willReturnSelf();
         $selectMock
-            ->expects($this->exactly(2))
+            ->expects($this->any())
             ->method('joinLeft')
             ->willReturnSelf();
         $selectMock
@@ -239,7 +239,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->willReturnSelf();
         $selectMock
-            ->expects($this->exactly(2))
+            ->expects($this->any())
             ->method('limit')
             ->willReturnSelf();
 

@@ -36,15 +36,6 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCreateNull()
-    {
-        $this->objectManagerMock->expects($this->never())
-            ->method('get');
-        $this->assertNull($this->model->create([]));
-        $this->assertNull($this->model->create(['something']));
-        $this->assertNull($this->model->create(['active' => null]));
-    }
-
     public function testCreate()
     {
         $cacheAdapterMock = $this->getMockBuilder('Magento\Framework\Cache\FrontendInterface')
@@ -56,17 +47,17 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
         $connectionAdapterMock = $this->getMockBuilder('Magento\Framework\App\Resource\ConnectionAdapterInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterInstanceMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterInstanceMock->expects($this->once())
+        $connectionMock->expects($this->once())
             ->method('setCacheAdapter')
             ->with($cacheAdapterMock)
             ->willReturnSelf();
         $connectionAdapterMock->expects($this->once())
             ->method('getConnection')
             ->with($loggerMock)
-            ->will($this->returnValue($adapterInstanceMock));
+            ->will($this->returnValue($connectionMock));
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with('Magento\Framework\App\Resource\ConnectionAdapterInterface')
@@ -86,6 +77,6 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
                     ['Magento\Framework\App\Cache\Type\FrontendPool', $poolMock],
                 ]
             ));
-        $this->assertSame($adapterInstanceMock, $this->model->create(['active' => true]));
+        $this->assertSame($connectionMock, $this->model->create(['active' => true]));
     }
 }

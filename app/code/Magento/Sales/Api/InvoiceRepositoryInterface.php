@@ -22,6 +22,13 @@ interface InvoiceRepositoryInterface
     public function getList(\Magento\Framework\Api\SearchCriteria $criteria);
 
     /**
+     * Return Invoice object
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceInterface
+     */
+    public function create();
+
+    /**
      * Loads a specified invoice.
      *
      * @param int $id The invoice ID.

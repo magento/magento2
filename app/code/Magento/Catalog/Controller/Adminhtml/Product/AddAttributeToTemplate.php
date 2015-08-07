@@ -62,7 +62,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
             $resultJson->setJsonData($attribute->toJson());
         } catch (\Exception $e) {
-            $response = new \Magento\Framework\Object();
+            $response = new \Magento\Framework\DataObject();
             $response->setError(false);
             $response->setMessage($e->getMessage());
             $resultJson->setJsonData($response->toJson());
