@@ -15,7 +15,8 @@ define([
         defaults: {
             opened: false,
             attributes: [],
-            productMatrix: []
+            productMatrix: [],
+            productAttributesMap: null
         },
         variations: [],
         productAttributes: [],
@@ -24,6 +25,7 @@ define([
             if (this.variations.length) {
                 this.render(this.variations, this.productAttributes);
             }
+            this.initProductAttributesMap();
         },
         initObservable: function () {
             this._super().observe('actions opened attributes productMatrix');
@@ -108,11 +110,9 @@ define([
         },
         toggleList: function (rowIndex) {
             var state = false;
-
             if (rowIndex !== this.opened()) {
                 state = rowIndex;
             }
-
             this.opened(state);
 
             return this;
@@ -123,6 +123,20 @@ define([
             }
 
             return this;
+        },
+        getVariationKey: function (options) {
+            return _.pluck(options, 'value').sort().join('-');
+        },
+        getProductByOptions: function (options) {
+            return this.productAttributesMap[this.getVariationKey(options)] || null;
+        },
+        initProductAttributesMap: function () {
+            if (null === this.productAttributesMap) {
+                this.productAttributesMap = {};
+                _.each(this.variations, function(product) {
+                    this.productAttributesMap[this.getVariationKey(product.options)] = product.product_id;
+                }.bind(this));
+            }
         },
         generateImageGallery: function(variation) {
             var gallery = [];

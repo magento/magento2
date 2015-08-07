@@ -18,16 +18,24 @@ define([
     var viewModel;
     viewModel = Component.extend({
         defaults: {
+            modules: {
+                variationsComponent: '${ $.variationsComponent }'
+            },
+            countVariations: 0,
+            attributes: [],
+            sections: {},
             images: null,
             price: "",
             quantity: ""
         },
+        initObservable: function () {
+            this._super().observe('countVariations attributes sections');
+            return this;
+        },
         initialize: function () {
             var self = this;
             this._super();
-            this.attributes = ko.observableArray([]);
-            this.countVariations = ko.observable();
-            this.sections = ko.observable({
+            this.sections({
                 images: {
                     label: 'images',
                     type: ko.observable('none'),
@@ -100,11 +108,40 @@ define([
                 section.attribute(null);
             });
 
-            this.countVariations(_.reduce(this.attributes(), function (memo, attribute) {
-                return memo * attribute.chosen.length;
-            }, 1));
-
+            this.initCountVariations();
             this.bindGalleries();
+        },
+        initCountVariations: function() {
+            var variations = this.generateVariation(this.attributes());
+            var newVariations = _.map(variations, function(options) {
+                return this.variationsComponent().getVariationKey(options)
+            }.bind(this));
+            var existingVariations = _.keys(this.variationsComponent().productAttributesMap);
+            this.countVariations(_.difference(newVariations, existingVariations).length);
+        } ,
+        /**
+         * @param attributes example [['b1', 'b2'],['a1', 'a2', 'a3'],['c1', 'c2', 'c3'],['d1']]
+         * @returns {*} example [['b1','a1','c1','d1'],['b1','a1','c2','d1']...]
+         */
+        generateVariation: function (attributes) {
+            return _.reduce(attributes, function(matrix, attribute) {
+                var tmp = [];
+                _.each(matrix, function(variations){
+                    _.each(attribute.chosen, function(option){
+                        option.attribute_code = attribute.code;
+                        option.attribute_label = attribute.label;
+                        tmp.push(_.union(variations, [option]));
+                    });
+                });
+                if (!tmp.length) {
+                    return _.map(attribute.chosen, function(option){
+                        option.attribute_code = attribute.code;
+                        option.attribute_label = attribute.label;
+                        return [option];
+                    });
+                }
+                return tmp;
+            }, []);
         },
         getSectionValue: function (section, options) {
             switch (this.sections()[section].type()) {
@@ -159,6 +196,7 @@ define([
             this.validate();
             wizard.data.sections = this.sections;
             wizard.data.sectionHelper = this.getSectionValue.bind(this);
+            wizard.data.variations = this.generateVariation(this.attributes());
         },
         validate: function () {
             _.each(this.sections(), function (section) {
