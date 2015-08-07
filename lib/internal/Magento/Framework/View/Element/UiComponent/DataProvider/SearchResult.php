@@ -39,8 +39,8 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param null|\Zend_Db_Adapter_Abstract $mainTable
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resourceModel
+     * @param string $mainTable
+     * @param string $resourceModel
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -75,7 +75,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
 
     /**
      * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
-     * @return $this
+     * @return void
      */
     public function setAggregations($aggregations)
     {

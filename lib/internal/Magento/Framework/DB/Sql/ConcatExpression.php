@@ -26,17 +26,11 @@ class ConcatExpression extends \Zend_Db_Expr
     /**
      * @var string
      */
-    protected $alias;
-
-    /**
-     * @var string
-     */
     protected $separator;
 
     /**
      * @param Resource $resource
      * @param array $columns
-     * @param string $alias
      * @param string $separator
      */
     public function __construct(

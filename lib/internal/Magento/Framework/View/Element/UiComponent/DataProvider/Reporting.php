@@ -46,6 +46,11 @@ class Reporting implements ReportingInterface
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $this->filterPool->applyFilters($collection, $searchCriteria);
+        foreach ($searchCriteria->getSortOrders() as $sortOrder) {
+            if ($sortOrder->getField()) {
+                $collection->setOrder($sortOrder->getField(), $sortOrder->getDirection());
+            }
+        }
         return $collection;
     }
 }
