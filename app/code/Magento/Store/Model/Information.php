@@ -36,7 +36,6 @@ class Information
     const XML_PATH_STORE_INFO_COUNTRY_CODE = 'general/store_information/country_id';
 
     const XML_PATH_STORE_INFO_VAT_NUMBER = 'general/store_information/merchant_vat_number';
-
     /**#@-*/
 
     /**
@@ -59,11 +58,8 @@ class Information
      * @param RegionFactory $regionFactory
      * @param CountryFactory $countryFactory
      */
-    public function __construct(
-        Renderer $renderer,
-        RegionFactory $regionFactory,
-        CountryFactory $countryFactory
-    ) {
+    public function __construct(Renderer $renderer, RegionFactory $regionFactory, CountryFactory $countryFactory)
+    {
         $this->renderer = $renderer;
         $this->regionFactory = $regionFactory;
         $this->countryFactory = $countryFactory;

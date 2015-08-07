@@ -31,10 +31,8 @@ class Renderer
      * @param EventManager $eventManager
      * @param FilterManager $filterManager
      */
-    public function __construct(
-        EventManager $eventManager,
-        FilterManager $filterManager
-    ) {
+    public function __construct(EventManager $eventManager, FilterManager $filterManager)
+    {
         $this->eventManager = $eventManager;
         $this->filterManager = $filterManager;
     }
