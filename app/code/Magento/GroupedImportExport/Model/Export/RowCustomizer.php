@@ -10,7 +10,11 @@ use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 class RowCustomizer implements RowCustomizerInterface
 {
     /**
-     * @inheritdoc
+     * Prepare data for export
+     *
+     * @param mixed $collection
+     * @param int $productIds
+     * @return mixed
      */
     public function prepareData($collection, $productIds)
     {
@@ -18,7 +22,10 @@ class RowCustomizer implements RowCustomizerInterface
     }
 
     /**
-     * @inheritdoc
+     * Set headers columns
+     *
+     * @param array $columns
+     * @return mixed
      */
     public function addHeaderColumns($columns)
     {
@@ -32,7 +39,11 @@ class RowCustomizer implements RowCustomizerInterface
     }
 
     /**
-     * @inheritdoc
+     * Add data for export
+     *
+     * @param array $dataRow
+     * @param int $productId
+     * @return mixed
      */
     public function addData($dataRow, $productId)
     {
@@ -40,7 +51,11 @@ class RowCustomizer implements RowCustomizerInterface
     }
 
     /**
-     * @inheritdoc
+     * Calculate the largest links block
+     *
+     * @param array $additionalRowsCount
+     * @param int $productId
+     * @return mixed
      */
     public function getAdditionalRowsCount($additionalRowsCount, $productId)
     {
