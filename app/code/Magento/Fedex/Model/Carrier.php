@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Framework\Xml\Security;
+use Magento\Fedex\Helper\Config;
 
 /**
  * Fedex shipping implementation
@@ -119,6 +120,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_productCollectionFactory;
 
     /**
+     * @var Config
+     */
+    protected $configHelper;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -137,6 +143,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Dir\Reader $configReader
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param Config $configHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -160,6 +167,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Dir\Reader $configReader,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        Config $configHelper,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
@@ -186,6 +194,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->_shipServiceWsdl = $wsdlBasePath . 'ShipService_v10.wsdl';
         $this->_rateServiceWsdl = $wsdlBasePath . 'RateService_v10.wsdl';
         $this->_trackServiceWsdl = $wsdlBasePath . 'TrackService_v5.wsdl';
+        $this->configHelper = $configHelper;
     }
 
     /**
@@ -560,7 +569,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $rate->setCarrier($this->_code);
                 $rate->setCarrierTitle($this->getConfigData('title'));
                 $rate->setMethod($method);
-                $rate->setMethodTitle($this->getCode('method', $method));
+                $rate->setMethodTitle($this->configHelper->getCode('method', $method));
                 $rate->setCost($costArr[$method]);
                 $rate->setPrice($price);
                 $result->append($rate);
@@ -759,7 +768,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $rate->setCarrier('fedex');
                 $rate->setCarrierTitle($this->getConfigData('title'));
                 $rate->setMethod($method);
-                $rate->setMethodTitle($this->getCode('method', $method));
+                $rate->setMethodTitle($this->configHelper->getCode('method', $method));
                 $rate->setCost($costArr[$method]);
                 $rate->setPrice($price);
                 $result->append($rate);
@@ -767,168 +776,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return $result;
-    }
-
-    /**
-     * Get configuration data of carrier
-     *
-     * @param string $type
-     * @param string $code
-     * @return array|false
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function getCode($type, $code = '')
-    {
-        $codes = [
-            'method' => [
-                'EUROPE_FIRST_INTERNATIONAL_PRIORITY' => __('Europe First Priority'),
-                'FEDEX_1_DAY_FREIGHT' => __('1 Day Freight'),
-                'FEDEX_2_DAY_FREIGHT' => __('2 Day Freight'),
-                'FEDEX_2_DAY' => __('2 Day'),
-                'FEDEX_2_DAY_AM' => __('2 Day AM'),
-                'FEDEX_3_DAY_FREIGHT' => __('3 Day Freight'),
-                'FEDEX_EXPRESS_SAVER' => __('Express Saver'),
-                'FEDEX_GROUND' => __('Ground'),
-                'FIRST_OVERNIGHT' => __('First Overnight'),
-                'GROUND_HOME_DELIVERY' => __('Home Delivery'),
-                'INTERNATIONAL_ECONOMY' => __('International Economy'),
-                'INTERNATIONAL_ECONOMY_FREIGHT' => __('Intl Economy Freight'),
-                'INTERNATIONAL_FIRST' => __('International First'),
-                'INTERNATIONAL_GROUND' => __('International Ground'),
-                'INTERNATIONAL_PRIORITY' => __('International Priority'),
-                'INTERNATIONAL_PRIORITY_FREIGHT' => __('Intl Priority Freight'),
-                'PRIORITY_OVERNIGHT' => __('Priority Overnight'),
-                'SMART_POST' => __('Smart Post'),
-                'STANDARD_OVERNIGHT' => __('Standard Overnight'),
-                'FEDEX_FREIGHT' => __('Freight'),
-                'FEDEX_NATIONAL_FREIGHT' => __('National Freight'),
-            ],
-            'dropoff' => [
-                'REGULAR_PICKUP' => __('Regular Pickup'),
-                'REQUEST_COURIER' => __('Request Courier'),
-                'DROP_BOX' => __('Drop Box'),
-                'BUSINESS_SERVICE_CENTER' => __('Business Service Center'),
-                'STATION' => __('Station'),
-            ],
-            'packaging' => [
-                'FEDEX_ENVELOPE' => __('FedEx Envelope'),
-                'FEDEX_PAK' => __('FedEx Pak'),
-                'FEDEX_BOX' => __('FedEx Box'),
-                'FEDEX_TUBE' => __('FedEx Tube'),
-                'FEDEX_10KG_BOX' => __('FedEx 10kg Box'),
-                'FEDEX_25KG_BOX' => __('FedEx 25kg Box'),
-                'YOUR_PACKAGING' => __('Your Packaging'),
-            ],
-            'containers_filter' => [
-                [
-                    'containers' => ['FEDEX_ENVELOPE', 'FEDEX_PAK'],
-                    'filters' => [
-                        'within_us' => [
-                            'method' => [
-                                'FEDEX_EXPRESS_SAVER',
-                                'FEDEX_2_DAY',
-                                'FEDEX_2_DAY_AM',
-                                'STANDARD_OVERNIGHT',
-                                'PRIORITY_OVERNIGHT',
-                                'FIRST_OVERNIGHT',
-                            ],
-                        ],
-                        'from_us' => [
-                            'method' => ['INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY'],
-                        ],
-                    ],
-                ],
-                [
-                    'containers' => ['FEDEX_BOX', 'FEDEX_TUBE'],
-                    'filters' => [
-                        'within_us' => [
-                            'method' => [
-                                'FEDEX_2_DAY',
-                                'FEDEX_2_DAY_AM',
-                                'STANDARD_OVERNIGHT',
-                                'PRIORITY_OVERNIGHT',
-                                'FIRST_OVERNIGHT',
-                                'FEDEX_FREIGHT',
-                                'FEDEX_1_DAY_FREIGHT',
-                                'FEDEX_2_DAY_FREIGHT',
-                                'FEDEX_3_DAY_FREIGHT',
-                                'FEDEX_NATIONAL_FREIGHT',
-                            ],
-                        ],
-                        'from_us' => [
-                            'method' => ['INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY'],
-                        ],
-                    ]
-                ],
-                [
-                    'containers' => ['FEDEX_10KG_BOX', 'FEDEX_25KG_BOX'],
-                    'filters' => [
-                        'within_us' => [],
-                        'from_us' => ['method' => ['INTERNATIONAL_PRIORITY']],
-                    ]
-                ],
-                [
-                    'containers' => ['YOUR_PACKAGING'],
-                    'filters' => [
-                        'within_us' => [
-                            'method' => [
-                                'FEDEX_GROUND',
-                                'GROUND_HOME_DELIVERY',
-                                'SMART_POST',
-                                'FEDEX_EXPRESS_SAVER',
-                                'FEDEX_2_DAY',
-                                'FEDEX_2_DAY_AM',
-                                'STANDARD_OVERNIGHT',
-                                'PRIORITY_OVERNIGHT',
-                                'FIRST_OVERNIGHT',
-                                'FEDEX_FREIGHT',
-                                'FEDEX_1_DAY_FREIGHT',
-                                'FEDEX_2_DAY_FREIGHT',
-                                'FEDEX_3_DAY_FREIGHT',
-                                'FEDEX_NATIONAL_FREIGHT',
-                            ],
-                        ],
-                        'from_us' => [
-                            'method' => [
-                                'INTERNATIONAL_FIRST',
-                                'INTERNATIONAL_ECONOMY',
-                                'INTERNATIONAL_PRIORITY',
-                                'INTERNATIONAL_GROUND',
-                                'FEDEX_FREIGHT',
-                                'FEDEX_1_DAY_FREIGHT',
-                                'FEDEX_2_DAY_FREIGHT',
-                                'FEDEX_3_DAY_FREIGHT',
-                                'FEDEX_NATIONAL_FREIGHT',
-                                'INTERNATIONAL_ECONOMY_FREIGHT',
-                                'INTERNATIONAL_PRIORITY_FREIGHT',
-                            ],
-                        ],
-                    ]
-                ],
-            ],
-            'delivery_confirmation_types' => [
-                'NO_SIGNATURE_REQUIRED' => __('Not Required'),
-                'ADULT' => __('Adult'),
-                'DIRECT' => __('Direct'),
-                'INDIRECT' => __('Indirect'),
-            ],
-            'unit_of_measure' => [
-                'LB' => __('Pounds'),
-                'KG' => __('Kilograms'),
-            ],
-        ];
-
-        if (!isset($codes[$type])) {
-            return false;
-        } elseif ('' === $code) {
-            return $codes[$type];
-        }
-
-        if (!isset($codes[$type][$code])) {
-            return false;
-        } else {
-            return $codes[$type][$code];
-        }
     }
 
     /**
@@ -1193,7 +1040,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $allowed = explode(',', $this->getConfigData('allowed_methods'));
         $arr = [];
         foreach ($allowed as $k) {
-            $arr[$k] = $this->getCode('method', $k);
+            $arr[$k] = $this->configHelper->getCode('method', $k);
         }
 
         return $arr;
@@ -1511,7 +1358,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getContainerTypesAll()
     {
-        return $this->getCode('packaging');
+        return $this->configHelper->getCode('packaging');
     }
 
     /**
@@ -1521,7 +1368,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getContainerTypesFilter()
     {
-        return $this->getCode('containers_filter');
+        return $this->configHelper->getCode('containers_filter');
     }
 
     /**
@@ -1533,6 +1380,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
     {
-        return $this->getCode('delivery_confirmation_types');
+        return $this->configHelper->getCode('delivery_confirmation_types');
     }
 }
