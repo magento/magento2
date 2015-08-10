@@ -100,7 +100,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_GROUP_TITLE_NOT_FOUND => 'Group titles not found for downloadable products',
         self::ERROR_OPTION_NO_TITLE => 'Option no title',
         self::ERROR_MOVE_FILE => 'Error move file',
-        self::ERROR_COLS_IS_EMPTY => 'Cols for downloadable products is empty'
+        self::ERROR_COLS_IS_EMPTY => 'Missing sample and links data for the downloadable product'
     ];
 
     /**
