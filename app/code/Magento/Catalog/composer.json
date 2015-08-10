@@ -10,7 +10,6 @@
         "magento/module-customer": "1.0.0-beta",
         "magento/module-theme": "1.0.0-beta",
         "magento/module-checkout": "1.0.0-beta",
-        "magento/module-log": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-widget": "1.0.0-beta",
         "magento/module-wishlist": "1.0.0-beta",
