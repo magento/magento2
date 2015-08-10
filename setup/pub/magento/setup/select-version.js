@@ -15,6 +15,7 @@ angular.module('select-version', ['ngStorage'])
         $scope.upgradeProcessError = false;
         $scope.componentsProcessed = false;
         $scope.componentsProcessError = false;
+        $scope.tryAgain = 0;
 
         $http.get('index.php/select-version/systemPackage', {'responseType' : 'json'})
             .success(function (data) {
@@ -24,28 +25,37 @@ angular.module('select-version', ['ngStorage'])
                     $scope.packages[0].version = $scope.versions[0].id;
                     $scope.selectedOption = $scope.versions[0].id;
                     $scope.readyForNext = true;
+
                 } else {
                     $scope.upgradeProcessError = true;
                 }
                 $scope.upgradeProcessed = true;
+                $scope.tryAgain++;
             })
             .error(function (data) {
                 $scope.upgradeProcessError = true;
+                $scope.tryAgain++;
             });
 
         $scope.updateComponents = {
             yes: false,
             no: true
         };
+
         $scope.$watch('updateComponents.no', function() {
+
             if (angular.equals($scope.updateComponents.no, true)) {
                 $scope.updateComponents.yes = false;
+                if ($scope.tryAgain < 0) {
+                    $scope.tryAgain++;
+                }
             }
         });
 
         $scope.$watch('updateComponents.yes', function() {
             if (angular.equals($scope.updateComponents.yes, true)) {
                 $scope.updateComponents.no = false;
+                $scope.tryAgain--;
                 if (!$scope.componentsProcessed && !$scope.componentsProcessError) {
                     $scope.readyForNext = false;
                     $http.get('index.php/other-components-grid/components', {'responseType': 'json'}).
@@ -66,8 +76,10 @@ angular.module('select-version', ['ngStorage'])
                                 $scope.componentsProcessError = true;
                             }
                             $scope.componentsProcessed = true;
+                            $scope.tryAgain++;
                         })
                         .error(function (data) {
+                            $scope.tryAgain++;
                             $scope.componentsProcessError = true;
                         });
                 }
