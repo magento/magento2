@@ -6,6 +6,7 @@
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 {
@@ -144,6 +145,11 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $this->_objectManager->create('Magento\Framework\Filesystem');
         $rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $this->_entityAdapter->getErrorAggregator()->initValidationStrategy(
+            ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR,
+            10
+        );
 
         // set fixture CSV file
         $result = $this->_entityAdapter->setSource(
