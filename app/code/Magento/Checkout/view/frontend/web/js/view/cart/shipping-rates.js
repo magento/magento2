@@ -26,7 +26,6 @@ define(
         checkoutData
     ) {
         'use strict';
-
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/cart/shipping-rates'
@@ -82,11 +81,15 @@ define(
             /**
              * Set shipping method.
              * @param {String} methodData
-             * @returns void
+             * @param {Object} event
+             * @param {Object} context
+             * @returns bool
              */
-            selectShippingMethod: function (methodData) {
+            selectShippingMethod: function (methodData, event, context) {
                 selectShippingMethodAction(methodData);
                 checkoutData.setSelectedShippingRate(methodData['carrier_code'] + '_' + methodData['method_code']);
+                context.setShippingMethod();
+                return true;
             },
 
             /**
