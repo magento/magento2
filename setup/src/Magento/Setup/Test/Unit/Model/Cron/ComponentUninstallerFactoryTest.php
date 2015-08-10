@@ -55,9 +55,13 @@ class ComponentUninstallerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateTheme()
     {
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
-        $objectManager->expects($this->once())->method('create')->with('');
+        $themeUninstaller = $this->getMock('Magento\Theme\Model\Theme\ThemeUinstaller');
+        $objectManager->expects($this->once())
+            ->method('create')
+            ->with('Magento\Theme\Model\Theme\ThemeUninstaller')
+            ->willReturn($themeUninstaller);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $this->serviceLocator->expects($this->never())->method($this->anything());
-        $this->factory->create(JobComponentUninstall::COMPONENT_THEME);
+        $this->assertSame($themeUninstaller, $this->factory->create(JobComponentUninstall::COMPONENT_THEME));
     }
 }
