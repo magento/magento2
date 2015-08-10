@@ -349,22 +349,19 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function isRowValidSample(array $rowData)
     {
         $result = false;
-        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) &&
-            $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '' &&
-            $this->sampleGroupTitle($rowData) == ''
-        ) {
+        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])
+            && $rowData[self::COL_DOWNLOADABLE_SAMPLES] != ''
+            && $this->sampleGroupTitle($rowData) == '') {
             $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
             $result = true;
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
-            $rowData[self::COL_DOWNLOADABLE_LINKS] != '')
-        {
-            $error = $this->isTitle($this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]));
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])
+            && $rowData[self::COL_DOWNLOADABLE_LINKS] != '') {
+            $result = $this->isTitle($this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]));
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) &&
-            $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '')
-        {
-            $error = $this->isTitle($this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES]));
+        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])
+            && $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '') {
+            $result = $this->isTitle($this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES]));
         }
         return $result;
 
@@ -397,10 +394,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function isRowDownloadableEmptyOptions(array $rowData)
     {
-        $result = isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
-            $rowData[self::COL_DOWNLOADABLE_LINKS] == '' &&
-            isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) &&
-            $rowData[self::COL_DOWNLOADABLE_SAMPLES] == '';
+        $result = isset($rowData[self::COL_DOWNLOADABLE_LINKS])
+            && $rowData[self::COL_DOWNLOADABLE_LINKS] == ''
+            && isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])
+            && $rowData[self::COL_DOWNLOADABLE_SAMPLES] == '';
         return $result;
     }
 
@@ -442,7 +439,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         return [
             'samples_title' => $this->sampleGroupTitle($rowData),
             'links_title' => $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE),
-            'links_purchased_separately' => $this->linksAdditionalAttributes($rowData, 'purchased_separately', self::DEFAULT_PURCHASED_SEPARATELY),
+            'links_purchased_separately' => $this->linksAdditionalAttributes(
+                $rowData,
+                'purchased_separately',
+                self::DEFAULT_PURCHASED_SEPARATELY
+            )
         ];
     }
 
@@ -578,10 +579,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         );
         foreach ($options as $option) {
             $existOption = $this->fillExistOptions($base, $option, $existingOptions);
-            if (empty($existOption))
+            if (empty($existOption)) {
                 $result[] = array_replace($base, $option);
-            else
+            } else {
                 $result[] = $existOption;
+            }
         }
         return $result;
     }
@@ -598,14 +600,13 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $result = [];
         foreach ($existingOptions as $existingOption) {
-            if ($option['link_url'] == $existingOption['link_url'] &&
-                $option['link_file'] == $existingOption['link_file'] &&
-                $option['link_type'] == $existingOption['link_type'] &&
-                $option['sample_url'] == $existingOption['sample_url'] &&
-                $option['sample_file'] == $existingOption['sample_file'] &&
-                $option['sample_type'] == $existingOption['sample_type'] &&
-                $option['product_id'] == $existingOption['product_id']
-            ) {
+            if ($option['link_url'] == $existingOption['link_url']
+                && $option['link_file'] == $existingOption['link_file']
+                && $option['link_type'] == $existingOption['link_type']
+                && $option['sample_url'] == $existingOption['sample_url']
+                && $option['sample_file'] == $existingOption['sample_file']
+                && $option['sample_type'] == $existingOption['sample_type']
+                && $option['product_id'] == $existingOption['product_id']) {
                 $result = array_replace($base, $option, $existingOption);
             }
         }
@@ -631,11 +632,13 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         );
         foreach ($options as $option) {
             $existOption = $this->fillExistOptions($this->dataLinkTitle, $option, $existingOptions);
-            if (!empty($existOption))
+            if (!empty($existOption)) {
                 $result['title'][] = $existOption;
+            }
             $existOption = $this->fillExistOptions($this->dataLinkPrice, $option, $existingOptions);
-            if (!empty($existOption))
+            if (!empty($existOption)) {
                 $result['price'][] = $existOption;
+            }
         }
         return $result;
     }
