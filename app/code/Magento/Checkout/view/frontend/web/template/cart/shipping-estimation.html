@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<form method="post" id="shipping-zip-form" data-bind="blockLoader: isLoading">
+<form method="post" id="shipping-zip-form">
     <fieldset class="fieldset estimate">
         <legend class="legend">
             <span data-bind="text: isVirtual ? $t('Estimate Tax') : $t('Estimate Shipping and Tax') "></span>
@@ -13,12 +13,5 @@
         <!-- ko foreach: getRegion('address-fieldsets') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
-        <div class="actions-toolbar">
-            <div class="primary">
-                <button type="submit" class="action quote primary" data-bind="click: getEstimationInfo">
-                    <span data-bind="text: $t('Get a Quote')"></span>
-                </button>
-            </div>
-        </div>
     </fieldset>
 </form>

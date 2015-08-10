@@ -30,7 +30,7 @@ define(
             defaults: {
                 template: 'Magento_Checkout/cart/shipping-rates'
             },
-            isLoading: ko.observable(false),
+            isLoading: shippingService.isLoading,
             shippingRates: shippingService.getShippingRates(),
             shippingRateGroups: ko.observableArray([]),
             selectedShippingMethod: ko.computed(function () {
@@ -97,13 +97,7 @@ define(
              * @returns void
              */
             setShippingMethod: function () {
-                var self = this;
-                this.isLoading(true);
-                setShippingInformationAction().done(
-                    function () {
-                        self.isLoading(false);
-                    }
-                );
+                setShippingInformationAction();
             }
         });
     }
