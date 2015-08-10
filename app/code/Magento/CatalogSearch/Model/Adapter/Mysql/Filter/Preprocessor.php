@@ -86,57 +86,54 @@ class Preprocessor implements PreprocessorInterface
     private function processQueryWithField(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
     {
         $currentStoreId = $this->scopeResolver->getScope()->getId();
-
+        $select = null;
         $attribute = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $filter->getField());
-        $select = $this->connection->select();
         $table = $attribute->getBackendTable();
         if ($filter->getField() == 'price') {
-            $query = str_replace('price', 'min_price', $query);
-            $select->from(['main_table' => $this->resource->getTableName('catalog_product_index_price')], 'entity_id')
-                ->where($query);
+            $filterQuery = str_replace('`price`', '`price_index`.`min_price`', $query);
+            return $filterQuery;
         } elseif ($filter->getField() == 'category_ids') {
-            return 'category_index.category_id = ' . $filter->getValue();
-        } else {
-            if ($attribute->isStatic()) {
-                $select->from(['main_table' => $table], 'entity_id')
-                    ->where($query);
+            return 'category_ids_index.category_id = ' . $filter->getValue();
+        } elseif ($attribute->isStatic()) {
+            $select = $this->connection->select();
+            $select->from(['main_table' => $table], 'entity_id')
+                ->where($query);
+        } elseif ($filter->getType() == FilterInterface::TYPE_TERM) {
+            if (is_array($filter->getValue())) {
+                $value = sprintf(
+                    '%s IN (%s)',
+                    ($isNegation ? 'NOT' : ''),
+                    implode(',', $filter->getValue())
+                );
             } else {
-                if ($filter->getType() == FilterInterface::TYPE_TERM) {
-                    if (is_array($filter->getValue())) {
-                        $value = sprintf(
-                            '%s IN (%s)',
-                            ($isNegation ? 'NOT' : ''),
-                            implode(',', $filter->getValue())
-                        );
-                    } else {
-                        $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
-                    }
-                    $filterQuery = sprintf(
-                        'cpie.store_id = %d AND cpie.attribute_id = %d AND cpie.value %s',
-                        $this->scopeResolver->getScope()->getId(),
-                        $attribute->getId(),
-                        $value
-                    );
-                    $queryContainer->addFilter($filterQuery);
-                    return '';
-                }
-                $ifNullCondition = $this->connection->getIfNullSql('current_store.value', 'main_table.value');
-
-                $select->from(['main_table' => $table], 'entity_id')
-                    ->joinLeft(
-                        ['current_store' => $table],
-                        'current_store.attribute_id = main_table.attribute_id AND current_store.store_id = '
-                        . $currentStoreId,
-                        null
-                    )
-                    ->columns([$filter->getField() => $ifNullCondition])
-                    ->where(
-                        'main_table.attribute_id = ?',
-                        $attribute->getAttributeId()
-                    )
-                    ->where('main_table.store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
-                    ->having($query);
+                $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
             }
+            $filterQuery = sprintf(
+                'cpie.store_id = %d AND cpie.attribute_id = %d AND cpie.value %s',
+                $this->scopeResolver->getScope()->getId(),
+                $attribute->getId(),
+                $value
+            );
+            $queryContainer->addFilter($filterQuery);
+            return '';
+        } else {
+            $select = $this->connection->select();
+            $ifNullCondition = $this->connection->getIfNullSql('current_store.value', 'main_table.value');
+
+            $select->from(['main_table' => $table], 'entity_id')
+                ->joinLeft(
+                    ['current_store' => $table],
+                    'current_store.attribute_id = main_table.attribute_id AND current_store.store_id = '
+                    . $currentStoreId,
+                    null
+                )
+                ->columns([$filter->getField() => $ifNullCondition])
+                ->where(
+                    'main_table.attribute_id = ?',
+                    $attribute->getAttributeId()
+                )
+                ->where('main_table.store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+                ->having($query);
         }
 
         return 'search_index.entity_id IN (
