@@ -591,7 +591,7 @@
     }
 
     .fields.group {
-        .clearfix();
+        .mixin-clearfix();
         .field {
             box-sizing: border-box;
             float: left;
@@ -611,16 +611,16 @@
     }
 
     .addon {
-        .vendor-prefix-display(inline-flex);
-        .vendor-prefix-flex-wrap(nowrap);
+        .mixin-vendor-prefix-display(inline-flex);
+        .mixin-vendor-prefix-flex-wrap(nowrap);
         padding: 0;
         width: 100%;
 
         textarea,
         select,
         input {
-            .vendor-prefix-order(2);
-            .vendor-prefix-flex-basis(100%);
+            .mixin-vendor-prefix-order(2);
+            .mixin-vendor-prefix-flex-basis(100%);
             display: inline-block;
             margin: 0;
             width: auto;
@@ -628,7 +628,7 @@
 
         .addbefore,
         .addafter {
-            .vendor-prefix-order(3);
+            .mixin-vendor-prefix-order(3);
             display: inline-block;
             .mixin-form-element-input(@_type: input-text);
             width: auto;
@@ -638,7 +638,7 @@
 
         .addbefore {
             float: left;
-            .vendor-prefix-order(1);
+            .mixin-vendor-prefix-order(1);
         }
     }
 
@@ -736,7 +736,7 @@
     @_type-inline-label-align,
     @_vertical-indent
 ) {
-    .clearfix();
+    .mixin-clearfix();
     .css(margin, @_type-inline-margin);
     box-sizing: border-box;
 

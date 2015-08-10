@@ -426,11 +426,11 @@
                 .css(color, @_bg);
                 .css(left, @_left);
                 .css(top, -@_size*2);
-                .arrow(up, @_size, @_bg);
+                .mixin-arrow(up, @_size, @_bg);
                 z-index: 4;
             }
             &:after {
-                .arrow(up, @_outer-size, @_border);
+                .mixin-arrow(up, @_outer-size, @_border);
                 .css(color, @_border);
                 .css(left, @_outer-left);
                 .css(top, -@_outer-size*2);
@@ -451,7 +451,7 @@
                 overflow: hidden;
                 position: absolute;
                 z-index: 4;
-                .arrow(up, @_size, @_bg);
+                .mixin-arrow(up, @_size, @_bg);
             }
         }
     }
@@ -468,7 +468,7 @@
                 overflow: hidden;
                 position: absolute;
                 z-index: 4;
-                .arrow(up, @_size, @_border);
+                .mixin-arrow(up, @_size, @_border);
             }
         }
     }

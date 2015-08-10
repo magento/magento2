@@ -422,7 +422,7 @@
 //  ---------------------------------------------
 
 @abs-hidden: {
-    .visibility-hidden();
+    .mixin-visibility-hidden();
 };
 
 .abs-hidden {
@@ -434,7 +434,7 @@
 //  ---------------------------------------------
 
 @abs-visually-hidden: {
-    .visually-hidden();
+    .mixin-visually-hidden();
 };
 
 .abs-visually-hidden {
@@ -470,7 +470,7 @@
 //  ---------------------------------------------
 
 @abs-add-clearfix: {
-    .clearfix();
+    .mixin-clearfix();
 };
 
 .abs-add-clearfix {
@@ -724,7 +724,7 @@
     .abs-forms-general-desktop {
         max-width: 500px;
         .legend {
-            .visually-hidden();
+            .mixin-visually-hidden();
         }
         .legend + br {
             display: none;
@@ -945,7 +945,7 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .abs-col-no-prefix {
         &:before {
-            .visually-hidden();
+            .mixin-visually-hidden();
         }
     }
 }
@@ -1448,7 +1448,7 @@
 
     &:before,
     &:after {
-        .arrow(
+        .mixin-arrow(
             @_position: top,
             @_size: @checkout-tooltip-icon-arrow__font-size,
             @_color: @checkout-tooltip-content__background-color

@@ -84,7 +84,7 @@
     }
     a {
         .css(background, @_breadcrumbs-link-background);
-        .background-gradient(
+        .mixin-background-gradient(
             @_breadcrumbs-link-gradient-color-start,
             @_breadcrumbs-link-gradient-color-end,
             @_breadcrumbs-link-gradient-direction,
@@ -97,7 +97,7 @@
         .css(text-decoration, @_breadcrumbs-link-text-decoration);
         &:visited {
             .css(background, @_breadcrumbs-link-background-visited);
-            .background-gradient(
+            .mixin-background-gradient(
                 @_breadcrumbs-link-gradient-color-start-visited,
                 @_breadcrumbs-link-gradient-color-end-visited,
                 @_breadcrumbs-link-gradient-direction,
@@ -109,7 +109,7 @@
         }
         &:hover {
             .css(background, @_breadcrumbs-link-background-hover);
-            .background-gradient(
+            .mixin-background-gradient(
                 @_breadcrumbs-link-gradient-color-start-hover,
                 @_breadcrumbs-link-gradient-color-end-hover,
                 @_breadcrumbs-link-gradient-direction,
@@ -121,7 +121,7 @@
         }
         &:active {
             .css(background, @_breadcrumbs-link-background-active);
-            .background-gradient(
+            .mixin-background-gradient(
                 @_breadcrumbs-link-gradient-color-start-active,
                 @_breadcrumbs-link-gradient-color-end-active,
                 @_breadcrumbs-link-gradient-direction,
@@ -134,7 +134,7 @@
     }
     strong {
         .css(background, @_breadcrumbs-current-background);
-        .background-gradient(
+        .mixin-background-gradient(
             @_breadcrumbs-current-gradient-color-start,
             @_breadcrumbs-current-gradient-color-end,
             @_breadcrumbs-current-gradient-direction,

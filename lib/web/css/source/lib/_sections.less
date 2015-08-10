@@ -8,7 +8,7 @@
 //  _____________________________________________
 
 .mixin-data-tabs__base(@_tab-control-height__base: @tab-control__height__base) {
-    .clearfix();
+    .mixin-clearfix();
     position: relative;
     z-index: 1;
     > .item.title {
@@ -22,7 +22,7 @@
         }
     }
     > .item.content {
-        .clearfix();
+        .mixin-clearfix();
         .css(margin-top, @_tab-control-height__base);
         box-sizing: border-box;
         float: right;
@@ -160,7 +160,7 @@
         }
     }
     > .item.content {
-        .clearfix();
+        .mixin-clearfix();
         box-sizing: border-box;
         display: block;
         float: none;

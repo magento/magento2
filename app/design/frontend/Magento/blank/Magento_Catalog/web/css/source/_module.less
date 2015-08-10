@@ -437,11 +437,11 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .catalog-product-view {
         .column.main {
-            .vendor-prefix-display(flex);
-            .vendor-prefix-flex-direction(column);
+            .mixin-vendor-prefix-display(flex);
+            .mixin-vendor-prefix-flex-direction(column);
         }
         .product.media {
-            .vendor-prefix-order(-1);
+            .mixin-vendor-prefix-order(-1);
         }
     }
     .product-info-main .box-tocart {

@@ -38,8 +38,8 @@
 #mixin-layout-columns() {
     & when (@use-flex = true) {
         box-sizing: border-box;
-        .vendor-prefix-display(flex);
-        .vendor-prefix-flex-wrap(wrap);
+        .mixin-vendor-prefix-display(flex);
+        .mixin-vendor-prefix-flex-wrap(wrap);
     };
     &:after {
         content: " ";
@@ -109,7 +109,7 @@
     ._mixin-set-column-width(length(@_units), @_width);
     .mixin-flex-degradation(@_total-columns, @_order);
     & when (@use-flex = true) {
-        .vendor-prefix-order(@_order);
+        .mixin-vendor-prefix-order(@_order);
     }
 }
 

@@ -188,7 +188,7 @@ and not (@_message-border-style = false) {
         ._mixin-message-icon-lateral-border-radius(@_message-icon-position);
     }
     > *:first-child:before {
-        .arrow(left, @message-icon__lateral-arrow-size, @_message-icon-background);
+        .mixin-arrow(left, @message-icon__lateral-arrow-size, @_message-icon-background);
         .css(right, @message-icon__lateral-width);
     }
     > *:first-child:after {
@@ -206,7 +206,7 @@ and not (@_message-border-style = false) {
         ._mixin-message-icon-lateral-border-radius(@_message-icon-position);
     }
     > *:first-child:before {
-        .arrow(right, @message-icon__lateral-arrow-size, @_message-icon-background);
+        .mixin-arrow(right, @message-icon__lateral-arrow-size, @_message-icon-background);
         .css(left, @message-icon__lateral-width);
     }
     > *:first-child:after {

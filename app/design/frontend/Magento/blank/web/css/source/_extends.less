@@ -408,7 +408,7 @@
 //  ---------------------------------------------
 
 .abs-hidden {
-    .visibility-hidden();
+    .mixin-visibility-hidden();
 }
 
 //
@@ -416,7 +416,7 @@
 //  ---------------------------------------------
 
 @abs-visually-hidden: {
-    .visually-hidden();
+    .mixin-visually-hidden();
 };
 
 .abs-visually-hidden {
@@ -452,7 +452,7 @@
 //  ---------------------------------------------
 
 @abs-add-clearfix: {
-    .clearfix();
+    .mixin-clearfix();
 };
 
 .abs-add-clearfix {
@@ -1060,7 +1060,7 @@
 
     &:before,
     &:after {
-        .arrow(
+        .mixin-arrow(
         @_position: top,
         @_size: @checkout-tooltip-icon-arrow__font-size,
         @_color: @checkout-tooltip-content__background-color

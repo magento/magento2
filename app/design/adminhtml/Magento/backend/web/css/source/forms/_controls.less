@@ -188,8 +188,8 @@ option:empty {
 
 //  Control with additional prefix or suffix label
 .admin__control-addon {
-    .vendor-prefix-display(inline-flex);
-    .vendor-prefix-flex-direction(row);
+    .mixin-vendor-prefix-display(inline-flex);
+    .mixin-vendor-prefix-flex-direction(row);
     display: inline-flex;
     flex-flow: row nowrap;
     position: relative;
@@ -197,15 +197,15 @@ option:empty {
     z-index: 1;
     > [class*='admin__addon-'],
     > [class*='admin__control-'] {
-        .vendor-prefix-flex-basis(auto);
-        .vendor-prefix-flex-grow(0);
-        .vendor-prefix-flex-shrink(0);
+        .mixin-vendor-prefix-flex-basis(auto);
+        .mixin-vendor-prefix-flex-grow(0);
+        .mixin-vendor-prefix-flex-shrink(0);
         position: relative;
         z-index: 1;
     }
     [class*='admin__control-'] {
         .css(appearence,none);
-        .vendor-prefix-flex-grow(1);
+        .mixin-vendor-prefix-flex-grow(1);
         box-shadow: none;
         background-color: transparent;
         border-color: transparent;
