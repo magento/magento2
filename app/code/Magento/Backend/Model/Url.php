@@ -181,6 +181,10 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     public function getUrl($routePath = null, $routeParams = null)
     {
+        if (filter_var($routePath, FILTER_VALIDATE_URL)) {
+            return $routePath;
+        }
+
         $cacheSecretKey = false;
         if (is_array($routeParams) && isset($routeParams['_cache_secret_key'])) {
             unset($routeParams['_cache_secret_key']);
