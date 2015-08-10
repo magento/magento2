@@ -61,8 +61,10 @@ class CleanExpiredOrders
             $orders = $this->orderCollectionFactory->create();
             $orders->addFieldToFilter('store_id', $storeId);
             $orders->addFieldToFilter('status', Order::STATE_PENDING_PAYMENT);
-            $time = $this->timeZone->date(time() - $lifetime * 60, $this->timeZone->getConfigTimezone());
-            $orders->addFieldToFilter('updated_at', ['to' => $time]);
+            $orders->getSelect()->where(
+                new \Zend_Db_Expr('TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP, `updated_at`)) >= ' . $lifetime * 60)
+            );
+
             try {
                 $orders->walk('cancel');
                 $orders->walk('save');
