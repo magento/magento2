@@ -18,8 +18,8 @@
     @_message-icon-right: "message-@{_message-type}-icon__right";
     @_message-icon-bottom: "message-@{_message-type}-icon__bottom";
     @_message-icon-left: "message-@{_message-type}-icon__left";
-    ._message();
-    ._message-style(
+    ._mixin-message();
+    ._mixin-message-style(
         @_message-color: @@_message-color,
         @_message-background: @@_message-background,
         @_message-link-color: @@_message-link-color,
@@ -29,7 +29,7 @@
     );
 }
 
-._message(
+._mixin-message(
     @_message-padding: @message__padding,
     @_message-margin: @message__margin,
     @_message-border-radius: @message__border-radius
@@ -46,10 +46,10 @@
         @_font-style: @message__font-style,
         @_line-height: @message__line-height
     );
-    ._message-border(@message__border-width, @message__border-style);
+    ._mixin-message-border(@message__border-width, @message__border-style);
 }
 
-._message-style(
+._mixin-message-style(
     @_message-background: @message-info__background,
     @_message-color: @message-info__color,
     @_message-link-color: @message-info-link__color,
@@ -71,7 +71,7 @@
     }
 }
 
-._message-border(
+._mixin-message-border(
     @_message-border-width: @message__border-width,
     @_message-border-style: @message__border-style
 ) when not (@_message-border-width = 0)
@@ -91,7 +91,7 @@ and not (@_message-border-style = false) {
     @_message-icon-right: "message-@{_message-type}-icon__right";
     @_message-icon-bottom: "message-@{_message-type}-icon__bottom";
     @_message-icon-left: "message-@{_message-type}-icon__left";
-    ._message-icon-lateral(
+    ._mixin-message-icon-lateral(
         @_message-icon-position,
         @@_message-icon,
         @@_message-icon-color,
@@ -113,7 +113,7 @@ and not (@_message-border-style = false) {
     @_message-icon-right: "message-@{_message-type}-icon__right";
     @_message-icon-bottom: "message-@{_message-type}-icon__bottom";
     @_message-icon-left: "message-@{_message-type}-icon__left";
-    ._message-icon-inner(
+    ._mixin-message-icon-inner(
         @@_message-icon,
         @@_message-icon-color,
         @@_message-icon-background,
@@ -125,7 +125,7 @@ and not (@_message-border-style = false) {
 }
 
 //  Private mixins
-._message-icon-lateral(
+._mixin-message-icon-lateral(
     @_message-icon-position,
     @_message-icon,
     @_message-icon-color,
@@ -155,7 +155,7 @@ and not (@_message-border-style = false) {
         top: 50%;
     }
     > *:first-child:after {
-        ._icon-font(
+        ._mixin-icon-font(
             @_icon-font-content: @_message-icon,
             @_icon-font: @icon-font,
             @_icon-font-size: @message-icon__font-size,
@@ -172,20 +172,20 @@ and not (@_message-border-style = false) {
         position: absolute;
         text-align: center;
     }
-    ._message-icon-lateral-position(
+    ._mixin-message-icon-lateral-position(
         @_message-icon-position,
         @_message-icon-background
     );
 }
 
-._message-icon-lateral-position(
+._mixin-message-icon-lateral-position(
     @_message-icon-position,
     @_message-icon-background
 ) when (@_message-icon-position = right) {
     .css(padding-right, @message-icon__lateral-width + @indent__s);
     &:before {
         right: 0;
-        ._message-icon-lateral-border-radius(@_message-icon-position);
+        ._mixin-message-icon-lateral-border-radius(@_message-icon-position);
     }
     > *:first-child:before {
         .arrow(left, @message-icon__lateral-arrow-size, @_message-icon-background);
@@ -196,14 +196,14 @@ and not (@_message-border-style = false) {
     }
 }
 
-._message-icon-lateral-position(
+._mixin-message-icon-lateral-position(
     @_message-icon-position,
     @_message-icon-background
 ) when (@_message-icon-position = left) {
     .css(padding-left, @message-icon__lateral-width + @indent__s);
     &:before {
         left: 0;
-        ._message-icon-lateral-border-radius(@_message-icon-position);
+        ._mixin-message-icon-lateral-border-radius(@_message-icon-position);
     }
     > *:first-child:before {
         .arrow(right, @message-icon__lateral-arrow-size, @_message-icon-background);
@@ -214,19 +214,19 @@ and not (@_message-border-style = false) {
     }
 }
 
-._message-icon-lateral-border-radius(
+._mixin-message-icon-lateral-border-radius(
     @_message-icon-position
 ) when (@_message-icon-position = left) and not (@message__border-radius = false) and not (@message__border-width = false) {
     border-radius: (@message__border-radius - @message__border-width) 0 0 (@message__border-radius - @message__border-width);
 }
 
-._message-icon-lateral-border-radius(
+._mixin-message-icon-lateral-border-radius(
     @_message-icon-position
 ) when (@_message-icon-position = right) and not (@message__border-radius = false) and not (@message__border-width = false) {
     border-radius: 0 (@message__border-radius - @message__border-width) (@message__border-radius - @message__border-width) 0;
 }
 
-._message-icon-inner(
+._mixin-message-icon-inner(
     @_message-icon,
     @_message-icon-color,
     @_message-icon-background,
@@ -239,7 +239,7 @@ and not (@_message-border-style = false) {
     .css(padding-left, @message-icon__inner-padding-left);
 
     > *:first-child:before {
-        ._icon-font(
+        ._mixin-icon-font(
             @_icon-font-content: @_message-icon,
             @_icon-font: @icon-font,
             @_icon-font-size: @message-icon__font-size,

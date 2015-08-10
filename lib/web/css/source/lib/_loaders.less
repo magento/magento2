@@ -46,11 +46,11 @@
         position: absolute;
         right: 0;
         top: 0;
-        ._loader-text(@_loader-text);
+        ._mixin-loader-text(@_loader-text);
     }
 }
 
-._loader-text(
+._mixin-loader-text(
     @_loader-text
 ) when (@_loader-text = true) {
     .css(padding, @_loader-text-padding);

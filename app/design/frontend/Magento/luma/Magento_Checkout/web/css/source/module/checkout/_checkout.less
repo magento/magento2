@@ -84,7 +84,7 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .opc-wrapper {
        &:extend(.abs-add-box-sizing-desktop-m all);
-        .layout-column(2, 1, @checkout-wrapper__columns);
+        .mixin-layout-column(2, 1, @checkout-wrapper__columns);
         padding-right: @indent__l;
     }
 }
