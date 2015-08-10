@@ -8,6 +8,7 @@ namespace Magento\Amqp\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Amqp\ConsumerFactory;
 
@@ -17,7 +18,8 @@ use Magento\Framework\Amqp\ConsumerFactory;
 class StartConsumerCommand extends Command
 {
     const ARGUMENT_CONSUMER = 'consumer';
-    const ARGUMENT_NUMBER_OF_MESSAGES = 'max-messages';
+    const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
+    const OPTION_LONG_RUNNING = 'long-running';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
     /**
@@ -42,9 +44,10 @@ class StartConsumerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $consumerName = $input->getArgument(self::ARGUMENT_CONSUMER);
-        $numberOfMessages = $input->getArgument(self::ARGUMENT_NUMBER_OF_MESSAGES);
+        $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
+        $longRunning = $input->hasOption(self::OPTION_LONG_RUNNING);
         $consumer = $this->consumerFactory->get($consumerName);
-        $consumer->process($numberOfMessages);
+        $consumer->process($numberOfMessages, $longRunning);
     }
 
     /**
@@ -59,11 +62,19 @@ class StartConsumerCommand extends Command
             InputArgument::REQUIRED,
             'The name of the consumer to be started.'
         );
-        $this->addArgument(
-            self::ARGUMENT_NUMBER_OF_MESSAGES,
-            InputArgument::OPTIONAL,
+        $this->addOption(
+            self::OPTION_NUMBER_OF_MESSAGES,
+            null,
+            InputOption::VALUE_REQUIRED,
             'The number of messages to be processed by the consumer before process termination. '
             . 'If not specify - terminate after processing all queued messages.'
+        );
+        $this->addOption(
+            self::OPTION_LONG_RUNNING,
+            null,
+            InputOption::VALUE_NONE,
+            'This option defines, whether this command long running or not. '
+            . 'If not specify - the command is not long running.'
         );
         $this->setHelp(
             <<<HELP
@@ -71,11 +82,15 @@ This command starts AMQP consumer by its name.
 
 To start consumer which will process all queued messages and terminate execution:
 
-      <comment>%command.full_name% --consumer=some_consumer</comment>
+      <comment>%command.full_name% some_consumer</comment>
 
 To specify the number of messages which should be processed by consumer before its termination:
 
-    <comment>%command.full_name% --consumer=some_consumer --max-messages=50</comment>
+    <comment>%command.full_name% some_consumer --max-messages=50</comment>
+
+To specify the command as long running:
+
+    <comment>%command.full_name% some_consumer --long-running</comment>
 HELP
         );
         parent::configure();
