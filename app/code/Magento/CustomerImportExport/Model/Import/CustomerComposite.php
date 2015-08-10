@@ -252,7 +252,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     {
         $result = $this->_customerEntity->importData();
         if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
-            return $result && $this->_addressEntity->importData();
+            return $result && $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->importData();
         }
 
         return $result;
