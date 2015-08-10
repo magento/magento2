@@ -36,7 +36,7 @@ class Options implements OptionSourceInterface
     /**
      * @var array
      */
-    protected $currentOptions;
+    protected $currentOptions = [];
 
     /**
      * Constructor
@@ -57,14 +57,7 @@ class Options implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        if ($this->options !== null) {
-            return $this->options;
-        }
-        $websiteCollection = $this->systemStore->getWebsiteCollection();
-        $groupCollection = $this->systemStore->getGroupCollection();
-        $storeCollection = $this->systemStore->getStoreCollection();
-
-        $this->generateCurrentOptions($websiteCollection, $groupCollection, $storeCollection);
+        $this->generateCurrentOptions();
 
         $this->options = array_values($this->currentOptions);
 
@@ -74,13 +67,16 @@ class Options implements OptionSourceInterface
     /**
      * Generate current options
      *
-     * @param array $websiteCollection
-     * @param array $groupCollection
-     * @param array $storeCollection
-     * @return void
+     * @return array|void
      */
-    protected function generateCurrentOptions(array $websiteCollection, array $groupCollection, array $storeCollection)
+    protected function generateCurrentOptions()
     {
+        if ($this->options !== null) {
+            return $this->options;
+        }
+        $websiteCollection = $this->systemStore->getWebsiteCollection();
+        $groupCollection = $this->systemStore->getGroupCollection();
+        $storeCollection = $this->systemStore->getStoreCollection();
         /** @var \Magento\Store\Model\Website $website */
         foreach ($websiteCollection as $website) {
             $groups = [];
