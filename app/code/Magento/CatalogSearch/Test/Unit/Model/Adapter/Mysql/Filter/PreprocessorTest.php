@@ -140,7 +140,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessPrice()
     {
-        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT table.price FROM catalog_product_entity';
@@ -159,22 +158,23 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('table_name'));
         $this->select->expects($this->once())
             ->method('from')
-            ->with(['main_table' => 'table_name'], 'entity_id')
+            ->with(['search_index' => 'table_name'], 'entity_id')
             ->will($this->returnSelf());
         $this->select->expects($this->once())
             ->method('where')
             ->with('SELECT table.min_price FROM catalog_product_entity')
             ->will($this->returnSelf());
-        $this->select->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('TEST QUERY PART'));
 
+        /** @var \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer|MockObject $queryContainer */
         $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
             ->disableOriginalConstructor()
             ->getMock();
+        $queryContainer->expects($this->once())
+            ->method('addFilterQuery')
+            ->with($this->select);
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
-        $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
+        $this->assertSame('', $this->removeWhitespaces($actualResult));
     }
 
     public function testProcessCategoryIds()
@@ -208,7 +208,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessStaticAttribute()
     {
-        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT field FROM table';
@@ -229,27 +228,23 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('backend_table'));
         $this->select->expects($this->once())
             ->method('from')
-            ->with(['main_table' => 'backend_table'], 'entity_id')
+            ->with(['search_index' => 'backend_table'], 'entity_id')
             ->will($this->returnSelf());
         $this->select->expects($this->once())
             ->method('where')
             ->with('SELECT field FROM table')
             ->will($this->returnSelf());
-        $this->select->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('TEST QUERY PART'));
 
         $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
             ->disableOriginalConstructor()
             ->getMock();
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
-        $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
+        $this->assertSame('', $this->removeWhitespaces($actualResult));
     }
 
     public function testProcessNotStaticAttribute()
     {
-        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT field FROM table';
@@ -274,11 +269,11 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($attributeId));
         $this->connection->expects($this->once())
             ->method('getIfNullSql')
-            ->with('current_store.value', 'main_table.value')
+            ->with('current_store.value', 'search_index.value')
             ->will($this->returnValue('IF NULL SQL'));
         $this->select->expects($this->once())
             ->method('from')
-            ->with(['main_table' => 'backend_table'], 'entity_id')
+            ->with(['search_index' => 'backend_table'], 'entity_id')
             ->will($this->returnSelf());
         $this->select->expects($this->once())
             ->method('joinLeft')
@@ -291,16 +286,13 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->exactly(2))
             ->method('where')
             ->will($this->returnSelf());
-        $this->select->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('TEST QUERY PART'));
 
         $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
             ->disableOriginalConstructor()
             ->getMock();
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
-        $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
+        $this->assertSame('', $this->removeWhitespaces($actualResult));
     }
 
     /**
