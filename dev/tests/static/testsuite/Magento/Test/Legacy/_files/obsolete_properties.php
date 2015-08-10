@@ -20,7 +20,6 @@ return [
     ['_cacheConf'],
     ['_cachedItemPriceBlocks'],
     ['_canUseLocalModules'],
-    ['_checkedProductsQty', 'Magento\CatalogInventory\Model\Observer'],
     ['_children', 'Magento\Core\Block\AbstractBlock'],
     ['_childrenHtmlCache', 'Magento\Core\Block\AbstractBlock'],
     ['_childGroups', 'Magento\Core\Block\AbstractBlock'],
