@@ -24,10 +24,10 @@ class AttributeRepository
     /** @var AddressMetadataInterface */
     protected $addressMetadata;
 
-    /** @var CustomerMetadataManagementInterface  */
+    /** @var CustomerMetadataManagementInterface */
     protected $customerMetadataManagement;
 
-    /** @var AddressMetadataManagementInterface  */
+    /** @var AddressMetadataManagementInterface */
     protected $addressMetadataManagement;
 
     /**
@@ -48,6 +48,9 @@ class AttributeRepository
         $this->addressMetadata = $addressMetadata;
     }
 
+    /**
+     * @return array
+     */
     public function getList()
     {
         if (!$this->attributes) {

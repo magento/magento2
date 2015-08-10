@@ -32,7 +32,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     *@SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testAddDynamicData()
     {
@@ -226,6 +226,9 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testAddDynamicDataWithStaticAndFilterable()
     {
         $existentName = 'field';
