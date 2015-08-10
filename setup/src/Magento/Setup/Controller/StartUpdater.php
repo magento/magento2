@@ -69,18 +69,10 @@ class StartUpdater extends AbstractActionController
         $postPayload = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $errorMessage = '';
         if (isset($postPayload['packages']) && is_array($postPayload['packages']) && isset($postPayload['type'])) {
-            $packages = $postPayload['packages'];
-            $jobType = $postPayload['type'];
-            foreach ($packages as $package) {
-                if (!isset($package['name'])
-                    || ($jobType != 'uninstall' && !isset($package['version']))
-                    || ($jobType == 'uninstall' && !isset($package['type']))
-                ) {
-                    $errorMessage .= 'Missing package information';
-                    break;
-                }
-            }
+            $errorMessage .= $this->validatePayload($postPayload);
             if (empty($errorMessage)) {
+                $packages = $postPayload['packages'];
+                $jobType = $postPayload['type'];
                 $this->createTypeFlag($jobType, $postPayload['headerTitle']);
                 $errorMessage .= $this->updater->createUpdaterTask(
                     $packages,
@@ -92,6 +84,29 @@ class StartUpdater extends AbstractActionController
         }
         $success = empty($errorMessage) ? true : false;
         return new JsonModel(['success' => $success, 'message' => $errorMessage]);
+    }
+
+    /**
+     * Validate POST request payload
+     *
+     * @param array $postPayload
+     * @return string
+     */
+    private function validatePayload(array $postPayload)
+    {
+        $errorMessage = '';
+        $packages = $postPayload['packages'];
+        $jobType = $postPayload['type'];
+        foreach ($packages as $package) {
+            if (!isset($package['name'])
+                || ($jobType != 'uninstall' && !isset($package['version']))
+                || ($jobType == 'uninstall' && !isset($package['type']))
+            ) {
+                $errorMessage .= 'Missing package information';
+                break;
+            }
+        }
+        return $errorMessage;
     }
 
     /**

@@ -89,35 +89,46 @@ class JobComponentUninstall extends AbstractJob
         }
         $components = $this->params['components'];
         foreach ($components as $component) {
-            if (!isset($component[self::COMPONENT_TYPE]) || !isset($component[self::COMPONENT_NAME])) {
-                throw new \RuntimeException('Job parameter format is incorrect');
-            }
-            $type = $component[self::COMPONENT_TYPE];
-            $componentName = $component[self::COMPONENT_NAME];
-
-            if (!in_array($type, [self::COMPONENT_MODULE, self::COMPONENT_THEME, self::COMPONENT_LANGUAGE])) {
-                throw new \RuntimeException('Unknown component type');
-            }
-
-            $options = [];
-            switch ($type) {
-                case self::COMPONENT_MODULE:
-                    $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = true;
-                    $options[ModuleUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
-                    break;
-                case self::COMPONENT_THEME:
-                    $options[ThemeUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
-                    break;
-                case self::COMPONENT_LANGUAGE:
-                    break;
-            }
-            $this->createAndRunUninstaller($type, $componentName, $options);
+            $this->executeComponent($component);
         }
         $this->cleanUp();
         $errorMessage = $this->updater->createUpdaterTask($components, Updater::TASK_TYPE_UNINSTALL);
         if ($errorMessage) {
             throw new \RuntimeException($errorMessage);
         }
+    }
+
+    /**
+     * Execute uninstall on a component
+     *
+     * @param array $component
+     * @return void
+     */
+    private function executeComponent(array $component)
+    {
+        if (!isset($component[self::COMPONENT_TYPE]) || !isset($component[self::COMPONENT_NAME])) {
+            throw new \RuntimeException('Job parameter format is incorrect');
+        }
+        $type = $component[self::COMPONENT_TYPE];
+        $componentName = $component[self::COMPONENT_NAME];
+
+        if (!in_array($type, [self::COMPONENT_MODULE, self::COMPONENT_THEME, self::COMPONENT_LANGUAGE])) {
+            throw new \RuntimeException('Unknown component type');
+        }
+
+        $options = [];
+        switch ($type) {
+            case self::COMPONENT_MODULE:
+                $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = true;
+                $options[ModuleUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
+                break;
+            case self::COMPONENT_THEME:
+                $options[ThemeUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
+                break;
+            case self::COMPONENT_LANGUAGE:
+                break;
+        }
+        $this->createAndRunUninstaller($type, $componentName, $options);
     }
 
     /**
