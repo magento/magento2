@@ -24,7 +24,7 @@ class Updater
     /**
      * Task types array
      */
-    const TASK_TYPES = [self::TASK_TYPE_UPDATE, self::TASK_TYPE_UNINSTALL];
+    const TASK_TYPES = [Updater::TASK_TYPE_UPDATE, Updater::TASK_TYPE_UNINSTALL];
 
     /**
      * @var Queue
