@@ -10,9 +10,10 @@ angular.module('select-version', ['ngStorage'])
             name: '',
             version: ''
         }];
-        $scope.readyForNext = false;
+        $scope.upgradeReadyForNext = false;
         $scope.upgradeProcessed = false;
         $scope.upgradeProcessError = false;
+        $scope.componentsReadyForNext = true;
         $scope.componentsProcessed = false;
         $scope.componentsProcessError = false;
         $scope.tryAgain = 0;
@@ -24,7 +25,7 @@ angular.module('select-version', ['ngStorage'])
                     $scope.packages[0].name = data.package.package;
                     $scope.packages[0].version = $scope.versions[0].id;
                     $scope.selectedOption = $scope.versions[0].id;
-                    $scope.readyForNext = true;
+                    $scope.upgradeReadyForNext = true;
 
                 } else {
                     $scope.upgradeProcessError = true;
@@ -57,7 +58,7 @@ angular.module('select-version', ['ngStorage'])
                 $scope.updateComponents.no = false;
                 $scope.tryAgain--;
                 if (!$scope.componentsProcessed && !$scope.componentsProcessError) {
-                    $scope.readyForNext = false;
+                    $scope.componentsReadyForNext = false;
                     $http.get('index.php/other-components-grid/components', {'responseType': 'json'}).
                         success(function (data) {
                             if (data.responseType != 'error') {
@@ -71,7 +72,7 @@ angular.module('select-version', ['ngStorage'])
                                         version: $scope.components[keys[i]].updates[0].id
                                     });
                                 }
-                                $scope.readyForNext = true;
+                                $scope.componentsReadyForNext = true;
                             } else {
                                 $scope.componentsProcessError = true;
                             }
