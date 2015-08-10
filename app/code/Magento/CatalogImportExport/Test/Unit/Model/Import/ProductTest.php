@@ -713,6 +713,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     /**
      * @dataProvider validateRowIsAlreadyValidatedDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testValidateRowIsAlreadyValidated($isInvalidRow, $expectedResult)
     {

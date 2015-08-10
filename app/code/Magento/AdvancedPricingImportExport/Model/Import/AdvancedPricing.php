@@ -309,6 +309,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function saveAndReplaceAdvancedPrices()
     {
@@ -366,7 +367,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
             } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
                 $this->processCountExistingPrices($tierPrices, self::TABLE_TIER_PRICE)
-                    ->processcountExistingPrices($groupPrices, self::TABLE_GROUPED_PRICE)
+                    ->processCountExistingPrices($groupPrices, self::TABLE_GROUPED_PRICE)
                     ->processCountNewPrices($tierPrices, $groupPrices);
                 $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
                     ->saveProductPrices($groupPrices, self::TABLE_GROUPED_PRICE);

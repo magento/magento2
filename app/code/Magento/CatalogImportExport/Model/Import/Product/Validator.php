@@ -80,7 +80,15 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             $valid = is_numeric($val);
         }
         if (!$valid) {
-            $this->_addMessages([sprintf($this->context->retrieveMessageTemplate(RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE), $attrCode, $type)]);
+            $this->_addMessages(
+                [
+                    sprintf(
+                        $this->context->retrieveMessageTemplate(RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE),
+                        $attrCode,
+                        $type
+                    )
+                ]
+            );
         }
         return $valid;
     }
@@ -122,7 +130,16 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             case 'multiselect':
                 $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
                 if (!$valid) {
-                    $this->_addMessages([sprintf($this->context->retrieveMessageTemplate(RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION), $attrCode)]);
+                    $this->_addMessages(
+                        [
+                            sprintf(
+                                $this->context->retrieveMessageTemplate(
+                                    RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION
+                                ),
+                                $attrCode
+                            )
+                        ]
+                    );
                 }
                 break;
             case 'datetime':
@@ -138,7 +155,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         }
 
         if ($valid && !empty($attrParams['is_unique'])) {
-            if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]]) && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])) {
+            if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
+                && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])) {
                 $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE]);
                 return false;
             }

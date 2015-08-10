@@ -141,6 +141,7 @@ class RowCustomizer implements RowCustomizerInterface
      * @param array $additionalRowsCount
      * @param int $productId
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAdditionalRowsCount($additionalRowsCount, $productId)
     {

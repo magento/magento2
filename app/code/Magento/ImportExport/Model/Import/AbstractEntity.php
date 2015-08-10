@@ -360,7 +360,11 @@ abstract class AbstractEntity
                     foreach ($rowData as $attrName => $element) {
                         if (!mb_check_encoding($element, 'UTF-8')) {
                             $valid = false;
-                            $this->addRowError(AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS, $this->_processedRowsCount, $attrName);
+                            $this->addRowError(
+                                AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
+                                $this->_processedRowsCount,
+                                $attrName
+                            );
                         }
                     }
                 } catch (\InvalidArgumentException $e) {
@@ -656,7 +660,7 @@ abstract class AbstractEntity
      * @param int $rowNumber
      * @return bool
      */
-    abstract function validateRow(array $rowData, $rowNumber);
+    abstract public function validateRow(array $rowData, $rowNumber);
 
     /**
      * Set data from outside to change behavior
