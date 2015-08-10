@@ -7,7 +7,7 @@
 <h2 class="page-title">{{$state.current.header}}</h2>
 <div class="componenet-manager-wrap">
     <div class="component-manager-title">
-        Magento Connect Account
+        My Connect Account
         <div class="componenet-manager-account">
             <span class="user-name"></span>
             <a href="#" class="sign-in-out"></a>
@@ -38,7 +38,20 @@
         </ul>
     </div>
 </div>
-<div class="admin__data-grid-outer-wrap">
+
+<div class="message message-spinner" ng-show="!componentsProcessed">
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+    <span class="message-text">Retrieving information for components...</span>
+</div>
+<div class="row" ng-show="componentsProcessed && total == 0">
+    <label class="form-label">
+        <b>We didn't find any components to update at this time. Please try later.<br/>
+    </label>
+</div>
+<div class="admin__data-grid-outer-wrap" ng-show="componentsProcessed && total > 0">
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
             <div class="col-xs-3">
@@ -98,7 +111,7 @@
                     <span>Type</span>
                 </th>
                 <th class="data-grid-th  _sortable">
-                    <span>Author</span>
+                    <span>Vendor</span>
                 </th>
                 <th class="data-grid-th  _sortable">
                     <span>Updated</span>
@@ -130,7 +143,7 @@
                     <span class="data-grid-data">{{component.type}}</span>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{component.author}}</span>
+                    <span class="data-grid-data">{{component.vendor}}</span>
                 </td>
                 <td>
                     <span class="data-grid-data">{{component.updated}}</span>
@@ -145,18 +158,12 @@
                             <span>Select</span>
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(component)}">
-                            <!--  will be covered in MAGETWO-34698 <li>
-                                <a class="action-menu-item">Enable</a>
-                            </li>
-                            <li>
-                                <a class="action-menu-item">Disable</a>
-                            </li>
-                            -->
-                            <li ng-class="{'hide' : !isAvailableUpdatePackage(component.name)}"
+                            <li ng-class="{'hide' : !isAvailableUpdatePackage(component.name) && component.update}"
                                 ng-mousedown="update(component)">
                                 <a class="action-menu-item">Update</a>
                             </li>
-                            <li ng-class="hide"
+                            <li ng-class="{'hide' : !isAvailableUninstallPackage(component.name)
+                            && component.uninstall}"
                                 ng-mousedown="uninstall(component)">
                                 <a class="action-menu-item">Uninstall</a>
                             </li>
