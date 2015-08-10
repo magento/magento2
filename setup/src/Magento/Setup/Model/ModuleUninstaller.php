@@ -5,64 +5,46 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Composer\AbstractComponentUninstaller;
-use Magento\Framework\Composer\Remove;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Module\ModuleList\Loader;
-use Magento\Framework\Module\PackageInfo;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Module\DataSetupFactory;
-use Magento\Setup\Module\Setup;
-use Magento\Setup\Module\SetupFactory;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ModuleUninstaller extends AbstractComponentUninstaller
+/**
+ * Class to uninstall a module component
+ */
+class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUninstaller
 {
+    /**#@+
+     * Module uninstall options
+     */
     const OPTION_REMOVE_DATA = 'data';
     const OPTION_REMOVE_CODE = 'code';
     const OPTION_REMOVE_REGISTRY = 'registry';
+    /**#@-*/
 
     /**
-     * @var ObjectManagerInterface
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var ObjectManagerProvider
-     */
-    private $objectManagerProvider;
-
-    /**
-     * @var DeploymentConfig
+     * @var \Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var DeploymentConfig\Writer
+     * @var \Magento\Framework\App\DeploymentConfig\Writer
      */
     private $writer;
 
     /**
-     * @var Loader
+     * @var \Magento\Framework\Module\ModuleList\Loader
      */
     private $loader;
 
     /**
-     * @var PackageInfo
-     */
-    private $packageInfo;
-
-    /**
-     * @var Remove
+     * @var \Magento\Framework\Composer\Remove
      */
     private $remove;
-
-    /**
-     * @var Resource
-     */
-    private $resource;
 
     /**
      * @var UninstallCollector
@@ -70,38 +52,38 @@ class ModuleUninstaller extends AbstractComponentUninstaller
     private $collector;
 
     /**
-     * @var DataSetupFactory
+     * @var \Magento\Setup\Module\DataSetupFactory
      */
     private $dataSetupFactory;
 
     /**
-     * @var SetupFactory
+     * @var \Magento\Setup\Module\SetupFactory
      */
     private $setupFactory;
 
     /**
      * Constructor
      *
-     * @param DeploymentConfig $deploymentConfig
-     * @param DeploymentConfig\Writer $writer
-     * @param Loader $loader
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
+     * @param \Magento\Framework\Module\ModuleList\Loader $loader
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param Remove $remove
+     * @param \Magento\Framework\Composer\Remove $remove
      * @param UninstallCollector $collector
-     * @param DataSetupFactory $dataSetupFactory
-     * @param SetupFactory $setupFactory
+     * @param \Magento\Setup\Module\DataSetupFactory $dataSetupFactory
+     * @param \Magento\Setup\Module\SetupFactory $setupFactory
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig,
-        DeploymentConfig\Writer $writer,
-        Loader $loader,
+        \Magento\Framework\App\DeploymentConfig $deploymentConfig,
+        \Magento\Framework\App\DeploymentConfig\Writer $writer,
+        \Magento\Framework\Module\ModuleList\Loader $loader,
         ObjectManagerProvider $objectManagerProvider,
-        Remove $remove,
+        \Magento\Framework\Composer\Remove $remove,
         UninstallCollector $collector,
-        DataSetupFactory $dataSetupFactory,
-        SetupFactory $setupFactory
+        \Magento\Setup\Module\DataSetupFactory $dataSetupFactory,
+        \Magento\Setup\Module\SetupFactory $setupFactory
     ) {
-        $this->objectManagerProvider = $objectManagerProvider;
+        $this->objectManager = $objectManagerProvider->get();
         $this->deploymentConfig = $deploymentConfig;
         $this->writer = $writer;
         $this->loader = $loader;
@@ -121,7 +103,6 @@ class ModuleUninstaller extends AbstractComponentUninstaller
      */
     public function uninstall(OutputInterface $output, array $modules, array $options)
     {
-        $this->objectManager = $this->objectManagerProvider->get();
         if (isset($options[self::OPTION_REMOVE_DATA]) && $options[self::OPTION_REMOVE_DATA]) {
             $this->removeData($output, $modules);
         }
@@ -145,13 +126,13 @@ class ModuleUninstaller extends AbstractComponentUninstaller
     {
         $uninstalls = $this->collector->collectUninstall();
         $setupModel = $this->setupFactory->create();
-        $this->resource = $this->objectManager->get('Magento\Framework\Module\Resource');
+        $resource = $this->objectManager->get('Magento\Framework\Module\Resource');
         foreach ($modules as $module) {
             if (isset($uninstalls[$module])) {
                 $output->writeln("<info>Removing data of $module</info>");
                 $uninstalls[$module]->uninstall(
                     $setupModel,
-                    new ModuleContext($this->resource->getDbVersion($module) ?: '')
+                    new ModuleContext($resource->getDbVersion($module) ?: '')
                 );
             } else {
                 $output->writeln("<info>No data to clear in $module</info>");
@@ -170,9 +151,10 @@ class ModuleUninstaller extends AbstractComponentUninstaller
     {
         $output->writeln('<info>Removing code from Magento codebase:</info>');
         $packages = [];
-        $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        /** @var \Magento\Framework\Module\PackageInfo $packageInfo */
+        $packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         foreach ($modules as $module) {
-            $packages[] = $this->packageInfo->getPackageName($module);
+            $packages[] = $packageInfo->getPackageName($module);
         }
         $this->remove->remove($packages);
     }
@@ -215,7 +197,10 @@ class ModuleUninstaller extends AbstractComponentUninstaller
             $newModules[$module] = $existingModules[$module];
         }
         $this->writer->saveConfig(
-            [ConfigFilePool::APP_CONFIG => [ConfigOptionsListConstants::KEY_MODULES => $newModules]],
+            [
+                \Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG =>
+                    [ConfigOptionsListConstants::KEY_MODULES => $newModules]
+            ],
             true
         );
     }

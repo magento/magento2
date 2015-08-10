@@ -22,13 +22,17 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $serviceManager = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', [], '', false);
-        $jobDbRollback = $this->getMock('Magento\Setup\Model\Cron\JobDbRollback', [], [], '', false);
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->once())->method('getStatusFilePath')->willReturn('path_a');
         $status->expects($this->once())->method('getLogFilePath')->willReturn('path_b');
         $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
+        $this->objectManager = $this->getMockForAbstractClass(
+            'Magento\Framework\ObjectManagerInterface',
+            [],
+            '',
+            false
+        );
         $objectManagerProvider->expects($this->atLeastOnce())->method('get')->willReturn($this->objectManager);
 
         $upgradeCommand = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
