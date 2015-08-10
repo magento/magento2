@@ -172,9 +172,9 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey($packageName, $packagesForUpdate['packages']);
         $this->assertTrue(
             version_compare(
-                $packagesForUpdate['packages'][$packageName]['latestVersion'],
+                $packagesForUpdate['packages'][$packageName]['version'],
                 $requiredPackages[$packageName]['version'],
-                '>'
+                '='
             )
         );
     }
