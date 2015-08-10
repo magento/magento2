@@ -6,8 +6,7 @@
 
 namespace Magento\CatalogSearch\Model\Search;
 
-use Magento\Eav\Model\Config;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Filter\BoolExpression;
@@ -29,24 +28,15 @@ class TableMapper
     private $storeManager;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @param Resource|Resource $resource
+     * @param AppResource $resource
      * @param StoreManagerInterface $storeManager
-     * @param Config $config
      */
     public function __construct(
-        Resource $resource,
-        StoreManagerInterface $storeManager,
-        Config $config
+        AppResource $resource,
+        StoreManagerInterface $storeManager
     ) {
-
         $this->resource = $resource;
         $this->storeManager = $storeManager;
-        $this->config = $config;
     }
 
     /**
@@ -66,14 +56,11 @@ class TableMapper
                 list($table, $mapOn, $mappedFields) = $fieldToTableMap[$field];
                 if (!array_key_exists($table, $mappedTables)) {
                     $select->joinLeft(
-                        [
-                            $mappingName => $table,
-                        ],
+                        [$mappingName => $table],
                         $mapOn,
                         $mappedFields
                     );
                     $mappedTables[$table] = $mappingName;
-                    unset($filterFields[$field]);
                 }
             } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
                 $table = $this->resource->getTableName('catalog_product_index_eav');
@@ -148,6 +135,7 @@ class TableMapper
     private function getFiltersFromBoolFilter(BoolExpression $boolExpression)
     {
         $filters = [];
+        /** @var BoolExpression $filter */
         foreach ($boolExpression->getMust() as $filter) {
             if ($filter->getType() === FilterInterface::TYPE_BOOL) {
                 $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
