@@ -5,7 +5,6 @@
  */
 namespace Magento\Cms\Ui\Component\Listing\Column\Cms;
 
-use Magento\Framework\Escaper;
 use Magento\Store\Model\System\Store as SystemStore;
 use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 
