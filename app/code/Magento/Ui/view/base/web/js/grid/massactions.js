@@ -154,6 +154,8 @@ define([
                 selections[itemsType] = false;
             }
 
+            _.extend(selections, data.params || {});
+
             utils.submit({
                 url: action.url,
                 data: selections
