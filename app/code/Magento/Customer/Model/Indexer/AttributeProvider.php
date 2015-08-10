@@ -7,7 +7,6 @@ namespace Magento\Customer\Model\Indexer;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Indexer\FieldsetInterface;
-use Magento\Customer\Model\Resource\Attribute\Collection;
 use Magento\Eav\Model\Config;
 use Magento\Customer\Model\Attribute;
 

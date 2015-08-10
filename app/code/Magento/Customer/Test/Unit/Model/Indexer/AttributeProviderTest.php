@@ -7,6 +7,7 @@ namespace Magento\Customer\Test\Unit\Model\Indexer;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Indexer\AttributeProvider;
+use Magento\Eav\Model\Resource\Entity\Attribute\Collection;
 
 class AttributeProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,11 +15,6 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eavConfig;
-
-    /**
-     * @var \Magento\Customer\Model\Resource\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $collection;
 
     /**
      * @var AttributeProvider
@@ -30,15 +26,14 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $this->eavConfig = $this->getMockBuilder('Magento\Eav\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Customer\Model\Resource\Attribute\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->object = new AttributeProvider(
-            $this->eavConfig,
-            $this->collection
+            $this->eavConfig
         );
     }
 
+    /**
+     *
+     */
     public function testAddDynamicData()
     {
         $existentName = 'field';
@@ -55,13 +50,20 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $attrBackendType = 'b_type';
         $attrFrontendInput = 'int';
 
+        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $collectionMock $entityType */
         $entityType = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \Magento\Customer\Model\Resource\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
         $entity = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer')
             ->disableOriginalConstructor()
             ->getMock();
-        $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
+        /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        $attribute = $this->getMockBuilder('Magento\Customer\Model\Attribute')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -69,13 +71,12 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                     'getName',
                     'getFrontendInput',
                     'getBackendType',
+                    'canBeSearchableInGrid',
+                    'canBeFilterableInGrid',
                     'getData',
                 ]
             )
             ->getMock();
-        $this->collection->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$attribute]);
         $this->eavConfig->expects($this->once())
             ->method('getEntityType')
             ->with(Customer::ENTITY)
@@ -83,6 +84,12 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $entityType->expects($this->once())
             ->method('getEntity')
             ->willReturn($entity);
+        $entityType->expects($this->once())
+            ->method('getAttributeCollection')
+            ->willReturn($collectionMock);
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$attribute]);
         $attribute->expects($this->once())
             ->method('setEntity')
             ->with($entity)
@@ -97,12 +104,16 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getFrontendInput')
             ->willReturn($attrFrontendInput);
         $attribute->expects($this->any())
+            ->method('canBeSearchableInGrid')
+            ->willReturn(false);
+        $attribute->expects($this->any())
+            ->method('canBeFilterableInGrid')
+            ->willReturn(false);
+        $attribute->expects($this->any())
             ->method('getData')
             ->willReturnMap(
                 [
                     ['is_used_in_grid', null, true],
-                    ['is_searchable_in_grid', null, false],
-                    ['is_filterable_in_grid', null, false],
                 ]
             );
 
@@ -142,13 +153,20 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $attrBackendType = 'static';
         $attrFrontendInput = 'text';
 
+        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $collectionMock $entityType */
         $entityType = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \Magento\Customer\Model\Resource\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
         $entity = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer')
             ->disableOriginalConstructor()
             ->getMock();
-        $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
+        /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        $attribute = $this->getMockBuilder('Magento\Customer\Model\Attribute')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -156,17 +174,22 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                     'getName',
                     'getFrontendInput',
                     'getBackendType',
+                    'canBeSearchableInGrid',
+                    'canBeFilterableInGrid',
                     'getData',
                 ]
             )
             ->getMock();
-        $this->collection->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$attribute]);
         $this->eavConfig->expects($this->once())
             ->method('getEntityType')
             ->with(Customer::ENTITY)
             ->willReturn($entityType);
+        $entityType->expects($this->once())
+            ->method('getAttributeCollection')
+            ->willReturn($collectionMock);
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$attribute]);
         $entityType->expects($this->once())
             ->method('getEntity')
             ->willReturn($entity);
@@ -180,13 +203,11 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->any())
             ->method('getBackendType')
             ->willReturn($attrBackendType);
-        $attribute->expects($this->once())
-            ->method('getData')
-            ->willReturnMap(
-                [
-                    ['is_searchable_in_grid', null, true],
-                ]
-            );
+        $attribute->expects($this->any())
+            ->method('canBeSearchableInGrid')
+            ->willReturn(true);
+        $attribute->expects($this->never())
+            ->method('canBeFilterableInGrid');
 
         $this->assertEquals(
             ['fields' =>
@@ -228,13 +249,20 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $attrBackendType = 'varchar';
         $attrFrontendInput = 'text';
 
+        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $collectionMock $entityType */
         $entityType = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \Magento\Customer\Model\Resource\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
         $entity = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer')
             ->disableOriginalConstructor()
             ->getMock();
-        $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
+        /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        $attribute = $this->getMockBuilder('Magento\Customer\Model\Attribute')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -242,17 +270,22 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
                     'getName',
                     'getFrontendInput',
                     'getBackendType',
+                    'canBeSearchableInGrid',
+                    'canBeFilterableInGrid',
                     'getData',
                 ]
             )
             ->getMock();
-        $this->collection->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$attribute]);
         $this->eavConfig->expects($this->once())
             ->method('getEntityType')
             ->with(Customer::ENTITY)
             ->willReturn($entityType);
+        $entityType->expects($this->once())
+            ->method('getAttributeCollection')
+            ->willReturn($collectionMock);
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$attribute]);
         $entityType->expects($this->once())
             ->method('getEntity')
             ->willReturn($entity);
@@ -270,12 +303,16 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getBackendType')
             ->willReturn($attrBackendType);
         $attribute->expects($this->any())
+            ->method('canBeSearchableInGrid')
+            ->willReturn(false);
+        $attribute->expects($this->any())
+            ->method('canBeFilterableInGrid')
+            ->willReturn(true);
+        $attribute->expects($this->any())
             ->method('getData')
             ->willReturnMap(
                 [
                     ['is_used_in_grid', null, true],
-                    ['is_searchable_in_grid', null, false],
-                    ['is_filterable_in_grid', null, true],
                 ]
             );
 
