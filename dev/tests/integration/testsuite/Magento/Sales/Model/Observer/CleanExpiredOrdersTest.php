@@ -14,7 +14,7 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Order $order */
         $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
-        $order->load('100000004', 'increment_id');
+        $order->load('100000001', 'increment_id');
         if (!$order->getId()) {
             $this->fail('Fixture failed to create order');
         }
@@ -34,7 +34,7 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
 
         /** @var Order $order */
         $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
-        $order->load('100000004', 'increment_id');
+        $order->load('100000001', 'increment_id');
         $this->assertEquals(Order::STATE_CANCELED, $order->getStatus());
     }
 }
