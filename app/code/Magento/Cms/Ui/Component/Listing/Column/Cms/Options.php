@@ -20,32 +20,16 @@ class Options extends StoreOptions
     const ALL_STORE_VIEWS = '0';
 
     /**
-     * @param SystemStore $systemStore
-     * @param Escaper $escaper
-     */
-    public function __construct(SystemStore $systemStore, Escaper $escaper)
-    {
-        parent::__construct($systemStore, $escaper);
-    }
-
-    /**
      * Get options
      *
      * @return array
      */
     public function toOptionArray()
     {
-        if ($this->options !== null) {
-            return $this->options;
-        }
-        $websiteCollection = $this->systemStore->getWebsiteCollection();
-        $groupCollection = $this->systemStore->getGroupCollection();
-        $storeCollection = $this->systemStore->getStoreCollection();
-
         $this->currentOptions['All Store Views']['label'] = __('All Store Views');
         $this->currentOptions['All Store Views']['value'] = self::ALL_STORE_VIEWS;
 
-        $this->generateCurrentOptions($websiteCollection, $groupCollection, $storeCollection);
+        $this->generateCurrentOptions();
 
         $this->options = array_values($this->currentOptions);
 
