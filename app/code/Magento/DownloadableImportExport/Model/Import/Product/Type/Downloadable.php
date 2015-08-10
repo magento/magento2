@@ -367,6 +367,30 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     }
 
+    /**
+     * Validation links option
+     *
+     * @param array $rowData
+     * @return bool
+     */
+    protected function isRowValidLink(array $rowData)
+    {
+        $result = false;
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
+            $rowData[self::COL_DOWNLOADABLE_LINKS] != '' &&
+            $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == ''
+        ) {
+            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
+            $result = true;
+        }
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
+            $rowData[self::COL_DOWNLOADABLE_LINKS] != ''
+        ) {
+            $result = $this->isTitle($this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]));
+        }
+        return $result;
+
+    }
 
     /**
      * Check isset title for all options
