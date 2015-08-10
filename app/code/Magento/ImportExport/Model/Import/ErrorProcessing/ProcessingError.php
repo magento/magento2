@@ -47,11 +47,11 @@ class ProcessingError
     protected $errorLevel;
 
     /**
-     * @param string $errorMessage
-     * @param string|null $errorCode
+     * @param string $errorCode
+     * @param string|null $errorLevel
      * @param int|null $rowNumber
      * @param string|null $columnName
-     * @param string|null $errorLevel
+     * @param string|null $errorMessage
      * @param string|null $errorDescription
      */
     public function init(
