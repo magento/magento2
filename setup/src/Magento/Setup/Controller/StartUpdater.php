@@ -70,15 +70,22 @@ class StartUpdater extends AbstractActionController
         $errorMessage = '';
         if (isset($postPayload['packages']) && is_array($postPayload['packages']) && isset($postPayload['type'])) {
             $packages = $postPayload['packages'];
+            $jobType = $postPayload['type'];
             foreach ($packages as $package) {
-                if (!isset($package['name']) || !isset($package['version'])) {
+                if (!isset($package['name'])
+                    || ($jobType != 'uninstall' && !isset($package['version']))
+                    || ($jobType == 'uninstall' && !isset($package['type']))
+                ) {
                     $errorMessage .= 'Missing package information';
                     break;
                 }
             }
             if (empty($errorMessage)) {
-                $this->createTypeFlag($postPayload['type'], $postPayload['headerTitle']);
-                $errorMessage .= $this->updater->createUpdaterTask($packages);
+                $this->createTypeFlag($jobType, $postPayload['headerTitle']);
+                $errorMessage .= $this->updater->createUpdaterTask(
+                    $packages,
+                    $jobType == 'uninstall' ? ModelUpdater::TASK_TYPE_UNINSTALL : ModelUpdater::TASK_TYPE_UPDATE
+                );
             }
         } else {
             $errorMessage .= 'Invalid request';

@@ -14,6 +14,18 @@ use Magento\Setup\Model\Cron\Queue;
  */
 class Updater
 {
+    /**#@+
+     * Task types
+     */
+    const TASK_TYPE_UPDATE = 'update';
+    const TASK_TYPE_UNINSTALL = 'uninstall';
+    /**#@-*/
+
+    /**
+     * Task types array
+     */
+    const TASK_TYPES = [self::TASK_TYPE_UPDATE, self::TASK_TYPE_UNINSTALL];
+
     /**
      * @var Queue
      */
@@ -33,14 +45,19 @@ class Updater
      * Create an update task for Updater app
      *
      * @param array $packages
+     * @param string $type
      * @return string
      */
-    public function createUpdaterTask($packages)
+    public function createUpdaterTask(array $packages, $type)
     {
         try {
-            // write to .update_queue.json file
-            $this->queue->addJobs([['name' => 'update', 'params' => ['require' => $packages]]]);
-            return '';
+            if (in_array($type, self::TASK_TYPES)) {
+                // write to .update_queue.json file
+                $this->queue->addJobs([['name' => $type, 'params' => ['components' => $packages]]]);
+                return '';
+            } else {
+                throw new \Exception('Unknown Updater task type');
+            }
         } catch (\Exception $e) {
             return $e->getMessage();
         }
