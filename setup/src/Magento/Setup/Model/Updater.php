@@ -23,8 +23,10 @@ class Updater
 
     /**
      * Task types array
+     *
+     * @var array
      */
-    const TASK_TYPES = [Updater::TASK_TYPE_UPDATE, Updater::TASK_TYPE_UNINSTALL];
+    static private $taskTypes = [Updater::TASK_TYPE_UPDATE, Updater::TASK_TYPE_UNINSTALL];
 
     /**
      * @var Queue
@@ -51,7 +53,7 @@ class Updater
     public function createUpdaterTask(array $packages, $type)
     {
         try {
-            if (in_array($type, self::TASK_TYPES)) {
+            if (in_array($type, self::$taskTypes)) {
                 // write to .update_queue.json file
                 $this->queue->addJobs([['name' => $type, 'params' => ['components' => $packages]]]);
                 return '';
