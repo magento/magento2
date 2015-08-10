@@ -12,6 +12,31 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 class Start extends ImportController
 {
     /**
+     * @var \Magento\ImportExport\Model\Import
+     */
+    protected $importModel;
+
+    /**
+     * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface
+     */
+    protected $reportProcessor;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\ImportExport\Model\Import $importModel
+     * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\ImportExport\Model\Import $importModel,
+        \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
+    ) {
+        parent::__construct($context);
+        $this->importModel = $importModel;
+        $this->reportProcessor = $reportProcessor;
+    }
+
+    /**
      * Start import process action
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -24,18 +49,17 @@ class Start extends ImportController
             $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
             /** @var $resultBlock \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result */
             $resultBlock = $resultLayout->getLayout()->getBlock('import.frame.result');
-            /** @var $importModel \Magento\ImportExport\Model\Import */
-            $importModel = $this->_objectManager->create('Magento\ImportExport\Model\Import');
 
-            $importModel->setData($data);
-            $importModel->importSource();
-
-            if ($importModel->getErrorAggregator()->hasToBeTerminated()) {
-                $this->addResultError($resultBlock, $importModel->getErrorAggregator());
+            $this->importModel->setData($data);
+            $this->importModel->importSource();
+            if ($this->importModel->getErrorAggregator()->hasToBeTerminated()) {
+                $this->addResultError($resultBlock, $this->importModel->getErrorAggregator());
             } else {
-                $importModel->invalidateIndex();
-                $this->addResultMessages($resultBlock, $importModel->getErrorAggregator());
+                $this->importModel->invalidateIndex();
+                $this->addResultMessages($resultBlock, $this->importModel->getErrorAggregator());
             }
+            $link = $this->reportProcessor->createReport($data[''], $this->importModel->getErrorAggregator());
+            $resultBlock->addNotice("Link to Error report: <a href=\"$link\">$link</a>");
 
             return $resultLayout;
         }
@@ -90,12 +114,24 @@ class Start extends ImportController
             ->addSuccess(__('Import successfully done'));
 
         if ($errorAggregator->getErrorsCount()) {
-            $resultBlock->addNotice('Following Error(s) has been occurred during importing process:');
+            $message = '';
             foreach ($this->getImportProcessingMessages($errorAggregator) as $error) {
-                $resultBlock->addNotice($error);
+                $message .= $error . '<br>';
             }
+            $resultBlock->addNotice(
+                '<strong>Following Error(s) has been occurred during importing process:</strong>:<br>' . $message
+            );
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $originalFileName
+     * @return string Link to error report file
+     */
+    protected function createReportFile($originalFileName)
+    {
+        return $this->reportProcessor->createReport($originalFileName, $this->importModel->getErrorAggregator());
     }
 }
