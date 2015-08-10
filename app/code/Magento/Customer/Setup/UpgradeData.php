@@ -6,7 +6,8 @@
 
 namespace Magento\Customer\Setup;
 
-use Magento\Framework\Module\Setup\Migration;
+use Magento\Customer\Model\Customer;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -21,16 +22,31 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @var CustomerSetupFactory
      */
-    private $customerSetupFactory;
+    protected $customerSetupFactory;
 
     /**
-     * Init
-     *
-     * @param CustomerSetupFactory $customerSetupFactory
+     * @var IndexerRegistry
      */
-    public function __construct(CustomerSetupFactory $customerSetupFactory)
-    {
+    protected $indexerRegistry;
+
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
+     * @param CustomerSetupFactory $customerSetupFactory
+     * @param IndexerRegistry $indexerRegistry
+     * @param \Magento\Eav\Model\Config $eavConfig
+     */
+    public function __construct(
+        CustomerSetupFactory $customerSetupFactory,
+        IndexerRegistry $indexerRegistry,
+        \Magento\Eav\Model\Config $eavConfig
+    ) {
         $this->customerSetupFactory = $customerSetupFactory;
+        $this->indexerRegistry = $indexerRegistry;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -170,6 +186,10 @@ class UpgradeData implements UpgradeDataInterface
                 }
             }
         }
+
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
+        $this->eavConfig->clear();
 
         $setup->endSetup();
     }

@@ -9,18 +9,32 @@ use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\Resource\Order\CollectionFactory;
+use Magento\Sales\Api\OrderManagementInterface;
 
+/**
+ * Class MassHold
+ */
 class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
+    /**
+     * @var OrderManagementInterface
+     */
+    protected $orderManagement;
+
     /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      */
-    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
-    {
+    public function __construct(
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        OrderManagementInterface $orderManagement
+    ) {
         parent::__construct($context, $filter);
         $this->collectionFactory = $collectionFactory;
+        $this->orderManagement = $orderManagement;
     }
 
     /**
@@ -36,8 +50,7 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
             if (!$order->canHold()) {
                 continue;
             }
-            $order->hold();
-            $order->save();
+            $this->orderManagement->hold($order->getEntityId());
             $countHoldOrder++;
         }
         $countNonHoldOrder = $collection->count() - $countHoldOrder;

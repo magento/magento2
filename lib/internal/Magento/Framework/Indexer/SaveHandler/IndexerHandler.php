@@ -234,7 +234,7 @@ class IndexerHandler implements IndexerInterface
     private function prepareFields()
     {
         foreach ($this->data['fieldsets'] as $fieldset) {
-            $this->fields = array_merge($this->fields, $fieldset['fields']);
+            $this->fields = array_merge($this->fields, array_values($fieldset['fields']));
         }
     }
 }
