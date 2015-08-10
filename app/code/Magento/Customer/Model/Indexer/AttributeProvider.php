@@ -9,7 +9,7 @@ use Magento\Customer\Model\Customer;
 use Magento\Framework\Indexer\FieldsetInterface;
 use Magento\Customer\Model\Resource\Attribute\Collection;
 use Magento\Eav\Model\Config;
-use Magento\Eav\Model\Entity\Attribute;
+use Magento\Customer\Model\Attribute;
 
 class AttributeProvider implements FieldsetInterface
 {
@@ -24,15 +24,17 @@ class AttributeProvider implements FieldsetInterface
     protected $attributes;
 
     /**
+     * @var Config
+     */
+    protected $eavConfig;
+
+    /**
      * @param Config $eavConfig
-     * @param Collection $collection
      */
     public function __construct(
-        Config $eavConfig,
-        Collection $collection
+        Config $eavConfig
     ) {
         $this->eavConfig = $eavConfig;
-        $this->collection = $collection;
     }
 
     /**
@@ -57,10 +59,11 @@ class AttributeProvider implements FieldsetInterface
     {
         if ($this->attributes === null) {
             $this->attributes = [];
-            /** @var \Magento\Eav\Model\Entity\Attribute[] $attributes */
-            $attributes = $this->collection->getItems();
-            /** @var \Magento\Eav\Model\Entity\AbstractEntity $entity */
-            $entity = $this->eavConfig->getEntityType(static::ENTITY)->getEntity();
+            $entityType = $this->eavConfig->getEntityType(static::ENTITY);
+            /** @var \Magento\Customer\Model\Attribute[] $attributes */
+            $attributes = $entityType->getAttributeCollection()->getItems();
+            /** @var \Magento\Customer\Model\Resource\Customer $entity */
+            $entity = $entityType->getEntity();
 
             foreach ($attributes as $attribute) {
                 $attribute->setEntity($entity);
@@ -82,7 +85,7 @@ class AttributeProvider implements FieldsetInterface
     {
         $fields = [];
         foreach ($attributes as $attribute) {
-            if ($attribute->getBackendType() != 'static') {
+            if (!$attribute->isStatic()) {
                 if ($attribute->getData('is_used_in_grid')) {
                     $fields[$attribute->getName()] = [
                         'name' => $attribute->getName(),
@@ -115,12 +118,9 @@ class AttributeProvider implements FieldsetInterface
      */
     protected function getType(Attribute $attribute)
     {
-        if (
-            in_array($attribute->getFrontendInput(), ['text', 'textarea'])
-            && $attribute->getData('is_searchable_in_grid')
-        ) {
+        if ($attribute->canBeSearchableInGrid()) {
             $type = 'searchable';
-        } elseif ($attribute->getData('is_filterable_in_grid')) {
+        } elseif ($attribute->canBeFilterableInGrid()) {
             $type = 'filterable';
         } else {
             $type = 'virtual';

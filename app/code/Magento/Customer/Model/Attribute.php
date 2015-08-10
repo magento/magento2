@@ -156,4 +156,25 @@ class Attribute extends \Magento\Eav\Model\Attribute
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->invalidate();
     }
+
+    /**
+     * Check whether attribute is searchable in admin grid and it is allowed
+     *
+     * @return bool
+     */
+    public function canBeSearchableInGrid()
+    {
+        return $this->getData('is_searchable_in_grid') && in_array($this->getFrontendInput(), ['text', 'textarea']);
+    }
+
+    /**
+     * Check whether attribute is filterable in admin grid and it is allowed
+     *
+     * @return bool
+     */
+    public function canBeFilterableInGrid()
+    {
+        return $this->getData('is_filterable_in_grid')
+            && in_array($this->getFrontendInput(), ['text', 'date', 'select', 'boolean']);
+    }
 }
