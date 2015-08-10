@@ -10,16 +10,6 @@ use \Magento\Sales\Model\Order;
 
 class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
 {
-    protected function checkFixture()
-    {
-        /** @var Order $order */
-        $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
-        $order->load('100000001', 'increment_id');
-        if (!$order->getId()) {
-            $this->fail('Fixture failed to create order');
-        }
-    }
-
     /**
      * @magentoConfigFixture default sales/orders/delete_pending_after 0
      * @magentoConfigFixture current_store sales/orders/delete_pending_after 0
@@ -27,7 +17,6 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $this->checkFixture();
         /** @var CleanExpiredOrders $job */
         $job = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Observer\CleanExpiredOrders');
         $job->execute();
