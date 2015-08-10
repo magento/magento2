@@ -32,7 +32,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *@SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testAddDynamicData()
     {
