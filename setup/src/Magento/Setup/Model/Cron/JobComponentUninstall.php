@@ -5,6 +5,8 @@
  */
 namespace Magento\Setup\Model\Cron;
 
+use Magento\Framework\Module\PackageInfo;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\Updater;
@@ -36,9 +38,9 @@ class JobComponentUninstall extends AbstractJob
     /**#@-*/
 
     /**
-     * @var ObjectManagerProvider
+     * @var ObjectManagerInterface
      */
-    private $objectManagerProvider;
+    private $objectManager;
 
     /**
      * @var ComponentUninstallerFactory
@@ -49,6 +51,11 @@ class JobComponentUninstall extends AbstractJob
      * @var Updater
      */
     private $updater;
+
+    /**
+     * @var PackageInfo
+     */
+    private $packageInfo;
 
     /**
      * Constructor
@@ -70,9 +77,10 @@ class JobComponentUninstall extends AbstractJob
         $name,
         $params = []
     ) {
-        $this->objectManagerProvider = $objectManagerProvider;
+        $this->objectManager = $objectManagerProvider->get();;
         $this->componentUninstallerFactory = $componentUninstallerFactory;
         $this->updater = $updater;
+        $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         parent::__construct($output, $status, $name, $params);
     }
 
@@ -119,6 +127,8 @@ class JobComponentUninstall extends AbstractJob
         $options = [];
         switch ($type) {
             case self::COMPONENT_MODULE:
+                // convert to module name
+                $componentName = $this->packageInfo->getModuleName($componentName);
                 $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = true;
                 $options[ModuleUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
                 break;
@@ -152,13 +162,12 @@ class JobComponentUninstall extends AbstractJob
      */
     private function cleanUp()
     {
-        $objectManager = $this->objectManagerProvider->get();
         $this->output->writeln('Cleaning cache');
         /** @var \Magento\Framework\App\Cache $cache */
-        $cache = $objectManager->get('Magento\Framework\App\Cache');
+        $cache = $this->objectManager->get('Magento\Framework\App\Cache');
         $cache->clean();
         /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
-        $cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
+        $cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
         $this->output->writeln('Cleaning generated files');
         $cleanupFiles->clearCodeGeneratedClasses();
         $this->output->writeln('Cleaning static view files');

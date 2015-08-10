@@ -69,27 +69,28 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
-    }
 
-    private function setUpCleanup()
-    {
+        $packageInfoFactory = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
+        $packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $packageInfoFactory->expects($this->once())->method('create')->willReturn($packageInfo);
         $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
-        $cache->expects($this->once())->method('clean');
-        $cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses');
-        $cleanupFiles->expects($this->once())->method('clearMaterializedViewFiles');
+        $cache->expects($this->any())->method('clean');
+        $cleanupFiles->expects($this->any())->method('clearCodeGeneratedClasses');
+        $cleanupFiles->expects($this->any())->method('clearMaterializedViewFiles');
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will(
                 $this->returnValueMap(
                     [
                         ['Magento\Framework\App\Cache', $cache],
-                        ['Magento\Framework\App\State\CleanupFiles', $cleanupFiles]
+                        ['Magento\Framework\App\State\CleanupFiles', $cleanupFiles],
+                        ['Magento\Framework\Module\PackageInfoFactory', $packageInfoFactory],
                     ]
                 )
             );
+        $this->objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
+        $this->updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
     }
 
     private function setUpUpdater()
@@ -99,7 +100,6 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteModule()
     {
-        $this->setUpCleanup();
         $this->setUpUpdater();
         $uninstaller = $this->getMockForAbstractClass(
             'Magento\Framework\Composer\AbstractComponentUninstaller',
@@ -134,7 +134,6 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteLanguage()
     {
-        $this->setUpCleanup();
         $this->setUpUpdater();
         $uninstaller = $this->getMockForAbstractClass(
             'Magento\Framework\Composer\AbstractComponentUninstaller',
@@ -169,7 +168,6 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteTheme()
     {
-        $this->setUpCleanup();
         $this->setUpUpdater();
         $uninstaller = $this->getMockForAbstractClass(
             'Magento\Framework\Composer\AbstractComponentUninstaller',
@@ -265,7 +263,6 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteUpdateFails()
     {
-        $this->setUpCleanup();
         $this->updater->expects($this->once())->method('createUpdaterTask')->willReturn('error');
         $uninstaller = $this->getMockForAbstractClass(
             'Magento\Framework\Composer\AbstractComponentUninstaller',
