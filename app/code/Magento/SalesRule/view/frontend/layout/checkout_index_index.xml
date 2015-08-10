@@ -22,7 +22,7 @@
                                                     <item name="children" xsi:type="array">
                                                         <item name="afterMethods" xsi:type="array">
                                                             <item name="children" xsi:type="array">
-                                                                <item name="store-credit" xsi:type="array">
+                                                                <item name="discount" xsi:type="array">
                                                                     <item name="component" xsi:type="string">Magento_SalesRule/js/view/payment/discount</item>
                                                                 </item>
                                                             </item>
