@@ -12,6 +12,7 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Search\TableMapper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TableMapperTest extends \PHPUnit_Framework_TestCase
 {
