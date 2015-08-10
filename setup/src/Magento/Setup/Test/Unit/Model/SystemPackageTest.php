@@ -7,6 +7,7 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\SystemPackage;
+use Magento\Composer\InfoCommand;
 
 class SystemPackageTest extends \PHPUnit_Framework_TestCase
 {
@@ -124,18 +125,21 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
                     'name' => 'magento/product-community-edition',
                     'descrip.' => 'eCommerce Platform for Growth (Community Edition)',
                     'keywords' => '',
-                    'versions' => 'dev-master, 1.2.0, 1.1.0, * 1.0.0',
+                    'versions' => '1.2.0, 1.1.0, * 1.0.0',
                     'type' => 'metapackage',
                     'license' => 'OSL-3.0, AFL-3.0',
                     'source' => '[]',
                     'names' => 'magento/product-community-edition',
                     'current_version' => '1.0.0',
                     'available_versions' => [
-                        0 => 'dev-master',
                         1 => '1.2.0',
                         2 => '1.1.0',
                         3 => '1.0.0',
                     ],
+                    'new_versions' => [
+                        '1.2.0',
+                        '1.1.0'
+                    ]
                 ]
             );
 
