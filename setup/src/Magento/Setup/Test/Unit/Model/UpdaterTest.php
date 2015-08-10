@@ -40,14 +40,15 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'name' => 'uninstall',
-                        'params' => ['components' => [['name' => 'vendor/package']]]
+                        'params' => ['components' => [['name' => 'vendor/package']], 'dataOption' => true]
                     ]
                 ]
             );
         $updater = new Updater($queue);
         $updater->createUpdaterTask(
             [['name' => 'vendor/package']],
-            Updater::TASK_TYPE_UNINSTALL
+            Updater::TASK_TYPE_UNINSTALL,
+            ['dataOption' => true]
         );
     }
 

@@ -17,6 +17,9 @@ angular.module('start-updater', ['ngStorage'])
         if ($localStorage.packages) {
             $scope.packages = $localStorage.packages;
         }
+        if ($localStorage.dataOption) {
+            $scope.dataOption = $localStorage.dataOption;
+        }
         if ($localStorage.backupInfo) {
             $scope.backupInfoPassed = $localStorage.backupInfo;
         }
@@ -42,8 +45,11 @@ angular.module('start-updater', ['ngStorage'])
         $scope.errorMessage = '';
         $scope.update = function() {
             $scope.started = true;
-            $http.post('index.php/start-updater/update', {
-                'packages': $scope.packages, 'type': $state.current.type, 'headerTitle': $scope.title})
+            var payLoad = {'packages': $scope.packages, 'type': $state.current.type, 'headerTitle': $scope.title};
+            if ($scope.dataOption) {
+                payLoad.dataOption = $scope.dataOption;
+            }
+            $http.post('index.php/start-updater/update', payLoad)
                 .success(function (data) {
                     if (data['success']) {
                         $window.location.href = '../update/index.php';

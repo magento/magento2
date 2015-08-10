@@ -48,14 +48,17 @@ class Updater
      *
      * @param array $packages
      * @param string $type
+     * @param array $additionalOptions
      * @return string
      */
-    public function createUpdaterTask(array $packages, $type)
+    public function createUpdaterTask(array $packages, $type, array $additionalOptions = [])
     {
         try {
             if (in_array($type, self::$taskTypes)) {
                 // write to .update_queue.json file
-                $this->queue->addJobs([['name' => $type, 'params' => ['components' => $packages]]]);
+                $this->queue->addJobs(
+                    [['name' => $type, 'params' => array_merge(['components' => $packages], $additionalOptions)]]
+                );
                 return '';
             } else {
                 throw new \Exception('Unknown Updater task type');

@@ -74,9 +74,17 @@ class StartUpdater extends AbstractActionController
                 $packages = $postPayload['packages'];
                 $jobType = $postPayload['type'];
                 $this->createTypeFlag($jobType, $postPayload['headerTitle']);
+                $additionalOptions = [];
+                if ($jobType == 'uninstall') {
+                    $additionalOptions = ['dataOption' => $postPayload['dataOption']];
+                    $cronTaskType = ModelUpdater::TASK_TYPE_UNINSTALL;
+                } else {
+                    $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
+                }
                 $errorMessage .= $this->updater->createUpdaterTask(
                     $packages,
-                    $jobType == 'uninstall' ? ModelUpdater::TASK_TYPE_UNINSTALL : ModelUpdater::TASK_TYPE_UPDATE
+                    $cronTaskType,
+                    $additionalOptions
                 );
             }
         } else {
@@ -97,6 +105,9 @@ class StartUpdater extends AbstractActionController
         $errorMessage = '';
         $packages = $postPayload['packages'];
         $jobType = $postPayload['type'];
+        if ($jobType == 'uninstall' && !isset($postPayload['dataOption'])) {
+            $errorMessage .= 'Missing dataOption' . PHP_EOL;
+        }
         foreach ($packages as $package) {
             if (!isset($package['name'])
                 || ($jobType != 'uninstall' && !isset($package['version']))
