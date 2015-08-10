@@ -25,7 +25,15 @@ class Weight extends AbstractImportValidator implements RowValidatorInterface
     {
         $this->_clearMessages();
         if (!empty($value['weight']) && (!is_numeric($value['weight']) || $value['weight'] < 0)) {
-            $this->_addMessages([sprintf($this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE), 'weight', 'decimal')]);
+            $this->_addMessages(
+                [
+                    sprintf(
+                        $this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE),
+                        'weight',
+                        'decimal'
+                    )
+                ]
+            );
             return false;
         }
         return true;

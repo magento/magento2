@@ -30,7 +30,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
-     * @param $string
+     * @param string $string
      * @return bool
      */
     protected function checkValidUrl($string)
@@ -39,7 +39,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
-     * @param $string
+     * @param string $string
      * @return bool
      */
     protected function checkPath($string)
@@ -48,7 +48,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
-     * @param $path
+     * @param string $path
      * @return bool
      */
     protected function checkFileExists($path)
@@ -57,7 +57,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
-     * @param $url
+     * @param string $url
      * @return bool
      */
     protected function checkUrlExists($url)
@@ -86,9 +86,14 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
         foreach ($this->media_attributes as $attribute) {
             if (isset($value[$attribute]) && strlen($value[$attribute])) {
                 if (!$this->checkPath($value[$attribute]) && !$this->checkValidUrl($value[$attribute])) {
-                    $this->_addMessages([
-                        sprintf($this->context->retrieveMessageTemplate(self::ERROR_INVALID_MEDIA_URL_OR_PATH), $attribute)
-                    ]);
+                    $this->_addMessages(
+                        [
+                            sprintf(
+                                $this->context->retrieveMessageTemplate(self::ERROR_INVALID_MEDIA_URL_OR_PATH),
+                                $attribute
+                            )
+                        ]
+                    );
                     $valid = false;
                 }
             }
@@ -96,9 +101,14 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
         if (isset($value[self::ADDITIONAL_IMAGES]) && strlen($value[self::ADDITIONAL_IMAGES])) {
             foreach (explode(self::ADDITIONAL_IMAGES_DELIMITER, $value[self::ADDITIONAL_IMAGES]) as $image) {
                 if (!$this->checkPath($image) && !$this->checkValidUrl($image)) {
-                    $this->_addMessages([
-                        sprintf($this->context->retrieveMessageTemplate(self::ERROR_INVALID_MEDIA_URL_OR_PATH), self::ADDITIONAL_IMAGES)
-                    ]);
+                    $this->_addMessages(
+                        [
+                            sprintf(
+                                $this->context->retrieveMessageTemplate(self::ERROR_INVALID_MEDIA_URL_OR_PATH),
+                                self::ADDITIONAL_IMAGES
+                            )
+                        ]
+                    );
                     $valid = false;
                 }
                 break;

@@ -120,8 +120,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
-     * @param $code
-     * @param $template
+     * @param string $code
+     * @param string $template
      * @return $this
      */
     public function addErrorMessageTemplate($code, $template)
@@ -267,7 +267,10 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @return int
      */
     public function getErrorsCount(
-        array $errorLevels = [ProcessingError::ERROR_LEVEL_CRITICAL, ProcessingError::ERROR_LEVEL_NOT_CRITICAL]
+        array $errorLevels = [
+        ProcessingError::ERROR_LEVEL_CRITICAL,
+        ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+        ]
     ) {
         $result = 0;
         foreach ($errorLevels as $errorLevel) {
