@@ -103,19 +103,19 @@
     @_pager-icon-font-position: @pager-icon__position,
     @_pager-icon-font-text-hide: @pager-icon__text-hide
 ) {
-    ._pager-label-display(  // To hide or to display label
+    ._mixin-pager-label-display(  // To hide or to display label
         @_pager-label-display: @_pager-label-display,
         @_pager-font-size: @_pager-font-size,
         @_pager-line-height: @_pager-line-height
     );
     .items {
-        ._pager-inline-block-spaces-container();
+        ._mixin-pager-inline-block-spaces-container();
         .mixin-list-reset-styles();
         .css(display, @_pager-item-display);
         .css(font-weight, @_pager-font-weight);
     }
     .item {
-        ._pager-inline-block-spaces-item(
+        ._mixin-pager-inline-block-spaces-item(
             @_pager-font-size: @_pager-font-size,
             @_pager-line-height: @_pager-line-height
         );
@@ -182,7 +182,7 @@
             @_pager-current-gradient
         );
         .css(border, @_pager-current-border);
-        ._pager-inline-block-spaces-item(
+        ._mixin-pager-inline-block-spaces-item(
             @_pager-font-size: @_pager-font-size,
             @_pager-line-height: @_pager-line-height
         );
@@ -239,7 +239,7 @@
             .css(color, @_pager-action-color-active);
         }
         &.next {
-            ._pager-icon (
+            ._mixin-pager-icon (
                 @_pager-icon-use: @_pager-icon-use,
                 @_icon-font-content: @_pager-icon-next-content,
                 @_icon-font: @_pager-icon-font,
@@ -255,7 +255,7 @@
             );
         }
         &.previous {
-            ._pager-icon (
+            ._mixin-pager-icon (
                 @_pager-icon-use: @_pager-icon-use,
                 @_icon-font-content: @_pager-icon-previous-content,
                 @_icon-font: @_pager-icon-font,
@@ -274,12 +274,12 @@
 }
 
 //  Delete spaces between elements when pager items have display: inline-block
-._pager-inline-block-spaces-container() when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
+._mixin-pager-inline-block-spaces-container() when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
     .inline-block-space-container();
     white-space: nowrap;
 }
 
-._pager-inline-block-spaces-item(
+._mixin-pager-inline-block-spaces-item(
     @_pager-font-size: @_pager-font-size,
     @_pager-line-height: @_pager-line-height
 ) when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
@@ -290,7 +290,7 @@
 }
 
 // Display or hide "page" label
-._pager-label-display(
+._mixin-pager-label-display(
     @_pager-label-display: @_pager-label-display,
     @_pager-font-size: @_pager-font-size,
     @_pager-font-weight: @_pager-font-weight,
@@ -309,7 +309,7 @@
     }
 }
 
-._pager-label-display(
+._mixin-pager-label-display(
     @_pager-label-display: @_pager-label-display,
     @_pager-font-size: @_pager-font-size,
     @_pager-font-weight: @_pager-font-weight,
@@ -320,7 +320,7 @@
     }
 }
 
-._pager-label-display(
+._mixin-pager-label-display(
     @_pager-label-display: @_pager-label-display,
     @_pager-font-size: @_pager-font-size,
     @_pager-font-weight: @_pager-font-weight,
@@ -331,7 +331,7 @@
     }
 }
 
-._pager-icon (
+._mixin-pager-icon (
     @_pager-icon-use: @_pager-icon-use,
     @_icon-font-content,
     @_icon-font: @_pager-icon-font,
@@ -367,7 +367,7 @@
     );
 }
 
-._pager-icon (
+._mixin-pager-icon (
     @_pager-icon-use: @_pager-icon-use,
     @_icon-font-content,
     @_icon-font: @_pager-icon-font,

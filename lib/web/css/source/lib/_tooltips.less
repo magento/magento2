@@ -53,7 +53,7 @@
             @_font-style: @_tooltip-font-style
         );
 
-        ._tooltip-border(@_tooltip-border-width, @_tooltip-border-color);
+        ._mixin-tooltip-border(@_tooltip-border-width, @_tooltip-border-color);
 
         @_tooltip-arrow-after-margin: @_tooltip-arrow-size * -1px;
         @_tooltip-arrow-before-margin: (@_tooltip-arrow-size + round(@_tooltip-border-width * 1.41421356)) * -1px;
@@ -77,7 +77,7 @@
             border-color: transparent;
         }
 
-        ._tooltip-arrow-position(
+        ._mixin-tooltip-arrow-position(
             @_tooltip-position,
             @_tooltip-arrow-size,
             @_tooltip-background,
@@ -99,14 +99,14 @@
     }
 }
 
-._tooltip-border(
+._mixin-tooltip-border(
     @_tooltip-border-width,
     @_tooltip-border-color
 ) when not (@_tooltip-border-width = 0) and not (@_tooltip-border-width = false) and not (@_tooltip-border-color = false) {
     .css(border, @_tooltip-border-width solid @_tooltip-border-color);
 }
 
-._tooltip-arrow-position(
+._mixin-tooltip-arrow-position(
     @_tooltip-position,
     @_tooltip-arrow-size,
     @_tooltip-background,
@@ -136,7 +136,7 @@
     }
 }
 
-._tooltip-arrow-position(
+._mixin-tooltip-arrow-position(
     @_tooltip-position,
     @_tooltip-arrow-size,
     @_tooltip-background,
@@ -166,7 +166,7 @@
     }
 }
 
-._tooltip-arrow-position(
+._mixin-tooltip-arrow-position(
     @_tooltip-position,
     @_tooltip-arrow-size,
     @_tooltip-background,
@@ -196,7 +196,7 @@
     }
 }
 
-._tooltip-arrow-position(
+._mixin-tooltip-arrow-position(
     @_tooltip-position,
     @_tooltip-arrow-size,
     @_tooltip-background,

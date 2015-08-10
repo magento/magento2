@@ -520,7 +520,7 @@
 
     //  Summary block
     &-summary {
-      .layout-column(2, 2, @layout-column-checkout__width-left);
+      .mixin-layout-column(2, 2, @layout-column-checkout__width-left);
       padding: 1px @indent__base @indent__m;
       position: relative;
       > .title {
@@ -594,7 +594,7 @@
     //  Discount
     &-discount {
       border: 0;
-      .layout-column(2, 1, @layout-column-checkout__width-main);
+      .mixin-layout-column(2, 1, @layout-column-checkout__width-main);
       &:extend(.abs-add-box-sizing-desktop all);
       padding-right: 4%;
       .block {
@@ -633,7 +633,7 @@
 
   //  Cross sell
   .block.crosssell {
-    .layout-column(2, 1, @layout-column-checkout__width-main);
+    .mixin-layout-column(2, 1, @layout-column-checkout__width-main);
     &:extend(.abs-add-box-sizing-desktop all);
     padding: 0 4% 0 0;
     .products-grid .product-item {

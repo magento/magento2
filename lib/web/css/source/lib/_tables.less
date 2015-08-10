@@ -374,7 +374,7 @@
     @_reset-table-hover: false,
     @_table-responsive-cell-padding: @table-responsive-cell__padding
 ) when (@_reset-table-striped = false) and (@_reset-table-hover = false){
-    ._responsive-table(
+    ._mixin-responsive-table(
         @_table-background-color-responsive: @_table-background-color-responsive,
         @_table-responsive-cell-padding: @_table-responsive-cell-padding
     );
@@ -395,7 +395,7 @@
         @_table_cell-background-color-hover: @_table-background-color-responsive,
         @_table_cell-odd-background-color-hover: @_table-background-color-responsive
     );
-    ._responsive-table(
+    ._mixin-responsive-table(
         @_table-background-color-responsive: @_table-background-color-responsive,
         @_table-responsive-cell-padding: @_table-responsive-cell-padding
     );
@@ -412,7 +412,7 @@
     @_table-responsive-cell-padding: @table-responsive-cell__padding
 ) when (@_reset-table-striped = true) and (@_reset-table-hover = false){
     .mixin-table-striped(@_stripped-background-color: @_table-background-color-responsive);
-    ._responsive-table(
+    ._mixin-responsive-table(
         @_table-background-color-responsive: @_table-background-color-responsive,
         @_table-responsive-cell-padding: @_table-responsive-cell-padding
     );
@@ -430,7 +430,7 @@
         @_table_cell-background-color-hover: @_table-background-color-responsive,
         @_table_cell-odd-background-color-hover: @_table-background-color-responsive
     );
-    ._responsive-table(
+    ._mixin-responsive-table(
         @_table-background-color-responsive: @_table-background-color-responsive,
         @_table-responsive-cell-padding: @_table-responsive-cell-padding
     );
@@ -483,7 +483,7 @@
     }
 }
 
-._responsive-table(
+._mixin-responsive-table(
     @_table-background-color-responsive: @_table-background-color-responsive,
     @_table-responsive-cell-padding: @_table-responsive-cell-padding
 ) {

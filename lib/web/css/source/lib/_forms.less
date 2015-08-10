@@ -57,7 +57,7 @@
     .css(vertical-align, @_vertical-align);
     .css(width, @_width);
 
-    ._form-element-focus(
+    ._mixin-form-element-focus(
         @_background,
         @_focus-background,
         @_border,
@@ -68,7 +68,7 @@
         @_focus-font-style
     );
 
-    ._form-element-disabled(
+    ._mixin-form-element-disabled(
         @_background,
         @_disabled-background,
         @_border,
@@ -80,7 +80,7 @@
         @_disabled-opacity
     );
 
-    ._form-element-placeholder(
+    ._mixin-form-element-placeholder(
         @_type,
         @_placeholder-color,
         @_font-style,
@@ -97,7 +97,7 @@
     .css(margin, @_margin);
     .css(vertical-align, @_vertical-align);
     &:disabled {
-        ._form-element-add-opacity(@_disabled-opacity);
+        ._mixin-form-element-add-opacity(@_disabled-opacity);
     }
 }
 
@@ -140,14 +140,14 @@
     .css(border-color, @_border-color);
     .css(color, @_color);
     &:focus {
-        ._form-element-state-add-border-color(@_focus-border-color, @_border-color);
-        ._form-element-state-add-background(@_focus-background, @_background);
-        ._form-element-state-add-font-color(@_focus-color, @_color);
+        ._mixin-form-element-state-add-border-color(@_focus-border-color, @_border-color);
+        ._mixin-form-element-state-add-background(@_focus-background, @_background);
+        ._mixin-form-element-state-add-font-color(@_focus-color, @_color);
     }
     &:disabled {
-        ._form-element-state-add-border-color(@_disabled-border-color, @_border-color);
-        ._form-element-state-add-background(@_disabled-background, @_background);
-        ._form-element-state-add-font-color(@_disabled-color, @_color);
+        ._mixin-form-element-state-add-border-color(@_disabled-border-color, @_border-color);
+        ._mixin-form-element-state-add-background(@_disabled-background, @_background);
+        ._mixin-form-element-state-add-font-color(@_disabled-color, @_color);
     }
     &::-moz-placeholder {
         .css(color, @_placeholder-color);
@@ -215,7 +215,7 @@
         @_line-height: @_note-line-height,
         @_font-style: @_note-font-style
     );
-    ._form-validation-icon(
+    ._mixin-form-validation-icon(
         @_note-icon-use,
         @_note-icon-font-content,
         @_note-icon-font,
@@ -325,7 +325,7 @@
 //  Internal use mixins
 //  ---------------------------------------------
 
-._form-validation-icon(
+._mixin-form-validation-icon(
     @_note-icon-use,
     @_note-icon-font-content,
     @_note-icon-font,
@@ -354,12 +354,12 @@
     );
 }
 
-._form-element-add-opacity(@_opacity) when not (@_opacity = 1) {
+._mixin-form-element-add-opacity(@_opacity) when not (@_opacity = 1) {
     .css(opacity, @_opacity);
 }
 
 //  Only for states :disabled, :focus, placeholder
-._form-element-focus(
+._mixin-form-element-focus(
     @_background-default,
     @_background-state,
     @_border-default,
@@ -370,14 +370,14 @@
     @_font-style-state
 ) {
     &:focus {
-        ._form-element-state-add-background(@_background-state, @_background-default);
-        ._form-element-state-add-border(@_border-state, @_border-default);
-        ._form-element-state-add-font-color(@_color-state, @_color-default);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        ._mixin-form-element-state-add-background(@_background-state, @_background-default);
+        ._mixin-form-element-state-add-border(@_border-state, @_border-default);
+        ._mixin-form-element-state-add-font-color(@_color-state, @_color-default);
+        ._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
 }
 
-._form-element-disabled(
+._mixin-form-element-disabled(
     @_background-default,
     @_background-state,
     @_border-default,
@@ -389,15 +389,15 @@
     @_opacity
 ) {
     &:disabled {
-        ._form-element-add-opacity(@_opacity);
-        ._form-element-state-add-background(@_background-state, @_background-default);
-        ._form-element-state-add-border(@_border-state, @_border-default);
-        ._form-element-state-add-font-color(@_color-state, @_color-default);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        ._mixin-form-element-add-opacity(@_opacity);
+        ._mixin-form-element-state-add-background(@_background-state, @_background-default);
+        ._mixin-form-element-state-add-border(@_border-state, @_border-default);
+        ._mixin-form-element-state-add-font-color(@_color-state, @_color-default);
+        ._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
 }
 
-._form-element-placeholder(
+._mixin-form-element-placeholder(
     @_type,
     @_color,
     @_font-style-default,
@@ -405,35 +405,35 @@
 ) when not (@_type = select) {
     &::-moz-placeholder {
         .css(color, @_color);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        ._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
     &::-webkit-input-placeholder {
         .css(color, @_color);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        ._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
     &:-ms-input-placeholder {
         .css(color, @_color);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        ._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
 }
 
-._form-element-state-add-background(@_background-state, @_background-default) when not (@_background-state = @_background-default) {
+._mixin-form-element-state-add-background(@_background-state, @_background-default) when not (@_background-state = @_background-default) {
     .css(background, @_background-state);
 }
 
-._form-element-state-add-border(@_border-state, @_border-default) when not ('@{_border-state}' = '@{_border-default}') {
+._mixin-form-element-state-add-border(@_border-state, @_border-default) when not ('@{_border-state}' = '@{_border-default}') {
     .css(border, @_border-state);
 }
 
-._form-element-state-add-border-color(@_border-state, @_border-default) when not (@_border-state = @_border-default) {
+._mixin-form-element-state-add-border-color(@_border-state, @_border-default) when not (@_border-state = @_border-default) {
     .css(border-color, @_border-state);
 }
 
-._form-element-state-add-font-style(@_font-style-state, @_font-style-default) when not (@_font-style-state = @_font-style-default) {
+._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default) when not (@_font-style-state = @_font-style-default) {
     .css(font-style, @_font-style-state);
 }
 
-._form-element-state-add-font-color(@_color-state, @_color-default) when not (@_color-state = @_color-default) {
+._mixin-form-element-state-add-font-color(@_color-state, @_color-default) when not (@_color-state = @_color-default) {
     .css(color, @_color-state);
 }
 
@@ -646,7 +646,7 @@
         .css(margin-top, @_additional-vertical-indent);
     }
 
-    ._form-field-required(
+    ._mixin-form-field-required(
         @_label-asterisk-color,
         @_label-asterisk-font-size,
         @_label-asterisk-font-family,
@@ -656,7 +656,7 @@
         @_label-asterisk-margin
     );
 
-    ._form-field-note(
+    ._mixin-form-field-note(
         @_note-font-size,
         @_note-color,
         @_note-font-family,
@@ -694,7 +694,7 @@
     @_type-block-label-padding: @form-field-type-label-block__padding,
     @_type-block-label-align: @form-field-type-label-block__align
 ) when (@_type = inline) {
-    ._form-field-type-inline(
+    ._mixin-form-field-type-inline(
         @_type-inline-margin,
         @_type-inline-label-margin,
         @_type-inline-label-padding,
@@ -719,7 +719,7 @@
     @_type-block-label-padding: @form-field-type-label-block__padding,
     @_type-block-label-align: @form-field-type-label-block__align
 ) when (@_type = block) {
-    ._form-field-type-block(
+    ._mixin-form-field-type-block(
         @_type-block-margin,
         @_type-block-label-margin,
         @_type-block-label-padding,
@@ -727,7 +727,7 @@
     );
 }
 
-._form-field-type-inline(
+._mixin-form-field-type-inline(
     @_type-inline-margin,
     @_type-inline-label-margin,
     @_type-inline-label-padding,
@@ -772,7 +772,7 @@
     }
 }
 
-._form-field-type-block(
+._mixin-form-field-type-block(
     @_type-block-margin,
     @_type-block-label-margin,
     @_type-block-label-padding,
@@ -787,7 +787,7 @@
     }
 }
 
-._form-field-required(
+._mixin-form-field-required(
     @_color: @form-field-label-asterisk__color,
     @_font-size: @form-field-label-asterisk__font-size,
     @_font-family: @form-field-label-asterisk__font-family,
@@ -810,7 +810,7 @@
     }
 }
 
-._form-field-note(
+._mixin-form-field-note(
     @_note-font-size,
     @_note-color,
     @_note-font-family,
@@ -881,11 +881,11 @@
             float: none;
             width: auto;
 
-            ._revert-type-block-label-align(
+            ._mixin-revert-type-block-label-align(
                 @_type-block-label-align
             );
 
-            ._revert-type-block-label-padding(
+            ._mixin-revert-type-block-label-padding(
                 @_type-block-label-padding
             );
         }
@@ -895,7 +895,7 @@
         }
     }
 
-    ._form-field-type-block(
+    ._mixin-form-field-type-block(
         @_type-block-margin,
         @_type-block-label-margin,
         @_type-block-label-padding,
@@ -923,11 +923,11 @@
     @_type-block-label-align: @form-field-type-label-block__align
 ) when (@_type = inline) and not (@_type = false) {
     > .label {
-        ._revert-type-inline-label-margin(
+        ._mixin-revert-type-inline-label-margin(
             @_type-inline-label-margin
         );
     }
-    ._form-field-type-inline(
+    ._mixin-form-field-type-inline(
         @_type-inline-margin,
         @_type-inline-label-margin,
         @_type-inline-label-padding,
@@ -960,19 +960,19 @@
     .css(width, 100% / @_column-number);
 }
 
-._revert-type-block-label-padding(
+._mixin-revert-type-block-label-padding(
     @_type-block-label-padding
 ) when (@_type-block-label-padding = false) {
     padding: 0;
 }
 
-._revert-type-block-label-align(
+._mixin-revert-type-block-label-align(
     @_type-block-label-align
 ) when (@_type-block-label-align = false) {
     text-align: left;
 }
 
-._revert-type-inline-label-margin(
+._mixin-revert-type-inline-label-margin(
     @_type-inline-label-margin
 ) when (@_type-inline-label-margin = false) {
     margin: 0;
@@ -990,7 +990,7 @@
     @_margin: @form-hasrequired__margin,
     @_padding: @form-hasrequired__padding
 ) {
-    ._form-hasrequired-position(
+    ._mixin-form-hasrequired-position(
         @_position,
         @_border,
         @_margin,
@@ -1004,7 +1004,7 @@
     );
 }
 
-._form-hasrequired-position(
+._mixin-form-hasrequired-position(
     @_position,
     @_border,
     @_margin,
@@ -1017,7 +1017,7 @@
     @_font-style
 ) when (@_position = top) {
     &:before {
-        ._form-hasrequired-position-any(
+        ._mixin-form-hasrequired-position-any(
             @_border,
             @_margin,
             @_padding,
@@ -1031,7 +1031,7 @@
     }
 }
 
-._form-hasrequired-position(
+._mixin-form-hasrequired-position(
     @_position,
     @_border,
     @_margin,
@@ -1044,7 +1044,7 @@
     @_font-style
 ) when (@_position = bottom) {
     &:after {
-        ._form-hasrequired-position-any(
+        ._mixin-form-hasrequired-position-any(
             @_border,
             @_margin,
             @_padding,
@@ -1058,7 +1058,7 @@
     }
 }
 
-._form-hasrequired-position-any(
+._mixin-form-hasrequired-position-any(
     @_border,
     @_margin,
     @_padding,

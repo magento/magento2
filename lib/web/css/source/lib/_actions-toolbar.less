@@ -22,8 +22,8 @@
     .clearfix();
     .css(margin, @_actions-toolbar-margin);
     .css(padding, @_actions-toolbar-padding);
-    ._actions-toolbar-align(@_actions-toolbar-actions-position);
-    ._actions-toolbar-floats(@_actions-toolbar-actions-position, @_actions-toolbar-actions-reverse);
+    ._mixin-actions-toolbar-align(@_actions-toolbar-actions-position);
+    ._mixin-actions-toolbar-floats(@_actions-toolbar-actions-position, @_actions-toolbar-actions-reverse);
     .primary,
     .secondary {
         display: inline-block;
@@ -69,11 +69,11 @@
 //  Internal use mixins
 //  ---------------------------------------------
 
-._actions-toolbar-align(@_actions-toolbar-actions-position) when not (@_actions-toolbar-actions-position = justify) {
+._mixin-actions-toolbar-align(@_actions-toolbar-actions-position) when not (@_actions-toolbar-actions-position = justify) {
     .css(text-align, @_actions-toolbar-actions-position);
 }
 
-._actions-toolbar-floats(
+._mixin-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = justify) and (@_actions-toolbar-actions-reverse = false) {
@@ -85,7 +85,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._mixin-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = justify) and (@_actions-toolbar-actions-reverse = true) {
@@ -97,7 +97,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._mixin-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = left) and (@_actions-toolbar-actions-reverse = false) {
@@ -106,7 +106,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._mixin-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = left) and (@_actions-toolbar-actions-reverse = true) {
@@ -115,7 +115,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._mixin-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = false) {
@@ -124,7 +124,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._mixin-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = true) {
@@ -133,7 +133,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._mixin-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = center) {

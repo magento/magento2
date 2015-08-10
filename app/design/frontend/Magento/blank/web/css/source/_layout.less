@@ -13,7 +13,7 @@
 & when (@media-common = true) {
 
 .columns {
-    #layout-columns();
+    #mixin-layout-columns();
     .column.main {
         &:extend(.abs-add-box-sizing all);
         .vendor-prefix-flex-grow(1);
@@ -100,13 +100,13 @@
     }
 
     .column.main {
-        #layout-columns > .main();
+        #mixin-layout-columns > .main();
         &:extend(.abs-add-box-sizing-desktop all);
         min-height: 300px;
     }
 
     .sidebar-main {
-        #layout-columns > .left();
+        #mixin-layout-columns > .left();
         padding-right: @layout-column-main__sidebar-offset;
         &:extend(.abs-add-box-sizing-desktop all);
     }
@@ -117,7 +117,7 @@
     }
 
     .sidebar-additional {
-        #layout-columns > .right();
+        #mixin-layout-columns > .right();
         padding-left: @layout-column__additional-sidebar-offset;
         clear: right;
         &:extend(.abs-add-box-sizing-desktop all);
