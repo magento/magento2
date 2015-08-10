@@ -77,6 +77,7 @@ class JobFactory
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $cronStatus,
+                    $this->serviceLocator->get('Magento\Setup\Model\Updater'),
                     $name,
                     $params
                 );

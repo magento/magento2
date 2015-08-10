@@ -240,7 +240,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             $this->moduleUninstaller->uninstall(
                 $output,
                 $modules,
-                [ModuleUninstaller::OPTION_REMOVE_CODE => true, ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
             );
             $this->cleanup($input, $output);
             $output->writeln('<info>Disabling maintenance mode</info>');
@@ -290,7 +290,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         } else {
             $output->writeln('<info>Removing data</info>');
         }
-        $this->moduleUninstaller->uninstall($output, $modules, [ModuleUninstaller::OPTION_REMOVE_DATA => true]);
+        $this->moduleUninstaller->uninstall($output, $modules, [ModuleUninstaller::OPTION_UNINSTALL_DATA => true]);
     }
 
 

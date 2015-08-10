@@ -11,7 +11,7 @@ use Magento\Setup\Model\Updater;
 
 class UpdaterTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreateUpdaterTask()
+    public function testCreateUpdaterTaskUpdate()
     {
         $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
         $queue->expects($this->once())
@@ -20,11 +20,48 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'name' => 'update',
-                        'params' => ['require' => [['name' => 'vendor/package', 'version' => 'dev-master']]]
+                        'params' => ['components' => [['name' => 'vendor/package', 'version' => 'dev-master']]]
                     ]
                 ]
             );
         $updater = new Updater($queue);
-        $updater->createUpdaterTask([['name' => 'vendor/package', 'version' => 'dev-master']]);
+        $updater->createUpdaterTask(
+            [['name' => 'vendor/package', 'version' => 'dev-master']],
+            Updater::TASK_TYPE_UPDATE
+        );
+    }
+
+    public function testCreateUpdaterTaskUninstall()
+    {
+        $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
+        $queue->expects($this->once())
+            ->method('addJobs')
+            ->with(
+                [
+                    [
+                        'name' => 'uninstall',
+                        'params' => ['components' => [['name' => 'vendor/package']]]
+                    ]
+                ]
+            );
+        $updater = new Updater($queue);
+        $updater->createUpdaterTask(
+            [['name' => 'vendor/package']],
+            Updater::TASK_TYPE_UNINSTALL
+        );
+    }
+
+    public function testCreateUpdaterTaskUnknownType()
+    {
+        $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
+        $queue->expects($this->never())->method($this->anything());
+        $updater = new Updater($queue);
+        $this->assertEquals(
+            'Unknown Updater task type',
+            $updater->createUpdaterTask(
+                [['name' => 'vendor/package', 'version' => 'dev-master']],
+                'unknown'
+            )
+        );
     }
 }

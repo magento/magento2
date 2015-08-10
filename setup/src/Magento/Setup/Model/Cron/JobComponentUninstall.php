@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Cron;
 
 use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\Updater;
 use Magento\Theme\Model\Theme\ThemeUninstaller;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,9 +27,13 @@ class JobComponentUninstall extends AbstractJob
      */
     const COMPONENT_NAME = 'name';
 
+    /**#@+
+     * Component types
+     */
     const COMPONENT_MODULE = 'module';
     const COMPONENT_THEME = 'theme';
     const COMPONENT_LANGUAGE = 'language';
+    /**#@-*/
 
     /**
      * @var ObjectManagerProvider
@@ -41,12 +46,18 @@ class JobComponentUninstall extends AbstractJob
     private $componentUninstallerFactory;
 
     /**
+     * @var Updater
+     */
+    private $updater;
+
+    /**
      * Constructor
      *
      * @param ComponentUninstallerFactory $componentUninstallerFactory
      * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
      * @param Status $status
+     * @param Updater $updater
      * @param array $name
      * @param array $params
      */
@@ -55,11 +66,13 @@ class JobComponentUninstall extends AbstractJob
         ObjectManagerProvider $objectManagerProvider,
         OutputInterface $output,
         Status $status,
+        Updater $updater,
         $name,
         $params = []
     ) {
         $this->objectManagerProvider = $objectManagerProvider;
         $this->componentUninstallerFactory = $componentUninstallerFactory;
+        $this->updater = $updater;
         parent::__construct($output, $status, $name, $params);
     }
 
@@ -71,47 +84,54 @@ class JobComponentUninstall extends AbstractJob
      */
     public function execute()
     {
-        if (!isset($this->params[self::COMPONENT_TYPE])
-            || !isset($this->params[self::COMPONENT_NAME])
-            || !is_array($this->params[self::COMPONENT_NAME])
-        ) {
-            throw new \RuntimeException('Job parameter format is incorrect');
+        if (!isset($this->params['components']) || !is_array($this->params['components'])) {
+            throw new \RunTimeException('Job parameter format is incorrect');
         }
-        $type = $this->params[self::COMPONENT_TYPE];
-        $component = $this->params[self::COMPONENT_NAME];
+        $components = $this->params['components'];
+        foreach ($components as $component) {
+            if (!isset($component[self::COMPONENT_TYPE]) || !isset($component[self::COMPONENT_NAME])) {
+                throw new \RuntimeException('Job parameter format is incorrect');
+            }
+            $type = $component[self::COMPONENT_TYPE];
+            $componentName = $component[self::COMPONENT_NAME];
 
-        if (!in_array($type, [self::COMPONENT_MODULE, self::COMPONENT_THEME, self::COMPONENT_LANGUAGE])) {
-            throw new \RuntimeException('Unknown component type');
-        }
+            if (!in_array($type, [self::COMPONENT_MODULE, self::COMPONENT_THEME, self::COMPONENT_LANGUAGE])) {
+                throw new \RuntimeException('Unknown component type');
+            }
 
-        $options = [];
-        switch ($type) {
-            case self::COMPONENT_MODULE:
-                $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = true;
-                $options[ModuleUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
-                break;
-            case self::COMPONENT_THEME:
-                $options[ThemeUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
-                break;
-            case self::COMPONENT_LANGUAGE:
-                break;
+            $options = [];
+            switch ($type) {
+                case self::COMPONENT_MODULE:
+                    $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = true;
+                    $options[ModuleUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
+                    break;
+                case self::COMPONENT_THEME:
+                    $options[ThemeUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
+                    break;
+                case self::COMPONENT_LANGUAGE:
+                    break;
+            }
+            $this->createAndRunUninstaller($type, $componentName, $options);
         }
-        $this->createAndRunUninstaller($type, $component, $options);
         $this->cleanUp();
+        $errorMessage = $this->updater->createUpdaterTask($components, Updater::TASK_TYPE_UNINSTALL);
+        if ($errorMessage) {
+            throw new \RuntimeException($errorMessage);
+        }
     }
 
     /**
      * Create the command and run it
      *
      * @param string $type
-     * @param array $component
+     * @param string $componentName
      * @param array $options
      * @return void
      */
-    private function createAndRunUninstaller($type, array $component, array $options)
+    private function createAndRunUninstaller($type, $componentName, array $options)
     {
         $uninstaller = $this->componentUninstallerFactory->create($type);
-        $uninstaller->uninstall($this->output, $component, $options);
+        $uninstaller->uninstall($this->output, [$componentName], $options);
     }
 
     /**

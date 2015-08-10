@@ -376,7 +376,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_CODE => true, ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
             );
         $this->tester->execute($input);
     }
@@ -390,7 +390,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_CODE => true, ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
             );
         $this->cleanupFiles->expects($this->once())->method('clearMaterializedViewFiles');
         $this->tester->execute($input);
@@ -405,14 +405,14 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_DATA => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_DATA => true]
             );
         $this->moduleUninstaller->expects($this->at(1))
             ->method('uninstall')
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_CODE => true, ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
             );
         $this->tester->execute($input);
     }
@@ -426,14 +426,14 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_DATA => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_DATA => true]
             );
         $this->moduleUninstaller->expects($this->at(1))
             ->method('uninstall')
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_CODE => true, ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
             );
         $this->cleanupFiles->expects($this->once())->method('clearMaterializedViewFiles');
         $this->tester->execute($input);
@@ -448,7 +448,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_CODE => true, ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
             );
         $this->backupRollback->expects($this->once())
             ->method('codeBackup')
@@ -465,7 +465,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_CODE => true, ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
             );
         $this->backupRollback->expects($this->once())
             ->method('codeBackup')
@@ -482,7 +482,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_CODE => true, ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
             );
         $this->backupRollback->expects($this->once())
             ->method('dbBackup')
@@ -499,7 +499,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $input['module'],
-                [ModuleUninstaller::OPTION_REMOVE_CODE => true, ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
             );
         $this->question
             ->expects($this->once())

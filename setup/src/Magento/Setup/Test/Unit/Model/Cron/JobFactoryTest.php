@@ -44,7 +44,10 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
+
         $returnValueMap =[
+            ['Magento\Setup\Model\Updater', $updater],
             ['Magento\Setup\Model\Cron\Status', $status],
             ['Magento\Setup\Console\Command\UpgradeCommand', $upgradeCommand],
             ['Magento\Framework\App\MaintenanceMode', $maintenanceMode],
