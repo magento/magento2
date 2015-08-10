@@ -3,15 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Model\Metadata;
+namespace Magento\Customer\Test\Unit\Model\Metadata;
 
 use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Model\Metadata\AddressMetadataManagement;
 
 class AddressMetadataManagementTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var CustomerMetadataManagement */
+    /** @var AddressMetadataManagement */
     protected $model;
 
     /** @var \Magento\Customer\Model\Metadata\AttributeResolver|\PHPUnit_Framework_MockObject_MockObject */
