@@ -11,6 +11,13 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Store\Model\Store;
 
+/**
+ * Class Downloadable
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**
@@ -253,7 +260,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\Resource $resource
      * @param array $params
-     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Downloadable\Helper\File $fileHelper
      */
@@ -265,7 +272,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Downloadable\Helper\File $fileHelper
-    ){
+    ) {
         $this->uploaderFactory = $uploaderFactory;
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->parameters = $this->_entityModel->getParameters();
@@ -333,32 +340,28 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $this->rowNum = $rowNum;
         $error = false;
-        if (!$this->isRowDownloadableNoValid($rowData)){
+        if (!$this->isRowDownloadableNoValid($rowData)) {
             $this->_entityModel->addRowError(self::ERROR_OPTIONS_NOT_FOUND, $this->rowNum);
             $error = true;
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
-            $rowData[self::COL_DOWNLOADABLE_LINKS] != '' &&
-            $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == '')
-        {
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])
+            && $rowData[self::COL_DOWNLOADABLE_LINKS] != ''
+            && $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == '') {
             $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
             $error = true;
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) &&
-            $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '' &&
-            $this->sampleGroupTitle($rowData) == '')
-        {
+        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])
+            && $rowData[self::COL_DOWNLOADABLE_SAMPLES] != ''
+            && $this->sampleGroupTitle($rowData) == '') {
             $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
             $error = true;
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
-            $rowData[self::COL_DOWNLOADABLE_LINKS] != '')
-        {
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])
+            && $rowData[self::COL_DOWNLOADABLE_LINKS] != '') {
             $error = $this->isTitle($this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]));
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) &&
-            $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '')
-        {
+        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])
+            && $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '') {
             $error = $this->isTitle($this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES]));
         }
         return !$error;
@@ -370,10 +373,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $options
      * @return bool
      */
-    protected function isTitle(array $options){
+    protected function isTitle(array $options)
+    {
         $result = false;
-        foreach($options as $option){
-            if (!array_key_exists('title', $option)){
+        foreach ($options as $option) {
+            if (!array_key_exists('title', $option)) {
                 $this->_entityModel->addRowError(self::ERROR_OPTION_NO_TITLE, $this->rowNum);
                 $result = true;
             }
@@ -413,7 +417,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function deleteFiles(){
+    protected function deleteFiles()
+    {
         $this->deleteSampleFiles();
         $this->deleteLinkFiles();
         return $this;
@@ -424,7 +429,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function deleteSampleFiles(){
+    protected function deleteSampleFiles()
+    {
         $existingOptions = $this->connection->fetchAll(
             $this->connection->select()->from(
                 $this->_resource->getTableName('downloadable_sample')
@@ -433,8 +439,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $this->productIds
             )
         );
-        foreach($existingOptions as $option){
-            if ($option['sample_file'] !== null){
+        foreach ($existingOptions as $option) {
+            if ($option['sample_file'] !== null) {
                 unlink(self::DOWNLOADABLE_PATCH_SAMPLES . $option['sample_file']);
             }
         }
@@ -446,7 +452,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function deleteLinkFiles(){
+    protected function deleteLinkFiles()
+    {
         $existingOptions = $this->connection->fetchAll(
             $this->connection->select()->from(
                 $this->_resource->getTableName('downloadable_link')
@@ -455,11 +462,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $this->productIds
             )
         );
-        foreach($existingOptions as $option){
-            if ($option['sample_file'] !== null){
+        foreach ($existingOptions as $option) {
+            if ($option['sample_file'] !== null) {
                 unlink(self::DOWNLOADABLE_PATCH_LINK_SAMPLES . $option['sample_file']);
             }
-            if ($option['link_file'] !== null){
+            if ($option['link_file'] !== null) {
                 unlink(self::DOWNLOADABLE_PATCH_LINKS . $option['link_file']);
             }
         }
@@ -477,7 +484,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         return [
             'samples_title' => $this->sampleGroupTitle($rowData),
             'links_title' => $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE),
-            'links_purchased_separately' => $this->linksAdditionalAttributes($rowData, 'purchased_separately', self::DEFAULT_PURCHASED_SEPARATELY)
+            'links_purchased_separately' => $this->linksAdditionalAttributes(
+                $rowData,
+                'purchased_separately',
+                self::DEFAULT_PURCHASED_SEPARATELY
+            )
         ];
     }
 
@@ -489,7 +500,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param mixed $defaultValue
      * @return string
      */
-    protected function linksAdditionalAttributes(array $rowData, $attribute, $defaultValue){
+    protected function linksAdditionalAttributes(array $rowData, $attribute, $defaultValue)
+    {
         $result = $defaultValue;
         if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])) {
             $options = explode(
@@ -498,7 +510,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             );
             foreach ($options as $option) {
                 $arr = $this->parseLinkOption(explode($this->_entityModel->getMultipleValueSeparator(), $option));
-                if (isset($arr[$attribute])){
+                if (isset($arr[$attribute])) {
                     $result = $arr[$attribute];
                     break;
                 }
@@ -514,7 +526,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      * @return string
      */
-    protected function sampleGroupTitle(array $rowData){
+    protected function sampleGroupTitle(array $rowData)
+    {
         $result = '';
         if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
             $options = explode(
@@ -523,7 +536,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             );
             foreach ($options as $option) {
                 $arr = $this->parseSampleOption(explode($this->_entityModel->getMultipleValueSeparator(), $option));
-                if (isset($arr['group_title'])){
+                if (isset($arr['group_title'])) {
                     $result = $arr['group_title'];
                     break;
                 }
@@ -535,22 +548,25 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Parse options for products
      *
-     * @param array $values
+     * @param array $rowData
      * @param int $entityId
-     * @return
+     * @return $this
      */
-    protected function parseOptions(array $rowData, $entityId){
+    protected function parseOptions(array $rowData, $entityId)
+    {
         $this->productIds[] = $entityId;
-        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]))
+        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])) {
             $this->cachedOptions['link'] = array_merge(
                 $this->cachedOptions['link'],
                 $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS], $entityId)
             );
-        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]))
+        }
+        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
             $this->cachedOptions['sample'] = array_merge(
                 $this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES], $entityId),
                 $this->cachedOptions['sample']
             );
+        }
         return $this;
     }
 
@@ -560,7 +576,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $options
      * @return array
      */
-    protected function fillDataTitleSample(array $options){
+    protected function fillDataTitleSample(array $options)
+    {
         $result = [];
         $existingOptions = $this->connection->fetchAll(
             $this->connection->select()->from(
@@ -570,13 +587,12 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $this->productIds
             )
         );
-        foreach($options as $option){
-            foreach($existingOptions as $existingOption){
-                if( $option['sample_url'] == $existingOption['sample_url'] &&
-                    $option['sample_file'] == $existingOption['sample_file'] &&
-                    $option['sample_type'] == $existingOption['sample_type'] &&
-                    $option['product_id'] == $existingOption['product_id']
-                ){
+        foreach ($options as $option) {
+            foreach ($existingOptions as $existingOption) {
+                if ($option['sample_url'] == $existingOption['sample_url']
+                    && $option['sample_file'] == $existingOption['sample_file']
+                    && $option['sample_type'] == $existingOption['sample_type']
+                    && $option['product_id'] == $existingOption['product_id']) {
                     $result[] = array_replace($this->dataSampleTitle, $option, $existingOption);
                 }
             }
@@ -591,7 +607,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $options
      * @return array
      */
-    protected function fillDataLink(array $options){
+    protected function fillDataLink(array $options)
+    {
         $result = [];
         $existingOptions = $this->connection->fetchAll(
             $this->connection->select()->from(
@@ -601,16 +618,15 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $this->productIds
             )
         );
-        foreach($options as $option){
-            foreach($existingOptions as $existingOption){
-                if( $option['link_url'] == $existingOption['link_url'] &&
-                    $option['link_file'] == $existingOption['link_file'] &&
-                    $option['link_type'] == $existingOption['link_type'] &&
-                    $option['sample_url'] == $existingOption['sample_url'] &&
-                    $option['sample_file'] == $existingOption['sample_file'] &&
-                    $option['sample_type'] == $existingOption['sample_type'] &&
-                    $option['product_id'] == $existingOption['product_id']
-                ){
+        foreach ($options as $option) {
+            foreach ($existingOptions as $existingOption) {
+                if ($option['link_url'] == $existingOption['link_url']
+                    && $option['link_file'] == $existingOption['link_file']
+                    && $option['link_type'] == $existingOption['link_type']
+                    && $option['sample_url'] == $existingOption['sample_url']
+                    && $option['sample_file'] == $existingOption['sample_file']
+                    && $option['sample_type'] == $existingOption['sample_type']
+                    && $option['product_id'] == $existingOption['product_id']) {
                     $result['title'][] = array_replace($this->dataLinkTitle, $option, $existingOption);
                     $result['price'][] = array_replace($this->dataLinkPrice, $option, $existingOption);
                 }
@@ -626,9 +642,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $replacement
      * @return array
      */
-    protected function prepareDataForSave(array $base, array $replacement){
+    protected function prepareDataForSave(array $base, array $replacement)
+    {
         $result = [];
-        foreach($replacement as $item){
+        foreach ($replacement as $item) {
             $result[] = array_intersect_key($item, $base);
         }
         return $result;
@@ -640,10 +657,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $options
      * @return array
      */
-    protected function uploadSampleFiles(array $options){
+    protected function uploadSampleFiles(array $options)
+    {
         $result = [];
-        foreach($options as $option){
-            if ($option['sample_file'] !== null){
+        foreach ($options as $option) {
+            if ($option['sample_file'] !== null) {
                 $option['sample_file'] = $this->uploadDownloadableFiles($option['sample_file'], 'samples', true);
             }
             $result[] = $option;
@@ -657,13 +675,14 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $options
      * @return array
      */
-    protected function uploadLinkFiles(array $options){
+    protected function uploadLinkFiles(array $options)
+    {
         $result = [];
-        foreach($options as $option){
-            if ($option['sample_file'] !== null){
+        foreach ($options as $option) {
+            if ($option['sample_file'] !== null) {
                 $option['sample_file'] = $this->uploadDownloadableFiles($option['sample_file'], 'link_samples', true);
             }
-            if ($option['link_file'] !== null){
+            if ($option['link_file'] !== null) {
                 $option['link_file'] = $this->uploadDownloadableFiles($option['link_file'], 'links', true);
             }
             $result[] = $option;
@@ -676,7 +695,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function saveOptions(){
+    protected function saveOptions()
+    {
         $options = $this->cachedOptions;
         if (!empty($options['sample'])) {
             $options['sample'] = $this->uploadSampleFiles($options['sample']);
@@ -717,7 +737,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param string $option
      * @return string
      */
-    protected function getTypeByValue($option){
+    protected function getTypeByValue($option)
+    {
         $result = self::FILE_OPTION_VALUE;
         if (preg_match('/\bhttps?:\/\//i', $option)) {
             $result = self::URL_OPTION_VALUE;
@@ -725,20 +746,21 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         return $result;
     }
 
-    /*
+    /**
      * Prepare string to array data sample
      *
      * @param string $rowCol
      * @param int $entityId
      * @return array
      */
-    protected function prepareSampleData($rowCol, $entityId = null){
+    protected function prepareSampleData($rowCol, $entityId = null)
+    {
         $result = [];
         $options = explode(
             \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
             $rowCol
         );
-        foreach($options as $option){
+        foreach ($options as $option) {
             $result[] =  array_merge(
                 $this->dataSample,
                 ['product_id' => $entityId],
@@ -755,13 +777,14 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param string $entityId
      * @return array
      */
-    protected function prepareLinkData($rowCol, $entityId = null){
+    protected function prepareLinkData($rowCol, $entityId = null)
+    {
         $result = [];
         $options = explode(
             \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
             $rowCol
         );
-        foreach($options as $option){
+        foreach ($options as $option) {
             $result[] = array_merge(
                 $this->dataLink,
                 ['product_id' => $entityId],
@@ -776,7 +799,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function deleteOptions(){
+    protected function deleteOptions()
+    {
         $this->connection->delete(
             $this->_resource->getTableName('downloadable_link'),
             $this->connection->quoteInto('product_id IN (?)', $this->productIds)
@@ -806,10 +830,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $option['sample_type'] = $this->getTypeByValue($value);
                     $option['sample_' . $option['sample_type']] = $value;
                 }
-                if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE){
+                if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE) {
                     $option['link_type'] = $key;
                 }
-                if ($key == 'downloads' && $value == 'unlimited'){
+                if ($key == 'downloads' && $value == 'unlimited') {
                     $value = 0;
                 }
                 if (isset($this->optionLinkMapping[$key])) {
@@ -835,7 +859,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             if ($pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR)) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
-                if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE){
+                if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE) {
                     $option['sample_type'] = $key;
                 }
                 if (isset($this->optionSampleMapping[$key])) {
@@ -893,8 +917,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Uploading files into the "downloadable/files" media folder.
      * Return a new file name if the same file is already exists.
+     *
      * @param string $fileName
      * @param string $type
+     * @param bool $renameFileOff
      * @return string
      */
     protected function uploadDownloadableFiles($fileName, $type = 'links', $renameFileOff = false)
@@ -928,9 +954,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @return array
      */
-    protected function getAllowedExtensions(){
+    protected function getAllowedExtensions()
+    {
         $result = [];
-        foreach(array_keys($this->fileHelper->getAllMineTypes()) as $option){
+        foreach (array_keys($this->fileHelper->getAllMineTypes()) as $option) {
             $result[] = substr($option, 1);
         }
         return $result;

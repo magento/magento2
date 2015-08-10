@@ -53,6 +53,7 @@ class ProcessingError
      * @param string|null $columnName
      * @param string|null $errorLevel
      * @param string|null $errorDescription
+     * @return void
      */
     public function init(
         $errorCode,

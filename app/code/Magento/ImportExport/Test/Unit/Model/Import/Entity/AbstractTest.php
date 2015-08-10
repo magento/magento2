@@ -75,7 +75,8 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
         $this->_createSourceAdapterMock(['']);
         $errorAggregator = $this->_model->validateData();
         $this->assertArrayHasKey(
-            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER, $errorAggregator->getRowsGroupedByErrorCode()
+            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER,
+            $errorAggregator->getRowsGroupedByErrorCode()
         );
     }
 
@@ -115,7 +116,8 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
         $this->_createSourceAdapterMock(['  ']);
         $errorAggregator = $this->_model->validateData();
         $this->assertArrayHasKey(
-            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER, $errorAggregator->getRowsGroupedByErrorCode()
+            AbstractEntity::ERROR_CODE_COLUMN_EMPTY_HEADER,
+            $errorAggregator->getRowsGroupedByErrorCode()
         );
     }
 
@@ -129,7 +131,8 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
         $this->_createSourceAdapterMock(['_test1']);
         $errorAggregator = $this->_model->validateData();
         $this->assertArrayHasKey(
-            AbstractEntity::ERROR_CODE_COLUMN_NAME_INVALID, $errorAggregator->getRowsGroupedByErrorCode()
+            AbstractEntity::ERROR_CODE_COLUMN_NAME_INVALID,
+            $errorAggregator->getRowsGroupedByErrorCode()
         );
     }
 

@@ -10,7 +10,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 abstract class AbstractImportValidator extends AbstractValidator implements RowValidatorInterface
 {
-    /*
+    /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
      */
     protected $context;
@@ -24,5 +24,4 @@ abstract class AbstractImportValidator extends AbstractValidator implements RowV
         $this->context = $context;
         return $this;
     }
-
 }
