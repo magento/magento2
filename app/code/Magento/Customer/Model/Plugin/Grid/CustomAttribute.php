@@ -7,7 +7,7 @@ namespace Magento\Customer\Model\Plugin\Grid;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
-use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 
 class CustomAttribute
 {
@@ -26,30 +26,33 @@ class CustomAttribute
     }
 
     /**
-     * @return AttributeMetadataInterface[]
+     * @return array
      */
     public function getCustomAttributesWithOptions()
     {
         $attributes = [];
-        foreach ($this->attributeRepository->getList() as $attribute) {
-            if ($attribute->getBackendType() != 'static' && $attribute->getIsUsedInGrid() && $attribute->getOptions()) {
-                $attributes[] = $attribute;
+        foreach ($this->attributeRepository->getList() as $attributeCode => $attributeData) {
+            if ($attributeData[AttributeMetadata::BACKEND_TYPE] != 'static'
+                && $attributeData[AttributeMetadata::IS_USED_IN_GRID]
+                && $attributeData[AttributeMetadata::OPTIONS]
+            ) {
+                $attributes[$attributeCode] = $attributeData;
             }
         }
         return $attributes;
     }
 
     /**
-     * @param AttributeMetadataInterface $attribute
+     * @param array $attributeData
      * @param string $optionId
      * @return string
      */
-    protected function getAttributeOptionLabelById(AttributeMetadataInterface $attribute, $optionId)
+    protected function getAttributeOptionLabelById(array $attributeData, $optionId)
     {
         $optionLabel = '';
-        foreach ($attribute->getOptions() as $option) {
-            if ($option->getValue() === $optionId) {
-                $optionLabel = $option->getLabel();
+        foreach ($attributeData[AttributeMetadata::OPTIONS] as $option) {
+            if ($option['value'] === $optionId) {
+                $optionLabel = $option['label'];
                 break;
             }
         }
@@ -65,15 +68,14 @@ class CustomAttribute
      */
     public function afterGetItems(SearchResult $subject, $documents)
     {
-        /** @var AttributeMetadataInterface $attribute */
-        foreach ($this->getCustomAttributesWithOptions() as $attribute) {
+        foreach ($this->getCustomAttributesWithOptions() as $attributeCode => $attributeData) {
             /** @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document $document */
             foreach ($documents as $document) {
-                $optionId = $document->getData($attribute->getAttributeCode());
+                $optionId = $document->getData($attributeCode);
                 if ($optionId) {
                     $document->setData(
-                        $attribute->getAttributeCode(),
-                        $this->getAttributeOptionLabelById($attribute, $optionId)
+                        $attributeCode,
+                        $this->getAttributeOptionLabelById($attributeData, $optionId)
                     );
                 }
             }

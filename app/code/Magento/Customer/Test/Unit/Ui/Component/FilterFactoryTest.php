@@ -78,26 +78,30 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
             ],
             'context' => $this->context,
         ];
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getOptions')
-            ->willReturn([$this->attributeOption]);
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getFrontendLabel')
-            ->willReturn('Label');
+        $attributeData = [
+            'attribute_code' => $filterName,
+            'frontend_input' => 'frontend-input',
+            'frontend_label' => 'Label',
+            'backend_type' => 'backend-type',
+            'options' => [
+                [
+                    'label' => 'Label',
+                    'value' => 'Value'
+                ]
+            ],
+            'is_used_in_grid' => true,
+            'is_visible_in_grid' => true,
+            'is_filterable_in_grid' => true,
+            'is_searchable_in_grid' => true,
+        ];
         $this->componentFactory->expects($this->once())
             ->method('create')
             ->with($filterName, 'filterInput', $config)
             ->willReturn($this->filter);
-        $this->attributeOption->expects($this->once())
-            ->method('getValue')
-            ->willReturn('Value');
-        $this->attributeOption->expects($this->once())
-            ->method('getLabel')
-            ->willReturn('Label');
 
         $this->assertSame(
             $this->filter,
-            $this->filterFactory->create($filterName, $this->attributeMetadata, $this->context)
+            $this->filterFactory->create($attributeData, $this->context)
         );
     }
 }
