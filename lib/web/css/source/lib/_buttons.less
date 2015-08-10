@@ -57,7 +57,7 @@
 ) {
     background-image: none; // Reset unusual Firefox-on-Android default style
     .css(background, @_button-background);
-    .background-gradient(
+    .mixin-background-gradient(
         @_button-gradient-color-start,
         @_button-gradient-color-end,
         @_button-gradient-direction,
@@ -93,7 +93,7 @@
     &:focus,
     &:active {
         .css(background, @_button-background-active);
-        .background-gradient(
+        .mixin-background-gradient(
             @_button-gradient-color-start-active,
             @_button-gradient-color-end-active,
             @_button-gradient-direction,
@@ -104,7 +104,7 @@
     }
     &:hover {
         .css(background, @_button-background-hover);
-        .background-gradient(
+        .mixin-background-gradient(
             @_button-gradient-color-start-hover,
             @_button-gradient-color-end-hover,
             @_button-gradient-direction,

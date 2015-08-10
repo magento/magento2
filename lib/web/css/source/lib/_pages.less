@@ -122,12 +122,12 @@
         .css(margin, @_pager-item-margin);
         .css(display, @_pager-item-display);
         .label {
-            .visually-hidden();
+            .mixin-visually-hidden();
         }
     }
     a.page {
         .css(background, @_pager-background);
-        .background-gradient(
+        .mixin-background-gradient(
             @_pager-gradient-color-start,
             @_pager-gradient-color-end,
             @_pager-gradient-direction,
@@ -140,7 +140,7 @@
         .css(text-decoration, @_pager-text-decoration);
         &:visited {
             .css(background, @_pager-background-visited);
-            .background-gradient(
+            .mixin-background-gradient(
                 @_pager-gradient-color-start-visited,
                 @_pager-gradient-color-end-visited,
                 @_pager-gradient-direction,
@@ -151,7 +151,7 @@
         }
         &:hover {
             .css(background, @_pager-background-hover);
-            .background-gradient(
+            .mixin-background-gradient(
                 @_pager-gradient-color-start-hover,
                 @_pager-gradient-color-end-hover,
                 @_pager-gradient-direction,
@@ -163,7 +163,7 @@
         }
         &:active {
             .css(background, @_pager-background-active);
-            .background-gradient(
+            .mixin-background-gradient(
                 @_pager-gradient-color-start-active,
                 @_pager-gradient-color-end-active,
                 @_pager-gradient-direction,
@@ -175,7 +175,7 @@
     }
     strong.page {
         .css(background, @_pager-current-background);
-        .background-gradient(
+        .mixin-background-gradient(
             @_pager-current-gradient-color-start,
             @_pager-current-gradient-color-end,
             @_pager-current-gradient-direction,
@@ -193,7 +193,7 @@
     }
     .action {
         .css(background, @_pager-action-background);
-        .background-gradient(
+        .mixin-background-gradient(
             @_pager-action-gradient-color-start,
             @_pager-action-gradient-color-end,
             @_pager-gradient-direction,
@@ -206,7 +206,7 @@
         .css(text-decoration, @_pager-action-text-decoration);
         &:visited {
             .css(background, @_pager-action-background-visited);
-            .background-gradient(
+            .mixin-background-gradient(
                 @_pager-action-gradient-color-start-visited,
                 @_pager-action-gradient-color-end-visited,
                 @_pager-action-gradient-direction,
@@ -217,7 +217,7 @@
         }
         &:hover {
             .css(background, @_pager-action-background-hover);
-            .background-gradient(
+            .mixin-background-gradient(
                 @_pager-action-gradient-color-start-hover,
                 @_pager-action-gradient-color-end-hover,
                 @_pager-action-gradient-direction,
@@ -229,7 +229,7 @@
         }
         &:active {
             .css(background, @_pager-action-background-active);
-            .background-gradient(
+            .mixin-background-gradient(
                 @_pager-action-gradient-color-start-active,
                 @_pager-action-gradient-color-end-active,
                 @_pager-action-gradient-direction,
@@ -275,7 +275,7 @@
 
 //  Delete spaces between elements when pager items have display: inline-block
 ._mixin-pager-inline-block-spaces-container() when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
-    .inline-block-space-container();
+    .mixin-inline-block-space-container();
     white-space: nowrap;
 }
 
@@ -283,7 +283,7 @@
     @_pager-font-size: @_pager-font-size,
     @_pager-line-height: @_pager-line-height
 ) when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
-    .inline-block-space-item(
+    .mixin-inline-block-space-item(
         @_font-size: @_pager-font-size,
         @_line-height: @_pager-line-height
     );
@@ -299,7 +299,7 @@
     > .label {
         .css(display, @_pager-label-display);
         .css(font-weight, @_pager-font-weight);
-        .inline-block-space-item(
+        .mixin-inline-block-space-item(
             @_font-size: @_pager-font-size,
             @_line-height: @_pager-line-height
         );
@@ -316,7 +316,7 @@
     @_pager-line-height: @_pager-line-height
 ) when (@_pager-label-display = none) {
     > .label {
-        .visually-hidden();
+        .mixin-visually-hidden();
     }
 }
 
@@ -327,7 +327,7 @@
     @_pager-line-height: @_pager-line-height
 ) when (@_pager-label-display = false) {
     > .label {
-        .visually-hidden();
+        .mixin-visually-hidden();
     }
 }
 

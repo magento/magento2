@@ -34,7 +34,7 @@
         z-index: 1;
     }
     input[type="radio"] {
-        .visually-hidden();
+        .mixin-visually-hidden();
         &:focus,
         &:checked {
             + label {
@@ -49,7 +49,7 @@
         display: block;
         position: absolute;
         span {
-            .visually-hidden();
+            .mixin-visually-hidden();
         }
         &:before {
             ._mixin-rating-icon-defalt(
@@ -130,7 +130,7 @@
             }
 
             span {
-                .visually-hidden();
+                .mixin-visually-hidden();
             }
         }
     }
@@ -138,7 +138,7 @@
 
 .mixin-rating-summary-label-hide() {
     .label {
-        .visually-hidden();
+        .mixin-visually-hidden();
     }
 }
 

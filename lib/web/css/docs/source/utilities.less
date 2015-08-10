@@ -6,9 +6,9 @@
 //  # Utilities
 //  <code>_utilities.less</code> is a reuseable collection of basic Less mixins.
 //
-// # .clearfix()
+// # .mixin-clearfix()
 //
-//  The <code>.clearfix()</code> mixin is a modern solution for healing container`s height which have floated elements. Also its applying prevents top-margins from collapsing.
+//  The <code>.mixin-clearfix()</code> mixin is a modern solution for healing container`s height which have floated elements. Also its applying prevents top-margins from collapsing.
 //
 
 .example-clearfix-container-1 {
@@ -16,7 +16,7 @@
 }
 
 .example-clearfix-container-2 {
-    .clearfix();
+    .mixin-clearfix();
     border: 1px solid #0f0;
 }
 
@@ -27,7 +27,7 @@
     float: right;
 }
 
-// Container with floated child elements without <code>.clearfix()</code>
+// Container with floated child elements without <code>.mixin-clearfix()</code>
 //  ```
 //  <div class="example-clearfix-container-1">
 //      <div class="example-clearfix-item left">
@@ -39,7 +39,7 @@
 //  </div>
 //  ```
 
-// Container with floated child elements with <code>.clearfix()</code>
+// Container with floated child elements with <code>.mixin-clearfix()</code>
 //  ```
 //  <div class="example-clearfix-container-2">
 //      <div class="example-clearfix-item left">
@@ -51,17 +51,17 @@
 //  </div>
 //  ```
 
-// # .visibility-hidden()
+// # .mixin-visibility-hidden()
 //
-//  The <code>.visibility-hidden()()</code> mixin changes element`s visibility to hidden and height to 0.
+//  The <code>.mixin-visibility-hidden()()</code> mixin changes element`s visibility to hidden and height to 0.
 //
 
 .example-visibility-hidden {
-    .visibility-hidden();
+    .mixin-visibility-hidden();
 }
 
 //
-//  This is a block with applied <code>.visibility-hidden()</code> mixin.
+//  This is a block with applied <code>.mixin-visibility-hidden()</code> mixin.
 
 //
 //  ```
@@ -72,17 +72,17 @@
 //  </div>
 //  ```
 
-// # .visually-hidden()
+// # .mixin-visually-hidden()
 //
-//  The <code>.visually-hidden()</code> mixin safely hides the element for accessibility reasons.
+//  The <code>.mixin-visually-hidden()</code> mixin safely hides the element for accessibility reasons.
 //
 
 .example-visually-hidden-1 {
-    .visually-hidden();
+    .mixin-visually-hidden();
 }
 
 //
-//  This is a block with applied <code>.visually-hidden()</code> mixin.
+//  This is a block with applied <code>.mixin-visually-hidden()</code> mixin.
 
 //
 //  ```
@@ -93,23 +93,23 @@
 //  </div>
 //  ```
 
-// # .visually-hidden-reset()
+// # .mixin-visually-hidden-reset()
 //
-//  The <code>.visually-hidden-reset()</code> mixin resets hidden visibility and makes element again visible.
+//  The <code>.mixin-visually-hidden-reset()</code> mixin resets hidden visibility and makes element again visible.
 //
 
 .example-visually-hidden-2 {
     background: #fdf0d5;
     padding: 5px;
-    .visually-hidden();
+    .mixin-visually-hidden();
 }
 
 .example-visually-hidden-2 {
-    .visually-hidden-reset();
+    .mixin-visually-hidden-reset();
 }
 
 //
-//  This is a block with applied <code>.visually-hidden-reset()</code> mixin after <code>.visually-hidden()</code> applying.
+//  This is a block with applied <code>.mixin-visually-hidden-reset()</code> mixin after <code>.mixin-visually-hidden()</code> applying.
 
 //
 //  ```
@@ -120,9 +120,9 @@
 //  </div>
 //  ```
 
-// # .css()
+// # .mixin-css()
 //
-//  The <code>.css()</code> mixin is used to set any css property if there is a value passed to it by a variable. Also <code>.css()</code> can add -ms-, -webkit- and -moz- prefixes if needed.
+//  The <code>.mixin-css()</code> mixin is used to set any css property if there is a value passed to it by a variable. Also <code>.css()</code> can add -ms-, -webkit- and -moz- prefixes if needed.
 //
 
 .example-css-container {
@@ -131,7 +131,7 @@
 }
 
 //
-//  If the variable is set to <code>false</code>, the <code>.css()</code> mixin will add nothing to the code.
+//  If the variable is set to <code>false</code>, the <code>.mixin-css()</code> mixin will add nothing to the code.
 //
 //  ```
 //  <div class="example-css-container">
@@ -151,7 +151,7 @@
 //  ```
 //
 
-//  # .css() variables
+//  # .mixin-css() variables
 //
 //  <pre>
 //    <table>
@@ -182,9 +182,9 @@
 //    </table>
 //  </pre>
 
-// # .rotate()
+// # .mixin-rotate()
 //
-//  The <code>.rotate()</code> mixin is a wrapper for css3 transform property with rotate value.
+//  The <code>.mixin-rotate()</code> mixin is a wrapper for css3 transform property with rotate value.
 //
 
 .example-rotate {
@@ -192,7 +192,7 @@
     position: absolute;
     height: 20px;
     width: 40px;
-    .rotate(
+    .mixin-rotate(
         @_rotation: 45deg;
     );
 }
@@ -202,7 +202,7 @@
 //  <div class="example-rotate"></div>
 //  ```
 
-//  #  .rotate() variables
+//  #  .mixin-rotate() variables
 //
 //  <pre>
 //    <table>
@@ -221,13 +221,13 @@
 //    </table>
 //  </pre>
 
-// # .input-placeholder()
+// # .mixin-input-placeholder()
 //
-//  The <code>.input-placeholder()</code> mixin is used to change placeholder font-color and font-weight.
+//  The <code>.mixin-input-placeholder()</code> mixin is used to change placeholder font-color and font-weight.
 //
 
 .example-placeholder {
-    .input-placeholder(#808080, bold);
+    .mixin-input-placeholder(#808080, bold);
 }
 
 //
@@ -236,7 +236,7 @@
 //  ```
 //
 
-//  #  .input-placeholder() variables
+//  #  .mixin-input-placeholder() variables
 //
 //  <pre>
 //    <table>
@@ -261,13 +261,13 @@
 //    </table>
 //  </pre>
 
-// # .background-gradient()
+// # .mixin-background-gradient()
 //
-//  The <code>.background-gradient()</code> mixin is used for applying custom css3 gradient.
+//  The <code>.mixin-background-gradient()</code> mixin is used for applying custom css3 gradient.
 //
 
 .example-background-gradient-1 {
-    .background-gradient(
+    .mixin-background-gradient(
         @_background-gradient: true,
         @_background-gradient-direction: vertical,
         @_background-gradient-color-start: #cff,
@@ -276,7 +276,7 @@
 }
 
 .example-background-gradient-2 {
-    .background-gradient(
+    .mixin-background-gradient(
         @_background-gradient: true,
         @_background-gradient-direction: horizontal,
         @_background-gradient-color-start: #cff,
@@ -290,7 +290,7 @@
 }
 
 .example-background-gradient-3 {
-    .background-gradient(
+    .mixin-background-gradient(
         @_background-gradient: true,
         @_background-gradient-direction: horizontal,
         @_background-gradient-color-start: rgba(255,255,255,0),
@@ -325,7 +325,7 @@
 //  ```
 //
 
-//  # .background-gradient() variables
+//  # .mixin-background-gradient() variables
 //
 //  <pre>
 //    <table>
