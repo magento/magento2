@@ -7,7 +7,7 @@ namespace Magento\Customer\Ui\Component\Listing;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Ui\Component\ColumnFactory;
-use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
@@ -77,11 +77,13 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     public function prepare()
     {
         $this->columnSortOrder = $this->getDefaultSortOrder();
-        foreach ($this->attributeRepository->getList() as $newAttributeCode => $attribute) {
-            if (isset($this->components[$attribute->getAttributeCode()])) {
-                $this->updateColumn($attribute, $newAttributeCode);
-            } elseif ($attribute->getBackendType() != 'static' && $attribute->getIsUsedInGrid()) {
-                $this->addColumn($attribute);
+        foreach ($this->attributeRepository->getList() as $newAttributeCode => $attributeData) {
+            if (isset($this->components[$newAttributeCode])) {
+                $this->updateColumn($attributeData, $newAttributeCode);
+            } elseif (!$attributeData[AttributeMetadata::BACKEND_TYPE] != 'static'
+                && $attributeData[AttributeMetadata::IS_USED_IN_GRID]
+            ) {
+                $this->addColumn($attributeData, $newAttributeCode);
             }
         }
         $this->updateActionColumnSortOrder();
@@ -89,42 +91,35 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     }
 
     /**
-     * @param AttributeMetadataInterface $attribute
+     * @param array $attributeData
+     * @param string $columnName
      * @return void
      */
-    public function addColumn(AttributeMetadataInterface $attribute)
+    public function addColumn(array $attributeData, $columnName)
     {
         $config['sortOrder'] = ++$this->columnSortOrder;
-        $column = $this->columnFactory->create($attribute, $this->getContext(), $config);
+        $column = $this->columnFactory->create($attributeData, $columnName, $this->getContext(), $config);
         $column->prepare();
-        $this->addComponent($attribute->getAttributeCode(), $column);
+        $this->addComponent($attributeData[AttributeMetadata::ATTRIBUTE_CODE], $column);
     }
 
     /**
-     * @param AttributeMetadataInterface $attribute
+     * @param array $attributeData
      * @param string $newAttributeCode
      * @return void
      */
-    public function updateColumn(AttributeMetadataInterface $attribute, $newAttributeCode)
+    public function updateColumn(array $attributeData, $newAttributeCode)
     {
-        $component = $this->components[$attribute->getAttributeCode()];
+        $component = $this->components[$attributeData[AttributeMetadata::ATTRIBUTE_CODE]];
 
-        if ($attribute->getAttributeCode() !== $newAttributeCode) {
-            unset($this->components[$attribute->getAttributeCode()]);
-            $this->components[$newAttributeCode] = $component;
-            $component->setData('name', $newAttributeCode);
-        }
-
-        if ($attribute->getBackendType() != 'static') {
-            if ($attribute->getIsUsedInGrid()) {
+        if ($attributeData[AttributeMetadata::BACKEND_TYPE] != 'static' ) {
+            if ($attributeData[AttributeMetadata::IS_USED_IN_GRID]) {
                 $config = array_merge(
                     $component->getData('config'),
                     [
                         'name' => $newAttributeCode,
-                        'type' => $this->getAttributeType($attribute),
-                        'dataType' => $attribute->getBackendType(),
-                        'visible' => $attribute->getIsVisibleInGrid(),
-                        'filters' => [],
+                        'dataType' => $attributeData[AttributeMetadata::BACKEND_TYPE],
+                        'visible' => $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]
                     ]
                 );
                 $component->setData('config', $config);
@@ -134,30 +129,9 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                 'config',
                 array_merge(
                     $component->getData('config'),
-                    ['type' => $this->getAttributeType($attribute)]
+                    ['visible' => $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]]
                 )
             );
         }
-        $component->setData('config', array_merge(
-            $component->getData('config'),
-            ['origin' => $attribute->getAttributeCode()]
-        ));
-    }
-
-    /**
-     * @param AttributeMetadataInterface $attribute
-     * @return string
-     */
-    protected function getAttributeType(AttributeMetadataInterface $attribute)
-    {
-        if ($attribute->getIsSearchableInGrid()) {
-            $type = 'searchable';
-        } elseif ($attribute->getIsFilterableInGrid()) {
-            $type = 'filterable';
-        } else {
-            $type = 'virtual';
-        }
-
-        return $type;
     }
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Ui\Component;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+
 class FilterFactory
 {
     /**
@@ -32,19 +34,18 @@ class FilterFactory
     }
 
     /**
-     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     * @param array $attributeData
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
      */
-    public function create($attribute, $context)
+    public function create(array $attributeData, $context)
     {
-        $columnName = $attribute->getAttributeCode();
         $config = [
-            'dataScope' => $columnName,
-            'label' => __($attribute->getFrontendLabel()),
+            'dataScope' => $attributeData[AttributeMetadata::ATTRIBUTE_CODE],
+            'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
         ];
-        if ($attribute->getOptions()) {
-            $config['options'] = $this->getOptionsArray($attribute);
+        if ($attributeData[AttributeMetadata::OPTIONS]) {
+            $config['options'] = $attributeData[AttributeMetadata::OPTIONS];
             $config['caption'] = __('Select...');
         }
         $arguments = [
@@ -54,36 +55,19 @@ class FilterFactory
             'context' => $context,
         ];
 
-        return $this->componentFactory->create($columnName, $this->getFilterType($attribute), $arguments);
+        return $this->componentFactory->create(
+            $attributeData[AttributeMetadata::ATTRIBUTE_CODE],
+            $this->getFilterType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
+            $arguments
+        );
     }
 
     /**
-     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
-     * @return array
-     */
-    protected function getOptionsArray($attribute)
-    {
-        $options = [];
-        foreach ($attribute->getOptions() as $option) {
-            array_push(
-                $options,
-                [
-                    'value' => $option->getValue(),
-                    'label' => $option->getLabel()
-                ]
-            );
-        }
-        return $options;
-    }
-
-    /**
-     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     * @param string $frontendInput
      * @return string
      */
-    protected function getFilterType($attribute)
+    protected function getFilterType($frontendInput)
     {
-        return isset($this->filterMap[$attribute->getFrontendInput()])
-            ? $this->filterMap[$attribute->getFrontendInput()]
-            : $this->filterMap['default'];
+        return isset($this->filterMap[$frontendInput]) ? $this->filterMap[$frontendInput] : $this->filterMap['default'];
     }
 }

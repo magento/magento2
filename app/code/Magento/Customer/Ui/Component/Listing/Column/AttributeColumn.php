@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
+use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 
 class AttributeColumn extends Column
 {
@@ -42,21 +43,18 @@ class AttributeColumn extends Column
     public function prepareDataSource(array &$dataSource)
     {
         if (!isset($dataSource['data']['items'])) {
-            return;
+            return null;
         }
 
-        $attributeCode = isset($this->getData('config')['origin'])
-            ? $this->getData('config')['origin']
-            : $this->getName();
-        $metaData = $this->attributeRepository->getMetadataByCode($attributeCode);
-        if ($metaData && count($metaData->getOptions())) {
+        $metaData = $this->attributeRepository->getMetadataByCode($this->getName());
+        if ($metaData && count($metaData[AttributeMetadata::OPTIONS])) {
             foreach ($dataSource['data']['items'] as &$item) {
                 if (!isset($item[$this->getName()])) {
                     continue;
                 }
-                foreach ($metaData->getOptions() as $option) {
-                    if ($option->getValue() == $item[$this->getName()]) {
-                        $item[$this->getName()] = $option->getLabel();
+                foreach ($metaData[AttributeMetadata::OPTIONS] as $option) {
+                    if ($option['value'] == $item[$this->getName()]) {
+                        $item[$this->getName()] = $option['label'];
                         break;
                     }
                 }
