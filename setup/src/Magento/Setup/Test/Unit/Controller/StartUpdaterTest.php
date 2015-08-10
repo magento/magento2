@@ -93,7 +93,7 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateInvalidRequestNotArray()
     {
-        $content = '{"packages":"test","type":"typeOne"}';
+        $content = '{"packages":"test","type":"update"}';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $this->filesystem->expects($this->never())->method('getDirectoryWrite');
         $this->controller->setEvent($this->mvcEvent);
@@ -103,7 +103,17 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateInvalidRequestMissingVersion()
     {
-        $content = '{"packages":[{"name":"vendor\/package"}],"type":"typeOne"}';
+        $content = '{"packages":[{"name":"vendor\/package"}],"type":"update"}';
+        $this->request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->filesystem->expects($this->never())->method('getDirectoryWrite');
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
+        $this->controller->updateAction();
+    }
+
+    public function testUpdateInvalidRequestMissingType()
+    {
+        $content = '{"packages":[{"name":"vendor\/package", "version": "1.0.0"}],"type":"uninstall"}';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $this->filesystem->expects($this->never())->method('getDirectoryWrite');
         $this->controller->setEvent($this->mvcEvent);
@@ -113,7 +123,7 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateMissingPackageInfo()
     {
-        $content = '{"packages":"test","type":"typeOne"}';
+        $content = '{"packages":"test","type":"update"}';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $this->filesystem->expects($this->never())->method('getDirectoryWrite');
         $this->controller->setEvent($this->mvcEvent);
@@ -123,13 +133,13 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateActionSuccessUpdate()
     {
-        $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"typeOne"}';
+        $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"update"}';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')
-            ->with('.type.json', '{"type":"typeOne","titles":["A"]}');
+            ->with('.type.json', '{"type":"update","titles":["A"]}');
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
@@ -137,13 +147,13 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateActionSuccessUpgrade()
     {
-        $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"typeTwo"}';
+        $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"upgrade"}';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')
-            ->with('.type.json', '{"type":"typeTwo","titles":["B"]}');
+            ->with('.type.json', '{"type":"upgrade","titles":["B"]}');
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
