@@ -176,17 +176,13 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      */
     public function setData($key, $value = null)
     {
-        if ($this->hasLockedAttributes()) {
-            if (is_array($key)) {
-                foreach ($this->getLockedAttributes() as $attribute) {
-                    if (isset($key[$attribute])) {
-                        unset($key[$attribute]);
-                    }
+        if ($this->hasLockedAttributes() && is_array($key)) {
+            foreach ($this->getLockedAttributes() as $attribute) {
+                if (isset($key[$attribute])) {
+                    unset($key[$attribute]);
                 }
-            } elseif ($this->isLockedAttribute($key)) {
-                return $this;
             }
-        } elseif ($this->isReadonly()) {
+        } elseif ($this->isReadonly() || $this->isLockedAttribute($key)) {
             return $this;
         }
 
