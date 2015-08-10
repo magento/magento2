@@ -542,12 +542,14 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             )
         );
         foreach ($options as $option) {
+            $isExist = false;
             foreach ($existingOptions as $existingOption) {
                 if ($option['sample_url'] == $existingOption['sample_url']
                     && $option['sample_file'] == $existingOption['sample_file']
                     && $option['sample_type'] == $existingOption['sample_type']
                     && $option['product_id'] == $existingOption['product_id']) {
                     $result[] = array_replace($this->dataSampleTitle, $option, $existingOption);
+                    $isExist = true;
                 }
             }
             if (!$isExist) {
@@ -563,8 +565,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $options
      * @return array
      */
-    protected function fillDataLink(array $options)
-    {
     protected function fillDataLink(array $base, array $options)
     {
         $result = [];
