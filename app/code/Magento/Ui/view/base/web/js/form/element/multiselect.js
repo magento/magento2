@@ -34,7 +34,7 @@ define([
             var value = this.value(),
                 initial = this.initialValue;
 
-            return !utils.identical(value, initial);
+            return !utils.equalArrays(value, initial);
         }
     });
 });
