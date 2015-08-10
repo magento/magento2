@@ -25,7 +25,7 @@
 .abs-action-link-button {
     .mixin-button();
     .mixin-link-as-button();
-    .css(border-radius, @button__border-radius);
+    .mixin-css(border-radius, @button__border-radius);
 }
 
 //
@@ -388,7 +388,7 @@
 //  ---------------------------------------------
 
 @abs-margin-for-forms-desktop: {
-    .css(margin-left, @form-field-type-label-inline__width);
+    .mixin-css(margin-left, @form-field-type-label-inline__width);
 };
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
@@ -798,7 +798,7 @@
 .abs-dropdown-items-new {
     .items .item:last-child {
         &:hover {
-            .css(background, @dropdown-list-item__hover);
+            .mixin-css(background, @dropdown-list-item__hover);
         }
     }
     .action.new {
@@ -939,7 +939,7 @@
 //  ---------------------------------------------
 
 .abs-block-items-counter {
-    .css(color, @primary__color__lighter);
+    .mixin-css(color, @primary__color__lighter);
     .mixin-font-size(12px);
     white-space: nowrap;
 }
@@ -963,7 +963,7 @@
             border-radius: 3px;
             font-weight: bold;
             &:active {
-                .css(box-shadow, @button__shadow);
+                .mixin-css(box-shadow, @button__shadow);
             }
         }
         &.update {
@@ -1032,7 +1032,7 @@
 //  ---------------------------------------------
 
 .abs-field-date-input {
-    .css(margin-right, @indent__s);
+    .mixin-css(margin-right, @indent__s);
     width: calc(~"100% - (@{icon-calendar__font-size} + @{indent__s})");
 }
 
@@ -1044,7 +1044,7 @@
     &:extend(.abs-add-box-sizing all);
     position: relative;
     input {
-        .css(margin-right, @indent__s);
+        .mixin-css(margin-right, @indent__s);
         width: calc(~"100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})");
     }
 }
@@ -1054,8 +1054,8 @@
 //  ---------------------------------------------
 
 @abs-checkout-tooltip-content-position-top: {
-    .css(right, @checkout-tooltip-content-mobile__right);
-    .css(top, @checkout-tooltip-content-mobile__top);
+    .mixin-css(right, @checkout-tooltip-content-mobile__right);
+    .mixin-css(top, @checkout-tooltip-content-mobile__top);
     left: auto;
 
     &:before,
@@ -1065,16 +1065,16 @@
         @_size: @checkout-tooltip-icon-arrow__font-size,
         @_color: @checkout-tooltip-content__background-color
         );
-        .css(margin-top, @checkout-tooltip-icon-arrow__left);
-        .css(right, @indent__s);
+        .mixin-css(margin-top, @checkout-tooltip-icon-arrow__left);
+        .mixin-css(right, @indent__s);
         left: auto;
         top: 0%;
     }
     &:before {
-        .css(border-bottom-color, @checkout-tooltip-content__border-color);
+        .mixin-css(border-bottom-color, @checkout-tooltip-content__border-color);
     }
     &:after {
-        .css(border-bottom-color, @checkout-tooltip-content__background-color);
+        .mixin-css(border-bottom-color, @checkout-tooltip-content__background-color);
         top: 1px;
     }
 };
@@ -1094,8 +1094,8 @@
 //  ---------------------------------------------
 
 .abs-checkout-title {
-    .css(border-bottom, @checkout-step-title__border);
-    .css(padding-bottom, @checkout-step-title__padding);
+    .mixin-css(border-bottom, @checkout-step-title__border);
+    .mixin-css(padding-bottom, @checkout-step-title__padding);
     .mixin-typography(
     @_font-size: @checkout-step-title__font-size,
     @_font-weight: @checkout-step-title__font-weight,
@@ -1144,8 +1144,8 @@
         &-summary {
             .mark,
             .amount {
-                .css(border-top, @border-width__base solid @border-color__base);
-                .css(border-bottom, @border-width__base solid @border-color__base);
+                .mixin-css(border-top, @border-width__base solid @border-color__base);
+                .mixin-css(border-bottom, @border-width__base solid @border-color__base);
                 cursor: pointer;
             }
             .amount .price {
@@ -1179,7 +1179,7 @@
         }
         &-details {
             display: none;
-            .css(border-bottom, @border-width__base solid @border-color__base);
+            .mixin-css(border-bottom, @border-width__base solid @border-color__base);
             &.shown {
                 display: table-row;
             }

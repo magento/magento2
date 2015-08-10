@@ -25,9 +25,9 @@
     @_icon-font-text-hide: @icon-font__text-hide,
     @_icon-font-display: @icon-font__display
 ) when (@_icon-font-position = before) {
-    .css(display, @_icon-font-display);
-    text-decoration: none;
     ._mixin-icon-text-hide(@_icon-font-text-hide);
+    .mixin-css(display, @_icon-font-display);
+    text-decoration: none;
 
     &:before {
         ._mixin-icon-font(
@@ -42,12 +42,12 @@
     }
     &:hover {
         &:before {
-            .css(color, @_icon-font-color-hover);
+            .mixin-css(color, @_icon-font-color-hover);
         }
     }
     &:active {
         &:before {
-            .css(color, @_icon-font-color-active);
+            .mixin-css(color, @_icon-font-color-active);
         }
     }
 }
@@ -66,9 +66,9 @@
     @_icon-font-text-hide: @icon-font__text-hide,
     @_icon-font-display: @icon-font__display
 ) when (@_icon-font-position = after) {
-    .css(display, @_icon-font-display);
-    text-decoration: none;
     ._mixin-icon-text-hide(@_icon-font-text-hide);
+    .mixin-css(display, @_icon-font-display);
+    text-decoration: none;
     &:after {
         ._mixin-icon-font(
             @_icon-font-content,
@@ -82,12 +82,12 @@
     }
     &:hover {
         &:after {
-            .css(color, @_icon-font-color-hover);
+            .mixin-css(color, @_icon-font-color-hover);
         }
     }
     &:active {
         &:after {
-            .css(color, @_icon-font-color-active);
+            .mixin-css(color, @_icon-font-color-active);
         }
     }
 }
@@ -117,7 +117,7 @@
     @_icon-font-position: @icon-font__position
 ) when (@_icon-font-position = before) {
     &:before {
-        .css(content, @_icon-font-content);
+        .mixin-css(content, @_icon-font-content);
     }
 }
 
@@ -126,7 +126,7 @@
     @_icon-font-position: @icon-font__position
 ) when (@_icon-font-position = after) {
     &:after {
-        .css(content, @_icon-font-content);
+        .mixin-css(content, @_icon-font-content);
     }
 }
 
@@ -157,7 +157,7 @@
             @_icon-image-position-x,
             @_icon-image-position-y
         );
-        .css(margin, @_icon-image-margin);
+        .mixin-css(margin, @_icon-image-margin);
     }
 }
 
@@ -184,7 +184,7 @@
             @_icon-image-position-x,
             @_icon-image-position-y
         );
-        .css(margin, @_icon-image-margin);
+        .mixin-css(margin, @_icon-image-margin);
     }
 }
 
@@ -287,16 +287,16 @@
     @_icon-image-position-x,
     @_icon-image-position-y
 ) {
+    .mixin-css(line-height, @_icon-image-height);
+    .mixin-css(margin, @_icon-image-margin);
+    .mixin-css(vertical-align, @_icon-image-vertical-align);
+    background: url(@_icon-image) no-repeat @_icon-image-position-x @_icon-image-position-y;
     content: '';
     display: inline-block;
     ._mixin-icon-image-size(
-        @_icon-image-width,
-        @_icon-image-height
+    @_icon-image-width,
+    @_icon-image-height
     );
-    .css(line-height, @_icon-image-height);
-    .css(margin, @_icon-image-margin);
-    .css(vertical-align, @_icon-image-vertical-align);
-    background: url(@_icon-image) no-repeat @_icon-image-position-x @_icon-image-position-y;
 }
 
 ._mixin-icon-image-position(
@@ -310,8 +310,8 @@
     @icon__width,
     @icon__height
 ) {
-    .css(height, @icon__height);
-    .css(width, @icon__width);
+    .mixin-css(height, @icon__height);
+    .mixin-css(width, @icon__width);
 }
 
 ._mixin-icon-sprite-position(
@@ -333,11 +333,11 @@
 ) {
     -webkit-font-smoothing: antialiased;
     ._mixin-icon-font-size(@_icon-font-size, @_icon-font-line-height);
-    .css(color, @_icon-font-color);
-    .css(content, @_icon-font-content);
-    .css(font-family, @_icon-font);
-    .css(margin, @_icon-font-margin);
-    .css(vertical-align, @_icon-font-vertical-align);
+    .mixin-css(color, @_icon-font-color);
+    .mixin-css(content, @_icon-font-content);
+    .mixin-css(font-family, @_icon-font);
+    .mixin-css(margin, @_icon-font-margin);
+    .mixin-css(vertical-align, @_icon-font-vertical-align);
     display: inline-block;
     font-weight: normal;
     overflow: hidden;
@@ -346,6 +346,6 @@
 }
 
 ._mixin-icon-font-size(@_icon-font-size, @_icon-font-line-height) {
-    .css(font-size, @_icon-font-size);
-    .css(line-height, @_icon-font-line-height);
+    .mixin-css(font-size, @_icon-font-size);
+    .mixin-css(line-height, @_icon-font-line-height);
 }

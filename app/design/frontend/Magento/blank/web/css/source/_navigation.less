@@ -17,7 +17,7 @@
     }
 
     .nav-sections {
-        .css(background, @navigation__background);
+        .mixin-css(background, @navigation__background);
     }
 
     .nav-toggle {
@@ -71,7 +71,7 @@
     }
 
     .nav-sections {
-        .css(transition, left .3s, 1);
+        .mixin-css(transition, left .3s, 1);
         height: 100%;
         left: -80%;
         left: calc(~'-1 * (100% - @{active-nav-indent})');
@@ -139,8 +139,8 @@
             }
             a,
             a:hover {
-                .css(color, @navigation-level0-item__color);
-                .css(text-decoration, @navigation-level0-item__text-decoration);
+                .mixin-css(color, @navigation-level0-item__color);
+                .mixin-css(text-decoration, @navigation-level0-item__text-decoration);
                 display: block;
                 font-weight: 700;
                 padding: 8px 20px;
@@ -152,7 +152,7 @@
         height: 100%;
         width: 100%;
         .page-wrapper {
-            .css(transition, left .3s, 1);
+            .mixin-css(transition, left .3s, 1);
             height: 100%;
             left: 0;
             overflow: hidden;
@@ -175,7 +175,7 @@
 
         .nav-sections {
             @_shadow: 0 0 5px 0 rgba(50, 50, 50, .75);
-            .css(box-shadow, @_shadow, 1);
+            .mixin-css(box-shadow, @_shadow, 1);
             left: 0;
             z-index: 99;
         }

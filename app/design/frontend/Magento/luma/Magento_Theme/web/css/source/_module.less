@@ -72,13 +72,13 @@
 
 & when (@media-common = true) {
     body {
-        .css(background-color, @page__background-color);
+        .mixin-css(background-color, @page__background-color);
     }
 
     //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
     .page-wrapper {
         .ie9 & {
-            .css(background-color, @page__background-color);
+            .mixin-css(background-color, @page__background-color);
             min-height: 0;
         }
     }
@@ -88,12 +88,12 @@
     //  ---------------------------------------------
 
     .page-header {
-        .css(background-color, @header__background-color);
+        .mixin-css(background-color, @header__background-color);
         border-bottom: 1px solid @border-color__base;
         margin-bottom: @indent__base;
         .panel.wrapper {
-            .css(background-color, @header-panel__background-color);
-            .css(color, @header-panel__text-color);
+            .mixin-css(background-color, @header-panel__background-color);
+            .mixin-css(color, @header-panel__text-color);
         }
     }
 
@@ -167,8 +167,8 @@
             left: 0;
             top: 0;
             text-align: center;
-            .css(background, @color-gray94);
-            .css(padding, @indent__s);
+            .mixin-css(background, @color-gray94);
+            .mixin-css(padding, @indent__s);
         }
     }
 
@@ -218,7 +218,7 @@
             }
             .links {
                 > li {
-                    .css(background, @footer__background-color);
+                    .mixin-css(background, @footer__background-color);
                     .mixin-font-size(16);
                     border-top: 1px solid @footer-links-separator-border-color;
                     margin: 0 -@layout__width-xs-indent;
@@ -230,7 +230,7 @@
                     padding: @indent__s 0;
                 }
                 strong {
-                    .css(color, @footer-links-color-current);
+                    .mixin-css(color, @footer-links-color-current);
                     font-weight: normal;
                 }
                 a {
@@ -250,8 +250,8 @@
     }
 
     .copyright {
-        .css(background-color, @copyright__background-color);
-        .css(color, @color-white);
+        .mixin-css(background-color, @copyright__background-color);
+        .mixin-css(color, @color-white);
         display: block;
         padding: @indent__s;
         text-align: center;
@@ -318,7 +318,7 @@
     }
     .page-footer .footer.content {
         .switcher-store {
-            .css(background, @footer__background-color);
+            .mixin-css(background, @footer__background-color);
             .mixin-font-size(16);
             margin: 0 -@layout__width-xs-indent;
             .switcher-options {
@@ -394,7 +394,7 @@
 
     body {
         .ie9 & {
-            .css(background-color, @copyright__background-color);
+            .mixin-css(background-color, @copyright__background-color);
         }
     }
 
@@ -406,7 +406,7 @@
         margin-bottom: 0;
         .panel.wrapper {
             border-bottom: 1px solid @secondary__color;
-            .css(background-color, @header-panel__background-color);
+            .mixin-css(background-color, @header-panel__background-color);
         }
         .header.panel:extend(.abs-add-clearfix-desktop all) {
             padding-bottom: @indent__s;
@@ -468,7 +468,7 @@
         }
         .action.switch {
             .mixin-button-reset();
-            .css(color, @color-white);
+            .mixin-css(color, @color-white);
         }
         .header.links {
             min-width: 175px;
@@ -504,8 +504,8 @@
                     }
                     &.welcome {
                         a {
-                            .css(color, @color-white);
-                            .css(padding-left, @indent__xs);
+                            .mixin-css(color, @color-white);
+                            .mixin-css(padding-left, @indent__xs);
                         }
                     }
                 }
@@ -551,7 +551,7 @@
     }
 
     .page-footer {
-        .css(background, @footer__background-color);
+        .mixin-css(background, @footer__background-color);
         margin-top: auto;
         padding-bottom: @indent__m;
     }
@@ -607,7 +607,7 @@
 
     .ui-tooltip {
         border: @tooltip__border-width solid @tooltip__border-color;
-        .css(background, @tooltip__background);
+        .mixin-css(background, @tooltip__background);
         padding: 10px;
     }
 }

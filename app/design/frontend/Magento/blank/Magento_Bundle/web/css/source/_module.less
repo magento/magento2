@@ -52,9 +52,9 @@
     }
 
     .block-bundle-summary {
-        padding: @indent__s @indent__base;
-        .css(background, @secondary__color);
         &:extend(.abs-add-box-sizing all);
+        .mixin-css(background, @secondary__color);
+        padding: @indent__s @indent__base;
 
         > .title > strong {
             .mixin-heading(h2);
@@ -97,15 +97,15 @@
     .nested {
         .field.qty {
             .label {
-                .css(font-weight, @form-field-label__font-weight);
-                .css(margin, 0 0 @indent__xs);
+                .mixin-css(font-weight, @form-field-label__font-weight);
+                .mixin-css(margin, 0 0 @indent__xs);
                 display: inline-block;
             }
-            .css(margin-top, @form-field__vertical-indent);
+            .mixin-css(margin-top, @form-field__vertical-indent);
         }
     }
     p.required {
-        .css(color, @form-field-label-asterisk__color);
+        .mixin-css(color, @form-field-label-asterisk__color);
     }
 }
 

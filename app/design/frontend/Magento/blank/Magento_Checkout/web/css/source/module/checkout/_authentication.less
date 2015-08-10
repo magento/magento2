@@ -81,10 +81,10 @@
                 padding-top: @indent__xl;
                 position: relative;
                 &::before {
-                    .css(height, @block-auth__or-label__size);
-                    .css(line-height, @block-auth__or-label__size - 2px);
-                    .css(margin, -(@block-auth__or-label__size/2 + 1px) 0 0 -(@block-auth__or-label__size / 2));
-                    .css(min-width, @block-auth__or-label__size);
+                    .mixin-css(height, @block-auth__or-label__size);
+                    .mixin-css(line-height, @block-auth__or-label__size - 2px);
+                    .mixin-css(margin, -(@block-auth__or-label__size/2 + 1px) 0 0 -(@block-auth__or-label__size / 2));
+                    .mixin-css(min-width, @block-auth__or-label__size);
                     background: @color-white;
                     border-radius: 50%;
                     border: 1px solid @color-gray-light5;
@@ -111,8 +111,8 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .authentication-dropdown {
-        .css(background-color, @block-auth__dropdown__background-color);
-        .css(border, @block-auth__border);
+        .mixin-css(background-color, @block-auth__dropdown__background-color);
+        .mixin-css(border, @block-auth__border);
         position: absolute;
         text-align: left;
         top: 100%;
@@ -122,7 +122,7 @@
         visibility: hidden;
         width: 100%;
         &._show {
-            .css(z-index, @dropdown-list__z-index);
+            .mixin-css(z-index, @dropdown-list__z-index);
             transform: scale(1,1);
             transition: transform linear .1s, visibility 0s linear 0s;
             visibility: visible;

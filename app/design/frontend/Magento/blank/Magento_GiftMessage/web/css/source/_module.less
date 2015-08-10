@@ -25,8 +25,8 @@
         }
         .field {
             .label {
-                .css(color, @gift-message-field-label__color);
-                .css(font-weight, @font-weight__regular);
+                .mixin-css(color, @gift-message-field-label__color);
+                .mixin-css(font-weight, @font-weight__regular);
             }
         }
     }
@@ -117,15 +117,15 @@
             @_button-icon-font-line-height: 16px,
             @_button-icon-font-position: after
             );
-            .css(font-weight, @font-weight__bold);
+            .mixin-css(font-weight, @font-weight__bold);
             &:active {
-                .css(box-shadow, @button__shadow);
+                .mixin-css(box-shadow, @button__shadow);
             }
         }
 
         .content {
             &:extend(.abs-add-clearfix all);
-            .css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
+            .mixin-css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
             padding: @indent__s @indent__s @indent__base;
             position: relative;
         }
@@ -140,7 +140,7 @@
         .block-order-details-gift-message {
             .item-options {
                 dt {
-                    .css(font-weight, @font-weight__regular);
+                    .mixin-css(font-weight, @font-weight__regular);
                     margin: @indent__s 0;
                 }
             }
@@ -214,7 +214,7 @@
     }
     .gift-item-block {
         border-bottom: 0;
-        .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+        .mixin-css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
     }
     .cart.table-wrapper {
         .gift-content {
@@ -261,7 +261,7 @@
         }
     }
     .gift-options-title {
-        .css(font-weight, @font-weight__light);
+        .mixin-css(font-weight, @font-weight__light);
         .mixin-font-size(18);
     }
     .gift-summary,

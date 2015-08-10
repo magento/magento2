@@ -69,10 +69,10 @@
     @_popup-actions-toolbar-primary-actions-links-margin-top: @popup-actions-toolbar-actions-links-primary__margin-top,
     @_popup-actions-toolbar-secondary-actions-links-margin-top: @popup-actions-toolbar-actions-links-secondary__margin-top
 ) {
-    .css(background, @_popup-background);
-    .css(border, @_popup-border);
-    .css(padding, @_popup-padding);
-    .css(width, @_popup-width);
+    .mixin-css(background, @_popup-background);
+    .mixin-css(border, @_popup-border);
+    .mixin-css(padding, @_popup-padding);
+    .mixin-css(width, @_popup-width);
     ._mixin-popup-height(@_popup-height);
     ._mixin-popup-shadow(@_popup-shadow);
     ._mixin-popup-action-toolbar(
@@ -89,25 +89,25 @@
         @_popup-actions-toolbar-secondary-actions-links-margin-top
     );
     .popup-header {
-        .css(margin, @_popup-header-margin);
+        .mixin-css(margin, @_popup-header-margin);
         .title {
             ._mixin-popup-headings(
                 @_popup-title-headings,
                 @_popup-title-headings-level
             );
         }
-        .css(padding-right, @_popup-icon-font-size)
+        .mixin-css(padding-right, @_popup-icon-font-size)
     }
     .popup-content {
         ._mixin-popup-height(@_popup-content-height);
-        .css(margin, @_popup-content-margin);
+        .mixin-css(margin, @_popup-content-margin);
     }
     .popup-footer {
-        .css(margin, @_popup-footer-margin);
+        .mixin-css(margin, @_popup-footer-margin);
     }
     .popup-actions {
         .action.close {
-            .css(position, @_popup-button-close-position);
+            .mixin-css(position, @_popup-button-close-position);
             ._mixin-popup-button-close-icon(
                 @_popup-button-close-icon,
                 @_popup-icon-font-content,
@@ -125,24 +125,25 @@
             ._mixin-popup-button-close-reset(
                 @_popup-button-close-reset
             );
-            .css(bottom, @_popup-button-close-position-bottom);
-            .css(left, @_popup-button-close-position-left);
-            .css(right, @_popup-button-close-position-right);
-            .css(top, @_popup-button-close-position-top);
+            .mixin-css(bottom, @_popup-button-close-position-bottom);
+            .mixin-css(left, @_popup-button-close-position-left);
+            .mixin-css(right, @_popup-button-close-position-right);
+            .mixin-css(top, @_popup-button-close-position-top);
         }
     }
 
     ._mixin-popup-fade(@_popup-fade);
-    .css(bottom, @_popup-position-bottom);
-    .css(left, @_popup-position-left);
-    .css(margin-bottom, @_popup-margin-bottom);
-    .css(margin-left, @_popup-margin-left);
-    .css(margin-right, @_popup-margin-right);
-    .css(margin-top, @_popup-margin-top);
-    .css(position, @_popup-position);
-    .css(right, @_popup-position-right);
-    .css(top, @_popup-position-top);
-    .css(z-index, @_popup-z-index);
+
+    .mixin-css(bottom, @_popup-position-bottom);
+    .mixin-css(left, @_popup-position-left);
+    .mixin-css(margin-bottom, @_popup-margin-bottom);
+    .mixin-css(margin-left, @_popup-margin-left);
+    .mixin-css(margin-right, @_popup-margin-right);
+    .mixin-css(margin-top, @_popup-margin-top);
+    .mixin-css(position, @_popup-position);
+    .mixin-css(right, @_popup-position-right);
+    .mixin-css(top, @_popup-position-top);
+    .mixin-css(z-index, @_popup-z-index);
     display: none;
     opacity: 0;
     &.active {
@@ -158,8 +159,8 @@
     @_overlay-z-index: @overlay__z-index
 ) {
     ._mixin-popup-fade(@_overlay-fade);
-    .css(background, @_overlay-background);
-    .css(z-index, @_overlay-z-index);
+    .mixin-css(background, @_overlay-background);
+    .mixin-css(z-index, @_overlay-z-index);
     bottom: 0;
     left: 0;
     opacity: 0;
@@ -178,18 +179,18 @@
 
 //  Popup fade
 ._mixin-popup-fade(@_popup-fade) when not (@_popup-fade = '') {
-    .css(transition, @_popup-fade);
+    .mixin-css(transition, @_popup-fade);
 }
 
 //  Popup shadow
 ._mixin-popup-shadow(@_popup-shadow) when not (@_popup-shadow = '') and not (@_popup-shadow = none)  {
-    .css(box-shadow, @_popup-shadow);
+    .mixin-css(box-shadow, @_popup-shadow);
 }
 
 //  Popup height
 ._mixin-popup-height(@_popup-height) when not (@_popup-height = auto) {
     overflow-y: auto;
-    .css(max-height, @_popup-height);
+    .mixin-css(max-height, @_popup-height);
 }
 
 //  Popup Headings

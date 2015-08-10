@@ -111,7 +111,7 @@
     }
 
     .table-wrapper {
-        .css(margin-bottom, @indent__base);
+        .mixin-css(margin-bottom, @indent__base);
         border-bottom: 1px solid @account-table-border-bottom-color;
         &:last-child {
             margin-bottom: 0;
@@ -139,7 +139,7 @@
             .action {
                 &:extend(.abs-account-actions all);
                 &.delete {
-                    .css(color, @account-table-action-delete);
+                    .mixin-css(color, @account-table-action-delete);
                 }
             }
         }
@@ -186,7 +186,7 @@
 }
 
 .control.captcha-image {
-    .css(margin-top, @indent__s);
+    .mixin-css(margin-top, @indent__s);
     .captcha-img {
         vertical-align: middle;
     }
@@ -377,12 +377,12 @@
                     &:extend(.abs-add-clearfix-mobile-m all);
                     > .action {
                         float: right;
-                        .css(margin-top, @indent__xs);
+                        .mixin-css(margin-top, @indent__xs);
                     }
                 }
                 .block-content {
                     .box {
-                        .css(margin-bottom, @indent__base);
+                        .mixin-css(margin-bottom, @indent__base);
                         &:last-child {
                             margin-bottom: 0;
                         }
@@ -394,7 +394,7 @@
     .control.captcha-image {
         .captcha-img {
             display: block;
-            .css(margin-bottom, @indent__s);
+            .mixin-css(margin-bottom, @indent__s);
         }
     }
     .customer-account-index {

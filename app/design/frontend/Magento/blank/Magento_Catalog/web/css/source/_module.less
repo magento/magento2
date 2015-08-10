@@ -132,9 +132,9 @@
             max-width: 100%;
         }
         .notice {
-            margin: @indent__s 0;
-            .css(color, @text__color__muted);
+            .mixin-css(color, @text__color__muted);
             .mixin-font-size(@font-size__s);
+            margin: @indent__s 0;
         }
         .product.thumbs {
             margin: @indent__base 0 @indent__l;
@@ -184,7 +184,7 @@
                 &.sku {
                     display: inline-block;
                     vertical-align: top;
-                    .css(color, @text__color__muted);
+                    .mixin-css(color, @text__color__muted);
                     > .value {
                         display: inline-block;
                         vertical-align: top;
@@ -212,11 +212,11 @@
     .product-options-wrapper {
         .fieldset-product-options-inner {
             .legend {
-                border: none;
-                .css(font-weight, @font-weight__bold);
-                .css(margin, 0 0 @indent__xs);
-                display: inline-block;
+                .mixin-css(font-weight, @font-weight__bold);
+                .mixin-css(margin, 0 0 @indent__xs);
                 .mixin-font-size(14px);
+                border: none;
+                display: inline-block;
                 float: none;
                 padding: 0;
             }
@@ -232,7 +232,7 @@
                         @_line-height: @form-field-label-asterisk__line-height,
                         @_font-style: @form-field-label-asterisk__font-style
                         );
-                        .css(margin, @form-field-label-asterisk__margin);
+                        .mixin-css(margin, @form-field-label-asterisk__margin);
                     }
                 }
             }
@@ -310,9 +310,9 @@
 
     .prices-tier {
         &:extend(.abs-reset-list all);
-        .css(background, @sidebar__background-color);
-        padding: @indent__s (.75 * @indent__base);
+        .mixin-css(background, @sidebar__background-color);
         margin: @indent__s 0;
+        padding: @indent__s (.75 * @indent__base);
         .price-tier_price {
             display: inline-block;
         }
@@ -374,7 +374,7 @@
                 margin-right: 8px;
             }
             .counter {
-                .css(color, @primary__color__lighter);
+                .mixin-css(color, @primary__color__lighter);
                 .mixin-font-size(12);
                 white-space: nowrap;
             }
@@ -694,12 +694,12 @@
     }
 
     .comparison.headings {
-        position: absolute;
-        z-index: 2;
-        top: 0;
+        .mixin-css(background, @page__background-color);
         left: 0;
+        position: absolute;
+        top: 0;
         width: auto;
-        .css(background, @page__background-color);
+        z-index: 2;
     }
 
     .block-compare {

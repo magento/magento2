@@ -201,13 +201,13 @@ body {
 
     .inner-wrapper {
         td {
-            .css(border-radius, @button__border-radius, 1);
+            .mixin-css(border-radius, @button__border-radius, 1);
             background-color: @button-primary__background;
 
             a {
                 font-size: @button__font-size;
                 color: @button-primary__color;
-                .css(border-radius, @button__border-radius, 1);
+                .mixin-css(border-radius, @button__border-radius, 1);
                 border: 1px solid @button-primary__background;
                 text-decoration: none;
                 padding: @button__padding;

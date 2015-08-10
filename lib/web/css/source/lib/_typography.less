@@ -51,8 +51,8 @@
 }
 
 .mixin-wrap-words() {
-    word-wrap: break-word;
     .mixin-hyphens();
+    word-wrap: break-word;
 }
 
 .mixin-text-overflow() {
@@ -64,8 +64,8 @@
 .mixin-text-hide() {
     background-color: transparent;
     border: 0;
-    font: ~"0/0" a;
     color: transparent;
+    font: ~'0/0' a;
     text-shadow: none;
 }
 
@@ -86,17 +86,17 @@
     @_line-height: @line-height__base,
     @_font-style: @font-style__base
 ) {
+    .mixin-css(color, @_color);
+    .mixin-css(font-family, @_font-family);
+    .mixin-css(font-style, @_font-style);
+    .mixin-css(font-weight, @_font-weight);
+    .mixin-css(line-height, @_line-height);
     .mixin-font-size(@_font-size);
-    .css(color, @_color);
-    .css(font-family, @_font-family);
-    .css(font-style, @_font-style);
-    .css(font-weight, @_font-weight);
-    .css(line-height, @_line-height);
 }
 
 .mixin-list-reset-styles(@_margin: 0, @_padding: 0) {
-    .css(margin, @_margin);
-    .css(padding, @_padding);
+    .mixin-css(margin, @_margin);
+    .mixin-css(padding, @_padding);
     list-style: none none;
 }
 
@@ -118,19 +118,19 @@
     @_link-color-active: @link__active__color,
     @_link-text-decoration-active: @link__active__text-decoration
 ) {
-    .css(color, @_link-color);
-    .css(text-decoration, @_link-text-decoration);
+    .mixin-css(color, @_link-color);
+    .mixin-css(text-decoration, @_link-text-decoration);
     &:visited {
-        .css(color, @_link-color-visited);
-        .css(text-decoration, @_link-text-decoration-visited);
+        .mixin-css(color, @_link-color-visited);
+        .mixin-css(text-decoration, @_link-text-decoration-visited);
     }
     &:hover {
-        .css(color, @_link-color-hover);
-        .css(text-decoration, @_link-text-decoration-hover);
+        .mixin-css(color, @_link-color-hover);
+        .mixin-css(text-decoration, @_link-text-decoration-hover);
     }
     &:active {
-        .css(color,@_link-color-active);
-        .css(text-decoration, @_link-text-decoration-active);
+        .mixin-css(color,@_link-color-active);
+        .mixin-css(text-decoration, @_link-text-decoration-active);
     }
 }
 
@@ -167,7 +167,7 @@
 
 .mixin-typography__base() {
     html {
-        .css(font-size, @root__font-size);
+        .mixin-css(font-size, @root__font-size);
         -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
                 font-size-adjust: 100%;
@@ -190,39 +190,39 @@
     //  Abbreviations and acronyms
     abbr[title] {
         cursor: help;
-        .css(border-bottom, 1px dotted @abbr__border-color);
+        .mixin-css(border-bottom, 1px dotted @abbr__border-color);
     }
 
     b,
     strong {
-        .css(font-weight, @font-weight__bold);
+        .mixin-css(font-weight, @font-weight__bold);
     }
 
     em,
     i {
-        .css(font-style, @font-style__emphasis);
+        .mixin-css(font-style, @font-style__emphasis);
     }
 
     mark {
-        .css(background, @mark__background-color);
-        .css(color, @mark__color);
+        .mixin-css(background, @mark__background-color);
+        .mixin-css(color, @mark__color);
     }
 
     small,
     .small {
-        .css(font-size, @font-size__s);
+        .mixin-css(font-size, @font-size__s);
     }
 
     hr {
-        .css(margin-top, @line-height__computed);
-        .css(margin-bottom, @line-height__computed);
         border: 0;
-        .css(border-top, @hr__border-width @hr__border-style @hr__border-color);
+        .mixin-css(border-top, @hr__border-width @hr__border-style @hr__border-color);
+        .mixin-css(margin-bottom, @line-height__computed);
+        .mixin-css(margin-top, @line-height__computed);
     }
 
     sub,
     sup {
-        .css(font-size, (@font-size__xs/@font-size__base)*100%);
+        .mixin-css(font-size, (@font-size__xs/@font-size__base)*100%);
         line-height: 0;
         position: relative;
         vertical-align: baseline;
@@ -235,7 +235,7 @@
     }
 
     dfn {
-        .css(font-style, @font-style__emphasis);
+        .mixin-css(font-style, @font-style__emphasis);
     }
 }
 
@@ -324,17 +324,17 @@
     }
 
     dl {
-        .css(margin-bottom, @dl__margin-bottom);
-        .css(margin-top, @dl__margin-top);
+        .mixin-css(margin-bottom, @dl__margin-bottom);
+        .mixin-css(margin-top, @dl__margin-top);
     }
     dt {
-        .css(font-weight, @dt__font-weight);
-        .css(margin-bottom, @dt__margin-bottom);
-        .css(margin-top, @dt__margin-top);
+        .mixin-css(font-weight, @dt__font-weight);
+        .mixin-css(margin-bottom, @dt__margin-bottom);
+        .mixin-css(margin-top, @dt__margin-top);
     }
     dd {
-        .css(margin-bottom, @dd__margin-bottom);
-        .css(margin-top, @dd__margin-top);
+        .mixin-css(margin-bottom, @dd__margin-bottom);
+        .mixin-css(margin-top, @dd__margin-top);
         margin-left: 0;
     }
 }
@@ -348,34 +348,34 @@
     kbd,
     pre,
     samp {
-        .css(font-family, @font-family__monospace);
+        .mixin-css(font-family, @font-family__monospace);
     }
 
     //  Inline code
     code {
-        .css(background, @code__background-color);
-        .css(color, @code__color);
-        .css(padding, @code__padding);
+        .mixin-css(background, @code__background-color);
+        .mixin-css(color, @code__color);
+        .mixin-css(padding, @code__padding);
         .mixin-font-size(@code__font-size);
         white-space: nowrap;
     }
 
     //  User input typically entered via keyboard
     kbd {
-        .css(background, @kbd__background-color);
-        .css(color, @kbd__color);
-        .css(padding, @code__padding);
+        .mixin-css(background, @kbd__background-color);
+        .mixin-css(color, @kbd__color);
+        .mixin-css(padding, @code__padding);
         .mixin-font-size(@code__font-size);
     }
 
     //  Blocks of code
     pre {
-        .css(background, @pre__background-color);
-        .css(border, @pre__border-width solid @pre__border-color);
-        .css(color, @pre__color);
-        .css(line-height, @line-height__base);
-        .css(margin, 0 0 @indent__s);
-        .css(padding, @indent__s);
+        .mixin-css(background, @pre__background-color);
+        .mixin-css(border, @pre__border-width solid @pre__border-color);
+        .mixin-css(color, @pre__color);
+        .mixin-css(line-height, @line-height__base);
+        .mixin-css(margin, 0 0 @indent__s);
+        .mixin-css(padding, @indent__s);
         .mixin-font-size (@code__font-size);
         display: block;
         word-wrap: break-word;
@@ -397,9 +397,9 @@
 
 .mixin-typography-blockquote() {
     blockquote {
-        .css(border-left, @blockquote__border-width solid @blockquote__border-color);
-        .css(margin, @blockquote__margin);
-        .css(padding, @blockquote__padding);
+        .mixin-css(border-left, @blockquote__border-width solid @blockquote__border-color);
+        .mixin-css(margin, @blockquote__margin);
+        .mixin-css(padding, @blockquote__padding);
         .mixin-typography(
             @_font-size: @blockquote__font-size,
             @_font-style: @blockquote__font-style
@@ -416,24 +416,24 @@
         footer,
         small,
         .small {
-            .css(color, @blockquote-small__color);
-            .css(line-height, @line-height__base);
+            .mixin-css(color, @blockquote-small__color);
+            .mixin-css(line-height, @line-height__base);
             .mixin-font-size(@blockquote-small__font-size);
             display: block;
             &:before {
-                .css(content, @blockquote__content-before);
+                .mixin-css(content, @blockquote__content-before);
             }
         }
 
         cite {
-            .css(font-style, @cite__font-style);
+            .mixin-css(font-style, @cite__font-style);
         }
     }
 
     //  Quotes
     blockquote:before,
     blockquote:after {
-        content: "";
+        content: '';
     }
 
     q {
@@ -447,7 +447,7 @@
 
     //  Undo browser default styling
     cite {
-        .css(font-style, @cite__font-style);
+        .mixin-css(font-style, @cite__font-style);
     }
 }
 

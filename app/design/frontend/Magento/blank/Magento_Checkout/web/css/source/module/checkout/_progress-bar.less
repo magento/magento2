@@ -44,12 +44,12 @@
 
     .opc-progress-bar {
         &:extend(.abs-reset-list all);
-        .css(margin, 0 0 @checkout-progress-bar__margin);
+        .mixin-css(margin, 0 0 @checkout-progress-bar__margin);
         counter-reset: i;
         font-size: 0;
     }
     .opc-progress-bar-item {
-        .css(margin, 0 0 @checkout-progress-bar-item__margin);
+        .mixin-css(margin, 0 0 @checkout-progress-bar-item__margin);
         display: inline-block;
         position: relative;
         text-align: center;
@@ -57,8 +57,8 @@
         width: 50%;
 
         &:before { // Horizontal line
-            .css(background, @checkout-progress-bar-item__background-color);
-            .css(top, @checkout-progress-bar-item-element__width/2);
+            .mixin-css(background, @checkout-progress-bar-item__background-color);
+            .mixin-css(top, @checkout-progress-bar-item-element__width/2);
             content: '';
             height: 7px;
             left: 0;
@@ -68,13 +68,13 @@
 
         &:first-child {
             &:before {
-                .css(border-radius, @checkout-progress-bar-item__border-radius 0 0 @checkout-progress-bar-item__border-radius);
+                .mixin-css(border-radius, @checkout-progress-bar-item__border-radius 0 0 @checkout-progress-bar-item__border-radius);
             }
         }
 
         &:last-child {
             &:before {
-                .css(border-radius, 0 @checkout-progress-bar-item__border-radius @checkout-progress-bar-item__border-radius 0);
+                .mixin-css(border-radius, 0 @checkout-progress-bar-item__border-radius @checkout-progress-bar-item__border-radius 0);
             }
         }
 
@@ -95,10 +95,10 @@
 
             &:before, // Item element
             &:after {
-                .css(background, @checkout-progress-bar-item__background-color);
-                .css(height, @checkout-progress-bar-item-element__height);
-                .css(margin-left, -(@checkout-progress-bar-item-element__width/2));
-                .css(width, @checkout-progress-bar-item-element__width);
+                .mixin-css(background, @checkout-progress-bar-item__background-color);
+                .mixin-css(height, @checkout-progress-bar-item-element__height);
+                .mixin-css(margin-left, -(@checkout-progress-bar-item-element__width/2));
+                .mixin-css(width, @checkout-progress-bar-item-element__width);
                 border-radius: 50%;
                 content: '';
                 left: 50%;
@@ -107,11 +107,11 @@
             }
 
             &:after { // Item element inner
-                .css(background, @checkout-progress-bar-item-element-inner__background-color);
-                .css(height, @checkout-progress-bar-item-element-inner__height);
-                .css(margin-left, -(@checkout-progress-bar-item-element-inner__width/2));
-                .css(top, @checkout-progress-bar-item-element-outer-radius__width);
-                .css(width, @checkout-progress-bar-item-element-inner__width);
+                .mixin-css(background, @checkout-progress-bar-item-element-inner__background-color);
+                .mixin-css(height, @checkout-progress-bar-item-element-inner__height);
+                .mixin-css(margin-left, -(@checkout-progress-bar-item-element-inner__width/2));
+                .mixin-css(top, @checkout-progress-bar-item-element-outer-radius__width);
+                .mixin-css(width, @checkout-progress-bar-item-element-inner__width);
                 content: counter(i);
                 counter-increment: i;
                 .mixin-typography(
@@ -130,14 +130,14 @@
                 background: @checkout-progress-bar-item__active__background-color;
             }
             > span {
-                .css(color, @checkout-progress-bar-item__color);
+                .mixin-css(color, @checkout-progress-bar-item__color);
                 &:before {
-                    .css(background, @checkout-progress-bar-item__active__background-color);
+                    .mixin-css(background, @checkout-progress-bar-item__active__background-color);
                 }
                 &:after {
-                    .css(content, @checkout-progress-bar-item-element-inner__active__content);
-                    .css(font-family, @icons__font-name);
-                    .css(line-height, @checkout-progress-bar-item-element-inner__active__line-height);
+                    .mixin-css(content, @checkout-progress-bar-item-element-inner__active__content);
+                    .mixin-css(font-family, @icons__font-name);
+                    .mixin-css(line-height, @checkout-progress-bar-item-element-inner__active__line-height);
                     .mixin-font-size(@checkout-progress-bar-item-element-inner__active__font-size);
                 }
             }
@@ -146,11 +146,11 @@
         &._complete {
             cursor: pointer;
             > span {
-                .css(color, @checkout-progress-bar-item__color);
+                .mixin-css(color, @checkout-progress-bar-item__color);
                 &:after {
-                    .css(content, @checkout-progress-bar-item-element-inner__active__content);
-                    .css(font-family, @icons__font-name);
-                    .css(line-height, @checkout-progress-bar-item-element-inner__active__line-height);
+                    .mixin-css(content, @checkout-progress-bar-item-element-inner__active__content);
+                    .mixin-css(font-family, @icons__font-name);
+                    .mixin-css(line-height, @checkout-progress-bar-item-element-inner__active__line-height);
                     .mixin-font-size(@checkout-progress-bar-item-element-inner__active__font-size);
                 }
             }
@@ -164,6 +164,6 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .opc-progress-bar-item {
-        .css(width, @checkout-progress-bar-item__width);
+        .mixin-css(width, @checkout-progress-bar-item__width);
     }
 }

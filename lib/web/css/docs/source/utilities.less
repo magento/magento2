@@ -122,12 +122,12 @@
 
 // # .mixin-css()
 //
-//  The <code>.mixin-css()</code> mixin is used to set any css property if there is a value passed to it by a variable. Also <code>.css()</code> can add -ms-, -webkit- and -moz- prefixes if needed.
+//  The <code>.mixin-css()</code> mixin is used to set any css property if there is a value passed to it by a variable. Also <code>.mixin-css()</code> can add -ms-, -webkit- and -moz- prefixes if needed.
 //
 
 .example-css-container {
-    .css(padding, @indent__base);
-    .css(background, @secondary__color);
+    .mixin-css(padding, @indent__base);
+    .mixin-css(background, @secondary__color);
 }
 
 //
@@ -141,7 +141,7 @@
 //
 
 .example-css-container-2 {
-    .css(background, false);
+    .mixin-css(background, false);
 }
 
 //  ```

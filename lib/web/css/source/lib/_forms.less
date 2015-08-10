@@ -40,22 +40,22 @@
     @_focus-color: ~"@{@{_type}__focus__color}",
     @_focus-font-style: ~"@{@{_type}__focus__font-style}"
 ) {
+    .mixin-css(background, @_background);
+    .mixin-css(background-clip, @_background-clip);
+    .mixin-css(border, @_border);
+    .mixin-css(border-radius, @_border-radius);
+    .mixin-css(color, @_color);
+    .mixin-css(font-family, @_font-family);
+    .mixin-css(font-size, @_font-size);
+    .mixin-css(font-style, @_font-style);
+    .mixin-css(font-weight, @_font-weight);
+    .mixin-css(height, @_height);
+    .mixin-css(line-height, @_line-height);
+    .mixin-css(margin, @_margin);
+    .mixin-css(padding, @_padding);
+    .mixin-css(vertical-align, @_vertical-align);
+    .mixin-css(width, @_width);
     box-sizing: border-box;
-    .css(background, @_background);
-    .css(background-clip, @_background-clip);
-    .css(border, @_border);
-    .css(border-radius, @_border-radius);
-    .css(color, @_color);
-    .css(font-family, @_font-family);
-    .css(font-size, @_font-size);
-    .css(font-style, @_font-style);
-    .css(font-weight, @_font-weight);
-    .css(height, @_height);
-    .css(line-height, @_line-height);
-    .css(margin, @_margin);
-    .css(padding, @_padding);
-    .css(vertical-align, @_vertical-align);
-    .css(width, @_width);
 
     ._mixin-form-element-focus(
         @_background,
@@ -94,8 +94,8 @@
     @_margin: ~"@{@{_type}__margin}",
     @_disabled-opacity: ~"@{@{_type}__disabled__opacity}"
 ) {
-    .css(margin, @_margin);
-    .css(vertical-align, @_vertical-align);
+    .mixin-css(margin, @_margin);
+    .mixin-css(vertical-align, @_vertical-align);
     &:disabled {
         ._mixin-form-element-add-opacity(@_disabled-opacity);
     }
@@ -121,7 +121,7 @@
 }
 
 .mixin-form-element-textarea-resize(@_textarea-resize: @textarea__resize) {
-    .css(resize, @_textarea-resize);
+    .mixin-css(resize, @_textarea-resize);
 }
 
 .mixin-form-element-color(
@@ -136,9 +136,10 @@
     @_disabled-color: '',
     @_placeholder-color: ''
 ) {
-    .css(background, @_background);
-    .css(border-color, @_border-color);
-    .css(color, @_color);
+    .mixin-css(background, @_background);
+    .mixin-css(border-color, @_border-color);
+    .mixin-css(color, @_color);
+
     &:focus {
         ._mixin-form-element-state-add-border-color(@_focus-border-color, @_border-color);
         ._mixin-form-element-state-add-background(@_focus-background, @_background);
@@ -150,13 +151,13 @@
         ._mixin-form-element-state-add-font-color(@_disabled-color, @_color);
     }
     &::-moz-placeholder {
-        .css(color, @_placeholder-color);
+        .mixin-css(color, @_placeholder-color);
     }
     &::-webkit-input-placeholder {
-        .css(color, @_placeholder-color);
+        .mixin-css(color, @_placeholder-color);
     }
     &:-ms-input-placeholder {
-        .css(color, @_placeholder-color);
+        .mixin-css(color, @_placeholder-color);
     }
 }
 
@@ -280,7 +281,7 @@
     }
 
     select[multiple="multiple"] {
-        .css(height, auto);
+        .mixin-css(height, auto);
         background-image: none;
     }
 
@@ -355,7 +356,7 @@
 }
 
 ._mixin-form-element-add-opacity(@_opacity) when not (@_opacity = 1) {
-    .css(opacity, @_opacity);
+    .mixin-css(opacity, @_opacity);
 }
 
 //  Only for states :disabled, :focus, placeholder
@@ -404,37 +405,37 @@
     @_font-style-state
 ) when not (@_type = select) {
     &::-moz-placeholder {
-        .css(color, @_color);
+        .mixin-css(color, @_color);
         ._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
     &::-webkit-input-placeholder {
-        .css(color, @_color);
+        .mixin-css(color, @_color);
         ._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
     &:-ms-input-placeholder {
-        .css(color, @_color);
+        .mixin-css(color, @_color);
         ._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
 }
 
 ._mixin-form-element-state-add-background(@_background-state, @_background-default) when not (@_background-state = @_background-default) {
-    .css(background, @_background-state);
+    .mixin-css(background, @_background-state);
 }
 
 ._mixin-form-element-state-add-border(@_border-state, @_border-default) when not ('@{_border-state}' = '@{_border-default}') {
-    .css(border, @_border-state);
+    .mixin-css(border, @_border-state);
 }
 
 ._mixin-form-element-state-add-border-color(@_border-state, @_border-default) when not (@_border-state = @_border-default) {
-    .css(border-color, @_border-state);
+    .mixin-css(border-color, @_border-state);
 }
 
 ._mixin-form-element-state-add-font-style(@_font-style-state, @_font-style-default) when not (@_font-style-state = @_font-style-default) {
-    .css(font-style, @_font-style-state);
+    .mixin-css(font-style, @_font-style-state);
 }
 
 ._mixin-form-element-state-add-font-color(@_color-state, @_color-default) when not (@_color-state = @_color-default) {
-    .css(color, @_color-state);
+    .mixin-css(color, @_color-state);
 }
 
 .mixin-form-fieldset(
@@ -451,9 +452,9 @@
     @_legend-padding: @form-fieldset-legend__padding,
     @_legend-width: @form-fieldset-legend__width
 ) {
-    .css(border, @_border);
-    .css(margin, @_margin);
-    .css(padding, @_padding);
+    .mixin-css(border, @_border);
+    .mixin-css(margin, @_margin);
+    .mixin-css(padding, @_padding);
     letter-spacing: -.31em;
     //word-spacing: -.43em;
 
@@ -463,8 +464,11 @@
     }
 
     > .legend {
-        .css(margin, @_legend-margin);
-        .css(padding, @_legend-padding);
+        .mixin-css(margin, @_legend-margin);
+        .mixin-css(padding, @_legend-padding);
+        .mixin-css(width, @_legend-width);
+        box-sizing: border-box;
+        float: left;
 
         .mixin-typography(
             @_font-size: @_legend-font-size,
@@ -474,16 +478,12 @@
             @_line-height: @_legend-line-height,
             @_font-style: @_legend-font-style
         );
-
-        box-sizing: border-box;
-        float: left;
-        .css(width, @_legend-width);
         & + br {
+            clear: both;
             display: block;
-            visibility: hidden;
             height: 0;
             overflow: hidden;
-            clear: both;
+            visibility: hidden;
         }
     }
 }
@@ -543,7 +543,7 @@
     @_note-icon-font-position: @form-field-note-icon-font__position,
     @_note-icon-font-text-hide: @form-field-note-icon-font__text-hide
 ) {
-    .css(border, @_border);
+    .mixin-css(border, @_border);
 
     .mixin-form-field-type(
         @_type,
@@ -628,12 +628,12 @@
 
         .addbefore,
         .addafter {
+            .mixin-form-element-input(@_type: input-text);
             .mixin-vendor-prefix-order(3);
             display: inline-block;
-            .mixin-form-element-input(@_type: input-text);
-            width: auto;
-            white-space: nowrap;
             vertical-align: middle;
+            white-space: nowrap;
+            width: auto;
         }
 
         .addbefore {
@@ -643,7 +643,7 @@
     }
 
     .additional {
-        .css(margin-top, @_additional-vertical-indent);
+        .mixin-css(margin-top, @_additional-vertical-indent);
     }
 
     ._mixin-form-field-required(
@@ -737,36 +737,36 @@
     @_vertical-indent
 ) {
     .mixin-clearfix();
-    .css(margin, @_type-inline-margin);
+    .mixin-css(margin, @_type-inline-margin);
     box-sizing: border-box;
 
     &.choice:before,
     &.no-label:before {
-        .css(padding, @_type-inline-label-padding);
-        .css(width, @_type-inline-label-width);
+        .mixin-css(padding, @_type-inline-label-padding);
+        .mixin-css(width, @_type-inline-label-width);
         box-sizing: border-box;
         content: ' ';
         float: left;
         height: 1px;
     }
     .description {
-        .css(padding, @_type-inline-label-padding);
-        .css(text-align, @_type-inline-label-align);
-        .css(width, @_type-inline-label-width);
+        .mixin-css(padding, @_type-inline-label-padding);
+        .mixin-css(text-align, @_type-inline-label-align);
+        .mixin-css(width, @_type-inline-label-width);
         box-sizing: border-box;
         float: left;
     }
     &:not(.choice) {
         > .label {
-            .css(margin, @_type-inline-label-margin);
-            .css(padding, @_type-inline-label-padding);
-            .css(text-align, @_type-inline-label-align);
-            .css(width, @_type-inline-label-width);
+            .mixin-css(margin, @_type-inline-label-margin);
+            .mixin-css(padding, @_type-inline-label-padding);
+            .mixin-css(text-align, @_type-inline-label-align);
+            .mixin-css(width, @_type-inline-label-width);
             box-sizing: border-box;
             float: left;
         }
         > .control {
-            .css(width, @_type-inline-control-width);
+            .mixin-css(width, @_type-inline-control-width);
             float: left;
         }
     }
@@ -778,11 +778,11 @@
     @_type-block-label-padding,
     @_type-block-label-align
 ) {
-    .css(margin, @_type-block-margin);
+    .mixin-css(margin, @_type-block-margin);
     > .label {
-        .css(margin, @_type-block-label-margin);
-        .css(padding, @_type-block-label-padding);
-        .css(text-align, @_type-block-label-align);
+        .mixin-css(margin, @_type-block-label-margin);
+        .mixin-css(padding, @_type-block-label-padding);
+        .mixin-css(text-align, @_type-block-label-align);
         display: inline-block;
     }
 }
@@ -796,17 +796,19 @@
     @_line-height: @form-field-label-asterisk__line-height,
     @_margin: @form-field-label-asterisk__margin
 ) {
-    &.required > .label:after {
-        content: '*';
-        .mixin-typography(
+    &.required > .label {
+        &:after {
+            content: '*';
+            .mixin-typography(
             @_font-size: @_font-size,
             @_color: @_color,
             @_font-family: @_font-family,
             @_font-weight: @_font-weight,
             @_line-height: @_line-height,
             @_font-style: @_font-style
-        );
-        .css(margin, @_margin);
+            );
+            .mixin-css(margin, @_margin);
+        }
     }
 }
 
@@ -842,8 +844,8 @@
             @_font-style: @_note-font-style
         );
 
-        .css(margin, @_note-margin);
-        .css(padding, @_note-padding);
+        .mixin-css(margin, @_note-margin);
+        .mixin-css(padding, @_note-padding);
 
         .mixin-icon-font(
             @_icon-font-content: @_note-icon-font-content,
@@ -890,8 +892,8 @@
             );
         }
         > .control {
-            width: auto;
             float: none;
+            width: auto;
         }
     }
 
@@ -902,9 +904,11 @@
         @_type-block-label-align
     );
 
-    &.choice:before,
-    &.no-label:before {
-        display: none;
+    &.choice,
+    &.no-label {
+        &:before {
+            display: none;
+        }
     }
 }
 
@@ -943,8 +947,7 @@
     @_column-padding: @form-field-column__padding,
     @_column-number: @form-field-column__number
 ) when (@_column = true) {
-
-    .css(padding, @_column-padding);
+    .mixin-css(padding, @_column-padding);
     box-sizing: border-box;
     display: inline-block;
 
@@ -957,7 +960,7 @@
 }
 
 .mixin-form-field-column-number(@_column-number: @form-field-column__number) {
-    .css(width, 100% / @_column-number);
+    .mixin-css(width, 100% / @_column-number);
 }
 
 ._mixin-revert-type-block-label-padding(
@@ -1069,8 +1072,13 @@
     @_line-height,
     @_font-style
 ) {
+    .mixin-css(border, @_border);
+    .mixin-css(margin, @_margin);
+    .mixin-css(padding, @_padding);
     content: attr(data-hasrequired);
     display: block;
+    letter-spacing: normal;
+    word-spacing: normal;
     .mixin-typography(
         @_font-size: @_font-size,
         @_color: @_color,
@@ -1079,9 +1087,4 @@
         @_line-height: @_line-height,
         @_font-style: @_font-style
     );
-    .css(border, @_border);
-    .css(margin, @_margin);
-    .css(padding, @_padding);
-    letter-spacing: normal;
-    word-spacing: normal;
 }
