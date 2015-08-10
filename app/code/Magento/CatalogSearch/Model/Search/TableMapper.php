@@ -194,7 +194,7 @@ class TableMapper
             ],
             'category_ids' => [
                 $this->resource->getTableName('catalog_category_product_index'),
-                'search_index.entity_id = category_index.product_id',
+                'search_index.entity_id = category_ids_index.product_id',
                 []
             ]
         ];
