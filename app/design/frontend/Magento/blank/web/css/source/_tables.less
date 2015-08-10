@@ -58,6 +58,21 @@ table {
                     padding-bottom: @indent__base;
                 }
             }
+            &.additional-attributes {
+                tbody {
+                    th {
+                        &:extend(.abs-no-display-s all);
+                    }
+                    td {
+                        &:last-child {
+                            border: none;
+                            padding: 0 0 @indent__xs;
+                        }
+                    }
+                }
+            }
+        }
+        .table:not(.totals):not(.table-comparison) {
             tfoot {
                 display: block;
                 tr {
@@ -85,19 +100,6 @@ table {
                     padding-right: 0;
                     text-align: right;
                     width: 30%;
-                }
-            }
-            &.additional-attributes {
-                tbody {
-                    th {
-                        &:extend(.abs-no-display-s all);
-                    }
-                    td {
-                        &:last-child {
-                            border: none;
-                            padding: 0 0 @indent__xs;
-                        }
-                    }
                 }
             }
         }
