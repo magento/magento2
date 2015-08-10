@@ -99,24 +99,19 @@ define([
         },
 
         /**
-         * Builds editors configuration described in a provided column.
+         * Builds editors' configuration described in a provided column.
          *
          * @param {Column} column - Column instance which contains editor definition.
-         * @returns {Object}
+         * @returns {Object} Complete editors' configuration.
          */
-        buildColumnEditor: function (column) {
-            var editors      = this.templates.editors,
-                columnEditor = column.editor,
-                editor;
+        buildEditor: function (column) {
+            var editors = this.templates.editors,
+                editor  = column.editor;
 
-            if (typeof columnEditor === 'object') {
-                editor = editors[columnEditor.editorType];
-
-                if (editor) {
-                    editor = utils.extend({}, editor, columnEditor);
-                }
-            } else {
-                editor = editors[columnEditor];
+            if (typeof editor === 'object' && editor.editorType) {
+                editor = utils.extend({}, editors[editor.editorType], editor);
+            } else if (typeof editor == 'string') {
+                editor = editors[editor];
             }
 
             editor = utils.extend({}, editors.base, editor);
@@ -132,7 +127,9 @@ define([
         },
 
         /**
+         * Creates editors for the specfied columns.
          *
+         * @param {Array} columns - An array of column instances.
          * @returns {Record} Chainable.
          */
         createEditors: function (columns) {
@@ -140,27 +137,11 @@ define([
 
             columns.forEach(function (column) {
                 if (column.editor && !this.getEditor(column.index)) {
-                    editor = this.buildColumnEditor(column);
+                    editor = this.buildEditor(column);
 
                     this.initEditor(editor);
                 }
             }, this);
-
-            return this;
-        },
-
-        /**
-         *
-         * @returns {Record} Chainable.
-         */
-        updateFields: function () {
-            var fields;
-
-            fields = this.columns().elems.map(function (column) {
-                return this.getEditor(column.index) || column;
-            }, this);
-
-            this.fields(fields);
 
             return this;
         },
@@ -177,37 +158,22 @@ define([
             });
         },
 
-        getColumn: function (index) {
-            return this.columns().getColumn(index);
-        },
-
         /**
          * Replaces current records' data with the provided one.
          *
-         * @param {Object} data
-         * @param {Boolean} [partial=false]
+         * @param {Object} data - New records data.
+         * @param {Boolean} [partial=false] - Flag that defines whether
+         *      to completely replace current data or to extend it.
          * @returns {Record} Chainable.
          */
         setData: function (data, partial) {
-            var currentData = this.data,
-                result;
+            var currentData = partial ? this.data : {};
 
-            result = partial ?
-                utils.extend({}, currentData, data) :
-                utils.copy(data);
+            data = utils.extend({}, currentData, data);
 
-            this.set('data', result);
+            this.set('data', data);
 
             return this;
-        },
-
-        /**
-         * Validates all of the available fields.
-         *
-         * @returns {Array} An array with validatation results.
-         */
-        validate: function () {
-            return this.elems.map('validate');
         },
 
         /**
@@ -219,6 +185,15 @@ define([
             this.elems.each('clear');
 
             return this;
+        },
+
+        /**
+         * Validates all of the available fields.
+         *
+         * @returns {Array} An array with validatation results.
+         */
+        validate: function () {
+            return this.elems.map('validate');
         },
 
         /**
@@ -248,7 +223,25 @@ define([
         },
 
         /**
-         * Listner of columns provider child array changes.
+         * Updates 'fields' array filling it with available edtiors
+         * or with column instances if associated editor is not present.
+         *
+         * @returns {Record} Chainable.
+         */
+        updateFields: function () {
+            var fields;
+
+            fields = this.columns().elems.map(function (column) {
+                return this.getEditor(column.index) || column;
+            }, this);
+
+            this.fields(fields);
+
+            return this;
+        },
+
+        /**
+         * Listener of columns provider child array changes.
          *
          * @param {Array} columns - Modified child elements array.
          */
