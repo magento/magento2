@@ -55,7 +55,7 @@ define([
          * @returns {View} Chainable.
          */
         initRoot: function (node) {
-            var table       = node.querySelector(':scope > table'),
+            var table       = $('> table', node)[0],
                 buttonsHtml = $(this.headerButtonsTmpl);
 
             buttonsHtml.insertBefore(node);

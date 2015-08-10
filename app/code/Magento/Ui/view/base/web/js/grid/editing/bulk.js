@@ -29,7 +29,9 @@ define([
                 }
             },
             listens: {
-                data: 'onDataChange'
+                data: 'onDataChange',
+                enabled: 'onEnableChange',
+                '${ $.editorProvider }:isMultiEditing': 'onMultiEditing'
             },
             modules: {
                 editor: '${ $.editorProvider }'
@@ -44,7 +46,8 @@ define([
         initObservable: function () {
             this._super()
                 .observe({
-                    hasData: false
+                    hasData: false,
+                    enabled: false
                 });
 
             return this;
@@ -56,9 +59,9 @@ define([
          *
          * @returns {Object} Columns' editor definition.
          */
-        buildColumnEditor: function () {
+        buildEditor: function () {
             var editor = this._super(),
-                rules = editor && editor.validation;
+                rules = editor.validation;
 
             if (rules) {
                 delete rules['required-entry'];
@@ -92,13 +95,9 @@ define([
          * @returns {Bulk} Chainable.
          */
         applyData: function (data) {
-            var editor = this.editor();
-
             data = data || this.getData();
 
-            editor.getActive().forEach(function (record) {
-                record.setData(data, true);
-            });
+            this.editor('setRecordsData', data, true);
 
             return this;
         },
@@ -106,10 +105,32 @@ define([
         /**
          * Returns data of all non-empty fields.
          *
-         * @returns {Object}
+         * @returns {Object} Fields data without empty values.
          */
         getData: function () {
             return removeEmpty(this.data);
+        },
+
+        /**
+         * Updates own 'hasData' property and defines
+         * whether regular rows editing can be resumed.
+         *
+         * @returns {Bulk} Chainable.
+         */
+        updateState: function () {
+            var fields  = _.keys(this.getData()),
+                hasData = !!fields.length;
+
+            this.hasData(hasData);
+
+            if (!this.enabled()) {
+                fields = [];
+            }
+
+            this.editor('disableFields', fields);
+            this.editor('canSave', !fields.length);
+
+            return this;
         },
 
         /**
@@ -126,22 +147,23 @@ define([
          * Listener of the 'data' object changes.
          */
         onDataChange: function () {
-            var data = this.getData(),
-                keys = Object.keys(data),
-                hasData = !!keys.length;
+            this.updateState();
+        },
 
-            this.hasData(hasData);
+        /**
+         * Listener of the 'enabled' property.
+         */
+        onEnableChange: function () {
+            this.updateState();
+        },
 
-            this.elems.each(function (field) {
-                var index = field.index,
-                    column = this.getColumn(index);
-
-                if (!column) {
-                    return;
-                }
-
-                column.disabled(_.contains(keys, index));
-            }, this);
+        /**
+         * Listener of the editors' multiediting state.
+         *
+         * @param {Boolean} enabled - Whether multiediting is enabled.
+         */
+        onMultiEditing: function (enabled) {
+            this.enabled(enabled);
         }
     });
 });
