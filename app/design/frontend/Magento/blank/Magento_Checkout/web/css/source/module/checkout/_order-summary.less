@@ -28,8 +28,8 @@
 
     .opc-block-summary {
         &:extend(.abs-add-box-sizing all);
-        .css(background, @checkout-summary__background-color);
-        .css(padding, @checkout-summary__padding);
+        .mixin-css(background, @checkout-summary__background-color);
+        .mixin-css(padding, @checkout-summary__padding);
         margin: 0 0 @indent__base;
 
         > .title {
@@ -44,7 +44,7 @@
 
         .mark {
             .value {
-                .css(color, @checkout-summary-mark-value__color);
+                .mixin-css(color, @checkout-summary-mark-value__color);
                 display: block;
             }
         }
@@ -75,7 +75,7 @@
         .items-in-cart {
             > .title {
                 border-bottom: @border-width__base solid @border-color__base;
-                .css(padding, @indent__s @indent__xl @indent__s 0);
+                .mixin-css(padding, @indent__s @indent__xl @indent__s 0);
                 cursor: pointer;
                 .mixin-icon-font(
                 @icon-down,
@@ -114,9 +114,9 @@
 
         //  Cart items
         .minicart-items-wrapper {
-            .css(margin, 0 -(@checkout-summary-items__padding) 0 0);
-            .css(max-height, @checkout-summary-items__max-height);
-            .css(padding, @checkout-summary-items__padding @checkout-summary-items__padding 0 0);
+            .mixin-css(margin, 0 -(@checkout-summary-items__padding) 0 0);
+            .mixin-css(max-height, @checkout-summary-items__max-height);
+            .mixin-css(padding, @checkout-summary-items__padding @checkout-summary-items__padding 0 0);
             border: 0;
         }
         .column.main & {

@@ -125,23 +125,23 @@
             &:extend(.abs-visually-hidden-desktop-s all);
         }
         &-mode {
-            float: left;
+            .mixin-css(color, @text__color__muted);
             border: 1px solid @border-color__base;
-            font-weight: @font-weight__regular;
-            .css(color, @text__color__muted);
-            text-align: center;
-            padding: 7px 10px;
-            line-height: 1;
             border-right: 0;
+            float: left;
+            font-weight: @font-weight__regular;
+            line-height: 1;
+            padding: 7px 10px;
+            text-align: center;
             &:not(.active):hover {
                 background: darken(@toolbar-element-background, 7%);
-                .css(color, @text__color__muted);
+                .mixin-css(color, @text__color__muted);
             }
             &:last-child {
                 border-right: 1px solid @border-color__base;
             }
             &.active {
-                .css(color, @primary__color__light);
+                .mixin-css(color, @primary__color__light);
             }
             .mixin-icon-font(
                 @icon-grid,

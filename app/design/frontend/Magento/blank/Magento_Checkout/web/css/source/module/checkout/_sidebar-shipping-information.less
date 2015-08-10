@@ -28,17 +28,17 @@
     //  ---------------------------------------------
 
     .opc-block-shipping-information {
-        .css(padding, 0 @checkout-sidebar-shipping-information__padding);
+        .mixin-css(padding, 0 @checkout-sidebar-shipping-information__padding);
 
         .shipping-information-title {
             &:extend(.abs-checkout-title all);
-            .css(border-bottom, @checkout-step-title__border);
+            .mixin-css(border-bottom, @checkout-step-title__border);
             margin: 0 0 @indent__base;
             position: relative;
 
             .action-edit {
                 &:extend(.abs-action-button-as-link all);
-                .css(top, @checkout-sidebar-shipping-information-edit-icon__top);
+                .mixin-css(top, @checkout-sidebar-shipping-information-edit-icon__top);
                 .mixin-icon-font(
                     @checkout-sidebar-shipping-information-edit-icon__content,
                     @_icon-font-size: @checkout-sidebar-shipping-information-edit-icon__font-size,
@@ -55,7 +55,7 @@
         }
 
         .shipping-information-content {
-            .css(line-height, @checkout-sidebar-shipping-information__line-height);
+            .mixin-css(line-height, @checkout-sidebar-shipping-information__line-height);
             .actions-toolbar {
                 margin-left: 0;
             }

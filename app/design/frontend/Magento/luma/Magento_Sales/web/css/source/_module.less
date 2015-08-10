@@ -14,22 +14,22 @@
         line-height: @tab-control__height;
         margin: 0 0 -1px;
         strong {
-            .css(background, @tab-control__active__background-color);
+            .mixin-css(background, @tab-control__active__background-color);
             border: @border-width__base solid @border-color__base;
             display: block;
             font-weight: @tab-control__font-weight;
             padding: 0 20px;
         }
         a {
-            .css(background, @tab-control__background-color);
-            .css(color, @tab-control__color);
+            .mixin-css(background, @tab-control__background-color);
+            .mixin-css(color, @tab-control__color);
             border: @border-width__base solid @border-color__base;
             display: block;
             font-weight: @tab-control__font-weight;
             padding: 0 20px;
             &:hover {
-                .css(background, @tab-control__hover__background-color);
-                .css(text-decoration, @tab-control__hover__text-decoration);
+                .mixin-css(background, @tab-control__hover__background-color);
+                .mixin-css(text-decoration, @tab-control__hover__text-decoration);
             }
         }
     }
@@ -160,7 +160,7 @@
                 @_icon-font-position: after,
                 @_icon-font-display: inline-block
             );
-            .css(color, @primary__color);
+            .mixin-css(color, @primary__color);
             &.expanded {
                 .mixin-icon-font-symbol(
                     @_icon-font-content: @icon-up,
@@ -383,7 +383,7 @@
             }
         }
         .action {
-            .css(margin-top, @indent__s);
+            .mixin-css(margin-top, @indent__s);
         }
         .items-qty {
             display: inline-block;

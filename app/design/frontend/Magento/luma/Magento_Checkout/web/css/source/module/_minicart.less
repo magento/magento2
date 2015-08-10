@@ -107,7 +107,7 @@
         );
         float: right;
         .block-minicart {
-            .css(padding, 25px @minicart__padding-horizontal);
+            .mixin-css(padding, 25px @minicart__padding-horizontal);
             right: 0;
             width: 320px;
             .block-title {
@@ -160,9 +160,9 @@
                     &.empty {
                        display: none;
                     }
-                    .css(background, @active__color);
+                    .mixin-css(background, @active__color);
                     border-radius: 2px;
-                    .css(color, @page__background-color);
+                    .mixin-css(color, @page__background-color);
                     clip: none;
                     display: inline-block;
                     height: 24px;
@@ -185,8 +185,8 @@
     }
 
     .minicart-items-wrapper {
-        .css(border, 1px solid @minicart__border-color);
-        .css(margin, 0 -@minicart__padding-horizontal);
+        .mixin-css(border, 1px solid @minicart__border-color);
+        .mixin-css(margin, 0 -@minicart__padding-horizontal);
         border-left: 0;
         border-right: 0;
         overflow-x: auto;
@@ -197,7 +197,7 @@
         .mixin-list-reset-styles();
         .product-item {
             &:not(:first-child) {
-                .css(border-top, 1px solid @minicart__border-color);
+                .mixin-css(border-top, 1px solid @minicart__border-color);
             }
             padding: @indent__base 0;
             &:first-child {
@@ -223,7 +223,7 @@
             font-weight: @font-weight__regular;
             margin: 0 0 @indent__s;
             a {
-                .css(color, @link__color);
+                .mixin-css(color, @link__color);
             }
         }
         .product-item-details {
@@ -255,7 +255,7 @@
                 &:after {
                     position: static;
                     margin: 0 0 0 @indent__xs;
-                    .css(color, @color-gray56);
+                    .mixin-css(color, @color-gray56);
                 }
                 border: 0;
                 padding: 0 @indent__xl @indent__xs 0;

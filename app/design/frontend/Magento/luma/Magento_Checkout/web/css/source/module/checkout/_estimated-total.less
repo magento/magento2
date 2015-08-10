@@ -16,14 +16,14 @@
     .opc-estimated-wrapper {
         &:extend(.abs-no-display-desktop all);
         &:extend(.abs-add-clearfix all);
-        .css(background, @checkout-step-content-mobile__background);
-        .css(border-bottom, @checkout-step-title__border);
-        .css(border-top, @checkout-step-title__border);
-        .css(margin, -21px -(@checkout-step-content-mobile__margin-s) @checkout-step-content-mobile__margin-s);
+        .mixin-css(background, @checkout-step-content-mobile__background);
+        .mixin-css(border-bottom, @checkout-step-title__border);
+        .mixin-css(border-top, @checkout-step-title__border);
+        .mixin-css(margin, -21px -(@checkout-step-content-mobile__margin-s) @checkout-step-content-mobile__margin-s);
         padding: 18px 15px;
 
         .estimated-block {
-            .css(font-size, @checkout-step-title-mobile__font-size);
+            .mixin-css(font-size, @checkout-step-title-mobile__font-size);
             float: left;
             font-weight: @font-weight__bold;
 
@@ -39,7 +39,7 @@
                 &.action.showcart {
                     .mixin-button-reset();
                     &:before {
-                        .css(color, @primary__color);
+                        .mixin-css(color, @primary__color);
                     }
                 }
             }

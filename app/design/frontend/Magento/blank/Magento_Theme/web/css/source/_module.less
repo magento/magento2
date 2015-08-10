@@ -47,14 +47,14 @@
 & when (@media-common = true) {
 
 body {
-    .css(background-color, @page__background-color);
+    .mixin-css(background-color, @page__background-color);
 }
 
 //
 //    Header
 //--------------------------------------
 .page-header {
-    .css(background-color, @header__background-color);
+    .mixin-css(background-color, @header__background-color);
     border-bottom: 1px solid @border-color__base;
     margin-bottom: @indent__base;
 }
@@ -103,8 +103,8 @@ body {
         left: 0;
         top: 0;
         text-align: center;
-        .css(background, @color-gray94);
-        .css(padding, @indent__s);
+        .mixin-css(background, @color-gray94);
+        .mixin-css(padding, @indent__s);
     }
 }
 
@@ -144,7 +144,7 @@ body {
 
 .page-footer {
     margin-top: auto;
-    .css(background-color, @footer__background-color);
+    .mixin-css(background-color, @footer__background-color);
 }
 
 .footer {
@@ -274,7 +274,7 @@ body {
                     }
                     &.welcome {
                         a {
-                            .css(padding-left, @indent__xs);
+                            .mixin-css(padding-left, @indent__xs);
                         }
                     }
                 }

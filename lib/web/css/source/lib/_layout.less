@@ -14,38 +14,38 @@
     @_layout__indent: @layout-indent__width
 ) when not (@responsive = true) {
     ._mixin-layout-width(@_layout__min-width, @_layout__max-width);
+    .mixin-css(padding-left, @layout-indent__width);
+    .mixin-css(padding-right, @layout-indent__width);
     margin: 0 auto;
-    .css(padding-left, @layout-indent__width);
-    .css(padding-right, @layout-indent__width);
 }
 
 ._mixin-layout-width(
         @_layout__min-width: @layout__min-width,
         @_layout__max-width: @layout__max-width
     ) when (@_layout__min-width = @_layout__max-width) {
-    .css(width, @_layout__min-width);
+    .mixin-css(width, @_layout__min-width);
 }
 
 ._mixin-layout-width(
         @_layout__min-width: @layout__min-width,
         @_layout__max-width: @layout__max-width
     ) when not (@_layout__min-width = @_layout__max-width) {
+    .mixin-css(max-width, @_layout__max-width);
+    .mixin-css(min-width, @_layout__min-width);
     width: auto;
-    .css(min-width, @_layout__min-width);
-    .css(max-width, @_layout__max-width);
 }
 
 #mixin-layout-columns() {
     & when (@use-flex = true) {
-        box-sizing: border-box;
         .mixin-vendor-prefix-display(flex);
         .mixin-vendor-prefix-flex-wrap(wrap);
+        box-sizing: border-box;
     };
     &:after {
-        content: " ";
+        clear: both;
+        content: ' ';
         display: block;
         height: 0;
-        clear: both;
         overflow: hidden;
         visibility: hidden;
     }
@@ -94,7 +94,7 @@
 }
 
 ._mixin-column-width(@_width, @_check, @_index) when (@_check = true), (@_width = auto) {
-    .css(width, @_width);
+    .mixin-css(width, @_width);
     @_index: 1;
 }
 

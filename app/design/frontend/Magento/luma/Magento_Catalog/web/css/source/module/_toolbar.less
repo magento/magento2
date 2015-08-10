@@ -24,9 +24,9 @@
 
 .toolbar {
     select {
-        .css(background-color, @toolbar-element-background);
+        .mixin-css(background-color, @toolbar-element-background);
         border-radius: 3px;
-        .css(box-shadow, @button__shadow);
+        .mixin-css(box-shadow, @button__shadow);
     }
 
     text-align: center;
@@ -51,7 +51,7 @@
     }
     margin-bottom: @indent__l;
     &-products {
-        .css(background-color, @toolbar-background);
+        .mixin-css(background-color, @toolbar-background);
         .pages {
             display: none;
             .products.wrapper ~ & {
@@ -159,26 +159,26 @@
             float: left;
             border: 1px solid @border-color__base;
             font-weight: @font-weight__regular;
-            .css(color, @text__color__muted);
+            .mixin-css(color, @text__color__muted);
             text-align: center;
             padding: 7px 10px;
             line-height: 1;
             border-right: 0;
-            .css(background-color, @toolbar-element-background);
-            .css(box-shadow, @button__shadow);
+            .mixin-css(background-color, @toolbar-element-background);
+            .mixin-css(box-shadow, @button__shadow);
             .modes-label + & {
                 border-radius: 3px 0 0 3px;
             }
             &:hover {
                 background: darken(@toolbar-element-background, 2%);
-                .css(color, @text__color__muted);
+                .mixin-css(color, @text__color__muted);
             }
             &:last-child {
                 border-radius: 0 3px 3px 0;
                 border-right: 1px solid @border-color__base;
             }
             &.active {
-                .css(box-shadow, @button__shadow-active);
+                .mixin-css(box-shadow, @button__shadow-active);
                 background: darken(@toolbar-element-background, 7%);
                 color: @color-gray62;
             }

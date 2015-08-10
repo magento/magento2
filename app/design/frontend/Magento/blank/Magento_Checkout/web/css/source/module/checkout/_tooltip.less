@@ -43,14 +43,14 @@
         top: 1px;
 
         &._active {
-            .css(z-index, @checkout-tooltip__hover__z-index);
+            .mixin-css(z-index, @checkout-tooltip__hover__z-index);
 
             .field-tooltip-content {
                 display: block;
             }
             .field-tooltip-action {
                 &:before {
-                    .css(color, @checkout-tooltip-icon__hover__color);
+                    .mixin-css(color, @checkout-tooltip-icon__hover__color);
                 }
             }
         }
@@ -67,24 +67,24 @@
 
             &:focus {
                 ._keyfocus & {
-                    .css(z-index, @checkout-tooltip__hover__z-index);
+                    .mixin-css(z-index, @checkout-tooltip__hover__z-index);
                     + .field-tooltip-content {
                         display: block;
                     }
                     &:before {
-                        .css(color, @checkout-tooltip-icon__hover__color);
+                        .mixin-css(color, @checkout-tooltip-icon__hover__color);
                     }
                 }
             }
         }
 
         .field-tooltip-content {
-            .css(background, @checkout-tooltip-content__background-color);
-            .css(border, @checkout-tooltip-content__border-width solid @checkout-tooltip-content__border-color);
-            .css(border-radius, @checkout-tooltip-content__border-width);
-            .css(font-size, @checkout-tooltip-content__font-size);
-            .css(padding, @checkout-tooltip-content__padding);
-            .css(width, @checkout-tooltip-content__width);
+            .mixin-css(background, @checkout-tooltip-content__background-color);
+            .mixin-css(border, @checkout-tooltip-content__border-width solid @checkout-tooltip-content__border-color);
+            .mixin-css(border-radius, @checkout-tooltip-content__border-width);
+            .mixin-css(font-size, @checkout-tooltip-content__font-size);
+            .mixin-css(padding, @checkout-tooltip-content__padding);
+            .mixin-css(width, @checkout-tooltip-content__width);
             display: none;
             left: 38px;
             position: absolute;
@@ -100,18 +100,18 @@
                 @_size: @checkout-tooltip-icon-arrow__font-size,
                 @_color: @checkout-tooltip-content__background-color
                 );
-                .css(left, @checkout-tooltip-icon-arrow__left);
-                .css(top, @checkout-tooltip-content__padding);
+                .mixin-css(left, @checkout-tooltip-icon-arrow__left);
+                .mixin-css(top, @checkout-tooltip-content__padding);
                 content: '';
                 display: block;
                 position: absolute;
                 z-index: 3;
             }
             &:before {
-                .css(border-right-color, @checkout-tooltip-content__active__border-color);
+                .mixin-css(border-right-color, @checkout-tooltip-content__active__border-color);
             }
             &:after {
-                .css(border-right-color, @checkout-tooltip-content__background-color);
+                .mixin-css(border-right-color, @checkout-tooltip-content__background-color);
                 width: 1px;
                 z-index: 4;
             }
@@ -127,7 +127,7 @@
     .modal-popup {
         .field-tooltip {
             .field-tooltip-content {
-                .css(width, @checkout-tooltip-content-mobile-popup__width);
+                .mixin-css(width, @checkout-tooltip-content-mobile-popup__width);
             }
         }
     }

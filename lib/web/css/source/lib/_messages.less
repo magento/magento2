@@ -34,9 +34,9 @@
     @_message-margin: @message__margin,
     @_message-border-radius: @message__border-radius
 ) {
-    .css(border-radius, @_message-border-radius);
-    .css(margin, @_message-margin);
-    .css(padding, @_message-padding);
+    .mixin-css(border-radius, @_message-border-radius);
+    .mixin-css(margin, @_message-margin);
+    .mixin-css(padding, @_message-padding);
     display: block;
     .mixin-typography(
         @_color: @message__color,
@@ -57,16 +57,16 @@
     @_message-link-color-active: @message-info-link__color-active,
     @_message-border-color: @message-info__border-color
 ) {
-    .css(background, @_message-background);
-    .css(border-color, @_message-border-color);
-    .css(color, @_message-color);
+    .mixin-css(background, @_message-background);
+    .mixin-css(border-color, @_message-border-color);
+    .mixin-css(color, @_message-color);
     a {
-        .css(color, @_message-link-color);
+        .mixin-css(color, @_message-link-color);
         &:hover {
-            .css(color, @_message-link-color-hover);
+            .mixin-css(color, @_message-link-color-hover);
         }
         &:active {
-            .css(color, @_message-link-color-active);
+            .mixin-css(color, @_message-link-color-active);
         }
     }
 }
@@ -77,7 +77,7 @@
 ) when not (@_message-border-width = 0)
 and not (@_message-border-width = false)
 and not (@_message-border-style = false) {
-    .css(border, @_message-border-width @_message-border-style);
+    .mixin-css(border, @_message-border-width @_message-border-style);
 }
 
 //  Messages with lateral icon
@@ -137,8 +137,8 @@ and not (@_message-border-style = false) {
 ) {
     position: relative;
     &:before {
-        .css(background, @_message-icon-background);
-        .css(width, @message-icon__lateral-width);
+        .mixin-css(background, @_message-icon-background);
+        .mixin-css(width, @message-icon__lateral-width);
         content: '';
         display: block;
         height: 100%;
@@ -147,30 +147,34 @@ and not (@_message-border-style = false) {
         text-align: center;
         top: 0;
     }
-    > *:first-child:before {
-        .css(margin-top, -@message-icon__lateral-arrow-size);
-        content: '';
-        overflow: hidden;
-        position: absolute;
-        top: 50%;
+    > *:first-child {
+        &:before {
+            .mixin-css(margin-top, -@message-icon__lateral-arrow-size);
+            content: '';
+            overflow: hidden;
+            position: absolute;
+            top: 50%;
+        }
     }
-    > *:first-child:after {
-        ._mixin-icon-font(
-            @_icon-font-content: @_message-icon,
-            @_icon-font: @icon-font,
-            @_icon-font-size: @message-icon__font-size,
-            @_icon-font-line-height: @message-icon__font-line-height,
-            @_icon-font-color: @_message-icon-color,
-            @_icon-font-margin: -@message-icon__font-size/2 0 0,
-            @_icon-font-vertical-align: @icon-font__vertical-align
-        );
-        .css(bottom, @_message-icon-bottom);
-        .css(left, @_message-icon-left);
-        .css(right, @_message-icon-right);
-        .css(top, @_message-icon-top);
-        .css(width, @message-icon__lateral-width);
-        position: absolute;
-        text-align: center;
+    > *:first-child {
+        &:after {
+            ._mixin-icon-font(
+                @_icon-font-content: @_message-icon,
+                @_icon-font: @icon-font,
+                @_icon-font-size: @message-icon__font-size,
+                @_icon-font-line-height: @message-icon__font-line-height,
+                @_icon-font-color: @_message-icon-color,
+                @_icon-font-margin: -@message-icon__font-size/2 0 0,
+                @_icon-font-vertical-align: @icon-font__vertical-align
+            );
+            .mixin-css(bottom, @_message-icon-bottom);
+            .mixin-css(left, @_message-icon-left);
+            .mixin-css(right, @_message-icon-right);
+            .mixin-css(top, @_message-icon-top);
+            .mixin-css(width, @message-icon__lateral-width);
+            position: absolute;
+            text-align: center;
+        }
     }
     ._mixin-message-icon-lateral-position(
         @_message-icon-position,
@@ -182,17 +186,21 @@ and not (@_message-border-style = false) {
     @_message-icon-position,
     @_message-icon-background
 ) when (@_message-icon-position = right) {
-    .css(padding-right, @message-icon__lateral-width + @indent__s);
+    .mixin-css(padding-right, @message-icon__lateral-width + @indent__s);
     &:before {
         right: 0;
         ._mixin-message-icon-lateral-border-radius(@_message-icon-position);
     }
-    > *:first-child:before {
-        .mixin-arrow(left, @message-icon__lateral-arrow-size, @_message-icon-background);
-        .css(right, @message-icon__lateral-width);
+    > *:first-child {
+        &:before {
+            .mixin-arrow(left, @message-icon__lateral-arrow-size, @_message-icon-background);
+            .mixin-css(right, @message-icon__lateral-width);
+        }
     }
-    > *:first-child:after {
-        right: 0;
+    > *:first-child {
+        &:after {
+            right: 0;
+        }
     }
 }
 
@@ -200,14 +208,15 @@ and not (@_message-border-style = false) {
     @_message-icon-position,
     @_message-icon-background
 ) when (@_message-icon-position = left) {
-    .css(padding-left, @message-icon__lateral-width + @indent__s);
+    .mixin-css(padding-left, @message-icon__lateral-width + @indent__s);
+
     &:before {
         left: 0;
         ._mixin-message-icon-lateral-border-radius(@_message-icon-position);
     }
     > *:first-child:before {
         .mixin-arrow(right, @message-icon__lateral-arrow-size, @_message-icon-background);
-        .css(left, @message-icon__lateral-width);
+        .mixin-css(left, @message-icon__lateral-width);
     }
     > *:first-child:after {
         left: 0;
@@ -235,8 +244,8 @@ and not (@_message-border-style = false) {
     @_message-icon-bottom,
     @_message-icon-right
 ) {
+    .mixin-css(padding-left, @message-icon__inner-padding-left);
     position: relative;
-    .css(padding-left, @message-icon__inner-padding-left);
 
     > *:first-child:before {
         ._mixin-icon-font(
@@ -248,11 +257,11 @@ and not (@_message-border-style = false) {
             @_icon-font-margin: -@message-icon__font-size/2 0 0,
             @_icon-font-vertical-align: @icon-font__vertical-align
         );
-        .css(bottom, @_message-icon-bottom);
-        .css(left, @_message-icon-left);
-        .css(right, @_message-icon-right);
-        .css(top, @_message-icon-top);
-        .css(width, @message-icon__inner-padding-left);
+        .mixin-css(bottom, @_message-icon-bottom);
+        .mixin-css(left, @_message-icon-left);
+        .mixin-css(right, @_message-icon-right);
+        .mixin-css(top, @_message-icon-top);
+        .mixin-css(width, @message-icon__inner-padding-left);
         position: absolute;
         text-align: center;
     }

@@ -76,14 +76,14 @@
         .mixin-list-reset-styles();
         li {
             &:not(:empty) {
-                .css(background, @autocomplete-background);
-                .css(border, @autocomplete-border);
+                .mixin-css(background, @autocomplete-background);
+                .mixin-css(border, @autocomplete-border);
                 border-top: 0;
             }
-            .css(border-top, @autocomplete-item-border);
+            .mixin-css(border-top, @autocomplete-item-border);
             cursor: pointer;
-            padding: @indent__xs @indent__xl @indent__xs @indent__s;
             margin: 0;
+            padding: @indent__xs @indent__xl @indent__xs @indent__s;
             position: relative;
             text-align: left;
             white-space: normal;
@@ -92,10 +92,10 @@
             }
             &:hover,
             &.selected {
-                .css(background, @autocomplete-item-hover);
+                .mixin-css(background, @autocomplete-item-hover);
             }
             .amount {
-                .css(color, @autocomplete-item-amount-color);
+                .mixin-css(color, @autocomplete-item-amount-color);
                 position: absolute;
                 right: 7px;
                 top: @indent__xs;
@@ -213,7 +213,7 @@
             .mixin-button-reset();
             &:focus {
                 &:before {
-                    .css(color, @color-gray20);
+                    .mixin-css(color, @color-gray20);
                 }
             }
             padding: @indent__xs 0;

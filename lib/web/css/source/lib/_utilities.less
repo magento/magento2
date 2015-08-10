@@ -10,6 +10,7 @@
 //
 //  Convert values to unit specified in typography variables
 //  ---------------------------------------------
+
 .mixin-font-size-value(
     @_value
 ) when not (@_value = false) and not (@_value = '') and (@font-size-unit-convert) {
@@ -87,9 +88,9 @@
     ) when not (@disable-filters) and (@_background-color-position = true) {
         background-color: @_end-color;
         background-repeat: repeat-x;
-        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
-        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)", @_start-color, @_end-color)); //  IE9 and down
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)", @_start-color, @_end-color)); // IE9 and down
     }
 
     .horizontal(
@@ -101,9 +102,9 @@
     ) when not (@disable-filters) and (@_background-color-position = false) {
         background-color: @_start-color;
         background-repeat: repeat-x;
-        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
-        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)", @_start-color, @_end-color)); //  IE9 and down
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)", @_start-color, @_end-color)); // IE9 and down
     }
 
     //  Horizontal gradient, from left to right
@@ -119,8 +120,8 @@
     ) when (@disable-filters) and (@_background-color-position = true) {
         background-color: @_end-color;
         background-repeat: repeat-x;
-        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
     }
 
     .horizontal(
@@ -132,8 +133,8 @@
     ) when (@disable-filters) and (@_background-color-position = false) {
         background-color: @_start-color;
         background-repeat: repeat-x;
-        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
     }
 
     //  Vertical gradient, from top to bottom
@@ -149,9 +150,9 @@
     ) when not (@disable-filters) and (@_background-color-position = true) {
         background-color: @_end-color;
         background-repeat: repeat-x;
-        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
-        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", @_start-color, @_end-color)); //  IE9 and down
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", @_start-color, @_end-color)); // IE9 and down
     }
 
     .vertical(
@@ -163,9 +164,9 @@
     ) when not (@disable-filters) and (@_background-color-position = false) {
         background-color: @_start-color;
         background-repeat: repeat-x;
-        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
-        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", @_start-color, @_end-color)); //  IE9 and down
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", @_start-color, @_end-color)); // IE9 and down
     }
 
     //  Vertical gradient, from top to bottom
@@ -181,8 +182,8 @@
     ) when (@disable-filters) and (@_background-color-position = true) {
         background-color: @_end-color;
         background-repeat: repeat-x;
-        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
     }
 
     .vertical(
@@ -194,8 +195,8 @@
     ) when (@disable-filters) and (@_background-color-position = false) {
         background-color: @_start-color;
         background-repeat: repeat-x;
-        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
     }
 }
 
@@ -267,7 +268,7 @@
 //  Add any css property
 //  ---------------------------------------------
 
-.css(
+.mixin-css(
     @_property,
     @_value,
     @_prefix: 0
@@ -283,7 +284,8 @@
        -moz-@{_property}: @_value;
         -ms-@{_property}: @_value;
 }
-.css(
+
+.mixin-css(
     @_property,
     @_value,
     @_prefix: 0
@@ -504,17 +506,17 @@
         border-bottom-style: solid;
     }
     &:before {
-        .css(@_position__vertical, @_position__vertical__value);
-        .css(@_position__horizontal, @_position__horizontal__value);
-        .css(z-index, @_z-index);
-        .css(border, solid @_size - 1);
-        .css(border-color, transparent transparent @_background-color transparent);
+        .mixin-css(@_position__horizontal, @_position__horizontal__value);
+        .mixin-css(@_position__vertical, @_position__vertical__value);
+        .mixin-css(border, solid @_size - 1);
+        .mixin-css(border-color, transparent transparent @_background-color transparent);
+        .mixin-css(z-index, @_z-index);
     }
     &:after {
-        .css(@_position__vertical, @_position__vertical__value - 2);
-        .css(@_position__horizontal, @_position__horizontal__value - 1);
-        .css(z-index, @_z-index - 1);
-        .css(border, solid @_size);
-        .css(border-color, transparent transparent @_border-color transparent);
+        .mixin-css(@_position__horizontal, @_position__horizontal__value - 1);
+        .mixin-css(@_position__vertical, @_position__vertical__value - 2);
+        .mixin-css(border, solid @_size);
+        .mixin-css(border-color, transparent transparent @_border-color transparent);
+        .mixin-css(z-index, @_z-index - 1);
     }
 }

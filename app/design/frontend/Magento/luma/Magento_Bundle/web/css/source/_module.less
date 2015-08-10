@@ -142,7 +142,7 @@
         }
     }
     p.required {
-        .css(color, @form-field-label-asterisk__color);
+        .mixin-css(color, @form-field-label-asterisk__color);
     }
     .nested {
         .field.qty {
@@ -194,12 +194,12 @@
                     font-size: @price-size-desktop;
                     line-height: @price-size-desktop;
                     font-weight: @font-weight__semibold;
-                    .css(color, @price-color);
+                    .mixin-css(color, @price-color);
                 }
             }
             .price-container {
                 .weee {
-                    .css(color, @price-color);
+                    .mixin-css(color, @price-color);
                     .price {
                         .mixin-font-size(12);
                         font-weight: @font-weight__bold;

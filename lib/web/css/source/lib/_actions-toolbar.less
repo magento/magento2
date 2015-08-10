@@ -20,35 +20,35 @@
     @_actions-toolbar-secondary-actions-links-margin-top: @actions-toolbar-actions-links-secondary__margin-top
 ) {
     .mixin-clearfix();
-    .css(margin, @_actions-toolbar-margin);
-    .css(padding, @_actions-toolbar-padding);
+    .mixin-css(margin, @_actions-toolbar-margin);
+    .mixin-css(padding, @_actions-toolbar-padding);
     ._mixin-actions-toolbar-align(@_actions-toolbar-actions-position);
     ._mixin-actions-toolbar-floats(@_actions-toolbar-actions-position, @_actions-toolbar-actions-reverse);
     .primary,
     .secondary {
         display: inline-block;
         .action {
-            .css(margin, @_actions-toolbar-actions-margin);
+            .mixin-css(margin, @_actions-toolbar-actions-margin);
         }
         a.action {
             display: inline-block;
-            .css(margin-top, @_actions-toolbar-actions-links-margin-top);
+            .mixin-css(margin-top, @_actions-toolbar-actions-links-margin-top);
         }
     }
     .primary {
         .action {
-            .css(margin, @_actions-toolbar-primary-actions-margin);
+            .mixin-css(margin, @_actions-toolbar-primary-actions-margin);
         }
         a.action {
-            .css(margin-top, @_actions-toolbar-primary-actions-links-margin-top);
+            .mixin-css(margin-top, @_actions-toolbar-primary-actions-links-margin-top);
         }
     }
     .secondary {
         .action {
-            .css(margin, @_actions-toolbar-secondary-actions-margin);
+            .mixin-css(margin, @_actions-toolbar-secondary-actions-margin);
         }
         a.action {
-            .css(margin-top, @_actions-toolbar-secondary-actions-links-margin-top);
+            .mixin-css(margin-top, @_actions-toolbar-secondary-actions-links-margin-top);
         }
     }
 }
@@ -70,7 +70,7 @@
 //  ---------------------------------------------
 
 ._mixin-actions-toolbar-align(@_actions-toolbar-actions-position) when not (@_actions-toolbar-actions-position = justify) {
-    .css(text-align, @_actions-toolbar-actions-position);
+    .mixin-css(text-align, @_actions-toolbar-actions-position);
 }
 
 ._mixin-actions-toolbar-floats(

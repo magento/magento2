@@ -55,14 +55,14 @@
     }
     .modal-custom {
         .action-close {
-            .css(margin, @indent__m);
+            .mixin-css(margin, @indent__m);
         }
     }
     .modal-popup {
         .modal-title {
-            .css(border-bottom, @modal-title__border);
-            .css(font-weight, @font-weight__light);
-            .css(padding-bottom, @indent__s);
+            .mixin-css(border-bottom, @modal-title__border);
+            .mixin-css(font-weight, @font-weight__light);
+            .mixin-css(padding-bottom, @indent__s);
             font-size: @modal-popup-title__font-size;
             margin-bottom: 0;
             min-height: 1em;
@@ -84,7 +84,7 @@
     }
 
     .modals-overlay {
-        .css(background-color, @modal-overlay__background-color);
+        .mixin-css(background-color, @modal-overlay__background-color);
         bottom: 0;
         left: 0;
         position: fixed;
@@ -120,7 +120,7 @@
             overflow-x: hidden;
         }
         .modal-inner-wrap {
-            .css(background-color, @modal-slide-mobile__background-color);
+            .mixin-css(background-color, @modal-slide-mobile__background-color);
             box-sizing: border-box;
             height: auto;
             min-height: 100%;
@@ -132,7 +132,7 @@
             overflow: hidden;
             width: 100vw;
             .modal-custom-overlay {
-                .css(background-color, @modal-overlay__background-color);
+                .mixin-css(background-color, @modal-overlay__background-color);
             }
         }
     }
@@ -142,7 +142,7 @@
     .modal-popup {
         &.modal-slide {
             .modal-inner-wrap[class] {
-                .css(background-color, @modal-slide-mobile__background-color);
+                .mixin-css(background-color, @modal-slide-mobile__background-color);
             }
             &._inner-scroll {
                 &._show {
@@ -156,8 +156,8 @@
             }
         }
         .modal-title {
-            .css(font-size, @modal-popup-title-mobile__font-size);
-            .css(font-weight, @font-weight__bold);
+            .mixin-css(font-size, @modal-popup-title-mobile__font-size);
+            .mixin-css(font-weight, @font-weight__bold);
         }
     }
 }
@@ -170,7 +170,7 @@
     .modal-popup {
         &.modal-slide {
             .modal-footer {
-                .css(border-top, @modal-title__border);
+                .mixin-css(border-top, @modal-title__border);
                 text-align: right;
             }
         }

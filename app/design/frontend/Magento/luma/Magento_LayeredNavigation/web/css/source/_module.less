@@ -22,8 +22,8 @@
             text-align: center;
             padding: 7px 10px;
             @_shadow: inset 0 1px 0 0 @color-white, inset 0 -1px 0 0 fade(@border-color__base, 30);
-            .css(background-color, @toolbar-element-background);
-            .css(box-shadow, @_shadow);
+            .mixin-css(background-color, @toolbar-element-background);
+            .mixin-css(box-shadow, @_shadow);
             border-radius: 3px;
             font-weight: 400;
             top: 0;
@@ -35,7 +35,7 @@
                 padding: 2px;
                 font-size: .8em;
                 margin: 0 5px;
-                .css(color, @color-white);
+                .mixin-css(color, @color-white);
                 min-width: 1em;
                 line-height: 1;
                 background: @color-orange-red4;
@@ -88,7 +88,7 @@
         }
     }
     &-value {
-        .css(color, @filter-quantity);
+        .mixin-css(color, @filter-quantity);
     }
     &-options {
         display: none;
@@ -119,7 +119,7 @@
                 top: 9px;
             }
             &:hover {
-                .css(color, @filter-link-hover);
+                .mixin-css(color, @filter-link-hover);
             }
             .active > & {
                 .mixin-icon-font-symbol(
@@ -136,7 +136,7 @@
                 line-height: 1.5em;
             }
             a {
-                .css(color, @filter-link);
+                .mixin-css(color, @filter-link);
                 margin-right: -5px;
                 padding-left: 5px;
                 margin-left: -5px;
@@ -150,7 +150,7 @@
                 }
             }
             .count {
-                .css(color, @filter-quantity);
+                .mixin-css(color, @filter-quantity);
                 padding-right: 5px;
                 &:before {
                     content: "(";
@@ -206,7 +206,7 @@
                         top: 10px;
                         border: 0;
                         background: none;
-                        .css(box-shadow, none);
+                        .mixin-css(box-shadow, none);
                         color: transparent;
                         .mixin-icon-font(
                             @icon-remove,
@@ -223,7 +223,7 @@
                 right: 0;
                 left: 0;
                 height: 50px;
-                .css(background, @toolbar-background);
+                .mixin-css(background, @toolbar-background);
                 z-index: 1;
                 line-height: 32px;
             }
@@ -235,7 +235,7 @@
                 right: 0;
                 bottom: 0;
                 overflow: scroll;
-                .css(background, @color-white);
+                .mixin-css(background, @color-white);
                 z-index: 10;
             }
         }
@@ -293,7 +293,7 @@
             &:after {
                 content:' (' attr(data-count) ')';
                 font-size:.9em;
-                .css(color, @text__color__muted);
+                .mixin-css(color, @text__color__muted);
             }
         }
         &.active {
@@ -394,7 +394,7 @@
                             margin-left: -20px;
                         }
                         &:after {
-                            .css(border-bottom-color, @color-white);
+                            .mixin-css(border-bottom-color, @color-white);
                             margin-top:2px;
                             z-index: 4;
                         }
@@ -411,13 +411,13 @@
                 &-content {
                     position: absolute;
                     z-index: 2;
-                    .css(background, @color-white);
+                    .mixin-css(background, @color-white);
                     width: 180px;
                     top: 100%;
                     border: 1px solid @border-color__base;
                     padding: @indent__xs 0;
                     @_shadow:  0 3px 5px 0 rgba(50, 50, 50, .75);
-                    .css(box-shadow, @_shadow, 1);
+                    .mixin-css(box-shadow, @_shadow, 1);
                     .item {
                         padding: @indent__xs;
                         margin:0;
@@ -436,7 +436,7 @@
                 &-subtitle {
                     display: inline;
                     padding: 0;
-                    .css(color, @text__color__muted);
+                    .mixin-css(color, @text__color__muted);
                     font-size: @font-size__base;
                     font-weight: normal;
                     &:after {

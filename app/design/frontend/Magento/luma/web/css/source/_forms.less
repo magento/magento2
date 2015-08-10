@@ -68,7 +68,7 @@ fieldset.field {
 }
 
 .select-styling() {
-    .css(appearance, none, 1);
+    .mixin-css(appearance, none, 1);
     appearance: none;
     border: 1px solid @border-color__base;
     height: 32px;
@@ -160,6 +160,6 @@ select:focus ~ .tooltip .tooltip-content {
 //--------------------------------------
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .legend {
-        .css(border-bottom, @legend-border-bottom);
+        .mixin-css(border-bottom, @legend-border-bottom);
     }
 }

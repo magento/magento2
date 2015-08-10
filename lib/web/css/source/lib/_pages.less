@@ -21,6 +21,7 @@
     @_pager-item-margin: @pager-item__margin,
     @_pager-item-padding: @pager-item__padding,
     @_pager-actions-padding: @pager-actions__padding,
+
     //  Page current
     @_pager-current-font-weight: @pager-current__font-weight,
     @_pager-current-color: @pager-current__color,
@@ -30,24 +31,29 @@
     @_pager-current-gradient-direction: @pager-current__gradient-direction,
     @_pager-current-gradient-color-start: @pager-current__gradient-color-start,
     @_pager-current-gradient-color-end: @pager-current__gradient-color-end,
+
     //  Page item - text color
     @_pager-color: @pager__color,
     @_pager-color-visited: @pager__visited__color,
     @_pager-color-hover: @pager__hover__color,
     @_pager-color-active: @pager__active__color,
+
     //  Page item - background
     @_pager-background: @pager__background,
     @_pager-background-visited: @pager__visited__background,
     @_pager-background-hover: @pager__hover__background,
     @_pager-background-active: @pager__active__background,
+
     //  Page item - border
     @_pager-border: @pager__border,
     @_pager-border-visited: @pager__visited__border,
     @_pager-border-hover: @pager__hover__border,
     @_pager-border-active: @pager__active__border,
+
     //  Page item - text decoration
     @_pager-text-decoration: @pager__text-decoration,
     @_pager-text-decoration-hover: @pager__text-decoration,
+
     //  Page item gradient
     @_pager-gradient: @pager__gradient,
     @_pager-gradient-direction: @pager__gradient-direction,
@@ -59,9 +65,11 @@
     @_pager-gradient-color-end-hover: @pager__hover__gradient-color-end,
     @_pager-gradient-color-start-active: @pager__active__gradient-color-start,
     @_pager-gradient-color-end-active: @pager__active__gradient-color-end,
+
     //  Page action item (previous-next)
     @_pager-action-text-decoration: @pager-action__text-decoration,
     @_pager-action-text-decoration-hover: @pager-action__hover__text-decoration,
+
     //  Page action item (previous-next) - default
     @_pager-action-color: @pager-action__color,
     @_pager-action-border: @pager-action__border,
@@ -69,12 +77,14 @@
     @_pager-action-gradient-color-start: @pager__gradient-color-start,
     @_pager-action-gradient-color-end: @pager__gradient-color-end,
     @_pager-action-text-decoration: @pager-action__text-decoration,
+
     //  Page action item (previous-next) - visited
     @_pager-action-color-visited: @pager-action__visited__color,
     @_pager-action-border-visited: @pager-action__visited__border,
     @_pager-action-background-visited: @pager-action__visited__background,
     @_pager-action-gradient-color-start-visited: @pager__visited__gradient-color-start,
     @_pager-action-gradient-color-end-visited: @pager__visited__gradient-color-end,
+
     //  Page action item (previous-next) - hover
     @_pager-action-color-hover: @pager-action__hover__color,
     @_pager-action-border-hover: @pager-action__hover__border,
@@ -82,15 +92,18 @@
     @_pager-action-gradient-color-start-hover: @pager__hover__gradient-color-start,
     @_pager-action-gradient-color-end-hover: @pager__hover__gradient-color-end,
     @_pager-action-text-decoration-hover: @pager-action__text-decoration,
+
     //  Page action item (previous-next) - active
     @_pager-action-color-active: @pager-action__active__color,
     @_pager-action-border-active: @pager-action__active__border,
     @_pager-action-background-active: @pager-action__active__background,
     @_pager-action-gradient-color-start-active: @pager__active__gradient-color-start,
     @_pager-action-gradient-color-end-active: @pager__active__gradient-color-end,
+
     //  Page action item (previous-next) - gradient
     @_pager-action-gradient: @pager__gradient,
     @_pager-action-gradient-direction: @pager__gradient-direction,
+
     //  Page action icons
     @_pager-icon-use: @pager-icon__use,
     @_pager-icon-previous-content: @pager-icon__previous-content,
@@ -111,133 +124,140 @@
     .items {
         ._mixin-pager-inline-block-spaces-container();
         .mixin-list-reset-styles();
-        .css(display, @_pager-item-display);
-        .css(font-weight, @_pager-font-weight);
+        .mixin-css(display, @_pager-item-display);
+        .mixin-css(font-weight, @_pager-font-weight);
     }
     .item {
         ._mixin-pager-inline-block-spaces-item(
             @_pager-font-size: @_pager-font-size,
             @_pager-line-height: @_pager-line-height
         );
-        .css(margin, @_pager-item-margin);
-        .css(display, @_pager-item-display);
+        .mixin-css(margin, @_pager-item-margin);
+        .mixin-css(display, @_pager-item-display);
         .label {
             .mixin-visually-hidden();
         }
     }
     a.page {
-        .css(background, @_pager-background);
+        .mixin-css(background, @_pager-background);
         .mixin-background-gradient(
             @_pager-gradient-color-start,
             @_pager-gradient-color-end,
             @_pager-gradient-direction,
             @_pager-gradient
         );
-        .css(border, @_pager-border);
-        .css(color, @_pager-color);
-        .css(display, @_pager-item-display);
-        .css(padding, @_pager-item-padding);
-        .css(text-decoration, @_pager-text-decoration);
+        .mixin-css(border, @_pager-border);
+        .mixin-css(color, @_pager-color);
+        .mixin-css(display, @_pager-item-display);
+        .mixin-css(padding, @_pager-item-padding);
+        .mixin-css(text-decoration, @_pager-text-decoration);
+
         &:visited {
-            .css(background, @_pager-background-visited);
+            .mixin-css(background, @_pager-background-visited);
             .mixin-background-gradient(
                 @_pager-gradient-color-start-visited,
                 @_pager-gradient-color-end-visited,
                 @_pager-gradient-direction,
                 @_pager-gradient
             );
-            .css(border, @_pager-border-visited);
-            .css(color, @_pager-color-visited);
+            .mixin-css(border, @_pager-border-visited);
+            .mixin-css(color, @_pager-color-visited);
         }
+
         &:hover {
-            .css(background, @_pager-background-hover);
+            .mixin-css(background, @_pager-background-hover);
             .mixin-background-gradient(
                 @_pager-gradient-color-start-hover,
                 @_pager-gradient-color-end-hover,
                 @_pager-gradient-direction,
                 @_pager-gradient
             );
-            .css(border, @_pager-border-hover);
-            .css(color, @_pager-color-hover);
-            .css(text-decoration, @_pager-text-decoration-hover);
+            .mixin-css(border, @_pager-border-hover);
+            .mixin-css(color, @_pager-color-hover);
+            .mixin-css(text-decoration, @_pager-text-decoration-hover);
         }
+
         &:active {
-            .css(background, @_pager-background-active);
+            .mixin-css(background, @_pager-background-active);
             .mixin-background-gradient(
                 @_pager-gradient-color-start-active,
                 @_pager-gradient-color-end-active,
                 @_pager-gradient-direction,
                 @_pager-gradient
             );
-            .css(border, @_pager-border-active);
-            .css(color, @_pager-color-active);
+            .mixin-css(border, @_pager-border-active);
+            .mixin-css(color, @_pager-color-active);
         }
     }
     strong.page {
-        .css(background, @_pager-current-background);
+        .mixin-css(background, @_pager-current-background);
         .mixin-background-gradient(
             @_pager-current-gradient-color-start,
             @_pager-current-gradient-color-end,
             @_pager-current-gradient-direction,
             @_pager-current-gradient
         );
-        .css(border, @_pager-current-border);
+        .mixin-css(border, @_pager-current-border);
         ._mixin-pager-inline-block-spaces-item(
             @_pager-font-size: @_pager-font-size,
             @_pager-line-height: @_pager-line-height
         );
-        .css(color, @_pager-current-color);
-        .css(display, @_pager-item-display);
-        .css(font-weight, @_pager-current-font-weight);
-        .css(padding, @_pager-item-padding);
+        .mixin-css(color, @_pager-current-color);
+        .mixin-css(display, @_pager-item-display);
+        .mixin-css(font-weight, @_pager-current-font-weight);
+        .mixin-css(padding, @_pager-item-padding);
     }
     .action {
-        .css(background, @_pager-action-background);
+        .mixin-css(background, @_pager-action-background);
         .mixin-background-gradient(
             @_pager-action-gradient-color-start,
             @_pager-action-gradient-color-end,
             @_pager-gradient-direction,
             @_pager-action-gradient
         );
-        .css(border, @_pager-action-border);
-        .css(color, @_pager-action-color);
-        .css(display, @_pager-item-display);
-        .css(padding, @_pager-actions-padding);
-        .css(text-decoration, @_pager-action-text-decoration);
+        .mixin-css(border, @_pager-action-border);
+        .mixin-css(color, @_pager-action-color);
+        .mixin-css(display, @_pager-item-display);
+        .mixin-css(padding, @_pager-actions-padding);
+        .mixin-css(text-decoration, @_pager-action-text-decoration);
+
         &:visited {
-            .css(background, @_pager-action-background-visited);
+            .mixin-css(background, @_pager-action-background-visited);
             .mixin-background-gradient(
                 @_pager-action-gradient-color-start-visited,
                 @_pager-action-gradient-color-end-visited,
                 @_pager-action-gradient-direction,
                 @_pager-action-gradient
             );
-            .css(border, @_pager-action-border-visited);
-            .css(color, @_pager-action-color-visited);
+            .mixin-css(border, @_pager-action-border-visited);
+            .mixin-css(color, @_pager-action-color-visited);
         }
+
         &:hover {
-            .css(background, @_pager-action-background-hover);
+            .mixin-css(background, @_pager-action-background-hover);
             .mixin-background-gradient(
                 @_pager-action-gradient-color-start-hover,
                 @_pager-action-gradient-color-end-hover,
                 @_pager-action-gradient-direction,
                 @_pager-action-gradient
             );
-            .css(border, @_pager-action-border-hover);
-            .css(color, @_pager-action-color-hover);
-            .css(text-decoration, @_pager-action-text-decoration-hover);
+            .mixin-css(border, @_pager-action-border-hover);
+            .mixin-css(color, @_pager-action-color-hover);
+            .mixin-css(text-decoration, @_pager-action-text-decoration-hover);
         }
+
         &:active {
-            .css(background, @_pager-action-background-active);
+            .mixin-css(background, @_pager-action-background-active);
             .mixin-background-gradient(
                 @_pager-action-gradient-color-start-active,
                 @_pager-action-gradient-color-end-active,
                 @_pager-action-gradient-direction,
                 @_pager-action-gradient
             );
-            .css(border, @_pager-action-border-active);
-            .css(color, @_pager-action-color-active);
+            .mixin-css(border, @_pager-action-border-active);
+            .mixin-css(color, @_pager-action-color-active);
         }
+
         &.next {
             ._mixin-pager-icon (
                 @_pager-icon-use: @_pager-icon-use,
@@ -297,8 +317,8 @@
     @_pager-line-height: @_pager-line-height
 ) when not (@_pager-label-display = none){
     > .label {
-        .css(display, @_pager-label-display);
-        .css(font-weight, @_pager-font-weight);
+        .mixin-css(display, @_pager-label-display);
+        .mixin-css(font-weight, @_pager-font-weight);
         .mixin-inline-block-space-item(
             @_font-size: @_pager-font-size,
             @_line-height: @_pager-line-height
@@ -346,11 +366,15 @@
     @_icon-font-position: @_pager-icon-font-position,
     @_icon-font-text-hide: @_pager-icon-font-text-hide
 ) when (@_pager-icon-use = true) and (@_icon-font-position = before) {
-    &:visited:before {
-        .css(color, @_icon-font-color-visited);
+    &:visited {
+        &:before {
+            .mixin-css(color, @_icon-font-color-visited);
+        }
     }
-    &:active:before {
-        .css(color, @_icon-font-color-active);
+    &:active {
+        &:before {
+            .mixin-css(color, @_icon-font-color-active);
+        }
     }
     .mixin-icon-font(
         @_icon-font-content: @_icon-font-content,
@@ -396,9 +420,9 @@
         @_icon-font-text-hide: @_icon-font-text-hide
     );
     &:visited:after {
-        .css(color, @_icon-font-color-visited);
+        .mixin-css(color, @_icon-font-color-visited);
     }
     &:active:after {
-        .css(color, @_icon-font-color-active);
+        .mixin-css(color, @_icon-font-color-active);
     }
 }

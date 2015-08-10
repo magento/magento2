@@ -14,12 +14,12 @@
 //--------------------------------------
 button,
 a.action.primary {
-    .css(border-radius, @button__border-radius);
+    .mixin-css(border-radius, @button__border-radius);
 }
 
 button {
     &:active {
-        .css(box-shadow, @button__shadow);
+        .mixin-css(box-shadow, @button__shadow);
     }
 }
 

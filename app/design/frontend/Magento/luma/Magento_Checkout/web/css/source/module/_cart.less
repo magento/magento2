@@ -38,7 +38,7 @@
     //  Summary block
     &-summary {
       &:extend(.abs-add-box-sizing all);
-      .css(background, @sidebar__background-color);
+      .mixin-css(background, @sidebar__background-color);
       margin-bottom: 25px;
       padding: 1px 0 25px;
       > .title {
@@ -192,7 +192,7 @@
           }
         }
         > .price {
-          .css(color, @primary__color__lighter);
+          .mixin-css(color, @primary__color__lighter);
           .mixin-font-size(18);
           font-weight: @font-weight__bold;
         }
@@ -482,7 +482,7 @@
   //  Cross sell
   .block.crosssell {
     margin-top: 70px;
-    .css(padding, 0 @mobile-cart-padding);
+    .mixin-css(padding, 0 @mobile-cart-padding);
     .product-item-info {
       width: 200px;
     }

@@ -36,8 +36,8 @@
 //--------------------------------------
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     h1 {
-        .css(font-size, @h1__font-size-desktop);
-        .css(margin-bottom, @h1__margin-bottom__desktop);
+        .mixin-css(font-size, @h1__font-size-desktop);
+        .mixin-css(margin-bottom, @h1__margin-bottom__desktop);
     }
 }
 

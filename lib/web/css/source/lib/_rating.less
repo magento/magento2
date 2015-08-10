@@ -92,7 +92,7 @@
     white-space: nowrap;
     ._mixin-rating-label-hide(@_label-hide);
     .rating-result {
-        .css(width, (@_icon-font-size * @_icon-count) + ceil(@_icon-letter-spacing * (@_icon-count - 1)));
+        .mixin-css(width, (@_icon-font-size * @_icon-count) + ceil(@_icon-letter-spacing * (@_icon-count - 1)));
         display: inline-block;
         position: relative;
         vertical-align: middle;
@@ -171,17 +171,17 @@
     @_icon-letter-spacing,
     @_icon-color
 ) {
-    .css(color, @_icon-color);
-    .css(font-family, @_icon-font);
-    .css(font-size, @_icon-font-size);
-    .css(height, @_icon-font-size);
-    .css(letter-spacing, @_icon-letter-spacing);
-    .css(line-height, @_icon-font-size);
-    -webkit-font-smoothing: antialiased;
+    .mixin-css(color, @_icon-color);
+    .mixin-css(font-family, @_icon-font);
+    .mixin-css(font-size, @_icon-font-size);
+    .mixin-css(height, @_icon-font-size);
+    .mixin-css(letter-spacing, @_icon-letter-spacing);
+    .mixin-css(line-height, @_icon-font-size);
     font-style: normal;
     font-weight: normal;
     speak: none;
     vertical-align: top;
+    -webkit-font-smoothing: antialiased;
 }
 
 ._mixin-rating-summary-icon-default(
@@ -192,14 +192,14 @@
     @_icon-content,
     @_icon-color
 ) {
-    .css(color, @_icon-color);
-    .css(font-family, @_icon-font);
-    .css(font-size, @_icon-font-size);
-    .css(height, @_icon-font-size);
-    .css(letter-spacing, @_icon-letter-spacing);
-    .css(line-height, @_icon-font-size);
-    .mixin-rating-icons-content(@_icon-count, @_icon-content);
     -webkit-font-smoothing: antialiased;
+    .mixin-css(color, @_icon-color);
+    .mixin-css(font-family, @_icon-font);
+    .mixin-css(font-size, @_icon-font-size);
+    .mixin-css(height, @_icon-font-size);
+    .mixin-css(letter-spacing, @_icon-letter-spacing);
+    .mixin-css(line-height, @_icon-font-size);
+    .mixin-rating-icons-content(@_icon-count, @_icon-content);
     display: block;
     font-style: normal;
     font-weight: normal;

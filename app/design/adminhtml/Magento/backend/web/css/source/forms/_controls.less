@@ -58,7 +58,7 @@
 //  Select styles
 .admin__control-select {
     &:extend(.abs-form-control-pattern all);
-    .css(appearance, none, 1);
+    .mixin-css(appearance, none, 1);
 
     background-repeat: no-repeat;
     background-image+: url('../images/arrows-bg.svg');
@@ -204,7 +204,7 @@ option:empty {
         z-index: 1;
     }
     [class*='admin__control-'] {
-        .css(appearence,none);
+        .mixin-css(appearence,none);
         .mixin-vendor-prefix-flex-grow(1);
         box-shadow: none;
         background-color: transparent;

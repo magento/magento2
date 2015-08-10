@@ -56,22 +56,22 @@
     @_button-icon-font-text-hide: @button-icon__text-hide
 ) {
     background-image: none; // Reset unusual Firefox-on-Android default style
-    .css(background, @_button-background);
+    .mixin-css(background, @_button-background);
     .mixin-background-gradient(
         @_button-gradient-color-start,
         @_button-gradient-color-end,
         @_button-gradient-direction,
         @_button-gradient
     );
-    .css(border, @_button-border);
-    .css(color, @_button-color);
-    .css(cursor, @_button-cursor);
-    .css(display, @_button-display);
-    .css(font-family, @_button-font-family);
-    .css(font-weight, @_button-font-weight);
-    .css(margin, @_button-margin);
-    .css(padding, @_button-padding);
-    .css(width, @_button-width);
+    .mixin-css(border, @_button-border);
+    .mixin-css(color, @_button-color);
+    .mixin-css(cursor, @_button-cursor);
+    .mixin-css(display, @_button-display);
+    .mixin-css(font-family, @_button-font-family);
+    .mixin-css(font-weight, @_button-font-weight);
+    .mixin-css(margin, @_button-margin);
+    .mixin-css(padding, @_button-padding);
+    .mixin-css(width, @_button-width);
     .mixin-font-size(@_button-font-size);
     .mixin-line-height(@_button-line-height);
     box-sizing: border-box;
@@ -92,33 +92,33 @@
     );
     &:focus,
     &:active {
-        .css(background, @_button-background-active);
+        .mixin-css(background, @_button-background-active);
         .mixin-background-gradient(
             @_button-gradient-color-start-active,
             @_button-gradient-color-end-active,
             @_button-gradient-direction,
             @_button-gradient
         );
-        .css(border, @_button-border-active);
-        .css(color, @_button-color-active);
+        .mixin-css(border, @_button-border-active);
+        .mixin-css(color, @_button-color-active);
     }
     &:hover {
-        .css(background, @_button-background-hover);
+        .mixin-css(background, @_button-background-hover);
         .mixin-background-gradient(
             @_button-gradient-color-start-hover,
             @_button-gradient-color-end-hover,
             @_button-gradient-direction,
             @_button-gradient
         );
-        .css(border, @_button-border-hover);
-        .css(color, @_button-color-hover);
+        .mixin-css(border, @_button-border-hover);
+        .mixin-css(color, @_button-color-hover);
     }
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
+        .mixin-css(opacity, @_button-disabled-opacity);
         cursor: default;
         pointer-events: none; // Disabling of clicks
-        .css(opacity, @_button-disabled-opacity);
     }
 }
 
@@ -131,7 +131,7 @@
     @_button-padding: @button__padding
 ){
     .mixin-line-height(@_button-line-height);
-    .css(padding, @_button-padding);
+    .mixin-css(padding, @_button-padding);
 }
 
 //
@@ -171,7 +171,7 @@
 //  ---------------------------------------------
 
 .mixin-link-as-button() {
-    .css(display, @button__display);
+    .mixin-css(display, @button__display);
     text-decoration: none;
     &:hover,
     &:active,
@@ -192,15 +192,15 @@
     @_margin: 0,
     @_padding: 0
 ) {
-    .css(line-height, @_line-height);
-    .css(margin, @_margin);
-    .css(padding, @_padding);
+    .mixin-css(line-height, @_line-height);
+    .mixin-css(margin, @_margin);
+    .mixin-css(padding, @_padding);
     .mixin-link();
     background: none;
     border: 0;
     display: inline;
     &:hover {
-        .css(color, @_link-color-hover);
+        .mixin-css(color, @_link-color-hover);
     }
     &:hover,
     &:active,
@@ -211,8 +211,8 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        .css(color, @_link-color);
-        .css(opacity, @_disabled_opacity);
+        .mixin-css(color, @_link-color);
+        .mixin-css(opacity, @_disabled_opacity);
         cursor: default;
         pointer-events: none; // Disabling of clicks
         text-decoration: underline;
@@ -234,7 +234,7 @@
 .mixin-button-reset() {
     background-image: none; // Reset unusual Firefox-on-Android default style
     background: none;
-    -moz-box-sizing: content-box; // hack: fix Firefox button line-height problem
+    -moz-box-sizing: content-box; // Hack: fix Firefox button line-height problem
     border: 0;
     box-shadow: none;
     line-height: inherit;
@@ -242,7 +242,7 @@
     padding: 0;
     text-decoration: none;
     text-shadow: none;
-    .css(font-weight, @font-weight__regular);
+    .mixin-css(font-weight, @font-weight__regular);
     &:focus,
     &:active {
         background: none;
@@ -257,7 +257,7 @@
     fieldset[disabled] & {
         cursor: not-allowed;
         pointer-events: none; // Disabling of clicks
-        .css(opacity, @button__disabled__opacity);
+        .mixin-css(opacity, @button__disabled__opacity);
     }
 }
 
@@ -330,19 +330,19 @@
     @_button-background-active: @button__active__background,
     @_button-border-active: @button__active__border
 ) {
-    .css(background, @_button-background);
-    .css(border, @_button-border);
-    .css(color, @_button-color);
+    .mixin-css(background, @_button-background);
+    .mixin-css(border, @_button-border);
+    .mixin-css(color, @_button-color);
     &:focus,
     &:active {
-        .css(background, @_button-background-active);
-        .css(border, @_button-border-active);
-        .css(color, @_button-color-active);
+        .mixin-css(background, @_button-background-active);
+        .mixin-css(border, @_button-border-active);
+        .mixin-css(color, @_button-color-active);
     }
     &:hover {
-        .css(background, @_button-background-hover);
-        .css(border, @_button-border-hover);
-        .css(color, @_button-color-hover);
+        .mixin-css(background, @_button-background-hover);
+        .mixin-css(border, @_button-border-hover);
+        .mixin-css(color, @_button-color-hover);
     }
 }
 
