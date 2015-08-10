@@ -11,8 +11,8 @@ define(
         'Magento_Checkout/js/action/select-shipping-address',
         'Magento_Checkout/js/model/address-converter',
         'Magento_Checkout/js/model/shipping-rate-service',
-        'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/checkout-data',
+        'Magento_Checkout/js/model/shipping-rates-validator',
         'uiRegistry',
         'Magento_Checkout/js/model/quote',
         'mage/validation'
@@ -23,19 +23,22 @@ define(
         selectShippingAddress,
         addressConverter,
         shippingRateService,
-        shippingService,
         checkoutData,
+        shippingRatesValidator,
         registry,
-        quote
+        quote,
+        registry
     ) {
         'use strict';
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/cart/shipping-estimation'
             },
-            isLoading: shippingService.isLoading,
             isVirtual: quote.isVirtual(),
 
+            /**
+             * @override
+             */
             initialize: function () {
                 var self = this;
                 this._super();
@@ -54,6 +57,19 @@ define(
                 });
             },
 
+            /**
+             * @override
+             */
+            initElement: function(element) {
+                if (element.index === 'address-fieldsets') {
+                    shippingRatesValidator.bindChangeHandlers(element.elems());
+                }
+            },
+
+            /**
+             * Returns shipping rates for address
+             * @returns void
+             */
             getEstimationInfo: function () {
                 var addressData = null;
                 this.source.set('params.invalid', false);

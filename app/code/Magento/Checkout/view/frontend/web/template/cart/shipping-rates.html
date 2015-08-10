@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<form id="co-shipping-method-form" data-bind="visible: (shippingRates().length > 0), blockLoader: isLoading">
-    <fieldset class="fieldset rate">
+<form id="co-shipping-method-form" data-bind="blockLoader: isLoading">
+    <p class="field note" data-bind="visible: (shippingRates().length <= 0)">
+        <!-- ko text: $t('Sorry, no quotes are available for this order at this time')--><!-- /ko -->
+    </p>
+    <fieldset class="fieldset rate" data-bind="visible: (shippingRates().length > 0)">
         <dl class="items methods" data-bind="foreach: shippingRateGroups">
             <dt class="item-title"><span data-bind="text: $data"></span></dt>
             <dd class="item-options" data-bind="foreach: $parent.getRatesForGroup($data)">
@@ -33,12 +36,5 @@
                 </div>
             </dd>
         </dl>
-        <div class="actions-toolbar">
-            <div class="primary">
-                <button class="action primary update" data-bind="click: setShippingMethod">
-                    <span data-bind="text: $t('Update Total')"></span>
-                </button>
-            </div>
-        </div>
     </fieldset>
 </form>
