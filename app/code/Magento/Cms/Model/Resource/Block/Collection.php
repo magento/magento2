@@ -13,6 +13,11 @@ namespace Magento\Cms\Model\Resource\Block;
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'block_id';
+
+    /**
      * @return \Magento\Cms\Model\Resource\Block\Collection
      */
     protected function _afterLoad()
