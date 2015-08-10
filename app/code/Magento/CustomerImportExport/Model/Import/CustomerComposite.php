@@ -5,6 +5,8 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * Import entity customer combined model
  *
@@ -129,7 +131,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $masterAttributeCode = 'email';
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
@@ -137,12 +139,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
+     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
@@ -150,9 +153,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
-        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
+        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
 
         $this->addMessageTemplate(
             self::ERROR_ROW_IS_ORPHAN,
@@ -285,7 +289,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                 // Add new customer data into customer storage for address entity instance
                 $websiteId = $this->_customerEntity->getWebsiteId($this->_currentWebsiteCode);
                 if (!$this->_addressEntity->getCustomerStorage()->getCustomerId($this->_currentEmail, $websiteId)) {
-                    $customerData = new \Magento\Framework\Object(
+                    $customerData = new \Magento\Framework\DataObject(
                         [
                             'id' => $this->_nextCustomerId,
                             'email' => $this->_currentEmail,
@@ -415,53 +419,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         $this->_addressEntity->setSource($source);
 
         return parent::setSource($source);
-    }
-
-    /**
-     * Returns error information grouped by error types and translated (if possible)
-     *
-     * @return array
-     */
-    public function getErrorMessages()
-    {
-        $errors = $this->_customerEntity->getErrorMessages();
-        $addressErrors = $this->_addressEntity->getErrorMessages();
-        foreach ($addressErrors as $message => $rowNumbers) {
-            if (isset($errors[$message])) {
-                foreach ($rowNumbers as $rowNumber) {
-                    $errors[$message][] = $rowNumber;
-                }
-                $errors[$message] = array_unique($errors[$message]);
-            } else {
-                $errors[$message] = $rowNumbers;
-            }
-        }
-
-        return array_merge($errors, parent::getErrorMessages());
-    }
-
-    /**
-     * Returns error counter value
-     *
-     * @return int
-     */
-    public function getErrorsCount()
-    {
-        return $this->_customerEntity->getErrorsCount() +
-            $this->_addressEntity->getErrorsCount() +
-            parent::getErrorsCount();
-    }
-
-    /**
-     * Returns invalid rows count
-     *
-     * @return int
-     */
-    public function getInvalidRowsCount()
-    {
-        return $this->_customerEntity->getInvalidRowsCount() +
-            $this->_addressEntity->getInvalidRowsCount() +
-            parent::getInvalidRowsCount();
     }
 
     /**

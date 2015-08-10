@@ -7,6 +7,7 @@
         "magento/module-import-export": "1.0.0-beta",
         "magento/module-catalog-import-export": "1.0.0-beta",
         "magento/module-downloadable": "1.0.0-beta",
+        "magento/module-store": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/magento-composer-installer": "*"

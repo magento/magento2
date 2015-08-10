@@ -37,7 +37,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             $collectionFactoryMock,
             $escaperMock
         );
-        $formMock = new \Magento\Framework\Object();
+        $formMock = new \Magento\Framework\DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
         $this->_link->setForm($formMock);

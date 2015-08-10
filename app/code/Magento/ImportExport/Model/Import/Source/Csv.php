@@ -73,7 +73,18 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      */
     protected function _getNextRow()
     {
-        return $this->_file->readCsv(0, $this->_delimiter, $this->_enclosure);
+        $parsed = $this->_file->readCsv(0, $this->_delimiter, $this->_enclosure);
+        if (is_array($parsed) && count($parsed) != $this->_colQty) {
+            foreach ($parsed as $element) {
+                if (strpos($element, "'") !== false) {
+                    $this->_foundWrongQuoteFlag = true;
+                    break;
+                }
+            }
+        } else {
+            $this->_foundWrongQuoteFlag = false;
+        }
+        return $parsed;
     }
 
     /**

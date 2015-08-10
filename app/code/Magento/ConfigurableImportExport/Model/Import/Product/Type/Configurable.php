@@ -26,6 +26,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_INVALID_WEBSITE = 'invalidSuperAttrWebsite';
 
+    const ERROR_DUPLICATED_VARIATIONS = 'duplicatedVariations';
+
     /**
      * Validation failure message template definitions
      *
@@ -35,6 +37,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with this code is not super',
         self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
+        self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
     ];
 
     /**
@@ -129,9 +132,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_resource;
 
     /**
-     * Instance of mysql database adapter.
+     * Instance of database adapter.
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 
@@ -780,6 +783,15 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $error = false;
         $dataWithExtraVirtualRows = $this->_parseVariations($rowData);
+        $skus = [];
+        foreach ($dataWithExtraVirtualRows as $option) {
+            if (in_array($option['_super_products_sku'], $skus)) {
+                $error = true;
+                $this->_entityModel->addRowError(sprintf($this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS], $option['_super_products_sku']), $rowNum);
+                break;
+            }
+            $skus[] = $option['_super_products_sku'];
+        }
         if (!empty($dataWithExtraVirtualRows)) {
             array_unshift($dataWithExtraVirtualRows, $rowData);
         } else {

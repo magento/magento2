@@ -16,10 +16,10 @@ class Url extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRen
     /**
      * Renders grid column
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         return htmlspecialchars($row->getData($this->getColumn()->getIndex()));
     }

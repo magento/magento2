@@ -18,6 +18,6 @@ namespace Magento\Customer\Model\Data;
  * @method setPasswordHash(string $hashedPassword)
  * @method setDeleteable(bool $deleteable)
  */
-class CustomerSecure extends \Magento\Framework\Object
+class CustomerSecure extends \Magento\Framework\DataObject
 {
 }
