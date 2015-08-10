@@ -24,6 +24,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 /**
  * Command for uninstalling modules
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class ModuleUninstallCommand extends AbstractModuleCommand
 {

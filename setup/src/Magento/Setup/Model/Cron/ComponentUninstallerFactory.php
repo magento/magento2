@@ -38,6 +38,7 @@ class ComponentUninstallerFactory
     /**
      * Constructor
      *
+     * @param ObjectManagerProvider $objectManagerProvider
      * @param ServiceLocatorInterface $serviceLocator
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider, ServiceLocatorInterface $serviceLocator)
