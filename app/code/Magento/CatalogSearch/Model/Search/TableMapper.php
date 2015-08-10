@@ -11,6 +11,7 @@ use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Filter\BoolExpression;
+use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -107,8 +108,7 @@ class TableMapper
 
     /**
      * @param RequestQueryInterface|FilterInterface $query
-     * @param FilterInterface[] $filters
-     * @return \Magento\Framework\Search\Request\Query\Filter[]
+     * @return Filter[]
      */
     private function getFilters($query)
     {
@@ -127,7 +127,7 @@ class TableMapper
                 }
                 break;
             case RequestQueryInterface::TYPE_FILTER:
-                /** @var \Magento\Framework\Search\Request\Query\Filter $query */
+                /** @var Filter $query */
                 $filter = $query->getReference();
                 if (FilterInterface::TYPE_BOOL === $filter->getType()) {
                     $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
@@ -180,6 +180,9 @@ class TableMapper
         return $this->storeManager->getWebsite()->getId();
     }
 
+    /**
+     * @return array
+     */
     private function getFieldToTableMap()
     {
         return [
