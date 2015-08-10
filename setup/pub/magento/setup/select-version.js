@@ -47,7 +47,7 @@ angular.module('select-version', ['ngStorage'])
 
             if (angular.equals($scope.updateComponents.no, true)) {
                 $scope.updateComponents.yes = false;
-                if ($scope.tryAgain < 0) {
+                if ($scope.tryAgain < 0 && (!$scope.upgradeProcessed || !$scope.componentsProcessed)) {
                     $scope.tryAgain++;
                 }
             }
@@ -56,7 +56,9 @@ angular.module('select-version', ['ngStorage'])
         $scope.$watch('updateComponents.yes', function() {
             if (angular.equals($scope.updateComponents.yes, true)) {
                 $scope.updateComponents.no = false;
-                $scope.tryAgain--;
+                if (!$scope.upgradeProcessed || !$scope.componentsProcessed) {
+                    $scope.tryAgain--;
+                }
                 if (!$scope.componentsProcessed && !$scope.componentsProcessError) {
                     $scope.componentsReadyForNext = false;
                     $http.get('index.php/other-components-grid/components', {'responseType': 'json'}).
