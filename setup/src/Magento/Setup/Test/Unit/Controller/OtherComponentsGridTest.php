@@ -8,6 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\OtherComponentsGrid;
 use \Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Composer\InfoCommand;
 
 class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
 {
@@ -72,7 +73,11 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
             ->method('run')
             ->willReturn([
                 'versions' => '3.0.0, 2.0.0',
-                'current_version' => '1.0.0'
+                'current_version' => '1.0.0',
+                'new_versions' => [
+                    '3.0.0',
+                    '2.0.0'
+                ]
             ]);
         $jsonModel = $this->controller->componentsAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
@@ -87,8 +92,18 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
                 'version' => '1.0.0',
                 'vendor' => 'magento',
                 'updates' => [
-                    0 => '3.0.0 (latest)',
-                    1 => '2.0.0'
+                    [
+                        'id' => '3.0.0',
+                        'name' => '3.0.0 (latest)'
+                    ],
+                    [
+                        'id' => '2.0.0',
+                        'name' => '2.0.0'
+                    ],
+                    [
+                        'id' => '1.0.0',
+                        'name' => '1.0.0 (current)'
+                    ]
                 ],
                 'dropdownId' => 'dd_magento/sample-module1',
                 'checkboxId' => 'cb_magento/sample-module1'

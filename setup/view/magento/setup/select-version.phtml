@@ -23,7 +23,7 @@
                 type="button"
                 class="btn btn-secondary"
                 ng-click="$state.forceReload()"
-                ng-disabled="!upgradeProcessed"
+                ng-disabled="tryAgain<=0"
                 >Try Again</button>
         </div>
     </div>
