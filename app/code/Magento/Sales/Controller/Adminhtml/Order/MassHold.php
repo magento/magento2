@@ -6,9 +6,23 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Sales\Model\Resource\Order\CollectionFactory;
 
 class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
+    {
+        parent::__construct($context, $filter);
+        $this->collectionFactory = $collectionFactory;
+    }
+
     /**
      * Hold selected orders
      *
@@ -18,12 +32,12 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
     protected function massAction(AbstractCollection $collection)
     {
         $countHoldOrder = 0;
+        $orderManagement = $this->_objectManager->get('Magento\Sales\Api\OrderManagementInterface');
         foreach ($collection->getItems() as $order) {
             if (!$order->canHold()) {
                 continue;
             }
-            $order->hold();
-            $order->save();
+            $orderManagement->hold($order->getEntityId());
             $countHoldOrder++;
         }
         $countNonHoldOrder = $collection->count() - $countHoldOrder;
@@ -39,7 +53,7 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
         }
 
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('sales/*/');
+        $resultRedirect->setPath($this->getComponentRefererUrl());
         return $resultRedirect;
     }
 }
