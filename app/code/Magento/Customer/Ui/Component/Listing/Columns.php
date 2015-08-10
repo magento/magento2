@@ -112,7 +112,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         $component = $this->components[$attributeData[AttributeMetadata::ATTRIBUTE_CODE]];
 
-        if ($attributeData[AttributeMetadata::BACKEND_TYPE] != 'static' ) {
+        if ($attributeData[AttributeMetadata::BACKEND_TYPE] != 'static') {
             if ($attributeData[AttributeMetadata::IS_USED_IN_GRID]) {
                 $config = array_merge(
                     $component->getData('config'),

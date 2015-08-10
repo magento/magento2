@@ -52,5 +52,4 @@ class Filters extends \Magento\Ui\Component\Filters
         }
         parent::prepare();
     }
-
 }
