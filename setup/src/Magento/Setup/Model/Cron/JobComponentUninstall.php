@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Cron;
 
 use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Theme\Model\Theme\ThemeUninstaller;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -86,10 +87,11 @@ class JobComponentUninstall extends AbstractJob
         $options = [];
         switch ($type) {
             case self::COMPONENT_MODULE:
-                $options[ModuleUninstaller::OPTION_REMOVE_DATA] = true;
-                $options[ModuleUninstaller::OPTION_REMOVE_REGISTRY] = true;
+                $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = true;
+                $options[ModuleUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
                 break;
             case self::COMPONENT_THEME:
+                $options[ThemeUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
                 break;
             case self::COMPONENT_LANGUAGE:
                 break;

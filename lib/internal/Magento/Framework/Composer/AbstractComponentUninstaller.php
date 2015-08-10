@@ -15,10 +15,10 @@ abstract class AbstractComponentUninstaller
     /**
      * Uninstall a component
      *
-     * @param OutputInterface $output
-     * @param array $modules
+     * @param OutputInterface $ouput
+     * @param array $components
      * @param array $option
      * @return void
      */
-    abstract public function uninstall(OutputInterface $ouput, array $modules, array $option);
+    abstract public function uninstall(OutputInterface $ouput, array $components, array $option);
 }

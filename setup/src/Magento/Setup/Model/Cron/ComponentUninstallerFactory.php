@@ -22,7 +22,7 @@ class ComponentUninstallerFactory
     static private $typeMap = [
         JobComponentUninstall::COMPONENT_MODULE => 'Magento\Setup\Model\ModuleUninstaller',
         JobComponentUninstall::COMPONENT_LANGUAGE => '',
-        JobComponentUninstall::COMPONENT_THEME => ''
+        JobComponentUninstall::COMPONENT_THEME => 'Magento\Theme\Model\Theme\ThemeUninstaller'
     ];
 
     /**

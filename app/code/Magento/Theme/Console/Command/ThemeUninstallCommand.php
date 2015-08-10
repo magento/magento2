@@ -12,18 +12,16 @@ use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
-use Magento\Framework\Composer\Remove;
-use Magento\Framework\Filesystem;
 use Magento\Theme\Model\Theme\Data\Collection;
+use Magento\Theme\Model\Theme\PackageNameFinder;
 use Magento\Theme\Model\Theme\ThemeProvider;
+use Magento\Theme\Model\Theme\ThemeUninstaller;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\Setup\BackupRollbackFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Theme\Model\ThemeValidator;
 
 /**
@@ -61,20 +59,6 @@ class ThemeUninstallCommand extends Command
      * @var ComposerInformation
      */
     private $composer;
-
-    /**
-     * File operation to read theme directory
-     *
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * Code remover
-     *
-     * @var Remove
-     */
-    private $remove;
 
     /**
      * Theme collection in filesystem
@@ -119,45 +103,58 @@ class ThemeUninstallCommand extends Command
     private $themeValidator;
 
     /**
+     * Package name finder
+     *
+     * @var PackageNameFinder
+     */
+    private $packageNameFinder;
+
+    /**
+     * Theme Uninstaller
+     *
+     * @var ThemeUninstaller
+     */
+    private $themeUninstaller;
+
+    /**
      * Constructor
      *
      * @param Cache $cache
      * @param CleanupFiles $cleanupFiles
      * @param ComposerInformation $composer
      * @param MaintenanceMode $maintenanceMode
-     * @param Filesystem $filesystem
      * @param DependencyChecker $dependencyChecker
      * @param Collection $themeCollection
      * @param ThemeProvider $themeProvider
-     * @param Remove $remove
      * @param BackupRollbackFactory $backupRollbackFactory
      * @param ThemeValidator $themeValidator
-     * @throws LocalizedException
+     * @param PackageNameFinder $packageNameFinder
+     * @param ThemeUninstaller $themeUninstaller
      */
     public function __construct(
         Cache $cache,
         CleanupFiles $cleanupFiles,
         ComposerInformation $composer,
         MaintenanceMode $maintenanceMode,
-        Filesystem $filesystem,
         DependencyChecker $dependencyChecker,
         Collection $themeCollection,
         ThemeProvider $themeProvider,
-        Remove $remove,
         BackupRollbackFactory $backupRollbackFactory,
-        ThemeValidator $themeValidator
+        ThemeValidator $themeValidator,
+        PackageNameFinder $packageNameFinder,
+        ThemeUninstaller $themeUninstaller
     ) {
         $this->cache = $cache;
         $this->cleanupFiles = $cleanupFiles;
         $this->composer = $composer;
         $this->maintenanceMode = $maintenanceMode;
-        $this->filesystem = $filesystem;
         $this->dependencyChecker = $dependencyChecker;
-        $this->remove = $remove;
         $this->themeCollection = $themeCollection;
         $this->themeProvider = $themeProvider;
         $this->backupRollbackFactory = $backupRollbackFactory;
         $this->themeValidator = $themeValidator;
+        $this->packageNameFinder = $packageNameFinder;
+        $this->themeUninstaller = $themeUninstaller;
         parent::__construct();
     }
 
@@ -223,14 +220,13 @@ class ThemeUninstallCommand extends Command
                 $codeBackup = $this->backupRollbackFactory->create($output);
                 $codeBackup->codeBackup($time);
             }
-            $output->writeln('<info>Removing ' . implode(', ', $themePaths) . ' from database');
-            $this->removeFromDb($themePaths);
-            $output->writeln('<info>Removing ' . implode(', ', $themePaths) . ' from Magento codebase');
-            $themePackages = [];
-            foreach ($themePaths as $themePath) {
-                $themePackages[] = $this->getPackageName($themePath);
-            }
-            $output->writeln($this->remove->remove($themePackages));
+
+            $this->themeUninstaller->uninstall(
+                $output,
+                $themePaths,
+                [ThemeUninstaller::OPTION_UNINSTALL_REGISTRY => true, ThemeUninstaller::OPTION_UNINSTALL_CODE => true]
+            );
+
             $this->cleanup($input, $output);
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
@@ -253,7 +249,7 @@ class ThemeUninstallCommand extends Command
         $unknownThemes = [];
         $installedPackages = $this->composer->getRootRequiredPackages();
         foreach ($themePaths as $themePath) {
-            if (array_search($this->getPackageName($themePath), $installedPackages) === false) {
+            if (array_search($this->packageNameFinder->getPackageName($themePath), $installedPackages) === false) {
                 $unknownPackages[] = $themePath;
             }
             if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
@@ -283,7 +279,7 @@ class ThemeUninstallCommand extends Command
         $messages = [];
         $packageToPath = [];
         foreach ($themePaths as $themePath) {
-            $packageToPath[$this->getPackageName($themePath)] = $themePath;
+            $packageToPath[$this->packageNameFinder->getPackageName($themePath)] = $themePath;
         }
         $dependencies = $this->dependencyChecker->checkDependencies(array_keys($packageToPath), true);
         foreach ($dependencies as $package => $dependingPackages) {
@@ -351,23 +347,6 @@ class ThemeUninstallCommand extends Command
     }
 
     /**
-     * Get package name of a theme by its full theme path
-     *
-     * @param string $themePath
-     * @return string
-     * @throws \Zend_Json_Exception
-     */
-    private function getPackageName($themePath)
-    {
-        $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
-        if ($themesDirRead->isExist($themePath . '/composer.json')) {
-            $rawData = \Zend_Json::decode($themesDirRead->readFile($themePath . '/composer.json'));
-            return isset($rawData['name']) ? $rawData['name'] : '';
-        }
-        return '';
-    }
-
-    /**
      * Cleanup after updated modules status
      *
      * @param InputInterface $input
@@ -388,19 +367,6 @@ class ThemeUninstallCommand extends Command
                 . ' You can clear them using the --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
                 . ' Failure to clear static view files might cause display issues in the Admin and storefront.</error>'
             );
-        }
-    }
-
-    /**
-     * Remove all records related to the theme(s) in the database
-     *
-     * @param string[] $themePaths
-     * @return void
-     */
-    private function removeFromDb(array $themePaths)
-    {
-        foreach ($themePaths as $themePath) {
-            $this->themeProvider->getThemeByFullPath($themePath)->delete();
         }
     }
 }

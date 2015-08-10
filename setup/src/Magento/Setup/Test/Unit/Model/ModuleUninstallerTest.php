@@ -121,7 +121,7 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
         $this->uninstaller->uninstall(
             $this->output,
             ['moduleA', 'moduleB'],
-            [ModuleUninstaller::OPTION_REMOVE_DATA => true]
+            [ModuleUninstaller::OPTION_UNINSTALL_DATA => true]
         );
     }
 
@@ -140,7 +140,7 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
         $this->uninstaller->uninstall(
             $this->output,
             ['moduleA', 'moduleB'],
-            [ModuleUninstaller::OPTION_REMOVE_CODE => true]
+            [ModuleUninstaller::OPTION_UNINSTALL_CODE => true]
         );
     }
 
@@ -164,7 +164,7 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
         $this->uninstaller->uninstall(
             $this->output,
             ['moduleA', 'moduleB'],
-            [ModuleUninstaller::OPTION_REMOVE_REGISTRY => true]
+            [ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
         );
     }
 }

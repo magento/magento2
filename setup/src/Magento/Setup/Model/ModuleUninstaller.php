@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -16,9 +15,9 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
     /**#@+
      * Module uninstall options
      */
-    const OPTION_REMOVE_DATA = 'data';
-    const OPTION_REMOVE_CODE = 'code';
-    const OPTION_REMOVE_REGISTRY = 'registry';
+    const OPTION_UNINSTALL_DATA = 'data';
+    const OPTION_UNINSTALL_CODE = 'code';
+    const OPTION_UNINSTALL_REGISTRY = 'registry';
     /**#@-*/
 
     /**
@@ -103,13 +102,13 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
      */
     public function uninstall(OutputInterface $output, array $modules, array $options)
     {
-        if (isset($options[self::OPTION_REMOVE_DATA]) && $options[self::OPTION_REMOVE_DATA]) {
+        if (isset($options[self::OPTION_UNINSTALL_DATA]) && $options[self::OPTION_UNINSTALL_DATA]) {
             $this->removeData($output, $modules);
         }
-        if (isset($options[self::OPTION_REMOVE_CODE]) && $options[self::OPTION_REMOVE_CODE]) {
+        if (isset($options[self::OPTION_UNINSTALL_CODE]) && $options[self::OPTION_UNINSTALL_CODE]) {
             $this->removeCode($output, $modules);
         }
-        if (isset($options[self::OPTION_REMOVE_REGISTRY]) && $options[self::OPTION_REMOVE_REGISTRY]) {
+        if (isset($options[self::OPTION_UNINSTALL_REGISTRY]) && $options[self::OPTION_UNINSTALL_REGISTRY]) {
             $this->removeModulesFromDb($output, $modules);
             $this->removeModulesFromDeploymentConfig($output, $modules);
         }
@@ -190,7 +189,9 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
         $output->writeln(
             '<info>Removing ' . implode(', ', $modules) .  ' from module list in deployment configuration</info>'
         );
-        $existingModules = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_MODULES);
+        $existingModules = $this->deploymentConfig->getConfigData(
+            \Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES
+        );
         $newSort = $this->loader->load($modules);
         $newModules = [];
         foreach (array_keys($newSort) as $module) {
@@ -199,7 +200,7 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
         $this->writer->saveConfig(
             [
                 \Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG =>
-                    [ConfigOptionsListConstants::KEY_MODULES => $newModules]
+                    [\Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES => $newModules]
             ],
             true
         );
