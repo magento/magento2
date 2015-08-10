@@ -89,7 +89,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_MOVE_FILE = 'moveFile';
 
-    const ERROR_COLS_IS_EMPTY = 'moveFile';
+    const ERROR_COLS_IS_EMPTY = 'emptyOptions';
     /**
      * Validation failure message template definitions
      *
