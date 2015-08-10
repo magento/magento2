@@ -45,14 +45,14 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($originalContent, $foundPath, $resolvedPath, $expectedContent)
     {
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css', 'path');
+        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'less', 'path');
         $this->notationResolver->expects($this->once())
             ->method('convertModuleNotationToPath')
             ->with($this->asset, $foundPath)
             ->will($this->returnValue($resolvedPath));
         $this->object->process($chain);
         $this->assertEquals($expectedContent, $chain->getContent());
-        $this->assertEquals('css', $chain->getContentType());
+        $this->assertEquals('less', $chain->getContentType());
     }
 
     /**

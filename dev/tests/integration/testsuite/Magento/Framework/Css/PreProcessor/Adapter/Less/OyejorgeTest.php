@@ -31,10 +31,14 @@ class OyejorgeTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $sourceFilePath = realpath(__DIR__ . '/../_files/oyejorge.less');
+        $sourceFilePath = realpath(__DIR__ . '/_files/oyejorge.less');
         $expectedCss = ($this->state->getMode() === State::MODE_DEVELOPER)
-            ? file_get_contents(__DIR__ . '/../_files/oyejorge_dev.css')
-            : file_get_contents(__DIR__ . '/../_files/oyejorge.css');
-        $this->assertEquals($expectedCss, $this->model->process($sourceFilePath));
+            ? file_get_contents(__DIR__ . '/_files/oyejorge_dev.css')
+            : file_get_contents(__DIR__ . '/_files/oyejorge.css');
+        $actualCss = ($this->model->process($sourceFilePath));
+
+        file_put_contents(__DIR__ . '/_files/actual.css', $actualCss);
+        file_put_contents(__DIR__ . '/_files/expected.css', $expectedCss);
+        $this->assertEquals($expectedCss, $actualCss);
     }
 }
