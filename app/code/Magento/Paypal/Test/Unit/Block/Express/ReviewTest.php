@@ -173,7 +173,6 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     public function testGetEmailWhenBillingAddressNotExist()
     {
         $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $billingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
         $this->model->setQuote($quoteMock);
         $this->assertEquals('', $this->model->getEmail());
