@@ -97,14 +97,17 @@ define([
                 lastWidth,
                 lst,
                 resizeMousedown = function (event) {
-                    var get = t._get();
+                    var get = t._get(),
+                        target = event.target;
+
                     cur.id = get.columnId(event);
                     cur.position = event.pageX;
                     event.stopPropagation();
                     dep = get.depElement(cur.id, returnObject);
-                    cur.element = $(event.target).parent().attr(cfg.nameSpacing.cellsDataAttribute);
+                    cur.element = $(target).parent().attr(cfg.nameSpacing.cellsDataAttribute);
                     cfg.resizable = true;
 
+                    $(target).closest('.data-grid').addClass('_in-resize');
                     $('body').bind('mousemove', resizeMousemove);
                     $(window).bind('mouseup', resizeMouseup);
                 },
@@ -131,9 +134,10 @@ define([
                         $(cfg.columnsElements[cur.id][0]).outerWidth(cfg.columnsWidth[cur.id] + cfg.columnsWidth[dep.id] - cfg.columnsMinWidth[dep.id]);
                     }
                 },
-                resizeMouseup = function () {
+                resizeMouseup = function (event) {
                     cfg.resizable = false;
 
+                    $(event.target).closest('.data-grid').removeClass('_in-resize');
                     $('body').unbind('mousemove', resizeMousemove);
                     $(window).unbind('mouseup', resizeMouseup);
                 };

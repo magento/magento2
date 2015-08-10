@@ -25,6 +25,7 @@
 @data-grid-cell__border-width: .1rem;
 @data-grid-cell__padding-horizontal: 1rem;
 @data-grid-cell__padding-vertical: 1rem;
+@data-grid-cell__resize__border-color: @color-blue-pure;
 
 @data-grid-td__border-color: @color-gray84;
 @data-grid-td__border-inner-style: dashed;
@@ -93,6 +94,12 @@
     max-width: 100%;
     margin-bottom: 0;
     width: 100%;
+    &._in-resize {
+        -webkit-user-select: none;
+           -moz-user-select: none;
+            -ms-user-select: none;
+                user-select: none;
+    }
     thead {
         background-color: transparent;
         color: @text__color; // ToDo UI: Rewrite old styles. Should be deleted afterwards
@@ -151,6 +158,10 @@
         border-right: @data-grid-cell__border-width @data-grid-td__border-inner-style @data-grid-td__border-color;
         color: @table__color;
         padding: @data-grid-cell__padding-vertical @data-grid-cell__padding-horizontal;
+        &._resizing {
+            border-left: 1px solid @data-grid-cell__resize__border-color;
+            border-right: 1px solid @data-grid-cell__resize__border-color;
+        }
         &:first-child {
             border-left-style: @data-grid-td__border-outer-style;
         }
@@ -219,14 +230,14 @@
             box-shadow: inset -3px 0 0px 0px @color-white;
         }
     }
-    [data-cl-elem="shadow-div"] {
-        position: absolute;
-        width: 10px;
+    [data-cl-elem="shadow-div"] { // ToDo JS: change it to class selector
+        cursor: col-resize;
         height: 100%;
-        top: 0;
-        right: 0;
         margin-right: -5px;
-        cursor: e-resize;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 10px;
     }
     .data-grid-th {
         color: @data-grid-th__color;
