@@ -113,7 +113,19 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateInvalidRequestMissingType()
     {
-        $content = '{"packages":[{"name":"vendor\/package", "version": "1.0.0"}],"type":"uninstall"}';
+        $content =
+            '{"packages":[{"name":"vendor\/package", "version": "1.0.0"}],"type":"uninstall","dataOption":"true"}';
+        $this->request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->filesystem->expects($this->never())->method('getDirectoryWrite');
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
+        $this->controller->updateAction();
+    }
+
+    public function testUpdateInvalidRequestMissingDataOption()
+    {
+        $content =
+            '{"packages":[{"name":"vendor\/package", "type": "module"}],"type":"uninstall"}';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $this->filesystem->expects($this->never())->method('getDirectoryWrite');
         $this->controller->setEvent($this->mvcEvent);
