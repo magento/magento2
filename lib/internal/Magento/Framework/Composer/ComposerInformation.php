@@ -198,18 +198,10 @@ class ComposerInformation
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             if ((in_array($package->getType(), self::$packageTypes))
                 && (!$this->isSystemPackage($package->getPrettyName()))) {
-                $moduleName = '';
-                $extra = $package->getExtra();
-                if (isset($extra['map'])) {
-                    $modulePath = $extra['map'][0][1];
-                    $moduleName = substr($modulePath, strpos($modulePath, '/')+1);
-                }
                 $packages[$package->getName()] = [
                     'name' => $package->getName(),
                     'type' => $package->getType(),
-                    'version' => $package->getPrettyVersion(),
-                    'author' => $this->getAuthors($package),
-                    'moduleName' => $moduleName
+                    'version' => $package->getPrettyVersion()
                 ];
             }
         }
@@ -381,18 +373,5 @@ class ComposerInformation
         return (in_array($packageName, array_keys($this->composer->getPackage()->getRequires()))
             || in_array($packageName, array_keys($this->composer->getPackage()->getDevRequires()))
         );
-    }
-
-    /**
-     * Return authors
-     *
-     * @param CompletePackageInterface $package
-     * @return string
-     */
-    private function getAuthors(CompletePackageInterface $package)
-    {
-        return $package->getAuthors()
-            ? implode(', ', array_column($package->getAuthors(), 'name'))
-            : strtok($package->getName(), '/');
     }
 }
