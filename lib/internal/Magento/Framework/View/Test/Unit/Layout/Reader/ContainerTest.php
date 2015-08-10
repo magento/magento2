@@ -107,6 +107,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function processDataProvider()
     {
@@ -202,7 +203,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             'referenceContainerDisplayFalse' => [
                 'elementCurrent' => $this->getElement(
                     '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" label="Add"'
-                        . ' display="true"/>',
+                    . ' display="true"/>',
                     'referenceContainer'
                 ),
                 'containerName' => 'reference',
