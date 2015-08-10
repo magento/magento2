@@ -25,9 +25,6 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeMetadata;
 
-    /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $genderOption;
-
     public function setup()
     {
         $this->context = $this->getMockForAbstractClass(
@@ -56,12 +53,6 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->genderOption = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\OptionInterface',
-            [],
-            '',
-            false
-        );
 
         $this->component = new AttributeColumn(
             $this->context,
@@ -81,7 +72,7 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
         $this->attributeRepository->expects($this->never())
             ->method('getMetadataByCode');
 
-        $this->component->prepareDataSource($dataSource);
+        $this->assertNull($this->component->prepareDataSource($dataSource));
     }
 
     public function testPrepareDataSource()
@@ -117,19 +108,22 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
         $this->attributeRepository->expects($this->once())
             ->method('getMetadataByCode')
             ->with('gender')
-            ->willReturn($this->attributeMetadata);
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getOptions')
-            ->willReturn([$this->genderOption]);
-        $this->genderOption->expects($this->once())
-            ->method('getValue')
-            ->willReturn(1);
-        $this->genderOption->expects($this->once())
-            ->method('getValue')
-            ->willReturn($genderOptionId);
-        $this->genderOption->expects($this->once())
-            ->method('getLabel')
-            ->willReturn($genderOptionLabel);
+            ->willReturn([
+                'attribute_code' => 'billing_attribute_code',
+                'frontend_input' => 'frontend-input',
+                'frontend_label' => 'frontend-label',
+                'backend_type' => 'backend-type',
+                'options' => [
+                    [
+                        'label' => $genderOptionLabel,
+                        'value' => $genderOptionId
+                    ]
+                ],
+                'is_used_in_grid' => true,
+                'is_visible_in_grid' => true,
+                'is_filterable_in_grid' => true,
+                'is_searchable_in_grid' => true,
+            ]);
 
         $this->component->prepareDataSource($dataSource);
 

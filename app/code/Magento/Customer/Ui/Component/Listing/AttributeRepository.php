@@ -5,105 +5,117 @@
  */
 namespace Magento\Customer\Ui\Component\Listing;
 
-use Magento\Eav\Model\Entity\Attribute;
-use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataManagementInterface;
+use Magento\Customer\Api\AddressMetadataManagementInterface;
 
 class AttributeRepository
 {
     const BILLING_ADDRESS_PREFIX = 'billing_';
 
-    /**
-     * @var null|\Magento\Catalog\Api\Data\ProductAttributeInterface[]
-     */
+    /** @var [] */
     protected $attributes;
 
-    /**
-     * @var \Magento\Customer\Model\Resource\Attribute\Collection
-     */
-    protected $attributeCollection;
-
-    /**
-     * @var \Magento\Customer\Model\Resource\Address\Attribute\Collection
-     */
-    protected $addressAttributeCollection;
-
-    /**
-     * @var \Magento\Customer\Model\Metadata\CustomerMetadata
-     */
+    /** @var CustomerMetadataInterface */
     protected $customerMetadata;
 
-    /**
-     * @var \Magento\Customer\Model\Metadata\AddressMetadata
-     */
+    /** @var AddressMetadataInterface */
     protected $addressMetadata;
 
+    /** @var CustomerMetadataManagementInterface  */
+    protected $customerMetadataManagement;
+
+    /** @var AddressMetadataManagementInterface  */
+    protected $addressMetadataManagement;
+
     /**
-     * @param \Magento\Customer\Model\Resource\Attribute\Collection $attributeCollection
-     * @param \Magento\Customer\Model\Resource\Address\Attribute\Collection $addressAttributeCollection
-     * @param \Magento\Customer\Model\Metadata\CustomerMetadata $customerMetadata
-     * @param \Magento\Customer\Model\Metadata\AddressMetadata $addressMetadata
+     * @param CustomerMetadataManagementInterface $customerMetadataManagement
+     * @param AddressMetadataManagementInterface $addressMetadataManagement
+     * @param CustomerMetadataInterface $customerMetadata
+     * @param AddressMetadataInterface $addressMetadata
      */
     public function __construct(
-        \Magento\Customer\Model\Resource\Attribute\Collection $attributeCollection,
-        \Magento\Customer\Model\Resource\Address\Attribute\Collection $addressAttributeCollection,
-        \Magento\Customer\Model\Metadata\CustomerMetadata $customerMetadata,
-        \Magento\Customer\Model\Metadata\AddressMetadata $addressMetadata
+        CustomerMetadataManagementInterface $customerMetadataManagement,
+        AddressMetadataManagementInterface $addressMetadataManagement,
+        CustomerMetadataInterface $customerMetadata,
+        AddressMetadataInterface $addressMetadata
     ) {
-        $this->attributeCollection = $attributeCollection;
-        $this->addressAttributeCollection = $addressAttributeCollection;
+        $this->customerMetadataManagement = $customerMetadataManagement;
+        $this->addressMetadataManagement = $addressMetadataManagement;
         $this->customerMetadata = $customerMetadata;
         $this->addressMetadata = $addressMetadata;
     }
 
-    /**
-     * @return AttributeMetadataInterface[]
-     */
     public function getList()
     {
-        if (null == $this->attributes) {
-            $this->attributes = [];
-            $attributes = array_merge(
-                $this->attributeCollection->getItems(),
-                $this->addressAttributeCollection->getItems()
+        if (!$this->attributes) {
+            $this->attributes = $this->getListForEntity(
+                $this->customerMetadata->getAllAttributesMetadata(),
+                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                $this->customerMetadataManagement
             );
-
-            /** @var Attribute $attribute */
-            foreach ($attributes as $attribute) {
-                $entityTypeCode = $attribute->getEntityType()->getEntityTypeCode();
-                $attribute = $this->getAttributeMetadata($attribute);
-                $attributeCode = $attribute->getAttributeCode();
-
-                if ($entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-                    $attributeCode = self::BILLING_ADDRESS_PREFIX . $attribute->getAttributeCode();
-                }
-                $this->attributes[$attributeCode] = $attribute;
-            }
+            $this->attributes = array_merge(
+                $this->attributes,
+                $this->getListForEntity(
+                    $this->addressMetadata->getAllAttributesMetadata(),
+                    AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
+                    $this->addressMetadataManagement
+                )
+            );
         }
+
         return $this->attributes;
     }
 
     /**
+     * @param array $metadata
+     * @param string $entityTypeCode
+     * @param \Magento\Customer\Api\MetadataManagementInterface $management
+     * @return array
+     */
+    protected function getListForEntity(array $metadata, $entityTypeCode, $management)
+    {
+        $attributes = [];
+        /** @var AttributeMetadataInterface $attribute */
+        foreach ($metadata as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            if ($entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
+                $attributeCode = self::BILLING_ADDRESS_PREFIX . $attribute->getAttributeCode();
+            }
+            $attributes[$attributeCode] = [
+                AttributeMetadataInterface::ATTRIBUTE_CODE => $attributeCode,
+                AttributeMetadataInterface::FRONTEND_INPUT => $attribute->getFrontendInput(),
+                AttributeMetadataInterface::FRONTEND_LABEL => $attribute->getFrontendLabel(),
+                AttributeMetadataInterface::BACKEND_TYPE => $attribute->getBackendType(),
+                AttributeMetadataInterface::OPTIONS => $this->getOptionArray($attribute->getOptions()),
+                AttributeMetadataInterface::IS_USED_IN_GRID => $attribute->getIsUsedInGrid(),
+                AttributeMetadataInterface::IS_VISIBLE_IN_GRID => $attribute->getIsVisibleInGrid(),
+                AttributeMetadataInterface::IS_FILTERABLE_IN_GRID => $management->canBeFilterableInGrid($attribute),
+                AttributeMetadataInterface::IS_SEARCHABLE_IN_GRID => $management->canBeSearchableInGrid($attribute),
+            ];
+        }
+
+        return $attributes;
+    }
+
+    protected function getOptionArray(array $options)
+    {
+        /** @var \Magento\Customer\Api\Data\OptionInterface $option */
+        foreach ($options as &$option) {
+            $option = ['label' => $option->getLabel(), 'value' => $option->getValue()];
+        }
+        return $options;
+    }
+
+
+    /**
      * @param string $code
-     * @return AttributeMetadataInterface|null
+     * @return []
      */
     public function getMetadataByCode($code)
     {
         return isset($this->getList()[$code]) ? $this->getList()[$code] : null;
-    }
-
-    /**
-     * @param Attribute $attribute
-     * @return AttributeMetadataInterface|null
-     */
-    protected function getAttributeMetadata(Attribute $attribute)
-    {
-        $metadata = null;
-        if ($attribute->getEntityType()->getEntityTypeCode() == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-            $metadata = $this->addressMetadata->getAttributeMetadata($attribute->getAttributeCode());
-        } else {
-            $metadata = $this->customerMetadata->getAttributeMetadata($attribute->getAttributeCode());
-        }
-        return $metadata;
     }
 }

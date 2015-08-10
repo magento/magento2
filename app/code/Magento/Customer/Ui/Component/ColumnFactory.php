@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Ui\Component;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+
 class ColumnFactory
 {
     /**
@@ -42,23 +44,23 @@ class ColumnFactory
     }
 
     /**
-     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     * @param array $attributeData
      * @param string $columnName
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param array $config
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
      */
-    public function create($attribute, $columnName, $context, array $config = [])
+    public function create(array $attributeData, $columnName, $context, array $config = [])
     {
         $config = array_merge([
-            'label' => __($attribute->getFrontendLabel()),
-            'dataType' => $this->getDataType($attribute),
+            'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
+            'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
             'align' => 'left',
-            'visible' => (bool)$attribute->getIsVisibleInGrid(),
+            'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
         ], $config);
 
-        if ($attribute->getOptions()) {
-            $config['options'] = $attribute->getOptions();
+        if ($attributeData[AttributeMetadata::OPTIONS]) {
+            $config['options'] = $attributeData[AttributeMetadata::OPTIONS];
         }
         $arguments = [
             'data' => [
@@ -82,13 +84,13 @@ class ColumnFactory
     }
 
     /**
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param string $frontendType
      * @return string
      */
-    protected function getDataType($attribute)
+    protected function getDataType($frontendType)
     {
-        return isset($this->dataTypeMap[$attribute->getFrontendInput()])
-            ? $this->dataTypeMap[$attribute->getFrontendInput()]
+        return isset($this->dataTypeMap[$frontendType])
+            ? $this->dataTypeMap[$frontendType]
             : $this->dataTypeMap['default'];
     }
 }
