@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Less\File\Collector;
+namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -14,7 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class AggregatedTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Less\File\Collector\Aggregated
+     * @var \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated
      */
     protected $model;
 
@@ -70,13 +70,13 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\File\Collector\Override\Base', ['filesystem' => $filesystem, 'subDir' => 'web']
         );
         $this->model = $this->objectManager->create(
-            'Magento\Framework\Less\File\Collector\Aggregated',
+            'Magento\Framework\Css\PreProcessor\File\Collector\Aggregated',
             ['baseFiles' => $sourceBase, 'overriddenBaseFiles' => $overriddenBaseFiles]
         );
     }
 
     /**
-     * @magentoDataFixture Magento/Framework/Less/_files/themes.php
+     * @magentoDataFixture Magento/Framework/Css/PreProcessor/_files/themes.php
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      * @param string $path

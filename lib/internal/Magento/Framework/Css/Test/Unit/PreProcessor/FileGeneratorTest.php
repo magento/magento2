@@ -158,6 +158,9 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
         $chain->expects($this->once())
             ->method('getAsset')
             ->willReturn($asset);
+        $chain->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('less');
 
         $this->temporaryFile->expects($this->once())
             ->method('createFile')
