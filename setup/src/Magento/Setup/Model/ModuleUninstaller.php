@@ -96,7 +96,7 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
      * Uninstall the module depending on uninstall options
      *
      * @param OutputInterface $output
-     * @param array $modules
+     * @param array $modules Module names
      * @param array $options
      * @return void
      */

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\Unit\Model\Theme;
+namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Theme\Model\Theme\PackageNameFinder;
 
