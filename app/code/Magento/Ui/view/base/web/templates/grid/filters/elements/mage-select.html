@@ -1,0 +1,58 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<label
+        class="admin__form-field-label"
+        data-bind="attr: {for: uid}">
+    <span data-bind="text: label"></span>
+</label>
+<div tabindex="0" class="admin__form-field-control admin__control-multiselect-wrap"
+        data-bind="event: {
+                            focusin: onFocusIn,
+                            focusout: onFocusOut,
+                            keydown: keydownSwitcher
+                    },
+                    hasFocus: false">
+    <div class="admin__control-multiselect-wrap">
+        <div class="admin__control-multiselect"
+             data-bind="text: caption,
+                        css: {_focus: multiselectFocus},
+                        click: function(data, event) {
+                            proxyClick(data, event)
+                        }">
+
+        </div>
+        <div class="admin__control-multiselect-list-wrap">
+            <ul data-bind="
+                visible: listVisible
+            ">
+                <!-- ko foreach: { data: options, as: 'option'}  -->
+                <li
+                    class="admin__control-multiselect-elements"
+                    data-bind="
+                                css: {_selected: option.visible, _active: option.hovered},
+                                click: $parent.proxyOptionsClick.bind($parent, $data),
+                                event: {
+                                    mouseenter: function(){$parent.onMouseEnter($data, $index())},
+                                    mouseleave: $parent.onMouseLeave
+                                },
+                                clickBubble: false,
+                                attr: {
+                                    'data-value': option.value
+                                }">
+                    <span
+                            class="admin__control-multiselect-checkbox"
+                            data-bind="css: {_checked: option.visible}">
+                    </span>
+                    <span
+                            data-bind="text: option.label">
+                    </span>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </div>
+    </div>
+</div>
