@@ -57,6 +57,10 @@ class Options implements OptionSourceInterface
      */
     public function toOptionArray()
     {
+        if ($this->options !== null) {
+            return $this->options;
+        }
+
         $this->generateCurrentOptions();
 
         $this->options = array_values($this->currentOptions);
@@ -67,13 +71,10 @@ class Options implements OptionSourceInterface
     /**
      * Generate current options
      *
-     * @return array|void
+     * @return void
      */
     protected function generateCurrentOptions()
     {
-        if ($this->options !== null) {
-            return $this->options;
-        }
         $websiteCollection = $this->systemStore->getWebsiteCollection();
         $groupCollection = $this->systemStore->getGroupCollection();
         $storeCollection = $this->systemStore->getStoreCollection();
