@@ -102,6 +102,10 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
         $this->_rowData = $rowData;
+        if (!empty($attrParams['apply_to']) && !in_array($rowData['product_type'], $attrParams['apply_to'])) {
+            return true;
+        }
+
         if ($attrCode == Product::COL_SKU || $attrParams['is_required']
             && ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
                 || ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
@@ -171,16 +175,13 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     protected function isValidAttributes()
     {
-        $rowData = $this->_rowData;
         $this->_clearMessages();
-        $sku = $rowData['sku'];
-        $newSku = $this->context->getNewSku($sku);
-        $rowData[Product::COL_ATTR_SET] = $newSku['attr_set_code'];
-        $productType = $this->context->retrieveProductTypeByName($newSku['type_id']);
-        $attributes = $productType->prepareAttributesWithDefaultValueForSave($rowData);
-        foreach ($attributes as $attributeCode => $attributeValue) {
-            $attrParams = $productType->retrieveAttribute($attributeCode, $newSku['attr_set_code']);
-            $this->isAttributeValid($attributeCode, $attrParams, [$attributeCode => $attributeValue]);
+        $entityTypeModel = $this->context->retrieveProductTypeByName($this->_rowData['product_type']);
+        foreach ($this->_rowData as $attrCode => $attrValue) {
+            $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
+            if ($attrParams) {
+                $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
+            }
         }
         if ($this->getMessages()) {
             return false;
@@ -194,8 +195,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     public function isValid($value)
     {
         $this->_rowData = $value;
-        $returnValue = true;
         $this->_clearMessages();
+        $returnValue = $this->isValidAttributes();
         foreach ($this->validators as $validator) {
             if (!$validator->isValid($value)) {
                 $returnValue = false;

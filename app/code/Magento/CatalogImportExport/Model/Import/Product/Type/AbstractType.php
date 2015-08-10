@@ -23,6 +23,13 @@ abstract class AbstractType
     public static $commonAttributesCache = [];
 
     /**
+     * Attribute Code to Id cache
+     *
+     * @var array
+     */
+    public static $attributeCodeToId = [];
+
+    /**
      * Product type attribute sets and attributes parameters.
      *
      * Example: [attr_set_name_1] => array(
@@ -118,6 +125,10 @@ abstract class AbstractType
      */
     protected $connection;
 
+    /**
+     * @var array
+     */
+    protected $codeToId;
 
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
@@ -296,6 +307,7 @@ abstract class AbstractType
                         $this->_indexValueAttributes
                     ),
                 ];
+                self::$attributeCodeToId[$attributeCode] = $attributeId;
                 $this->_addAttributeParams(
                     $attributeSetName,
                     self::$commonAttributesCache[$attributeId],
@@ -303,6 +315,20 @@ abstract class AbstractType
                 );
             }
         }
+    }
+
+    /**
+     * @param $attributeCode
+     * @return mixed
+     */
+    public function retrieveAttributeFromCache($attributeCode)
+    {
+        if (isset(self::$attributeCodeToId[$attributeCode]) && $id = self::$attributeCodeToId[$attributeCode]) {
+            if (isset(self::$commonAttributesCache[$id])) {
+                return self::$commonAttributesCache[$id];
+            }
+        }
+        return [];
     }
 
     /**
