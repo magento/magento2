@@ -78,6 +78,16 @@ class Http extends Request implements RequestInterface
     protected $objectManager;
 
     /**
+     * @var bool|null
+     */
+    protected $isSafeMethod = null;
+
+    /**
+     * @var array
+     */
+    protected $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'CONNECT'];
+
+    /**
      * @param CookieReaderInterface $cookieReader
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
@@ -409,6 +419,23 @@ class Http extends Request implements RequestInterface
         );
 
         return $this->initialRequestSecure($offLoaderHeader);
+    }
+
+    /**
+     * Check that this is safe request
+     *
+     * @return bool
+     */
+    public function isSafeMethod()
+    {
+        if ($this->isSafeMethod === null) {
+            if (isset($_SERVER['REQUEST_METHOD']) && (in_array($_SERVER['REQUEST_METHOD'], $this->safeRequestTypes))) {
+                $this->isSafeMethod = true;
+            } else {
+                $this->isSafeMethod = false;
+            }
+        }
+        return $this->isSafeMethod;
     }
 
     /**
