@@ -14,6 +14,7 @@ define(
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/checkout-data',
         'uiRegistry',
+        'Magento_Checkout/js/model/quote',
         'mage/validation'
     ],
     function(
@@ -24,7 +25,8 @@ define(
         shippingRateService,
         shippingService,
         checkoutData,
-        registry
+        registry,
+        quote
     ) {
         'use strict';
         return Component.extend({
@@ -32,6 +34,7 @@ define(
                 template: 'Magento_Checkout/cart/shipping-estimation'
             },
             isLoading: shippingService.isLoading,
+            isVirtual: quote.isVirtual(),
 
             initialize: function () {
                 var self = this;
