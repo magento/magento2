@@ -3814,4 +3814,13 @@ return [
     ['Magento\Store\Model\StorageFactory'],
     ['Magento\Framework\Object', 'Magento\Framework\DataObject'],
     ['Magento\Framework\Stdlib\String', 'Magento\Framework\Stdlib\StringUtils'],
+    ['Magento\Bundle\Model\Observer', 'corresponding classes in Magento\Bundle\Observer\*'],
+    ['Magento\CatalogRule\Model\Observer', 'corresponding classes in Magento\CatalogRule\Observer\*'],
+    ['Magento\Tax\Model\Observer', 'corresponding classes in Magento\Tax\Observer\*'],
+    ['Magento\CacheInvalidate\Model\Observer', 'corresponding classes in Magento\CacheInvalidate\Observer\*'],
+    ['Magento\Catalog\Model\Observer', 'corresponding classes in Magento\Catalog\Observer\*'],
+    ['Magento\CatalogInventory\Model\Observer', 'corresponding classes in Magento\CatalogInventory\Observer\*'],
+    ['Magento\Paypal\Model\Observer', 'corresponding classes in Magento\Paypal\Observer\*'],
+    ['Magento\Checkout\Model\Observer', 'corresponding classes in Magento\Checkout\Observer\*'],
+    ['Magento\CurrencySymbol\Model\Observer', 'corresponding classes in Magento\CurrencySymbol\Observer\*'],
 ];
