@@ -11,18 +11,22 @@
 
     //  PayPal checkout button
     .paypal {
-        &.after:before {
-            content: '- ' attr(data-label) ' -';
-            display: block;
-            margin: 0 @indent__xs @indent__s;
-            text-transform: uppercase;
+        &.after {
+            &:before {
+                content: '- ' attr(data-label) ' -';
+                display: block;
+                margin: 0 @indent__xs @indent__s;
+                text-transform: uppercase;
+            }
         }
-        &.before:before {
-            content: '- ' attr(data-label) ' -';
-            display: block;
-            margin: @indent__s @indent__xs;
-            text-align: center;
-            text-transform: uppercase;
+        &.before {
+            &:before {
+                content: '- ' attr(data-label) ' -';
+                display: block;
+                margin: @indent__s @indent__xs;
+                text-align: center;
+                text-transform: uppercase;
+            }
         }
         &.acceptance {
             display: block;
