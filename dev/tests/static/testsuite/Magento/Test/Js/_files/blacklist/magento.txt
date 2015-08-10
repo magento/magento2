@@ -327,6 +327,9 @@ app/code/Magento/Shipping/view/frontend/web/js/model/config.js
 app/code/Magento/Shipping/view/frontend/web/js/view/checkout/shipping/shipping-policy.js
 app/code/Magento/Store/view/base/requirejs-config.js
 app/code/Magento/Store/view/base/web/js/listing/filter/store.js
+app/code/Magento/Swatches/view/adminhtml/web/js/TypeChanger.js
+app/code/Magento/Swatches/view/frontend/requirejs-config.js
+app/code/Magento/Swatches/view/frontend/web/js/SwatchRenderer.js
 app/code/Magento/Tax/view/adminhtml/web/js/bootstrap.js
 app/code/Magento/Tax/view/frontend/web/js/view/checkout/minicart/subtotal/totals.js
 app/code/Magento/Tax/view/frontend/web/js/view/checkout/shipping_method/price.js

@@ -50,6 +50,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAmount()
     {
+        $this->_product->expects($this->any())->method('hasData')->will($this->returnValue(false));
+        $this->_product->expects($this->any())->method('getData')->will($this->returnValue(11.26));
+
         $this->assertEquals('11.26', $this->_helperData->getAmount($this->_product));
     }
 
