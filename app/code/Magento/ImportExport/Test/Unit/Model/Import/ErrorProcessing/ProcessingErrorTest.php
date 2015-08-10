@@ -13,6 +13,9 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * Preparing mock objects
+     */
     public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -20,6 +23,8 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method init.
+     *
      * @dataProvider errorMessageInfo
      */
     public function testInit($initData)
@@ -40,6 +45,11 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Data for method testInit
+     *
+     * @return array
+     */
     public function errorMessageInfo()
     {
         return [
@@ -67,6 +77,8 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method getErrorCode
+     *
      * @dataProvider errorCodeData
      */
     public function testGetErrorCode($data, $expectedValue)
@@ -76,6 +88,11 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expectedValue);
     }
 
+    /**
+     * Data for method testGetErrorCode
+     *
+     * @return array
+     */
     public function errorCodeData()
     {
         return [
@@ -91,6 +108,8 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method getErrorMessage
+     *
      * @dataProvider errorMessageData
      */
     public function testGetErrorMessage($data, $expectedValue)
@@ -100,6 +119,11 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expectedValue);
     }
 
+    /**
+     * Data for method testGetErrorMessage
+     *
+     * @return array
+     */
     public function errorMessageData()
     {
         return [
@@ -115,6 +139,8 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method getRowNumber
+     *
      * @dataProvider rowNumberData
      */
     public function testGetRowNumber($data, $expectedValue)
@@ -124,6 +150,11 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expectedValue);
     }
 
+    /**
+     * Data for method testGetRowNumber
+     *
+     * @return array
+     */
     public function rowNumberData()
     {
         return [
@@ -139,6 +170,8 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method getColumnName
+     *
      * @dataProvider columnNameData
      */
     public function testGetColumnName($data, $expectedValue)
@@ -148,6 +181,11 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expectedValue);
     }
 
+    /**
+     * Data for method testGetColumnName
+     *
+     * @return array
+     */
     public function columnNameData()
     {
         return [
@@ -168,6 +206,8 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method getErrorLevel
+     *
      * @dataProvider errorLevelData
      */
     public function testGetErrorLevel($data, $expectedValue)
@@ -177,6 +217,11 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expectedValue);
     }
 
+    /**
+     * Data for method testGetErrorLevel
+     *
+     * @return array
+     */
     public function errorLevelData()
     {
         return [
@@ -198,6 +243,8 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method getErrorDescription
+     *
      * @dataProvider errorDescriptionData
      */
     public function testGetErrorDescription($data, $expectedValue)
@@ -207,6 +254,11 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expectedValue);
     }
 
+    /**
+     * Data for method testGetErrorDescription
+     *
+     * @return array
+     */
     public function errorDescriptionData()
     {
         return [
