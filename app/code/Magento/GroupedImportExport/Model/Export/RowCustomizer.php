@@ -15,6 +15,7 @@ class RowCustomizer implements RowCustomizerInterface
      * @param mixed $collection
      * @param int $productIds
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareData($collection, $productIds)
     {
@@ -44,6 +45,7 @@ class RowCustomizer implements RowCustomizerInterface
      * @param array $dataRow
      * @param int $productId
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addData($dataRow, $productId)
     {
@@ -56,6 +58,7 @@ class RowCustomizer implements RowCustomizerInterface
      * @param array $additionalRowsCount
      * @param int $productId
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAdditionalRowsCount($additionalRowsCount, $productId)
     {

@@ -87,7 +87,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->_model->setData(
             Import::FIELD_NAME_VALIDATION_STRATEGY,
             Import\ErrorProcessing\ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
-            );
+        );
         $this->_model->importSource();
 
         $customers = $customersCollection->getItems();
