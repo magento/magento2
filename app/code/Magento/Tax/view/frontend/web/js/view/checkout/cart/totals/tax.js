@@ -38,7 +38,6 @@ define(
              * @override
              */
             isCalculated: function () {
-                return true;
                 return this.totals() && totals.getSegment('tax') !== null;
             }
         });
