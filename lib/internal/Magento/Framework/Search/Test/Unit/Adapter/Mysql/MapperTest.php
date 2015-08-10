@@ -196,10 +196,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     {
         $query = $this->createFilterQuery(Filter::REFERENCE_FILTER, $this->createFilter());
 
-        $this->queryContainer->expects($this->once())
-            ->method('getFilterQueries')
-            ->willReturn([]);
-
         $this->select->expects($this->any())->method('columns')->will($this->returnValue($this->select));
 
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));

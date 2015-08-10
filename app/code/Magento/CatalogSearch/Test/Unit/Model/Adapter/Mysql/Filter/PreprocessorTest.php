@@ -104,9 +104,12 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['from', 'where', '__toString', 'joinLeft', 'columns', 'having'])
             ->getMock();
-        $this->connection->expects($this->once())
+        $this->connection->expects($this->any())
             ->method('select')
             ->will($this->returnValue($this->select));
+        $this->connection->expects($this->any())
+            ->method('quoteIdentifier')
+            ->will($this->returnArgument(0));
         $resource->expects($this->atLeastOnce())
             ->method('getConnection')
             ->will($this->returnValue($this->connection));
@@ -140,9 +143,10 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessPrice()
     {
+        $expectedResult = 'price_index.min_price = 23';
         $scopeId = 0;
         $isNegation = false;
-        $query = 'SELECT table.price FROM catalog_product_entity';
+        $query = 'price = 23';
 
         $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
         $this->filter->expects($this->exactly(2))
@@ -152,34 +156,17 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('getAttribute')
             ->with(\Magento\Catalog\Model\Product::ENTITY, 'price')
             ->will($this->returnValue($this->attribute));
-        $this->resource->expects($this->once())
-            ->method('getTableName')
-            ->with('catalog_product_index_price')
-            ->will($this->returnValue('table_name'));
-        $this->select->expects($this->once())
-            ->method('from')
-            ->with(['search_index' => 'table_name'], 'entity_id')
-            ->will($this->returnSelf());
-        $this->select->expects($this->once())
-            ->method('where')
-            ->with('SELECT table.min_price FROM catalog_product_entity')
-            ->will($this->returnSelf());
-
-        /** @var \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer|MockObject $queryContainer */
         $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $queryContainer->expects($this->once())
-            ->method('addFilterQuery')
-            ->with($this->select);
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
-        $this->assertSame('', $this->removeWhitespaces($actualResult));
+        $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
     public function testProcessCategoryIds()
     {
-        $expectedResult = 'category_index.category_id = FilterValue';
+        $expectedResult = 'category_ids_index.category_id = FilterValue';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT category_ids FROM catalog_product_entity';
@@ -208,6 +195,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessStaticAttribute()
     {
+        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT field FROM table';
@@ -228,23 +216,27 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('backend_table'));
         $this->select->expects($this->once())
             ->method('from')
-            ->with(['search_index' => 'backend_table'], 'entity_id')
+            ->with(['main_table' => 'backend_table'], 'entity_id')
             ->will($this->returnSelf());
         $this->select->expects($this->once())
             ->method('where')
             ->with('SELECT field FROM table')
             ->will($this->returnSelf());
+        $this->select->expects($this->once())
+            ->method('__toString')
+            ->will($this->returnValue('TEST QUERY PART'));
 
         $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
             ->disableOriginalConstructor()
             ->getMock();
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
-        $this->assertSame('', $this->removeWhitespaces($actualResult));
+        $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
     public function testProcessNotStaticAttribute()
     {
+        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT field FROM table';
@@ -269,11 +261,11 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($attributeId));
         $this->connection->expects($this->once())
             ->method('getIfNullSql')
-            ->with('current_store.value', 'search_index.value')
+            ->with('current_store.value', 'main_table.value')
             ->will($this->returnValue('IF NULL SQL'));
         $this->select->expects($this->once())
             ->method('from')
-            ->with(['search_index' => 'backend_table'], 'entity_id')
+            ->with(['main_table' => 'backend_table'], 'entity_id')
             ->will($this->returnSelf());
         $this->select->expects($this->once())
             ->method('joinLeft')
@@ -286,13 +278,16 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->exactly(2))
             ->method('where')
             ->will($this->returnSelf());
+        $this->select->expects($this->once())
+            ->method('__toString')
+            ->will($this->returnValue('TEST QUERY PART'));
 
         $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
             ->disableOriginalConstructor()
             ->getMock();
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
-        $this->assertSame('', $this->removeWhitespaces($actualResult));
+        $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
     /**

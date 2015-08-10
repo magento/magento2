@@ -90,7 +90,11 @@ class Preprocessor implements PreprocessorInterface
         $attribute = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $filter->getField());
         $table = $attribute->getBackendTable();
         if ($filter->getField() == 'price') {
-            $filterQuery = str_replace('`price`', '`price_index`.`min_price`', $query);
+            $filterQuery = str_replace(
+                $this->connection->quoteIdentifier('price'),
+                $this->connection->quoteIdentifier('price_index.min_price'),
+                $query
+            );
             return $filterQuery;
         } elseif ($filter->getField() == 'category_ids') {
             return 'category_ids_index.category_id = ' . $filter->getValue();
