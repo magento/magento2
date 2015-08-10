@@ -7,6 +7,8 @@ namespace Magento\AdvancedPricingImportExport\Model\Import;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Framework\App\Resource;
 
 /**
  * Class AdvancedPricing
@@ -80,19 +82,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_catalogData;
 
     /**
-     * @var \Magento\Catalog\Model\Product
-     */
-    protected $_productModel;
-
-    /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
      */
     protected $_storeResolver;
-
-    /**
-     * @var ImportProduct
-     */
-    protected $_importProduct;
 
     /**
      * @var AdvancedPricing\Validator
@@ -144,49 +136,56 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\Config $config
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
-     * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param ImportProduct\StoreResolver $storeResolver
-     * @param ImportProduct $importProduct
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\GroupPrice $groupPriceValidator
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\Config $config,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
         \Magento\Framework\App\Resource $resource,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
-        \Magento\Catalog\Model\Product $productModel,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
-        ImportProduct $importProduct,
         AdvancedPricing\Validator $validator,
         AdvancedPricing\Validator\Website $websiteValidator,
-        AdvancedPricing\Validator\GroupPrice $groupPriceValidator
+        AdvancedPricing\Validator\GroupPrice $groupPriceValidator,
+        \Magento\Framework\Stdlib\StringUtils $string,
+        ProcessingErrorAggregatorInterface $errorAggregator
     ) {
         $this->_localeDate = $localeDate;
-        $this->jsonHelper = $jsonHelper;
-        $this->_importExportData = $importExportData;
-        $this->_resourceHelper = $resourceHelper;
-        $this->_dataSourceModel = $importData;
         $this->_connection = $resource->getConnection('write');
         $this->_resourceFactory = $resourceFactory;
-        $this->_productModel = $productModel;
         $this->_catalogData = $catalogData;
         $this->_storeResolver = $storeResolver;
-        $this->_importProduct = $importProduct;
         $this->_validator = $validator;
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->websiteValidator = $websiteValidator;
         $this->groupPriceValidator = $groupPriceValidator;
         $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
+
+        parent::__construct(
+            $jsonHelper,
+            $importExportData,
+            $importData,
+            $config,
+            $resource,
+            $resourceHelper,
+            $string,
+            $errorAggregator
+        );
     }
 
     /**
@@ -210,7 +209,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     {
         $sku = false;
         if (isset($this->_validatedRows[$rowNum])) {
-            return !isset($this->_invalidRows[$rowNum]);
+            return !$this->getErrorAggregator()->isRowInvalid($rowNum);
         }
         $this->_validatedRows[$rowNum] = true;
         // BEHAVIOR_DELETE use specific validation logic
@@ -232,7 +231,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         if (false === $sku) {
             $this->addRowError(ValidatorInterface::ERROR_ROW_IS_ORPHAN, $rowNum);
         }
-        return !isset($this->_invalidRows[$rowNum]);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNum);
     }
 
     /**
@@ -276,9 +275,13 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $listSku = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             foreach ($bunch as $rowNum => $rowData) {
-                if ($this->validateRow($rowData, $rowNum)) {
+                $this->validateRow($rowData, $rowNum);
+                if (!$this->getErrorAggregator()->isRowInvalid($rowNum)) {
                     $rowSku = $rowData[self::COL_SKU];
                     $listSku[] = $rowSku;
+                }
+                if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                    $this->getErrorAggregator()->addRowToSkip($rowNum);
                 }
             }
         }
@@ -306,6 +309,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function saveAndReplaceAdvancedPrices()
     {
@@ -322,6 +326,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                     $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
                     continue;
                 }
+                if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                    $this->getErrorAggregator()->addRowToSkip($rowNum);
+                    continue;
+                }
+
                 $rowSku = $rowData[self::COL_SKU];
                 $listSku[] = $rowSku;
                 if (!empty($rowData[self::COL_TIER_PRICE_WEBSITE])) {
@@ -358,7 +367,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
             } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
                 $this->processCountExistingPrices($tierPrices, self::TABLE_TIER_PRICE)
-                    ->processcountExistingPrices($groupPrices, self::TABLE_GROUPED_PRICE)
+                    ->processCountExistingPrices($groupPrices, self::TABLE_GROUPED_PRICE)
                     ->processCountNewPrices($tierPrices, $groupPrices);
                 $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
                     ->saveProductPrices($groupPrices, self::TABLE_GROUPED_PRICE);

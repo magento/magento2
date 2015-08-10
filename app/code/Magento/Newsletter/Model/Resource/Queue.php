@@ -27,14 +27,14 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_subscriberCollection = $subscriberCollection;
     }
 
@@ -66,9 +66,9 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
             throw new \Magento\Framework\Exception\LocalizedException(__('You selected an invalid queue.'));
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select();
+        $select = $connection->select();
         $select->from(
             $this->getTable('newsletter_queue_link'),
             'subscriber_id'
@@ -80,8 +80,8 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $subscriberIds
         );
 
-        $usedIds = $adapter->fetchCol($select);
-        $adapter->beginTransaction();
+        $usedIds = $connection->fetchCol($select);
+        $connection->beginTransaction();
         try {
             foreach ($subscriberIds as $subscriberId) {
                 if (in_array($subscriberId, $usedIds)) {
@@ -90,11 +90,11 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $data = [];
                 $data['queue_id'] = $queue->getId();
                 $data['subscriber_id'] = $subscriberId;
-                $adapter->insert($this->getTable('newsletter_queue_link'), $data);
+                $connection->insert($this->getTable('newsletter_queue_link'), $data);
             }
-            $adapter->commit();
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
         }
     }
 
@@ -107,17 +107,17 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function removeSubscribersFromQueue(ModelQueue $queue)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         try {
-            $adapter->beginTransaction();
-            $adapter->delete(
+            $connection->beginTransaction();
+            $connection->delete(
                 $this->getTable('newsletter_queue_link'),
                 ['queue_id = ?' => $queue->getId(), 'letter_sent_at IS NULL']
             );
 
-            $adapter->commit();
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
     }
@@ -130,8 +130,8 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function setStores(ModelQueue $queue)
     {
-        $adapter = $this->_getWriteAdapter();
-        $adapter->delete($this->getTable('newsletter_queue_store_link'), ['queue_id = ?' => $queue->getId()]);
+        $connection = $this->getConnection();
+        $connection->delete($this->getTable('newsletter_queue_store_link'), ['queue_id = ?' => $queue->getId()]);
 
         $stores = $queue->getStores();
         if (!is_array($stores)) {
@@ -142,7 +142,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $data = [];
             $data['store_id'] = $storeId;
             $data['queue_id'] = $queue->getId();
-            $adapter->insert($this->getTable('newsletter_queue_store_link'), $data);
+            $connection->insert($this->getTable('newsletter_queue_store_link'), $data);
         }
         $this->removeSubscribersFromQueue($queue);
 
@@ -176,15 +176,15 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getStores(ModelQueue $queue)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('newsletter_queue_store_link'),
             'store_id'
         )->where(
             'queue_id = :queue_id'
         );
 
-        if (!($result = $adapter->fetchCol($select, ['queue_id' => $queue->getId()]))) {
+        if (!($result = $connection->fetchCol($select, ['queue_id' => $queue->getId()]))) {
             $result = [];
         }
 

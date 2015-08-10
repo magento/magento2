@@ -5,6 +5,9 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
+use Magento\Framework\App\Resource;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+
 /**
  * Import entity abstract product type model
  *
@@ -51,11 +54,21 @@ abstract class AbstractType
     protected $_indexValueAttributes = [];
 
     /**
-     * Validation failure message template definitions
+     * Validation failure entity specific message template definitions
      *
      * @var array
      */
     protected $_messageTemplates = [];
+
+    /**
+     * Validation failure general message template definitions
+     *
+     * @var array
+     */
+    protected $_genericMessageTemplates = [
+        RowValidatorInterface::ERROR_INVALID_WEIGHT => 'Weight value is incorrect',
+        RowValidatorInterface::ERROR_INVALID_WEBSITE => 'Provided Website code doesn\'t exist'
+    ];
 
     /**
      * Column names that holds values with particular meaning.
@@ -122,7 +135,7 @@ abstract class AbstractType
         $this->_attrSetColFac = $attrSetColFac;
         $this->_prodAttrColFac = $prodAttrColFac;
         $this->_resource = $resource;
-        $this->_connection = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection();
         if ($this->isSuitable()) {
             if (!isset($params[0])
                 || !isset($params[1])
@@ -134,11 +147,25 @@ abstract class AbstractType
             $this->_entityModel = $params[0];
             $this->_type = $params[1];
 
-            foreach ($this->_messageTemplates as $errorCode => $message) {
-                $this->_entityModel->addMessageTemplate($errorCode, $message);
-            }
+            $this->initMessageTemplates(
+                array_merge($this->_genericMessageTemplates, $this->_messageTemplates)
+            );
+
             $this->_initAttributes();
         }
+    }
+
+    /**
+     * @param array $templateCollection
+     * @return $this
+     */
+    protected function initMessageTemplates(array $templateCollection)
+    {
+        foreach ($templateCollection as $errorCode => $message) {
+            $this->_entityModel->addMessageTemplate($errorCode, $message);
+        }
+
+        return $this;
     }
 
     /**
@@ -156,6 +183,21 @@ abstract class AbstractType
             $this->_attributes[$attrSetName][$attrParams['code']] = $attrParams;
         }
         return $this;
+    }
+
+    /**
+     * Retrieve product Attribute
+     *
+     * @param string $attributeCode
+     * @param string $attributeSet
+     * @return array
+     */
+    public function retrieveAttribute($attributeCode, $attributeSet)
+    {
+        if (isset($this->_attributes[$attributeSet]) && isset($this->_attributes[$attributeSet][$attributeCode])) {
+            return $this->_attributes[$attributeSet][$attributeCode];
+        }
+        return [];
     }
 
     /**
@@ -352,8 +394,10 @@ abstract class AbstractType
     {
         $error = false;
         $rowScope = $this->_entityModel->getRowScope($rowData);
+        if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL == $rowScope) &&
+            !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
 
-        if (\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope) {
+
             foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
                 // check value for non-empty in the case of required attribute?
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {

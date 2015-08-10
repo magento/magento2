@@ -7,6 +7,7 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 class Start extends ImportController
 {
@@ -26,23 +27,75 @@ class Start extends ImportController
             /** @var $importModel \Magento\ImportExport\Model\Import */
             $importModel = $this->_objectManager->create('Magento\ImportExport\Model\Import');
 
-            try {
-                $importModel->setData($data);
-                $importModel->importSource();
+            $importModel->setData($data);
+            $importModel->importSource();
+
+            if ($importModel->getErrorAggregator()->hasToBeTerminated()) {
+                $this->addResultError($resultBlock, $importModel->getErrorAggregator());
+            } else {
                 $importModel->invalidateIndex();
-                $resultBlock->addAction('show', 'import_validation_container')
-                    ->addAction('innerHTML', 'import_validation_container_header', __('Status'));
-            } catch (\Exception $e) {
-                $resultBlock->addError($e->getMessage());
-                return $resultLayout;
+                $this->addResultMessages($resultBlock, $importModel->getErrorAggregator());
             }
-            $resultBlock->addAction('hide', ['edit_form', 'upload_button', 'messages'])
-                ->addSuccess(__('Import successfully done'));
+
             return $resultLayout;
         }
+
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;
+    }
+
+    /**
+     * @param \Magento\Framework\View\Element\AbstractBlock $resultBlock
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @return $this
+     */
+    protected function addResultError(
+        \Magento\Framework\View\Element\AbstractBlock $resultBlock,
+        ProcessingErrorAggregatorInterface $errorAggregator
+    ) {
+        if ($errorAggregator->isErrorLimitExceeded()) {
+            $resultBlock->addError('Maximum error count has been reached:');
+            foreach ($this->getImportProcessingMessages($errorAggregator) as $error) {
+                $resultBlock->addError($error);
+            }
+        }
+
+        if ($errorAggregator->hasFatalExceptions()) {
+            $resultBlock->addError('System fatal exceptions(s):');
+            foreach ($this->getSystemExceptions($errorAggregator) as $error) {
+                $resultBlock->addError(
+                    $error->getErrorMessage() . '<br>Additional data: ' . $error->getErrorDescription()
+                );
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param \Magento\Framework\View\Element\AbstractBlock $resultBlock
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @return $this
+     */
+    protected function addResultMessages(
+        \Magento\Framework\View\Element\AbstractBlock $resultBlock,
+        ProcessingErrorAggregatorInterface $errorAggregator
+    ) {
+        $resultBlock
+            ->addAction('show', 'import_validation_container')
+            ->addAction('innerHTML', 'import_validation_container_header', __('Status'))
+            ->addAction('hide', ['edit_form', 'upload_button', 'messages'])
+            ->addSuccess(__('Import successfully done'));
+
+        if ($errorAggregator->getErrorsCount()) {
+            $resultBlock->addNotice('Following Error(s) has been occurred during importing process:');
+            foreach ($this->getImportProcessingMessages($errorAggregator) as $error) {
+                $resultBlock->addNotice($error);
+            }
+        }
+
+        return $this;
     }
 }

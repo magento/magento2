@@ -239,12 +239,12 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->method('canInvoice')
             ->willReturn(true);
 
-        $orderService = $this->getMockBuilder('Magento\Sales\Model\Service\Order')
+        $invoiceManagement = $this->getMockBuilder('Magento\Sales\Api\InvoiceManagementInterface')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $orderService->expects($this->once())
+        $invoiceManagement->expects($this->once())
             ->method('prepareInvoice')
+            ->with($orderId, [])
             ->willReturn($invoiceMock);
 
         $menuBlockMock = $this->getMockBuilder('Magento\Backend\Block\Menu')
@@ -270,8 +270,8 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($orderMock);
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
-            ->with('Magento\Sales\Model\Service\Order')
-            ->willReturn($orderService);
+            ->with('Magento\Sales\Api\InvoiceManagementInterface')
+            ->willReturn($invoiceManagement);
         $this->objectManagerMock->expects($this->at(2))
             ->method('get')
             ->with('Magento\Backend\Model\Session')

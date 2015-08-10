@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\App;
 
+use \Magento\Framework\Setup\BackendFrontnameGenerator;
+
 /**
  * A model for determining information about setup application
  */
@@ -111,6 +113,16 @@ class SetupInfo
             return '';
         }
         return 'http://' . $this->server['HTTP_HOST'] . substr($this->projectRoot . '/', strlen($this->docRoot));
+    }
+
+    /**
+     * Get the admin area path
+     *
+     * @return string
+     */
+    public function getProjectAdminPath()
+    {
+        return BackendFrontnameGenerator::generate();
     }
 
     /**

@@ -5,7 +5,7 @@
  */
 namespace Magento\GroupedProduct\Block\Stockqty\Type;
 
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Product stock qty block for grouped product type

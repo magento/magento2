@@ -18,14 +18,17 @@
         <plugin name="checkout-session-depersonalize"
                 type="Magento\Checkout\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
     </type>
-    <type name="Magento\Customer\Block\Account\AuthenticationPopup">
-        <plugin name="authentication-popup-checkout-url"
-                type="Magento\Checkout\Model\Customer\Autentication\ConfigPlugin" sortOrder="20"/>
-    </type>
     <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="cart" xsi:type="string">Magento\Checkout\CustomerData\Cart</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\SectionConfig">
+        <arguments>
+            <argument name="clientSideSections" xsi:type="array">
+                <item name="checkout-data" xsi:type="string">checkout-data</item>
             </argument>
         </arguments>
     </type>

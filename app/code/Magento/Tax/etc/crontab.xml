@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
     <group id="default">
-        <job name="aggregate_sales_report_tax_data" instance="Magento\Tax\Model\Observer" method="aggregateSalesReportTaxData">
+        <job name="aggregate_sales_report_tax_data" instance="Magento\Tax\Observer\AggregateSalesReportTaxData" method="invoke">
             <schedule>0 0 * * *</schedule>
         </job>
     </group>

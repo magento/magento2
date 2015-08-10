@@ -88,7 +88,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -98,14 +98,14 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_storeManager = $storeManager;
         $this->_catalogConfig = $catalogConfig;
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $tableStrategy, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $connectionName);
     }
 
     /**
@@ -227,7 +227,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      */
     protected function _loadNodes($parentNode = null, $recursionLevel = 0, $storeId = 0, $skipMenuFilter = false)
     {
-        $_conn = $this->_getReadAdapter();
+        $_conn = $this->getConnection();
         $startLevel = 1;
         $parentPath = '';
         if ($parentNode instanceof \Magento\Catalog\Model\Category) {
@@ -304,7 +304,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      *
      * @param array $children
      * @param string $path
-     * @param \Magento\Framework\Object $parent
+     * @param \Magento\Framework\DataObject $parent
      * @return void
      */
     public function addChildNodes($children, $path, $parent)
@@ -346,13 +346,13 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
     public function getNodes($parentId, $recursionLevel = 0, $storeId = 0)
     {
         if (!$this->_loaded) {
-            $selectParent = $this->_getReadAdapter()->select()->from(
+            $selectParent = $this->getConnection()->select()->from(
                 $this->getMainStoreTable($storeId)
             )->where(
                 'entity_id = ?',
                 $parentId
             );
-            if ($parentNode = $this->_getReadAdapter()->fetchRow($selectParent)) {
+            if ($parentNode = $this->getConnection()->fetchRow($selectParent)) {
                 $parentNode['id'] = $parentNode['entity_id'];
                 $parentNode = $this->_categoryFactory->create()->setData($parentNode);
                 $this->_nodes[$parentNode->getId()] = $parentNode;
@@ -390,14 +390,14 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
     public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
         if ($asCollection) {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 ['mt' => $this->getMainStoreTable($this->getStoreId())],
                 ['path']
             )->where(
                 'mt.entity_id = ?',
                 $parent
             );
-            $parentPath = $this->_getReadAdapter()->fetchOne($select);
+            $parentPath = $this->getConnection()->fetchOne($select);
 
             $collection = $this->_categoryCollectionFactory
                 ->create()
@@ -421,7 +421,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      *
      * @param integer $nodeId
      * @param array $nodes
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getNodeById($nodeId, $nodes = null)
     {
@@ -462,7 +462,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
     public function getChildrenAmount($category, $isActiveFlag = true)
     {
         $_table = $this->getMainStoreTable($category->getStoreId());
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $_table,
             "COUNT({$_table}.entity_id)"
         )->where(
@@ -472,7 +472,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
             "{$_table}.is_active = ?",
             (int)$isActiveFlag
         );
-        return (int)$this->_getReadAdapter()->fetchOne($select);
+        return (int)$this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -483,7 +483,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      */
     public function getProductCount($category)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable('catalog_category_product'),
             "COUNT({$this->getTable('catalog_category_product')}.product_id)"
         )->where(
@@ -492,7 +492,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
         )->group(
             "{$this->getTable('catalog_category_product')}.category_id"
         );
-        return (int)$this->_getReadAdapter()->fetchOne($select);
+        return (int)$this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -505,15 +505,15 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
     public function getParentCategories($category, $isActive = true)
     {
         $categories = [];
-        $read = $this->_getReadAdapter();
-        $select = $read->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['main_table' => $this->getMainStoreTable($category->getStoreId())],
             ['main_table.entity_id', 'main_table.name']
         )->joinLeft(
             ['url_rewrite' => $this->getTable('url_rewrite')],
             'url_rewrite.entity_id = main_table.entity_id AND url_rewrite.is_autogenerated = 1'
-            . $read->quoteInto(' AND url_rewrite.store_id = ?', $category->getStoreId())
-            . $read->quoteInto(' AND url_rewrite.entity_type = ?', CategoryUrlRewriteGenerator::ENTITY_TYPE),
+            . $connection->quoteInto(' AND url_rewrite.store_id = ?', $category->getStoreId())
+            . $connection->quoteInto(' AND url_rewrite.entity_type = ?', CategoryUrlRewriteGenerator::ENTITY_TYPE),
             ['request_path' => 'url_rewrite.request_path']
         )->where(
             'main_table.entity_id IN (?)',
@@ -523,7 +523,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
             $select->where('main_table.is_active = ?', '1');
         }
         $select->order('main_table.path ASC');
-        $result = $this->_getReadAdapter()->fetchAll($select);
+        $result = $this->getConnection()->fetchAll($select);
         foreach ($result as $row) {
             $row['id'] = $row['entity_id'];
             $categories[$row['entity_id']] = $this->_categoryFactory->create()->setData($row);
@@ -595,7 +595,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      */
     public function getChildren($category, $recursive = true, $isActive = true)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainStoreTable($category->getStoreId()),
             'entity_id'
         )->where(
@@ -608,7 +608,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
         if ($isActive) {
             $select->where('is_active = ?', '1');
         }
-        $_categories = $this->_getReadAdapter()->fetchAll($select);
+        $_categories = $this->getConnection()->fetchAll($select);
         $categoriesIds = [];
         foreach ($_categories as $_category) {
             $categoriesIds[] = $_category['entity_id'];
@@ -639,14 +639,14 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      */
     public function checkId($id)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainStoreTable($this->getStoreId()),
             'entity_id'
         )->where(
             'entity_id=?',
             $id
         );
-        return $this->_getReadAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -658,7 +658,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      */
     public function getAnchorsAbove(array $filterIds, $storeId = 0)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['e' => $this->getMainStoreTable($storeId)],
             'entity_id'
         )->where(
@@ -669,6 +669,6 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
             $filterIds
         );
 
-        return $this->_getReadAdapter()->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 }

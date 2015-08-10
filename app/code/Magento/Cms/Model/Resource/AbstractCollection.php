@@ -67,7 +67,7 @@ class AbstractCollection extends AbstractSearchResult
      */
     protected function init()
     {
-        $this->query->addCountSqlSkipPart(\Zend_Db_Select::GROUP, true);
+        $this->query->addCountSqlSkipPart(\Magento\Framework\DB\Select::GROUP, true);
     }
 
     /**
