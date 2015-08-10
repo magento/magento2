@@ -26,8 +26,7 @@ define(
         checkoutData,
         shippingRatesValidator,
         registry,
-        quote,
-        registry
+        quote
     ) {
         'use strict';
         return Component.extend({
