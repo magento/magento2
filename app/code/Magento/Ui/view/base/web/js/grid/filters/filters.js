@@ -31,10 +31,7 @@ define([
      * @returns {Object}
      */
     function removeEmpty(data) {
-        data = utils.flatten(data);
-        data = _.omit(data, utils.isEmpty);
-
-        return utils.unflatten(data);
+        return utils.mapRecursive(data, utils.removeEmptyValues.bind(utils));
     }
 
     return Collapsible.extend({
