@@ -3823,4 +3823,5 @@ return [
     ['Magento\Paypal\Model\Observer', 'corresponding classes in Magento\Paypal\Observer\*'],
     ['Magento\Checkout\Model\Observer', 'corresponding classes in Magento\Checkout\Observer\*'],
     ['Magento\CurrencySymbol\Model\Observer', 'corresponding classes in Magento\CurrencySymbol\Observer\*'],
+    ['Magento\Tools\Console\CommandList'],
 ];

@@ -38,7 +38,6 @@ class Cli extends SymfonyApplication
     protected function getApplicationCommands()
     {
         $setupCommands   = [];
-        $toolsCommands   = [];
         $modulesCommands = [];
 
         $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
@@ -57,11 +56,6 @@ class Cli extends SymfonyApplication
             $setupCommands = $setupCommandList->getCommands();
         }
 
-        if (class_exists('Magento\Tools\Console\CommandList')) {
-            $toolsCommandList = new \Magento\Tools\Console\CommandList();
-            $toolsCommands = $toolsCommandList->getCommands();
-        }
-
         if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
             /** @var \Magento\Framework\Console\CommandList $commandList */
             $commandList = $objectManager->create('Magento\Framework\Console\CommandList');
@@ -70,7 +64,6 @@ class Cli extends SymfonyApplication
 
         $commandsList = array_merge(
             $setupCommands,
-            $toolsCommands,
             $modulesCommands
         );
 
