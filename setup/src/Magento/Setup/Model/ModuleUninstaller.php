@@ -133,6 +133,4 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
         }
         $this->remove->remove($packages);
     }
-
-
 }
