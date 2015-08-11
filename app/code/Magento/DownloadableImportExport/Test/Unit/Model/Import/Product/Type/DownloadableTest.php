@@ -268,8 +268,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                         'sku' => 'downloadablesku1',
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
-                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                            .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                            .'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => true,
@@ -336,8 +339,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                         'sku' => 'downloadablesku2',
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
-                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                            .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, '
+                            .'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => false,
@@ -357,8 +363,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                         'sku' => 'downloadablesku3',
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
-                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                            .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                            .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => true,
@@ -378,8 +387,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                         'sku' => 'downloadablesku4',
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
-                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                            .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                            .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => true,
@@ -446,8 +458,12 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                         'sku' => 'downloadablesku5',
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
-                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                        'downloadable_links' => 'group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=http://www.sample.com/pic.jpg,sortorder=0,sample=http://www.sample.com/pic.jpg,purchased_separately=1,shareable=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0,sample=media/file2mp4',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                            .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
+                            .' url=http://www.sample.com/pic.jpg,sortorder=0,sample=http://www.sample.com/pic.jpg,'
+                            .'purchased_separately=1,shareable=1|group_title=Group Title, title=Title 2, price=10, '
+                            .'downloads=unlimited, url=media/file2.mp4,sortorder=0,sample=media/file2mp4',
                     ],
                 ],
                 'allowImport' => true,
@@ -524,8 +540,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                     'sku' => 'downloadablesku1',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 1',
-                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                        .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, '
+                        .'downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, '
+                        .'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 0,
                 true
@@ -535,8 +554,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                        .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                        .' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2,'
+                        .' price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 1,
                 true
@@ -555,8 +577,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'title=Title 1, file=media/file.mp4,sortorder=1|title=Title 2, url=media/file2.mp4,sortorder=0',
-                    'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'title=Title 1, file=media/file.mp4,sortorder=1|title=Title 2,'
+                        .' url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,'
+                        .'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
+                        .' url=media/file2.mp4,sortorder=0',
                 ],
                 3,
                 true
@@ -566,8 +591,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'file=media/file.mp4,sortorder=1|group_title=Group Title, url=media/file2.mp4,sortorder=0',
-                    'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'file=media/file.mp4,sortorder=1|group_title=Group Title, '
+                        .'url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,'
+                        .'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
+                        .' url=media/file2.mp4,sortorder=0',
                 ],
                 4,
                 true
@@ -577,8 +605,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'group_title=, title=Title 1, file=media/file.mp4,sortorder=1|group_title=, title=Title 2, url=media/file2.mp4,sortorder=0',
-                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'group_title=, title=Title 1, file=media/file.mp4,sortorder=1'
+                        .'|group_title=, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                        .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                        .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 5,
                 true
@@ -588,8 +619,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                    'downloadable_links' => 'group_title=, title=Title 1, price=10, downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                        .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=, title=Title 1, price=10, downloads=unlimited, '
+                        .'file=media/file_link.mp4,sortorder=1|group_title=, title=Title 2, price=10, '
+                        .'downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 6,
                 true
@@ -683,8 +717,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                         'sku' => 'downloadablesku1',
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
-                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                            .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads='
+                            .'unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2,'
+                            .' price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => true,
@@ -702,8 +739,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             'sku' => 'downloadablesku1',
             'product_type' => 'downloadable',
             'name' => 'Downloadable Product 1',
-            'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-            'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+            'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1'
+                .'|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+            'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited,'
+                .' file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads'
+                .'=unlimited, url=media/file2.mp4,sortorder=0',
         ];
 
         $this->setPropertyValue(
