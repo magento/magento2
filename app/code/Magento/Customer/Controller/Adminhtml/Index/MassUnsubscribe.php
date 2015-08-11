@@ -30,19 +30,19 @@ class MassUnsubscribe extends AbstractMassAction
 
     /**
      * @param Context $context
-     * @param Filter $massActionFilter
+     * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param SubscriberFactory $subscriberFactory
      */
     public function __construct(
         Context $context,
-        Filter $massActionFilter,
+        Filter $filter,
         CollectionFactory $collectionFactory,
         CustomerRepositoryInterface $customerRepository,
         SubscriberFactory $subscriberFactory
     ) {
-        parent::__construct($context, $massActionFilter, $collectionFactory);
+        parent::__construct($context, $filter, $collectionFactory);
         $this->customerRepository = $customerRepository;
         $this->subscriberFactory = $subscriberFactory;
     }
