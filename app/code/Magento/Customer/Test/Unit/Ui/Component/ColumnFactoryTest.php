@@ -77,24 +77,33 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
                     'dataType' => 'text',
                     'align' => 'left',
                     'visible' => true,
-                    'options' => [$this->attributeOption]
+                    'options' =>  [
+                        [
+                            'label' => 'Label',
+                            'value' => 'Value'
+                        ]
+                    ]
                 ],
             ],
             'context' => $this->context,
         ];
+        $attributeData = [
+            'attribute_code' => 'billing_attribute_code',
+            'frontend_input' => 'frontend-input',
+            'frontend_label' => 'Label',
+            'backend_type' => 'backend-type',
+            'options' => [
+                [
+                    'label' => 'Label',
+                    'value' => 'Value'
+                ]
+            ],
+            'is_used_in_grid' => true,
+            'is_visible_in_grid' => true,
+            'is_filterable_in_grid' => true,
+            'is_searchable_in_grid' => true,
+        ];
 
-        $this->attributeMetadata->expects($this->once())
-            ->method('getFrontendLabel')
-            ->willReturn('Label');
-        $this->attributeMetadata->expects($this->once())
-            ->method('getIsVisibleInGrid')
-            ->willReturn(true);
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getOptions')
-            ->willReturn([$this->attributeOption]);
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getFrontendInput')
-            ->willReturn('text');
         $this->componentFactory->expects($this->once())
             ->method('create')
             ->with($columnName, 'column', $config)
@@ -102,7 +111,7 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->column,
-            $this->columnFactory->create($this->attributeMetadata, $columnName, $this->context)
+            $this->columnFactory->create($attributeData, $columnName, $this->context)
         );
     }
 }

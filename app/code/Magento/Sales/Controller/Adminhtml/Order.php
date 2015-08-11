@@ -9,6 +9,7 @@ use Magento\Backend\App\Action;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -16,6 +17,7 @@ use Psr\Log\LoggerInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Order extends \Magento\Backend\App\Action
 {
@@ -87,8 +89,12 @@ abstract class Order extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface $logger
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         Action\Context $context,
@@ -141,6 +147,10 @@ abstract class Order extends \Magento\Backend\App\Action
         try {
             $order = $this->orderRepository->get($id);
         } catch (NoSuchEntityException $e) {
+            $this->messageManager->addError(__('This order no longer exists.'));
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
+            return false;
+        } catch (InputException $e) {
             $this->messageManager->addError(__('This order no longer exists.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;

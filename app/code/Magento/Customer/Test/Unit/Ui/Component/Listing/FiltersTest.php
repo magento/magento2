@@ -71,26 +71,29 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepare()
     {
-        $attributeCode = 'attribute-code';
-
+        $attributeCode = 'billing_attribute_code';
+        $attributeData = [
+            'attribute_code' => $attributeCode,
+            'frontend_input' => 'frontend-input',
+            'frontend_label' => 'frontend-label',
+            'backend_type' => 'backend-type',
+            'options' => [
+                [
+                    'label' => 'Label',
+                    'value' => 'Value'
+                ]
+            ],
+            'is_used_in_grid' => true,
+            'is_visible_in_grid' => true,
+            'is_filterable_in_grid' => true,
+            'is_searchable_in_grid' => true,
+        ];
         $this->attributeRepository->expects($this->atLeastOnce())
             ->method('getList')
-            ->willReturn([$attributeCode => $this->attributeMetadata]);
-        $this->attributeMetadata->expects($this->once())
-            ->method('getBackendType')
-            ->willReturn('backend-type');
-        $this->attributeMetadata->expects($this->once())
-            ->method('getIsUsedInGrid')
-            ->willReturn(true);
-        $this->attributeMetadata->expects($this->once())
-            ->method('getIsFilterableInGrid')
-            ->willReturn(true);
-        $this->attributeMetadata->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($attributeCode);
+            ->willReturn([$attributeCode => $attributeData]);
         $this->filterFactory->expects($this->once())
             ->method('create')
-            ->with($attributeCode, $this->attributeMetadata, $this->context)
+            ->with($attributeData, $this->context)
             ->willReturn($this->filter);
         $this->filter->expects($this->once())
             ->method('prepare');
@@ -101,18 +104,28 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareWithAlreadyAddedComponent()
     {
-        $attributeCode = 'attribute-code';
+        $attributeCode = 'billing_attribute_code';
+        $attributeData = [
+            'attribute_code' => $attributeCode,
+            'frontend_input' => 'frontend-input',
+            'frontend_label' => 'frontend-label',
+            'backend_type' => 'backend-type',
+            'options' => [
+                [
+                    'label' => 'Label',
+                    'value' => 'Value'
+                ]
+            ],
+            'is_used_in_grid' => true,
+            'is_visible_in_grid' => true,
+            'is_filterable_in_grid' => false,
+            'is_searchable_in_grid' => true,
+        ];
         $this->component->addComponent($attributeCode, $this->filter);
 
         $this->attributeRepository->expects($this->atLeastOnce())
             ->method('getList')
-            ->willReturn([$attributeCode => $this->attributeMetadata]);
-        $this->attributeMetadata->expects($this->once())
-            ->method('getIsUsedInGrid')
-            ->willReturn(true);
-        $this->attributeMetadata->expects($this->once())
-            ->method('getIsFilterableInGrid')
-            ->willReturn(false);
+            ->willReturn([$attributeCode => $attributeData]);
 
         $this->component->prepare();
         $this->assertEquals(null, $this->component->getComponent($attributeCode));

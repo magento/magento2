@@ -11,6 +11,10 @@ use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class CommentsHistory
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
@@ -33,6 +37,7 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         Action\Context $context,

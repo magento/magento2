@@ -29,7 +29,7 @@ class AttributeResolver
     /**
      * Get attribute model by attribute data object
      *
-     * @param $entityType
+     * @param string $entityType
      * @param AttributeMetadataInterface $attribute
      * @return Attribute
      * @throws NoSuchEntityException

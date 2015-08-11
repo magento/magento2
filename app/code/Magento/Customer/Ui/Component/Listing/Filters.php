@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Ui\Component\Listing;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+
 class Filters extends \Magento\Ui\Component\Filters
 {
     /**
@@ -31,22 +33,23 @@ class Filters extends \Magento\Ui\Component\Filters
      */
     public function prepare()
     {
-        /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute */
-        foreach ($this->attributeRepository->getList() as $attributeCode => $attribute) {
+        /** @var \Magento\Customer\Model\Attribute $attribute */
+        foreach ($this->attributeRepository->getList() as $attributeCode => $attributeData) {
             if (!isset($this->components[$attributeCode])) {
-                if ($attribute->getBackendType() !== 'static'
-                    && $attribute->getIsUsedInGrid()
-                    && $attribute->getIsFilterableInGrid()
+                if (!$attributeData[AttributeMetadata::BACKEND_TYPE] != 'static'
+                    && $attributeData[AttributeMetadata::IS_USED_IN_GRID]
+                    && $attributeData[AttributeMetadata::IS_FILTERABLE_IN_GRID]
                 ) {
-                    $filter = $this->filterFactory->create($attributeCode, $attribute, $this->getContext());
+                    $filter = $this->filterFactory->create($attributeData, $this->getContext());
                     $filter->prepare();
-                    $this->addComponent($attribute->getAttributeCode(), $filter);
+                    $this->addComponent($attributeCode, $filter);
                 }
-            } elseif ($attribute->getIsUsedInGrid() && !$attribute->getIsFilterableInGrid()) {
+            } elseif ($attributeData[AttributeMetadata::IS_USED_IN_GRID]
+                && !$attributeData[AttributeMetadata::IS_FILTERABLE_IN_GRID]
+            ) {
                 unset($this->components[$attributeCode]);
             }
         }
         parent::prepare();
     }
-
 }

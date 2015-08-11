@@ -1589,21 +1589,6 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getPayments();
 
     /**
-     * Gets actual payment for the order it it exists, false if not
-     *
-     * @return \Magento\Sales\Api\Data\OrderPaymentInterface|false
-     */
-    public function getPayment();
-
-    /**
-     * Set actual payment for the order
-     *
-     * @param \Magento\Sales\Api\Data\OrderPaymentInterface $payment
-     * @return $this
-     */
-    public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment);
-
-    /**
      * Sets the payments for the order.
      *
      * @param \Magento\Sales\Api\Data\OrderPaymentInterface[] $payments
