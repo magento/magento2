@@ -183,7 +183,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     {
         if ($this->isInMiniCart()) {
             return 'braintree_paypal_container_minicart';
-
         } else {
             return 'braintree_paypal_container' . $this->mathRandom->getRandomString(5);
         }
