@@ -303,7 +303,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'qty' => 1,
             'id' => 0
         ];
-        $updateParams = new \Magento\Framework\Object($params);
+        $updateParams = new \Magento\Framework\DataObject($params);
         $quote->updateItem($updateParams['id'], $updateParams);
         $quote->setTotalsCollectedFlag(false)->collectTotals();
         $this->assertEquals(1, $quote->getItemsQty());

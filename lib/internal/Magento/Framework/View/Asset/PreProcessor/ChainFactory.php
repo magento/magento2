@@ -7,6 +7,10 @@ namespace Magento\Framework\View\Asset\PreProcessor;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Factory for Magento\Framework\View\Asset\PreProcessor\Chain
+ * @codeCoverageIgnore
+ */
 class ChainFactory implements ChainFactoryInterface
 {
     /**
@@ -14,30 +18,21 @@ class ChainFactory implements ChainFactoryInterface
      *
      * @var ObjectManagerInterface
      */
-    private $_objectManager;
+    private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(
-        ObjectManagerInterface $objectManager
-    ) {
-        $this->_objectManager = $objectManager;
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritdoc}
      */
     public function create(array $arguments = [])
     {
-        $arguments = array_intersect_key(
-            $arguments,
-            [
-                'asset' => 'asset',
-                'origContent' => 'origContent',
-                'origContentType' => 'origContentType'
-            ]
-        );
-        return $this->_objectManager->create('Magento\Framework\View\Asset\PreProcessor\Chain', $arguments);
+        return $this->objectManager->create(Chain::class, $arguments);
     }
 }

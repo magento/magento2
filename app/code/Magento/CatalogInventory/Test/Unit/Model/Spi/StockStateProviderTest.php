@@ -44,12 +44,12 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
     protected $localeFormat;
 
     /**
-     * @var \Magento\Framework\Object\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectFactory;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $object;
 
@@ -125,8 +125,8 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getNumber')
             ->willReturn($this->qty);
 
-        $this->object = $this->objectManagerHelper->getObject('Magento\Framework\Object');
-        $this->objectFactory = $this->getMock('\Magento\Framework\Object\Factory', ['create'], [], '', false);
+        $this->object = $this->objectManagerHelper->getObject('Magento\Framework\DataObject');
+        $this->objectFactory = $this->getMock('\Magento\Framework\DataObject\Factory', ['create'], [], '', false);
         $this->objectFactory->expects($this->any())->method('create')->willReturn($this->object);
 
         $this->product = $this->getMock(

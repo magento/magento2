@@ -51,7 +51,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param \Magento\MediaStorage\Model\Resource\File\Storage\Database $resource
      * @param Directory\DatabaseFactory $directoryFactory
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param null $connectionName
+     * @param string $connectionName
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */

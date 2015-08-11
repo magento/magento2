@@ -591,9 +591,9 @@ class TypeProcessor
             $methodName = $boolAccessorName;
             return $methodName;
         } else {
-            throw new \Exception(
+            throw new \LogicException(
                 sprintf(
-                    'Property :"%s" does not exist in the provided class: "%s".',
+                    'Property "%s" does not have corresponding setter in class "%s".',
                     $camelCaseProperty,
                     $class->getName()
                 )

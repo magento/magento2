@@ -8,7 +8,7 @@ namespace Magento\Cms\Model\Wysiwyg;
 /**
  * Wysiwyg Config for Editor HTML Element
  */
-class Config extends \Magento\Framework\Object
+class Config extends \Magento\Framework\DataObject
 {
     /**
      * Wysiwyg status enabled
@@ -127,7 +127,7 @@ class Config extends \Magento\Framework\Object
     }
 
     /**
-     * Return Wysiwyg config as \Magento\Framework\Object
+     * Return Wysiwyg config as \Magento\Framework\DataObject
      *
      * Config options description:
      *
@@ -139,12 +139,12 @@ class Config extends \Magento\Framework\Object
      * files_browser_*:         Files Browser (media, images) settings
      * encode_directives:       Encode template directives with JS or not
      *
-     * @param array|\Magento\Framework\Object $data Object constructor params to override default config values
-     * @return \Magento\Framework\Object
+     * @param array|\Magento\Framework\DataObject $data Object constructor params to override default config values
+     * @return \Magento\Framework\DataObject
      */
     public function getConfig($data = [])
     {
-        $config = new \Magento\Framework\Object();
+        $config = new \Magento\Framework\DataObject();
 
         $config->setData(
             [
