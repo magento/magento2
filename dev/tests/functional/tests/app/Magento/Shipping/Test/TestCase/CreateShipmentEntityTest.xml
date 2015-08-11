@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Shipping\Test\TestCase\CreateShipmentEntityTest">
+    <testCase name="Magento\Shipping\Test\TestCase\CreateShipmentEntityTest" summary="Create Shipment for Offline Payment Methods" ticketId="MAGETWO-28708">
         <variation name="CreateShipmentEntityTestVariation1">
             <data name="description" xsi:type="string">shipment with tracking number</data>
             <data name="order/dataset" xsi:type="string">default</data>
