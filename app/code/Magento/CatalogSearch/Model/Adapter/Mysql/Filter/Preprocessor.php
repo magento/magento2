@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 
+use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\App\ScopeResolverInterface;
@@ -47,10 +48,16 @@ class Preprocessor implements PreprocessorInterface
     private $connection;
 
     /**
+     * @var TableMapper
+     */
+    private $tableMapper;
+
+    /**
      * @param ConditionManager $conditionManager
      * @param ScopeResolverInterface $scopeResolver
      * @param Config $config
-     * @param Resource $resource
+     * @param Resource|Resource $resource
+     * @param TableMapper $tableMapper
      * @param string $attributePrefix
      */
     public function __construct(
@@ -58,6 +65,7 @@ class Preprocessor implements PreprocessorInterface
         ScopeResolverInterface $scopeResolver,
         Config $config,
         Resource $resource,
+        TableMapper $tableMapper,
         $attributePrefix
     ) {
         $this->conditionManager = $conditionManager;
@@ -66,6 +74,7 @@ class Preprocessor implements PreprocessorInterface
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->attributePrefix = $attributePrefix;
+        $this->tableMapper = $tableMapper;
     }
 
     /**
@@ -87,22 +96,27 @@ class Preprocessor implements PreprocessorInterface
     {
         $currentStoreId = $this->scopeResolver->getScope()->getId();
         $select = null;
+        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
         $attribute = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $filter->getField());
         $table = $attribute->getBackendTable();
-        if ($filter->getField() == 'price') {
+        if ($filter->getField() === 'price') {
             $filterQuery = str_replace(
                 $this->connection->quoteIdentifier('price'),
                 $this->connection->quoteIdentifier('price_index.min_price'),
                 $query
             );
             return $filterQuery;
-        } elseif ($filter->getField() == 'category_ids') {
+        } elseif ($filter->getField() === 'category_ids') {
             return 'category_ids_index.category_id = ' . $filter->getValue();
-        } elseif ($attribute->isStatic()) {
-            $select = $this->connection->select();
-            $select->from(['main_table' => $table], 'entity_id')
-                ->where($query);
-        } elseif ($filter->getType() == FilterInterface::TYPE_TERM) {
+        } elseif ($attribute->isStatic() && $attribute->getIsSearchable()) {
+            $alias = $this->tableMapper->getMappingAlias($filter);
+            $filterQuery = str_replace(
+                $this->connection->quoteIdentifier($attribute->getAttributeCode()),
+                $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
+                $query
+            );
+            return $filterQuery;
+        } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
             if (is_array($filter->getValue())) {
                 $value = sprintf(
                     '%s IN (%s)',

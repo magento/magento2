@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
@@ -28,15 +31,23 @@ class TableMapper
     private $storeManager;
 
     /**
+     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     */
+    private $attributeCollection;
+
+    /**
      * @param AppResource $resource
      * @param StoreManagerInterface $storeManager
+     * @param CollectionFactory $attributeCollectionFactory
      */
     public function __construct(
         AppResource $resource,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        CollectionFactory $attributeCollectionFactory
     ) {
         $this->resource = $resource;
         $this->storeManager = $storeManager;
+        $this->attributeCollection = $attributeCollectionFactory->create();
     }
 
     /**
@@ -46,56 +57,82 @@ class TableMapper
      */
     public function addTables(Select $select, RequestInterface $request)
     {
-        $filterFields = $this->getFilterFields($request->getQuery());
         $mappedTables = [];
-        $fieldToTableMap = $this->getFieldToTableMap();
-
-        foreach ($filterFields as $field => $filter) {
-            if (array_key_exists($field, $fieldToTableMap)) {
-                $mappingName = $field . '_index';
-                list($table, $mapOn, $mappedFields) = $fieldToTableMap[$field];
-                if (!array_key_exists($table, $mappedTables)) {
-                    $select->joinLeft(
-                        [$mappingName => $table],
-                        $mapOn,
-                        $mappedFields
-                    );
-                    $mappedTables[$table] = $mappingName;
-                }
-            } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
-                $table = $this->resource->getTableName('catalog_product_index_eav');
-                if (!array_key_exists($table, $mappedTables)) {
-                    $select->joinLeft(
-                        ['cpie' => $table],
-                        'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
-                        []
-                    );
-                    $mappedTables[$table] = $field;
-                }
+        $filters = $this->getFilters($request->getQuery());
+        foreach ($filters as $filter) {
+            list($alias, $table, $mapOn, $mappedFields) = $this->getMappingData($filter);
+            if (!array_key_exists($alias, $mappedTables)) {
+                $select->joinLeft(
+                    [$alias => $table],
+                    $mapOn,
+                    $mappedFields
+                );
+                $mappedTables[$alias] = $table;
             }
         }
-
         return $select;
     }
 
     /**
-     * @param RequestQueryInterface $queryInterface
-     * @return FilterInterface[]
+     * @param FilterInterface $filter
+     * @return string
      */
-    private function getFilterFields(RequestQueryInterface $queryInterface)
+    public function getMappingAlias(FilterInterface $filter)
     {
-        $fields = [];
-        foreach ($this->getFilters($queryInterface) as $filter) {
-            $field = $filter->getField();
-            $fields[$field] = $filter;
-        }
-
-        return $fields;
+        list($alias) = $this->getMappingData($filter);
+        return $alias;
     }
 
     /**
-     * @param RequestQueryInterface|FilterInterface $query
-     * @return Filter[]
+     * Returns mapping data for field in format: [
+     *  'table_alias',
+     *  'table',
+     *  'join_condition',
+     *  ['fields']
+     * ]
+     * @param FilterInterface $filter
+     * @return array
+     */
+    private function getMappingData(FilterInterface $filter)
+    {
+        $alias = null;
+        $table = null;
+        $mapOn = null;
+        $mappedFields = null;
+        $field = $filter->getField();
+        $fieldToTableMap = $this->getFieldToTableMap($field);
+        if ($fieldToTableMap) {
+            list($alias, $table, $mapOn, $mappedFields) = $fieldToTableMap;
+            $table = $this->resource->getTableName($table);
+        } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
+            $table = $this->resource->getTableName('catalog_product_index_eav');
+            $alias = 'cpie';
+            $mapOn = sprintf(
+                'search_index.entity_id = %1$s.entity_id AND search_index.attribute_id = %1$s.attribute_id',
+                $alias
+            );
+            $mappedFields = [];
+        } else {
+            /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
+            $attribute = $this->attributeCollection->getItemByColumnValue('attribute_code', $field);
+            if ($attribute && $attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
+                $table = $attribute->getBackendTable();
+                $alias = $this->getTableAlias($table);
+                $mapOn = 'search_index.entity_id = ' . $alias . '.entity_id';
+                $mappedFields = null;
+            }
+        }
+
+        if (!$alias && $table) {
+            $alias = $this->getTableAlias($table);
+        }
+
+        return [$alias, $table, $mapOn, $mappedFields];
+    }
+
+    /**
+     * @param RequestQueryInterface $query
+     * @return FilterInterface[]
      */
     private function getFilters($query)
     {
@@ -169,22 +206,37 @@ class TableMapper
     }
 
     /**
-     * @return array
+     * @param string $field
+     * @return array|null
      */
-    private function getFieldToTableMap()
+    private function getFieldToTableMap($field)
     {
-        return [
+        $fieldToTableMap = [
             'price' => [
-                $this->resource->getTableName('catalog_product_index_price'),
-                'search_index.entity_id = price_index.entity_id'
-                . $this->resource->getConnection()->quoteInto(' AND price_index.website_id = ?', $this->getWebsiteId()),
+                'price_index',
+                'catalog_product_index_price',
+                $this->resource->getConnection()->quoteInto(
+                    'search_index.entity_id = price_index.entity_id AND price_index.website_id = ?',
+                    $this->getWebsiteId()
+                ),
                 []
             ],
             'category_ids' => [
-                $this->resource->getTableName('catalog_category_product_index'),
+                'category_ids_index',
+                'catalog_category_product_index',
                 'search_index.entity_id = category_ids_index.product_id',
                 []
             ]
         ];
+        return array_key_exists($field, $fieldToTableMap) ? $fieldToTableMap[$field] : null;
+    }
+
+    /**
+     * @param $table
+     * @return string
+     */
+    private function getTableAlias($table)
+    {
+        return md5($table);
     }
 }
