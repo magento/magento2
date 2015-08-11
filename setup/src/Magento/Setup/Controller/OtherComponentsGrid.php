@@ -70,12 +70,10 @@ class OtherComponentsGrid extends AbstractActionController
                         'id' => $packageInfo[InfoCommand::CURRENT_VERSION],
                         'name' => $packageInfo[InfoCommand::CURRENT_VERSION]
                     ];
-                    if (count($versions) > 1) {
-                        $versions[0]['name'] .= ' (latest)';
-                    }
-                    if (count($versions) >= 1) {
-                        $versions[count($versions)-1]['name'] .= ' (current)';
-                    }
+                    
+                    $versions[0]['name'] .= ' (latest)';
+                    $versions[count($versions) - 1]['name'] .= ' (current)';
+
                     $components[$component['name']]['vendor'] = $componentNameParts[0];
                     $components[$component['name']]['updates'] = $versions;
                     $components[$component['name']]['dropdownId'] = 'dd_' . $component['name'];
