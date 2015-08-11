@@ -15,21 +15,21 @@ use Magento\Mtf\Client\Locator;
 class Links extends Block
 {
     /**
-     * Selector for qty products on compare.
+     * Locator value for qty of Products in Compare list.
      *
      * @var string
      */
     protected $qtyCompareProducts = '.compare .counter.qty';
 
     /**
-     * Link selector.
+     * Locator value for correspondent link.
      *
      * @var string
      */
     protected $link = '//a[contains(text(), "%s")]';
 
     /**
-     * Welcome message on frontend.
+     * Locator value for welcome message.
      *
      * @var string
      */
@@ -43,14 +43,14 @@ class Links extends Block
     protected $toggleButton = '[data-action="customer-menu-toggle"]';
 
     /**
-     * Locator value for Customer Menu
+     * Locator value for Customer Menu.
      *
      * @var string
      */
     protected $customerMenu = '.customer-menu > ul';
 
     /**
-     * Expand Customer Menu (located in page Header) if it is collapsed
+     * Expand Customer Menu (located in page Header) if it was collapsed.
      *
      * @return void
      */
@@ -62,7 +62,7 @@ class Links extends Block
     }
 
     /**
-     * Open Link by title.
+     * Open link by its title.
      *
      * @param string $linkTitle
      * @return void
@@ -74,7 +74,7 @@ class Links extends Block
     }
 
     /**
-     * Is visible Link by title.
+     * Verify if correspondent link is present or not.
      *
      * @param string $linkTitle
      * @return bool
@@ -86,7 +86,7 @@ class Links extends Block
     }
 
     /**
-     * Wait for link is visible.
+     * Wait until correspondent link appears.
      *
      * @param string $linkTitle
      * @return void
@@ -104,7 +104,7 @@ class Links extends Block
     }
 
     /**
-     * Get the number of products added to compare list.
+     * Get qty of Products in Compare list.
      *
      * @return string
      */
@@ -131,7 +131,7 @@ class Links extends Block
     }
 
     /**
-     * Waiter for welcome message.
+     * Wait until welcome message appears.
      *
      * @return void
      */

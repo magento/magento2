@@ -29,7 +29,7 @@ class Navigation extends Block
     protected $optionTitle = './/div[@class="filter-options-title" and contains(text(),"%s")]';
 
     /**
-     * Filter link locator.
+     * Locator value for correspondent "Filter" link.
      *
      * @var string
      */
@@ -43,17 +43,17 @@ class Navigation extends Block
     protected $expandFilterButton = '[data]';
 
     /**
-     * Clear all applied filters.
+     * Remove all applied filters.
      *
      * @return void
      */
     public function clearAll()
     {
-        $this->_rootElement->find($this->clearAll, locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->clearAll)->click();
     }
 
     /**
-     * Get array of available filters.
+     * Get all available filters.
      *
      * @return array
      */
