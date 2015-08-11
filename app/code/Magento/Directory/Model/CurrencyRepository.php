@@ -6,8 +6,7 @@
 namespace Magento\Directory\Model;
 
 /**
- * Currency class
- *
+ * Currency Repository class
  */
 class CurrencyRepository implements \Magento\Directory\Api\CurrencyRepositoryInterface
 {
@@ -40,18 +39,25 @@ class CurrencyRepository implements \Magento\Directory\Api\CurrencyRepositoryInt
         $this->exchangeRateFactory = $exchangeRateFactory;
         $this->storeManager = $storeManager;
     }
+
     /**
      * {@inheritdoc}
      */
     public function getCurrencyInfo()
     {
-        $currency = $this->currencyInformationFactory->create();
+        $currencyInfo = $this->currencyInformationFactory->create();
 
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();
-        $currency->setBaseCurrencyCode($store->getBaseCurrencyCode());
-        $currency->setDefaultDisplayCurrencyCode($store->getDefaultCurrencyCode());
-        $currency->setAvailableCurrencyCodes($store->getAvailableCurrencyCodes(true));
+
+        $currencyInfo->setBaseCurrencyCode($store->getBaseCurrency()->getCode());
+        $currencyInfo->setBaseCurrencySymbol($store->getBaseCurrency()->getCurrencySymbol());
+
+        $currencyInfo->setDefaultDisplayCurrencyCode($store->getDefaultCurrency()->getCode());
+        $currencyInfo->setDefaultDisplayCurrencySymbol($store->getDefaultCurrency()->getCurrencySymbol());
+
+        $currencyInfo->setAvailableCurrencyCodes($store->getAvailableCurrencyCodes(true));
+
         $exchangeRates = [];
         foreach ($store->getAvailableCurrencyCodes(true) as $currencyCode) {
             $exchangeRate = $this->exchangeRateFactory->create();
@@ -59,8 +65,8 @@ class CurrencyRepository implements \Magento\Directory\Api\CurrencyRepositoryInt
             $exchangeRate->setCurrencyTo($currencyCode);
             $exchangeRates[] = $exchangeRate;
         }
+        $currencyInfo->setExchangeRates($exchangeRates);
 
-        $currency->setExchangeRates($exchangeRates);
-        return $currency;
+        return $currencyInfo;
     }
 }

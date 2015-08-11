@@ -13,21 +13,6 @@ namespace Magento\Directory\Api\Data;
 interface ExchangeRateInterface
 {
     /**
-     * Get the exchange rate for the associated currency and the store's base currency.
-     *
-     * @return float
-     */
-    public function getRate();
-
-    /**
-     * Set the exchange rate for the associated currency and the store's base currency.
-     *
-     * @param float $rate
-     * @return $this
-     */
-    public function setRate($rate);
-
-    /**
      * Get the currency code associated with the exchange rate.
      *
      * @return string
@@ -41,6 +26,21 @@ interface ExchangeRateInterface
      * @return $this
      */
     public function setCurrencyTo($code);
+
+    /**
+     * Get the exchange rate for the associated currency and the store's base currency.
+     *
+     * @return float
+     */
+    public function getRate();
+
+    /**
+     * Set the exchange rate for the associated currency and the store's base currency.
+     *
+     * @param float $rate
+     * @return $this
+     */
+    public function setRate($rate);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

@@ -17,24 +17,8 @@ use Magento\Directory\Api\Data\ExchangeRateInterface;
 class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Directory\Api\Data\ExchangeRateInterface
 {
-    const KEY_RATE = 'rate';
     const KEY_CURRENCY_TO = 'currency_to';
-
-    /**
-     * @inheritDoc
-     */
-    public function getRate()
-    {
-        return $this->_get(self::KEY_RATE);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setRate($rate)
-    {
-        return $this->setData(self::KEY_RATE, $rate);
-    }
+    const KEY_RATE = 'rate';
 
     /**
      * @inheritDoc
@@ -50,6 +34,22 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
     public function setCurrencyTo($code)
     {
         return $this->setData(self::KEY_CURRENCY_TO, $code);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRate()
+    {
+        return $this->_get(self::KEY_RATE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setRate($rate)
+    {
+        return $this->setData(self::KEY_RATE, $rate);
     }
 
     /**
