@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Test\Unit\Model\Plugin;
+namespace Magento\SalesRule\Test\Unit\Model\Plugin\Resource;
 
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
