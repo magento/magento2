@@ -440,6 +440,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_resourceFactory;
 
     /**
+     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource 
+     */
+    protected $_resource;
+
+    /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory
      */
     protected $_setColFactory;
@@ -1574,10 +1579,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $product = $this->_proxyProdFactory->create(['data' => $rowData]);
 
                 foreach ($rowData as $attrCode => $attrValue) {
-                    if (!isset($this->_attributeCache[$attrCode])) {
-                        $this->_attributeCache[$attrCode] = $resource->getAttribute($attrCode);
-                    }
-                    $attribute = $this->_attributeCache[$attrCode];
+                    $attribute = $this->retrieveAttributeByCode($attrCode);
 
                     if ('multiselect' != $attribute->getFrontendInput() && self::SCOPE_NULL == $rowScope) {
                         // skip attribute processing for SCOPE_NULL rows
@@ -2029,6 +2031,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         }
         return $this;
+    }
+
+    /**
+     * Retrieve attribute by code
+     *
+     * @param string $attrCode
+     * @return mixed
+     */
+    public function retrieveAttributeByCode($attrCode)
+    {
+        if (!$this->_resource) {
+            $this->_resource = $this->_resourceFactory->create();
+        }
+        if (!isset($this->_attributeCache[$attrCode])) {
+            $this->_attributeCache[$attrCode] = $this->_resource->getAttribute($attrCode);
+        }
+        return $this->_attributeCache[$attrCode];
     }
 
     /**
