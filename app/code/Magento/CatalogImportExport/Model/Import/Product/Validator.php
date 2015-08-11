@@ -98,6 +98,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @param array $attrParams
      * @param array $rowData
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
