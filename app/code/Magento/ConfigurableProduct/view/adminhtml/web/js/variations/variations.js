@@ -127,7 +127,7 @@ define([
         getVariationKey: function (options) {
             return _.pluck(options, 'value').sort().join('-');
         },
-        getProductByOptions: function (options) {
+        getProductIdByOptions: function (options) {
             return this.productAttributesMap[this.getVariationKey(options)] || null;
         },
         initProductAttributesMap: function () {
@@ -137,6 +137,9 @@ define([
                     this.productAttributesMap[this.getVariationKey(product.options)] = product.product_id;
                 }.bind(this));
             }
+        },
+        isShowPreviewImage: function(variation) {
+            return variation.images.preview && (!variation.editable || variation.images.file);
         },
         generateImageGallery: function(variation) {
             var gallery = [];
@@ -169,7 +172,11 @@ define([
 
                 jQuery(function ($) {
                     var matrix = $('[data-role=product-variations-matrix]');
-                    matrix.find('[data-action=upload-image] [name=image]').each(function() {
+                    matrix.find('[data-action=upload-image]').find('[name=image]').each(function() {
+                        var imageColumn = $(this).closest('[data-column=image]');
+                        if (imageColumn.find('[data-role=image]').length) {
+                            imageColumn.find('[data-toggle=dropdown]').dropdown().show();
+                        }
                         $(this).fileupload({
                             dataType: 'json',
                             dropZone: $(this).closest('[data-role=row]'),
