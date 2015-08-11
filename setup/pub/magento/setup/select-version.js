@@ -44,7 +44,6 @@ angular.module('select-version', ['ngStorage'])
         };
 
         $scope.$watch('updateComponents.no', function() {
-
             if (angular.equals($scope.updateComponents.no, true)) {
                 $scope.updateComponents.yes = false;
                 if ($scope.tryAgain < 0 && (!$scope.upgradeProcessed || !$scope.componentsProcessed)) {
