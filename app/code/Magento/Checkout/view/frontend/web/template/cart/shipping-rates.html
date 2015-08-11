@@ -12,7 +12,7 @@
         <dl class="items methods" data-bind="foreach: shippingRateGroups">
             <dt class="item-title"><span data-bind="text: $data"></span></dt>
             <dd class="item-options" data-bind="foreach: $parent.getRatesForGroup($data)">
-                <div data-bind="click: function(data, event) { return $parents[1].selectShippingMethod(data, event, $parents[1]); },
+                <div data-bind="click: $parents[1].selectShippingMethod,
                                 css: {'field choice item': available, 'message error': !available} ">
                     <!-- ko ifnot: (available) -->
                     <div data-bind="text: error_message"></div>
