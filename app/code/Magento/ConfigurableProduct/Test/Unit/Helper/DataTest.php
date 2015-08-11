@@ -56,14 +56,28 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptions(array $expected, array $data)
     {
-        $this->_imageHelperMock->expects($this->at(0))
-            ->method('init')
-            ->will($this->returnValue('http://example.com/base_img_url'));
+        if (count($data['allowed_products'])) {
+            $imageHelper1 = $this->getMockBuilder('Magento\Catalog\Helper\Image')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $imageHelper1->expects($this->any())
+                ->method('getUrl')
+                ->willReturn('http://example.com/base_img_url');
 
-        for ($i = 1; $i <= count($data['allowed_products']); $i++) {
-            $this->_imageHelperMock->expects($this->at($i))
+            $imageHelper2 = $this->getMockBuilder('Magento\Catalog\Helper\Image')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $imageHelper2->expects($this->any())
+                ->method('getUrl')
+                ->willReturn('http://example.com/base_img_url_2');
+
+            $this->_imageHelperMock->expects($this->any())
                 ->method('init')
-                ->will($this->returnValue('http://example.com/base_img_url_' . $i));
+                ->willReturnMap([
+                    [$data['current_product_mock'], 'product_page_image_large', [], $imageHelper1],
+                    [$data['allowed_products'][0], 'product_page_image_large', [], $imageHelper1],
+                    [$data['allowed_products'][1], 'product_page_image_large', [], $imageHelper2],
+                ]);
         }
 
         $this->assertEquals(

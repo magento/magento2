@@ -3,11 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\Test\Unit\File\Collector;
 
-use \Magento\Framework\View\File\Collector\ThemeModular;
-
+use Magento\Framework\View\File\Collector\ThemeModular;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\View\File\Factory;
@@ -29,6 +27,11 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
      */
     private $fileFactory;
 
+    /**
+     * @var \Magento\Framework\View\Helper\PathPattern|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pathPatternHelperMock;
+
     protected function setUp()
     {
         $this->directory = $this->getMock(
@@ -38,6 +41,9 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->pathPatternHelperMock = $this->getMockBuilder('Magento\Framework\View\Helper\PathPattern')
+            ->disableOriginalConstructor()
+            ->getMock();
         $filesystem = $this->getMock(
             'Magento\Framework\Filesystem',
             ['getDirectoryRead', '__wakeup'],
@@ -48,11 +54,12 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::THEMES)
-            ->will($this->returnValue($this->directory));
+            ->willReturn($this->directory);
         $this->fileFactory = $this->getMock('Magento\Framework\View\File\Factory', [], [], '', false);
         $this->model = new \Magento\Framework\View\File\Collector\ThemeModular(
             $filesystem,
             $this->fileFactory,
+            $this->pathPatternHelperMock,
             'subdir'
         );
     }
@@ -60,13 +67,14 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $files
      * @param string $filePath
+     * @param string $pathPattern
      *
-     * @dataProvider dataProvider
+     * @dataProvider getFilesDataProvider
      */
-    public function testGetFiles($files, $filePath)
+    public function testGetFiles($files, $filePath, $pathPattern)
     {
         $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue('area/theme/path'));
+        $theme->expects($this->once())->method('getFullPath')->willReturn('area/theme/path');
 
         $handlePath = 'design/area/theme/path/%s/subdir/%s';
         $returnKeys = [];
@@ -74,12 +82,16 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
             $returnKeys[] = sprintf($handlePath, $file['module'], $file['handle']);
         }
 
+        $this->pathPatternHelperMock->expects($this->any())
+            ->method('translatePatternFromGlob')
+            ->with($filePath)
+            ->willReturn($pathPattern);
         $this->directory->expects($this->once())
             ->method('search')
-            ->will($this->returnValue($returnKeys));
+            ->willReturn($returnKeys);
         $this->directory->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $checkResult = [];
         foreach ($files as $key => $file) {
@@ -88,7 +100,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
                 ->expects($this->at($key))
                 ->method('create')
                 ->with(sprintf($handlePath, $file['module'], $file['handle']), $file['module'], $theme)
-                ->will($this->returnValue($checkResult[$key]));
+                ->willReturn($checkResult[$key]);
         }
         $this->assertSame($checkResult, $this->model->getFiles($theme, $filePath));
     }
@@ -96,7 +108,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public function getFilesDataProvider()
     {
         return [
             [
@@ -106,12 +118,14 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
                     ['handle' => '3.xml', 'module' => 'Module_Two'],
                 ],
                 '*.xml',
+                '[^/]*\\.xml'
             ],
             [
                 [
                     ['handle' => 'preset/4', 'module' => 'Module_Fourth'],
                 ],
                 'preset/4',
+                'preset/4'
             ],
         ];
     }
