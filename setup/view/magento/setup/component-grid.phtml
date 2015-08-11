@@ -113,9 +113,6 @@
                 <th class="data-grid-th  _sortable">
                     <span>Vendor</span>
                 </th>
-                <th class="data-grid-th  _sortable">
-                    <span>Updated</span>
-                </th>
                 <th class="data-grid-actions-cell data-grid-th">
                     <span>Actions</span>
                 </th>
@@ -145,25 +142,22 @@
                 <td>
                     <span class="data-grid-data">{{component.vendor}}</span>
                 </td>
-                <td>
-                    <span class="data-grid-data">{{component.updated}}</span>
-                </td>
                 <td class="data-grid-actions-cell">
                     <!-- "_active" class should be added when .action-select button clicked to the -->
                     <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
                         <button class="action-select"
+                                ng-show="component.update || component.uninstall"
                             ng-click="toggleActiveActionsCell(component)"
                             ng-blur="closeActiveActionsCell(component)">
                             <span>Select</span>
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(component)}">
-                            <li ng-class="{'hide' : !isAvailableUpdatePackage(component.name) && component.update}"
+                            <li ng-class="{'hide' : !component.update}"
                                 ng-mousedown="update(component)">
                                 <a class="action-menu-item">Update</a>
                             </li>
-                            <li ng-class="{'hide' : !isAvailableUninstallPackage(component.name)
-                            && component.uninstall}"
+                            <li ng-class="{'hide' : !component.uninstall}"
                                 ng-mousedown="uninstall(component)">
                                 <a class="action-menu-item">Uninstall</a>
                             </li>

@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Composer\InfoCommand;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
 
@@ -23,11 +22,6 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
      * @var PackageInfo
      */
     private $packageInfo;
-
-    /**
-     * @var InfoCommand
-     */
-    private $infoCommand;
 
     /**
      * Controller
@@ -110,27 +104,9 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $packageInfoFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->packageInfo);
-        $magentoComposerApplicationFactory = $this->getMock(
-            'Magento\Framework\Composer\MagentoComposerApplicationFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->infoCommand = $this->getMock(
-            'Magento\Composer\InfoCommand',
-            [],
-            [],
-            '',
-            false
-        );
-        $magentoComposerApplicationFactory->expects($this->once())
-            ->method('createInfoCommand')
-            ->willReturn($this->infoCommand);
         $this->controller = new ComponentGrid(
             $this->composerInformationMock,
-            $objectManagerProvider,
-            $magentoComposerApplicationFactory
+            $objectManagerProvider
         );
     }
 
@@ -143,16 +119,6 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
 
     public function testComponentsAction()
     {
-        $this->infoCommand->expects($this->once())
-            ->method('run')
-            ->willReturn([
-                'versions' => '3.0.0, 2.0.0',
-                'current_version' => '1.0.0',
-                'new_versions' => [
-                    '3.0.0',
-                    '2.0.0'
-                ]
-            ]);
         $this->packageInfo->expects($this->once())
             ->method('getModuleName')
             ->willReturn('Sample_Module');
@@ -174,10 +140,10 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             'name' => 'magento/sample-module1',
             'type' => 'magento2-module',
             'version' => '1.0.0',
+            'update' => false,
+            'uninstall' => true,
             'vendor' => 'magento',
-            'moduleName' => 'Sample_Module',
-            'update' => true,
-            'uninstall' => true
+            'moduleName' => 'Sample_Module'
         ]];
         $this->assertEquals($expected, $variables['components']);
         $this->assertArrayHasKey('total', $variables);
