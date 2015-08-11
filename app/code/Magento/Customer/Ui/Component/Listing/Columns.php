@@ -7,7 +7,7 @@ namespace Magento\Customer\Ui\Component\Listing;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Ui\Component\ColumnFactory;
-use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
@@ -77,11 +77,13 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     public function prepare()
     {
         $this->columnSortOrder = $this->getDefaultSortOrder();
-        foreach ($this->attributeRepository->getList() as $newAttributeCode => $attribute) {
-            if (isset($this->components[$attribute->getAttributeCode()])) {
-                $this->updateColumn($attribute, $newAttributeCode);
-            } elseif ($attribute->getBackendType() != 'static' && $attribute->getIsUsedInGrid()) {
-                $this->addColumn($attribute, $newAttributeCode);
+        foreach ($this->attributeRepository->getList() as $newAttributeCode => $attributeData) {
+            if (isset($this->components[$newAttributeCode])) {
+                $this->updateColumn($attributeData, $newAttributeCode);
+            } elseif (!$attributeData[AttributeMetadata::BACKEND_TYPE] != 'static'
+                && $attributeData[AttributeMetadata::IS_USED_IN_GRID]
+            ) {
+                $this->addColumn($attributeData, $newAttributeCode);
             }
         }
         $this->updateActionColumnSortOrder();
@@ -89,35 +91,35 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     }
 
     /**
-     * @param AttributeMetadataInterface $attribute
+     * @param array $attributeData
      * @param string $columnName
      * @return void
      */
-    public function addColumn(AttributeMetadataInterface $attribute, $columnName)
+    public function addColumn(array $attributeData, $columnName)
     {
         $config['sortOrder'] = ++$this->columnSortOrder;
-        $column = $this->columnFactory->create($attribute, $columnName, $this->getContext(), $config);
+        $column = $this->columnFactory->create($attributeData, $columnName, $this->getContext(), $config);
         $column->prepare();
-        $this->addComponent($attribute->getAttributeCode(), $column);
+        $this->addComponent($attributeData[AttributeMetadata::ATTRIBUTE_CODE], $column);
     }
 
     /**
-     * @param AttributeMetadataInterface $attribute
+     * @param array $attributeData
      * @param string $newAttributeCode
      * @return void
      */
-    public function updateColumn(AttributeMetadataInterface $attribute, $newAttributeCode)
+    public function updateColumn(array $attributeData, $newAttributeCode)
     {
-        $component = $this->components[$attribute->getAttributeCode()];
+        $component = $this->components[$attributeData[AttributeMetadata::ATTRIBUTE_CODE]];
 
-        if ($attribute->getBackendType() != 'static') {
-            if ($attribute->getIsUsedInGrid()) {
+        if ($attributeData[AttributeMetadata::BACKEND_TYPE] != 'static') {
+            if ($attributeData[AttributeMetadata::IS_USED_IN_GRID]) {
                 $config = array_merge(
                     $component->getData('config'),
                     [
                         'name' => $newAttributeCode,
-                        'dataType' => $attribute->getBackendType(),
-                        'visible' => $attribute->getIsVisibleInGrid()
+                        'dataType' => $attributeData[AttributeMetadata::BACKEND_TYPE],
+                        'visible' => $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]
                     ]
                 );
                 $component->setData('config', $config);
@@ -127,7 +129,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                 'config',
                 array_merge(
                     $component->getData('config'),
-                    ['visible' => $attribute->getIsVisibleInGrid()]
+                    ['visible' => $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]]
                 )
             );
         }

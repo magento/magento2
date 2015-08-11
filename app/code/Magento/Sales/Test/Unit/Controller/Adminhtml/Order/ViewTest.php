@@ -8,6 +8,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 /**
  * @covers \Magento\Sales\Controller\Adminhtml\Order\View
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
@@ -271,9 +272,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $orderId
+     * init Order Success
      */
-    protected function initOrderSuccess($orderId)
+    protected function initOrderSuccess()
     {
         $this->coreRegistryMock->expects($this->exactly(2))
             ->method('register')

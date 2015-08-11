@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\App\TemplateTypesInterface;
+
 // @codingStandardsIgnoreFile
 
 /* @var $block \Magento\Newsletter\Block\Adminhtml\Template\Edit */
@@ -151,9 +153,9 @@ require([
 
         preview: function() {
             if (this.typeChange) {
-                $('preview_type').value = 1;
+                $('preview_type').value = <?php echo TemplateTypesInterface::TYPE_TEXT ?>;
             } else {
-                $('preview_type').value = 2;
+                $('preview_type').value = <?php echo $block->getTemplateType() ?>;
             }
             if (this.isEditor() && tinyMCE.get(this.id)) {
                 tinyMCE.triggerSave();

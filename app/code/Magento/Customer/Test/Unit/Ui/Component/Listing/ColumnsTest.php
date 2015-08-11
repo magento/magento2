@@ -18,8 +18,8 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Ui\Component\Listing\AttributeRepository|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeRepository;
 
-    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $attributeMetadata;
+    /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    protected $attribute;
 
     /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $column;
@@ -49,8 +49,9 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->attributeMetadata = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AttributeMetadataInterface',
+        $this->attribute = $this->getMock(
+            'Magento\Customer\Model\Attribute',
+            [],
             [],
             '',
             false
@@ -73,22 +74,28 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
     {
         $attributeCode = 'attribute_code';
 
-        $this->attributeRepository->expects($this->once())
+        $this->attributeRepository->expects($this->atLeastOnce())
             ->method('getList')
             ->willReturn(
                 [
-                    $attributeCode => $this->attributeMetadata
+                    $attributeCode => [
+                        'attribute_code' => 'billing_attribute_code',
+                        'frontend_input' => 'frontend-input',
+                        'frontend_label' => 'frontend-label',
+                        'backend_type' => 'backend-type',
+                        'options' => [
+                            [
+                                'label' => 'Label',
+                                'value' => 'Value'
+                            ]
+                        ],
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => true,
+                        'is_filterable_in_grid' => true,
+                        'is_searchable_in_grid' => true,
+                    ]
                 ]
             );
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getBackendType')
-            ->willReturn('backend-type');
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getIsUsedInGrid')
-            ->willReturn(true);
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getAttributeCode')
-            ->willReturn($attributeCode);
         $this->columnFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->column);
@@ -100,33 +107,33 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareWithUpdateColumn()
     {
-        $attributeCode = 'attribute_code';
+        $attributeCode = 'billing_attribute_code';
         $backendType = 'backend-type';
-
-        $this->attributeRepository->expects($this->once())
-            ->method('getList')
-            ->willReturn(
+        $attributeData = [
+            'attribute_code' => 'billing_attribute_code',
+            'frontend_input' => 'frontend-input',
+            'frontend_label' => 'frontend-label',
+            'backend_type' => 'backend-type',
+            'options' => [
                 [
-                    $attributeCode => $this->attributeMetadata
+                    'label' => 'Label',
+                    'value' => 'Value'
                 ]
-            );
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getBackendType')
-            ->willReturn($backendType);
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getIsUsedInGrid')
-            ->willReturn(true);
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getAttributeCode')
-            ->willReturn($attributeCode);
+            ],
+            'is_used_in_grid' => true,
+            'is_visible_in_grid' => true,
+            'is_filterable_in_grid' => true,
+            'is_searchable_in_grid' => true,
+        ];
+
+        $this->attributeRepository->expects($this->atLeastOnce())
+            ->method('getList')
+            ->willReturn([$attributeCode => $attributeData]);
         $this->columnFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->column);
         $this->column->expects($this->once())
             ->method('prepare');
-        $this->attributeMetadata->expects($this->once())
-            ->method('getIsVisibleInGrid')
-            ->willReturn(true);
         $this->column->expects($this->atLeastOnce())
             ->method('getData')
             ->with('config')
@@ -142,38 +149,39 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->component->addColumn($this->attributeMetadata, $attributeCode);
+        $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();
     }
 
     public function testPrepareWithUpdateStaticColumn()
     {
-        $attributeCode = 'attribute_code';
+        $attributeCode = 'billing_attribute_code';
         $backendType = 'static';
-
-        $this->attributeRepository->expects($this->once())
-            ->method('getList')
-            ->willReturn(
+        $attributeData = [
+            'attribute_code' => 'billing_attribute_code',
+            'frontend_input' => 'frontend-input',
+            'frontend_label' => 'frontend-label',
+            'backend_type' => $backendType,
+            'options' => [
                 [
-                    $attributeCode => $this->attributeMetadata
+                    'label' => 'Label',
+                    'value' => 'Value'
                 ]
-            );
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getBackendType')
-            ->willReturn($backendType);
-        $this->attributeMetadata->expects($this->never())
-            ->method('getIsUsedInGrid');
-        $this->attributeMetadata->expects($this->atLeastOnce())
-            ->method('getAttributeCode')
-            ->willReturn($attributeCode);
+            ],
+            'is_used_in_grid' => true,
+            'is_visible_in_grid' => true,
+            'is_filterable_in_grid' => true,
+            'is_searchable_in_grid' => true,
+        ];
+
+        $this->attributeRepository->expects($this->atLeastOnce())
+            ->method('getList')
+            ->willReturn([$attributeCode => $attributeData]);
         $this->columnFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->column);
         $this->column->expects($this->once())
             ->method('prepare');
-        $this->attributeMetadata->expects($this->once())
-            ->method('getIsVisibleInGrid')
-            ->willReturn(true);
         $this->column->expects($this->atLeastOnce())
             ->method('getData')
             ->with('config')
@@ -187,7 +195,7 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->component->addColumn($this->attributeMetadata, $attributeCode);
+        $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();
     }
 }
