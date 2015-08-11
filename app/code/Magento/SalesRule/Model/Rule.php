@@ -241,7 +241,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function loadCouponCode()
     {
         $this->setCouponCode($this->getPrimaryCoupon()->getCode());
-        if ($this->getUsesPerCoupon() !== null && !$this->getUseAutoGeneration()) {
+        if ($this->getUsesPerCoupon() == null && !$this->getUseAutoGeneration()) {
             $this->setUsesPerCoupon($this->getPrimaryCoupon()->getUsageLimit());
         }
     }
