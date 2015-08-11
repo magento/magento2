@@ -257,6 +257,16 @@ class History extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * @return $this
+     */
+    public function loadLastInsertItem()
+    {
+        $this->load($this->getLastItemId());
+
+        return $this;
+    }
+
+    /**
      * Retrieve admin ID
      *
      * @return string
