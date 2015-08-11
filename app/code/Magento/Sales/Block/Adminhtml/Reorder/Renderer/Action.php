@@ -47,7 +47,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     public function render(\Magento\Framework\DataObject $row)
     {
         $this->_actions = [];
-        if ($this->_salesReorder->canReorder($row)) {
+        if ($this->_salesReorder->canReorder($row->getId())) {
             $reorderAction = [
                 '@' => [
                     'href' => $this->getUrl('sales/order_create/reorder', ['order_id' => $row->getId()]),
