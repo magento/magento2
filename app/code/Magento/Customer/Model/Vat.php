@@ -6,6 +6,7 @@
 namespace Magento\Customer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Information as StoreInformation;
@@ -111,7 +112,7 @@ class Vat
      * Retrieve customer group ID based on his VAT number
      *
      * @param string $customerCountryCode
-     * @param \Magento\Framework\DataObject $vatValidationResult
+     * @param DataObject $vatValidationResult
      * @param \Magento\Store\Model\Store|string|int $store
      * @return null|int
      */
@@ -156,16 +157,16 @@ class Vat
      * @param string $requesterCountryCode
      * @param string $requesterVatNumber
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
     {
         // Default response
-        $gatewayResponse = new \Magento\Framework\DataObject([
+        $gatewayResponse = new DataObject([
             'is_valid' => false,
             'request_date' => '',
             'request_identifier' => '',
-            'request_success' => false,
+            'request_success' => false
         ]);
 
         if (!extension_loaded('soap')) {
@@ -244,8 +245,8 @@ class Vat
      * Get VAT class
      *
      * @param string $customerCountryCode
-     * @param \Magento\Framework\DataObject $vatValidationResult
-     * @param \Magento\Store\Model\Store|string|int|null $store
+     * @param DataObject $vatValidationResult
+     * @param Store|string|int|null $store
      * @return null|string
      */
     public function getCustomerVatClass($customerCountryCode, $vatValidationResult, $store = null)
