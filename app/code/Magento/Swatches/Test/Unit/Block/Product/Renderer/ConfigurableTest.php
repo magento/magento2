@@ -170,25 +170,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->with($this->product, ['code' => 3])
             ->willReturn($this->product);
 
-        $this->swatchMediaHelper->expects($this->once())->method('getImageConfig')
-            ->willReturn([
-                'swatch_image:width' => 320,
-                'swatch_image:height' => 240,
-                'swatch_thumb:width' => 320,
-                'swatch_thumb:height' => 240,
-            ]);
-
         $this->product->expects($this->exactly(4))->method('getData')
             ->with('swatch_image')
             ->willReturn('/path');
 
         $this->imageHelper->expects($this->exactly(2))->method('init')
-            ->with($this->product, 'swatch_image')
-            ->willReturnSelf();
-
-        $this->imageHelper->expects($this->exactly(2))->method('resize')
-            ->with(320, 240)
-            ->willReturn('/path');
+            ->willReturnMap([
+                [$this->product, 'swatch_image', [], $this->imageHelper],
+                [$this->product, 'swatch_thumb', [], $this->imageHelper],
+            ]);
 
         $this->jsonEncoder->expects($this->once())->method('encode');
 
@@ -226,25 +216,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn('/path');
 
-        $this->swatchMediaHelper->expects($this->once())->method('getImageConfig')
-            ->willReturn([
-                'swatch_image:width' => 320,
-                'swatch_image:height' => 240,
-                'swatch_thumb:width' => 320,
-                'swatch_thumb:height' => 240,
-            ]);
-
         $this->product->expects($this->exactly(6))->method('getData')
             ->withConsecutive(['swatch_image'], ['image'], ['image'], ['swatch_image'], ['image'], ['image'])
             ->will($this->onConsecutiveCalls(null, '/path', '/path', null, '/path', '/path'));
 
         $this->imageHelper->expects($this->exactly(2))->method('init')
-            ->with($this->product, 'image')
-            ->willReturnSelf();
-
-        $this->imageHelper->expects($this->exactly(2))->method('resize')
-            ->with(320, 240)
-            ->willReturn('/path');
+            ->willReturnMap([
+                [$this->product, 'swatch_image_base', [], $this->imageHelper],
+                [$this->product, 'swatch_thumb_base', [], $this->imageHelper],
+            ]);
 
         $this->jsonEncoder->expects($this->once())->method('encode');
 
@@ -281,14 +261,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ['swatch_thumb', 'hello']
             )
             ->willReturn('/path');
-
-        $this->swatchMediaHelper->expects($this->once())->method('getImageConfig')
-            ->willReturn([
-                'swatch_image:width' => 320,
-                'swatch_image:height' => 240,
-                'swatch_thumb:width' => 320,
-                'swatch_thumb:height' => 240,
-            ]);
 
         $this->product->expects($this->exactly(4))->method('getData')
             ->withConsecutive(['swatch_image'], ['image'], ['swatch_image'], ['image'])
