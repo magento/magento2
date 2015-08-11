@@ -355,10 +355,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
             $result = true;
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])
-            && $rowData[self::COL_DOWNLOADABLE_LINKS] != '') {
-            $result = $this->isTitle($this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]));
-        }
         if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])
             && $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '') {
             $result = $this->isTitle($this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES]));
