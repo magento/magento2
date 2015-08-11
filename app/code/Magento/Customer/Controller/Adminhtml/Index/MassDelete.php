@@ -44,7 +44,7 @@ class MassDelete extends AbstractMassAction
     protected function massAction(AbstractCollection $collection)
     {
         $customersDeleted = 0;
-        foreach($collection->getAllIds() as $customerId) {
+        foreach ($collection->getAllIds() as $customerId) {
             $this->customerRepository->deleteById($customerId);
             $customersDeleted++;
         }

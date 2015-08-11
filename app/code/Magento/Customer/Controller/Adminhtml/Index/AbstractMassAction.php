@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\customer\Controller\Adminhtml\Index;
+namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\Controller\ResultFactory;

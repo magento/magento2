@@ -56,7 +56,7 @@ class MassSubscribe extends AbstractMassAction
     protected function massAction(AbstractCollection $collection)
     {
         $customersUpdated = 0;
-        foreach ($collection->getAllIds() as $customerId){
+        foreach ($collection->getAllIds() as $customerId) {
             // Verify customer exists
             $this->customerRepository->getById($customerId);
             $this->subscriberFactory->create()->subscribeCustomerById($customerId);
