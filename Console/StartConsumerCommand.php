@@ -19,7 +19,7 @@ class StartConsumerCommand extends Command
 {
     const ARGUMENT_CONSUMER = 'consumer';
     const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
-    const OPTION_LONG_RUNNING = 'long-running';
+    const OPTION_DURABLE = 'durable';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
     /**
@@ -45,9 +45,9 @@ class StartConsumerCommand extends Command
     {
         $consumerName = $input->getArgument(self::ARGUMENT_CONSUMER);
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
-        $longRunning = $input->hasOption(self::OPTION_LONG_RUNNING);
+        $durable = $input->hasOption(self::OPTION_DURABLE);
         $consumer = $this->consumerFactory->get($consumerName);
-        $consumer->process($numberOfMessages, $longRunning);
+        $consumer->process($numberOfMessages, $durable);
     }
 
     /**
@@ -70,11 +70,11 @@ class StartConsumerCommand extends Command
             . 'If not specify - terminate after processing all queued messages.'
         );
         $this->addOption(
-            self::OPTION_LONG_RUNNING,
+            self::OPTION_DURABLE,
             null,
             InputOption::VALUE_NONE,
-            'This option defines, whether this command long running or not. '
-            . 'If not specify - the command is not long running.'
+            'This option defines, whether this command will run indefinitely or not '
+            . 'if number of messages is not defined. If not specify - the command is not durable.'
         );
         $this->setHelp(
             <<<HELP
@@ -88,9 +88,9 @@ To specify the number of messages which should be processed by consumer before i
 
     <comment>%command.full_name% some_consumer --max-messages=50</comment>
 
-To specify the command as long running:
+To specify the command as durable:
 
-    <comment>%command.full_name% some_consumer --long-running</comment>
+    <comment>%command.full_name% some_consumer --durable</comment>
 HELP
         );
         parent::configure();
