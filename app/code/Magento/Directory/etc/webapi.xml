@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
     <!-- Currency -->
     <route url="/V1/currency" method="GET">
-        <service class="Magento\Directory\Api\CurrencyRepositoryInterface" method="getCurrency"/>
+        <service class="Magento\Directory\Api\CurrencyRepositoryInterface" method="getCurrencyInfo"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

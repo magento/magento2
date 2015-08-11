@@ -30,4 +30,6 @@
     <preference for="Magento\Directory\Model\Country\Postcode\ConfigInterface" type="Magento\Directory\Model\Country\Postcode\Config" />
     <preference for="Magento\Directory\Model\Country\Postcode\ValidatorInterface" type="Magento\Directory\Model\Country\Postcode\Validator" />
     <preference for="Magento\Directory\Api\CurrencyRepositoryInterface" type="Magento\Directory\Model\CurrencyRepository" />
+    <preference for="Magento\Directory\Api\Data\CurrencyInformationInterface" type="Magento\Directory\Model\Data\CurrencyInformation" />
+    <preference for="Magento\Directory\Api\Data\ExchangeRateInterface" type="Magento\Directory\Model\Data\ExchangeRate" />
 </config>

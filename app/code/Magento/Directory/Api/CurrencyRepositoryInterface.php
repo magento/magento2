@@ -15,10 +15,9 @@ interface CurrencyRepositoryInterface
     /**
      * Get Currency (by Store: optional).
      *
-     * @param int $storeId | null
-     * @return \Magento\Directory\Api\Data\CurrencyInterface
+     * @return \Magento\Directory\Api\Data\CurrencyInformationInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $id is not found
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getCurrency($storeId = null);
+    public function getCurrencyInfo();
 }
