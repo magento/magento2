@@ -82,7 +82,7 @@ class JobComponentUninstall extends AbstractJob
         $name,
         $params = []
     ) {
-        $this->objectManager = $objectManagerProvider->get();;
+        $this->objectManager = $objectManagerProvider->get();
         $this->componentUninstallerFactory = $componentUninstallerFactory;
         $this->updater = $updater;
         $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();

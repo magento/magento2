@@ -5,26 +5,10 @@
  */
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Setup\Model\ModuleUninstaller;
 
 class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Writer
-     */
-    private $writer;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList\Loader
-     */
-    private $loader;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
      */
@@ -41,11 +25,6 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
     private $collector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\DataSetup
-     */
-    private $dataSetup;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\Setup
      */
     private $setup;
@@ -60,12 +39,20 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
      */
     private $output;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ModuleRegistryUninstaller
+     */
+    private $moduleRegistryUninstaller;
+
     public function setUp()
     {
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
-        $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-
+        $this->moduleRegistryUninstaller = $this->getMock(
+            'Magento\Setup\Model\ModuleRegistryUninstaller',
+            [],
+            [],
+            '',
+            false
+        );
         $this->objectManager = $this->getMockForAbstractClass(
             'Magento\Framework\ObjectManagerInterface',
             [],
@@ -78,22 +65,16 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
         $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);
         $this->collector = $this->getMock('Magento\Setup\Model\UninstallCollector', [], [], '', false);
 
-        $this->dataSetup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
-        $dataSetupFactory = $this->getMock('Magento\Setup\Module\DataSetupFactory', [], [], '', false);
-        $dataSetupFactory->expects($this->any())->method('create')->willReturn($this->dataSetup);
         $this->setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
         $setupFactory = $this->getMock('Magento\Setup\Module\SetupFactory', [], [], '', false);
         $setupFactory->expects($this->any())->method('create')->willReturn($this->setup);
 
         $this->uninstaller = new ModuleUninstaller(
-            $this->deploymentConfig,
-            $this->writer,
-            $this->loader,
             $objectManagerProvider,
             $this->remove,
             $this->collector,
-            $dataSetupFactory,
-            $setupFactory
+            $setupFactory,
+            $this->moduleRegistryUninstaller
         );
 
         $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
@@ -101,6 +82,7 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUninstallRemoveData()
     {
+        $this->moduleRegistryUninstaller->expects($this->never())->method($this->anything());
         $uninstall = $this->getMockForAbstractClass('Magento\Framework\Setup\UninstallInterface', [], '', false);
         $uninstall->expects($this->atLeastOnce())
             ->method('uninstall')
@@ -127,6 +109,7 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUninstallRemoveCode()
     {
+        $this->moduleRegistryUninstaller->expects($this->never())->method($this->anything());
         $this->output->expects($this->once())->method('writeln');
         $packageInfoFactory = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
         $packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
@@ -141,30 +124,6 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
             $this->output,
             ['moduleA', 'moduleB'],
             [ModuleUninstaller::OPTION_UNINSTALL_CODE => true]
-        );
-    }
-
-    public function testUninstallRemoveRegistry()
-    {
-        $this->output->expects($this->atLeastOnce())->method('writeln');
-        $this->dataSetup->expects($this->atLeastOnce())->method('deleteTableRow');
-        $this->deploymentConfig->expects($this->once())
-            ->method('getConfigData')
-            ->willReturn(['moduleA' => 1, 'moduleB' => 1, 'moduleC' => 1, 'moduleD' => 1]);
-        $this->loader->expects($this->once())->method('load')->willReturn(['moduleC' => [], 'moduleD' => []]);
-        $this->writer->expects($this->once())
-            ->method('saveConfig')
-            ->with(
-                [
-                    ConfigFilePool::APP_CONFIG => [
-                        ConfigOptionsListConstants::KEY_MODULES => ['moduleC' => 1, 'moduleD' => 1]
-                    ]
-                ]
-            );
-        $this->uninstaller->uninstall(
-            $this->output,
-            ['moduleA', 'moduleB'],
-            [ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
         );
     }
 }
