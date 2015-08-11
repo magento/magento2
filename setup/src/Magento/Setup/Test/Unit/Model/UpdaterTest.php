@@ -39,7 +39,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     [
-                        'name' => 'uninstall_component',
+                        'name' => 'uninstall',
                         'params' => ['components' => [['name' => 'vendor/package']], 'dataOption' => true]
                     ]
                 ]
@@ -49,20 +49,6 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             [['name' => 'vendor/package']],
             Updater::TASK_TYPE_UNINSTALL,
             ['dataOption' => true]
-        );
-    }
-
-    public function testCreateUpdaterTaskUnknownType()
-    {
-        $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
-        $queue->expects($this->never())->method($this->anything());
-        $updater = new Updater($queue);
-        $this->assertEquals(
-            'Unknown Updater task type',
-            $updater->createUpdaterTask(
-                [['name' => 'vendor/package', 'version' => 'dev-master']],
-                'unknown'
-            )
         );
     }
 }

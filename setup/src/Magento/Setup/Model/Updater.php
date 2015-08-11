@@ -18,15 +18,8 @@ class Updater
      * Task types
      */
     const TASK_TYPE_UPDATE = 'update';
-    const TASK_TYPE_UNINSTALL = 'uninstall_component';
+    const TASK_TYPE_UNINSTALL = 'uninstall';
     /**#@-*/
-
-    /**
-     * Task types array
-     *
-     * @var array
-     */
-    static private $taskTypes = [Updater::TASK_TYPE_UPDATE, Updater::TASK_TYPE_UNINSTALL];
 
     /**
      * @var Queue
@@ -54,15 +47,11 @@ class Updater
     public function createUpdaterTask(array $packages, $type, array $additionalOptions = [])
     {
         try {
-            if (in_array($type, self::$taskTypes)) {
-                // write to .update_queue.json file
-                $this->queue->addJobs(
-                    [['name' => $type, 'params' => array_merge(['components' => $packages], $additionalOptions)]]
-                );
-                return '';
-            } else {
-                throw new \Exception('Unknown Updater task type');
-            }
+            // write to .update_queue.json file
+            $this->queue->addJobs(
+                [['name' => $type, 'params' => array_merge(['components' => $packages], $additionalOptions)]]
+            );
+            return '';
         } catch (\Exception $e) {
             return $e->getMessage();
         }

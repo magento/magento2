@@ -126,7 +126,8 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
                         JobComponentUninstall::COMPONENT_TYPE => JobComponentUninstall::COMPONENT_MODULE,
                         JobComponentUninstall::COMPONENT_NAME => 'moduleA',
                     ]
-                ]
+                ],
+                'dataOption' => true
             ]
         );
         $this->job->execute();

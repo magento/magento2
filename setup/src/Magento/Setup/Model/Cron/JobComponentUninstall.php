@@ -29,6 +29,11 @@ class JobComponentUninstall extends AbstractJob
      */
     const COMPONENT_NAME = 'name';
 
+    /**
+     * Data option
+     */
+    const DATA_OPTION = 'dataOption';
+
     /**#@+
      * Component types
      */
@@ -130,8 +135,8 @@ class JobComponentUninstall extends AbstractJob
             case self::COMPONENT_MODULE:
                 // convert to module name
                 $componentName = $this->packageInfo->getModuleName($componentName);
-                $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = isset($this->params['dataOption']) ?
-                    $this->params['dataOption'] : false;
+                $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = isset($this->params[self::DATA_OPTION]) ?
+                    $this->params[self::DATA_OPTION] : false;
                 $options[ModuleUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
                 break;
             case self::COMPONENT_THEME:

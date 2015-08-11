@@ -8,6 +8,7 @@ namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Setup\Model\Cron\JobComponentUninstall;
 use Magento\Setup\Model\Navigation as NavModel;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -20,6 +21,18 @@ use Zend\View\Model\ViewModel;
  */
 class StartUpdater extends AbstractActionController
 {
+    /**#@+
+     * Keys in Post payload
+     */
+    const KEY_POST_JOB_TYPE = 'type';
+    const KEY_POST_PACKAGES = 'packages';
+    const KEY_POST_HEADER_TITLE = 'headerTitle';
+    const KEY_POST_DATA_OPTION = 'dataOption';
+    const KEY_POST_PACKAGE_NAME = 'name';
+    const KEY_POST_PACKAGE_TYPE = 'type';
+    const KEY_POST_PACKAGE_VERSION = 'version';
+    /**#@- */
+
     /**
      * @var Filesystem
      */
@@ -68,16 +81,21 @@ class StartUpdater extends AbstractActionController
     {
         $postPayload = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $errorMessage = '';
-        if (isset($postPayload['packages']) && is_array($postPayload['packages']) && isset($postPayload['type'])) {
+        if (isset($postPayload[self::KEY_POST_PACKAGES])
+            && is_array($postPayload[self::KEY_POST_PACKAGES])
+            && isset($postPayload[self::KEY_POST_JOB_TYPE])
+        ) {
             $errorMessage .= $this->validatePayload($postPayload);
             if (empty($errorMessage)) {
-                $packages = $postPayload['packages'];
-                $jobType = $postPayload['type'];
-                $this->createTypeFlag($jobType, $postPayload['headerTitle']);
+                $packages = $postPayload[self::KEY_POST_PACKAGES];
+                $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
+                $this->createTypeFlag($jobType, $postPayload[self::KEY_POST_HEADER_TITLE]);
                 $additionalOptions = [];
                 if ($jobType == 'uninstall') {
-                    $additionalOptions = ['dataOption' => $postPayload['dataOption']];
-                    $cronTaskType = ModelUpdater::TASK_TYPE_UNINSTALL;
+                    $additionalOptions = [
+                        JobComponentUninstall::DATA_OPTION => $postPayload[self::KEY_POST_DATA_OPTION]
+                    ];
+                    $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::COMPONENT_UNINSTALL;
                 } else {
                     $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
                 }
@@ -103,15 +121,15 @@ class StartUpdater extends AbstractActionController
     private function validatePayload(array $postPayload)
     {
         $errorMessage = '';
-        $packages = $postPayload['packages'];
-        $jobType = $postPayload['type'];
-        if ($jobType == 'uninstall' && !isset($postPayload['dataOption'])) {
+        $packages = $postPayload[self::KEY_POST_PACKAGES];
+        $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
+        if ($jobType == 'uninstall' && !isset($postPayload[self::KEY_POST_DATA_OPTION])) {
             $errorMessage .= 'Missing dataOption' . PHP_EOL;
         }
         foreach ($packages as $package) {
-            if (!isset($package['name'])
-                || ($jobType != 'uninstall' && !isset($package['version']))
-                || ($jobType == 'uninstall' && !isset($package['type']))
+            if (!isset($package[self::KEY_POST_PACKAGE_NAME])
+                || ($jobType != 'uninstall' && !isset($package[self::KEY_POST_PACKAGE_VERSION]))
+                || ($jobType == 'uninstall' && !isset($package[self::KEY_POST_PACKAGE_TYPE]))
             ) {
                 $errorMessage .= 'Missing package information' . PHP_EOL;
                 break;
@@ -130,8 +148,8 @@ class StartUpdater extends AbstractActionController
     private function createTypeFlag($type, $title)
     {
         $data = [];
-        $data['type'] = $type;
-        $data['headerTitle'] = $title;
+        $data[self::KEY_POST_JOB_TYPE] = $type;
+        $data[self::KEY_POST_HEADER_TITLE] = $title;
 
         $menuItems = $this->navigation->getMenuItems();
         $titles = [];
