@@ -9,7 +9,7 @@ use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Indexer\Console\Command\IndexerShowModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
+class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonTest
 {
     /**
      * Command being tested
@@ -23,9 +23,8 @@ class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
         $this->stateMock->expects($this->never())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
         $this->command = new IndexerShowModeCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(2, sizeof($optionsList));
-        $this->assertSame('all', $optionsList[0]->getName());
-        $this->assertSame('index', $optionsList[1]->getName());
+        $this->assertSame(1, sizeof($optionsList));
+        $this->assertSame('index', $optionsList[0]->getName());
     }
 
     public function testExecuteAll()

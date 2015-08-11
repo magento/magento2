@@ -8,14 +8,15 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\ObjectManagerFactory;
 
-class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
+class AbstractIndexerCommandCommonTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager\ConfigLoader
      */
     private $configLoaderMock;
+
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerFactory
      */
     protected $indexerFactory;
 
@@ -25,12 +26,12 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
     protected $stateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CollectionFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\Indexer\CollectionFactory
      */
     protected $collectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManagerFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManagerFactory
      */
     protected $objectManagerFactory;
 
