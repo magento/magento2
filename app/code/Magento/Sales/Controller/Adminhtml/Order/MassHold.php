@@ -25,6 +25,7 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @param OrderManagementInterface $orderManagement
      */
     public function __construct(
         Context $context,
