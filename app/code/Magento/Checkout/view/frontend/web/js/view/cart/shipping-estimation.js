@@ -41,7 +41,6 @@ define(
              * @override
              */
             initialize: function () {
-                var self = this;
                 this._super();
                 registry.async('checkoutProvider')(function (checkoutProvider) {
                     checkoutDataResolver.resolveEstimationAddress();
