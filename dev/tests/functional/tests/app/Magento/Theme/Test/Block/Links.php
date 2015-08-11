@@ -36,7 +36,7 @@ class Links extends Block
     protected $welcomeMessage = '.greet.welcome';
 
     /**
-     * Locator value for "Expand/Collapse Customer Menu" button
+     * Locator value for "Expand/Collapse Customer Menu" button.
      *
      * @var string
      */
@@ -51,14 +51,13 @@ class Links extends Block
 
     /**
      * Expand Customer Menu (located in page Header) if it is collapsed
+     *
+     * @return void
      */
     protected function expandCustomerMenu()
     {
         if (!$this->_rootElement->find($this->customerMenu)->isVisible()) {
-            $toggleButton = $this->_rootElement->find($this->toggleButton);
-            if ($toggleButton->isVisible()) {
-                $toggleButton->click();
-            }
+            $this->_rootElement->find($this->toggleButton)->click();
         }
     }
 

@@ -65,7 +65,7 @@ class Cart extends Block
     protected $cartContainer = '.cart-container';
 
     /**
-     * Locator value for "Remove Product" button
+     * Locator value for "Remove Product" button.
      *
      * @var string
      */
@@ -142,17 +142,12 @@ class Cart extends Block
     }
 
     /**
-     * Clear shopping cart
+     * Clear Shopping Cart.
      *
      * @return void
      */
     public function clearShoppingCart()
     {
-        $clearShoppingCartButton = $this->_rootElement->find($this->clearShoppingCart);
-        if ($clearShoppingCartButton->isVisible()) {
-            $clearShoppingCartButton->click();
-        }
-
         while (!$this->cartIsEmpty()) {
             $this->_rootElement->find($this->deleteItemButton)->click();
         }
