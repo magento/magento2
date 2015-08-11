@@ -131,14 +131,13 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->_entityFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\Factory')
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->_entityAdapter = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\AbstractEntity')
             ->disableOriginalConstructor()
             ->setMethods(['importData', '_saveValidatedBunches', 'getErrorAggregator'])
             ->getMockForAbstractClass();
-        /*$this->_entityAdapter->method('getErrorAggregator')->willReturn(
-            $this->getErrorAggregatorObject()
-        );*/
+        $this->_entityAdapter->method('getErrorAggregator')->willReturn(
+            $this->getErrorAggregatorObject(['initValidationStrategy'])
+        );
         $this->_entityFactory->method('create')->willReturn($this->_entityAdapter);
 
         $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\Resource\Import\Data')
@@ -206,6 +205,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 'getEntity',
                 'getBehavior',
                 'isReportEntityType',
+                '_getEntityAdapter'
             ])
             ->getMock();
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
@@ -237,12 +237,12 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->import->expects($this->any())
                     ->method('addLogComment')
                     ->with($this->isInstanceOf($phraseClass));
-        $this->_entityAdapter->expects($this->once())
+        $this->_entityAdapter->expects($this->any())
                     ->method('importData')
                     ->will($this->returnSelf());
-        /*$this->import->expects($this->any())
+        $this->import->expects($this->any())
                     ->method('_getEntityAdapter')
-                    ->will($this->returnValue($this->_entityAdapter));*/
+                    ->will($this->returnValue($this->_entityAdapter));
         $this->_importConfig
             ->expects($this->any())
             ->method('getEntities')
@@ -254,23 +254,19 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 ]
             );
         $importOnceMethodsReturnNull = [
-            'getBehavior',
-            'getProcessedRowsCount',
-            'getProcessedEntitiesCount',
+            'getBehavior'
         ];
 
         foreach ($importOnceMethodsReturnNull as $method) {
             $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
         }
 
-        $this->import->importSource();
+        $this->assertEquals(false, $this->import->importSource());
     }
 
     /**
      * Test importSource with expected exception
      *
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
-     * @expectedExceptionMessage URL key for specified store already exists.
      */
     public function testImportSourceException()
     {
@@ -282,7 +278,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->method('getEntityTypeCode')
             ->will($this->returnValue($entityTypeCode));
         $behaviour = 'behaviour';
-        $this->_importData->expects($this->once())
+        $this->_importData->expects($this->any())
             ->method('getBehavior')
             ->will($this->returnValue($behaviour));
         $this->import->expects($this->any())
@@ -296,10 +292,10 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->import->expects($this->any())
             ->method('addLogComment')
             ->with($this->isInstanceOf($phraseClass));
-        $this->_entityAdapter->expects($this->once())
+        $this->_entityAdapter->expects($this->any())
             ->method('importData')
             ->will($this->throwException($exceptionMock));
-        $this->import->expects($this->once())
+        $this->import->expects($this->any())
             ->method('_getEntityAdapter')
             ->will($this->returnValue($this->_entityAdapter));
         $importOnceMethodsReturnNull = [
