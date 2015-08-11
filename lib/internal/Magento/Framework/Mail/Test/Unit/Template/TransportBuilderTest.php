@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Mail\Test\Unit\Template;
 
+use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\MessageInterface;
+
 class TransportBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -160,13 +163,13 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
-                \Magento\Framework\Mail\Message::TYPE_TEXT,
+                TemplateTypesInterface::TYPE_TEXT,
+                MessageInterface::TYPE_TEXT,
                 'Plain text',
             ],
             [
-                \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
-                \Magento\Framework\Mail\Message::TYPE_HTML,
+                TemplateTypesInterface::TYPE_HTML,
+                MessageInterface::TYPE_HTML,
                 '<h1>Html message</h1>'
             ]
         ];
