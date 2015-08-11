@@ -8,7 +8,7 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\ObjectManagerFactory;
 
-class AbstractIndexerCommandCommonTest extends \PHPUnit_Framework_TestCase
+class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager\ConfigLoader

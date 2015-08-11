@@ -9,7 +9,7 @@ use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Indexer\Console\Command\IndexerShowModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonTest
+class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
 {
     /**
      * Command being tested
