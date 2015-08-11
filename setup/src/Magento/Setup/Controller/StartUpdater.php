@@ -7,9 +7,7 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
-use Magento\Setup\Model\Navigation as NavModel;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\Updater as ModelUpdater;
@@ -34,12 +32,12 @@ class StartUpdater extends AbstractActionController
     /**#@- */
 
     /**
-     * @var Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
 
     /**
-     * @var NavModel
+     * @var \Magento\Setup\Model\Navigation
      */
     private $navigation;
 
@@ -49,12 +47,15 @@ class StartUpdater extends AbstractActionController
     private $updater;
 
     /**
-     * @param Filesystem $filesystem
-     * @param NavModel $navigation
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Setup\Model\Navigation $navigation
      * @param ModelUpdater $updater
      */
-    public function __construct(Filesystem $filesystem, NavModel $navigation, ModelUpdater $updater)
-    {
+    public function __construct(
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Setup\Model\Navigation $navigation,
+        ModelUpdater $updater
+    ) {
         $this->filesystem = $filesystem;
         $this->navigation = $navigation;
         $this->updater = $updater;
