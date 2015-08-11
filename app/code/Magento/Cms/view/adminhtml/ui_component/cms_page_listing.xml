@@ -352,13 +352,13 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterInput name="select-demo">
+            <filterInput name="uiSelect">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/mage-select</item>
-                        <item name="template" xsi:type="string">ui/grid/filters/elements/mage-select</item>
-                        <item name="dataScope" xsi:type="string">select-demo</item>
-                        <item name="label" xsi:type="string" translate="true">Select Demo</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/uiSelect</item>
+                        <item name="template" xsi:type="string">ui/grid/filters/elements/uiSelect</item>
+                        <item name="dataScope" xsi:type="string">uiSelect</item>
+                        <item name="label" xsi:type="string" translate="true">uiSelect</item>
                     </item>
                 </argument>
             </filterInput>
