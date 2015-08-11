@@ -23,8 +23,8 @@ interface ConsumerInterface
      *
      * @param int|null $maxNumberOfMessages if not specified - process all queued incoming messages and terminate,
      *      otherwise terminate execution after processing the specified number of messages
-     * @param bool|null $longRunning
+     * @param bool|null $durable
      * @return mixed
      */
-    public function process($maxNumberOfMessages = null, $longRunning = false);
+    public function process($maxNumberOfMessages = null, $durable = false);
 }
