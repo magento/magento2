@@ -13,11 +13,17 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 {
     public function testRender()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
         $testCacheValue = '1433259723';
-        $testDatetime   = (new \DateTime(null, new \DateTimeZone('UTC')))->setTimestamp($testCacheValue);
-        $formattedDate  = (\IntlDateFormatter::formatObject($testDatetime));
-        $htmlId         = 'test_HTML_id';
-        $label          = 'test_label';
+        $testDatetime = (new \DateTime(null, new \DateTimeZone('UTC')))->setTimestamp($testCacheValue);
+
+        /** @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatter $dateTimeFormatter */
+        $dateTimeFormatter = $objectManager->getObject('Magento\Framework\Stdlib\DateTime\DateTimeFormatter');
+        $formattedDate = $dateTimeFormatter->formatObject($testDatetime);
+
+        $htmlId = 'test_HTML_id';
+        $label = 'test_label';
 
         $cacheMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
             ->disableOriginalConstructor()
@@ -37,8 +43,6 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
-
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $notification = $objectManager->getObject(
             'Magento\Config\Block\System\Config\Form\Field\Notification',

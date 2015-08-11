@@ -6,6 +6,7 @@
 namespace Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer;
 
 use Magento\Framework\Locale\Bundle\DataBundle;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
 
 /**
  * Adminhtml grid item renderer date
@@ -17,14 +18,16 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
      *
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param DateTimeFormatter $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        DateTimeFormatter $dateTimeFormatter,
         array $data = []
     ) {
-        parent::__construct($context, $data);
+        parent::__construct($context, $dateTimeFormatter, $data);
         $this->_localeResolver = $localeResolver;
     }
 
@@ -78,7 +81,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
             } else {
                 $date = $this->_localeDate->date(new \DateTime($data), null, false);
             }
-            return \IntlDateFormatter::formatObject($date, $format, $this->_localeResolver->getLocale());
+            return $this->dateTimeFormatter->formatObject($date, $format, $this->_localeResolver->getLocale());
         }
         return $this->getColumn()->getDefault();
     }
