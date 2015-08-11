@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Block\Cart\Item;
 
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
@@ -23,7 +20,8 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
+class Renderer extends \Magento\Framework\View\Element\Template implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -198,11 +196,9 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      */
     public function getProductThumbnailSidebarUrl()
     {
-        return (string)$this->getProductThumbnail()->resize(
-            $this->getThumbnailSidebarSize()
-        )->setWatermarkSize(
-            '30x10'
-        );
+        return (string)$this->getProductThumbnail()
+            ->resize($this->getThumbnailSidebarSize())
+            ->setWatermarkSize('30x10');
     }
 
     /**
@@ -256,7 +252,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
                 }
             }
         }
-
         return false;
     }
 
