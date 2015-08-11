@@ -36,12 +36,12 @@
 
         <fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'braintree_form_cc'}">
             <!-- ko if: (isShowLegend())-->
-            <legend class="legend"><span><!-- ko text: $t('Credit Card Information')--><!-- /ko --></span></legend><br />
+            <legend class="legend"><span><!-- ko i18n: 'Credit Card Information'--><!-- /ko --></span></legend><br />
             <!-- /ko -->
             <!-- ko if: (useVault()) -->
             <div>
                 <label data-bind="attr: {for: getCode() + '_cc_token'}" class="label">
-                    <span><!-- ko text: $t('Payment Information')--><!-- /ko --></span>
+                    <span><!-- ko i18n: 'Payment Information'--><!-- /ko --></span>
                 </label>
                 <div class="control">
                     <select name="payment[cc_token]" class="select"
@@ -60,7 +60,7 @@
             <!-- /ko -->
             <div class="field type required" data-bind="visible: isCcFormShown">
                 <label data-bind="attr: {for: getCode() + '_cc_type'}" class="label">
-                    <span><!-- ko text: $t('Credit Card Type')--><!-- /ko --></span>
+                    <span><!-- ko i18n: 'Credit Card Type'--><!-- /ko --></span>
                 </label>
                 <div class="control">
                     <!-- ko if: (!isCcDetectionEnabled())-->
@@ -102,7 +102,7 @@
             </div>
             <div class="field number required" data-bind="visible: isCcFormShown">
                 <label data-bind="attr: {for: getCode() + '_cc_number'}" class="label">
-                    <span><!-- ko text: $t('Credit Card Number')--><!-- /ko --></span>
+                    <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>
                 </label>
                 <div class="control">
                     <input type="number" name="payment[cc_number]" class="input-text" value=""
@@ -112,7 +112,7 @@
             </div>
             <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'}, visible: isCcFormShown">
                 <label data-bind="attr: {for: getCode() + '_expiration'}" class="label">
-                    <span><!-- ko text: $t('Expiration Date')--><!-- /ko --></span>
+                    <span><!-- ko i18n: 'Expiration Date'--><!-- /ko --></span>
                 </label>
                 <div class="control">
                     <div class="fields group group-2">
@@ -148,7 +148,7 @@
             <!-- ko if: (hasVerification())-->
             <div class="field cvv required" data-bind="attr: {id: getCode() + '_cc_type_cvv_div'}, visible: isCcFormShown">
                 <label data-bind="attr: {for: getCode() + '_cc_cid'}" class="label">
-                    <span><!-- ko text: $t('Card Verification Number')--><!-- /ko --></span>
+                    <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
                 </label>
                 <div class="control">
                     <input type="number"
@@ -166,7 +166,7 @@
                               tabindex="0"
                               data-toggle="dropdown"
                               data-bind="attr: {title: $t('What is this?')}, mageInit: {'dropdown':{'activeClass': '_active'}}">
-                            <span><!-- ko text: $t('What is this?')--><!-- /ko --></span>
+                            <span><!-- ko i18n: 'What is this?'--><!-- /ko --></span>
                         </span>
                         <div class="field-tooltip-content"
                              data-target="dropdown"
@@ -189,7 +189,7 @@
                            class="checkbox"
                            data-bind="checked: storeInVault"/>
                     <label class="label" for="braintree_store_in_vault">
-                        <span><!-- ko text: $t('Save this card for future use')--><!-- /ko --></span>
+                        <span><!-- ko i18n: 'Save this card for future use'--><!-- /ko --></span>
                     </label>
                 </div>
             </div>
@@ -212,7 +212,7 @@
                             css: {disabled: !isPlaceOrderActionAllowed()}
                             "
                             disabled>
-                        <span data-bind="text: $t('Place Order')"></span>
+                        <span data-bind="i18n: 'Place Order'"></span>
                     </button>
                 </div>
             </div>
