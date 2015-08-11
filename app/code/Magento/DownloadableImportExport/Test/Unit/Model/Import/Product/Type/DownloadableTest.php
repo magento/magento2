@@ -6,345 +6,791 @@
 
 namespace Magento\DownloadableImportExport\Test\Unit\Model\Import\Product\Type;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
 class DownloadableTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable
-     */
-    protected $downloadable;
+    /** @var ObjectManager|\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable */
+    protected $downloadableModelMock;
 
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
+    /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
+    protected $connectionMock;
 
-    /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resource;
-
-    /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $entityModel;
-
-    /**
-     * @var []
-     */
-    protected $params;
-
-    /** @var
-     * \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $connection;
+    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+    protected $select;
 
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attrSetColFac;
-
-    /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $prodAttrColFac;
+    protected $attrSetColFacMock;
 
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $setCollection;
+    protected $attrSetColMock;
 
-    protected function setUp()
+    /**
+     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $prodAttrColFacMock;
+
+    /**
+     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $prodAttrColMock;
+
+    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    protected $resourceMock;
+
+    /** @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject */
+    protected $entityModelMock;
+
+    /** @var array|mixed */
+    protected $paramsArray;
+
+    /** @var \Magento\CatalogImportExport\Model\Import\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $uploaderFactoryMock;
+
+    /** @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit_Framework_MockObject_MockObject */
+    protected $uploaderMock;
+
+    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    protected $filesystemMock;
+
+    /** @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject */
+    protected $directoryWriteMock;
+
+    /** @var \Magento\Downloadable\Helper\File|\PHPUnit_Framework_MockObject_MockObject */
+    protected $fileHelperMock;
+
+    public function setUp()
     {
-        $this->entityModel = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product',
-            ['getBehavior', 'getNewSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope', 'getConnection'],
-            [],
-            '',
-            false
-        );
-        $this->connection = $this->getMock(
+        $objectManager = new ObjectManager($this);
+
+        //connection and sql query results
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'],
             [],
             '',
             false
         );
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
         $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
-            '1' => '1', '2' => '2'
-        ]));
-        $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
-        $this->connection->expects($this->any())->method('delete')->willReturnSelf();
-        $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
-        $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource',
-            ['getConnection', 'getTableName'],
-            [],
-            '',
-            false
+        $this->select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $this->connectionMock->expects($this->any())->method('fetchPairs')->will(
+            $this->returnValue(
+                [
+                    '1' => 'default',
+                    '2' => 'another_set'
+                ]
+            )
         );
-        $this->resource->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($this->connection)
-        );
-        $this->resource->expects($this->any())->method('getTableName')->will(
-            $this->returnValue('tableName')
-        );
-        $this->attrSetColFac = $this->getMock(
+        $this->connectionMock->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
+        $this->connectionMock->expects($this->any())->method('delete')->willReturnSelf();
+        $this->connectionMock->expects($this->any())->method('quoteInto')->willReturn('');
+
+        //constructor arguments:
+        // 1. $attrSetColFac
+        $this->attrSetColFacMock = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
-        $this->setCollection = $this->getMock(
+        $this->attrSetColMock = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
             ['setEntityTypeFilter'],
             [],
             '',
             false
         );
-        $this->attrSetColFac->expects($this->any())->method('create')->will(
-            $this->returnValue($this->setCollection)
-        );
-        $this->setCollection->expects($this->any())
+        $this->attrSetColMock
+            ->expects($this->any())
             ->method('setEntityTypeFilter')
             ->will($this->returnValue([]));
-        $this->prodAttrColFac = $this->getMock(
+
+        // 2. $prodAttrColFac
+        $this->prodAttrColFacMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
-        $attrCollection =
-            $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\Collection', [], [], '', false);
-        $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
 
-        $this->prodAttrColFac->expects($this->any())->method('create')->will(
-            $this->returnValue($attrCollection)
-        );
-        $this->params = [
-            0 => $this->entityModel,
-            1 => 'downloadable'
-        ];
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-
-        $this->bundle = $this->objectManagerHelper->getObject(
-            'Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
-            [
-                'attrSetColFac' => $this->attrSetColFac,
-                'prodAttrColFac' => $this->prodAttrColFac,
-                'resource' => $this->resource,
-                'params' => $this->params
-            ]
-        );
-    }
-
-    /**
-     * Test for method saveData()
-     *
-     * @param array $skus
-     * @param array $bunch
-     * @param $allowImport
-     * @dataProvider testSaveDataProvider
-     */
-    public function testSaveData($skus, $bunch, $allowImport)
-    {
-        $this->entityModel->expects($this->any())->method('getBehavior')->will($this->returnValue(
-            \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
-        ));
-        $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue($skus['newSku']));
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue([$bunch]));
-        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(
-            $allowImport
-        ));
-
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-
-        $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->will($this->returnValue([
-            '1' => [
-                'option_id' => '1',
-                'parent_id' => '1',
-                'required' => '1',
-                'position' => '1',
-                'type' => 'downloadable',
-                'value_id' => '1',
-                'title' => 'Downloadable1',
-                'name' => 'Downloadable1',
-                'selections' => [
-                    ['name' => 'Bundlen1',
-                        'type' => 'dropdown',
-                        'required' => '1',
-                        'sku' => '1',
-                        'price' => '10',
-                        'price_type' => 'fixed',
-                        'default_qty' => '1',
-                        'is_defaul' => '1',
-                        'position' => '1',
-                        'option_id' => '1']
-                ]
-            ],
-            '2' => [
-                'option_id' => '6',
-                'parent_id' => '6',
-                'required' => '6',
-                'position' => '6',
-                'type' => 'bundle',
-                'value_id' => '6',
-                'title' => 'Bundle6',
-                'selections' => [
-                    ['name' => 'Bundlen6',
-                        'type' => 'dropdown',
-                        'required' => '1',
-                        'sku' => '222',
-                        'price' => '10',
-                        'price_type' => 'percent',
-                        'default_qty' => '2',
-                        'is_defaul' => '1',
-                        'position' => '6',
-                        'option_id' => '6']
-                ]
-            ]
-        ]));
-        $this->connection->expects($this->any())->method('fetchAll')->with($select)->will($this->returnValue([[
-            'selection_id' => '1',
-            'option_id' => '1',
-            'parent_product_id' => '1',
-            'product_id' => '1',
-            'position' => '1',
-            'is_default' => '1'
-        ]]));
-
-        $this->bundle->saveData();
-    }
-
-
-    /**
-     * Data provider for saveData()
-     *
-     * @return array
-     */
-    public function testSaveDataProvider()
-    {
-        return [
-            [
-                'skus' => ['newSku' => ['sku' => ['sku' => 'sku', 'entity_id' => 3, 'type_id' => 'downloadable']]],
-                'bunch' => ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name'],
-                'allowImport' => true
-            ],
-            [
-                'skus' => ['newSku' => ['sku' => ['sku' => 'sku', 'entity_id' => 3, 'type_id' => 'simple']]],
-                'bunch' => ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name'],
-                'allowImport' => true
-            ],
-            [
-                'skus' => ['newSku' => ['sku' => ['sku' => 'sku', 'entity_id' => 3, 'type_id' => 'downloadable']]],
-                'bunch' => ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name'],
-                'allowImport' => false
-            ],
-            [
-                'skus' => ['newSku' => [
-                    'sku' => ['sku' => 'sku', 'entity_id' => 3, 'type_id' => 'downloadable'],
-                    'sku1' => ['sku1' => 'sku1', 'entity_id' => 3, 'type_id' => 'downloadable'],
-                    'sku2' => ['sku2' => 'sku2', 'entity_id' => 3, 'type_id' => 'downloadable']
-                ]],
-                'bunch' => [
-                    'sku' => 'sku',
-                    'name' => 'name',
-                    'bundle_values' =>
-                        'name=Bundle1,'
-                        . 'type=dropdown,'
-                        . 'required=1,'
-                        . 'sku=1,'
-                        . 'price=10,'
-                        . 'price_type=fixed,'
-                        . 'default_qty=1,'
-                        . 'is_defaul=1,'
-                        . 'position=1,'
-                        . 'option_id=1 | name=Bundle2,'
-                        . 'type=dropdown,'
-                        . 'required=1,'
-                        . 'sku=2,'
-                        . 'price=10,'
-                        . 'price_type=fixed,'
-                        . 'default_qty=1,'
-                        . 'is_defaul=1,'
-                        . 'position=2,'
-                        . 'option_id=2'
-                ],
-                'allowImport' => true
-            ]
-        ];
-    }
-
-    /**
-     * Test for method saveData()
-     */
-    public function testSaveDataDelete()
-    {
-        $this->entityModel->expects($this->any())->method('getBehavior')->will($this->returnValue(
-            \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
-        ));
-        $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue([
-            'sku' => ['sku' => 'sku', 'entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'downloadable']
-        ]));
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue([
-            ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']
-        ]));
-        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(true));
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->will($this->returnValue([
-            ['id1', 'id2', 'id_3']
-        ]));
-        $this->downloadable->saveData();
-    }
-
-    public function testPrepareAttributesWithDefaultValueForSaveInsideCall()
-    {
-        $downloadableMock = $this->getMock(
-            'Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
-            ['transformBundleCustomAttributes'],
+        $attrCollection = $this->getMock(
+            '\Magento\Catalog\Model\Resource\Product\Attribute\Collection',
+            [],
             [],
             '',
             false
         );
-        // Set some attributes to bypass errors due to static call inside method.
-        $attrVal = 'value';
-        $rowData = [
-            \Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET => $attrVal,
+
+        $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
+        $this->prodAttrColFacMock->expects($this->any())->method('create')->will($this->returnValue($attrCollection));
+
+        // 3. $resource
+        $this->resourceMock = $this->getMock(
+            'Magento\Framework\App\Resource',
+            ['getConnection', 'getTableName'],
+            [],
+            '',
+            false
+        );
+        $this->resourceMock->expects($this->any())->method('getConnection')->will(
+            $this->returnValue($this->connectionMock)
+        );
+        $this->resourceMock->expects($this->any())->method('getTableName')->will(
+            $this->returnValue('tableName')
+        );
+
+        // 4. $params
+        $this->entityModelMock = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\Product',
+            [
+                'addMessageTemplate',
+                'getEntityTypeId',
+                'getBehavior',
+                'getNewSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getParameters',
+                'addRowError'
+            ],
+            [],
+            '',
+            false
+        );
+
+        $this->entityModelMock->expects($this->any())->method('addMessageTemplate')->will($this->returnSelf());
+        $this->entityModelMock->expects($this->any())->method('getEntityTypeId')->will($this->returnValue(5));
+        $this->entityModelMock->expects($this->any())->method('getParameters')->will($this->returnValue([]));
+        $this->paramsArray = [
+            $this->entityModelMock,
+            'downloadable'
         ];
-        $this->setPropertyValue($downloadableMock, '_attributes', [
-            $attrVal => [],
-        ]);
 
-        $downloadableMock
-            ->expects($this->once())
-            ->method('transformBundleCustomAttributes')
-            ->with($rowData)
-            ->willReturn([]);
 
-        $downloadableMock->prepareAttributesWithDefaultValueForSave($rowData);
+        // 5. $uploaderFactory
+        $this->uploaderFactoryMock = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\UploaderFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
+        $this->uploaderMock = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\Uploader',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->uploaderFactoryMock->expects($this->any())->method('create')->willReturn($this->uploaderMock);
+
+        // 6. $filesystem
+        $this->filesystemMock = $this->getMock('\Magento\Framework\Filesystem', ['getDirectoryWrite'], [], '', false);
+        $this->directoryWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->with('base')->willReturn(
+            $this->directoryWriteMock
+        );
+
+        // 7. $fileHelper
+        $this->fileHelperMock = $this->getMock('\Magento\Downloadable\Helper\File', null, [], '', false);
+
+        $this->downloadableModelMock = $objectManager->getObject(
+            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
+            [
+                'attrSetColFac' => $this->attrSetColFacMock,
+                'prodAttrColFac' => $this->prodAttrColFacMock,
+                'resource' => $this->resourceMock,
+                'params' => $this->paramsArray,
+                'uploaderFactory' => $this->uploaderFactoryMock,
+                'filesystem' => $this->filesystemMock,
+                'fileHelper' => $this->fileHelperMock
+            ]
+        );
+    }
+
+    /**
+     * @dataProvider dataForSave
+     */
+    public function testSaveDataAppend($newSku, $bunch, $allowImport, $fetchResult)
+    {
+        $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
+        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
+        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
+        $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
+
+        $this->uploaderMock->expects($this->any())->method('setTmpDir')->willReturn(true);
+        $this->uploaderMock->expects($this->any())->method('setDestDir')->with('pub/media/')->willReturn(true);
+
+        $this->connectionMock->expects($this->any())->method('fetchAll')->with(
+            $this->select
+        )->willReturnOnConsecutiveCalls(
+            $fetchResult['sample'],
+            $fetchResult['sample'],
+            $fetchResult['link'],
+            $fetchResult['link']
+        );
+
+        $this->downloadableModelMock->saveData();
+    }
+
+    /**
+     * Data for method testSaveDataAppend
+     *
+     * @return array
+     */
+    public function dataForSave()
+    {
+        return [
+            [
+                'newSku' => [
+                    'downloadablesku1' => [
+                        'entity_id' => '25',
+                        'type_id' => 'downloadable',
+                        'attr_set_id' => '4',
+                        'attr_set_code' => 'Default',
+                    ],
+                ],
+                'bunch' => [
+                    [
+                        'sku' => 'downloadablesku1',
+                        'product_type' => 'downloadable',
+                        'name' => 'Downloadable Product 1',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                            .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                            .'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    ],
+                ],
+                'allowImport' => true,
+                [
+                    'sample' => [
+                        [
+                            'sample_id' => '65',
+                            'product_id' => '25',
+                            'sample_url' => null,
+                            'sample_file' => '',
+                            'sample_type' => 'file',
+                            'sort_order' => '1',
+                        ],
+                        [
+                            'sample_id' => '66',
+                            'product_id' => '25',
+                            'sample_url' => 'media/file2.mp4',
+                            'sample_file' => null,
+                            'sample_type' => 'url',
+                            'sort_order' => '0',
+                        ]
+                    ],
+                    'link' => [
+                        [
+                            'link_id' => '65',
+                            'product_id' => '25',
+                            'sort_order' => '1',
+                            'number_of_downloads' => '0',
+                            'is_shareable' => '2',
+                            'link_url' => null,
+                            'link_file' => '',
+                            'link_type' => 'file',
+                            'sample_url' => null,
+                            'sample_file' => null,
+                            'sample_type' => null,
+                        ],
+                        [
+                            'link_id' => '66',
+                            'product_id' => '25',
+                            'sort_order' => '0',
+                            'number_of_downloads' => '0',
+                            'is_shareable' => '2',
+                            'link_url' => 'media/file2.mp4',
+                            'link_file' => null,
+                            'link_type' => 'url',
+                            'sample_url' => null,
+                            'sample_file' => null,
+                            'sample_type' => null,
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'newSku' => [
+                    'downloadablesku2' => [
+                        'entity_id' => '25',
+                        'type_id' => 'downloadable',
+                        'attr_set_id' => '4',
+                        'attr_set_code' => 'Default',
+                    ],
+                ],
+                'bunch' => [
+                    [
+                        'sku' => 'downloadablesku2',
+                        'product_type' => 'downloadable',
+                        'name' => 'Downloadable Product 1',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                            .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, '
+                            .'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    ],
+                ],
+                'allowImport' => false,
+                ['sample' => [], 'link' => []]
+            ],
+            [
+                'newSku' => [
+                    'downloadablesku3' => [
+                        'entity_id' => '25',
+                        'type_id' => 'simple',
+                        'attr_set_id' => '4',
+                        'attr_set_code' => 'Default',
+                    ],
+                ],
+                'bunch' => [
+                    [
+                        'sku' => 'downloadablesku3',
+                        'product_type' => 'downloadable',
+                        'name' => 'Downloadable Product 1',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                            .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                            .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    ],
+                ],
+                'allowImport' => true,
+                ['sample' => [], 'link' => []]
+            ],
+            [
+                'newSku' => [
+                    'downloadablesku4' => [
+                        'entity_id' => '25',
+                        'type_id' => 'downloadable',
+                        'attr_set_id' => '4',
+                        'attr_set_code' => 'Default',
+                    ],
+                ],
+                'bunch' => [
+                    [
+                        'sku' => 'downloadablesku4',
+                        'product_type' => 'downloadable',
+                        'name' => 'Downloadable Product 1',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                            .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                            .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    ],
+                ],
+                'allowImport' => true,
+                [
+                    'sample' => [
+                        [
+                            'sample_id' => '65',
+                            'product_id' => '25',
+                            'sample_url' => null,
+                            'sample_file' => '',
+                            'sample_type' => 'file',
+                            'sort_order' => '1',
+                        ],
+                        [
+                            'sample_id' => '66',
+                            'product_id' => '25',
+                            'sample_url' => 'media/some_another_file.mp4',
+                            'sample_file' => null,
+                            'sample_type' => 'url',
+                            'sort_order' => '0',
+                        ]
+                    ],
+                    'link' => [
+                        [
+                            'link_id' => '65',
+                            'product_id' => '25',
+                            'sort_order' => '1',
+                            'number_of_downloads' => '0',
+                            'is_shareable' => '2',
+                            'link_url' => null,
+                            'link_file' => '',
+                            'link_type' => 'file',
+                            'sample_url' => null,
+                            'sample_file' => null,
+                            'sample_type' => null,
+                        ],
+                        [
+                            'link_id' => '66',
+                            'product_id' => '25',
+                            'sort_order' => '0',
+                            'number_of_downloads' => '0',
+                            'is_shareable' => '2',
+                            'link_url' => 'media/some_another_file.mp4',
+                            'link_file' => null,
+                            'link_type' => 'url',
+                            'sample_url' => null,
+                            'sample_file' => null,
+                            'sample_type' => null,
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'newSku' => [
+                    'downloadablesku5' => [
+                        'entity_id' => '25',
+                        'type_id' => 'downloadable',
+                        'attr_set_id' => '4',
+                        'attr_set_code' => 'Default',
+                    ],
+                ],
+                'bunch' => [
+                    [
+                        'sku' => 'downloadablesku5',
+                        'product_type' => 'downloadable',
+                        'name' => 'Downloadable Product 1',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                            .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
+                            .' url=http://www.sample.com/pic.jpg,sortorder=0,sample=http://www.sample.com/pic.jpg,'
+                            .'purchased_separately=1,shareable=1|group_title=Group Title, title=Title 2, price=10, '
+                            .'downloads=unlimited, url=media/file2.mp4,sortorder=0,sample=media/file2mp4',
+                    ],
+                ],
+                'allowImport' => true,
+                [
+                    'sample' => [
+                        [
+                            'sample_id' => '65',
+                            'product_id' => '25',
+                            'sample_url' => null,
+                            'sample_file' => '',
+                            'sample_type' => 'file',
+                            'sort_order' => '1',
+                        ],
+                        [
+                            'sample_id' => '66',
+                            'product_id' => '25',
+                            'sample_url' => 'media/file2.mp4',
+                            'sample_file' => null,
+                            'sample_type' => 'url',
+                            'sort_order' => '0',
+                        ]
+                    ],
+                    'link' => [
+                        [
+                            'link_id' => '65',
+                            'product_id' => '25',
+                            'sort_order' => '1',
+                            'number_of_downloads' => '0',
+                            'is_shareable' => '1',
+                            'link_url' => 'http://www.sample.com/pic.jpg',
+                            'link_file' => null,
+                            'link_type' => 'url',
+                            'sample_url' => 'http://www.sample.com/pic.jpg',
+                            'sample_file' => null,
+                            'sample_type' => 'url',
+                        ],
+                        [
+                            'link_id' => '66',
+                            'product_id' => '25',
+                            'sort_order' => '0',
+                            'number_of_downloads' => '0',
+                            'is_shareable' => '2',
+                            'link_url' => 'media/file2.mp4',
+                            'link_file' => null,
+                            'link_type' => 'url',
+                            'sample_url' => null,
+                            'sample_file' => 'f/i/file.png',
+                            'sample_type' => 'file',
+                        ]
+                    ]
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider isRowValidData
+     */
+    public function testIsRowValid(array $rowData, $rowNum, $isNewProduct = true)
+    {
+        $this->downloadableModelMock->isRowValid($rowData, $rowNum, $isNewProduct);
+    }
+
+    /**
+     * Data for method testIsRowValid
+     *
+     * @return array
+     */
+    public function isRowValidData()
+    {
+        return [
+            [
+                [
+                    'sku' => 'downloadablesku1',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 1',
+                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                        .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, '
+                        .'downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, '
+                        .'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                ],
+                0,
+                true
+            ],
+            [
+                [
+                    'sku' => 'downloadablesku12',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 2',
+                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                        .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                        .' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2,'
+                        .' price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                ],
+                1,
+                true
+            ],
+            [
+                [
+                    'sku' => 'downloadablesku12',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 2',
+                ],
+                2,
+                true
+            ],
+            [
+                [
+                    'sku' => 'downloadablesku12',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 2',
+                    'downloadable_samples' => 'title=Title 1, file=media/file.mp4,sortorder=1|title=Title 2,'
+                        .' url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,'
+                        .'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
+                        .' url=media/file2.mp4,sortorder=0',
+                ],
+                3,
+                true
+            ],
+            [
+                [
+                    'sku' => 'downloadablesku12',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 2',
+                    'downloadable_samples' => 'file=media/file.mp4,sortorder=1|group_title=Group Title, '
+                        .'url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,'
+                        .'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
+                        .' url=media/file2.mp4,sortorder=0',
+                ],
+                4,
+                true
+            ],
+            [ //empty group title samples
+                [
+                    'sku' => 'downloadablesku12',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 2',
+                    'downloadable_samples' => 'group_title=, title=Title 1, file=media/file.mp4,sortorder=1'
+                        .'|group_title=, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                        .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                        .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                ],
+                5,
+                true
+            ],
+            [ //empty group title links
+                [
+                    'sku' => 'downloadablesku12',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 2',
+                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
+                        .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=, title=Title 1, price=10, downloads=unlimited, '
+                        .'file=media/file_link.mp4,sortorder=1|group_title=, title=Title 2, price=10, '
+                        .'downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                ],
+                6,
+                true
+            ],
+            [
+                [
+                    'sku' => 'downloadablesku12',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 2',
+                    'downloadable_samples' => '',
+                    'downloadable_links' => '',
+                ],
+                7,
+                true
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataForUploaderDir
+     */
+    public function testSetUploaderDirFalse($newSku, $bunch, $allowImport)
+    {
+        $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
+        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
+        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
+        $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
+
+        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
+        $this->setExpectedException('\Exception');
+        $this->uploaderMock->expects($this->any())->method('setTmpDir')->willReturn(false);
+
+        $this->downloadableModelMock->saveData();
+    }
+
+    /**
+     * @dataProvider dataForUploaderDir
+     */
+    public function testSetDestDirFalse($newSku, $bunch, $allowImport)
+    {
+        $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
+        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
+        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
+        $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
+
+        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
+        $this->setExpectedException('\Exception');
+        $this->uploaderMock->expects($this->any())->method('setTmpDir')->willReturn(true);
+        $this->uploaderMock->expects($this->any())->method('setDestDir')->with('pub/media/')->willReturn(false);
+
+        $this->downloadableModelMock->saveData();
+    }
+
+    /**
+     * @dataProvider dataForUploaderDir
+     */
+    public function testDirWithoutPermissions($newSku, $bunch, $allowImport)
+    {
+        $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
+        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
+        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
+        $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
+
+        $this->setPropertyValue($this->downloadableModelMock, 'parameters', ['import_images_file_dir' => 'some_dir']);
+        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
+        $this->setExpectedException('\Exception');
+        $this->uploaderMock->expects($this->any())->method('setTmpDir')->willReturn(false);
+
+        $this->downloadableModelMock->saveData();
+    }
+
+    /**
+     * Data for methods testSetUploaderDirFalse, testSetDestDirFalse, testDirWithoutPermissions
+     *
+     * @return array
+     */
+    public function dataForUploaderDir()
+    {
+        return [
+            [
+                'newSku' => [
+                    'downloadablesku1' => [
+                        'entity_id' => '25',
+                        'type_id' => 'downloadable',
+                        'attr_set_id' => '4',
+                        'attr_set_code' => 'Default',
+                    ],
+                ],
+                'bunch' => [
+                    [
+                        'sku' => 'downloadablesku1',
+                        'product_type' => 'downloadable',
+                        'name' => 'Downloadable Product 1',
+                        'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                            .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads='
+                            .'unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2,'
+                            .' price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    ],
+                ],
+                'allowImport' => true,
+            ],
+        ];
+    }
+
+    /**
+     * Test for method prepareAttributesWithDefaultValueForSave
+     */
+    public function testPrepareAttributesWithDefaultValueForSave()
+    {
+        $rowData = [
+            '_attribute_set' => 'Default',
+            'sku' => 'downloadablesku1',
+            'product_type' => 'downloadable',
+            'name' => 'Downloadable Product 1',
+            'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1'
+                .'|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+            'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited,'
+                .' file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads'
+                .'=unlimited, url=media/file2.mp4,sortorder=0',
+        ];
+
+        $this->setPropertyValue(
+            $this->downloadableModelMock,
+            '_attributes',
+            [
+                'Default' => [
+                    'name' => [
+                        'id' => '69',
+                        'code' => 'name',
+                        'is_global' => '0',
+                        'is_required' => '1',
+                        'is_unique' => '0',
+                        'frontend_label' => 'Name',
+                        'is_static' => false,
+                        'apply_to' =>
+                            [
+                            ],
+                        'type' => 'varchar',
+                        'default_value' => null,
+                        'options' =>
+                            [
+                            ],
+                    ],
+                    'sku' => [
+                        'id' => '70',
+                        'code' => 'sku',
+                        'is_global' => '1',
+                        'is_required' => '1',
+                        'is_unique' => '1',
+                        'frontend_label' => 'SKU',
+                        'is_static' => true,
+                        'apply_to' =>
+                            [
+                            ],
+                        'type' => 'varchar',
+                        'default_value' => null,
+                        'options' =>
+                            [
+                            ],
+                    ]
+                ]
+            ]
+
+        );
+
+        $this->downloadableModelMock->prepareAttributesWithDefaultValueForSave($rowData);
     }
 
     /**
