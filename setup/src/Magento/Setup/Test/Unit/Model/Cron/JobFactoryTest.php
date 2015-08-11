@@ -81,6 +81,10 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testComponentUninstall()
     {
+        $this->objectManager->expects($this->once())
+            ->method('get')
+            ->with('Magento\Framework\Module\PackageInfoFactory')
+            ->willReturn($this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false));
         $this->assertInstanceOf(
             'Magento\Setup\Model\Cron\JobComponentUninstall',
             $this->jobFactory->create('setup:component:uninstall', [])
