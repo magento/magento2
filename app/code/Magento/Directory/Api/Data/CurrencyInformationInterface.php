@@ -6,11 +6,11 @@
 namespace Magento\Directory\Api\Data;
 
 /**
- * Currency interface.
+ * Currency Information interface.
  *
  * @api
  */
-interface CurrencyInterface
+interface CurrencyInformationInterface
 {
     /**
      * Get the base currency code for the store.
@@ -47,7 +47,7 @@ interface CurrencyInterface
      *
      * @return string[]
      */
-    public function getAllowedCurrencyCodes();
+    public function getAvailableCurrencyCodes();
 
     /**
      * Set the list of allowed currency codes for the store.
@@ -55,7 +55,7 @@ interface CurrencyInterface
      * @param string[] $codes
      * @return $this
      */
-    public function setAllowedCurrencyCodes(array $codes = null);
+    public function setAvailableCurrencyCodes(array $codes = null);
 
     /**
      * Get the list of exchange rate information for the store.
@@ -71,4 +71,21 @@ interface CurrencyInterface
      * @return $this
      */
     public function setExchangeRates(array $exchangeRates = null);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Directory\Api\Data\CurrencyInformationInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Directory\Api\Data\CurrencyInformationInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Directory\Api\Data\CurrencyInformationInterface $extensionAttributes
+    );
 }

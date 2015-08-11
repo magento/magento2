@@ -32,7 +32,7 @@ interface ExchangeRateInterface
      *
      * @return string
      */
-    public function getCurrencyCode();
+    public function getCurrencyTo();
 
     /**
      * Set the currency code associated with the exchange rate.
@@ -40,5 +40,22 @@ interface ExchangeRateInterface
      * @param string $code
      * @return $this
      */
-    public function setCurrencyCode($code);
+    public function setCurrencyTo($code);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Directory\Api\Data\ExchangeRateInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Directory\Api\Data\ExchangeRateInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Directory\Api\Data\ExchangeRateInterface $extensionAttributes
+    );
 }
