@@ -8,23 +8,6 @@ namespace Magento\Checkout\Block\Cart;
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
-     * Available Carriers Instances
-     * @var null|array
-     */
-    protected $carriers = null;
-
-    /**
-     * Estimate Rates
-     * @var array
-     */
-    protected $rates = [];
-
-    /**
-     * @var \Magento\Quote\Model\Quote|null
-     */
-    protected $quote = null;
-
-    /**
      * @var \Magento\Checkout\Block\Checkout\AttributeMerger
      */
     protected $merger;
@@ -38,16 +21,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @var \Magento\Directory\Model\Resource\Region\Collection
      */
     protected $regionCollection;
-
-    /**
-     * @var \Magento\Shipping\Model\CarrierFactoryInterface
-     */
-    protected $carrierFactory;
-
-    /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $checkoutSession;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -73,8 +46,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param \Magento\Checkout\Block\Checkout\AttributeMerger $merger
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
      * @param \Magento\Directory\Model\Resource\Region\Collection $regionCollection
-     * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
-     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
@@ -82,65 +53,14 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
         \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
         \Magento\Directory\Model\Resource\Region\Collection $regionCollection,
-        \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
-        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         $this->merger = $merger;
         $this->countryCollection = $countryCollection;
         $this->regionCollection = $regionCollection;
-        $this->carrierFactory = $carrierFactory;
-        $this->checkoutSession = $checkoutSession;
         $this->customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
-    }
-
-    /**
-     * Obtain available carriers instances
-     *
-     * @return array
-     */
-    protected function getCarriers()
-    {
-        if (null === $this->carriers) {
-            $this->carriers = [];
-            $this->getEstimateRates();
-            foreach ($this->rates as $rateGroup) {
-                if (!empty($rateGroup)) {
-                    foreach ($rateGroup as $rate) {
-                        $this->carriers[] = $this->carrierFactory->get($rate->getCarrier());
-                    }
-                }
-            }
-        }
-        return $this->carriers;
-    }
-
-    /**
-     * Get Address Model
-     *
-     * @return \Magento\Quote\Model\Quote\Address
-     */
-    protected function getAddress()
-    {
-        if (empty($this->address)) {
-            $this->address = $this->getQuote()->getShippingAddress();
-        }
-        return $this->address;
-    }
-
-    /**
-     * Get active quote
-     *
-     * @return \Magento\Quote\Model\Quote
-     */
-    protected function getQuote()
-    {
-        if (null === $this->quote) {
-            $this->quote = $this->checkoutSession->getQuote();
-        }
-        return $this->quote;
     }
 
     /**
@@ -159,34 +79,9 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
-     * Get Estimate Rates
-     *
-     * @return array
-     */
-    protected function getEstimateRates()
-    {
-        if (empty($this->rates)) {
-            $groups = $this->getAddress()->getGroupedAllShippingRates();
-            $this->rates = $groups;
-        }
-        return $this->rates;
-    }
-
-    /**
-     * Get Estimate Country Id
-     *
-     * @return string
-     */
-    protected function getEstimatedCountryId()
-    {
-        return $this->getAddress()->getCountryId();
-    }
-
-    /**
      * Show City in Shipping Estimation
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     protected function isCityActive()
     {
@@ -200,51 +95,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      */
     protected function isStateActive()
     {
-        return false;
-    }
-
-    /**
-     * Check if one of carriers require city
-     *
-     * @return bool
-     */
-    protected function isCityRequired()
-    {
-        foreach ($this->getCarriers() as $carrier) {
-            if ($carrier->isCityRequired()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if one of carriers require state/province
-     *
-     * @return bool
-     */
-    protected function isStateProvinceRequired()
-    {
-        foreach ($this->getCarriers() as $carrier) {
-            if ($carrier->isStateProvinceRequired()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if one of carriers require zip code
-     *
-     * @return bool
-     */
-    protected function isZipCodeRequired()
-    {
-        foreach ($this->getCarriers() as $carrier) {
-            if ($carrier->isZipCodeRequired($this->getEstimatedCountryId())) {
-                return true;
-            }
-        }
         return false;
     }
 
@@ -281,7 +131,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 'visible' => $this->isCityActive(),
                 'formElement' => 'input',
                 'label' => __('City'),
-                'validation' => $this->isCityRequired() ? ['required-entry' => true] : null,
                 'value' => $defaultAddress ? $defaultAddress->getCity() : null
             ],
             'country_id' => [
@@ -296,14 +145,12 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 'formElement' => 'select',
                 'label' => __('State/Province'),
                 'options' => $this->regionCollection->load()->toOptionArray(),
-                'validation' => $this->isStateProvinceRequired() ? ['required-entry' => true] : null,
                 'value' => $defaultAddress ? $defaultAddress->getRegionId() : null
             ],
             'postcode' => [
                 'visible' => true,
                 'formElement' => 'input',
                 'label' => __('Zip/Postal Code'),
-                'validation' => $this->isZipCodeRequired() ? ['required-entry' => true] : null,
                 'value' => $defaultAddress ? $defaultAddress->getPostcode() : null
             ]
         ];

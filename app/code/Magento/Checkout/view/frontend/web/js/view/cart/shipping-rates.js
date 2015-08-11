@@ -81,23 +81,13 @@ define(
             /**
              * Set shipping method.
              * @param {String} methodData
-             * @param {Object} event
-             * @param {Object} context
              * @returns bool
              */
-            selectShippingMethod: function (methodData, event, context) {
+            selectShippingMethod: function (methodData) {
                 selectShippingMethodAction(methodData);
                 checkoutData.setSelectedShippingRate(methodData['carrier_code'] + '_' + methodData['method_code']);
-                context.setShippingMethod();
-                return true;
-            },
-
-            /**
-             * Set shipping method and update totals.
-             * @returns void
-             */
-            setShippingMethod: function () {
                 setShippingInformationAction();
+                return true;
             }
         });
     }
