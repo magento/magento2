@@ -8,7 +8,7 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class IndexerReindexCommandTest extends AbstractIndexerCommandCommonTest
+class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
 {
     /**
      * Command being tested
