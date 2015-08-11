@@ -7,8 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest">
-        <variation name="OnePageCheckoutTestVariation17">
-            <data name="description" xsi:type="string">MAGETWO-12832 - Check Out as a Guest with Authorize.Net and Offline Shipping method</data>
+        <variation name="OnePageCheckoutTestVariation17" summary="Check Out as a Guest with Authorize.Net and Offline Shipping method" ticketId="MAGETWO-12832">
             <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -23,9 +22,9 @@
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="configData" xsi:type="string">authorizenet</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
         </variation>
     </testCase>
 </config>

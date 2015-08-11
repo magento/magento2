@@ -27,6 +27,11 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     protected $connectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $selectMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -46,7 +51,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->connectionMock);
 
 
-        $this->resourceMock->expects($this->once())
+        $this->resourceMock->expects($this->atLeastOnce())
             ->method('getTableName')
             ->willReturn('table_name');
 
@@ -84,5 +89,33 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->selectMock);
 
         $this->model->isWeeeInLocation('US', 0, 1);
+    }
+
+    public function testFetchWeeeTaxCalculationsByEntity()
+    {
+        $this->selectMock->expects($this->any())
+            ->method('where')
+            ->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->any())
+            ->method('from')
+            ->with(
+                ['eavTable' => 'table_name'],
+                [
+                    'eavTable.attribute_code',
+                    'eavTable.attribute_id',
+                    'eavTable.frontend_label'
+                ]
+            )->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->any())
+            ->method('joinLeft')
+            ->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->any())
+            ->method('joinInner')
+            ->willReturn($this->selectMock);
+
+        $this->model->fetchWeeeTaxCalculationsByEntity('US', 0, 1, 3, 4);
     }
 }
