@@ -26,21 +26,6 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig\Writer
-     */
-    private $writer;
-
-    /**
-     * @var \Magento\Framework\Module\ModuleList\Loader
-     */
-    private $loader;
-
-    /**
      * @var \Magento\Framework\Composer\Remove
      */
     private $remove;
@@ -51,45 +36,36 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
     private $collector;
 
     /**
-     * @var \Magento\Setup\Module\DataSetupFactory
-     */
-    private $dataSetupFactory;
-
-    /**
      * @var \Magento\Setup\Module\SetupFactory
      */
     private $setupFactory;
 
     /**
+     * @var ModuleRegistryUninstaller
+     */
+    private $moduleRegistryUninstaller;
+
+    /**
      * Constructor
      *
-     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
-     * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
-     * @param \Magento\Framework\Module\ModuleList\Loader $loader
      * @param ObjectManagerProvider $objectManagerProvider
      * @param \Magento\Framework\Composer\Remove $remove
      * @param UninstallCollector $collector
-     * @param \Magento\Setup\Module\DataSetupFactory $dataSetupFactory
      * @param \Magento\Setup\Module\SetupFactory $setupFactory
+     * @param ModuleRegistryUninstaller $moduleRegistryUninstaller
      */
     public function __construct(
-        \Magento\Framework\App\DeploymentConfig $deploymentConfig,
-        \Magento\Framework\App\DeploymentConfig\Writer $writer,
-        \Magento\Framework\Module\ModuleList\Loader $loader,
         ObjectManagerProvider $objectManagerProvider,
         \Magento\Framework\Composer\Remove $remove,
         UninstallCollector $collector,
-        \Magento\Setup\Module\DataSetupFactory $dataSetupFactory,
-        \Magento\Setup\Module\SetupFactory $setupFactory
+        \Magento\Setup\Module\SetupFactory $setupFactory,
+        ModuleRegistryUninstaller $moduleRegistryUninstaller
     ) {
         $this->objectManager = $objectManagerProvider->get();
-        $this->deploymentConfig = $deploymentConfig;
-        $this->writer = $writer;
-        $this->loader = $loader;
         $this->remove = $remove;
         $this->collector = $collector;
-        $this->dataSetupFactory = $dataSetupFactory;
         $this->setupFactory = $setupFactory;
+        $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
     }
 
     /**
@@ -109,8 +85,8 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
             $this->removeCode($output, $modules);
         }
         if (isset($options[self::OPTION_UNINSTALL_REGISTRY]) && $options[self::OPTION_UNINSTALL_REGISTRY]) {
-            $this->removeModulesFromDb($output, $modules);
-            $this->removeModulesFromDeploymentConfig($output, $modules);
+            $this->moduleRegistryUninstaller->removeModulesFromDb($output, $modules);
+            $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($output, $modules);
         }
     }
 
@@ -158,51 +134,5 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
         $this->remove->remove($packages);
     }
 
-    /**
-     * Removes module from setup_module table
-     *
-     * @param OutputInterface $output
-     * @param string[] $modules
-     * @return void
-     */
-    private function removeModulesFromDb(OutputInterface $output, array $modules)
-    {
-        $output->writeln(
-            '<info>Removing ' . implode(', ', $modules) . ' from module registry in database</info>'
-        );
-        /** @var \Magento\Framework\Setup\ModuleDataSetupInterface $setup */
-        $setup = $this->dataSetupFactory->create();
-        foreach ($modules as $module) {
-            $setup->deleteTableRow('setup_module', 'module', $module);
-        }
-    }
 
-    /**
-     * Removes module from deployment configuration
-     *
-     * @param OutputInterface $output
-     * @param string[] $modules
-     * @return void
-     */
-    private function removeModulesFromDeploymentConfig(OutputInterface $output, array $modules)
-    {
-        $output->writeln(
-            '<info>Removing ' . implode(', ', $modules) .  ' from module list in deployment configuration</info>'
-        );
-        $existingModules = $this->deploymentConfig->getConfigData(
-            \Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES
-        );
-        $newSort = $this->loader->load($modules);
-        $newModules = [];
-        foreach (array_keys($newSort) as $module) {
-            $newModules[$module] = $existingModules[$module];
-        }
-        $this->writer->saveConfig(
-            [
-                \Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG =>
-                    [\Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES => $newModules]
-            ],
-            true
-        );
-    }
 }
