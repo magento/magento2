@@ -232,7 +232,7 @@ class TableMapper
     }
 
     /**
-     * @param $table
+     * @param string $table
      * @return string
      */
     private function getTableAlias($table)

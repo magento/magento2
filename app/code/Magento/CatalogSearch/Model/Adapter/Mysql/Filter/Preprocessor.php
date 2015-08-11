@@ -15,6 +15,9 @@ use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Preprocessor implements PreprocessorInterface
 {
     /**
