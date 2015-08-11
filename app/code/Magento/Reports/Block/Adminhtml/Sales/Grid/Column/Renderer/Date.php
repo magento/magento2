@@ -58,10 +58,10 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
     /**
      * Renders grid column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             switch ($this->getColumn()->getPeriodType()) {
@@ -78,7 +78,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
             } else {
                 $date = $this->_localeDate->date(new \DateTime($data), null, false);
             }
-            return \IntlDateFormatter::formatObject($date, $format);
+            return \IntlDateFormatter::formatObject($date, $format, $this->_localeResolver->getLocale());
         }
         return $this->getColumn()->getDefault();
     }

@@ -20,7 +20,7 @@ class InvalidateCacheIfChangedTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer */
     protected $observerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object\IdentityInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject\IdentityInterface */
     protected $objectMock;
 
     /**
@@ -44,7 +44,12 @@ class InvalidateCacheIfChangedTest extends \PHPUnit_Framework_TestCase
 
         $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $eventMock = $this->getMock('Magento\Framework\Event', ['getObject'], [], '', false);
-        $this->objectMock = $this->getMockForAbstractClass('Magento\Framework\Object\IdentityInterface', [], '', false);
+        $this->objectMock = $this->getMockForAbstractClass(
+            'Magento\Framework\DataObject\IdentityInterface',
+            [],
+            '',
+            false
+        );
         $eventMock->expects($this->any())->method('getObject')->willReturn($this->objectMock);
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
     }

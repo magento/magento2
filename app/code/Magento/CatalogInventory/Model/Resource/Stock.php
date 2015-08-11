@@ -84,7 +84,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param StockConfigurationInterface $stockConfiguration
      * @param StoreManagerInterface $storeManager
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -92,9 +92,9 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\Stdlib\DateTime $dateTime,
         StockConfigurationInterface $stockConfiguration,
         StoreManagerInterface $storeManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->stockConfiguration = $stockConfiguration;
@@ -125,12 +125,12 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $itemTable = $this->getTable('cataloginventory_stock_item');
         $productTable = $this->getTable('catalog_product_entity');
-        $select = $this->_getWriteAdapter()->select()->from(['si' => $itemTable])
+        $select = $this->getConnection()->select()->from(['si' => $itemTable])
             ->join(['p' => $productTable], 'p.entity_id=si.product_id', ['type_id'])
             ->where('website_id=?', $websiteId)
             ->where('product_id IN(?)', $productIds)
             ->forUpdate(true);
-        return $this->_getWriteAdapter()->fetchAll($select);
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**
@@ -147,20 +147,20 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $conditions = [];
         foreach ($items as $productId => $qty) {
-            $case = $adapter->quoteInto('?', $productId);
-            $result = $adapter->quoteInto("qty{$operator}?", $qty);
+            $case = $connection->quoteInto('?', $productId);
+            $result = $connection->quoteInto("qty{$operator}?", $qty);
             $conditions[$case] = $result;
         }
 
-        $value = $adapter->getCaseSql('product_id', $conditions, 'qty');
+        $value = $connection->getCaseSql('product_id', $conditions, 'qty');
         $where = ['product_id IN (?)' => array_keys($items), 'website_id = ?' => $websiteId];
 
-        $adapter->beginTransaction();
-        $adapter->update($this->getTable('cataloginventory_stock_item'), ['qty' => $value], $where);
-        $adapter->commit();
+        $connection->beginTransaction();
+        $connection->update($this->getTable('cataloginventory_stock_item'), ['qty' => $value], $where);
+        $connection->commit();
 
         return $this;
     }
@@ -202,10 +202,10 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $values = ['is_in_stock' => 0, 'stock_status_changed_auto' => 1];
 
-        $select = $adapter->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
+        $select = $connection->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
             ->where('type_id IN(?)', $this->_configTypeIds);
 
         $where = sprintf(
@@ -223,7 +223,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->assemble()
         );
 
-        $adapter->update($this->getTable('cataloginventory_stock_item'), $values, $where);
+        $connection->update($this->getTable('cataloginventory_stock_item'), $values, $where);
     }
 
     /**
@@ -236,10 +236,10 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $values = ['is_in_stock' => 1];
 
-        $select = $adapter->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
+        $select = $connection->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
             ->where('type_id IN(?)', $this->_configTypeIds);
 
         $where = sprintf(
@@ -255,7 +255,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->assemble()
         );
 
-        $adapter->update($this->getTable('cataloginventory_stock_item'), $values, $where);
+        $connection->update($this->getTable('cataloginventory_stock_item'), $values, $where);
     }
 
     /**
@@ -269,17 +269,17 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
 
-        $adapter = $this->_getWriteAdapter();
-        $condition = $adapter->quoteInto(
+        $connection = $this->getConnection();
+        $condition = $connection->quoteInto(
             '(use_config_notify_stock_qty = 1 AND qty < ?)',
             $this->_configNotifyStockQty
         ) . ' OR (use_config_notify_stock_qty = 0 AND qty < notify_stock_qty)';
-        $currentDbTime = $adapter->quoteInto('?', $this->dateTime->formatDate(true));
-        $conditionalDate = $adapter->getCheckSql($condition, $currentDbTime, 'NULL');
+        $currentDbTime = $connection->quoteInto('?', $this->dateTime->formatDate(true));
+        $conditionalDate = $connection->getCheckSql($condition, $currentDbTime, 'NULL');
 
         $value = ['low_stock_date' => new \Zend_Db_Expr($conditionalDate)];
 
-        $select = $adapter->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
+        $select = $connection->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
             ->where('type_id IN(?)', $this->_configTypeIds);
 
         $where = sprintf(
@@ -291,7 +291,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->assemble()
         );
 
-        $adapter->update($this->getTable('cataloginventory_stock_item'), $value, $where);
+        $connection->update($this->getTable('cataloginventory_stock_item'), $value, $where);
     }
 
     /**
@@ -304,34 +304,34 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function addLowStockFilter(\Magento\Catalog\Model\Resource\Product\Collection $collection, $fields)
     {
         $this->_initConfig();
-        $adapter = $collection->getSelect()->getAdapter();
-        $qtyIf = $adapter->getCheckSql(
+        $connection = $collection->getSelect()->getConnection();
+        $qtyIf = $connection->getCheckSql(
             'invtr.use_config_notify_stock_qty > 0',
             $this->_configNotifyStockQty,
             'invtr.notify_stock_qty'
         );
         $conditions = [
             [
-                $adapter->prepareSqlCondition('invtr.use_config_manage_stock', 1),
-                $adapter->prepareSqlCondition($this->_isConfigManageStock, 1),
-                $adapter->prepareSqlCondition('invtr.qty', ['lt' => $qtyIf]),
+                $connection->prepareSqlCondition('invtr.use_config_manage_stock', 1),
+                $connection->prepareSqlCondition($this->_isConfigManageStock, 1),
+                $connection->prepareSqlCondition('invtr.qty', ['lt' => $qtyIf]),
             ],
             [
-                $adapter->prepareSqlCondition('invtr.use_config_manage_stock', 0),
-                $adapter->prepareSqlCondition('invtr.manage_stock', 1)
+                $connection->prepareSqlCondition('invtr.use_config_manage_stock', 0),
+                $connection->prepareSqlCondition('invtr.manage_stock', 1)
             ],
         ];
 
         $where = [];
         foreach ($conditions as $k => $part) {
-            $where[$k] = join(' ' . \Zend_Db_Select::SQL_AND . ' ', $part);
+            $where[$k] = join(' ' . \Magento\Framework\DB\Select::SQL_AND . ' ', $part);
         }
 
-        $where = $adapter->prepareSqlCondition(
+        $where = $connection->prepareSqlCondition(
             'invtr.low_stock_date',
             ['notnull' => true]
-        ) . ' ' . \Zend_Db_Select::SQL_AND . ' ((' . join(
-            ') ' . \Zend_Db_Select::SQL_OR . ' (',
+        ) . ' ' . \Magento\Framework\DB\Select::SQL_AND . ' ((' . join(
+            ') ' . \Magento\Framework\DB\Select::SQL_OR . ' (',
             $where
         ) . '))';
 

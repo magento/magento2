@@ -40,23 +40,30 @@ class Manager
 
     /** @var array */
     public static $availableTypes = [self::ASSET_TYPE_JS, self::ASSET_TYPE_HTML];
+    /**
+     * @var Asset\Minification
+     */
+    private $minification;
 
     /**
      * @param Filesystem $filesystem
      * @param Bundle $bundle
      * @param Bundle\ConfigInterface $bundleConfig
      * @param Asset\ConfigInterface $assetConfig
+     * @param Asset\Minification $minification
      */
     public function __construct(
         Filesystem $filesystem,
         Bundle $bundle,
         Bundle\ConfigInterface $bundleConfig,
-        Asset\ConfigInterface $assetConfig
+        Asset\ConfigInterface $assetConfig,
+        Asset\Minification $minification
     ) {
         $this->filesystem = $filesystem;
         $this->assetConfig = $assetConfig;
         $this->bundleConfig = $bundleConfig;
         $this->bundle = $bundle;
+        $this->minification = $minification;
     }
 
     /**
@@ -186,7 +193,7 @@ class Manager
         if (in_array($asset->getFilePath(), $this->excluded)) {
             return false;
         }
-        if ($this->assetConfig->isAssetMinification($asset->getContentType())) {
+        if ($this->minification->isEnabled($asset->getContentType())) {
 
             if (strpos($sourceFile, '.min.') !== false) {
                 $this->excluded[] = str_replace('.min.', '', $sourceFile);

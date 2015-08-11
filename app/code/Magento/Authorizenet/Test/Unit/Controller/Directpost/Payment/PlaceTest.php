@@ -251,7 +251,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      */
     public function textExecuteDataProvider()
     {
-        $objectSuccess = new \Magento\Framework\Object();
+        $objectSuccess = new \Magento\Framework\DataObject();
         $objectSuccess->setData('success', true);
 
         return [
@@ -277,7 +277,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      */
     public function textExecuteFailedPlaceOrderDataProvider()
     {
-        $objectFailed = new \Magento\Framework\Object();
+        $objectFailed = new \Magento\Framework\DataObject();
         $objectFailed->setData('error', true);
         $objectFailed->setData('error_messages', __('Cannot place order.'));
 

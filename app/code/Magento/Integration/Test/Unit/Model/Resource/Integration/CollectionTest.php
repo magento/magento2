@@ -35,10 +35,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $resource = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getReadConnection'])
+            ->setMethods(['__wakeup', 'getConnection'])
             ->getMockForAbstractClass();
         $resource->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($connection));
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

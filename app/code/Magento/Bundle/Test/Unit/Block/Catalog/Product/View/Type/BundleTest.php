@@ -9,7 +9,7 @@
 namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type;
 
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
-use Magento\Framework\Object as MagentoObject;
+use Magento\Framework\DataObject as MagentoObject;
 
 class BundleTest extends \PHPUnit_Framework_TestCase
 {
@@ -205,7 +205,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())
             ->method('hasPreconfiguredValues')
             ->will($this->returnValue(true));
-        $preconfiguredValues = new \Magento\Framework\Object(
+        $preconfiguredValues = new \Magento\Framework\DataObject(
             [
                 'bundle_option' => [
                     1 => 123123111
@@ -236,6 +236,12 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     private function setupBundleBlock($options, $priceInfo, $priceType)
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+
+        $eventManager = $this->getMockBuilder('\Magento\Framework\Event\Manager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $eventManager->expects($this->any())->method('dispatch')->will($this->returnValue(true));
 
         $optionCollection = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Option\Collection')
             ->disableOriginalConstructor()
@@ -285,6 +291,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())
             ->method('getTaxData')
             ->will($this->returnValue($taxHelperMock));
+        $context->expects($this->any())
+            ->method('getEventManager')
+            ->will($this->returnValue($eventManager));
 
         $jsonEncoderMock = $this->getMockBuilder('\Magento\Framework\Json\Encoder')
             ->disableOriginalConstructor()
