@@ -78,7 +78,7 @@ class UpgradeData implements UpgradeDataInterface
                     'email' => [
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                         'is_searchable_in_grid' => true,
                     ],
                     'group_id' => [
@@ -158,13 +158,13 @@ class UpgradeData implements UpgradeDataInterface
                     'postcode' => [
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                         'is_searchable_in_grid' => true,
                     ],
                     'telephone' => [
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                         'is_searchable_in_grid' => true,
                     ],
                     'fax' => [
