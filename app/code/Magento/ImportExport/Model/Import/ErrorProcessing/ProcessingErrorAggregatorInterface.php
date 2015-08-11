@@ -91,6 +91,12 @@ interface ProcessingErrorAggregatorInterface
     public function getErrorsByCode(array $codes);
 
     /**
+     * @param int $rowNumber
+     * @return ProcessingError[]
+     */
+    public function getErrorByRowNumber($rowNumber);
+
+    /**
      * @param array $errorCode
      * @param array $excludedCodes
      * @param bool|true $replaceCodeWithMessage

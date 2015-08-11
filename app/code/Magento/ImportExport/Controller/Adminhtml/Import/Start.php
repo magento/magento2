@@ -22,18 +22,34 @@ class Start extends ImportController
     protected $reportProcessor;
 
     /**
+     * @var \Magento\ImportExport\Model\History
+     */
+    protected $historyModel;
+
+    /**
+     * @var \Magento\ImportExport\Helper\Report
+     */
+    protected $reportHelper;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\ImportExport\Model\Import $importModel
      * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
+     * @param \Magento\ImportExport\Model\History $historyModel
+     * @param \Magento\ImportExport\Helper\Report $reportHelper
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\ImportExport\Model\Import $importModel,
-        \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
+        \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor,
+        \Magento\ImportExport\Model\History $historyModel,
+        \Magento\ImportExport\Helper\Report $reportHelper
     ) {
         parent::__construct($context);
         $this->importModel = $importModel;
         $this->reportProcessor = $reportProcessor;
+        $this->historyModel = $historyModel;
+        $this->reportHelper = $reportHelper;
     }
 
     /**
@@ -58,8 +74,8 @@ class Start extends ImportController
                 $this->importModel->invalidateIndex();
                 $this->addResultMessages($resultBlock, $this->importModel->getErrorAggregator());
             }
-            $link = $this->reportProcessor->createReport($data[''], $this->importModel->getErrorAggregator());
-            $resultBlock->addNotice("Link to Error report: <a href=\"$link\">$link</a>");
+            $fileName = $this->createReportFile();
+            $resultBlock->addNotice("Error report file name: $fileName");
 
             return $resultLayout;
         }
@@ -80,14 +96,14 @@ class Start extends ImportController
         ProcessingErrorAggregatorInterface $errorAggregator
     ) {
         if ($errorAggregator->isErrorLimitExceeded()) {
-            $resultBlock->addError('Maximum error count has been reached:');
+            $message = '';
             foreach ($this->getImportProcessingMessages($errorAggregator) as $error) {
-                $resultBlock->addError($error);
+                $message .= $error . '<br>';
             }
+            $resultBlock->addError("Maximum error count has been reached:<br>$message");
         }
 
         if ($errorAggregator->hasFatalExceptions()) {
-            $resultBlock->addError('System fatal exceptions(s):');
             foreach ($this->getSystemExceptions($errorAggregator) as $error) {
                 $resultBlock->addError(
                     $error->getErrorMessage() . '<br>Additional data: ' . $error->getErrorDescription()
@@ -127,11 +143,12 @@ class Start extends ImportController
     }
 
     /**
-     * @param string $originalFileName
      * @return string Link to error report file
      */
-    protected function createReportFile($originalFileName)
+    protected function createReportFile()
     {
-        return $this->reportProcessor->createReport($originalFileName, $this->importModel->getErrorAggregator());
+        $this->historyModel->loadLastInsertItem();
+        $sourceFile = $this->reportHelper->getReportAbsolutePath($this->historyModel->getData('imported_file'));
+        return $this->reportProcessor->createReport($sourceFile, $this->importModel->getErrorAggregator());
     }
 }
