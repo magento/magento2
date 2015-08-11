@@ -74,6 +74,12 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_scopeConfigMock;
 
     /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     * |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $errorAggregator;
+
+    /**
      * Expected prepared data after method CustomerComposite::_prepareRowForDb
      *
      * @var array
@@ -151,6 +157,14 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->errorAggregator = $this->getMock(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            ['hasToBeTerminated'],
+            [],
+            '',
+            false
+        );
+
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
     }
 
@@ -169,6 +183,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->_dataFactory,
             $this->_customerFactory,
             $this->_addressFactory,
+            $this->errorAggregator,
             $data
         );
     }
@@ -542,24 +557,6 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
                 '$expectedErrors' => [],
                 '$behavior' => Import::BEHAVIOR_APPEND,
             ],
-            'customer and addresses row with filed validation, append behavior' => [
-                '$rows' => [
-                    [
-                        Customer::COLUMN_EMAIL => 'test@test.com',
-                        Customer::COLUMN_WEBSITE => 'admin',
-                        Address::COLUMN_ADDRESS_ID => null,
-                    ],
-                    [
-                        Customer::COLUMN_EMAIL => '',
-                        Customer::COLUMN_WEBSITE => '',
-                        Address::COLUMN_ADDRESS_ID => 1
-                    ],
-                ],
-                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 0],
-                '$validationReturn' => false,
-                '$expectedErrors' => ['Orphan rows that will be skipped due default row errors'],
-                '$behavior' => Import::BEHAVIOR_APPEND,
-            ]
         ];
     }
 
@@ -621,42 +618,6 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $modelUnderTest->setSource($source);
-    }
-
-    public function testGetErrorMessages()
-    {
-        $errorMessages = [
-            'Required field' => [1, 2, 3],
-            'Bad password' => [1],
-            'Wrong website' => [1, 2],
-        ];
-        $customerEntity = $this->_getCustomerEntityMock();
-        $customerEntity->expects($this->once())->method('getErrorMessages')->will($this->returnValue($errorMessages));
-
-        $errorMessages = ['Required field' => [2, 3, 4, 5], 'Wrong address' => [1, 2]];
-        $addressEntity = $this->_getAddressEntityMock();
-        $addressEntity->expects($this->once())->method('getErrorMessages')->will($this->returnValue($errorMessages));
-
-        $data = $this->_getModelDependencies();
-        $data['customer_entity'] = $customerEntity;
-        $data['address_entity'] = $addressEntity;
-
-        $modelUnderTest = $this->_createModelMock($data);
-
-        $modelUnderTest->addRowError('Bad password', 1);
-
-        $expectedErrors = [
-            'Required field' => [1, 2, 3, 4, 5],
-            'Bad password' => [2],
-            'Wrong website' => [1, 2],
-            'Wrong address' => [1, 2],
-        ];
-
-        $actualErrors = $modelUnderTest->getErrorMessages();
-        foreach ($expectedErrors as $error => $rows) {
-            $this->assertArrayHasKey($error, $actualErrors);
-            $this->assertSame($rows, array_values($actualErrors[$error]));
-        }
     }
 
     public function testPrepareRowForDb()
@@ -762,26 +723,6 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertFalse($importResult);
         }
-    }
-
-    public function testGetErrorsCount()
-    {
-        $customerReturnData = 1;
-        $addressReturnData = 2;
-        $model = $this->_getModelForGetterTest('getErrorsCount', $customerReturnData, $addressReturnData);
-        $model->addRowError(CustomerComposite::ERROR_ROW_IS_ORPHAN, 1);
-
-        $this->assertEquals($customerReturnData + $addressReturnData + 1, $model->getErrorsCount());
-    }
-
-    public function testGetInvalidRowsCount()
-    {
-        $customerReturnData = 3;
-        $addressReturnData = 2;
-        $model = $this->_getModelForGetterTest('getInvalidRowsCount', $customerReturnData, $addressReturnData);
-        $model->addRowError(CustomerComposite::ERROR_ROW_IS_ORPHAN, 1);
-
-        $this->assertEquals($customerReturnData + $addressReturnData + 1, $model->getInvalidRowsCount());
     }
 
     public function testGetProcessedEntitiesCount()

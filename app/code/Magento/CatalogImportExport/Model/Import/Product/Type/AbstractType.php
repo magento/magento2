@@ -394,7 +394,7 @@ abstract class AbstractType
     {
         $error = false;
         $rowScope = $this->_entityModel->getRowScope($rowData);
-        if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL == $rowScope) &&
+        if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope) &&
             !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
 
 
