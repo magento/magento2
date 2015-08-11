@@ -5,17 +5,174 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product;
 
+use \Magento\Framework\Exception\LocalizedException;
+
 class VariationHandler
 {
     /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Media */
     protected $media;
 
+    /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable */
+    protected $configurableProduct;
+
+    /** @var \Magento\Eav\Model\Entity\Attribute\SetFactory */
+    protected $attributeSetFactory;
+
+    /** @var \Magento\Eav\Model\EntityFactory */
+    protected $entityFactory;
+
+    /** @var \Magento\Catalog\Model\ProductFactory */
+    protected $productFactory;
+
+    /** @var \Magento\Framework\Json\Helper\Data */
+    protected $jsonHelper;
+
+    /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface */
+    protected $stockConfiguration;
+
     /**
+     * @param Type\Configurable $configurableProduct
+     * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
+     * @param \Magento\Eav\Model\EntityFactory $entityFactory
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
      */
-    public function __construct(\Magento\Catalog\Model\Product\Attribute\Backend\Media $media)
-    {
+    public function __construct(
+        Type\Configurable $configurableProduct,
+        \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
+        \Magento\Eav\Model\EntityFactory $entityFactory,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
+        \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
+    ) {
+        $this->configurableProduct = $configurableProduct;
+        $this->attributeSetFactory = $attributeSetFactory;
+        $this->entityFactory = $entityFactory;
+        $this->productFactory = $productFactory;
+        $this->jsonHelper = $jsonHelper;
+        $this->stockConfiguration = $stockConfiguration;
         $this->media = $media;
+    }
+
+    /**
+     * Generate simple products to link with configurable
+     *
+     * @param \Magento\Catalog\Model\Product $parentProduct
+     * @param array $productsData
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function generateSimpleProducts($parentProduct, $productsData)
+    {
+        $this->prepareAttributeSetToBeBaseForNewVariations($parentProduct);
+        $generatedProductIds = [];
+        $productsData = $this->duplicateImagesForVariations($productsData);
+        foreach ($productsData as $simpleProductData) {
+            $newSimpleProduct = $this->productFactory->create();
+            if (isset($simpleProductData['configurable_attribute'])) {
+                $configurableAttribute = $this->jsonHelper->jsonDecode($simpleProductData['configurable_attribute']);
+                unset($simpleProductData['configurable_attribute']);
+            } else {
+                throw new LocalizedException(__('Configuration must have specified attributes'));
+            }
+
+            $this->fillSimpleProductData(
+                $newSimpleProduct,
+                $parentProduct,
+                array_merge($simpleProductData, $configurableAttribute)
+            );
+            $newSimpleProduct->save();
+
+            $generatedProductIds[] = $newSimpleProduct->getId();
+        }
+        return $generatedProductIds;
+    }
+
+    /**
+     * Prepare attribute set comprising all selected configurable attributes
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     */
+    protected function prepareAttributeSetToBeBaseForNewVariations(\Magento\Catalog\Model\Product $product)
+    {
+        $attributes = $this->configurableProduct->getUsedProductAttributes($product);
+        $attributeSetId = $product->getNewVariationsAttributeSetId();
+        /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
+        $attributeSet = $this->attributeSetFactory->create()->load($attributeSetId);
+        $attributeSet->addSetInfo(
+            $this->entityFactory->create()->setType(\Magento\Catalog\Model\Product::ENTITY)->getTypeId(),
+            $attributes
+        );
+        foreach ($attributes as $attribute) {
+            /* @var $attribute \Magento\Catalog\Model\Entity\Attribute */
+            if (!$attribute->isInSet($attributeSetId)) {
+                $attribute->setAttributeSetId(
+                    $attributeSetId
+                )->setAttributeGroupId(
+                    $attributeSet->getDefaultGroupId($attributeSetId)
+                )->save();
+            }
+        }
+    }
+
+    /**
+     * Fill simple product data during generation
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product $parentProduct
+     * @param array $postData
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function fillSimpleProductData(
+        \Magento\Catalog\Model\Product $product,
+        \Magento\Catalog\Model\Product $parentProduct,
+        $postData
+    ) {
+        $product->setStoreId(
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        )->setTypeId(
+            $postData['weight'] ? \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE : \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+        )->setAttributeSetId(
+            $parentProduct->getNewVariationsAttributeSetId()
+        );
+
+        foreach ($product->getTypeInstance()->getEditableAttributes($product) as $attribute) {
+            if ($attribute->getIsUnique() ||
+                $attribute->getAttributeCode() == 'url_key' ||
+                $attribute->getFrontend()->getInputType() == 'gallery' ||
+                $attribute->getFrontend()->getInputType() == 'media_image' ||
+                !$attribute->getIsVisible()
+            ) {
+                continue;
+            }
+
+            $product->setData($attribute->getAttributeCode(), $parentProduct->getData($attribute->getAttributeCode()));
+        }
+
+        $postData['stock_data'] = $parentProduct->getStockData();
+        $postData['stock_data']['manage_stock'] = $postData['quantity_and_stock_status']['qty'] === '' ? 0 : 1;
+        if (!isset($postData['stock_data']['is_in_stock'])) {
+            $stockStatus = $parentProduct->getQuantityAndStockStatus();
+            $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];
+        }
+        $configDefaultValue = $this->stockConfiguration->getManageStock($product->getStoreId());
+        $postData['stock_data']['use_config_manage_stock'] = $postData['stock_data']['manage_stock'] ==
+        $configDefaultValue ? 1 : 0;
+        $postData = $this->processMediaGallery($product, $postData);
+        $postData['status'] = isset($postData['status'])
+            ? $postData['status']
+            : \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
+        $product->addData(
+            $postData
+        )->setWebsiteIds(
+            $parentProduct->getWebsiteIds()
+        )->setVisibility(
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
+        );
     }
 
     /**

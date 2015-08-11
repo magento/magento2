@@ -9,14 +9,26 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initializatio
 
 class Configurable
 {
+    /** @var \Magento\ConfigurableProduct\Model\Product\VariationHandler */
+    protected $variationHandler;
+
+    /** @var \Magento\Framework\App\RequestInterface */
+    protected $request;
+
+    /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable */
+    protected $productType;
+
     /**
+     * @param \Magento\ConfigurableProduct\Model\Product\VariationHandler $variationHandler
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType
      * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
+        \Magento\ConfigurableProduct\Model\Product\VariationHandler $variationHandler,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType,
         \Magento\Framework\App\RequestInterface $request
     ) {
+        $this->variationHandler = $variationHandler;
         $this->productType = $productType;
         $this->request = $request;
     }
@@ -42,7 +54,7 @@ class Configurable
             $associatedProductIds = $this->request->getPost('associated_product_ids', []);
             $variationsMatrix = $this->request->getParam('variations-matrix', []);
             if (!empty($variationsMatrix)) {
-                $generatedProductIds = $this->productType->generateSimpleProducts($product, $variationsMatrix);
+                $generatedProductIds = $this->variationHandler->generateSimpleProducts($product, $variationsMatrix);
                 $associatedProductIds = array_merge($associatedProductIds, $generatedProductIds);
             }
             $product->setAssociatedProductIds(array_filter($associatedProductIds));

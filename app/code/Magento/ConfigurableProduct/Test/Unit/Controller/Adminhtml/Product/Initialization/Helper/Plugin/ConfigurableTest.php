@@ -5,6 +5,8 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable;
+
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -30,12 +32,24 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $variationHandler;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $subjectMock;
 
     protected function setUp()
     {
         $this->productTypeMock = $this->getMock(
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->variationHandler = $this->getMock(
+            'Magento\ConfigurableProduct\Model\Product\VariationHandler',
             [],
             [],
             '',
@@ -56,7 +70,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->plugin = new \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable($this->productTypeMock, $this->requestMock);
+        $this->plugin = new Configurable($this->variationHandler, $this->productTypeMock, $this->requestMock);
     }
 
     public function testAfterInitializeIfAttributesNotEmptyAndActionNameNotGenerateVariations()
@@ -87,7 +101,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->productMock
         );
         $this->productMock->expects($this->once())->method('setNewVariationsAttributeSetId')->with($postValue);
-        $this->productTypeMock->expects(
+        $this->variationHandler->expects(
             $this->once()
         )->method(
             'generateSimpleProducts'
