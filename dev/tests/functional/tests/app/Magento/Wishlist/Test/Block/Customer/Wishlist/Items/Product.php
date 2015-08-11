@@ -16,14 +16,14 @@ use Magento\Mtf\Client\Locator;
 class Product extends Form
 {
     /**
-     * Selector for 'Add to Cart' button
+     * Locator value for "Add to Cart" button.
      *
      * @var string
      */
     protected $addToCart = '.action.tocart';
 
     /**
-     * Selector for 'Remove item' button
+     * Locator value for "Remove item" button.
      *
      * @var string
      */
@@ -37,49 +37,49 @@ class Product extends Form
     protected $viewDetails = '.details.tooltip';
 
     /**
-     * Selector for 'Details block' element
+     * Locator value for "Details" block.
      *
      * @var string
      */
     protected $detailsBlock = '.product-item-tooltip';
 
     /**
-     * Edit button css selector
+     * Locator value for "Edit" button.
      *
      * @var string
      */
     protected $edit = '.action.edit';
 
     /**
-     * Selector for option's label
+     * Locator value for option's label.
      *
      * @var string
      */
     protected $optionLabel = '.tooltip.content .label';
 
     /**
-     * Selector for option's value
+     * Locator value for option's value.
      *
      * @var string
      */
     protected $optionValue = '.tooltip.content .values';
 
     /**
-     * Selector for click on footer block
+     * Locator value for Footer block.
      *
      * @var string
      */
     protected $footer = './ancestor::body//footer';
 
     /**
-     * Locator value for Product Price
+     * Locator value for item Price.
      *
      * @var string
      */
     protected $price = '.price';
 
     /**
-     * Fill item product details
+     * Fill item with details.
      *
      * @param array $fields
      * @return void
@@ -92,7 +92,7 @@ class Product extends Form
     }
 
     /**
-     * Click button 'Add To Cart'
+     * Click "Add to Cart" button.
      *
      * @return void
      */
@@ -103,7 +103,7 @@ class Product extends Form
     }
 
     /**
-     * Remove product from wish list
+     * Remove item from Wish List.
      *
      * @return void
      */
@@ -114,7 +114,7 @@ class Product extends Form
     }
 
     /**
-     * Get product options
+     * Get Product options.
      *
      * @return array|null
      */
@@ -144,7 +144,7 @@ class Product extends Form
     }
 
     /**
-     * Click "Edit" button for correspondent Product
+     * Click "Edit" button.
      *
      * @return void
      */
@@ -155,7 +155,7 @@ class Product extends Form
     }
 
     /**
-     * Hover Product block so that possible actions appear
+     * Hover Product block so that possible actions appear.
      *
      * @return void
      */
