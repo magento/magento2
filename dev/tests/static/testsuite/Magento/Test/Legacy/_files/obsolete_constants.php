@@ -752,4 +752,9 @@ return [
     ['ERROR_INVALID_PRICE_CORRECTION', 'Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
     ['EXCEPTION_CODE_NOT_SALABLE', 'Magento\Wishlist\Model\Item'],
     ['EXCEPTION_CODE_HAS_REQUIRED_OPTIONS', 'Magento\Wishlist\Model\Item'],
+    [
+        'CONFIG_PATH_DEFINITION_FORMAT',
+        'Magento\Framework\Config\ConfigOptionsListConstants',
+        'Magento\Framework\App\ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT'
+    ],
 ];
