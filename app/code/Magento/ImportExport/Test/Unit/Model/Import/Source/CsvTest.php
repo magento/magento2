@@ -111,6 +111,10 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage wrongColumnsNumber
+     */
     public function testRewind()
     {
         $this->_directoryMock->expects(
@@ -139,6 +143,6 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $model->next();
         $model->next();
         $this->assertSame(2, $model->key());
-        $this->assertSame(['column1' => '5', 'column2' => ''], $model->current());
+        $model->current();
     }
 }

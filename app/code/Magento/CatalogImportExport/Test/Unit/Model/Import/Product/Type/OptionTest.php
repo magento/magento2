@@ -255,6 +255,13 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $catalogDataMock,
             $scopeConfig,
             new \Magento\Framework\Stdlib\DateTime(),
+            $this->getMock(
+                'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface',
+                [],
+                [],
+                '',
+                false
+            ),
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
         ];
 

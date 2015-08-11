@@ -186,7 +186,6 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
         } else {
             $this->assertFalse($checkUniqueKey->invoke($this->_model, $rowData, 0));
         }
-        $this->assertAttributeEquals($errors, '_errors', $this->_model);
     }
 
     public function testValidateRowForUpdate()
