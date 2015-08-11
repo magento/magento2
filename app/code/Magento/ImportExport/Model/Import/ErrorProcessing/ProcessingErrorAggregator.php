@@ -186,7 +186,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     {
         $isExceeded = false;
         if ($this->validationStrategy == self::VALIDATION_STRATEGY_STOP_ON_ERROR
-            && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) >= $this->allowedErrorsCount
+            && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) > $this->allowedErrorsCount
         ) {
             $isExceeded = true;
         }
