@@ -113,7 +113,7 @@ class StartUpdater extends AbstractActionController
                 || ($jobType != 'uninstall' && !isset($package['version']))
                 || ($jobType == 'uninstall' && !isset($package['type']))
             ) {
-                $errorMessage .= 'Missing package information';
+                $errorMessage .= 'Missing package information' . PHP_EOL;
                 break;
             }
         }
