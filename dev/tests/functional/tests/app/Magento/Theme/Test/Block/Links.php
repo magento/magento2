@@ -56,9 +56,7 @@ class Links extends Block
      */
     protected function expandCustomerMenu()
     {
-        if (!$this->_rootElement->find($this->customerMenu)->isVisible()) {
-            $this->_rootElement->find($this->toggleButton)->click();
-        }
+        $this->_rootElement->find($this->toggleButton)->click();
     }
 
     /**
@@ -69,8 +67,11 @@ class Links extends Block
      */
     public function openLink($linkTitle)
     {
-        $this->expandCustomerMenu();
-        $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->click();
+        $link = $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH);
+        if (!$link->isVisible()) {
+            $this->expandCustomerMenu();
+        }
+        $link->click();
     }
 
     /**
