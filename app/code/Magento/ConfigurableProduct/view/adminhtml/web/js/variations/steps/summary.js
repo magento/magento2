@@ -45,18 +45,22 @@ define([
                 quantity = getSectionValue('quantity', options);
                 price = getSectionValue('price', options);
                 price = price || productPrice;
-                var product = this.variationsComponent().getProductByOptions(options);
+                var productId = this.variationsComponent().getProductIdByOptions(options);
+                if (productId && !images.file) {
+                    var product = _.findWhere(this.variationsComponent().variations, {product_id: productId});
+                    images = product.images;
+                }
                 var variation = {
                     options: options,
                     images: images,
                     sku: sku,
                     quantity: quantity,
                     price: price,
-                    product_id: product,
+                    product_id: productId,
                     editable: true
                 };
                 this.variations.push(variation);
-                if (product) {
+                if (productId) {
                     this.gridExisting.push(this.prepareRowForGrid(variation));
                 } else {
                     this.gridNew.push(this.prepareRowForGrid(variation));

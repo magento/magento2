@@ -158,8 +158,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected $jsonHelper;
 
-    /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Media */
-    protected $media;
+    /** @var \Magento\ConfigurableProduct\Model\Product\VariationHandler */
+    protected $variationHandler;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
@@ -190,7 +190,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
+     * @param \Magento\ConfigurableProduct\Model\Product\VariationHandler $variationHandler
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -217,7 +217,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
+        \Magento\ConfigurableProduct\Model\Product\VariationHandler $variationHandler
     ) {
         $this->_typeConfigurableFactory = $typeConfigurableFactory;
         $this->_entityFactory = $entityFactory;
@@ -231,7 +231,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->stockConfiguration = $stockConfiguration;
         $this->jsonHelper = $jsonHelper;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->media = $media;
+        $this->variationHandler = $variationHandler;
 
         parent::__construct(
             $catalogProductOption,
@@ -1094,7 +1094,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         $this->_prepareAttributeSetToBeBaseForNewVariations($parentProduct);
         $generatedProductIds = [];
-        $this->duplicateImagesForVariations($productsData);
+        $productsData = $this->variationHandler->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
             $configurableAttribute = [];
@@ -1206,15 +1206,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $configDefaultValue = $this->stockConfiguration->getManageStock($product->getStoreId());
         $postData['stock_data']['use_config_manage_stock'] = $postData['stock_data']['manage_stock'] ==
             $configDefaultValue ? 1 : 0;
-        if (!empty($postData['image']) && empty($postData['media_gallery'])) {
-            $postData['small_image'] = $postData['thumbnail'] = $postData['image'];
-            $postData['media_gallery']['images'][] = [
-                'position' => 1,
-                'file' => $postData['image'],
-                'disabled' => 0,
-                'label' => '',
-            ];
-        }
+        $postData = $this->variationHandler->processMediaGallery($product, $postData);
         $postData['status'] = isset($postData['status'])
             ? $postData['status']
             : \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
@@ -1225,45 +1217,5 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         )->setVisibility(
             \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
         );
-    }
-
-    /**
-     * Duplicate images for variations
-     *
-     * @param $productsData
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function duplicateImagesForVariations(&$productsData)
-    {
-        $imagesForCopy = [];
-        foreach ($productsData as $variationId => $simpleProductData) {
-            if (!isset($simpleProductData['media_gallery']['images'])) {
-                continue;
-            }
-
-            foreach ($simpleProductData['media_gallery']['images'] as $imageId => $image) {
-                $image['variation_id'] = $variationId;
-                if (isset($imagesForCopy[$imageId][0])) {
-                    // skip duplicate image for first product
-                    unset($imagesForCopy[$imageId][0]);
-                }
-                $imagesForCopy[$imageId][] = $image;
-            }
-        }
-        foreach ($imagesForCopy as $imageId => $variationImages) {
-            foreach ($variationImages as $image) {
-                $file = $image['file'];
-                $variationId = $image['variation_id'];
-                $newFile = $this->media->duplicateImageFromTmp($file);
-                $productsData[$variationId]['media_gallery']['images'][$imageId]['file'] = $newFile;
-                foreach (['small_image', 'thumbnail', 'image'] as $imageType) {
-                    if (isset($productsData[$variationId][$imageType])
-                        && $productsData[$variationId][$imageType] == $file
-                    ) {
-                        $productsData[$variationId][$imageType] = $newFile;
-                    }
-                }
-            }
-        }
     }
 }

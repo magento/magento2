@@ -141,28 +141,27 @@ if ($variations) {
                 <tr data-role="row" data-bind="css: { _disabled: !variation.status, even: $index() % 2 }, attr: { 'data-row-number': $index() }">
                     <td class="col-image" data-column="image">
                         <div class="actions split actions-image-uploader">
-                            <!-- ko ifnot: variation.editable -->
+                            <div class="action-upload action split" data-action="upload-image">
+                                <!-- ko if: $parent.isShowPreviewImage(variation) -->
                                 <img data-bind='attr: {src: variation.images.preview}' class="variation" data-role="image"/>
-                            <!-- /ko -->
-                            <!-- ko if: variation.editable -->
-                                <!-- ko ifnot: variation.images.file-->
-                                <div class="action-upload action split" data-action="upload-image">
-                                    <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
-                                    <span><?= __('Upload Image'); ?></span>
-                                    <input name="image" type="file"
-                                           data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
-                                           title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
-                                </div>
-                                <button type="button" class="action toggle no-display" data-toggle="dropdown"
-                                        data-mage-init='{"dropdown":{}}'>
-                                    <span><?= __('Select'); ?></span>
-                                </button>
                                 <!-- /ko -->
+                                <!-- ko if: variation.editable-->
+                                <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
+                                <span><?= __('Upload Image'); ?></span>
+                                <input name="image" type="file"
+                                       data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
+                                       title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
+                                <!-- /ko -->
+                            </div>
+                            <!-- ko if: variation.editable -->
                             <!-- ko if: variation.images.file -->
-                                <img data-bind='attr: {src: variation.images.preview}' class="variation" data-role="image"/>
                                 <span data-bind="html: $parent.generateImageGallery(variation)" data-block="variation-images"></span>
                             <!-- /ko -->
                             <!-- /ko -->
+                            <button type="button" class="action toggle no-display" data-toggle="dropdown"
+                                    data-mage-init='{"dropdown":{}}'>
+                                <span><?= __('Select'); ?></span>
+                            </button>
                             <ul class="dropdown">
                                 <li>
                                     <a class="item" data-action="no-image"><?= __('No Image'); ?></a>
