@@ -11,7 +11,7 @@ use Magento\Mtf\Client\Locator;
 
 /**
  * Class Product
- * Wishlist item product form
+ * Wish List item Product form
  */
 class Product extends Form
 {
@@ -70,6 +70,13 @@ class Product extends Form
      * @var string
      */
     protected $footer = './ancestor::body//footer';
+
+    /**
+     * Locator value for Product Price
+     *
+     * @var string
+     */
+    protected $price = '.price';
 
     /**
      * Fill item product details
@@ -154,6 +161,6 @@ class Product extends Form
      */
     public function hoverProductBlock()
     {
-        $this->_rootElement->find('.price')->click();
+        $this->_rootElement->find($this->price)->click();
     }
 }

@@ -15,14 +15,14 @@ use Magento\Mtf\Client\Locator;
 class Navigation extends Block
 {
     /**
-     * 'Clear All' link.
+     * Locator value for "Clear All" link.
      *
      * @var string
      */
     protected $clearAll = '.action.clear';
 
     /**
-     * Attribute option title selector.
+     * Locator value for correspondent Attribute filter option.
      *
      * @var string
      */
@@ -36,14 +36,14 @@ class Navigation extends Block
     protected $filterLink = './/div[@class="filter-options-title" and contains(text(),"%s")]/following-sibling::div//a';
 
     /**
-     * Locator value for "Expand Filter" button
+     * Locator value for "Expand Filter" button.
      *
      * @var string
      */
     protected $expandFilterButton = '[data]';
 
     /**
-     * Click on 'Clear All' link.
+     * Clear all applied filters.
      *
      * @return void
      */

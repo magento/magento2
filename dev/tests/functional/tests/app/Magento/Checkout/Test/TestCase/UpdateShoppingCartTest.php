@@ -102,7 +102,8 @@ class UpdateShoppingCartTest extends Injectable
     {
         // Preconditions
         $product->persist();
-        $this->checkoutCart->open()->getCartBlock()->clearShoppingCart();
+        $this->checkoutCart->open();
+        $this->checkoutCart->getCartBlock()->clearShoppingCart();
 
         // Steps
         $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');

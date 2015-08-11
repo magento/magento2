@@ -135,7 +135,7 @@ class Footer extends Block
     }
 
     /**
-     * Open Advanced Search
+     * Open Advanced Search.
      *
      * @return void
      */
