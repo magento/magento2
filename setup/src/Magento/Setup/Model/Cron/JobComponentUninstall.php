@@ -129,7 +129,8 @@ class JobComponentUninstall extends AbstractJob
             case self::COMPONENT_MODULE:
                 // convert to module name
                 $componentName = $this->packageInfo->getModuleName($componentName);
-                $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = true;
+                $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = isset($this->params['dataOption']) ?
+                    $this->params['dataOption'] : false;
                 $options[ModuleUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
                 break;
             case self::COMPONENT_THEME:
