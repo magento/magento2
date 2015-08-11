@@ -2405,4 +2405,12 @@ return [
     ['salesQuoteSaveAfter', 'Magento\Checkout\Model\Observer', 'Magento\Checkout\Observer\SalesQuoteSaveAfter::invoke'],
     ['unsetAll', 'Magento\Checkout\Model\Observer', 'Magento\Checkout\Observer\UnsetAll::invoke'],
     ['currencyDisplayOptions', 'Magento\CurrencySymbol\Model\Observer', 'Magento\CurrencySymbol\Observer\CurrencyDisplayOptions::invoke'],
+    ['getColumnsComponent', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getColumnsComponent'],
+    ['getColumns', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getColumns'],
+    ['getHeaders', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getHeaders'],
+    ['getFields', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getFields'],
+    ['getRowData', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getRowData'],
+    ['getComplexLabel', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getComplexLabel'],
+    ['getFilterOptions', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getFilterOptions'],
+    ['getOptions', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getOptions'],
 ];
