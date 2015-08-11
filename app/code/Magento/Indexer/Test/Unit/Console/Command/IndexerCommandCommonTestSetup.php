@@ -5,14 +5,24 @@
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\ObjectManagerFactory;
 
 class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager\ConfigLoader
+     */
+    private $configLoaderMock;
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|IndexerFactory
      */
     protected $indexerFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     */
+    protected $stateMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|CollectionFactory
@@ -33,16 +43,17 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
 
-        //TODO: temporary fix unit
-        $stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $stateMock->expects($this->once())->method('setAreaCode')->with('adminmhtml')->willReturnSelf();
+        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->configLoaderMock = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
 
-        $this->objectManager->expects($this->once())
+        $this->objectManager->expects($this->any())
             ->method('get')
-            ->with('Magento\Framework\App\State')
-            ->willReturn($stateMock);
-        $this->objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\State', $this->stateMock],
+                ['Magento\Framework\App\ObjectManager\ConfigLoader', $this->configLoaderMock]
+            ]));
 
         $this->collectionFactory = $this->getMockBuilder('Magento\Indexer\Model\Indexer\CollectionFactory')
             ->disableOriginalConstructor()
@@ -54,13 +65,26 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->objectManager
-            ->expects($this->exactly(2))
+            ->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
                 ['Magento\Indexer\Model\Indexer\CollectionFactory', [], $this->collectionFactory],
                 ['Magento\Indexer\Model\IndexerFactory', [], $this->indexerFactory],
             ]));
+    }
 
-        $this->objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
+    protected function configureAdminArea()
+    {
+        $config = ['test config'];
+        $this->configLoaderMock->expects($this->once())
+            ->method('load')
+            ->with(FrontNameResolver::AREA_CODE)
+            ->will($this->returnValue($config));
+        $this->objectManager->expects($this->once())
+            ->method('configure')
+            ->with($config);
+        $this->stateMock->expects($this->once())
+            ->method('setAreaCode')
+            ->with(FrontNameResolver::AREA_CODE);
     }
 }

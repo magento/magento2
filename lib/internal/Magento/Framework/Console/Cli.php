@@ -27,12 +27,7 @@ class Cli extends SymfonyApplication
      */
     protected function getDefaultCommands()
     {
-        $commands = parent::getDefaultCommands();
-        foreach ($this->getApplicationCommands() as $command) {
-            $commands[] = $this->add($command);
-        }
-
-        return $commands;
+        return array_merge(parent::getDefaultCommands(), $this->getApplicationCommands());
     }
 
     /**
@@ -51,10 +46,13 @@ class Cli extends SymfonyApplication
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
         $bootstrap = Bootstrap::create(BP, $params);
         $objectManager = $bootstrap->getObjectManager();
+        $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
+            ->getServiceManager();
+        /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
+        $omProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
+        $omProvider->setObjectManager($objectManager);
 
         if (class_exists('Magento\Setup\Console\CommandList')) {
-            $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
-                ->getServiceManager();
             $setupCommandList = new \Magento\Setup\Console\CommandList($serviceManager);
             $setupCommands = $setupCommandList->getCommands();
         }
@@ -65,6 +63,7 @@ class Cli extends SymfonyApplication
         }
 
         if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+            /** @var \Magento\Framework\Console\CommandList $commandList */
             $commandList = $objectManager->create('Magento\Framework\Console\CommandList');
             $modulesCommands = $commandList->getCommands();
         }
