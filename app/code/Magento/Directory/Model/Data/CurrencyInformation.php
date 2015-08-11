@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model\Data;
-use Magento\Directory\Api\Data\CurrencyInformationInterface;
 
 /**
  * Class Currency Information
@@ -17,8 +16,10 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
     \Magento\Directory\Api\Data\CurrencyInformationInterface
 {
     const KEY_BASE_CURRENCY_CODE = 'base_currency_code';
+    const KEY_BASE_CURRENCY_SYMBOL = 'base_currency_symbol';
     const KEY_DEFAULT_DISPLAY_CURRENCY_CODE = 'default_display_currency_code';
-    const KEY_AVAILABLE_CURRENCYCODES = 'available_currency_codes';
+    const KEY_DEFAULT_DISPLAY_CURRENCY_SYMBOL = 'default_display_currency_symbol';
+    const KEY_AVAILABLE_CURRENCY_CODES = 'available_currency_codes';
     const KEY_EXCHANGE_RATES = 'exchange_rates';
 
     /**
@@ -40,9 +41,25 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
     /**
      * @inheritDoc
      */
+    public function getBaseCurrencySymbol()
+    {
+        return $this->_get(self::KEY_BASE_CURRENCY_SYMBOL);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setBaseCurrencySymbol($symbol)
+    {
+        return $this->setData(self::KEY_BASE_CURRENCY_SYMBOL, $symbol);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getDefaultDisplayCurrencyCode()
     {
-        return $this->_get(self::KEY_BASE_CURRENCY_CODE);
+        return $this->_get(self::KEY_DEFAULT_DISPLAY_CURRENCY_CODE);
     }
 
     /**
@@ -56,9 +73,25 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
     /**
      * @inheritDoc
      */
+    public function getDefaultDisplayCurrencySymbol()
+    {
+        return $this->_get(self::KEY_DEFAULT_DISPLAY_CURRENCY_SYMBOL);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setDefaultDisplayCurrencySymbol($symbol)
+    {
+        return $this->setData(self::KEY_DEFAULT_DISPLAY_CURRENCY_SYMBOL, $symbol);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getAvailableCurrencyCodes()
     {
-        return $this->_get(self::KEY_AVAILABLE_CURRENCYCODES);
+        return $this->_get(self::KEY_AVAILABLE_CURRENCY_CODES);
     }
 
     /**
@@ -66,7 +99,7 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
      */
     public function setAvailableCurrencyCodes(array $codes = null)
     {
-        return $this->setData(self::KEY_AVAILABLE_CURRENCYCODES, $codes);
+        return $this->setData(self::KEY_AVAILABLE_CURRENCY_CODES, $codes);
     }
 
     /**

@@ -6,18 +6,16 @@
 namespace Magento\Directory\Api;
 
 /**
- * Currency interface
+ * Currency Repository interface
  *
  * @api
  */
 interface CurrencyRepositoryInterface
 {
     /**
-     * Get Currency (by Store: optional).
+     * Get currency information for the store.
      *
      * @return \Magento\Directory\Api\Data\CurrencyInformationInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If $id is not found
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCurrencyInfo();
 }

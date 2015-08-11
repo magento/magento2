@@ -28,6 +28,21 @@ interface CurrencyInformationInterface
     public function setBaseCurrencyCode($code);
 
     /**
+     * Get the currency symbol of the base currency for the store.
+     *
+     * @return string
+     */
+    public function getBaseCurrencySymbol();
+
+    /**
+     * Set the currency symbol of the base currency for the store.
+     *
+     * @param string $symbol
+     * @return $this
+     */
+    public function setBaseCurrencySymbol($symbol);
+
+    /**
      * Get the default display currency code for the store.
      *
      * @return string
@@ -41,6 +56,21 @@ interface CurrencyInformationInterface
      * @return $this
      */
     public function setDefaultDisplayCurrencyCode($code);
+
+    /**
+     * Get the currency symbol of the default display currency for the store.
+     *
+     * @return string
+     */
+    public function getDefaultDisplayCurrencySymbol();
+
+    /**
+     * Set the currency symbol of the default display currency for the store.
+     *
+     * @param string $symbol
+     * @return $this
+     */
+    public function setDefaultDisplayCurrencySymbol($symbol);
 
     /**
      * Get the list of allowed currency codes for the store.
