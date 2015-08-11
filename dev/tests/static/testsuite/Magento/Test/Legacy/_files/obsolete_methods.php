@@ -2401,4 +2401,19 @@ return [
     ['getStoreCodeFromCookie', '\Magento\Store\Model\Store'],
     ['deleteCookie', '\Magento\Store\Model\Store'],
     ['setCookie', '\Magento\Store\Model\Store'],
+    [
+        'generateSimpleProducts',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::generateSimpleProducts'
+    ],
+    [
+        '_prepareAttributeSetToBeBaseForNewVariations',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::prepareAttributeSetToBeBaseForNewVariations'
+    ],
+    [
+        '_fillSimpleProductData',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
+    ],
 ];
