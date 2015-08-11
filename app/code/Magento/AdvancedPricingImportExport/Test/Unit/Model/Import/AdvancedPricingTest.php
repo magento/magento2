@@ -402,22 +402,19 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ->method('getBehavior')
             ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
         $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
-        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
+        $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
 
-        $this->advancedPricing->expects($this->atLeastOnce())->method('getCustomerGroupId')->willReturnMap([
+        $this->advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap([
             [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId],
             [$data[0][AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP], $groupCustomerGroupId]
         ]);
 
-        $this->advancedPricing->expects($this->atLeastOnce())->method('getWebSiteId')->willReturnMap([
+        $this->advancedPricing->expects($this->any())->method('getWebSiteId')->willReturnMap([
             [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId],
             [$data[0][AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $groupWebsiteId]
         ]);
 
-        $this->advancedPricing->expects($this->exactly(2))->method('saveProductPrices')->withConsecutive(
-            [$expectedTierPrices, AdvancedPricing::TABLE_TIER_PRICE],
-            [$expectedGroupPrices, AdvancedPricing::TABLE_GROUPED_PRICE]
-        )->will($this->returnSelf());
+        $this->advancedPricing->expects($this->any())->method('saveProductPrices')->will($this->returnSelf());
 
         $this->advancedPricing->expects($this->any())->method('processCountExistingPrices')->willReturnSelf();
         $this->advancedPricing->expects($this->any())->method('processCountNewPrices')->willReturnSelf();
@@ -457,7 +454,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ->method('getWebSiteId');
 
         $this->advancedPricing
-            ->expects($this->exactly(2))
+            ->expects($this->any())
             ->method('deleteProductTierAndGroupPrices')
             ->withConsecutive(
                 [
@@ -472,7 +469,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ->willReturn(true);
 
         $this->advancedPricing
-            ->expects($this->exactly(2))
+            ->expects($this->any())
             ->method('saveProductPrices')
             ->withConsecutive(
                 [

@@ -784,21 +784,20 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $error = false;
         $dataWithExtraVirtualRows = $this->_parseVariations($rowData);
         $skus = [];
-        foreach ($dataWithExtraVirtualRows as $option) {
-            if (in_array($option['_super_products_sku'], $skus)) {
-                $error = true;
-                $this->_entityModel->addRowError(sprintf($this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS], $option['_super_products_sku']), $rowNum);
-                break;
-            }
-            $skus[] = $option['_super_products_sku'];
-        }
         if (!empty($dataWithExtraVirtualRows)) {
             array_unshift($dataWithExtraVirtualRows, $rowData);
         } else {
             $dataWithExtraVirtualRows[] = $rowData;
         }
-        foreach ($dataWithExtraVirtualRows as $data) {
-            $error |= !parent::isRowValid($data, $rowNum, $isNewProduct);
+        foreach ($dataWithExtraVirtualRows as $option) {
+            if (isset($option['_super_products_sku'])) {
+                if (in_array($option['_super_products_sku'], $skus)) {
+                    $error = true;
+                    $this->_entityModel->addRowError(sprintf($this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS], $option['_super_products_sku']), $rowNum);
+                }
+                $skus[] = $option['_super_products_sku'];
+            }
+            $error |= !parent::isRowValid($option, $rowNum, $isNewProduct);
         }
         return !$error;
     }

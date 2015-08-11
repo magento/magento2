@@ -279,6 +279,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     {
         $rowData = [
             '_attribute_set' => 'attribute_set_name',
+            'sku' => 'sku'
         ];
         $rowNum = 1;
         $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(1);

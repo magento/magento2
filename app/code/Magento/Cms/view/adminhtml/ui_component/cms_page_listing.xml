@@ -25,7 +25,7 @@
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">PageGridDataProvider</argument>
             <argument name="name" xsi:type="string">cms_page_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">block_id</argument>
+            <argument name="primaryFieldName" xsi:type="string">page_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

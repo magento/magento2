@@ -548,6 +548,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Get fill data options with key sample
      *
+     * @param array $base
      * @param array $options
      * @return array
      */
@@ -583,6 +584,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Get fill data options with key link
      *
+     * @param array $base
      * @param array $options
      * @return array
      */
