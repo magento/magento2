@@ -30,6 +30,7 @@ define(
             defaults: {
                 template: 'Magento_Checkout/cart/shipping-rates'
             },
+            isVisible: ko.observable(!quote.isVirtual()),
             isLoading: shippingService.isLoading,
             shippingRates: shippingService.getShippingRates(),
             shippingRateGroups: ko.observableArray([]),

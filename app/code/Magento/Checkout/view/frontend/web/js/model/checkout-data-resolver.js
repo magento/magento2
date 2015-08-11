@@ -35,6 +35,14 @@ define([
     'use strict';
 
     return {
+        resolveEstimationAddress: function () {
+            if (checkoutData.getShippingAddressFromData()) {
+                var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
+                selectShippingAddress(address);
+            }
+            this.applyShippingAddress();
+        },
+
         resolveShippingAddress: function () {
             var newCustomerShippingAddress = checkoutData.getNewCustomerShippingAddress();
             if (newCustomerShippingAddress) {
@@ -45,7 +53,10 @@ define([
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
             }
+            this.applyShippingAddress();
+        },
 
+        applyShippingAddress: function () {
             var shippingAddress = quote.shippingAddress();
             if (!shippingAddress) {
                 var isShippingAddressInitialized = addressList.some(function (address) {
