@@ -41,6 +41,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     const DEFAULT_IS_SHAREABLE = 2;
 
     /**
+     * Default website id
+     */
+    const DEFAULT_WEBSITE_ID = 0;
+
+    /**
      * Patch for downloadable files samples
      */
     const DOWNLOADABLE_PATCH_SAMPLES = 'downloadable/files/samples';
@@ -213,6 +218,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected $dataLinkPrice = [
         'link_id' => null,
+        'website_id' => self::DEFAULT_WEBSITE_ID,
         'price' => null
     ];
 
