@@ -125,6 +125,7 @@ class JobComponentUninstall extends AbstractJob
         }
 
         $options = [];
+        $skip = false;
         switch ($type) {
             case self::COMPONENT_MODULE:
                 // convert to module name
@@ -137,9 +138,12 @@ class JobComponentUninstall extends AbstractJob
                 $options[ThemeUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
                 break;
             case self::COMPONENT_LANGUAGE:
+                $skip = true;
                 break;
         }
-        $this->createAndRunUninstaller($type, $componentName, $options);
+        if (!$skip) {
+            $this->createAndRunUninstaller($type, $componentName, $options);
+        }
     }
 
     /**

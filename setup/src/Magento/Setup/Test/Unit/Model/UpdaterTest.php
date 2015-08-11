@@ -39,7 +39,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     [
-                        'name' => 'uninstall',
+                        'name' => 'uninstall_component',
                         'params' => ['components' => [['name' => 'vendor/package']], 'dataOption' => true]
                     ]
                 ]

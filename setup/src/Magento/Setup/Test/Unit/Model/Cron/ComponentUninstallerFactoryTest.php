@@ -43,15 +43,6 @@ class ComponentUninstallerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($moduleUninstaller, $this->factory->create(JobComponentUninstall::COMPONENT_MODULE));
     }
 
-    public function testCreateLanguage()
-    {
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
-        $objectManager->expects($this->once())->method('create')->with('');
-        $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $this->serviceLocator->expects($this->never())->method($this->anything());
-        $this->factory->create(JobComponentUninstall::COMPONENT_LANGUAGE);
-    }
-
     public function testCreateTheme()
     {
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);

@@ -18,7 +18,7 @@ class Updater
      * Task types
      */
     const TASK_TYPE_UPDATE = 'update';
-    const TASK_TYPE_UNINSTALL = 'uninstall';
+    const TASK_TYPE_UNINSTALL = 'uninstall_component';
     /**#@-*/
 
     /**
