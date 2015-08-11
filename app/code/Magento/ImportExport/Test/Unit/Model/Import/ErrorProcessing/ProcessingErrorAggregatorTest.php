@@ -96,6 +96,14 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method addRowToSkip
+     */
+    public function testAddRowToSkip()
+    {
+        $this->model->addRowToSkip(7);
+    }
+
+    /**
      * Test for method addErrorMessageTemplate
      */
     public function testAddErrorMessageTemplate()
