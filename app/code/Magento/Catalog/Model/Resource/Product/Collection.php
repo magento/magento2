@@ -35,6 +35,11 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     const MAIN_TABLE_ALIAS = 'e';
 
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'entity_id';
+
+    /**
      * Catalog Product Flat is enabled cache per store
      *
      * @var array
