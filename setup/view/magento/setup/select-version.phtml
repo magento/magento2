@@ -15,7 +15,7 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="update()"
-                ng-disabled="!upgradeReadyForNext || !componentsReadyForNext
+                ng-disabled="!upgradeReadyForNext || (!componentsReadyForNext && updateComponents.yes)
                 || upgradeProcessError || componentsProcessError"
                 >Next</button>
         </div>
@@ -24,7 +24,7 @@
                 type="button"
                 class="btn btn-secondary"
                 ng-click="$state.forceReload()"
-                ng-disabled="tryAgain <= 0"
+                ng-disabled="!tryAgainEnabled()"
                 >Try Again</button>
         </div>
     </div>
