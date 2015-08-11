@@ -74,7 +74,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setError(false);
 
         try {

@@ -105,14 +105,16 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
     {
         $table = $this->getTable($table);
         if (!$this->setupCache->has($table, $parentId, $rowId)) {
-            $adapter = $this->getConnection();
+            $connection = $this->getConnection();
             $bind = ['id_field' => $rowId];
-            $select = $adapter->select()->from($table)->where($adapter->quoteIdentifier($idField) . '= :id_field');
+            $select = $connection->select()
+                ->from($table)
+                ->where($connection->quoteIdentifier($idField) . '= :id_field');
             if (null !== $parentField) {
-                $select->where($adapter->quoteIdentifier($parentField) . '= :parent_id');
+                $select->where($connection->quoteIdentifier($parentField) . '= :parent_id');
                 $bind['parent_id'] = $parentId;
             }
-            $this->setupCache->setRow($table, $parentId, $rowId, $adapter->fetchRow($select, $bind));
+            $this->setupCache->setRow($table, $parentId, $rowId, $connection->fetchRow($select, $bind));
         }
 
         return $this->setupCache->get($table, $parentId, $rowId, $field);
@@ -131,13 +133,13 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
     public function deleteTableRow($table, $idField, $rowId, $parentField = null, $parentId = 0)
     {
         $table = $this->getTable($table);
-        $adapter = $this->getConnection();
-        $where = [$adapter->quoteIdentifier($idField) . '=?' => $rowId];
-        if (!is_null($parentField)) {
-            $where[$adapter->quoteIdentifier($parentField) . '=?'] = $parentId;
+        $connection = $this->getConnection();
+        $where = [$connection->quoteIdentifier($idField) . '=?' => $rowId];
+        if (null !== $parentField) {
+            $where[$connection->quoteIdentifier($parentField) . '=?'] = $parentId;
         }
 
-        $adapter->delete($table, $where);
+        $connection->delete($table, $where);
 
         $this->setupCache->remove($table, $parentId, $rowId);
 
@@ -166,9 +168,9 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
             $data = [$field => $value];
         }
 
-        $adapter = $this->getConnection();
-        $where = [$adapter->quoteIdentifier($idField) . '=?' => $rowId];
-        $adapter->update($table, $data, $where);
+        $connection = $this->getConnection();
+        $where = [$connection->quoteIdentifier($idField) . '=?' => $rowId];
+        $connection->update($table, $data, $where);
 
         if (is_array($field)) {
             $oldRow = $this->setupCache->has($table, $parentId, $rowId) ?

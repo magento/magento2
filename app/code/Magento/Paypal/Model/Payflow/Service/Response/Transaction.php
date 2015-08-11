@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
@@ -84,7 +84,7 @@ class Transaction
      */
     public function getResponseObject($gatewayTransactionResponse)
     {
-        $response = new Object();
+        $response = new DataObject();
         $response = $this->transparent->mapGatewayResponse($gatewayTransactionResponse, $response);
         $this->logger->debug(
             $gatewayTransactionResponse,

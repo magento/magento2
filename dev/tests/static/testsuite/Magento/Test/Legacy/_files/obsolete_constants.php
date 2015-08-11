@@ -54,6 +54,18 @@ return [
         'Mage_Core_Model_Resource',
         'Magento_Core_Model_Config_Resource::DEFAULT_WRITE_CONNECTION',
     ],
+    [
+        'DEFAULT_READ_RESOURCE',
+        'Magento\Framework\App\Resource',
+    ],
+    [
+        'DEFAULT_WRITE_RESOURCE',
+        'Magento\Framework\App\Resource',
+    ],
+    [
+        'DEFAULT_SETUP_CONNECTION',
+        '\Magento\Framework\App\Resource\Config',
+    ],
     ['DEFAULT_READ_CONNECTION', 'Magento\Framework\App\Resource\Config'],
     ['DEFAULT_WRITE_CONNECTION', 'Magento\Framework\App\Resource\Config'],
     ['DEFAULT_ERROR_HANDLER', 'Mage'],
@@ -731,6 +743,12 @@ return [
     ],
     ['CURRENT_CUSTOMER', 'Magento\Customer\Controller\RegistryConstants'],
     ['METHOD_WPS', 'Magento\Paypal\Model\Config'],
+    [
+        'XML_PATH_MINIFICATION_ENABLED',
+        'Magento\Framework\View\Asset\Config',
+        'Magento\Framework\View\Asset\Minification::XML_PATH_MINIFICATION_ENABLED'
+    ],
+    ['XML_PATH_MINIFICATION_ADAPTER', 'Magento\Framework\View\Asset\Config'],
     ['ERROR_INVALID_PRICE_CORRECTION', 'Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
     ['EXCEPTION_CODE_NOT_SALABLE', 'Magento\Wishlist\Model\Item'],
     ['EXCEPTION_CODE_HAS_REQUIRED_OPTIONS', 'Magento\Wishlist\Model\Item'],

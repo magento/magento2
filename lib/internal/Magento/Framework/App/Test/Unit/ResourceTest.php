@@ -13,7 +13,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
-    const RESOURCE_NAME = \Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE;
+    const RESOURCE_NAME = \Magento\Framework\App\Resource::DEFAULT_CONNECTION;
     const CONNECTION_NAME = 'connection-name';
     const TABLE_PREFIX = 'prefix_';
 

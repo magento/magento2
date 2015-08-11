@@ -72,7 +72,7 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
                 } else {
                     $result[] = null;
                 }
-            } elseif ($item instanceof \Magento\Framework\Object) {
+            } elseif ($item instanceof \Magento\Framework\DataObject) {
                 $result[] = $item->getData($index);
             } else {
                 $result[] = null;
