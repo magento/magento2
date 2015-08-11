@@ -83,7 +83,8 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
             $this->getSelect()->join(
                 ['website' => $this->getTable($entityInfo['associations_table'])],
                 $this->getConnection()->quoteInto('website.' . $entityInfo['entity_id_field'] . ' = ?', $websiteId)
-                . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field']
+                . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field'],
+                []
             );
         }
         return $this;
