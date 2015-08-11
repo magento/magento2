@@ -121,6 +121,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         $expectedId = 'id';
         $expectedCustomerGroups = [
             $expectedCode => $expectedId,
+            'id' => true
         ];
         $groupTest->expects($this->once())->method('getCode')->willReturn($expectedCode);
         $groupTest->expects($this->any())->method('getId')->willReturn($expectedId);
@@ -352,6 +353,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      *
      * @param object $object
      * @param string $property
+     * @return mixed
      */
     protected function getPropertyValue($object, $property)
     {
@@ -368,6 +370,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      * @param object $object
      * @param string $property
      * @param mixed $value
+     * @return object
      */
     protected function setPropertyValue(&$object, $property, $value)
     {
