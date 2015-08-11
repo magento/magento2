@@ -47,6 +47,26 @@ define(
                 return address(addressData);
             },
 
+            /**
+             * Convert Address object to address form data
+             * @param {Object} address
+             * @returns {Object}
+             */
+            quoteAddressToFormAddressData: function (address) {
+                var self = this;
+                var output = {};
+                $.each(address, function (key) {
+                    if (address.hasOwnProperty(key) && !$.isFunction(address[key])) {
+                        output[self.toUnderscore(key)] = address[key];
+                    }
+                });
+                return output;
+            },
+
+            toUnderscore: function (string) {
+                return string.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();});
+            },
+
             formDataProviderToFlatData: function(formProviderData, formIndex) {
                 var addressData = {};
                 $.each(formProviderData, function(path, value) {

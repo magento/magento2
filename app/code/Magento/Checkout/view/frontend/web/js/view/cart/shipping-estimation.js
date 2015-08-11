@@ -15,6 +15,7 @@ define(
         'Magento_Checkout/js/model/shipping-rates-validator',
         'uiRegistry',
         'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/checkout-data-resolver',
         'mage/validation'
     ],
     function(
@@ -26,7 +27,8 @@ define(
         checkoutData,
         shippingRatesValidator,
         registry,
-        quote
+        quote,
+        checkoutDataResolver
     ) {
         'use strict';
         return Component.extend({
@@ -42,13 +44,14 @@ define(
                 var self = this;
                 this._super();
                 registry.async('checkoutProvider')(function (checkoutProvider) {
-                    var shippingAddressData = checkoutData.getShippingAddressFromData();
-                    if (shippingAddressData) {
+                    checkoutDataResolver.resolveEstimationAddress();
+                    var shippingAddress = quote.shippingAddress();
+                    if (shippingAddress) {
+                        var shippingAddressData = addressConverter.quoteAddressToFormAddressData(shippingAddress);
                         checkoutProvider.set(
                             'shippingAddress',
                             $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                         );
-                        self.getEstimationInfo();
                     }
                     checkoutProvider.on('shippingAddress', function (shippingAddressData) {
                         checkoutData.setShippingAddressFromData(shippingAddressData);
