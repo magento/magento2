@@ -7,38 +7,30 @@ define(
     [
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/shipping-rate-processor/new-address',
-        'Magento_Checkout/js/model/shipping-rate-processor/customer-address',
         'Magento_Checkout/js/model/cart/totals-processor/default'
     ],
-    function (quote, defaultProcessor, customerAddressProcessor, totalsDefaultProvider) {
+    function (quote, defaultProcessor, totalsDefaultProvider) {
         'use strict';
 
-        var processors = [];
+        var rateProcessors = [],
+            totalsProcessors = [];
 
-        if (quote.isVirtual()) {
-            quote.shippingAddress.subscribe(function () {
-                processors['default'] = totalsDefaultProvider;
-                processors['default'] = totalsDefaultProvider.estimateTotals(quote.shippingAddress());
+        quote.shippingAddress.subscribe(function () {
+            var type = quote.shippingAddress().getType();
+            if (quote.isVirtual()) {
+                // update totals block when estimated address was set
+                totalsProcessors['default'] = totalsDefaultProvider;
+                totalsProcessors[type]
+                    ? totalsProcessors[type].estimateTotals(quote.shippingAddress())
+                    : totalsProcessors['default'].estimateTotals(quote.shippingAddress());
+            } else {
+                // update rates list when estimated address was set
+                rateProcessors['default'] = defaultProcessor;
+                rateProcessors[type]
+                    ? rateProcessors[type].getRates(quote.shippingAddress())
+                    : rateProcessors['default'].getRates(quote.shippingAddress());
 
-            });
-        } else {
-                quote.shippingAddress.subscribe(function () {
-                    processors['default'] = defaultProcessor;
-                    processors['customer-address'] = customerAddressProcessor;
-                    var type = quote.shippingAddress().getType();
-                    var rates = [];
-                    if (processors[type]) {
-                        rates = processors[type].getRates(quote.shippingAddress());
-                    } else {
-                        rates = processors['default'].getRates(quote.shippingAddress());
-                    }
-                });
-
-        }
-        return {
-            registerProcessor: function(type, processor) {
-                processors[type] = processor;
             }
-        }
+        });
     }
 );
