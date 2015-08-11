@@ -247,7 +247,7 @@ class ComposerInformation
             $packageName = $package['name'];
             if (array_key_exists($packageName, $availablePackages)) {
                 if (version_compare($availablePackages[$packageName]['version'], $package['latestVersion'], '<')) {
-                    $actualUpdatePackages[$packageName] = $availablePackages[$packageName];
+                    $actualUpdatePackages[$packageName] = $package;
                 }
             }
         }
@@ -280,7 +280,7 @@ class ComposerInformation
         $versionParser = new VersionParser();
         foreach ($this->getPackageAvailableVersions($package) as $version) {
             if ($versionParser->parseStability($version) != 'dev') {
-                return $versionParser->normalize($version);
+                return $version;
             }
         }
         return '';

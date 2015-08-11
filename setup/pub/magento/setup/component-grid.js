@@ -54,10 +54,6 @@ angular.module('component-grid', ['ngStorage'])
                 return typeof $scope.availableUpdatePackages !== 'undefined'
                     && packageName in $scope.availableUpdatePackages;
             };
-            $scope.isAvailableUninstallPackage = function(packageName) {
-                return typeof $scope.availableUpdatePackages !== 'undefined'
-                    && packageName in $scope.availableUpdatePackages;
-            };
 
             $scope.getIndicatorInfo = function(component, type) {
                 var indicators = {
