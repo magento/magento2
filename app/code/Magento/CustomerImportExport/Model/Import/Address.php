@@ -386,6 +386,7 @@ class Address extends AbstractCustomer
      *
      * @abstract
      * @return boolean
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _importData()
     {
