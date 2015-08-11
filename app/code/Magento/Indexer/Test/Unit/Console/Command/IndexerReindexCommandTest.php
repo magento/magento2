@@ -19,6 +19,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testGetOptions()
     {
+        $this->stateMock->expects($this->never())->method('setAreaCode');
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
         $this->assertSame(2, sizeof($optionsList));
@@ -28,6 +29,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteAll()
     {
+        $this->configureAdminArea();
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
@@ -44,6 +46,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithIndex()
     {
+        $this->configureAdminArea();
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('reindexAll');
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
@@ -66,6 +69,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithLocalizedException()
     {
+        $this->configureAdminArea();
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $localizedException = new \Magento\Framework\Exception\LocalizedException(__('Some Exception Message'));
         $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($localizedException));
@@ -80,6 +84,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithException()
     {
+        $this->configureAdminArea();
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $exception = new \Exception();
         $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($exception));
@@ -95,6 +100,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithExceptionInLoad()
     {
+        $this->configureAdminArea();
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $exception = new \Exception();
         $indexerOne->expects($this->once())->method('load')->will($this->throwException($exception));

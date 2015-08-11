@@ -19,6 +19,7 @@ class IndexerStatusCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteAll()
     {
+        $this->configureAdminArea();
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
