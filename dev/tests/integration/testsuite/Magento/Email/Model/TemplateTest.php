@@ -121,7 +121,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->setNotDefaultThemeForFixtureStore();
-        $expectedViewUrl = 'static/frontend/Magento/luma/en_US/Magento_Theme/favicon.ico';
+        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplate());
         $this->model->setDesignConfig(
@@ -497,15 +497,14 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Set 'Magento/luma' for the 'fixturestore' store.
-     * Application isolation is required, if a test uses this method.
+     * Application isolation is required, if test uses this method.
      */
     protected function setNotDefaultThemeForFixtureStore()
     {
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\View\Design\ThemeInterface'
         );
-        $theme->load('Magento/luma', 'theme_path');
+        $theme->load('Magento/blank', 'theme_path');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
@@ -529,7 +528,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->setNotDefaultThemeForFixtureStore();
-        $expectedViewUrl = 'static/frontend/Magento/luma/en_US/Magento_Theme/favicon.ico';
+        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setTemplateSubject('{{view url="Magento_Theme::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
         $this->model->setDesignConfig(
@@ -557,7 +556,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->assertStringEndsWith(
-            'static/frontend/Magento/blank/en_US/Magento_Email/logo_email.png',
+            'static/frontend/Magento/luma/en_US/Magento_Email/logo_email.png',
             $this->model->getDefaultEmailLogo()
         );
     }

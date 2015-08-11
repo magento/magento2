@@ -26,14 +26,21 @@ class Navigation extends Block
      *
      * @var string
      */
-    protected $optionTitle = '.filter-options-title';
+    protected $optionTitle = './/div[@class="filter-options-title" and contains(text(),"%s")]';
 
     /**
      * Filter link locator.
      *
      * @var string
      */
-    protected $filterLink = './/dt[contains(text(),"%s")]/following-sibling::dd//a';
+    protected $filterLink = './/div[@class="filter-options-title" and contains(text(),"%s")]/following-sibling::div//a';
+
+    /**
+     * Locator value for "Expand Filter" button
+     *
+     * @var string
+     */
+    protected $expandFilterButton = '[data]';
 
     /**
      * Click on 'Clear All' link.
@@ -52,7 +59,7 @@ class Navigation extends Block
      */
     public function getFilters()
     {
-        $options = $this->_rootElement->getElements($this->optionTitle);
+        $options = $this->_rootElement->getElements(sprintf($this->optionTitle, ''), Locator::SELECTOR_XPATH);
         $data = [];
         foreach ($options as $option) {
             $data[] = $option->getText();
@@ -61,17 +68,23 @@ class Navigation extends Block
     }
 
     /**
-     * Click filter link.
+     * Apply Layerd Navigation filter.
      *
      * @param string $filter
      * @param string $linkPattern
      * @return void
      * @throws \Exception
      */
-    public function clickFilterLink($filter, $linkPattern)
+    public function applyFilter($filter, $linkPattern)
     {
-        $links = $this->_rootElement->getElements(sprintf($this->filterLink, $filter), Locator::SELECTOR_XPATH);
+        $expandFilterButton = sprintf($this->optionTitle, $filter);
+        $links = sprintf($this->filterLink, $filter);
 
+        if (!$this->_rootElement->find($links, Locator::SELECTOR_XPATH)->isVisible()) {
+            $this->_rootElement->find($expandFilterButton, Locator::SELECTOR_XPATH)->click();
+        }
+
+        $links = $this->_rootElement->getElements($links, Locator::SELECTOR_XPATH);
         foreach ($links as $link) {
             if (preg_match($linkPattern, trim($link->getText()))) {
                 $link->click();

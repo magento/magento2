@@ -51,7 +51,7 @@
         <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
         <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
         <!-- Whether to cleanup the application before running tests or not -->
-        <const name="TESTS_CLEANUP" value="enabled"/>
+        <const name="TESTS_CLEANUP" value="disabled"/>
         <!-- Memory usage and estimated leaks thresholds -->
         <!--<const name="TESTS_MEM_USAGE_LIMIT" value="1024M"/>-->
         <const name="TESTS_MEM_LEAK_LIMIT" value=""/>

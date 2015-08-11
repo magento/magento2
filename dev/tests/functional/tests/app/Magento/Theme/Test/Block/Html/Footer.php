@@ -52,6 +52,13 @@ class Footer extends Block
     protected $storeGroupSelector = './/a[contains(.,"%s")]';
 
     /**
+     * Css selector for "Advanced Search" link
+     *
+     * @var string
+     */
+    protected $advancedSearchSelector = '[data-action="advanced-search"]';
+
+    /**
      * Click on link by name
      *
      * @param string $linkName
@@ -125,5 +132,15 @@ class Footer extends Block
     public function isStoreGroupSwitcherVisible()
     {
         return $this->_rootElement->find($this->storeGroupSwitch)->isVisible();
+    }
+
+    /**
+     * Open Advanced Search
+     *
+     * @return void
+     */
+    public function openAdvancedSearch()
+    {
+        $this->_rootElement->find($this->advancedSearchSelector)->click();
     }
 }

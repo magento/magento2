@@ -65,6 +65,13 @@ class Cart extends Block
     protected $cartContainer = '.cart-container';
 
     /**
+     * Locator value for "Remove Product" button
+     *
+     * @var string
+     */
+    protected $deleteItemButton = '.action.action-delete';
+
+    /**
      * Get cart item block
      *
      * @param FixtureInterface $product
@@ -141,9 +148,13 @@ class Cart extends Block
      */
     public function clearShoppingCart()
     {
-        $clearShoppingCart = $this->_rootElement->find($this->clearShoppingCart);
-        if ($clearShoppingCart->isVisible()) {
-            $clearShoppingCart->click();
+        $clearShoppingCartButton = $this->_rootElement->find($this->clearShoppingCart);
+        if ($clearShoppingCartButton->isVisible()) {
+            $clearShoppingCartButton->click();
+        }
+
+        while (!$this->cartIsEmpty()) {
+            $this->_rootElement->find($this->deleteItemButton)->click();
         }
     }
 
@@ -175,7 +186,7 @@ class Cart extends Block
      */
     public function cartIsEmpty()
     {
-        return $this->_rootElement->find($this->cartEmpty, Locator::SELECTOR_CSS)->isVisible();
+        return $this->_rootElement->find($this->cartEmpty)->isVisible();
     }
 
     /**
