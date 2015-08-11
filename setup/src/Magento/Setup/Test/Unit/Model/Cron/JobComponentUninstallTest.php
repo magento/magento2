@@ -135,17 +135,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
     public function testExecuteLanguage()
     {
         $this->setUpUpdater();
-        $uninstaller = $this->getMockForAbstractClass(
-            'Magento\Framework\Composer\AbstractComponentUninstaller',
-            [],
-            '',
-            false
-        );
-        $uninstaller->expects($this->once())->method('uninstall');
-        $this->componentUninstallerFactory->expects($this->once())
-            ->method('create')
-            ->with(JobComponentUninstall::COMPONENT_LANGUAGE)
-            ->willReturn($uninstaller);
+        $this->componentUninstallerFactory->expects($this->never())->method('create');
 
         $this->job = new JobComponentUninstall(
             $this->componentUninstallerFactory,

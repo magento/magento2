@@ -10,7 +10,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Factory to create a component remove command, depending on component type
+ * Factory to create a component uninstaller, depending on component type
  */
 class ComponentUninstallerFactory
 {
@@ -21,7 +21,6 @@ class ComponentUninstallerFactory
      */
     static private $typeMap = [
         JobComponentUninstall::COMPONENT_MODULE => 'Magento\Setup\Model\ModuleUninstaller',
-        JobComponentUninstall::COMPONENT_LANGUAGE => '',
         JobComponentUninstall::COMPONENT_THEME => 'Magento\Theme\Model\Theme\ThemeUninstaller'
     ];
 
