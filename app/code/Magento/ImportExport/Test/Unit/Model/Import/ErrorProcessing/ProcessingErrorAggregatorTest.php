@@ -101,6 +101,8 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     public function testAddRowToSkip()
     {
         $this->model->addRowToSkip(7);
+        $result = $this->model->isRowInvalid(7);
+        $this->assertTrue($result);
     }
 
     /**
