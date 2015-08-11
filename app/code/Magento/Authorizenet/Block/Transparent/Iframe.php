@@ -55,14 +55,24 @@ class Iframe extends TransparentIframe
     }
 
     /**
-     * Escape redirect url and add success message
-     *
-     * @param string $url
-     * @return string
+     * {inheritdoc}
      */
-    public function getRedirectParentUrl($url)
+    protected function _beforeToHtml()
     {
-        $this->messageManager->addSuccess(__('You created the order.'));
-        return $this->escapeUrl($url);
+        $this->addSuccessMessage();
+        return parent::_beforeToHtml();
+    }
+
+    /**
+     * Add success message
+     *
+     * @return void
+     */
+    private function addSuccessMessage()
+    {
+        $params = $this->getParams();
+        if (isset($params['redirect_parent'])) {
+            $this->messageManager->addSuccess(__('You created the order.'));
+        }
     }
 }
