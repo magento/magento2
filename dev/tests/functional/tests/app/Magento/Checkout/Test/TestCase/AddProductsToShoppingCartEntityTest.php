@@ -93,6 +93,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     {
         // Preconditions
         $products = $this->prepareProducts($productsData);
+        $this->cartPage->open()->getCartBlock()->clearShoppingCart();
 
         // Steps
         $this->addToCart($products);

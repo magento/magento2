@@ -51,13 +51,6 @@ class Search extends Block
     protected $placeholder = '//input[@id="search" and contains(@placeholder, "%s")]';
 
     /**
-     * Css selector advanced search button
-     *
-     * @var string
-     */
-    protected $advancedSearchSelector = '.action.advanced';
-
-    /**
      * Search products by a keyword
      *
      * @param string $keyword
@@ -117,15 +110,5 @@ class Search extends Block
                 return $rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }
         );
-    }
-
-    /**
-     * Click advanced search button
-     *
-     * @return void
-     */
-    public function clickAdvancedSearchButton()
-    {
-        $this->_rootElement->find($this->advancedSearchSelector)->click();
     }
 }

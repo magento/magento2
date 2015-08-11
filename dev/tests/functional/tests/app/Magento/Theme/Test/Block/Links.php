@@ -36,6 +36,33 @@ class Links extends Block
     protected $welcomeMessage = '.greet.welcome';
 
     /**
+     * Locator value for "Expand/Collapse Customer Menu" button
+     *
+     * @var string
+     */
+    protected $toggleButton = '[data-action="customer-menu-toggle"]';
+
+    /**
+     * Locator value for Customer Menu
+     *
+     * @var string
+     */
+    protected $customerMenu = '.customer-menu > ul';
+
+    /**
+     * Expand Customer Menu (located in page Header) if it is collapsed
+     */
+    protected function expandCustomerMenu()
+    {
+        if (!$this->_rootElement->find($this->customerMenu)->isVisible()) {
+            $toggleButton = $this->_rootElement->find($this->toggleButton);
+            if ($toggleButton->isVisible()) {
+                $toggleButton->click();
+            }
+        }
+    }
+
+    /**
      * Open Link by title.
      *
      * @param string $linkTitle
@@ -43,6 +70,7 @@ class Links extends Block
      */
     public function openLink($linkTitle)
     {
+        $this->expandCustomerMenu();
         $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->click();
     }
 
@@ -54,6 +82,7 @@ class Links extends Block
      */
     public function isLinkVisible($linkTitle)
     {
+        $this->expandCustomerMenu();
         return $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->isVisible();
     }
 

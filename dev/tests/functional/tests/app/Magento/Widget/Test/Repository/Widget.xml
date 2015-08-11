@@ -52,7 +52,7 @@
             <field name="page_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
-            <field name="theme_id" xsi:type="string">Magento Blank</field>
+            <field name="theme_id" xsi:type="string">Magento Luma</field>
             <field name="widgetOptions" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="type_id" xsi:type="string">cmsPageLink</item>

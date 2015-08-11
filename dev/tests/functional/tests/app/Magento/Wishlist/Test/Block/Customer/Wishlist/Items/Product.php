@@ -79,6 +79,7 @@ class Product extends Form
      */
     public function fillProduct(array $fields)
     {
+        $this->hoverProductBlock();
         $mapping = $this->dataMapping($fields);
         $this->_fill($mapping);
     }
@@ -90,6 +91,7 @@ class Product extends Form
      */
     public function clickAddToCart()
     {
+        $this->hoverProductBlock();
         $this->_rootElement->find($this->addToCart)->click();
     }
 
@@ -100,6 +102,7 @@ class Product extends Form
      */
     public function remove()
     {
+        $this->hoverProductBlock();
         $this->_rootElement->find($this->remove)->click();
     }
 
@@ -134,12 +137,23 @@ class Product extends Form
     }
 
     /**
-     * Click edit button
+     * Click "Edit" button for correspondent Product
      *
      * @return void
      */
     public function clickEdit()
     {
+        $this->hoverProductBlock();
         $this->_rootElement->find($this->edit)->click();
+    }
+
+    /**
+     * Hover Product block so that possible actions appear
+     *
+     * @return void
+     */
+    public function hoverProductBlock()
+    {
+        $this->_rootElement->find('.price')->click();
     }
 }
