@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Checkout\Test\TestCase\DeleteProductsFromShoppingCartTest">
+    <testCase name="Magento\Checkout\Test\TestCase\DeleteProductsFromShoppingCartTest" summary="Delete Products from Shopping Cart" ticketId="MAGETWO-25218">
         <variation name="DeleteProductsFromShoppingCartTestVariation1">
             <data name="productsData" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />

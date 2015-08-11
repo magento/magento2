@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\UpdateProductAttributeEntityTest">
+    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\UpdateProductAttributeEntityTest" summary="Update Product Attribute" ticketId="MAGETWO-23459">
         <variation name="UpdateProductAttributeEntityTestVariation1">
             <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_text_field</data>
