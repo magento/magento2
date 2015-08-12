@@ -5,21 +5,11 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Checkout\Model\Layout\AbstractTotalsProcessor;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 
 class CartTotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessorInterface
 {
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(
-        ScopeConfigInterface $scopeConfig
-    ) {
-        parent::__construct($scopeConfig);
-    }
-
     /**
      * {@inheritdoc}
      */
