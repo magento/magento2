@@ -19,7 +19,7 @@ class StartConsumerCommand extends Command
 {
     const ARGUMENT_CONSUMER = 'consumer';
     const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
-    const OPTION_DURABLE = 'durable';
+    const OPTION_DAEMON_MODE = 'daemon-mode';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
     /**
@@ -45,9 +45,9 @@ class StartConsumerCommand extends Command
     {
         $consumerName = $input->getArgument(self::ARGUMENT_CONSUMER);
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
-        $durable = $input->hasOption(self::OPTION_DURABLE);
+        $daemonMode = $input->getOption(self::OPTION_DAEMON_MODE);
         $consumer = $this->consumerFactory->get($consumerName);
-        $consumer->process($numberOfMessages, $durable);
+        $consumer->process($numberOfMessages, $daemonMode);
     }
 
     /**
@@ -70,11 +70,11 @@ class StartConsumerCommand extends Command
             . 'If not specify - terminate after processing all queued messages.'
         );
         $this->addOption(
-            self::OPTION_DURABLE,
+            self::OPTION_DAEMON_MODE,
             null,
             InputOption::VALUE_NONE,
-            'This option defines, whether this command will run indefinitely or not '
-            . 'if number of messages is not defined. If not specify - the command is not durable.'
+            'This option defines, whether this command will run indefinitely or not. '
+            . 'If number of messages is defined or if this option is not specify - the command is not in daemon mode.'
         );
         $this->setHelp(
             <<<HELP
@@ -88,9 +88,9 @@ To specify the number of messages which should be processed by consumer before i
 
     <comment>%command.full_name% some_consumer --max-messages=50</comment>
 
-To specify the command as durable:
+To specify the command as daemon-mode:
 
-    <comment>%command.full_name% some_consumer --durable</comment>
+    <comment>%command.full_name% some_consumer --daemon-mode</comment>
 HELP
         );
         parent::configure();
