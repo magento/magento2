@@ -16,7 +16,7 @@ define(
             getUrlForTotalsEstimationForNewAddress: function(quote) {
                 var params = (this.getCheckoutMethod() == 'guest') ? {cartId: quote.getQuoteId()} : {};
                 var urls = {
-                    'guest': '/carts/:cartId/totals-information',
+                    'guest': '/guest-carts/:cartId/totals-information',
                     'customer': '/carts/mine/totals-information'
                 };
                 return this.getUrl(urls, params);
