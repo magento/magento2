@@ -5,7 +5,7 @@
 
 //  # Drop-down and split buttons mixins
 //
-//  Magento UI library provides mixins for 2 types of drop-downs: the <code>.mixin-dropdown()</code> mixin for drop-down and the <code>.mixin-dropdown-split()</code> mixin for split button.
+//  Magento UI library provides mixins for 2 types of drop-downs: the <code>.lib-dropdown()</code> mixin for drop-down and the <code>.lib-dropdown-split()</code> mixin for split button.
 //
 //  # Drop-down
 //
@@ -35,7 +35,7 @@
 //  ```
 
 .example-dropdown-1 {
-    .mixin-dropdown();
+    .lib-dropdown();
 }
 
 //  ## Span tag drop-down toggle
@@ -62,7 +62,7 @@
 //  ```
 
 .example-dropdown-2 {
-    .mixin-dropdown();
+    .lib-dropdown();
 }
 
 // # Drop-down variables
@@ -253,7 +253,7 @@
 //  @_dropdown-toggle-icon-content: @icon-expand,
 //  @_dropdown-toggle-active-icon-content: @icon-collapse
 //  ```
-//  The <code>.mixin-dropdown()</code> mixin uses the <code>.icon-font()</code> mixin to display and customize toggle icon. More information about <code>.icon-font()</code> mixin parameters you can find at the **Icons** page
+//  The <code>.lib-dropdown()</code> mixin uses the <code>.icon-font()</code> mixin to display and customize toggle icon. More information about <code>.icon-font()</code> mixin parameters you can find at the **Icons** page
 //
 //  ```html
 //  <div class="actions dropdown example-dropdown-3">
@@ -275,7 +275,7 @@
 //  ```
 
 .example-dropdown-3 {
-    .mixin-dropdown(
+    .lib-dropdown(
         @_dropdown-toggle-icon-content: @icon-expand,
         @_dropdown-toggle-active-icon-content: @icon-collapse,
         @_icon-font-line-height: 1,
@@ -309,7 +309,7 @@
 //  ```
 
 .example-dropdown-5 {
-    .mixin-dropdown(
+    .lib-dropdown(
         @_dropdown-list-pointer: false,
         @_dropdown-list-background: #eef1f3,
         @_dropdown-list-item-hover: #d8e3e3,
@@ -374,13 +374,13 @@
 //  ```
 
 .example-dropdown-6 {
-    .mixin-dropdown-split(
+    .lib-dropdown-split(
         @_dropdown-split-button-border-radius-fix: true
     );
 }
 
 .split.example-dropdown-7 {
-    .mixin-dropdown-split();
+    .lib-dropdown-split();
 }
 
 //  # Split button variables
@@ -653,28 +653,28 @@
 //  ```
 
 .example-dropdown-8 {
-    .mixin-dropdown-split(@_dropdown-split-button-border-radius-fix: true);
+    .lib-dropdown-split(@_dropdown-split-button-border-radius-fix: true);
 }
 
 .example-dropdown-9 {
     .action.split,
     .action.toggle {
-        .mixin-button-l();
+        .lib-button-l();
     }
-    .mixin-dropdown-split(@_dropdown-split-button-border-radius-fix: true);
+    .lib-dropdown-split(@_dropdown-split-button-border-radius-fix: true);
 }
 
 .example-dropdown-10 {
     .action.split,
     .action.toggle {
-        .mixin-button-s();
+        .lib-button-s();
     }
-    .mixin-dropdown-split(@_dropdown-split-button-border-radius-fix: true);
+    .lib-dropdown-split(@_dropdown-split-button-border-radius-fix: true);
 }
 
 //  # Split button icon customization
 //
-//  Mixin <code>.mixin-dropdown-split()</code> uses <code>.icon-font()</code> mixin to customize icon. More information about <code>.icon-font()</code> parameters you can find at **Icons** page
+//  Mixin <code>.lib-dropdown-split()</code> uses <code>.icon-font()</code> mixin to customize icon. More information about <code>.icon-font()</code> parameters you can find at **Icons** page
 //
 //  ```html
 //  <div class="actions split example-dropdown-11">
@@ -699,7 +699,7 @@
 //  ```
 
 .example-dropdown-11 {
-    .mixin-dropdown-split(
+    .lib-dropdown-split(
         @_dropdown-split-toggle-position: left,
         @_dropdown-split-button-border-radius-fix: true,
         @_dropdown-split-toggle-icon-content: @icon-expand,
@@ -737,7 +737,7 @@
 //  ```
 
 .example-dropdown-12 {
-    .mixin-dropdown-split(
+    .lib-dropdown-split(
         @_dropdown-split-list-pointer: false,
         @_dropdown-split-list-background: #eef1f3,
         @_dropdown-split-list-item-hover: #d8e3e3,

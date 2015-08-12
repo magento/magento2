@@ -7,7 +7,7 @@
 //  Popups
 //  _____________________________________________
 
-.mixin-popup(
+.lib-popup(
     @_popup-width: @popup__width,
     @_popup-height: @popup__height,
     @_popup-padding: @popup__padding,
@@ -69,13 +69,13 @@
     @_popup-actions-toolbar-primary-actions-links-margin-top: @popup-actions-toolbar-actions-links-primary__margin-top,
     @_popup-actions-toolbar-secondary-actions-links-margin-top: @popup-actions-toolbar-actions-links-secondary__margin-top
 ) {
-    .mixin-css(background, @_popup-background);
-    .mixin-css(border, @_popup-border);
-    .mixin-css(padding, @_popup-padding);
-    .mixin-css(width, @_popup-width);
-    ._mixin-popup-height(@_popup-height);
-    ._mixin-popup-shadow(@_popup-shadow);
-    ._mixin-popup-action-toolbar(
+    .lib-css(background, @_popup-background);
+    .lib-css(border, @_popup-border);
+    .lib-css(padding, @_popup-padding);
+    .lib-css(width, @_popup-width);
+    ._lib-popup-height(@_popup-height);
+    ._lib-popup-shadow(@_popup-shadow);
+    ._lib-popup-action-toolbar(
         @_popup-actions-toolbar,
         @_popup-actions-toolbar-actions-position,
         @_popup-actions-toolbar-actions-reverse,
@@ -89,26 +89,26 @@
         @_popup-actions-toolbar-secondary-actions-links-margin-top
     );
     .popup-header {
-        .mixin-css(margin, @_popup-header-margin);
+        .lib-css(margin, @_popup-header-margin);
         .title {
-            ._mixin-popup-headings(
+            ._lib-popup-headings(
                 @_popup-title-headings,
                 @_popup-title-headings-level
             );
         }
-        .mixin-css(padding-right, @_popup-icon-font-size)
+        .lib-css(padding-right, @_popup-icon-font-size)
     }
     .popup-content {
-        ._mixin-popup-height(@_popup-content-height);
-        .mixin-css(margin, @_popup-content-margin);
+        ._lib-popup-height(@_popup-content-height);
+        .lib-css(margin, @_popup-content-margin);
     }
     .popup-footer {
-        .mixin-css(margin, @_popup-footer-margin);
+        .lib-css(margin, @_popup-footer-margin);
     }
     .popup-actions {
         .action.close {
-            .mixin-css(position, @_popup-button-close-position);
-            ._mixin-popup-button-close-icon(
+            .lib-css(position, @_popup-button-close-position);
+            ._lib-popup-button-close-icon(
                 @_popup-button-close-icon,
                 @_popup-icon-font-content,
                 @_popup-icon-font,
@@ -122,28 +122,28 @@
                 @_popup-icon-font-position,
                 @_popup-icon-font-text-hide
             );
-            ._mixin-popup-button-close-reset(
+            ._lib-popup-button-close-reset(
                 @_popup-button-close-reset
             );
-            .mixin-css(bottom, @_popup-button-close-position-bottom);
-            .mixin-css(left, @_popup-button-close-position-left);
-            .mixin-css(right, @_popup-button-close-position-right);
-            .mixin-css(top, @_popup-button-close-position-top);
+            .lib-css(bottom, @_popup-button-close-position-bottom);
+            .lib-css(left, @_popup-button-close-position-left);
+            .lib-css(right, @_popup-button-close-position-right);
+            .lib-css(top, @_popup-button-close-position-top);
         }
     }
 
-    ._mixin-popup-fade(@_popup-fade);
+    ._lib-popup-fade(@_popup-fade);
 
-    .mixin-css(bottom, @_popup-position-bottom);
-    .mixin-css(left, @_popup-position-left);
-    .mixin-css(margin-bottom, @_popup-margin-bottom);
-    .mixin-css(margin-left, @_popup-margin-left);
-    .mixin-css(margin-right, @_popup-margin-right);
-    .mixin-css(margin-top, @_popup-margin-top);
-    .mixin-css(position, @_popup-position);
-    .mixin-css(right, @_popup-position-right);
-    .mixin-css(top, @_popup-position-top);
-    .mixin-css(z-index, @_popup-z-index);
+    .lib-css(bottom, @_popup-position-bottom);
+    .lib-css(left, @_popup-position-left);
+    .lib-css(margin-bottom, @_popup-margin-bottom);
+    .lib-css(margin-left, @_popup-margin-left);
+    .lib-css(margin-right, @_popup-margin-right);
+    .lib-css(margin-top, @_popup-margin-top);
+    .lib-css(position, @_popup-position);
+    .lib-css(right, @_popup-position-right);
+    .lib-css(top, @_popup-position-top);
+    .lib-css(z-index, @_popup-z-index);
     display: none;
     opacity: 0;
     &.active {
@@ -151,16 +151,16 @@
     }
 }
 
-.mixin-window-overlay(
+.lib-window-overlay(
     @_overlay-background: @overlay__background,
     @_overlay-opacity: @overlay__opacity,
     @_overlay-opacity-old: @overlay__opacity-old,
     @_overlay-fade: @overlay__fade,
     @_overlay-z-index: @overlay__z-index
 ) {
-    ._mixin-popup-fade(@_overlay-fade);
-    .mixin-css(background, @_overlay-background);
-    .mixin-css(z-index, @_overlay-z-index);
+    ._lib-popup-fade(@_overlay-fade);
+    .lib-css(background, @_overlay-background);
+    .lib-css(z-index, @_overlay-z-index);
     bottom: 0;
     left: 0;
     opacity: 0;
@@ -178,66 +178,66 @@
 //  ---------------------------------------------
 
 //  Popup fade
-._mixin-popup-fade(@_popup-fade) when not (@_popup-fade = '') {
-    .mixin-css(transition, @_popup-fade);
+._lib-popup-fade(@_popup-fade) when not (@_popup-fade = '') {
+    .lib-css(transition, @_popup-fade);
 }
 
 //  Popup shadow
-._mixin-popup-shadow(@_popup-shadow) when not (@_popup-shadow = '') and not (@_popup-shadow = none)  {
-    .mixin-css(box-shadow, @_popup-shadow);
+._lib-popup-shadow(@_popup-shadow) when not (@_popup-shadow = '') and not (@_popup-shadow = none)  {
+    .lib-css(box-shadow, @_popup-shadow);
 }
 
 //  Popup height
-._mixin-popup-height(@_popup-height) when not (@_popup-height = auto) {
+._lib-popup-height(@_popup-height) when not (@_popup-height = auto) {
     overflow-y: auto;
-    .mixin-css(max-height, @_popup-height);
+    .lib-css(max-height, @_popup-height);
 }
 
 //  Popup Headings
-._mixin-popup-headings(
+._lib-popup-headings(
     @_popup-title-headings,
     @_popup-title-headings-level
 ) when (@_popup-title-headings = true) and (@_popup-title-headings-level = h1) {
-    .mixin-heading(h1);
+    .lib-heading(h1);
 }
 
-._mixin-popup-headings(
+._lib-popup-headings(
     @_popup-title-headings,
     @_popup-title-headings-level
 ) when (@_popup-title-headings = true) and (@_popup-title-headings-level = h2) {
-    .mixin-heading(h2);
+    .lib-heading(h2);
 }
 
-._mixin-popup-headings(
+._lib-popup-headings(
     @_popup-title-headings,
     @_popup-title-headings-level
 ) when (@_popup-title-headings = true) and (@_popup-title-headings-level = h3) {
-    .mixin-heading(h3);
+    .lib-heading(h3);
 }
 
-._mixin-popup-headings(
+._lib-popup-headings(
     @_popup-title-headings,
     @_popup-title-headings-level
 ) when (@_popup-title-headings = true) and (@_popup-title-headings-level = h4) {
-    .mixin-heading(h4);
+    .lib-heading(h4);
 }
 
-._mixin-popup-headings(
+._lib-popup-headings(
     @_popup-title-headings,
     @_popup-title-headings-level
 ) when (@_popup-title-headings = true) and (@_popup-title-headings-level = h5) {
-    .mixin-heading(h5);
+    .lib-heading(h5);
 }
 
-._mixin-popup-headings(
+._lib-popup-headings(
     @_popup-title-headings,
     @_popup-title-headings-level
 ) when (@_popup-title-headings = true) and (@_popup-title-headings-level = h6) {
-    .mixin-heading(h6);
+    .lib-heading(h6);
 }
 
 //  Popup action-toolbar
-._mixin-popup-action-toolbar(
+._lib-popup-action-toolbar(
     @_popup-actions-toolbar,
     @_popup-actions-toolbar-actions-position,
     @_popup-actions-toolbar-actions-reverse,
@@ -252,7 +252,7 @@
 ) when (@_popup-actions-toolbar = true) {
     .popup-footer {
         .actions.toolbar {
-            .mixin-actions-toolbar(
+            .lib-actions-toolbar(
                 @_actions-toolbar-actions-position: @_popup-actions-toolbar-actions-position,
                 @_actions-toolbar-actions-reverse: @_popup-actions-toolbar-actions-reverse,
                 @_actions-toolbar-margin: @_popup-actions-toolbar-margin,
@@ -269,7 +269,7 @@
 }
 
 //  Popup close button use icon
-._mixin-popup-button-close-icon(
+._lib-popup-button-close-icon(
     @_popup-button-close-icon,
     @_popup-icon-font-content,
     @_popup-icon-font,
@@ -283,7 +283,7 @@
     @_popup-icon-font-position,
     @_popup-icon-font-text-hide
 ) when (@_popup-button-close-icon = true) {
-    .mixin-button-icon(
+    .lib-button-icon(
         @_icon-font-content: @_popup-icon-font-content,
         @_icon-font: @_popup-icon-font,
         @_icon-font-size: @_popup-icon-font-size,
@@ -299,8 +299,8 @@
 }
 
 //  Popup close button reset
-._mixin-popup-button-close-reset (
+._lib-popup-button-close-reset (
     @_popup-button-close-reset
 ) when (@_popup-button-close-reset = true) {
-    .mixin-button-reset();
+    .lib-button-reset();
 }

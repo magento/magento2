@@ -72,13 +72,13 @@
 
 & when (@media-common = true) {
     body {
-        .mixin-css(background-color, @page__background-color);
+        .lib-css(background-color, @page__background-color);
     }
 
     //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
     .page-wrapper {
         .ie9 & {
-            .mixin-css(background-color, @page__background-color);
+            .lib-css(background-color, @page__background-color);
             min-height: 0;
         }
     }
@@ -88,18 +88,18 @@
     //  ---------------------------------------------
 
     .page-header {
-        .mixin-css(background-color, @header__background-color);
+        .lib-css(background-color, @header__background-color);
         border-bottom: 1px solid @border-color__base;
         margin-bottom: @indent__base;
         .panel.wrapper {
-            .mixin-css(background-color, @header-panel__background-color);
-            .mixin-css(color, @header-panel__text-color);
+            .lib-css(background-color, @header-panel__background-color);
+            .lib-css(color, @header-panel__text-color);
         }
     }
 
     .header.panel {
         > .header.links {
-            .mixin-list-inline();
+            .lib-list-inline();
             float: right;
             font-size: 0;
             margin-left: auto;
@@ -108,7 +108,7 @@
                 font-size: @font-size__base;
                 margin: 0 0 0 15px;
                 > a {
-                    .mixin-link(
+                    .lib-link(
                     @_link-color: @header-panel__text-color,
                     @_link-text-decoration: none,
                     @_link-color-visited: @header-panel__text-color,
@@ -167,8 +167,8 @@
             left: 0;
             top: 0;
             text-align: center;
-            .mixin-css(background, @color-gray94);
-            .mixin-css(padding, @indent__s);
+            .lib-css(background, @color-gray94);
+            .lib-css(padding, @indent__s);
         }
     }
 
@@ -182,7 +182,7 @@
         }
         &.noscript,
         &.cookie {
-            .mixin-message(@_message-type: global-note);
+            .lib-message(@_message-type: global-note);
             margin: 0;
         }
         &.cookie {
@@ -196,7 +196,7 @@
             }
         }
         &.demo {
-            .mixin-message(@_message-type: global-caution);
+            .lib-message(@_message-type: global-caution);
             margin-bottom: 0;
             text-align: center;
         }
@@ -218,8 +218,8 @@
             }
             .links {
                 > li {
-                    .mixin-css(background, @footer__background-color);
-                    .mixin-font-size(16);
+                    .lib-css(background, @footer__background-color);
+                    .lib-font-size(16);
                     border-top: 1px solid @footer-links-separator-border-color;
                     margin: 0 -@layout__width-xs-indent;
                     padding: 0 @layout__width-xs-indent;
@@ -230,11 +230,11 @@
                     padding: @indent__s 0;
                 }
                 strong {
-                    .mixin-css(color, @footer-links-color-current);
+                    .lib-css(color, @footer-links-color-current);
                     font-weight: normal;
                 }
                 a {
-                    .mixin-link(
+                    .lib-link(
                     @_link-color: @footer-links-color,
                     @_link-text-decoration: none,
                     @_link-color-visited: @footer-links-color,
@@ -250,8 +250,8 @@
     }
 
     .copyright {
-        .mixin-css(background-color, @copyright__background-color);
-        .mixin-css(color, @color-white);
+        .lib-css(background-color, @copyright__background-color);
+        .lib-css(color, @color-white);
         display: block;
         padding: @indent__s;
         text-align: center;
@@ -261,7 +261,7 @@
     .page-footer {
         .switcher {
             .options {
-                .mixin-dropdown(
+                .lib-dropdown(
                 @_dropdown-actions-padding: 0,
                 @_dropdown-list-item-padding: 0,
                 @_dropdown-toggle-icon-content: @icon-down,
@@ -273,7 +273,7 @@
                 );
                 ul.dropdown {
                     a {
-                        .mixin-link(
+                        .lib-link(
                         @_link-color: @color-gray20,
                         @_link-text-decoration: none,
                         @_link-color-visited: @color-gray20,
@@ -307,19 +307,19 @@
         display: none;
     }
     .nav-sections .switcher-trigger strong:after {
-        .mixin-font-size(16);
+        .lib-font-size(16);
         right: -25px;
         top: 2px;
     }
     .navigation .parent .level-top:after {
-        .mixin-font-size(16);
+        .lib-font-size(16);
         right: 10px;
         top: 7px;
     }
     .page-footer .footer.content {
         .switcher-store {
-            .mixin-css(background, @footer__background-color);
-            .mixin-font-size(16);
+            .lib-css(background, @footer__background-color);
+            .lib-font-size(16);
             margin: 0 -@layout__width-xs-indent;
             .switcher-options {
                 display: block;
@@ -394,7 +394,7 @@
 
     body {
         .ie9 & {
-            .mixin-css(background-color, @copyright__background-color);
+            .lib-css(background-color, @copyright__background-color);
         }
     }
 
@@ -406,7 +406,7 @@
         margin-bottom: 0;
         .panel.wrapper {
             border-bottom: 1px solid @secondary__color;
-            .mixin-css(background-color, @header-panel__background-color);
+            .lib-css(background-color, @header-panel__background-color);
         }
         .header.panel:extend(.abs-add-clearfix-desktop all) {
             padding-bottom: @indent__s;
@@ -416,7 +416,7 @@
             float: right;
             margin-left: 15px;
             margin-right: -6px;
-            .mixin-vendor-prefix-order(1);
+            .lib-vendor-prefix-order(1);
         }
     }
 
@@ -433,7 +433,7 @@
     }
 
     .customer-welcome {
-        .mixin-dropdown(
+        .lib-dropdown(
         @_toggle-selector: ~".action.switch",
         @_options-selector: ~"ul",
         @_dropdown-actions-padding: 0,
@@ -448,7 +448,7 @@
         );
         li:extend(.switcher li all) {
             a {
-                .mixin-link(
+                .lib-link(
                 @_link-color: @color-gray20,
                 @_link-text-decoration: none,
                 @_link-color-visited: @color-gray20,
@@ -467,15 +467,15 @@
             display: none;
         }
         .action.switch {
-            .mixin-button-reset();
-            .mixin-css(color, @color-white);
+            .lib-button-reset();
+            .lib-css(color, @color-white);
         }
         .header.links {
             min-width: 175px;
         }
         &.active {
             .action.switch {
-                .mixin-icon-font-symbol(
+                .lib-icon-font-symbol(
                 @_icon-font-content: @icon-up,
                 @_icon-font-position: after
                 );
@@ -493,7 +493,7 @@
         &.panel {
             > .header.links {
                 float: right;
-                .mixin-list-inline();
+                .lib-list-inline();
                 margin-left: auto;
                 > li {
                     margin: 0 0 0 15px;
@@ -504,8 +504,8 @@
                     }
                     &.welcome {
                         a {
-                            .mixin-css(color, @color-white);
-                            .mixin-css(padding-left, @indent__xs);
+                            .lib-css(color, @color-white);
+                            .lib-css(padding-left, @indent__xs);
                         }
                     }
                 }
@@ -532,8 +532,8 @@
     }
 
     .page-wrapper {
-        .mixin-vendor-prefix-display(flex);
-        .mixin-vendor-prefix-flex-direction(column);
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
         margin: 0;
         min-height: 100%; //  Stretch content area for sticky footer
         position: relative;
@@ -551,7 +551,7 @@
     }
 
     .page-footer {
-        .mixin-css(background, @footer__background-color);
+        .lib-css(background, @footer__background-color);
         margin-top: auto;
         padding-bottom: @indent__m;
     }
@@ -607,7 +607,7 @@
 
     .ui-tooltip {
         border: @tooltip__border-width solid @tooltip__border-color;
-        .mixin-css(background, @tooltip__background);
+        .lib-css(background, @tooltip__background);
         padding: 10px;
     }
 }

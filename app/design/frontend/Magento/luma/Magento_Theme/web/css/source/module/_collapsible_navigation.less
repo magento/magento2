@@ -29,7 +29,7 @@
 
 .block-collapsible-nav {
     .content {
-        .mixin-css(background, @collapsible-nav-background);
+        .lib-css(background, @collapsible-nav-background);
         padding: 15px 0;
     }
     .item {
@@ -40,25 +40,25 @@
         a,
         > strong {
             border-left: 3px solid transparent;
-            .mixin-css(color, @collapsible-nav-color);
+            .lib-css(color, @collapsible-nav-color);
             display: block;
             padding: 5px 18px 5px 15px;
         }
         a {
             text-decoration: none;
             &:hover {
-                .mixin-css(background, @collapsible-nav-item-hover);
+                .lib-css(background, @collapsible-nav-item-hover);
             }
         }
         &.current {
             a,
             > strong {
-                .mixin-css(border-color, @collapsible-nav-current-border-color);
-                .mixin-css(color, @collapsible-nav-current-color);
-                .mixin-css(font-weight, @collapsible-nav-current-font-weight);
+                .lib-css(border-color, @collapsible-nav-current-border-color);
+                .lib-css(color, @collapsible-nav-current-color);
+                .lib-css(font-weight, @collapsible-nav-current-font-weight);
             }
             a {
-                .mixin-css(border-color, @collapsible-nav-current-border-color);
+                .lib-css(border-color, @collapsible-nav-current-border-color);
             }
         }
     }

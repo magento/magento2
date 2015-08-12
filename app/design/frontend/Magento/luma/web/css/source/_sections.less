@@ -9,7 +9,7 @@
 
 & when (@media-common = true) {
     .product.data.items {
-        .mixin-data-accordion();
+        .lib-data-accordion();
         border-bottom: @tab-control__border-width solid @tab-control__border-color;
         margin-bottom: @indent__base;
         margin-left: -@layout__width-xs-indent;
@@ -17,7 +17,7 @@
         .item.title {
             a {
                 position: relative;
-                .mixin-icon-font(
+                .lib-icon-font(
                     @_icon-font-content: @icon-down,
                     @_icon-font-size: @font-size__base,
                     @_icon-font-line-height: @icon-font__line-height,
@@ -54,7 +54,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .product.data.items {
-        .mixin-data-tabs();
+        .lib-data-tabs();
         border-bottom: 0;
         margin-left: 0;
         margin-right: 0;

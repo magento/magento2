@@ -13,13 +13,13 @@
     }
 
     table {
-        .mixin-table-caption();
+        .lib-table-caption();
     }
 
     .table {
         &:not(.cart) {
             &:not(.totals) {
-                .mixin-table-bordered(
+                .lib-table-bordered(
                 @_table_type: light,
                 @_table_border-width: @table__border-width
                 );
@@ -49,13 +49,13 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .table-wrapper {
-        .mixin-table-overflow();
+        .lib-table-overflow();
         position: relative; // To hide unnecessary horizontal scrollbar in Safari
         .table {
             &:not(.cart) {
                 &:not(.totals) {
                     &:not(.table-comparison) {
-                        .mixin-table-responsive();
+                        .lib-table-responsive();
                         tbody > tr {
                             > td:first-child {
                                 padding-top: @indent__base;

@@ -8,7 +8,7 @@
 //  _____________________________________________
 
 //  Rating-vote mixin
-.mixin-rating-vote(
+.lib-rating-vote(
     @_icon-count: @rating-icon__count,
     @_icon-content: @rating-icon__content,
     @_icon-font: @rating-icon__font,
@@ -19,13 +19,13 @@
 ) {
     overflow: hidden;
     &:before {
-        ._mixin-rating-icon-defalt(
+        ._lib-rating-icon-defalt(
             @_icon-font,
             @_icon-font-size,
             @_icon-letter-spacing,
             @_icon-color
         );
-        .mixin-rating-icons-content(
+        .lib-rating-icons-content(
             @_icon-count,
             @_icon-content
         );
@@ -34,7 +34,7 @@
         z-index: 1;
     }
     input[type="radio"] {
-        .mixin-visually-hidden();
+        .lib-visually-hidden();
         &:focus,
         &:checked {
             + label {
@@ -49,10 +49,10 @@
         display: block;
         position: absolute;
         span {
-            .mixin-visually-hidden();
+            .lib-visually-hidden();
         }
         &:before {
-            ._mixin-rating-icon-defalt(
+            ._lib-rating-icon-defalt(
                 @_icon-font,
                 @_icon-font-size,
                 @_icon-letter-spacing,
@@ -71,14 +71,14 @@
             }
         }
     }
-    ._mixin-rating-iteration(
+    ._lib-rating-iteration(
         @_icon-content,
         @_icon-count
     );
 }
 
 //  Rating-summary mixin
-.mixin-rating-summary(
+.lib-rating-summary(
     @_icon-count: @rating-icon__count,
     @_icon-content: @rating-icon__content,
     @_icon-font: @rating-icon__font,
@@ -90,9 +90,9 @@
 ) {
     overflow: hidden;
     white-space: nowrap;
-    ._mixin-rating-label-hide(@_label-hide);
+    ._lib-rating-label-hide(@_label-hide);
     .rating-result {
-        .mixin-css(width, (@_icon-font-size * @_icon-count) + ceil(@_icon-letter-spacing * (@_icon-count - 1)));
+        .lib-css(width, (@_icon-font-size * @_icon-count) + ceil(@_icon-letter-spacing * (@_icon-count - 1)));
         display: inline-block;
         position: relative;
         vertical-align: middle;
@@ -103,7 +103,7 @@
             top: 0;
             width: 100%;
             z-index: 1;
-            ._mixin-rating-summary-icon-default(
+            ._lib-rating-summary-icon-default(
                 @_icon-font,
                 @_icon-font-size,
                 @_icon-letter-spacing,
@@ -119,7 +119,7 @@
             &:before {
                 position: relative;
                 z-index: 2;
-                ._mixin-rating-summary-icon-default(
+                ._lib-rating-summary-icon-default(
                     @_icon-font,
                     @_icon-font-size,
                     @_icon-letter-spacing,
@@ -130,24 +130,24 @@
             }
 
             span {
-                .mixin-visually-hidden();
+                .lib-visually-hidden();
             }
         }
     }
 }
 
-.mixin-rating-summary-label-hide() {
+.lib-rating-summary-label-hide() {
     .label {
-        .mixin-visually-hidden();
+        .lib-visually-hidden();
     }
 }
 
 //  Internal use mixins
-._mixin-rating-label-hide(@_label-hide) when (@_label-hide = true) {
-    .mixin-rating-summary-label-hide();
+._lib-rating-label-hide(@_label-hide) when (@_label-hide = true) {
+    .lib-rating-summary-label-hide();
 }
 
-._mixin-rating-iteration(
+._lib-rating-iteration(
     @_icon-content,
     @_icon-count
 ) {
@@ -155,7 +155,7 @@
         .rating-@{_index} {
             z-index: @_icon-count - (@_index - 2);
             &:before {
-               .mixin-rating-icons-content(@_index, @_icon-content);
+               .lib-rating-icons-content(@_index, @_icon-content);
             }
         }
         //  Next iteration
@@ -165,18 +165,18 @@
     .loopingClass (@_icon-count);
 }
 
-._mixin-rating-icon-defalt(
+._lib-rating-icon-defalt(
     @_icon-font,
     @_icon-font-size,
     @_icon-letter-spacing,
     @_icon-color
 ) {
-    .mixin-css(color, @_icon-color);
-    .mixin-css(font-family, @_icon-font);
-    .mixin-css(font-size, @_icon-font-size);
-    .mixin-css(height, @_icon-font-size);
-    .mixin-css(letter-spacing, @_icon-letter-spacing);
-    .mixin-css(line-height, @_icon-font-size);
+    .lib-css(color, @_icon-color);
+    .lib-css(font-family, @_icon-font);
+    .lib-css(font-size, @_icon-font-size);
+    .lib-css(height, @_icon-font-size);
+    .lib-css(letter-spacing, @_icon-letter-spacing);
+    .lib-css(line-height, @_icon-font-size);
     font-style: normal;
     font-weight: normal;
     speak: none;
@@ -184,7 +184,7 @@
     -webkit-font-smoothing: antialiased;
 }
 
-._mixin-rating-summary-icon-default(
+._lib-rating-summary-icon-default(
     @_icon-font,
     @_icon-font-size,
     @_icon-letter-spacing,
@@ -193,23 +193,23 @@
     @_icon-color
 ) {
     -webkit-font-smoothing: antialiased;
-    .mixin-css(color, @_icon-color);
-    .mixin-css(font-family, @_icon-font);
-    .mixin-css(font-size, @_icon-font-size);
-    .mixin-css(height, @_icon-font-size);
-    .mixin-css(letter-spacing, @_icon-letter-spacing);
-    .mixin-css(line-height, @_icon-font-size);
-    .mixin-rating-icons-content(@_icon-count, @_icon-content);
+    .lib-css(color, @_icon-color);
+    .lib-css(font-family, @_icon-font);
+    .lib-css(font-size, @_icon-font-size);
+    .lib-css(height, @_icon-font-size);
+    .lib-css(letter-spacing, @_icon-letter-spacing);
+    .lib-css(line-height, @_icon-font-size);
+    .lib-rating-icons-content(@_icon-count, @_icon-content);
     display: block;
     font-style: normal;
     font-weight: normal;
     speak: none;
 }
 
-.mixin-rating-icons-content(
+.lib-rating-icons-content(
     @_icon-count: @rating-icon__count,
     @_icon-content: @rating-icon__content
 ) when (@_icon-count > 0) {
-    .mixin-rating-icons-content((@_icon-count - 1),@_icon-content);
+    .lib-rating-icons-content((@_icon-count - 1),@_icon-content);
     content+_: @_icon-content;
 }

@@ -43,20 +43,20 @@
         top: 1px;
 
         &._active {
-            .mixin-css(z-index, @checkout-tooltip__hover__z-index);
+            .lib-css(z-index, @checkout-tooltip__hover__z-index);
 
             .field-tooltip-content {
                 display: block;
             }
             .field-tooltip-action {
                 &:before {
-                    .mixin-css(color, @checkout-tooltip-icon__hover__color);
+                    .lib-css(color, @checkout-tooltip-icon__hover__color);
                 }
             }
         }
 
         .field-tooltip-action {
-            .mixin-icon-font(
+            .lib-icon-font(
                 @checkout-tooltip-icon__content,
                 @_icon-font-size: @checkout-tooltip-icon__font-size,
                 @_icon-font-text-hide: true,
@@ -67,24 +67,24 @@
 
             &:focus {
                 ._keyfocus & {
-                    .mixin-css(z-index, @checkout-tooltip__hover__z-index);
+                    .lib-css(z-index, @checkout-tooltip__hover__z-index);
                     + .field-tooltip-content {
                         display: block;
                     }
                     &:before {
-                        .mixin-css(color, @checkout-tooltip-icon__hover__color);
+                        .lib-css(color, @checkout-tooltip-icon__hover__color);
                     }
                 }
             }
         }
 
         .field-tooltip-content {
-            .mixin-css(background, @checkout-tooltip-content__background-color);
-            .mixin-css(border, @checkout-tooltip-content__border-width solid @checkout-tooltip-content__border-color);
-            .mixin-css(border-radius, @checkout-tooltip-content__border-width);
-            .mixin-css(font-size, @checkout-tooltip-content__font-size);
-            .mixin-css(padding, @checkout-tooltip-content__padding);
-            .mixin-css(width, @checkout-tooltip-content__width);
+            .lib-css(background, @checkout-tooltip-content__background-color);
+            .lib-css(border, @checkout-tooltip-content__border-width solid @checkout-tooltip-content__border-color);
+            .lib-css(border-radius, @checkout-tooltip-content__border-width);
+            .lib-css(font-size, @checkout-tooltip-content__font-size);
+            .lib-css(padding, @checkout-tooltip-content__padding);
+            .lib-css(width, @checkout-tooltip-content__width);
             display: none;
             left: 38px;
             position: absolute;
@@ -95,23 +95,23 @@
 
             &:before,
             &:after {
-                .mixin-arrow(
+                .lib-arrow(
                 @_position: left,
                 @_size: @checkout-tooltip-icon-arrow__font-size,
                 @_color: @checkout-tooltip-content__background-color
                 );
-                .mixin-css(left, @checkout-tooltip-icon-arrow__left);
-                .mixin-css(top, @checkout-tooltip-content__padding);
+                .lib-css(left, @checkout-tooltip-icon-arrow__left);
+                .lib-css(top, @checkout-tooltip-content__padding);
                 content: '';
                 display: block;
                 position: absolute;
                 z-index: 3;
             }
             &:before {
-                .mixin-css(border-right-color, @checkout-tooltip-content__active__border-color);
+                .lib-css(border-right-color, @checkout-tooltip-content__active__border-color);
             }
             &:after {
-                .mixin-css(border-right-color, @checkout-tooltip-content__background-color);
+                .lib-css(border-right-color, @checkout-tooltip-content__background-color);
                 width: 1px;
                 z-index: 4;
             }
@@ -127,7 +127,7 @@
     .modal-popup {
         .field-tooltip {
             .field-tooltip-content {
-                .mixin-css(width, @checkout-tooltip-content-mobile-popup__width);
+                .lib-css(width, @checkout-tooltip-content-mobile-popup__width);
             }
         }
     }

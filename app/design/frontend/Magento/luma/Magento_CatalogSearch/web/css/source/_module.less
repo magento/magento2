@@ -26,7 +26,7 @@
         margin-bottom: 0;
     }
     .label {
-        .mixin-icon-font(
+        .lib-icon-font(
             @_icon-font-content: @icon-search,
             @_icon-font-size: 22px,
             @_icon-font-line-height: 28px,
@@ -74,14 +74,14 @@
     margin-top: -15px;
     &:extend(.abs-add-box-sizing all);
     ul {
-        .mixin-list-reset-styles();
+        .lib-list-reset-styles();
         &:not(:empty) {
-            .mixin-css(background, @autocomplete-background);
-            .mixin-css(border, @autocomplete-border);
+            .lib-css(background, @autocomplete-background);
+            .lib-css(border, @autocomplete-border);
             border-top: 0;
         }
         li {
-            .mixin-css(border-top, @autocomplete-item-border);
+            .lib-css(border-top, @autocomplete-item-border);
             cursor: pointer;
             padding: @indent__xs @indent__xl @indent__xs @indent__s;
             margin: 0;
@@ -93,10 +93,10 @@
             }
             &:hover,
             &.selected {
-                .mixin-css(background, @autocomplete-item-hover);
+                .lib-css(background, @autocomplete-item-hover);
             }
             .amount {
-                .mixin-css(color, @autocomplete-item-amount-color);
+                .lib-css(color, @autocomplete-item-amount-color);
                 position: absolute;
                 right: 7px;
                 top: @indent__xs;
@@ -198,7 +198,7 @@
             position: static;
             padding-right: 35px;
             margin: 0;
-            .mixin-input-placeholder(@form-element-input-placeholder__color);
+            .lib-input-placeholder(@form-element-input-placeholder__color);
         }
         .action.search {
             position: absolute;
@@ -206,7 +206,7 @@
             right: @indent__s;
             top: 0;
             z-index: 1;
-            .mixin-button-icon(
+            .lib-button-icon(
                 @_icon-font-content: @icon-search,
                 @_icon-font-size: 16px,
                 @_icon-font-text-hide: true,
@@ -214,10 +214,10 @@
                 @_icon-font-color-hover: @header-icons-color-hover,
                 @_icon-font-line-height: 32px
             );
-            .mixin-button-reset();
+            .lib-button-reset();
             &:focus {
                 &:before {
-                    .mixin-css(color, @color-gray20);
+                    .lib-css(color, @color-gray20);
                 }
             }
         }

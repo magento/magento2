@@ -13,12 +13,12 @@
     }
 
     table {
-        .mixin-table-caption();
+        .lib-table-caption();
     }
 
     .table {
         tfoot {
-            .mixin-css(background, @sidebar__background-color);
+            .lib-css(background, @sidebar__background-color);
             > tr {
                 &:first-child {
                     th,
@@ -47,10 +47,10 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .table-wrapper {
         border-top: @table__border-width @table__border-style @table__border-color;
-        .mixin-table-overflow();
+        .lib-table-overflow();
         position: relative; // To hide unnecessary horizontal scrollbar in Safari
         .table:not(.totals):not(.cart):not(.table-comparison) {
-            .mixin-table-responsive();
+            .lib-table-responsive();
             tbody {
                 > tr {
                     > td:first-child {
@@ -90,7 +90,7 @@
                     width: 30%;
                 }
                 .grand.totals {
-                    .mixin-font-size(16);
+                    .lib-font-size(16);
                     .amount {
                         padding-bottom: @indent__s;
                     }
@@ -119,7 +119,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
     .table {
-        .mixin-table-bordered(
+        .lib-table-bordered(
             @_table_type: horizontal_body
         );
     }

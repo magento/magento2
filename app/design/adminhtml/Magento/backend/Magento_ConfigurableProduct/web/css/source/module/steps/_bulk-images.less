@@ -71,7 +71,7 @@
             } 
         }
         .attribute-label {
-            .mixin-font-size(16);
+            .lib-font-size(16);
             margin-bottom: @indent__xs;
         }
         .image-panel {
@@ -142,7 +142,7 @@
     //  Image Placeholder
     &.image-placeholder {
         position: relative;
-        .mixin-icon-font(
+        .lib-icon-font(
         @icon-camera__content,
         @_icon-font: @icons-admin__font-name,
         @_icon-font-size: 4rem,
@@ -211,7 +211,7 @@
     }
 
     .image-placeholder-text {
-        .mixin-font-size(11);
+        .lib-font-size(11);
         bottom: 0;
         color: @color-blue-dodger;
         left: 0;
@@ -239,7 +239,7 @@
         position: absolute;
         width: 20px;
         z-index: @image-gallery-action__z-index;
-        .mixin-icon-font(
+        .lib-icon-font(
         @icon-delete__content,
         @_icon-font: @icons-admin__font-name,
         @_icon-font-size: 1.8rem,
@@ -258,7 +258,7 @@
         right: 3px;
         width: 20px;
         z-index: @image-gallery-action__z-index;
-        .mixin-icon-font(
+        .lib-icon-font(
         @icon-tag__content,
         @_icon-font: @icons-admin__font-name,
         @_icon-font-size: 1.8rem,
@@ -311,7 +311,7 @@
         top: 2px;
         width: 20px;
         z-index: @image-gallery-action__z-index;
-        .mixin-icon-font(
+        .lib-icon-font(
         @icon-gripper__content,
         @_icon-font: @icons-admin__font-name,
         @_icon-font-size: 1.8rem,
@@ -321,7 +321,7 @@
     }
 
     .image-fade {
-        .mixin-font-size(18);
+        .lib-font-size(18);
         background: rgba(255, 255, 255, .8);
         bottom: 0;
         color: @color-gray62;
@@ -389,12 +389,12 @@
     .image-name {
         color: @color-gray40;
         display: block;
-        .mixin-font-size(16);
+        .lib-font-size(16);
     }
     .action-remove {
         &:extend(.abs-action-reset all);
         margin: 0 0 35px;
-        .mixin-icon-font(
+        .lib-icon-font(
         @icon-delete__content,
         @_icon-font: @icons-admin__font-name,
         @_icon-font-size: 1.8rem,
@@ -424,7 +424,7 @@
 
 .image-file-params {
     color: @color-gray40;
-    .mixin-font-size(11);
+    .lib-font-size(11);
     margin: 0 0 @indent__s;
 }
 
@@ -438,7 +438,7 @@
         position: absolute;
         right: 29px;
         top: 17px;
-        .mixin-icon-font(
+        .lib-icon-font(
         @_icon-font-content: @icon-close-mage__content,
         @_icon-font: @icons-admin__font-name,
         @_icon-font-size: 2rem,
@@ -480,7 +480,7 @@
                     background: darken(@color-blue-clear-sky, 10%);
                 }
                 label {
-                    .mixin-icon-font(
+                    .lib-icon-font(
                     @icon-check-mage__content,
                     @_icon-font: @icons-admin__font-name,
                     @_icon-font-size: 1.4rem,

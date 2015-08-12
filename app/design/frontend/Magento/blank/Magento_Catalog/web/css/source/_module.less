@@ -61,7 +61,7 @@
         .weee[data-label] {
             display: inline;
             .price {
-                .mixin-font-size(11);
+                .lib-font-size(11);
             }
             &:before {
                 content: " +" attr(data-label) ": ";
@@ -132,15 +132,15 @@
             max-width: 100%;
         }
         .notice {
-            .mixin-css(color, @text__color__muted);
-            .mixin-font-size(@font-size__s);
+            .lib-css(color, @text__color__muted);
+            .lib-font-size(@font-size__s);
             margin: @indent__s 0;
         }
         .product.thumbs {
             margin: @indent__base 0 @indent__l;
         }
         .items.thumbs {
-            .mixin-list-inline();
+            .lib-list-inline();
             .active {
                 display: block;
                 line-height: 1;
@@ -153,7 +153,7 @@
         margin-bottom: 30px;
         .additional-attributes {
             width: auto;
-            .mixin-table-resize(
+            .lib-table-resize(
             @_th-padding-left: 0,
             @_th-padding-right: @indent__l,
             @_th-padding-bottom: @indent__s,
@@ -184,7 +184,7 @@
                 &.sku {
                     display: inline-block;
                     vertical-align: top;
-                    .mixin-css(color, @text__color__muted);
+                    .lib-css(color, @text__color__muted);
                     > .value {
                         display: inline-block;
                         vertical-align: top;
@@ -205,16 +205,16 @@
             margin-top: @indent__s;
         }
         .product-reviews-summary .reviews-actions {
-            .mixin-font-size(@font-size__base);
+            .lib-font-size(@font-size__base);
         }
     }
 
     .product-options-wrapper {
         .fieldset-product-options-inner {
             .legend {
-                .mixin-css(font-weight, @font-weight__bold);
-                .mixin-css(margin, 0 0 @indent__xs);
-                .mixin-font-size(14px);
+                .lib-css(font-weight, @font-weight__bold);
+                .lib-css(margin, 0 0 @indent__xs);
+                .lib-font-size(14px);
                 border: none;
                 display: inline-block;
                 float: none;
@@ -224,7 +224,7 @@
                 .legend {
                     &:after {
                         content: '*';
-                        .mixin-typography(
+                        .lib-typography(
                         @_font-size: @form-field-label-asterisk__font-size,
                         @_color: @form-field-label-asterisk__color,
                         @_font-family: @form-field-label-asterisk__font-family,
@@ -232,7 +232,7 @@
                         @_line-height: @form-field-label-asterisk__line-height,
                         @_font-style: @form-field-label-asterisk__font-style
                         );
-                        .mixin-css(margin, @form-field-label-asterisk__margin);
+                        .lib-css(margin, @form-field-label-asterisk__margin);
                     }
                 }
             }
@@ -250,16 +250,16 @@
             .price-including-tax + .price-excluding-tax,
             .weee + .price-excluding-tax,
             .weee {
-                .mixin-font-size(12);
+                .lib-font-size(12);
                 margin-bottom: @indent__xs;
                 line-height: 14px;
                 .price {
-                    .mixin-font-size(12);
+                    .lib-font-size(12);
                     font-weight: @font-weight__bold;
                 }
             }
             .price-wrapper .price {
-                .mixin-font-size(18);
+                .lib-font-size(18);
                 font-weight: @font-weight__bold;
             }
         }
@@ -267,7 +267,7 @@
             display: block;
             margin: @indent__s 0;
             .price-container {
-                .mixin-font-size(14);
+                .lib-font-size(14);
             }
             .price-label + .price-wrapper {
                 display: inline-block;
@@ -310,7 +310,7 @@
 
     .prices-tier {
         &:extend(.abs-reset-list all);
-        .mixin-css(background, @sidebar__background-color);
+        .lib-css(background, @sidebar__background-color);
         margin: @indent__s 0;
         padding: @indent__s (.75 * @indent__base);
         .price-tier_price {
@@ -321,14 +321,14 @@
         .weee {
             display: inline-block;
             .price {
-                .mixin-font-size(14);
+                .lib-font-size(14);
                 font-weight: @font-weight__bold;
             }
         }
     }
 
     .ui-dialog-titlebar-close {
-        .mixin-button-as-link();
+        .lib-button-as-link();
     }
 
     .block.related {
@@ -374,8 +374,8 @@
                 margin-right: 8px;
             }
             .counter {
-                .mixin-css(color, @primary__color__lighter);
-                .mixin-font-size(12);
+                .lib-css(color, @primary__color__lighter);
+                .lib-font-size(12);
                 white-space: nowrap;
             }
             .minilist {
@@ -437,11 +437,11 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .catalog-product-view {
         .column.main {
-            .mixin-vendor-prefix-display(flex);
-            .mixin-vendor-prefix-flex-direction(column);
+            .lib-vendor-prefix-display(flex);
+            .lib-vendor-prefix-flex-direction(column);
         }
         .product.media {
-            .mixin-vendor-prefix-order(-1);
+            .lib-vendor-prefix-order(-1);
         }
     }
     .product-info-main .box-tocart {
@@ -634,7 +634,7 @@
                 }
             }
             &.attribute {
-                .mixin-font-size(13);
+                .lib-font-size(13);
                 img {
                     max-width: 100%;
                     height: auto;
@@ -663,7 +663,7 @@
 
             .action.split,
             .action.toggle {
-                .mixin-button-s();
+                .lib-button-s();
             }
 
             .action.toggle {
@@ -694,7 +694,7 @@
     }
 
     .comparison.headings {
-        .mixin-css(background, @page__background-color);
+        .lib-css(background, @page__background-color);
         left: 0;
         position: absolute;
         top: 0;

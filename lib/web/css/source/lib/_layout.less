@@ -8,37 +8,37 @@
 //  _____________________________________________
 
 //  Page Width mixin
-.mixin-layout-width(
+.lib-layout-width(
     @_layout__min-width: @layout__min-width,
     @_layout__max-width: @layout__max-width,
     @_layout__indent: @layout-indent__width
 ) when not (@responsive = true) {
-    ._mixin-layout-width(@_layout__min-width, @_layout__max-width);
-    .mixin-css(padding-left, @layout-indent__width);
-    .mixin-css(padding-right, @layout-indent__width);
+    ._lib-layout-width(@_layout__min-width, @_layout__max-width);
+    .lib-css(padding-left, @layout-indent__width);
+    .lib-css(padding-right, @layout-indent__width);
     margin: 0 auto;
 }
 
-._mixin-layout-width(
+._lib-layout-width(
         @_layout__min-width: @layout__min-width,
         @_layout__max-width: @layout__max-width
     ) when (@_layout__min-width = @_layout__max-width) {
-    .mixin-css(width, @_layout__min-width);
+    .lib-css(width, @_layout__min-width);
 }
 
-._mixin-layout-width(
+._lib-layout-width(
         @_layout__min-width: @layout__min-width,
         @_layout__max-width: @layout__max-width
     ) when not (@_layout__min-width = @_layout__max-width) {
-    .mixin-css(max-width, @_layout__max-width);
-    .mixin-css(min-width, @_layout__min-width);
+    .lib-css(max-width, @_layout__max-width);
+    .lib-css(min-width, @_layout__min-width);
     width: auto;
 }
 
-#mixin-layout-columns() {
+#lib-layout-columns() {
     & when (@use-flex = true) {
-        .mixin-vendor-prefix-display(flex);
-        .mixin-vendor-prefix-flex-wrap(wrap);
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-wrap(wrap);
         box-sizing: border-box;
     };
     &:after {
@@ -51,76 +51,76 @@
     }
     .main() {
         .@{layout-class-1column} & {
-            .mixin-layout-column(1, 2, 100%);
+            .lib-layout-column(1, 2, 100%);
         }
         .@{layout-class-3columns} & {
-            .mixin-layout-column(3, 2, @layout-column-main__width-3);
+            .lib-layout-column(3, 2, @layout-column-main__width-3);
         }
         .@{layout-class-2columns__left} & {
-            .mixin-layout-column(2, 2, @layout-column-main__width-2-left);
+            .lib-layout-column(2, 2, @layout-column-main__width-2-left);
         }
         .@{layout-class-2columns__right} & {
-            .mixin-layout-column(2, 1, @layout-column-main__width-2-right);
+            .lib-layout-column(2, 1, @layout-column-main__width-2-right);
         }
     }
 
     .left() {
         .@{layout-class-3columns} & {
-            .mixin-layout-column(3, 1, @layout-column__left-width);
+            .lib-layout-column(3, 1, @layout-column__left-width);
         }
         .@{layout-class-2columns__left} & {
-            .mixin-layout-column(2, 1, @layout-column__left-width);
+            .lib-layout-column(2, 1, @layout-column__left-width);
         }
         .@{layout-class-2columns__right} & {
-            .mixin-layout-column(2, 1, @layout-column__left-width);
+            .lib-layout-column(2, 1, @layout-column__left-width);
         }
     }
 
     .right() {
         .@{layout-class-3columns} & {
-            .mixin-layout-column(3, 3, @layout-column__right-width);
+            .lib-layout-column(3, 3, @layout-column__right-width);
         }
         .@{layout-class-2columns__left} & {
-            .mixin-layout-column(2, 2, @layout-column__right-width);
+            .lib-layout-column(2, 2, @layout-column__right-width);
         }
         .@{layout-class-2columns__right} & {
-            .mixin-layout-column(2, 2, @layout-column__right-width);
+            .lib-layout-column(2, 2, @layout-column__right-width);
         }
     }
 }
 
-._mixin-column-width(@_width, @_check, @_index) when (@_check = false) and (@_index = 1) {
-    .mixin-column-width(@_width);
+._lib-column-width(@_width, @_check, @_index) when (@_check = false) and (@_index = 1) {
+    .lib-column-width(@_width);
 }
 
-._mixin-column-width(@_width, @_check, @_index) when (@_check = true), (@_width = auto) {
-    .mixin-css(width, @_width);
+._lib-column-width(@_width, @_check, @_index) when (@_check = true), (@_width = auto) {
+    .lib-css(width, @_width);
     @_index: 1;
 }
 
-._mixin-set-column-width(@_index, @_width) when (@_index > 0) {
+._lib-set-column-width(@_index, @_width) when (@_index > 0) {
     @_checkUnit: isunit(@_width, extract(@_units, @_index));
-    ._mixin-column-width(@_width, @_checkUnit, @_index);
-    ._mixin-set-column-width(@_index - 1, @_width);
+    ._lib-column-width(@_width, @_checkUnit, @_index);
+    ._lib-set-column-width(@_index - 1, @_width);
 }
 
-.mixin-layout-column(@_total-columns, @_order, @_width) {
+.lib-layout-column(@_total-columns, @_order, @_width) {
     @_units: "px","%","em","rem","pt";
-    ._mixin-set-column-width(length(@_units), @_width);
-    .mixin-flex-degradation(@_total-columns, @_order);
+    ._lib-set-column-width(length(@_units), @_width);
+    .lib-flex-degradation(@_total-columns, @_order);
     & when (@use-flex = true) {
-        .mixin-vendor-prefix-order(@_order);
+        .lib-vendor-prefix-order(@_order);
     }
 }
 
-.mixin-flex-degradation(@_total-columns, @_order) when (@_order = 1) {
+.lib-flex-degradation(@_total-columns, @_order) when (@_order = 1) {
     float: left;
 }
 
-.mixin-flex-degradation(@_total-columns, @_order) when (@_order = @_total-columns) {
+.lib-flex-degradation(@_total-columns, @_order) when (@_order = @_total-columns) {
     float: right;
 }
 
-.mixin-flex-degradation(@_total-columns, @_order) when (@_total-columns = 3) and (@_order = 2) {
+.lib-flex-degradation(@_total-columns, @_order) when (@_total-columns = 3) and (@_order = 2) {
     display: inline-block;
 }
