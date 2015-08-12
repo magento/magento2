@@ -57,9 +57,7 @@ class PaymentDataObjectFactoryTest extends \PHPUnit_Framework_TestCase
                 ->getMock();
 
         $this->paymentDataObjectMock =
-            $this->getMockBuilder('Magento\Payment\Gateway\Data\PaymentDataObject')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->getMock('Magento\Payment\Gateway\Data\PaymentDataObjectInterface');
 
         $this->model = new PaymentDataObjectFactory(
             $this->objectManagerMock,
@@ -97,7 +95,7 @@ class PaymentDataObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                'Magento\Payment\Gateway\Data\PaymentDataObject',
+                'Magento\Payment\Gateway\Data\PaymentDataObjectInterface',
                 [
                     'order' => $orderAdapterMock,
                     'payment' => $paymentInfoMock
@@ -136,7 +134,7 @@ class PaymentDataObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                'Magento\Payment\Gateway\Data\PaymentDataObject',
+                'Magento\Payment\Gateway\Data\PaymentDataObjectInterface',
                 [
                     'order' => $quoteAdapterMock,
                     'payment' => $paymentInfoMock

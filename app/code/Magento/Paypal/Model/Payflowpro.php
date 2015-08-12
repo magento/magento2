@@ -316,10 +316,11 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     /**
      * Check whether payment method can be used
      *
-     * @param Quote|null $quote
+     * @param \Magento\Quote\Api\Data\CartInterface|Quote|null $quote
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable($quote) && $this->getConfig()->isMethodAvailable($this->getCode());
     }
