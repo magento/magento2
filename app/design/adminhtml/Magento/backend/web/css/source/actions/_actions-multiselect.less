@@ -8,21 +8,128 @@
 //  _____________________________________________
 
 .admin__action-multiselect-wrap {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    &.action-select-wrap {
+        .action-menu {
+            max-height: none;
+            overflow-y: inherit;
+        }
+    }
+    .action-menu {
+        padding: 1rem;
+    }
     .action-menu-item {
         &:hover {
+            background-color: @page-wrapper__background-color;
+        }
+        &._selected,
+        &._hover {
             background-color: @action__hover__background-color;
         }
-
+    }
+    .admin__action-multiselect {
+        border: 1px solid @action__border-color;
+        cursor: pointer;
+        min-height: @action__height;
+        padding: @action__padding-top + .1rem (@action__height + .4rem) @action__padding-bottom 1em;
+        white-space: normal;
+        &:after {
+            top: auto;
+            bottom: @action__height / 2 - @button-marker-triangle__height / 2 - .1rem;
+        }
+        &:before {
+            top: auto;
+            height: @action__height;
+            width: @action__height;
+        }
     }
 }
 
-.admin__action-multiselect {
-    border: 1px solid @action__border-color;
-    padding: @action__padding-top 1em @action__padding-bottom;
-}
-
 .admin__action-multiselect-label {
+    position: relative;
+    z-index: 1;
     &:before {
         margin-right: .5rem;
+    }
+}
+
+.admin__action-multiselect-search-wrap {
+    margin-bottom: 1rem;
+    position: relative;
+    + .admin__action-multiselect-menu-inner {
+        border-bottom: 1px solid @border__color;
+        border-top: 1px solid @border__color;
+        overflow-y: auto;
+        margin-bottom: 1rem;
+        max-height: 17.2rem;
+    }
+}
+
+.admin__action-multiselect-menu-inner {
+    margin-bottom: 0;
+}
+
+.admin__action-multiselect-search {
+    padding-right: 3rem;
+    width: 100%;
+}
+
+.admin__action-multiselect-search-label {
+    display: block;
+    font-size: 1.5rem;
+    height: 1em;
+    overflow: hidden;
+    position: absolute;
+    right: 1.2rem;
+    top: .7rem;
+    width: 1em;
+    &:before {
+        &:extend(.abs-icon all);
+        content: @icon-search__content;
+    }
+}
+
+.admin__action-multiselect-actions-wrap {
+    text-align: center;
+    .action-default {
+        font-size: 1.3rem;
+        min-width: 13rem;
+    }
+}
+
+//  Crumbs
+.admin__action-multiselect-crumb {
+    background-color: @color-white-smoke;
+    border: 1px solid @color-gray65-almost;
+    border-radius: 1px;
+    display: inline-block;
+    font-size: 1.2rem;
+    margin: -.3rem .9rem .5rem -1.1rem;
+    padding: .3rem (2rem + .4rem) .4rem 1rem;
+    position: relative;
+    transition: border-color .1s linear;
+    &:hover {
+        border-color: darken(@color-gray65-almost, 10%);
+    }
+    .action-close {
+        bottom: 0;
+        font-size: .5em;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 2rem;
+        &:hover {
+            color: darken(@text__color, 20%);
+        }
+        &:focus,
+        &:active {
+            background-color: transparent;
+        }
+        &:active {
+            transform: scale(.9);
+        }
     }
 }
