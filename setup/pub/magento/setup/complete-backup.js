@@ -11,11 +11,7 @@ angular.module('complete-backup', ['ngStorage'])
             $scope.backupInfoPassed = $localStorage.backupInfo;
         }
 
-        if ($state.current.type === 'cm') {
-            $scope.type = 'update';
-        } else if ($state.current.type === 'su') {
-            $scope.type = 'upgrade';
-        }
+        $scope.type = $state.current.type;
 
         $scope.progressCounter = BACKUPCOUNTER;
         $scope.startProgress = function() {

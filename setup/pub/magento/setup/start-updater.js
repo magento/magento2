@@ -59,6 +59,6 @@ angular.module('start-updater', ['ngStorage'])
                 });
         }
         $scope.goToCreateBackup = function() {
-            $state.go('root.create-backup-'. $state.current.type);
+            $state.go('root.create-backup-' . $state.current.type);
         }
     }]);

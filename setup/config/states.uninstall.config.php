@@ -66,12 +66,12 @@ return [
             'type'        => 'uninstall'
         ],
         [
-            'id'          => 'root.uninstall-module',
-            'url'         => 'uninstall-module',
+            'id'          => 'root.uninstall',
+            'url'         => 'uninstall',
             'templateUrl' => "$base/start-updater",
-            'title'       => "Uninstall\n Module",
+            'title'       => "Uninstall",
             'controller'  => 'startUpdaterController',
-            'header'      => 'Step 4: Uninstall Module',
+            'header'      => 'Step 4: Uninstall',
             'nav'         => true,
             'order'       => 7,
             'type'        => 'uninstall'
