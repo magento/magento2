@@ -10,6 +10,7 @@ use Magento\Customer\Model\Resource\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class MassDelete
@@ -52,7 +53,8 @@ class MassDelete extends AbstractMassAction
         if ($customersDeleted) {
             $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $customersDeleted));
         }
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath($this->getComponentRefererUrl());
 
         return $resultRedirect;
