@@ -45,7 +45,7 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */

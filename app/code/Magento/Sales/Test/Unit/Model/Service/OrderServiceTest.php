@@ -220,6 +220,10 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(123)
             ->willReturn($this->orderMock);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->orderMock)
+            ->willReturn($this->orderMock);
         $this->orderMock->expects($this->once())
             ->method('hold')
             ->willReturn($this->orderMock);
@@ -231,6 +235,10 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->with(123)
+            ->willReturn($this->orderMock);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->orderMock)
             ->willReturn($this->orderMock);
         $this->orderMock->expects($this->once())
             ->method('unHold')

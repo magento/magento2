@@ -51,7 +51,7 @@ class ModuleOutput implements CollectorInterface
      *
      * @param ThemeInterface $theme
      * @param string $filePath
-     * @return array|\Magento\Framework\View\File[]
+     * @return \Magento\Framework\View\File[]
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

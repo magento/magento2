@@ -121,7 +121,7 @@ class Adjustment extends AbstractAdjustment
     /**
      * Obtain Weee tax attributes
      *
-     * @return array|\Magento\Framework\Object[]
+     * @return array|\Magento\Framework\DataObject[]
      */
     public function getWeeeTaxAttributes()
     {
@@ -131,10 +131,10 @@ class Adjustment extends AbstractAdjustment
     /**
      * Render Weee tax attributes name
      *
-     * @param \Magento\Framework\Object $attribute
+     * @param \Magento\Framework\DataObject $attribute
      * @return string
      */
-    public function renderWeeeTaxAttributeName(\Magento\Framework\Object $attribute)
+    public function renderWeeeTaxAttributeName(\Magento\Framework\DataObject $attribute)
     {
         return $attribute->getData('name');
     }
@@ -142,10 +142,10 @@ class Adjustment extends AbstractAdjustment
     /**
      * Render Weee tax attributes value
      *
-     * @param \Magento\Framework\Object $attribute
+     * @param \Magento\Framework\DataObject $attribute
      * @return string
      */
-    public function renderWeeeTaxAttribute(\Magento\Framework\Object $attribute)
+    public function renderWeeeTaxAttribute(\Magento\Framework\DataObject $attribute)
     {
         return $this->convertAndFormatCurrency($attribute->getData('amount'));
     }
@@ -165,7 +165,7 @@ class Adjustment extends AbstractAdjustment
     /**
      * Get Weee attributes for display
      *
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     protected function getWeeeAttributesForDisplay()
     {

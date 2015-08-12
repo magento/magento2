@@ -57,24 +57,55 @@ class Repository
     private $defaults = null;
 
     /**
+     * @var FileFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @var File\FallbackContextFactory
+     */
+    private $fallbackContextFactory;
+
+    /**
+     * @var File\ContextFactory
+     */
+    private $contextFactory;
+    /**
+     * @var RemoteFactory
+     */
+    private $remoteFactory;
+
+    /**
      * @param \Magento\Framework\UrlInterface $baseUrl
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
      * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \Magento\Framework\App\Request\Http $request
+     * @param FileFactory $fileFactory
+     * @param File\FallbackContextFactory $fallbackContextFactory
+     * @param File\ContextFactory $contextFactory
+     * @param RemoteFactory $remoteFactory
      */
     public function __construct(
         \Magento\Framework\UrlInterface $baseUrl,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\View\Design\Theme\ListInterface $themeList,
         \Magento\Framework\View\Asset\Source $assetSource,
-        \Magento\Framework\App\Request\Http $request
+        \Magento\Framework\App\Request\Http $request,
+        FileFactory $fileFactory,
+        File\FallbackContextFactory $fallbackContextFactory,
+        File\ContextFactory $contextFactory,
+        RemoteFactory $remoteFactory
     ) {
         $this->baseUrl = $baseUrl;
         $this->design = $design;
         $this->themeList = $themeList;
         $this->assetSource = $assetSource;
         $this->request = $request;
+        $this->fileFactory = $fileFactory;
+        $this->fallbackContextFactory = $fallbackContextFactory;
+        $this->contextFactory = $contextFactory;
+        $this->remoteFactory = $remoteFactory;
     }
 
     /**
@@ -160,12 +191,14 @@ class Repository
             $themePath,
             $params['locale']
         );
-        return new File(
-            $this->assetSource,
-            $context,
-            $filePath,
-            $module,
-            $this->assetSource->getContentType($filePath)
+        return $this->fileFactory->create(
+            [
+                'source' => $this->assetSource,
+                'context' => $context,
+                'filePath' => $filePath,
+                'module' => $module,
+                'contentType' => $this->assetSource->getContentType($filePath)
+            ]
         );
     }
 
@@ -208,12 +241,14 @@ class Repository
         $id = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $locale]);
         if (!isset($this->fallbackContext[$id])) {
             $url = $this->baseUrl->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
-            $this->fallbackContext[$id] = new \Magento\Framework\View\Asset\File\FallbackContext(
-                $url,
-                $area,
-                $themePath,
-                $locale,
-                $isSecure
+            $this->fallbackContext[$id] = $this->fallbackContextFactory->create(
+                [
+                    'baseUrl' => $url,
+                    'areaType' => $area,
+                    'themePath' => $themePath,
+                    'localeCode' => $locale,
+                    'isSecure' => $isSecure
+                ]
             );
         }
         return $this->fallbackContext[$id];
@@ -232,12 +267,14 @@ class Repository
         if (!$module) {
             $module = $similarTo->getModule();
         }
-        return new File(
-            $this->assetSource,
-            $similarTo->getContext(),
-            $filePath,
-            $module,
-            $this->assetSource->getContentType($filePath)
+        return $this->fileFactory->create(
+            [
+                'source' => $this->assetSource,
+                'context' => $similarTo->getContext(),
+                'filePath' => $filePath,
+                'module' => $module,
+                'contentType' => $this->assetSource->getContentType($filePath)
+            ]
         );
     }
 
@@ -261,7 +298,15 @@ class Repository
     ) {
         $context = $this->getFileContext($baseDirType, $baseUrlType, $dirPath);
         $contentType = $this->assetSource->getContentType($filePath);
-        return new File($this->assetSource, $context, $filePath, '', $contentType);
+        return $this->fileFactory->create(
+            [
+                'source' => $this->assetSource,
+                'context' => $context,
+                'filePath' => $filePath,
+                'module' => '',
+                'contentType' => $contentType
+            ]
+        );
     }
 
     /**
@@ -279,7 +324,9 @@ class Repository
         $id = implode('|', [$baseDirType, $urlType, $dirPath]);
         if (!isset($this->fileContext[$id])) {
             $url = $this->baseUrl->getBaseUrl(['_type' => $urlType]);
-            $this->fileContext[$id] = new \Magento\Framework\View\Asset\File\Context($url, $baseDirType, $dirPath);
+            $this->fileContext[$id] = $this->contextFactory->create(
+                ['baseUrl' => $url, 'baseDirType' => $baseDirType, 'contextPath' => $dirPath]
+            );
         }
         return $this->fileContext[$id];
     }
@@ -307,10 +354,11 @@ class Repository
      * @param string $url
      * @param string $contentType
      * @return Remote
+     * @codeCoverageIgnore
      */
     public function createRemoteAsset($url, $contentType)
     {
-        return new Remote($url, $contentType);
+        return $this->remoteFactory->create(['url' => $url, 'contentType' => $contentType]);
     }
 
     /**

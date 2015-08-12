@@ -632,7 +632,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $pagerBlock = $this->getChildBlock('product_list_toolbar_pager');
 
-        if ($pagerBlock instanceof \Magento\Framework\Object) {
+        if ($pagerBlock instanceof \Magento\Framework\DataObject) {
             /* @var $pagerBlock \Magento\Theme\Block\Html\Pager */
             $pagerBlock->setAvailableLimit($this->getAvailableLimit());
 
@@ -680,9 +680,11 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             'modeCookie' => ToolbarModel::MODE_COOKIE_NAME,
             'directionCookie' => ToolbarModel::DIRECTION_COOKIE_NAME,
             'orderCookie' => ToolbarModel::ORDER_COOKIE_NAME,
-            'limitCookie' => ToolbarModel::LIMIT_COOKIE_NAME,
-            'postData' => json_decode($postData),
+            'limitCookie' => ToolbarModel::LIMIT_COOKIE_NAME
         ];
+        if ($postData) {
+            $options['postData'] = json_decode($postData);
+        }
         $options = array_replace_recursive($options, $customOptions);
         return json_encode(['productListToolbarForm' => $options]);
     }

@@ -73,7 +73,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
     protected $_attributeCollection;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
@@ -86,7 +86,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,

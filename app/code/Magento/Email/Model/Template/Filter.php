@@ -146,7 +146,7 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $emogrifier;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -163,7 +163,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -753,6 +753,10 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function cssDirective($construction)
     {
+        if ($this->isPlainTemplateMode()) {
+            return '';
+        }
+
         $params = $this->getParameters($construction[2]);
         $file = isset($params['file']) ? $params['file'] : null;
         if (!$file) {

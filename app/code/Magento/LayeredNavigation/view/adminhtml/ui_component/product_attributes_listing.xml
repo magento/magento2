@@ -17,7 +17,6 @@
                         <item name="dataScope" xsi:type="string">is_filterable</item>
                         <item name="label" xsi:type="string" translate="true">Use in Layered Navigation</item>
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="appendTo" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.listing_filters.is_comparable</item>
                     </item>
                 </argument>
             </filterSelect>
@@ -34,7 +33,6 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Use in Layered Navigation</item>
-                    <item name="appendTo" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns.is_comparable</item>
                 </item>
             </argument>
         </column>
