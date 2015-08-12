@@ -13,7 +13,6 @@ define([
 
     return Abstract.extend({
         defaults: {
-            caption: 'Select...',
             options: [
                 {
                     label: '1 column',
@@ -28,22 +27,18 @@ define([
             ],
             listVisible: false,
             multiselectFocus: false,
-            selectedCounter: 0,
-            hoveredElementIndex: null,
-            selectedVariable: [],
             selected: [],
             selectedPlaceholders: {
                 defaultPlaceholder: 'Select...',
                 lotPlaceholders: ' Selected'
             },
+            hoverElIndex: null,
 
             listens: {
                 selected: 'setCaption setValue',
                 listVisible: 'cleanHoveredElement'
             }
         },
-
-
 
         /**
          * Calls 'initObservable' of parent, initializes 'options' and 'initialOptions'
@@ -52,41 +47,39 @@ define([
          * @returns {Object} Chainable.
          */
         initObservable: function () {
-            var i = 0,
-                length = this.options.length,
-                curOption;
-
             this._super();
-            this.observe('multiselectFocus');
-            this.observe('caption');
-            this.observe(['listVisible', 'selected']);
-
-            for (i; i < length; i++) {
-                curOption = this.options[i];
-                curOption.selected = ko.observable(false);
-                curOption.hovered = ko.observable(false);
-            }
+            this.observe(['listVisible', 'selected', 'hoverElIndex', 'placeholder', 'multiselectFocus']);
 
             return this;
         },
 
         /**
-         * preprocessing array values to string and set to value variable
-         */
-        setValue: function () {
-            this.value(this.selected());
-        },
-
-        /**
-         * clean hover from element and clean hoveredElementIndex variable
+         * clean hoverElIndex variable
          */
         cleanHoveredElement: function () {
-            if (!this.listVisible() && !_.isNull(this.hoveredElementIndex)) {
-                this.onHoveredOut(this.options[this.hoveredElementIndex]);
-                this.hoveredElementIndex = null;
+            if (!this.listVisible() && !_.isNull(this.hoverElIndex())) {
+                this.hoverElIndex(null);
             }
 
             return this;
+        },
+
+        /**
+         *  "IS" METHODS
+         *
+         * check selected option
+         */
+        isSelected: function (label) {
+            return _.contains(this.selected(), label);
+        },
+
+        /**
+         *  "IS" METHODS
+         *
+         * check hovered option
+         */
+        isHovered: function (index) {
+            return this.hoverElIndex() === index;
         },
 
         /**
@@ -105,7 +98,11 @@ define([
          * Toggle activity list element
          */
         toggleOptionSelected: function (data) {
-            data.selected(!data.selected());
+            if (!_.contains(this.selected(), data.label)) {
+                this.selected.push(data.label);
+            } else {
+                this.selected(_.without(this.selected(), data.label));
+            }
 
             return this;
         },
@@ -118,16 +115,15 @@ define([
          * @param {Number} index - element index
          */
         onHoveredIn: function (data, index) {
-            this.hoveredElementIndex = index;
-            data.hovered(true);
+            this.hoverElIndex(index);
         },
 
         /**
          * onHoveredOut: Remove hover to some list element and write element ID from variable
          * @param {Object} data - object with data about this element
          */
-        onHoveredOut: function (data) {
-            data.hovered(false);
+        onHoveredOut: function (data, index) {
+            this.hoverElIndex(index);
         },
 
         /**
@@ -154,8 +150,9 @@ define([
          */
         enterKeyHandler: function () {
             if (this.listVisible()) {
-                !_.isNull(this.hoveredElementIndex) ?
-                    this.proxyOptionsClick(this.options[this.hoveredElementIndex]) : false;
+                if (!_.isNull(this.hoverElIndex())) {
+                    this.toggleOptionSelected(this.options[this.hoverElIndex()]);
+                }
             } else {
                 this.setListVisible(true);
             }
@@ -173,14 +170,14 @@ define([
          * selected first option in list
          */
         pageDownKeyHandler: function () {
-            if (!_.isNull(this.hoveredElementIndex)) {
-                this.onHoveredOut(this.options[this.hoveredElementIndex]);
-                this.hoveredElementIndex !== this.options.length - 1 ?
-                      this.hoveredElementIndex++
-                    : this.onHoveredIn(this.options[0], 0);
-                this.onHoveredIn(this.options[this.hoveredElementIndex], this.hoveredElementIndex);
+            if (!_.isNull(this.hoverElIndex())) {
+                if (this.hoverElIndex() !== this.options.length - 1) {
+                    this.hoverElIndex(this.hoverElIndex() + 1);
+                } else {
+                    this.hoverElIndex(0);
+                }
             } else {
-                this.onHoveredIn(this.options[0], 0);
+                this.hoverElIndex(0);
             }
         },
 
@@ -189,14 +186,14 @@ define([
          * selected last option in list
          */
         pageUpKeyHandler: function () {
-            if (!_.isNull(this.hoveredElementIndex)) {
-                this.onHoveredOut(this.options[this.hoveredElementIndex]);
-                this.hoveredElementIndex !== 0 ?
-                      this.hoveredElementIndex--
-                    : this.onHoveredIn(this.options[this.options.length - 1], this.options.length - 1);
-                this.onHoveredIn(this.options[this.hoveredElementIndex], this.hoveredElementIndex);
+            if (!_.isNull(this.hoverElIndex())) {
+                if (this.hoverElIndex() !== 0) {
+                    this.hoverElIndex(this.hoverElIndex() - 1);
+                } else {
+                    this.hoverElIndex(this.options.length - 1);
+                }
             } else {
-                this.onHoveredIn(this.options[this.options.length - 1], this.options.length - 1);
+                this.hoverElIndex(this.options.length - 1);
             }
         },
 
@@ -228,19 +225,21 @@ define([
             var length = this.selected().length;
 
             if (length && length !== 1) {
-                this.caption(length + this.selectedPlaceholders.lotPlaceholders);
+                this.placeholder(length + this.selectedPlaceholders.lotPlaceholders);
             } else if (length) {
-                this.caption(this.selected()[0].label);
+                this.placeholder(this.selected()[0]);
             } else {
-                this.caption(this.selectedPlaceholders.defaultPlaceholder);
+                this.placeholder(this.selectedPlaceholders.defaultPlaceholder);
             }
+
+            return this.placeholder();
         },
 
         /**
-         * setToSelectedArray: set data item to array selected elements
+         * preprocessing array values to string and set to value variable
          */
-        setToSelectedArray: function () {
-            this.selected(_.compact(this.selectedVariable));
+        setValue: function () {
+            this.value(this.selected());
         },
 
         /**
@@ -251,41 +250,13 @@ define([
         },
 
         /**
-         * setToSelectedVariableArray: set or remove data to variable array,
-         * this array can has empty values because data sets and removes to
-         * array by self index
-         */
-        setToSelectedVariableArray: function (data, index) {
-            data.selected() ? this.selectedVariable[index] = data : this.selectedVariable[index] = null;
-        },
-
-        /**
-         * proxyOptionsClick: proxy function for delegation data to support methods
-         */
-        proxyOptionsClick: function (data, index) {
-            this.toggleOptionSelected(data);
-            this.setToSelectedVariableArray(data, index);
-            this.setToSelectedArray();
-        },
-
-        /**
          * Processes preview for option by it's value, and sets the result
          * to 'preview' observable
          *
-         * @param {String}
          * @returns {String}
          */
         getPreview: function () {
-            var i = 0,
-                selectedArray = this.selected(),
-                length = selectedArray.length,
-                value = '';
-
-            for (i; i < length; i++) {
-                i > 0 ? value += ', ' + selectedArray[i].label : value += selectedArray[i].label;
-            }
-
-            return value;
+            return this.selected().toString();
         }
     });
 });
