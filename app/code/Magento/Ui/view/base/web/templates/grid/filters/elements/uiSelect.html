@@ -4,48 +4,59 @@
  * See COPYING.txt for license details.
  */
 -->
+
 <label
-        class="admin__form-field-label"
-        data-bind="attr: {for: uid}">
+    class="admin__form-field-label"
+    data-bind="attr: {for: uid}">
     <span data-bind="text: label"></span>
 </label>
-<div tabindex="0" class="admin__form-field-control admin__control-multiselect-wrap"
-        data-bind="event: {
-                            focusin: onFocusIn,
-                            focusout: onFocusOut,
-                            keydown: keydownSwitcher
+<div
+    tabindex="0"
+    data-bind="event: {
+                        focusin: onFocusIn,
+                        focusout: onFocusOut,
+                        keydown: keydownSwitcher
                     },
                     hasFocus: false">
-    <div class="admin__control-multiselect-wrap">
-        <div class="admin__control-multiselect"
-             data-bind="text: setCaption(),
+    <div
+        class="admin__action-multiselect-wrap action-select-wrap"
+        data-bind="css: {_active: listVisible}">
+        <div
+            class="action-select admin__action-multiselect"
+            data-bind="text: setCaption(),
                         css: {_focus: multiselectFocus},
                         click: function(data, event) {
                             toggleListVisible(data, event)
                         }">
 
         </div>
-        <div class="admin__control-multiselect-list-wrap">
-            <ul data-bind="
-                visible: listVisible
-            ">
+        <div class="admin__action-multiselect-wrap">
+            <ul
+                class="action-menu"
+                data-bind="css: {
+                    _active: listVisible
+                }">
                 <!-- ko foreach: { data: options, as: 'option'}  -->
                 <li
-                    class="admin__control-multiselect-elements"
+                    class="action-menu-item"
                     data-bind="
-                                css: {_selected: $parent.isSelected(option.label), _active: $parent.isHovered($index())},
+                                css: {
+                                    _selected: $parent.isSelected(option.label),
+                                    _active: $parent.isHovered($index())
+                                },
                                 click: $parent.toggleOptionSelected.bind($parent, $data, $index()),
                                 event: {
                                     mouseenter: function(){$parent.onHoveredIn($data, $index())},
                                     mouseleave: function(){$parent.onHoveredIn($data, $index())},
-                                }">
-                    <span
-                            class="admin__control-multiselect-checkbox"
-                            data-bind="css: {_checked: $parent.isSelected(option.label)}">
-                    </span>
-                    <span
-                            data-bind="text: option.label">
-                    </span>
+">
+                    <input
+                        class="admin__control-checkbox"
+                        type="checkbox"
+                        data-bind="attr: { 'checked': $parent.isSelected(option.label) }">
+                    <label
+                        class="admin__action-multiselect-label"
+                        data-bind="text: option.label">
+                    </label>
                 </li>
                 <!-- /ko -->
             </ul>
