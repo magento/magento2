@@ -20,8 +20,5 @@ define([
             expect(element.trigger('openDialog')).toBe(element);
             expect(element.trigger('closeDialog')).toBe(element);
         });
-        it('Check for transition support', function () {
-            expect(modal.whichTransitionEvent()).toBe('webkitTransitionEnd');
-        });
     });
 });
