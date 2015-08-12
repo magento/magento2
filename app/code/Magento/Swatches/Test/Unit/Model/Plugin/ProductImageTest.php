@@ -83,7 +83,7 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataForTest
      */
-    public function testBeforeInit($expected)
+    public function testBeforeGetImage($expected)
     {
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
 
@@ -99,10 +99,10 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
             ->method('loadVariationByFallback')
             ->willReturn($expected['product']);
 
-        $productImageMock = $this->getMock('Magento\Catalog\Block\Product\Image', [], [], '', false);
+        $productImageMock = $this->getMock('Magento\Catalog\Block\Product\AbstractProduct', [], [], '', false);
 
-        $result = $this->pluginModel->beforeInit($productImageMock, $this->productMock, $expected['page_handle']);
-        $this->assertEquals([$this->productMock, $expected['page_handle'], 'Magento_Catalog'], $result);
+        $result = $this->pluginModel->beforeGetImage($productImageMock, $this->productMock, $expected['page_handle']);
+        $this->assertEquals([$this->productMock, $expected['page_handle'], []], $result);
     }
 
     protected function getFilterArray($expected)
