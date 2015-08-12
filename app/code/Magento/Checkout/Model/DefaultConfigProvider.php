@@ -379,14 +379,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
             foreach ($quoteItems as $index => $quoteItem) {
                 $quoteItemData[$index] = $quoteItem->toArray();
                 $quoteItemData[$index]['options'] = $this->getFormattedOptionValue($quoteItem);
-                $thumbnailSize = $this->viewConfig->getViewConfig()->getVarValue(
-                    'Magento_Catalog',
-                    'product_thumbnail_image_size'
-                );
-                $quoteItemData[$index]['thumbnail'] = (string) $this->imageHelper->init(
+                $quoteItemData[$index]['thumbnail'] = $this->imageHelper->init(
                     $quoteItem->getProduct(),
-                    'thumbnail'
-                )->resize($thumbnailSize);
+                    'product_thumbnail_image'
+                )->getUrl();
             }
         }
         return $quoteItemData;
