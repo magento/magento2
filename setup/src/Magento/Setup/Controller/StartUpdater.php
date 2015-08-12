@@ -27,7 +27,6 @@ class StartUpdater extends AbstractActionController
     const KEY_POST_HEADER_TITLE = 'headerTitle';
     const KEY_POST_DATA_OPTION = 'dataOption';
     const KEY_POST_PACKAGE_NAME = 'name';
-    const KEY_POST_PACKAGE_TYPE = 'type';
     const KEY_POST_PACKAGE_VERSION = 'version';
     /**#@- */
 
@@ -130,7 +129,6 @@ class StartUpdater extends AbstractActionController
         foreach ($packages as $package) {
             if (!isset($package[self::KEY_POST_PACKAGE_NAME])
                 || ($jobType != 'uninstall' && !isset($package[self::KEY_POST_PACKAGE_VERSION]))
-                || ($jobType == 'uninstall' && !isset($package[self::KEY_POST_PACKAGE_TYPE]))
             ) {
                 $errorMessage .= 'Missing package information' . PHP_EOL;
                 break;

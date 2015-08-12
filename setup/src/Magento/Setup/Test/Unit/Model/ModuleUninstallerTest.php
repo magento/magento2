@@ -100,11 +100,7 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Magento\Framework\Module\Resource')
             ->willReturn($resource);
-        $this->uninstaller->uninstall(
-            $this->output,
-            ['moduleA', 'moduleB'],
-            [ModuleUninstaller::OPTION_UNINSTALL_DATA => true]
-        );
+        $this->uninstaller->uninstallData($this->output, ['moduleA', 'moduleB']);
     }
 
     public function testUninstallRemoveCode()
@@ -120,10 +116,6 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Framework\Module\PackageInfoFactory')
             ->willReturn($packageInfoFactory);
         $this->remove->expects($this->once())->method('remove');
-        $this->uninstaller->uninstall(
-            $this->output,
-            ['moduleA', 'moduleB'],
-            [ModuleUninstaller::OPTION_UNINSTALL_CODE => true]
-        );
+        $this->uninstaller->uninstallCode($this->output, ['moduleA', 'moduleB']);
     }
 }

@@ -7,7 +7,7 @@
 namespace Magento\Theme\Test\Unit\Console\Command;
 
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
-use Magento\Theme\Model\Theme\PackageNameFinder;
+use Magento\Theme\Model\Theme\themePackageInfo;
 use Magento\Theme\Model\Theme\ThemeUninstaller;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Setup\BackupRollbackFactory;
@@ -70,9 +70,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $themeUninstaller;
 
     /**
-     * @var PackageNameFinder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemePackageInfo|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $packageNameFinder;
+    private $themePackageInfo;
 
     /**
      * @var CommandTester
@@ -106,7 +106,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         );
         $this->themeValidator = $this->getMock('Magento\Theme\Model\ThemeValidator', [], [], '', false);
         $this->themeUninstaller = $this->getMock('Magento\Theme\Model\Theme\ThemeUninstaller', [], [], '', false);
-        $this->packageNameFinder = $this->getMock('Magento\Theme\Model\Theme\PackageNameFinder', [], [], '', false);
+        $this->themePackageInfo = $this->getMock('Magento\Theme\Model\Theme\ThemePackageInfo', [], [], '', false);
         $this->command = new ThemeUninstallCommand(
             $this->cache,
             $this->cleanupFiles,
@@ -117,7 +117,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->themeProvider,
             $this->backupRollbackFactory,
             $this->themeValidator,
-            $this->packageNameFinder,
+            $this->themePackageInfo,
             $this->themeUninstaller
         );
         $this->tester = new CommandTester($this->command);
@@ -125,8 +125,8 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedValidationNotPackage()
     {
-        $this->packageNameFinder->expects($this->at(0))->method('getPackageName')->willReturn('dummy');
-        $this->packageNameFinder->expects($this->at(1))->method('getPackageName')->willReturn('magento/theme-a');
+        $this->themePackageInfo->expects($this->at(0))->method('getPackageName')->willReturn('dummy');
+        $this->themePackageInfo->expects($this->at(1))->method('getPackageName')->willReturn('magento/theme-a');
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
@@ -144,7 +144,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedValidationNotTheme()
     {
-        $this->packageNameFinder->expects($this->exactly(2))->method('getPackageName')->willReturn('');
+        $this->themePackageInfo->expects($this->exactly(2))->method('getPackageName')->willReturn('');
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
@@ -179,7 +179,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                     ['test4/composer.json', true]
                 ]
             ));
-        $this->packageNameFinder->expects($this->exactly(4))
+        $this->themePackageInfo->expects($this->exactly(4))
             ->method('getPackageName')
             ->will($this->returnValueMap([
                 ['test1', 'dummy1'], ['test2', 'magento/theme-b'], ['test3', ''], ['test4', 'dummy2']
@@ -208,7 +208,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUpPassValidation()
     {
-        $this->packageNameFinder->expects($this->any())->method('getPackageName')->willReturn('magento/theme-a');
+        $this->themePackageInfo->expects($this->any())->method('getPackageName')->willReturn('magento/theme-a');
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
@@ -372,15 +372,11 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getThemeByFullPath')
             ->willReturn($theme);
         $this->themeUninstaller->expects($this->once())
-            ->method('uninstall')
-            ->with(
-                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
-                $this->anything(),
-                [
-                    ThemeUninstaller::OPTION_UNINSTALL_REGISTRY => true,
-                    ThemeUninstaller::OPTION_UNINSTALL_CODE => true
-                ]
-            );
+            ->method('uninstallRegistry')
+            ->with($this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'), $this->anything());
+        $this->themeUninstaller->expects($this->once())
+            ->method('uninstallCode')
+            ->with($this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'), $this->anything());
     }
 
     public function testExecuteWithBackupCode()

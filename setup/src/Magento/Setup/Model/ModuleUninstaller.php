@@ -10,16 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class to uninstall a module component
  */
-class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUninstaller
+class ModuleUninstaller
 {
-    /**#@+
-     * Module uninstall options
-     */
-    const OPTION_UNINSTALL_DATA = 'data';
-    const OPTION_UNINSTALL_CODE = 'code';
-    const OPTION_UNINSTALL_REGISTRY = 'registry';
-    /**#@-*/
-
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -65,29 +57,6 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
         $this->remove = $remove;
         $this->collector = $collector;
         $this->setupFactory = $setupFactory;
-        $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
-    }
-
-    /**
-     * Uninstall the module depending on uninstall options
-     *
-     * @param OutputInterface $output
-     * @param array $modules Module names
-     * @param array $options
-     * @return void
-     */
-    public function uninstall(OutputInterface $output, array $modules, array $options)
-    {
-        if (isset($options[self::OPTION_UNINSTALL_DATA]) && $options[self::OPTION_UNINSTALL_DATA]) {
-            $this->removeData($output, $modules);
-        }
-        if (isset($options[self::OPTION_UNINSTALL_CODE]) && $options[self::OPTION_UNINSTALL_CODE]) {
-            $this->removeCode($output, $modules);
-        }
-        if (isset($options[self::OPTION_UNINSTALL_REGISTRY]) && $options[self::OPTION_UNINSTALL_REGISTRY]) {
-            $this->moduleRegistryUninstaller->removeModulesFromDb($output, $modules);
-            $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($output, $modules);
-        }
     }
 
     /**
@@ -97,7 +66,7 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
      * @param array $modules
      * @return void
      */
-    private function removeData(OutputInterface $output, array $modules)
+    public function uninstallData(OutputInterface $output, array $modules)
     {
         $uninstalls = $this->collector->collectUninstall();
         $setupModel = $this->setupFactory->create();
@@ -122,7 +91,7 @@ class ModuleUninstaller extends \Magento\Framework\Composer\AbstractComponentUni
      * @param array $modules
      * @return void
      */
-    private function removeCode(OutputInterface $output, array $modules)
+    public function uninstallCode(OutputInterface $output, array $modules)
     {
         $output->writeln('<info>Removing code from Magento codebase:</info>');
         $packages = [];

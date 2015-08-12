@@ -11,7 +11,7 @@ use Magento\Setup\Module\DataSetupFactory;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Helper class used by ModuleUninstaller to uninstall registry from the database and deployment config
+ * Used to uninstall registry from the database and deployment config
  */
 class ModuleRegistryUninstaller
 {
@@ -92,7 +92,7 @@ class ModuleRegistryUninstaller
         $newSort = $this->loader->load($modules);
         $newModules = [];
         foreach (array_keys($newSort) as $module) {
-            $newModules[$module] = $existingModules[$module];
+            $newModules[$module] = isset($existingModules[$module]) ? $existingModules[$module] : 0;
         }
         $this->writer->saveConfig(
             [

@@ -25,7 +25,6 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->once())->method('getStatusFilePath')->willReturn('path_a');
         $status->expects($this->once())->method('getLogFilePath')->willReturn('path_b');
-        $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass(
             'Magento\Framework\ObjectManagerInterface',
@@ -36,23 +35,18 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider->expects($this->atLeastOnce())->method('get')->willReturn($this->objectManager);
 
         $upgradeCommand = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
-        $componentUninstallerFactory = $this->getMock(
-            'Magento\Setup\Model\Cron\ComponentUninstallerFactory',
-            [],
-            [],
-            '',
-            false
-        );
+        $moduleUninstaller = $this->getMock('Magento\Setup\Model\ModuleUninstaller', [], [], '', false);
+        $moduleRegistryUninstaller = $this->getMock('Magento\Setup\Model\ModuleRegistryUninstaller', [], [], '', false);
 
         $updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
 
-        $returnValueMap =[
+        $returnValueMap = [
             ['Magento\Setup\Model\Updater', $updater],
             ['Magento\Setup\Model\Cron\Status', $status],
             ['Magento\Setup\Console\Command\UpgradeCommand', $upgradeCommand],
-            ['Magento\Framework\App\MaintenanceMode', $maintenanceMode],
             ['Magento\Setup\Model\ObjectManagerProvider', $objectManagerProvider],
-            ['Magento\Setup\Model\Cron\ComponentUninstallerFactory', $componentUninstallerFactory],
+            ['Magento\Setup\Model\ModuleUninstaller', $moduleUninstaller],
+            ['Magento\Setup\Model\ModuleRegistryUninstaller', $moduleRegistryUninstaller],
         ];
 
         $serviceManager->expects($this->atLeastOnce())
@@ -81,10 +75,27 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testComponentUninstall()
     {
-        $this->objectManager->expects($this->once())
+        $valueMap = [
+            [
+                'Magento\Frameowrk\Module\PackageInfoFactory',
+                $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false)
+            ],
+            [
+                'Magento\Framework\Composer\ComposerInformation',
+                $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false)
+            ],
+            [
+                'Magento\Theme\Model\Theme\ThemeUninstaller',
+                $this->getMock('Magento\Theme\Model\Theme\ThemeUninstaller', [], [], '', false)
+            ],
+            [
+                'Magento\Theme\Model\Theme\ThemePackageInfo',
+                $this->getMock('Magento\Theme\Model\Theme\ThemePackageInfo', [], [], '', false)
+            ],
+        ];
+        $this->objectManager->expects($this->any())
             ->method('get')
-            ->with('Magento\Framework\Module\PackageInfoFactory')
-            ->willReturn($this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false));
+            ->will($this->returnValueMap($valueMap));
         $this->assertInstanceOf(
             'Magento\Setup\Model\Cron\JobComponentUninstall',
             $this->jobFactory->create('setup:component:uninstall', [])

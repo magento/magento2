@@ -13,7 +13,7 @@ use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Theme\Model\Theme\Data\Collection;
-use Magento\Theme\Model\Theme\PackageNameFinder;
+use Magento\Theme\Model\Theme\ThemePackageInfo;
 use Magento\Theme\Model\Theme\ThemeProvider;
 use Magento\Theme\Model\Theme\ThemeUninstaller;
 use Symfony\Component\Console\Command\Command;
@@ -105,9 +105,9 @@ class ThemeUninstallCommand extends Command
     /**
      * Package name finder
      *
-     * @var PackageNameFinder
+     * @var ThemePackageInfo
      */
-    private $packageNameFinder;
+    private $themePackageInfo;
 
     /**
      * Theme Uninstaller
@@ -128,7 +128,7 @@ class ThemeUninstallCommand extends Command
      * @param ThemeProvider $themeProvider
      * @param BackupRollbackFactory $backupRollbackFactory
      * @param ThemeValidator $themeValidator
-     * @param PackageNameFinder $packageNameFinder
+     * @param ThemePackageInfo $themePackageInfo
      * @param ThemeUninstaller $themeUninstaller
      */
     public function __construct(
@@ -141,7 +141,7 @@ class ThemeUninstallCommand extends Command
         ThemeProvider $themeProvider,
         BackupRollbackFactory $backupRollbackFactory,
         ThemeValidator $themeValidator,
-        PackageNameFinder $packageNameFinder,
+        ThemePackageInfo $themePackageInfo,
         ThemeUninstaller $themeUninstaller
     ) {
         $this->cache = $cache;
@@ -153,7 +153,7 @@ class ThemeUninstallCommand extends Command
         $this->themeProvider = $themeProvider;
         $this->backupRollbackFactory = $backupRollbackFactory;
         $this->themeValidator = $themeValidator;
-        $this->packageNameFinder = $packageNameFinder;
+        $this->themePackageInfo = $themePackageInfo;
         $this->themeUninstaller = $themeUninstaller;
         parent::__construct();
     }
@@ -221,11 +221,8 @@ class ThemeUninstallCommand extends Command
                 $codeBackup->codeBackup($time);
             }
 
-            $this->themeUninstaller->uninstall(
-                $output,
-                $themePaths,
-                [ThemeUninstaller::OPTION_UNINSTALL_REGISTRY => true, ThemeUninstaller::OPTION_UNINSTALL_CODE => true]
-            );
+            $this->themeUninstaller->uninstallRegistry($output, $themePaths);
+            $this->themeUninstaller->uninstallCode($output, $themePaths);
 
             $this->cleanup($input, $output);
             $output->writeln('<info>Disabling maintenance mode</info>');
@@ -249,7 +246,7 @@ class ThemeUninstallCommand extends Command
         $unknownThemes = [];
         $installedPackages = $this->composer->getRootRequiredPackages();
         foreach ($themePaths as $themePath) {
-            if (array_search($this->packageNameFinder->getPackageName($themePath), $installedPackages) === false) {
+            if (array_search($this->themePackageInfo->getPackageName($themePath), $installedPackages) === false) {
                 $unknownPackages[] = $themePath;
             }
             if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
@@ -279,7 +276,7 @@ class ThemeUninstallCommand extends Command
         $messages = [];
         $packageToPath = [];
         foreach ($themePaths as $themePath) {
-            $packageToPath[$this->packageNameFinder->getPackageName($themePath)] = $themePath;
+            $packageToPath[$this->themePackageInfo->getPackageName($themePath)] = $themePath;
         }
         $dependencies = $this->dependencyChecker->checkDependencies(array_keys($packageToPath), true);
         foreach ($dependencies as $package => $dependingPackages) {
