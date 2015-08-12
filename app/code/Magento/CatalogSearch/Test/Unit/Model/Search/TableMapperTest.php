@@ -106,6 +106,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $attributeCollectionFactory = $this->getMockBuilder(
             '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory'
         )
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeCollectionFactory->expects($this->once())
