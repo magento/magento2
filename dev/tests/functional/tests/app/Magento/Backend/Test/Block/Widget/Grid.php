@@ -46,7 +46,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $resetButton = '[data-action="grid-filter-remove-chip"]';
+    protected $resetButton = '[data-action="grid-filter-reset"]';
 
     /**
      * The first row in grid. For this moment we suggest that we should strictly define what we are going to search
