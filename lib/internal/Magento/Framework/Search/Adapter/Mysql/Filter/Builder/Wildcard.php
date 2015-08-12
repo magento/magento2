@@ -35,7 +35,7 @@ class Wildcard implements FilterInterface
     ) {
         /** @var \Magento\Framework\Search\Request\Filter\Wildcard $filter */
 
-        $searchValue = $filter->getValue() . '%';
+        $searchValue = '%' . $filter->getValue() . '%';
         return $this->conditionManager->generateCondition(
             $filter->getField(),
             ($isNegation ? self::CONDITION_NOT_LIKE : self::CONDITION_LIKE),
