@@ -789,6 +789,7 @@ class Generator extends AbstractSchemaGenerator
             $parameterInfo['type'],
             $description
         );
+        $bodySchema['type'] = 'object';
         return $bodySchema;
     }
 
