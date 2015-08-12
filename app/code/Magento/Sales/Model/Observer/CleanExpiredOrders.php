@@ -21,29 +21,21 @@ class CleanExpiredOrders
     protected $orderCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $timeZone;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
      * @param StoresConfig $storesConfig
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timeZone
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $collectionFactory
      */
     public function __construct(
         StoresConfig $storesConfig,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timeZone,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Resource\Order\CollectionFactory $collectionFactory
     ) {
         $this->storesConfig = $storesConfig;
-        $this->timeZone = $timeZone;
         $this->logger = $logger;
         $this->orderCollectionFactory = $collectionFactory;
     }

@@ -28,11 +28,6 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $timeZoneMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $loggerMock;
 
     /**
@@ -68,13 +63,11 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->timeZoneMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
 
         $this->loggerMock = $this->getMock('\Psr\Log\LoggerInterface');
 
         $this->model = new \Magento\Sales\Model\Observer\CleanExpiredOrders(
             $this->storesConfigMock,
-            $this->timeZoneMock,
             $this->loggerMock,
             $this->collectionFactoryMock
         );
@@ -93,10 +86,13 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->orderCollectionMock);
-        $this->orderCollectionMock->expects($this->exactly(6))->method('addFieldToFilter');
-        $this->timeZoneMock->expects($this->exactly(2))->method('getConfigTimezone');
-        $this->timeZoneMock->expects($this->exactly(2))->method('date');
+        $this->orderCollectionMock->expects($this->exactly(4))->method('addFieldToFilter');
         $this->orderCollectionMock->expects($this->exactly(4))->method('walk');
+
+        $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
+        $selectMock->expects($this->exactly(2))->method('where')->willReturnSelf();
+        $this->orderCollectionMock->expects($this->exactly(2))->method('getSelect')->willReturn($selectMock);
+
         $this->loggerMock->expects($this->never())->method('error');
         $this->model->execute();
     }
@@ -115,9 +111,12 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->orderCollectionMock);
-        $this->orderCollectionMock->expects($this->exactly(3))->method('addFieldToFilter');
-        $this->timeZoneMock->expects($this->once())->method('getConfigTimezone');
-        $this->timeZoneMock->expects($this->once())->method('date');
+        $this->orderCollectionMock->expects($this->exactly(2))->method('addFieldToFilter');
+
+        $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
+        $selectMock->expects($this->once())->method('where')->willReturnSelf();
+        $this->orderCollectionMock->expects($this->once())->method('getSelect')->willReturn($selectMock);
+
         $this->orderCollectionMock->expects($this->once())
             ->method('walk')
             ->willThrowException(new \Exception($exceptionMessage));
