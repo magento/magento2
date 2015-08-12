@@ -19,6 +19,11 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     const WEBSITE_ID = 4512;
 
     /**
+     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeCollection;
+
+    /**
      * @var \Magento\Store\Api\Data\WebsiteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $website;
@@ -93,11 +98,23 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->any())
             ->method('getWebsite')
             ->willReturn($this->website);
+        $this->attributeCollection = $this->getMockBuilder(
+            '\Magento\Catalog\Model\Resource\Product\Attribute\Collection'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeCollectionFactory = $this->getMockBuilder(
+            '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeCollectionFactory->method('create')->willReturn($this->attributeCollection);
         $this->target = $objectManager->getObject(
             '\Magento\CatalogSearch\Model\Search\TableMapper',
             [
                 'resource' => $this->resource,
                 'storeManager' => $this->storeManager,
+                'attributeCollectionFactory' => $attributeCollectionFactory
             ]
         );
 
@@ -122,6 +139,26 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
                 ['price_index' => 'prefix_catalog_product_index_price'],
                 'search_index.entity_id = price_index.entity_id AND price_index.website_id = ' . self::WEBSITE_ID,
                 []
+            )
+            ->willReturnSelf();
+        $select = $this->target->addTables($this->select, $this->request);
+        $this->assertEquals($this->select, $select, 'Returned results isn\'t equal to passed select');
+    }
+
+    public function testAddStaticAttributeFilter()
+    {
+        $priceFilter = $this->createRangeFilter('static');
+        $query = $this->createFilterQuery($priceFilter);
+        $this->createAttributeMock('static', 'static', 'backend_table');
+        $this->request->expects($this->once())
+            ->method('getQuery')
+            ->willReturn($query);
+        $this->select->expects($this->once())
+            ->method('joinLeft')
+            ->with(
+                ['4111c4a3daddb5c5dba31cdac705114b' => 'backend_table'],
+                'search_index.entity_id = 4111c4a3daddb5c5dba31cdac705114b.entity_id',
+                null
             )
             ->willReturnSelf();
         $select = $this->target->addTables($this->select, $this->request);
@@ -397,5 +434,25 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $filter->method('getField')
             ->willReturn($field);
         return $filter;
+    }
+
+    /**
+     * @param string $code
+     * @param string $backendType
+     * @param string $backendTable
+     */
+    private function createAttributeMock($code, $backendType = null, $backendTable = null)
+    {
+        $attribute = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
+            ->setMethods(['getBackendType', 'getBackendTable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attribute->method('getBackendType')
+            ->willReturn($backendType);
+        $attribute->method('getBackendTable')
+            ->willReturn($backendTable);
+        $this->attributeCollection->method('getItemByColumnValue')
+            ->with('attribute_code', $code)
+            ->willReturn($attribute);
     }
 }
