@@ -221,88 +221,15 @@
     .admin__form-field-label,
     .admin__control-text,
     .admin__control-select,
-    .admin__control-multiselect {
+    .admin__action-multiselect {
         font-size: @data-grid-filters__font-size;
     }
-    .admin__control-multiselect-wrap {
-        ul {
-            list-style: none;
-            width: 100%;
-            border: .1rem solid #007bdb;
-            position: absolute;
-            z-index: 999;
-            background: #fff;
-            -webkit-user-select: none;
-            cursor: pointer;
-            li {
-                padding: .2rem  1rem;
-            }
-            li._selected {
-                background: #e3e3e3;
-            }
-            li._active {
-              color: #fff;
-              background: #008fdb;
-            }
-        }
-    }
-    .admin__form-field-control.admin__control-multiselect-wrap {
-        box-shadow: none;
-    }
-
-    .admin__control-multiselect-checkbox {
-        width: 16px;
-        height: 16px;
-        margin-right: 5px;
-        display: block;
-        border: 1px solid #e3e3e3;
-        box-sizing: border-box;
-        border-radius: 2px;
-        background: #fff;
-        float: left;
-    }
-    .admin__control-multiselect-checkbox._checked {
-        border-color: #008fdb;
-        background-repeat: no-repeat;
-        background-position: top center;
-        background-image+: url('../images/arrows-bg.svg');
-        background-size+: auto;
-    }
-    .admin__control-multiselect-list-wrap {
-        position: relative;
-    }
-    .admin__control-multiselect {
-        padding-top: @action__padding-top + .1rem;
-        user-select: none;
-        cursor: pointer;
-        -webkit-user-select: none;
-        background-repeat: no-repeat;
-        background-image+: url('../images/arrows-bg.svg');
-        background-position+: ~'calc(100% - 12px)' -34px;
-        background-size+: auto;
-
-        background-image+: linear-gradient(#e3e3e3, #e3e3e3);
-        background-position+: 100%;
-        background-size+: 33px 100%;
-
-        background-image+: linear-gradient(#adadad, #adadad);
-        background-position+: ~'calc(100% - 33px)' 0;
-        background-size+: 1px 100%;
-    }
-    .admin__control-multiselect._focus {
-        border-color: #007bdb;
-        background-image+: url('../images/arrows-bg.svg');
-        background-position+: ~'calc(100% - 12px)' 13px;
-
-        background-image+: linear-gradient(#e3e3e3, #e3e3e3);
-        background-position+: 100%;
-
-        background-image+: linear-gradient(#007bdb, #007bdb);
-        background-position+: ~'calc(100% - 33px)' 0;
+    .admin__action-multiselect,
+    .admin__control-select {
+        height: @action__height - .1rem;
     }
     .admin__control-select {
         padding-top: @action__padding-top - .1rem;
-        height: @action__height - .1rem;
     }
     //  Date control
     .admin__control-text.hasDatepicker,
