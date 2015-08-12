@@ -189,7 +189,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     {
         $isExceeded = false;
         if ($this->validationStrategy == self::VALIDATION_STRATEGY_STOP_ON_ERROR
-            && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) >= $this->allowedErrorsCount
+            && $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]) > $this->allowedErrorsCount
         ) {
             $isExceeded = true;
         }
@@ -265,9 +265,6 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
                 continue;
             }
             $message = $replaceCodeWithMessage ? $error->getErrorMessage() : $error->getErrorCode();
-            if (!isset($result[$message])) {
-                $result[$message] = [];
-            }
             $result[$message][] = $error->getRowNumber()+1;
         }
         return $result;

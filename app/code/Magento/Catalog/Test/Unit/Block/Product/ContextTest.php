@@ -21,6 +21,11 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected $context;
 
     /**
+     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageBuilder;
+
+    /**
      * Set up
      *
      * @return void
@@ -36,10 +41,15 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->imageBuilder = $this->getMockBuilder('Magento\Catalog\Block\Product\ImageBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->context = $objectManager->getObject(
             'Magento\Catalog\Block\Product\Context',
             [
-                'stockRegistry' => $this->stockRegistryMock
+                'stockRegistry' => $this->stockRegistryMock,
+                'imageBuilder' => $this->imageBuilder,
             ]
         );
     }
@@ -52,5 +62,10 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testGetStockRegistry()
     {
         $this->assertEquals($this->stockRegistryMock, $this->context->getStockRegistry());
+    }
+
+    public function testGetImageBuilder()
+    {
+        $this->assertInstanceOf('Magento\Catalog\Block\Product\ImageBuilder', $this->context->getImageBuilder());
     }
 }
