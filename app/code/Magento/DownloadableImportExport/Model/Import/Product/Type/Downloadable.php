@@ -217,6 +217,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @var array
      */
     protected $dataLinkPrice = [
+        'price_id' => null,
         'link_id' => null,
         'website_id' => self::DEFAULT_WEBSITE_ID,
         'price' => null
@@ -652,7 +653,13 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $result = [];
         $existingOptions = $this->connection->fetchAll(
             $this->connection->select()->from(
-                $this->_resource->getTableName('downloadable_link')
+                ['dl' => $this->_resource->getTableName('downloadable_link')],
+                ['link_id',	'product_id', 'sort_order',	'number_of_downloads', 'is_shareable',
+                    'link_url', 'link_file', 'link_type', 'sample_url', 'sample_file', 'sample_type']
+            )->joinLeft(
+                ['dlp' => $this->_resource->getTableName('downloadable_link_price')],
+                'dl.link_id = dlp.link_id AND dlp.website_id='.self::DEFAULT_WEBSITE_ID,
+                ['price_id', 'website_id']
             )->where(
                 'product_id in (?)',
                 $this->productIds
