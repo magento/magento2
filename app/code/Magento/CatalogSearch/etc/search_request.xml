@@ -62,8 +62,8 @@
                 <queryReference clause="should" ref="price_query"/>
                 <queryReference clause="should" ref="category_query"/>
             </query>
-            <query xsi:type="matchQuery" value="$sku$" name="sku_query">
-                <match field="sku"/>
+            <query name="sku_query" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="sku_query_filter"/>
             </query>
             <query name="price_query" xsi:type="filteredQuery">
                 <filterReference clause="must" ref="price_query_filter"/>
@@ -73,6 +73,7 @@
             </query>
         </queries>
         <filters>
+            <filter xsi:type="wildcardFilter" name="sku_query_filter" field="sku" value="$sku$"/>
             <filter xsi:type="rangeFilter" name="price_query_filter" field="price" from="$price.from$" to="$price.to$"/>
             <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
         </filters>
