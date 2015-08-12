@@ -474,16 +474,10 @@ class Onepage
 
                     // don't reset original shipping data, if it was not changed by customer
                     foreach ($shipping->getData() as $shippingKey => $shippingValue) {
-                        if (!is_null(
-                            $shippingValue
-                        ) && !is_null(
-                            $billing->getData($shippingKey)
-                        ) && !isset(
-                            $data[$shippingKey]
-                        ) && !in_array(
-                            $shippingKey,
-                            $requiredBillingAttributes
-                        )
+                        if ($shippingValue !== null
+                            && $billing->getData($shippingKey) !== null
+                            && !isset($data[$shippingKey])
+                            && !in_array($shippingKey, $requiredBillingAttributes)
                         ) {
                             $billing->unsetData($shippingKey);
                         }
