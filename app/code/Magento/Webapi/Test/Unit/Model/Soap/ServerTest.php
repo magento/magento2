@@ -15,7 +15,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\Store */
     protected $_storeMock;
 
-    /** @var \Magento\Webapi\Controller\Soap\Request */
+    /** @var \Magento\Framework\Webapi\Request */
     protected $_requestMock;
 
     /** @var \Magento\Store\Model\StoreManagerInterface */
@@ -61,7 +61,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $areaListMock->expects($this->any())->method('getFrontName')->will($this->returnValue('soap'));
 
         $this->_requestMock = $this->getMockBuilder(
-            'Magento\Webapi\Controller\Soap\Request'
+            'Magento\Framework\Webapi\Request'
         )->disableOriginalConstructor()->getMock();
 
         $this->_soapServerFactory = $this->getMockBuilder(
