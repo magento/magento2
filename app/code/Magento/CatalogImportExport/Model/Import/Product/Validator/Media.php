@@ -19,7 +19,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     const ADDITIONAL_IMAGES_DELIMITER = ',';
 
     /** @var array */
-    protected $media_attributes = ['image', 'small_image', 'thumbnail'];
+    protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
 
     /**
      * {@inheritdoc}
@@ -77,13 +77,17 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Validate value
+     *
+     * @param array $value
+     * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isValid($value)
     {
         $this->_clearMessages();
         $valid = true;
-        foreach ($this->media_attributes as $attribute) {
+        foreach ($this->mediaAttributes as $attribute) {
             if (isset($value[$attribute]) && strlen($value[$attribute])) {
                 if (!$this->checkPath($value[$attribute]) && !$this->checkValidUrl($value[$attribute])) {
                     $this->_addMessages(
