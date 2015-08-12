@@ -778,12 +778,15 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
+        if (!$this->isActive($quote ? $quote->getStoreId() : null)) {
+            return false;
+        }
+
         $checkResult = new \StdClass();
-        $isActive = $this->isActive($quote ? $quote->getStoreId() : null);
-        $checkResult->isAvailable = $isActive;
-        $checkResult->isDeniedInConfig = !$isActive;
+        $checkResult->isAvailable = true;
+
         // for future use in observers
         $this->_eventManager->dispatch(
             'payment_method_is_active',

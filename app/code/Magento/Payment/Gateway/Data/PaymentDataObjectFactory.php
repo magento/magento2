@@ -49,7 +49,7 @@ class PaymentDataObjectFactory
      * Creates Payment Data Object
      *
      * @param InfoInterface $paymentInfo
-     * @return PaymentDataObject
+     * @return PaymentDataObjectInterface
      */
     public function create(InfoInterface $paymentInfo)
     {
@@ -65,7 +65,7 @@ class PaymentDataObjectFactory
         $data['payment'] = $paymentInfo;
 
         return $this->objectManager->create(
-            'Magento\Payment\Gateway\Data\PaymentDataObject',
+            'Magento\Payment\Gateway\Data\PaymentDataObjectInterface',
             $data
         );
     }

@@ -6,6 +6,7 @@
 namespace Magento\Payment\Gateway\Helper;
 
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Framework\DataObject;
 
 class SubjectReader
 {
@@ -75,11 +76,11 @@ class SubjectReader
      * Read state object from subject
      *
      * @param array $subject
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public static function readStateObject(array $subject)
     {
-        if (!isset($subject['stateObject']) || !is_object($subject['stateObject'])) {
+        if (!isset($subject['stateObject']) || !$subject['stateObject'] instanceof DataObject) {
             throw new \InvalidArgumentException('State object does not exist');
         }
 

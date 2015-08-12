@@ -118,10 +118,10 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
     /**
      * EC PE won't be available if the EC is available
      *
-     * @param \Magento\Quote\Model\Quote|null $quote
+     * @param \Magento\Quote\Api\Data\CartInterface|\Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         if (!parent::isAvailable($quote)) {
             return false;
