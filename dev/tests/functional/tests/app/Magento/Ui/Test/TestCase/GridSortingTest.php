@@ -70,22 +70,27 @@ class GridSortingTest extends Injectable
      * @return array
      */
     public function test(
-        $fixtureName,
-        $fixtureDataSet,
-        $itemsCount,
-        $steps,
         $pageClass,
         $gridRetriever,
-        $columnsForSorting
+        $columnsForSorting,
+        $fixtureName = null,
+        $fixtureDataSet = null,
+        $itemsCount = null,
+        $steps = null
     ) {
-        // Preconditions
-        $this->createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps);
+        // Fill grid before sorting if needed
+        if  ($fixtureName && $fixtureDataSet && $itemsCount && $steps) {
+            $this->createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps);
+        }
+
         $page = $this->pageFactory->create($pageClass);
 
         // Steps
         $page->open();
         /** @var DataGrid $gridBlock */
         $gridBlock = $page->$gridRetriever();
+        $gridBlock->resetFilter();
+
         $columnNames = explode('|', $columnsForSorting);
         $sortingResults = [];
         foreach ($columnNames as $columnName) {
