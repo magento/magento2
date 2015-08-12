@@ -16,7 +16,13 @@ angular.module('select-version', ['ngStorage'])
         $scope.componentsReadyForNext = true;
         $scope.componentsProcessed = false;
         $scope.componentsProcessError = false;
-        $scope.tryAgain = 0;
+
+        $scope.tryAgainEnabled = function() {
+            return ($scope.upgradeProcessed || $scope.upgradeProcessError)
+                && ($scope.updateComponents.no ||
+                    ($scope.updateComponents.yes && ($scope.componentsProcessed || $scope.componentsProcessError))
+                );
+        };
 
         $http.get('index.php/select-version/systemPackage', {'responseType' : 'json'})
             .success(function (data) {
@@ -31,11 +37,9 @@ angular.module('select-version', ['ngStorage'])
                     $scope.upgradeProcessError = true;
                 }
                 $scope.upgradeProcessed = true;
-                $scope.tryAgain++;
             })
             .error(function (data) {
                 $scope.upgradeProcessError = true;
-                $scope.tryAgain++;
             });
 
         $scope.updateComponents = {
@@ -46,18 +50,12 @@ angular.module('select-version', ['ngStorage'])
         $scope.$watch('updateComponents.no', function() {
             if (angular.equals($scope.updateComponents.no, true)) {
                 $scope.updateComponents.yes = false;
-                if ($scope.tryAgain < 0 && (!$scope.upgradeProcessed || !$scope.componentsProcessed)) {
-                    $scope.tryAgain++;
-                }
             }
         });
 
         $scope.$watch('updateComponents.yes', function() {
             if (angular.equals($scope.updateComponents.yes, true)) {
                 $scope.updateComponents.no = false;
-                if (!$scope.upgradeProcessed || !$scope.componentsProcessed) {
-                    $scope.tryAgain--;
-                }
                 if (!$scope.componentsProcessed && !$scope.componentsProcessError) {
                     $scope.componentsReadyForNext = false;
                     $http.get('index.php/other-components-grid/components', {'responseType': 'json'}).
@@ -78,10 +76,8 @@ angular.module('select-version', ['ngStorage'])
                                 $scope.componentsProcessError = true;
                             }
                             $scope.componentsProcessed = true;
-                            $scope.tryAgain++;
                         })
                         .error(function (data) {
-                            $scope.tryAgain++;
                             $scope.componentsProcessError = true;
                         });
                 }
