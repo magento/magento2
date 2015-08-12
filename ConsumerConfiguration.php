@@ -70,9 +70,9 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      */
     private function getData($key)
     {
-        if (!isset($data[$key])) {
+        if (!isset($this->data[$key])) {
             return null;
         }
-        return $data[$key];
+        return $this->data[$key];
     }
 }
