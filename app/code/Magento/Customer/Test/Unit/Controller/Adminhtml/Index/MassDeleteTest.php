@@ -159,7 +159,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
 
         $this->customerRepositoryMock->expects($this->any())
             ->method('deleteById')
-            ->willReturnMap([[10, true],[11, true],[12, true]]);
+            ->willReturnMap([[10, true], [11, true], [12, true]]);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
