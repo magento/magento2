@@ -26,7 +26,7 @@
             data-bind="text: caption,
                         css: {_focus: multiselectFocus},
                         click: function(data, event) {
-                            proxyClick(data, event)
+                            toggleListVisible(data, event)
                         }">
 
         </div>
@@ -41,22 +41,21 @@
                     class="action-menu-item"
                     data-bind="
                                 css: {
-                                    _selected: option.visible,
+                                    _selected: option.selected,
                                     _active: option.hovered
                                 },
-                                click: $parent.proxyOptionsClick.bind($parent, $data),
+                                click: $parent.proxyOptionsClick.bind($parent, $data, $index()),
                                 event: {
-                                    mouseenter: function(){$parent.onMouseEnter($data, $index())},
-                                    mouseleave: $parent.onMouseLeave
+                                    mouseenter: function(){$parent.onHoveredIn($data, $index())},
+                                    mouseleave: $parent.onHoveredOut
                                 },
-                                clickBubble: false,
                                 attr: {
                                     'data-value': option.value
                                 }">
                     <input
                         class="admin__control-checkbox"
                         type="checkbox"
-                        data-bind="attr: { 'checked': option.visible }">
+                        data-bind="attr: { 'checked': option.selected }">
                     <label
                         class="admin__action-multiselect-label"
                         data-bind="text: option.label">
