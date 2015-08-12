@@ -6,9 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityTest">
-        <variation name="CreateCmsPageEntityTestVariation1">
-            <data name="description" xsi:type="string">MAGETWO-12399: Create CMS Content Page</data>
+    <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityTest" summary="Create Cms Page" ticketId="MAGETWO-25580">
+        <variation name="CreateCmsPageEntityTestVariation1" summary="Create CMS Content Page" ticketId="MAGETWO-12399">
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
