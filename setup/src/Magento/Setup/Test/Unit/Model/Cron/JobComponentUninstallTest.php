@@ -42,24 +42,14 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
     private $objectManagerProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ModuleUninstaller
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Helper\ModuleUninstall
      */
-    private $moduleUninstaller;
+    private $moduleUninstallHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ModuleRegistryUninstaller
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Helper\ThemeUninstall
      */
-    private $moduleRegistryUninstaller;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Theme\ThemeUninstaller
-     */
-    private $themeUninstaller;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Theme\ThemePackageInfo
-     */
-    private $themePackageInfo;
+    private $themeUninstallHelper;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerInformation
@@ -75,16 +65,20 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $this->moduleUninstaller = $this->getMock('Magento\Setup\Model\ModuleUninstaller', [], [], '', false);
-        $this->moduleRegistryUninstaller = $this->getMock(
-            'Magento\Setup\Model\ModuleRegistryUninstaller',
+        $this->moduleUninstallHelper = $this->getMock(
+            'Magento\Setup\Model\Cron\Helper\ModuleUninstall',
             [],
             [],
             '',
             false
         );
-        $this->themeUninstaller = $this->getMock('Magento\Theme\Model\Theme\ThemeUninstaller', [], [], '', false);
-        $this->themePackageInfo = $this->getMock('Magento\Theme\Model\Theme\ThemePackageInfo', [], [], '', false);
+        $this->themeUninstallHelper = $this->getMock(
+            'Magento\Setup\Model\Cron\Helper\ThemeUninstall',
+            [],
+            [],
+            '',
+            false
+        );
         $this->composerInformation = $this->getMock(
             'Magento\Framework\Composer\ComposerInformation',
             [],
@@ -132,16 +126,14 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUpUpdater();
 
-        $this->moduleUninstaller->expects($this->once())->method('uninstallData');
-        $this->moduleRegistryUninstaller->expects($this->once())->method('removeModulesFromDb');
-        $this->moduleRegistryUninstaller->expects($this->once())->method('removeModulesFromDeploymentConfig');
+        $this->moduleUninstallHelper->expects($this->once())
+            ->method('uninstall')
+            ->with($this->output, 'vendor/module-package', true);
 
         $this->job = new JobComponentUninstall(
             $this->composerInformation,
-            $this->moduleUninstaller,
-            $this->moduleRegistryUninstaller,
-            $this->themeUninstaller,
-            $this->themePackageInfo,
+            $this->moduleUninstallHelper,
+            $this->themeUninstallHelper,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -170,12 +162,13 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             ->method('getInstalledMagentoPackages')
             ->willReturn(['vendor/language-a' => ['type' => JobComponentUninstall::COMPONENT_LANGUAGE]]);
 
+        $this->moduleUninstallHelper->expects($this->never())->method($this->anything());
+        $this->themeUninstallHelper->expects($this->never())->method($this->anything());
+
         $this->job = new JobComponentUninstall(
             $this->composerInformation,
-            $this->moduleUninstaller,
-            $this->moduleRegistryUninstaller,
-            $this->themeUninstaller,
-            $this->themePackageInfo,
+            $this->moduleUninstallHelper,
+            $this->themeUninstallHelper,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -198,14 +191,15 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
             ->willReturn(['vendor/theme-a' => ['type' => JobComponentUninstall::COMPONENT_THEME]]);
-        $this->themeUninstaller->expects($this->once())->method('uninstallRegistry');
+        $this->themeUninstallHelper->expects($this->once())
+            ->method('uninstall')
+            ->with($this->output, 'vendor/theme-a');
+        $this->moduleUninstallHelper->expects($this->never())->method($this->anything());
 
         $this->job = new JobComponentUninstall(
             $this->composerInformation,
-            $this->moduleUninstaller,
-            $this->moduleRegistryUninstaller,
-            $this->themeUninstaller,
-            $this->themePackageInfo,
+            $this->moduleUninstallHelper,
+            $this->themeUninstallHelper,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -233,12 +227,13 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             ->method('getInstalledMagentoPackages')
             ->willReturn(['vendor/unknown-a' => ['type' => 'unknown']]);
 
+        $this->moduleUninstallHelper->expects($this->never())->method($this->anything());
+        $this->themeUninstallHelper->expects($this->never())->method($this->anything());
+
         $this->job = new JobComponentUninstall(
             $this->composerInformation,
-            $this->moduleUninstaller,
-            $this->moduleRegistryUninstaller,
-            $this->themeUninstaller,
-            $this->themePackageInfo,
+            $this->moduleUninstallHelper,
+            $this->themeUninstallHelper,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -263,12 +258,13 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWrongFormat(array $params)
     {
+        $this->moduleUninstallHelper->expects($this->never())->method($this->anything());
+        $this->themeUninstallHelper->expects($this->never())->method($this->anything());
+
         $this->job = new JobComponentUninstall(
             $this->composerInformation,
-            $this->moduleUninstaller,
-            $this->moduleRegistryUninstaller,
-            $this->themeUninstaller,
-            $this->themePackageInfo,
+            $this->moduleUninstallHelper,
+            $this->themeUninstallHelper,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -301,10 +297,8 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
         $this->job = new JobComponentUninstall(
             $this->composerInformation,
-            $this->moduleUninstaller,
-            $this->moduleRegistryUninstaller,
-            $this->themeUninstaller,
-            $this->themePackageInfo,
+            $this->moduleUninstallHelper,
+            $this->themeUninstallHelper,
             $this->objectManagerProvider,
             $this->output,
             $this->status,

@@ -45,51 +45,37 @@ class JobComponentUninstall extends AbstractJob
     private $updater;
 
     /**
-     * @var \Magento\Setup\Model\ModuleUninstaller
-     */
-    private $moduleUninstaller;
-
-    /**
-     * @var \Magento\Setup\Model\ModuleRegistryUninstaller
-     */
-    private $moduleRegistryUninstaller;
-
-    /**
-     * @var \Magento\Theme\Model\Theme\ThemeUninstaller
-     */
-    private $themeUninstaller;
-
-    /**
-     * @var \Magento\Theme\Model\Theme\ThemePackageInfo
-     */
-    private $themePackageInfo;
-
-    /**
      * @var \Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
 
     /**
+     * @var Helper\ModuleUninstall
+     */
+    private $moduleUninstall;
+
+    /**
+     * @var Helper\ThemeUninstall
+     */
+    private $themeUninstall;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
-     * @param \Magento\Setup\Model\ModuleUninstaller $moduleUninstaller
-     * @param \Magento\Setup\Model\ModuleRegistryUninstaller $moduleRegistryUninstaller
-     * @param \Magento\Theme\Model\Theme\ThemeUninstaller $themeUninstaller
-     * @param \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo
+     * @param Helper\ModuleUninstall $moduleUninstall
+     * @param Helper\ThemeUninstall $themeUninstall
      * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
      * @param Status $status
      * @param Updater $updater
-     * @param $name
+     * @param string $name
      * @param array $params
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
-        \Magento\Setup\Model\ModuleUninstaller $moduleUninstaller,
-        \Magento\Setup\Model\ModuleRegistryUninstaller $moduleRegistryUninstaller,
-        \Magento\Theme\Model\Theme\ThemeUninstaller $themeUninstaller,
-        \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo,
+        Helper\ModuleUninstall $moduleUninstall,
+        Helper\ThemeUninstall $themeUninstall,
         ObjectManagerProvider $objectManagerProvider,
         OutputInterface $output,
         Status $status,
@@ -98,12 +84,10 @@ class JobComponentUninstall extends AbstractJob
         $params = []
     ) {
         $this->composerInformation = $composerInformation;
-        $this->moduleUninstaller = $moduleUninstaller;
-        $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
-        $this->themeUninstaller = $themeUninstaller;
+        $this->moduleUninstall = $moduleUninstall;
+        $this->themeUninstall = $themeUninstall;
         $this->objectManager = $objectManagerProvider->get();
         $this->updater = $updater;
-        $this->themePackageInfo = $themePackageInfo;
         parent::__construct($output, $status, $name, $params);
     }
 
@@ -134,6 +118,7 @@ class JobComponentUninstall extends AbstractJob
      *
      * @param array $component
      * @return void
+     * @throw \RuntimeException
      */
     private function executeComponent(array $component)
     {
@@ -142,7 +127,6 @@ class JobComponentUninstall extends AbstractJob
         }
 
         $componentName = $component[self::COMPONENT_NAME];
-
         $type = $this->composerInformation->getInstalledMagentoPackages()[$componentName]['type'];
 
         if (!in_array($type, [self::COMPONENT_MODULE, self::COMPONENT_THEME, self::COMPONENT_LANGUAGE])) {
@@ -151,19 +135,14 @@ class JobComponentUninstall extends AbstractJob
 
         switch ($type) {
             case self::COMPONENT_MODULE:
-                // convert to module name
-                /** @var \Magento\Framework\Module\PackageInfo $packageInfo */
-                $packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
-                $moduleName = $packageInfo->getModuleName($componentName);
-                if (isset($this->params[self::DATA_OPTION]) && $this->params[self::DATA_OPTION]) {
-                    $this->moduleUninstaller->uninstallData($this->output, [$moduleName]);
-                }
-                $this->moduleRegistryUninstaller->removeModulesFromDb($this->output, [$moduleName]);
-                $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($this->output, [$moduleName]);
+                $this->moduleUninstall->uninstall(
+                    $this->output,
+                    $componentName,
+                    isset($this->params[self::DATA_OPTION]) ? $this->params[self::DATA_OPTION] : false
+                );
                 break;
             case self::COMPONENT_THEME:
-                $themePath = $this->themePackageInfo->getFullThemePath($componentName);
-                $this->themeUninstaller->uninstallRegistry($this->output, [$themePath]);
+                $this->themeUninstall->uninstall($this->output, $componentName);
                 break;
         }
     }

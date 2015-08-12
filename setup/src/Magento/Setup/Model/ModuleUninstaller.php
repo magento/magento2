@@ -33,25 +33,18 @@ class ModuleUninstaller
     private $setupFactory;
 
     /**
-     * @var ModuleRegistryUninstaller
-     */
-    private $moduleRegistryUninstaller;
-
-    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param \Magento\Framework\Composer\Remove $remove
      * @param UninstallCollector $collector
      * @param \Magento\Setup\Module\SetupFactory $setupFactory
-     * @param ModuleRegistryUninstaller $moduleRegistryUninstaller
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
         \Magento\Framework\Composer\Remove $remove,
         UninstallCollector $collector,
-        \Magento\Setup\Module\SetupFactory $setupFactory,
-        ModuleRegistryUninstaller $moduleRegistryUninstaller
+        \Magento\Setup\Module\SetupFactory $setupFactory
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->remove = $remove;
