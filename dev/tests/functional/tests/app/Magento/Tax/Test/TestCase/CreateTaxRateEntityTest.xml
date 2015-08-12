@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Tax\Test\TestCase\CreateTaxRateEntityTest">
+    <testCase name="Magento\Tax\Test\TestCase\CreateTaxRateEntityTest" summary="Create Tax Rate" ticketId="MAGETWO-23286">
         <variation name="CreateTaxRateEntityTestVariation1">
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>

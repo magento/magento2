@@ -6,7 +6,7 @@
 namespace Magento\Review\Model;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Review\Model\Resource\Review\Product\Collection as ProductCollection;
 use Magento\Review\Model\Resource\Review\Status\Collection as StatusCollection;
 
@@ -213,7 +213,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     public function getEntitySummary($product, $storeId = 0)
     {
         $summaryData = $this->_summaryModFactory->create()->setStoreId($storeId)->load($product->getId());
-        $summary = new \Magento\Framework\Object();
+        $summary = new \Magento\Framework\DataObject();
         $summary->setData($summaryData->getData());
         $product->setRatingSummary($summary);
     }

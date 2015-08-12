@@ -15,10 +15,10 @@ class Purchases extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstr
     /**
      * Renders Purchases value
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return \Magento\Framework\Phrase|string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if (($value = $row->getData($this->getColumn()->getIndex())) > 0) {
             return $value;
