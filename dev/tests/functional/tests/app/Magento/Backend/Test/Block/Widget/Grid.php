@@ -32,7 +32,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $searchButton = '.data-grid-search-control-wrap .action-submit';
+    protected $searchButton = '[data-action="grid-filter-apply"]';
 
     /**
      * Locator for 'Sort' link
@@ -60,7 +60,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $editLink = 'a.action-menu-item';
+    protected $editLink = 'td[class*=col-action] a';
 
     /**
      * An element locator which allows to select entities in grid
@@ -74,21 +74,28 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $selectAll = '.data-grid-multiselect-cell .action-menu-item:first';
+    protected $selectAll = '.massaction a[onclick*=".selectAll()"]';
 
     /**
-     * Mass action toggle list.
+     * Massaction dropdown
      *
      * @var string
      */
-    protected $massActionToggleList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
+    protected $massactionSelect = '[id*=massaction-select]';
+
+    /**
+     * Massaction dropdown
+     *
+     * @var string
+     */
+    protected $massactionAction = '[data-menu="grid-mass-select"]';
 
     /**
      * Massaction 'Submit' button
      *
      * @var string
      */
-    protected $massactionSubmit = '.modal-inner-wrap .action-secondary';
+    protected $massactionSubmit = '[id*=massaction-form] button';
 
     /**
      * Backend abstract block
@@ -151,21 +158,21 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $actionNextPage = '.admin__data-grid-pager-wrap .action-next';
+    protected $actionNextPage = '[class*=data-grid-pager] .action-next';
 
     /**
      * Locator for disabled next page action
      *
      * @var string
      */
-    protected $actionNextPageDisabled = '.admin__data-grid-pager-wrap .action-next.disabled';
+    protected $actionNextPageDisabled = '[class*=data-grid-pager] .action-next.disabled';
 
     /**
      * First row selector
      *
      * @var string
      */
-    protected $firstRowSelector = '//tbody/tr[1]/td[contains(@class,"data-grid-actions-cell")]/a';
+    protected $firstRowSelector = '';
 
     /**
      * Selector for no records row.
@@ -312,14 +319,11 @@ abstract class Grid extends Block
             $this->searchAndSelect($item);
         }
         if ($massActionSelection) {
-            $this->_rootElement
-                ->find(sprintf($this->massActionToggleList, $massActionSelection), Locator::SELECTOR_XPATH)
-                ->click();
+            $this->_rootElement->find($this->massactionAction, Locator::SELECTOR_CSS, 'select')
+                ->setValue($massActionSelection);
         }
         $actionType = key($action);
-        $this->_rootElement
-            ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
-            ->click();
+        $this->_rootElement->find($this->massactionSelect, Locator::SELECTOR_CSS, 'select')->setValue($actionType);
         if (isset($action[$actionType]) && $action[$actionType] != '-') {
             $this->_rootElement->find($this->option, Locator::SELECTOR_CSS, 'select')->setValue($action[$actionType]);
         }
