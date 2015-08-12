@@ -83,6 +83,7 @@ class Query extends AbstractDb
      * @param int|string $value
      * @param null|string $field
      * @return $this|\Magento\Framework\Model\Resource\Db\AbstractDb
+     * @SuppressWarnings("unused")
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
