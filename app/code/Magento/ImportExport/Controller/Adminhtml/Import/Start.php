@@ -63,10 +63,12 @@ class Start extends ImportController
         }
 
         if ($errorAggregator->hasFatalExceptions()) {
-            $resultBlock->addError('System fatal exceptions(s):');
             foreach ($this->getSystemExceptions($errorAggregator) as $error) {
                 $resultBlock->addError(
-                    $error->getErrorMessage() . '<br>Additional data: ' . $error->getErrorDescription()
+                    $error->getErrorMessage()
+                    . '<a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
+                    . __('Show more') . '</a><div style="display:none;">' . __('Additional data') . ': '
+                    . $error->getErrorDescription() . '</div>'
                 );
             }
         }
