@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model\Data;
-use Magento\Directory\Api\Data\CurrencyInformationInterface;
-use Magento\Directory\Api\Data\ExchangeRateInterface;
 
 /**
  * Class Exchange Rate

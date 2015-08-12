@@ -21,8 +21,8 @@ class CurrencyRepository implements \Magento\Directory\Api\CurrencyRepositoryInt
     protected $exchangeRateFactory;
 
     /**
-    * @var \Magento\Store\Model\StoreManagerInterface
-    */
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
     
     /**
