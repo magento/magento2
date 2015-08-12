@@ -72,6 +72,13 @@ class DataGrid extends Grid
     protected $actionButton = '.modal-inner-wrap .action-secondary';
 
     /**
+     * Column header locator
+     *
+     * @var string
+     */
+    protected $columnHeader = "//th/span[.='%s']";
+
+    /**
      * Clear all applied Filters.
      *
      * @return void
@@ -200,5 +207,25 @@ class DataGrid extends Grid
         if ($acceptAlert) {
             $this->browser->find($this->actionButton)->click();
         }
+    }
+
+    /**
+     * @param string $columnLabel
+     */
+    public function sortByColumn($columnLabel)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->_rootElement->find(sprintf($this->columnHeader, $columnLabel), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getFirstItemId()
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        return $this->_rootElement->find($this->selectItem)->getValue();
     }
 }
