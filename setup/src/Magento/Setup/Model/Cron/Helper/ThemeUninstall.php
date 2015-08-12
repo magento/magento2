@@ -41,6 +41,7 @@ class ThemeUninstall
      *
      * @param OutputInterface $output
      * @param string $componentName
+     * @return void
      */
     public function uninstall(OutputInterface $output, $componentName)
     {

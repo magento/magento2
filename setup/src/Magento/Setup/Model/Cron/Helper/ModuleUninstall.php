@@ -53,6 +53,7 @@ class ModuleUninstall
      * @param OutputInterface $output
      * @param string $componentName
      * @param bool $dataOption
+     * @return void
      */
     public function uninstall(OutputInterface $output, $componentName, $dataOption)
     {
