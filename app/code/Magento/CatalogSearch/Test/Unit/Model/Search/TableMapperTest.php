@@ -108,7 +108,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeCollectionFactory->method('create')->willReturn($this->attributeCollection);
+        $attributeCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->attributeCollection);
         $this->target = $objectManager->getObject(
             '\Magento\CatalogSearch\Model\Search\TableMapper',
             [
