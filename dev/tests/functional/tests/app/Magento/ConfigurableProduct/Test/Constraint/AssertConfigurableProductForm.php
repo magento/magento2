@@ -32,6 +32,7 @@ class AssertConfigurableProductForm extends AssertProductForm
      */
     protected $skippedAttributeFields = [
         'frontend_input',
+        'frontend_label',
         'attribute_code',
         'attribute_id',
         'is_required',
@@ -66,24 +67,12 @@ class AssertConfigurableProductForm extends AssertProductForm
      */
     protected function prepareFixtureData(array $data, array $sortFields = [])
     {
-        // filter values and reset keys in attributes data
-        $attributeData = $data['configurable_attributes_data']['attributes_data'];
-        foreach ($attributeData as $attributeKey => $attribute) {
-            foreach ($attribute['options'] as $optionKey => $option) {
-                if (isset($option['admin'])) {
-                    $option['label'] = $option['admin'];
-                }
-                $attribute['options'][$optionKey] = array_diff_key($option, array_flip($this->skippedOptionFields));
-            }
-            $attribute['options'] = $this->sortDataByPath($attribute['options'], '::label');
-            $attributeData[$attributeKey] = array_diff_key($attribute, array_flip($this->skippedAttributeFields));
-        }
-        $data['configurable_attributes_data']['attributes_data'] = $this->sortDataByPath($attributeData, '::label');
+        // Attribute is no longer displayed on product page
+        unset($data['configurable_attributes_data']['attributes_data']);
 
         // prepare and filter values, reset keys in variation matrix
         $variationsMatrix = $data['configurable_attributes_data']['matrix'];
         foreach ($variationsMatrix as $key => $variationMatrix) {
-            $variationMatrix['display'] = isset($variationMatrix['display']) ? $variationMatrix['display'] : 'Yes';
             $variationsMatrix[$key] = array_diff_key($variationMatrix, array_flip($this->skippedVariationMatrixFields));
         }
         $data['configurable_attributes_data']['matrix'] = array_values($variationsMatrix);
@@ -100,14 +89,6 @@ class AssertConfigurableProductForm extends AssertProductForm
      */
     protected function prepareFormData(array $data, array $sortFields = [])
     {
-        // prepare attributes data
-        $attributeData = $data['configurable_attributes_data']['attributes_data'];
-        foreach ($attributeData as $attributeKey => $attribute) {
-            $attribute['options'] = $this->sortDataByPath($attribute['options'], '::label');
-            $attributeData[$attributeKey] = $attribute;
-        }
-        $data['configurable_attributes_data']['attributes_data'] = $this->sortDataByPath($attributeData, '::label');
-
         // filter values and reset keys in variation matrix
         $variationsMatrix = $data['configurable_attributes_data']['matrix'];
         foreach ($variationsMatrix as $key => $variationMatrix) {

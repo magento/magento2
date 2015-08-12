@@ -400,6 +400,7 @@ class Customer extends AbstractCustomer
      *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _importData()
     {
