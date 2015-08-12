@@ -5,11 +5,28 @@
  */
 namespace Magento\Framework\Stdlib\DateTime;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * @package Magento\Framework
  */
 class DateTimeFormatter
 {
+    /**
+     * @var bool
+     */
+    protected $useIntlFormatObject;
+
+    /**
+     * @param bool|null $useIntlFormatObject
+     */
+    public function __construct($useIntlFormatObject = null)
+    {
+        $this->useIntlFormatObject = (null === $useIntlFormatObject)
+            ? !defined('HHVM_VERSION')
+            : $useIntlFormatObject;
+    }
+
     /**
      * Returns a translated and localized date string
      *
@@ -20,10 +37,10 @@ class DateTimeFormatter
      */
     public function formatObject($object, $format = null, $locale = null)
     {
-        if (defined('HHVM_VERSION')) {
-            return $this->doFormatObject($object, $format, $locale);
+        if ($this->useIntlFormatObject) {
+            return \IntlDateFormatter::formatObject($object, $format, $locale);
         }
-        return \IntlDateFormatter::formatObject($object, $format, $locale);
+        return $this->doFormatObject($object, $format, $locale);
     }
 
     /**
@@ -33,6 +50,7 @@ class DateTimeFormatter
      * @param string|int|array|null $format
      * @param string|null $locale
      * @return string
+     * @throws LocalizedException
      */
     protected function doFormatObject($object, $format = null, $locale = null)
     {
@@ -42,17 +60,25 @@ class DateTimeFormatter
             list($dateFormat, $timeFormat) = $format;
         } elseif (is_numeric($format)) {
             $dateFormat = $format;
-        } else {
-            $dateFormat = $timeFormat = \IntlDateFormatter::FULL;
+        } elseif (is_string($format) || null == $format) {
+            $dateFormat = $timeFormat = \IntlDateFormatter::MEDIUM;
             $pattern = $format;
+        } else {
+            throw new LocalizedException(__('Format type is invalid'));
         }
 
-        $timezone = $object->getTimezone()->getName();
+        $timezone = $object->getTimezone();
+        if ($object instanceof \IntlCalendar) {
+            $timezone = $timezone->toDateTimeZone();
+        }
+        $timezone = $timezone->getName();
+
         if ($timezone === '+00:00') {
             $timezone = 'UTC';
-        } elseif ($timezone[0] === '+' || $timezone[0] === '-') {
+        } elseif ($timezone[0] === '+' || $timezone[0] === '-') { // $timezone[0] is first symbol of string
             $timezone = 'GMT' . $timezone;
         }
+
         return (new \IntlDateFormatter($locale, $dateFormat, $timeFormat, $timezone, $calendar, $pattern))
             ->format($object);
     }
