@@ -111,7 +111,7 @@ class Preprocessor implements PreprocessorInterface
             return $filterQuery;
         } elseif ($filter->getField() === 'category_ids') {
             return 'category_ids_index.category_id = ' . $filter->getValue();
-        } elseif ($attribute->isStatic() && $attribute->getIsSearchable()) {
+        } elseif ($attribute->isStatic()) {
             $alias = $this->tableMapper->getMappingAlias($filter);
             $filterQuery = str_replace(
                 $this->connection->quoteIdentifier($attribute->getAttributeCode()),

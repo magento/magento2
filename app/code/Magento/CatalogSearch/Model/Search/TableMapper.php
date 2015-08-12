@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogSearch\Model\Search;
 
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Resource as AppResource;
