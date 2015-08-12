@@ -86,7 +86,7 @@ class TemporaryStorage
     {
         $connection = $this->getConnection();
         $table = $connection->newTable($this->resource->getTableName(self::TEMPORARY_TABLE_PREFIX . time()));
-        $connection->dropTable($table->getName());
+        $connection->dropTemporaryTable($table->getName());
         $table->addColumn(
             self::FIELD_ENTITY_ID,
             Table::TYPE_INTEGER,
