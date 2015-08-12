@@ -22,12 +22,17 @@
         padding: 1rem;
     }
     .action-menu-item {
+        transition: background-color .1s linear;
+        &._hover,
         &:hover {
-            background-color: @page-wrapper__background-color;
-        }
-        &._selected,
-        &._hover {
             background-color: @action__hover__background-color;
+        }
+        &._selected {
+            background-color: @action__hover__background-color;
+            &._hover,
+            &:hover {
+                background-color: darken(@action__hover__background-color, 5%);
+            }
         }
     }
     .admin__action-multiselect {
@@ -36,6 +41,9 @@
         min-height: @action__height;
         padding: @action__padding-top + .1rem (@action__height + .4rem) @action__padding-bottom 1em;
         white-space: normal;
+        &:focus {
+            box-shadow: none;
+        }
         &:after {
             top: auto;
             bottom: @action__height / 2 - @button-marker-triangle__height / 2 - .1rem;
