@@ -12,6 +12,7 @@ define([
 
     return Component.extend({
         defaults: {
+            active: true,
             fields: [],
             errorsCount: 0,
             fieldTmpl: 'ui/grid/editing/field',
@@ -23,6 +24,9 @@ define([
                         name: '${ $.$data.column.index }',
                         provider: '${ $.$data.record.name }',
                         dataScope: 'data.${ $.$data.column.index }',
+                        imports: {
+                            disabled: '${ $.$data.record.parentName }:fields.${ $.$data.column.index }.disabled'
+                        },
                         isEditor: true
                     },
                     text: {
@@ -89,10 +93,12 @@ define([
         /**
          * Creates new instance of an editor.
          *
-         * @param {Object} editor - Editors' instance definition.
+         * @param {Column} column - Column instance which contains editor definition.
          * @returns {Record} Chainable.
          */
-        initEditor: function (editor) {
+        initEditor: function (column) {
+            var editor = this.buildEditor(column);
+
             layout([editor]);
 
             return this;
@@ -121,7 +127,6 @@ define([
             }, true, true);
 
             editor.visible  = column.visible;
-            editor.disabled = column.disabled;
 
             return editor;
         },
@@ -133,13 +138,9 @@ define([
          * @returns {Record} Chainable.
          */
         createEditors: function (columns) {
-            var editor;
-
             columns.forEach(function (column) {
                 if (column.editor && !this.getEditor(column.index)) {
-                    editor = this.buildEditor(column);
-
-                    this.initEditor(editor);
+                    this.initEditor(column);
                 }
             }, this);
 
@@ -156,6 +157,25 @@ define([
             return this.elems.findWhere({
                 index: index
             });
+        },
+
+        /**
+         * Returns records' data object.
+         *
+         * @returns {Object}
+         */
+        getData: function () {
+            var fields = this.elems.map(function (elem) {
+                return elem.index;
+            });
+
+            _.each(this.preserveFields, function (enabled, field) {
+                if (enabled && !_.contains(fields, field)) {
+                    fields.push(field);
+                }
+            });
+
+            return _.pick(this.data, fields);
         },
 
         /**
@@ -238,6 +258,16 @@ define([
             this.fields(fields);
 
             return this;
+        },
+
+        /**
+         * Checks if provided column is an actions column.
+         *
+         * @param {Column} column - Column to be checked.
+         * @returns {Boolean}
+         */
+        isActionsColumn: function (column) {
+            return column.dataType === 'actions';
         },
 
         /**

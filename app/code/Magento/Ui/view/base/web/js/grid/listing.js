@@ -168,7 +168,13 @@ define([
 
             return this;
         },
-        
+
+        /**
+         * Returns instance of a column found by provided identifier.
+         *
+         * @param {String} index - Columns' identifier.
+         * @returns {Column}
+         */
         getColumn: function (index) {
             return this.elems.findWhere({
                 index: index

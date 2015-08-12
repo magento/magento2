@@ -4,14 +4,27 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="data-grid-info-panel" data-bind="visible: isMultiEditing">
-    <div class="messages" data-bind="visible: hasErrors()">
-        <div class="message message-warning">
+<div class="data-grid-info-panel" data-bind="visible: isMultiEditing() || (hasActive() && hasMessages())">
+    <div class="messages" data-bind="visible: hasMessages()">
+        <div class="message message-warning" data-bind="visible: hasErrors()">
             <strong>There are <!-- ko text: countErrors() --><!-- /ko --> meesages requires your attention.</strong>
             Please make corrections to the errors in the table below and re-submit.
         </div>
+        <!-- ko foreach: messages -->
+            <div
+                class="message"
+                data-bind="
+                    css: {
+                        'message-warning': type === 'warning',
+                        'message-error': type === 'error',
+                        'message-success': type === 'success'
+                    },
+                    text: message">
+
+            </div>
+        <!-- /ko -->
     </div>
-    <div class="data-grid-info-panel-actions">
+    <div class="data-grid-info-panel-actions" data-bind="visible: isMultiEditing">
         <button class="action-tertiary" type="button" data-bind="click: cancel">
             <span data-bind="text: 'Cancel'"></span>
         </button>

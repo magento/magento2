@@ -6,48 +6,66 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
+    'mage/translate',
     'uiComponent'
-], function (_, utils, layout, Component) {
+], function (_, utils, layout, $t, Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
             rowButtonsTmpl: 'ui/grid/editing/row-buttons',
             headerButtonsTmpl: 'ui/grid/editing/header-buttons',
+            successMsg: $t('You have successfully saved your edits.'),
             errorsCount: 0,
             canSave: true,
             isMultiEditing: false,
             isSingleEditing: false,
             rowsData: [],
+            fields: {},
+
             templates: {
                 record: {
                     parent: '${ $.$data.editor.name }',
                     name: '${ $.$data.recordId }',
                     component: 'Magento_Ui/js/grid/editing/record',
                     columnsProvider: '${ $.$data.editor.columnsProvider }',
-                    active: true
+                    preserveFields: {
+                        '${ $.$data.editor.indexField }': true
+                    }
                 }
             },
+
             bulkConfig: {
                 component: 'Magento_Ui/js/grid/editing/bulk',
                 name: '${ $.name }_bulk',
                 editorProvider: '${ $.name }',
                 columnsProvider: '${ $.columnsProvider }'
             },
+
+            clientConfig: {
+                component: 'Magento_Ui/js/grid/editing/client',
+                name: '${ $.name }_client'
+            },
+
             viewConfig: {
                 component: 'Magento_Ui/js/grid/editing/editor-view',
                 name: '${ $.name }_view',
                 model: '${ $.name }',
                 columnsProvider: '${ $.columnsProvider }'
             },
+
             imports: {
                 rowsData: '${ $.dataProvider }:data.items'
             },
+
             listens: {
-                '${ $.dataProvider }:reload': 'hide',
+                '${ $.dataProvider }:reloaded': 'cancel',
                 '${ $.selectProvider }:selected': 'onSelectionsChange'
             },
+
             modules: {
+                source: '${ $.dataProvider }',
+                client: '${ $.clientConfig.name }',
                 columns: '${ $.columnsProvider }',
                 bulk: '${ $.bulkConfig.name }',
                 selections: '${ $.selectProvider }'
@@ -60,10 +78,11 @@ define([
          * @returns {Editor} Chainable.
          */
         initialize: function () {
-            _.bindAll(this, 'updateState', 'countErrors');
+            _.bindAll(this, 'updateState', 'countErrors', 'onDataSaved', 'onSaveError');
 
             this._super()
                 .initBulk()
+                .initClient()
                 .initView();
 
             return this;
@@ -83,8 +102,20 @@ define([
                     'isSingleEditing'
                 ])
                 .observe({
-                    active: []
+                    active: [],
+                    messages: []
                 });
+
+            return this;
+        },
+
+        /**
+         * Initializes bulk editing component.
+         *
+         * @returns {Editor} Chainable.
+         */
+        initBulk: function () {
+            layout([this.bulkConfig]);
 
             return this;
         },
@@ -101,12 +132,27 @@ define([
         },
 
         /**
-         * Initializes bulk editing component.
+         * Initializes client component.
          *
          * @returns {Editor} Chainable.
          */
-        initBulk: function () {
-            layout([this.bulkConfig]);
+        initClient: function () {
+            layout([this.clientConfig]);
+
+            return this;
+        },
+
+        /**
+         * Creates instance of a new record.
+         *
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
+         * @returns {Editor} Chainable.
+         */
+        initRecord: function (id, isIndex) {
+            var record = this.buildRecord(id, isIndex);
+
+            layout([record]);
 
             return this;
         },
@@ -129,13 +175,13 @@ define([
         },
 
         /**
-         * Creates new records' instance associated with a row data.
+         * Creates configuration for a new record associated with a row data.
          *
          * @param {(Number|String)} id - See 'getId' method.
          * @param {Boolean} [isIndex=false] - See 'getId' method.
-         * @returns {Editor} Chainable.
+         * @returns {Object} Record configuration.
          */
-        createRecord: function (id, isIndex) {
+        buildRecord: function (id, isIndex) {
             var recordId = this.getId(id, isIndex),
                 recordTmpl = this.templates.record,
                 record;
@@ -152,9 +198,7 @@ define([
             record.recordId = id;
             record.data     = this.getRowData(id);
 
-            layout([record]);
-
-            return this;
+            return record;
         },
 
         /**
@@ -166,8 +210,8 @@ define([
          * @returns {Editor} Chainable.
          */
         edit: function (id, isIndex, ignoreSelections) {
-            var recordId    = this.getId(id, isIndex),
-                record      = this.getRecord(recordId);
+            var recordId = this.getId(id, isIndex),
+                record   = this.getRecord(recordId);
 
             if (!this.hasActive() && !ignoreSelections) {
                 this.selections('deselectAll');
@@ -176,7 +220,7 @@ define([
 
             record ?
                 record.active(true) :
-                this.createRecord(recordId);
+                this.initRecord(recordId);
 
             return this;
         },
@@ -199,7 +243,7 @@ define([
          * @returns {Editor} Chainable.
          */
         hide: function () {
-            this.elems.each('active', false);
+            this.active.each('active', false);
 
             return this;
         },
@@ -210,7 +254,7 @@ define([
          * @returns {Editor} Chainable.
          */
         reset: function () {
-            this.active.each(function (record) {
+            this.elems.each(function (record) {
                 this.resetRecord(record.recordId);
             }, this);
 
@@ -218,7 +262,7 @@ define([
         },
 
         /**
-         * STUBBED action.
+         * Validates and saves data of active records.
          *
          * @returns {Editor} Chainable.
          */
@@ -226,6 +270,14 @@ define([
             if (!this.isValid()) {
                 return this;
             }
+
+            this.clearMessages()
+                .columns('showLoader');
+
+            this.client()
+                .save(this.getData())
+                .done(this.onDataSaved)
+                .fail(this.onSaveError);
 
             return this;
         },
@@ -250,49 +302,52 @@ define([
          * @returns {Boolean}
          */
         isValid: function () {
-            return this.validate.every(function (result) {
+            return this.validate().every(function (result) {
                 return result.valid;
             });
         },
 
         /**
-         * Disables editing of specfied fields.
+         * Returns active records data, indexed by a records id.
          *
-         * @param {Array} fields - An array of fields indeces to be disabled.
+         * @returns {Object} Collection of records data.
+         */
+        getData: function () {
+            var data = this.active.map('getData');
+
+            return _.indexBy(data, this.indexField);
+        },
+
+        /**
+         * Sets provided data to all active records.
+         *
+         * @param {Object} data - See 'setData' method of a 'Record'.
+         * @param {Boolean} partial - See 'setData' method of a 'Record'.
          * @returns {Editor} Chainable.
          */
-        disableFields: function (fields) {
-            var columns = this.columns().elems();
-
-            if (typeof fields == 'string') {
-                fields = fields.split(' ');
-            }
-
-            columns.forEach(function (column) {
-                column.disabled(_.contains(fields, column.index));
-            });
+        setData: function (data, partial) {
+            this.active.each('setData', data, partial);
 
             return this;
         },
 
         /**
-         * Converts index of a row into the record id.
+         * Resets specific records' data
+         * to the data present in asscotiated row.
          *
-         * @param {(Number|String)} id - Records' identifier or its' index in the rows array.
-         * @param {Boolean} [isIndex=false] - Flag that indicates if first
-         *      parameter is an index or identifier.
-         * @returns {Number|String} Records' id.
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
+         * @returns {Editor} Chainable.
          */
-        getId: function (id, isIndex) {
-            var rowsData = this.rowsData,
-                record;
+        resetRecord: function (id, isIndex) {
+            var record  = this.getRecord(id, isIndex),
+                data    = this.getRowData(id, isIndex);
 
-            if (isIndex === true) {
-                record = rowsData[id];
-                id = record ? record[this.indexField] : false;
+            if (record && data) {
+                record.setData(data);
             }
 
-            return id;
+            return this;
         },
 
         /**
@@ -322,35 +377,45 @@ define([
         },
 
         /**
-         * Sets provided data to all active records.
+         * Disables editing of specfied fields.
          *
-         * @param {Object} data - See 'setData' method of a 'Record'.
-         * @param {Boolean} partial - See 'setData' method of a 'Record'.
+         * @param {Array} fields - An array of fields indeces to be disabled.
          * @returns {Editor} Chainable.
          */
-        setRecordsData: function (data, partial) {
-            this.active.each('setData', data, partial);
+        disableFields: function (fields) {
+            var columns = this.columns().elems(),
+                data    = utils.copy(this.fields);
+
+            columns.forEach(function (column) {
+                var index = column.index,
+                    field = data[index] = data[index] || {};
+
+                field.disabled = _.contains(fields, index);
+            });
+
+            this.set('fields', data);
 
             return this;
         },
 
         /**
-         * Resets specific records' data
-         * to the data present in asscotiated row.
+         * Converts index of a row into the record id.
          *
-         * @param {(Number|String)} id - See 'getId' method.
-         * @param {Boolean} [isIndex=false] - See 'getId' method.
-         * @returns {Editor} Chainable.
+         * @param {(Number|String)} id - Records' identifier or its' index in the rows array.
+         * @param {Boolean} [isIndex=false] - Flag that indicates if first
+         *      parameter is an index or identifier.
+         * @returns {Number|String} Records' id.
          */
-        resetRecord: function (id, isIndex) {
-            var record = this.getRecord(id, isIndex),
-                data = this.getRowData(id, isIndex);
+        getId: function (id, isIndex) {
+            var rowsData = this.rowsData,
+                record;
 
-            if (record) {
-                record.setData(data);
+            if (isIndex === true) {
+                record = rowsData[id];
+                id = record ? record[this.indexField] : false;
             }
 
-            return this;
+            return id;
         },
 
         /**
@@ -474,12 +539,75 @@ define([
         },
 
         /**
+         * Checks if there is any additional messages.
+         *
+         * @returns {Boolean}
+         */
+        hasMessages: function () {
+            return this.messages().length;
+        },
+
+        /**
+         * Adds new additional message or a set of messages.
+         *
+         * @param {(Object|Array)} message - Messages to be added.
+         * @returns {Editor} Chainable.
+         */
+        addMessage: function (message) {
+            var messages = this.messages();
+
+            Array.isArray(message) ?
+                messages.push.apply(messages, message) :
+                messages.push(message);
+
+            this.messages(messages);
+
+            return this;
+        },
+
+        /**
+         * Removes all additional messages.
+         *
+         * @returns {Editor} Chainable.
+         */
+        clearMessages: function () {
+            this.messages.removeAll();
+
+            return this;
+        },
+
+        /**
          * Listener of the selections data changes.
          */
         onSelectionsChange: function () {
             if (this.hasActive()) {
                 this.editSelected();
             }
+        },
+
+        /**
+         * Handles successful save request.
+         */
+        onDataSaved: function () {
+            var msg = {
+                type: 'success',
+                message: this.successMsg
+            };
+
+            this.addMessage(msg)
+                .source('reload');
+
+            _.delay(this.clearMessages.bind(this), 2000);
+        },
+
+        /**
+         * Handles failed save request.
+         *
+         * @param {(Array|Object)} errors - List of errors or a single error object.
+         */
+        onSaveError: function (errors) {
+            this.addMessage(errors)
+                .columns('hideLoader');
         }
     });
 });
