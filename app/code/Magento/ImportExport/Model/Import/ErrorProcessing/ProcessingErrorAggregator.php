@@ -77,6 +77,9 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $errorMessage = null,
         $errorDescription = null
     ) {
+        if ($this->isErrorAlreadyAdded($rowNumber, $errorCode)) {
+            return $this;
+        }
         $this->processErrorStatistics($errorLevel);
         $this->processInvalidRow($rowNumber);
         $errorMessage = $this->getErrorMessage($errorCode, $errorMessage, $columnName);
@@ -228,6 +231,22 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * @param int $rowNumber
+     * @return ProcessingError[]
+     */
+    public function getErrorByRowNumber($rowNumber)
+    {
+        $result = [];
+        foreach ($this->items as $error) {
+            if ($error->getRowNumber() == (int)$rowNumber) {
+                $result[] = $error;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @param array $errorCode
      * @param array $excludedCodes
      * @param bool $replaceCodeWithMessage
@@ -287,6 +306,22 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $this->invalidRows = [];
 
         return $this;
+    }
+
+    /**
+     * @param int $rowNum
+     * @param string $errorCode
+     * @return bool
+     */
+    protected function isErrorAlreadyAdded($rowNum, $errorCode)
+    {
+        $errors = $this->getErrorsByCode([$errorCode]);
+        foreach ($errors as $error) {
+            if ($rowNum == $error->getRowNumber()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
