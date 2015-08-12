@@ -86,10 +86,10 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
     /**
      * Check whether method is available
      *
-     * @param \Magento\Paypal\Model\Quote|null $quote
+     * @param \Magento\Paypal\Model\Quote|\Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         if ($this->_isAvailable === null) {
             $this->_isAvailable = parent::isAvailable($quote) && $this->_isAvailable($quote);

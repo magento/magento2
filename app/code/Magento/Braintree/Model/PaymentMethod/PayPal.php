@@ -181,7 +181,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return $this->isActive($quote ? $quote->getStoreId() : null);
     }
