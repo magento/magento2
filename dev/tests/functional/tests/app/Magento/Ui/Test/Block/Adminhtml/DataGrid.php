@@ -228,4 +228,21 @@ class DataGrid extends Grid
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
         return $this->_rootElement->find($this->selectItem)->getValue();
     }
+
+    /**
+     * Return ids of all items currently displayed in grid
+     *
+     * @return string[]
+     */
+    public function getAllIds()
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $rowsCheckboxes = $this->_rootElement->getElements($this->selectItem);
+        $ids = [];
+        foreach ($rowsCheckboxes as $checkbox) {
+            $ids[] = $checkbox->getValue();
+        }
+        return $ids;
+    }
 }
