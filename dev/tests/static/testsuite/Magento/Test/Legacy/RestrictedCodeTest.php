@@ -50,7 +50,7 @@ class RestrictedCodeTest extends \PHPUnit_Framework_TestCase
                 str_replace(\Magento\Framework\App\Utility\Files::init()->getPathToSource(), '', $file)
             );
             array_push(self::$_fixtureFiles, $relativePath);
-            $data = array_merge($data, self::_readList($file));
+            $data = array_merge_recursive($data, self::_readList($file));
         }
     }
 
@@ -95,16 +95,19 @@ class RestrictedCodeTest extends \PHPUnit_Framework_TestCase
     protected function _testRestrictedClasses($file)
     {
         $content = file_get_contents($file);
-        foreach (self::$_classes as $row) {
-            list($class, $replacement, $whiteList) = $row;
-            foreach ($whiteList as $skippedPath) {
+        foreach (self::$_classes as $restrictedClass => $classRules) {
+            foreach ($classRules['exclude'] as $skippedPath) {
                 if ($this->_isFileInPath($skippedPath, $file)) {
                     continue 2;
                 }
             }
             $this->assertFalse(
-                \Magento\TestFramework\Utility\CodeCheck::isClassUsed($class, $content),
-                sprintf("Class '%s' is restricted. Suggested replacement: %s", $class, $replacement)
+                \Magento\TestFramework\Utility\CodeCheck::isClassUsed($restrictedClass, $content),
+                sprintf(
+                    "Class '%s' is restricted. Suggested replacement: %s",
+                    $restrictedClass,
+                    $classRules['replacement']
+                )
             );
         }
     }
