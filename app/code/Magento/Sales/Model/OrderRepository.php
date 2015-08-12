@@ -56,14 +56,14 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new InputException('Id required');
+            throw new InputException(__('Id required'));
         }
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\OrderInterface $entity */
             $entity = $this->metadata->getNewInstance();
             $this->metadata->getMapper()->load($entity, $id);
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException('Requested entity doesn\'t exist');
+                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
             $this->registry[$id] = $entity;
         }
