@@ -54,7 +54,7 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->controller = new StartUpdater($this->filesystem, $this->navigation, $this->updater);
         $this->navigation->expects($this->any())
             ->method('getMenuItems')
-            ->willReturn([['title' => 'A', 'type' => 'typeOne'], ['title' => 'B', 'type' => 'typeTwo']]);
+            ->willReturn([['title' => 'A', 'type' => 'update'], ['title' => 'B', 'type' => 'upgrade']]);
         $this->request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
         $this->response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
         $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
@@ -113,8 +113,7 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateInvalidRequestMissingDataOption()
     {
-        $content =
-            '{"packages":[{"name":"vendor\/package", "type": "module"}],"type":"uninstall"}';
+        $content = '{"packages":[{"name":"vendor\/package", "version": "1.0.0"}],"type":"uninstall"}';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $this->filesystem->expects($this->never())->method('getDirectoryWrite');
         $this->controller->setEvent($this->mvcEvent);
@@ -134,13 +133,14 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateActionSuccessUpdate()
     {
-        $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"update"}';
+        $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"update",'
+            . '"headerTitle": "Update package 1" }';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')
-            ->with('.type.json', '{"type":"update","titles":["A"]}');
+            ->with('.type.json', '{"type":"update","headerTitle":"Update package 1","titles":["A"]}');
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
@@ -148,13 +148,14 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateActionSuccessUpgrade()
     {
-        $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"upgrade"}';
+        $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"upgrade",'
+            . '"headerTitle": "System Upgrade" }';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')
-            ->with('.type.json', '{"type":"upgrade","titles":["B"]}');
+            ->with('.type.json', '{"type":"upgrade","headerTitle":"System Upgrade","titles":["B"]}');
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
