@@ -42,6 +42,7 @@ class ThemeUninstaller
     /**
      * Uninstall theme from database registry
      *
+     * @param OutputInterface $output
      * @param array $themePaths
      * @return void
      */
@@ -56,6 +57,7 @@ class ThemeUninstaller
     /**
      * Uninstall theme from code base
      *
+     * @param OutputInterface $output
      * @param array $themePaths
      * @return void
      */

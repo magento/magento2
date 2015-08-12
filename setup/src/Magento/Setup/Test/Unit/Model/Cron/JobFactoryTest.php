@@ -77,7 +77,7 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $valueMap = [
             [
-                'Magento\Frameowrk\Module\PackageInfoFactory',
+                'Magento\Framework\Module\PackageInfoFactory',
                 $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false)
             ],
             [

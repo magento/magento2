@@ -61,7 +61,7 @@ class ThemePackageInfo
     /**
      * Get full theme path by its package name
      *
-     * @param $packageName
+     * @param string $packageName
      * @return string
      */
     public function getFullThemePath($packageName)
