@@ -22,15 +22,19 @@ define(
             estimateTotals: function (address) {
                 totalsService.isLoading(true);
                 var serviceUrl = resourceUrlManager.getUrlForTotalsEstimationForNewAddress(quote),
-                    payload = JSON.stringify({
+                    payload = {
                             addressInformation: {
                                 address: quote.shippingAddress()
                             }
-                        }
-                    );
+                    };
+                if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
+                    payload.addressInformation.shipping_method_code = quote.shippingMethod()['method_code'];
+                    payload.addressInformation.shipping_carrier_code = quote.shippingMethod()['carrier_code'];
+
+                }
 
                 storage.post(
-                    serviceUrl, payload, false
+                    serviceUrl, JSON.stringify(payload), false
                 ).done(
                     function (result) {
                         quote.setTotals(result);

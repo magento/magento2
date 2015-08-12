@@ -11,7 +11,6 @@ define(
         'Magento_Catalog/js/price-utils',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/action/select-shipping-method',
-        'Magento_Checkout/js/action/set-shipping-information',
         'Magento_Checkout/js/checkout-data'
     ],
     function (
@@ -22,7 +21,6 @@ define(
         priceUtils,
         quote,
         selectShippingMethodAction,
-        setShippingInformationAction,
         checkoutData
     ) {
         'use strict';
@@ -87,7 +85,6 @@ define(
             selectShippingMethod: function (methodData) {
                 selectShippingMethodAction(methodData);
                 checkoutData.setSelectedShippingRate(methodData['carrier_code'] + '_' + methodData['method_code']);
-                setShippingInformationAction();
                 return true;
             }
         });
