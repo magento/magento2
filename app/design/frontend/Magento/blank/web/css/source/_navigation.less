@@ -17,17 +17,17 @@
     }
 
     .nav-sections {
-        .mixin-css(background, @navigation__background);
+        .lib-css(background, @navigation__background);
     }
 
     .nav-toggle {
-        .mixin-icon-font(
+        .lib-icon-font(
             @icon-menu,
             @_icon-font-size: 28px,
             @_icon-font-color: @header-icons-color,
             @_icon-font-color-hover: @header-icons-color-hover
         );
-        .mixin-icon-text-hide();
+        .lib-icon-text-hide();
         cursor: pointer;
         display: block;
         font-size: 0;
@@ -49,7 +49,7 @@
         .parent {
             .level-top {
                 position: relative;
-                .mixin-icon-font(
+                .lib-icon-font(
                 @_icon-font-content: @icon-down,
                 @_icon-font-size: 42px,
                 @_icon-font-position: after,
@@ -61,7 +61,7 @@
                     top: -8px;
                 }
                 &.ui-state-active {
-                    .mixin-icon-font-symbol(
+                    .lib-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                     );
@@ -71,7 +71,7 @@
     }
 
     .nav-sections {
-        .mixin-css(transition, left .3s, 1);
+        .lib-css(transition, left .3s, 1);
         height: 100%;
         left: -80%;
         left: calc(~'-1 * (100% - @{active-nav-indent})');
@@ -98,7 +98,7 @@
                 strong {
                     display: inline-block !important;
                     position: relative;
-                    .mixin-icon-font(
+                    .lib-icon-font(
                         @_icon-font-content: @icon-down,
                         @_icon-font-size: 42px,
                         @_icon-font-position: after,
@@ -111,20 +111,20 @@
                     }
                 }
                 &.active strong {
-                    .mixin-icon-font-symbol(
+                    .lib-icon-font-symbol(
                         @_icon-font-content: @icon-up,
                         @_icon-font-position: after
                     );
                 }
             }
             &-dropdown {
-                .mixin-list-reset-styles();
+                .lib-list-reset-styles();
                 padding: @indent__s 0;
             }
         }
 
         .header.links {
-            .mixin-list-reset-styles();
+            .lib-list-reset-styles();
             li {
                 border-top: 1px solid @color-gray82;
                 font-size: 1.6rem;
@@ -139,8 +139,8 @@
             }
             a,
             a:hover {
-                .mixin-css(color, @navigation-level0-item__color);
-                .mixin-css(text-decoration, @navigation-level0-item__text-decoration);
+                .lib-css(color, @navigation-level0-item__color);
+                .lib-css(text-decoration, @navigation-level0-item__text-decoration);
                 display: block;
                 font-weight: 700;
                 padding: 8px 20px;
@@ -152,7 +152,7 @@
         height: 100%;
         width: 100%;
         .page-wrapper {
-            .mixin-css(transition, left .3s, 1);
+            .lib-css(transition, left .3s, 1);
             height: 100%;
             left: 0;
             overflow: hidden;
@@ -175,7 +175,7 @@
 
         .nav-sections {
             @_shadow: 0 0 5px 0 rgba(50, 50, 50, .75);
-            .mixin-css(box-shadow, @_shadow, 1);
+            .lib-css(box-shadow, @_shadow, 1);
             left: 0;
             z-index: 99;
         }
@@ -197,7 +197,7 @@
 
     .nav-sections {
         &-items {
-            .mixin-clearfix();
+            .lib-clearfix();
             position: relative;
             z-index: 1;
         }
@@ -219,7 +219,7 @@
         }
 
         &-item-content {
-            .mixin-clearfix();
+            .lib-clearfix();
             box-sizing: border-box;
             float: right;
             margin-left: -100%;
@@ -232,7 +232,7 @@
         }
     }
 
-    .mixin-main-navigation();
+    .lib-main-navigation();
 }
 
 //
@@ -260,7 +260,7 @@
         }
     }
 
-    .mixin-main-navigation-desktop();
+    .lib-main-navigation-desktop();
 
     .panel.header {
         .links,

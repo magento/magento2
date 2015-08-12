@@ -14,21 +14,21 @@
 //--------------------------------------
 button,
 a.action.primary {
-    .mixin-css(border-radius, @button__border-radius);
+    .lib-css(border-radius, @button__border-radius);
 }
 
 button {
     &:active {
-        .mixin-css(box-shadow, @button__shadow);
+        .lib-css(box-shadow, @button__shadow);
     }
 }
 
 a.action.primary {
-    .mixin-link-as-button();
+    .lib-link-as-button();
 }
 
 .action.primary {
-    .mixin-button-primary();
+    .lib-button-primary();
 }
 
 }

@@ -7,7 +7,7 @@
 //  Breadcrumbs
 //  _____________________________________________
 
-.mixin-breadcrumbs(
+.lib-breadcrumbs(
     @_breadcrumbs-font-size: @breadcrumbs__font-size,
     @_breadcrumbs-display: @breadcrumbs__display,
     @_breadcrumbs-container-margin: @breadcrumbs__container-margin,
@@ -73,91 +73,91 @@
     @_breadcrumbs-link-gradient-color-start-active: @breadcrumbs-link__active__gradient-color-start,
     @_breadcrumbs-link-gradient-color-end-active: @breadcrumbs-link__active__gradient-color-end
 ) {
-    .mixin-css(margin, @_breadcrumbs-container-margin);
+    .lib-css(margin, @_breadcrumbs-container-margin);
     .items {
-        .mixin-font-size(@_breadcrumbs-font-size);
-        .mixin-css(color, @_breadcrumbs-current-color);
-        .mixin-list-inline();
+        .lib-font-size(@_breadcrumbs-font-size);
+        .lib-css(color, @_breadcrumbs-current-color);
+        .lib-list-inline();
     }
     .item {
         margin: 0;
     }
     a {
-        .mixin-css(background, @_breadcrumbs-link-background);
-        .mixin-background-gradient(
+        .lib-css(background, @_breadcrumbs-link-background);
+        .lib-background-gradient(
             @_breadcrumbs-link-gradient-color-start,
             @_breadcrumbs-link-gradient-color-end,
             @_breadcrumbs-link-gradient-direction,
             @_breadcrumbs-link-gradient
         );
-        .mixin-css(border, @_breadcrumbs-link-border);
-        .mixin-css(color, @_breadcrumbs-link-color);
-        .mixin-css(display, @_breadcrumbs-display);
-        .mixin-css(padding, @_breadcrumbs-padding);
-        .mixin-css(text-decoration, @_breadcrumbs-link-text-decoration);
+        .lib-css(border, @_breadcrumbs-link-border);
+        .lib-css(color, @_breadcrumbs-link-color);
+        .lib-css(display, @_breadcrumbs-display);
+        .lib-css(padding, @_breadcrumbs-padding);
+        .lib-css(text-decoration, @_breadcrumbs-link-text-decoration);
         &:visited {
-            .mixin-css(background, @_breadcrumbs-link-background-visited);
-            .mixin-background-gradient(
+            .lib-css(background, @_breadcrumbs-link-background-visited);
+            .lib-background-gradient(
                 @_breadcrumbs-link-gradient-color-start-visited,
                 @_breadcrumbs-link-gradient-color-end-visited,
                 @_breadcrumbs-link-gradient-direction,
                 @_breadcrumbs-link-gradient
             );
-            .mixin-css(border, @_breadcrumbs-link-border-visited);
-            .mixin-css(color, @_breadcrumbs-link-color-visited);
-            .mixin-css(text-decoration, @_breadcrumbs-link-text-decoration-visited);
+            .lib-css(border, @_breadcrumbs-link-border-visited);
+            .lib-css(color, @_breadcrumbs-link-color-visited);
+            .lib-css(text-decoration, @_breadcrumbs-link-text-decoration-visited);
         }
         &:hover {
-            .mixin-css(background, @_breadcrumbs-link-background-hover);
-            .mixin-background-gradient(
+            .lib-css(background, @_breadcrumbs-link-background-hover);
+            .lib-background-gradient(
                 @_breadcrumbs-link-gradient-color-start-hover,
                 @_breadcrumbs-link-gradient-color-end-hover,
                 @_breadcrumbs-link-gradient-direction,
                 @_breadcrumbs-link-gradient
             );
-            .mixin-css(border, @_breadcrumbs-link-border-hover);
-            .mixin-css(color, @_breadcrumbs-link-color-hover);
-            .mixin-css(text-decoration, @_breadcrumbs-link-text-decoration-hover);
+            .lib-css(border, @_breadcrumbs-link-border-hover);
+            .lib-css(color, @_breadcrumbs-link-color-hover);
+            .lib-css(text-decoration, @_breadcrumbs-link-text-decoration-hover);
         }
         &:active {
-            .mixin-css(background, @_breadcrumbs-link-background-active);
-            .mixin-background-gradient(
+            .lib-css(background, @_breadcrumbs-link-background-active);
+            .lib-background-gradient(
                 @_breadcrumbs-link-gradient-color-start-active,
                 @_breadcrumbs-link-gradient-color-end-active,
                 @_breadcrumbs-link-gradient-direction,
                 @_breadcrumbs-link-gradient
             );
-            .mixin-css(border, @_breadcrumbs-link-border-active);
-            .mixin-css(color, @_breadcrumbs-link-color-active);
-            .mixin-css(text-decoration, @_breadcrumbs-link-text-decoration-active);
+            .lib-css(border, @_breadcrumbs-link-border-active);
+            .lib-css(color, @_breadcrumbs-link-color-active);
+            .lib-css(text-decoration, @_breadcrumbs-link-text-decoration-active);
         }
     }
     strong {
-        .mixin-css(background, @_breadcrumbs-current-background);
-        .mixin-background-gradient(
+        .lib-css(background, @_breadcrumbs-current-background);
+        .lib-background-gradient(
             @_breadcrumbs-current-gradient-color-start,
             @_breadcrumbs-current-gradient-color-end,
             @_breadcrumbs-current-gradient-direction,
             @_breadcrumbs-current-gradient
         );
-        .mixin-css(border, @_breadcrumbs-current-border);
-        .mixin-css(display, @_breadcrumbs-display);
-        .mixin-css(font-weight, @_breadcrumbs-current-font-weight);
-        .mixin-css(padding, @_breadcrumbs-padding);
+        .lib-css(border, @_breadcrumbs-current-border);
+        .lib-css(display, @_breadcrumbs-display);
+        .lib-css(font-weight, @_breadcrumbs-current-font-weight);
+        .lib-css(padding, @_breadcrumbs-padding);
     }
 
     & when not (@_breadcrumbs-separator-symbol = '') and not (@_breadcrumbs-separator-symbol = false) { // Insert separating symbol to "content"
         .item:not(:last-child) {
             &:after {
-                .mixin-css(color, @_breadcrumbs-separator-color);
-                .mixin-css(content, @_breadcrumbs-separator-symbol);
+                .lib-css(color, @_breadcrumbs-separator-color);
+                .lib-css(content, @_breadcrumbs-separator-symbol);
             }
         }
     }
 
     & when (@_breadcrumbs-icon-use = true) {  // Use font icon as a separating symbol
         .item:not(:last-child) {
-            .mixin-icon-font(
+            .lib-icon-font(
                 @_icon-font-content: @_breadcrumbs-icon-font-content,
                 @_icon-font: @_icon-font,
                 @_icon-font-size: @_icon-font-size,

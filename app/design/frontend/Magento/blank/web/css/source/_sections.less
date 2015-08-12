@@ -9,7 +9,7 @@
 
 & when (@media-common = true) {
     .product.data.items {
-        .mixin-data-accordion();
+        .lib-data-accordion();
         margin-bottom: @indent__base;
     }
 }
@@ -20,7 +20,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .product.data.items {
-        .mixin-data-tabs(
+        .lib-data-tabs(
             @_tab-content-border-top-status: true
         );
     }
@@ -32,7 +32,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .product.data.items {
-        .mixin-data-accordion();
+        .lib-data-accordion();
         .data.item {
             display: block;
         }

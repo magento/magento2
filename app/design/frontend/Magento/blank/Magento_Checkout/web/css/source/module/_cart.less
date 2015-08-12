@@ -17,11 +17,11 @@
         //  Summary block
         &-summary {
             &:extend(.abs-add-box-sizing all);
-            .mixin-css(background, @sidebar__background-color);
+            .lib-css(background, @sidebar__background-color);
             margin-bottom: @indent__m;
             padding: 1px 15px @indent__m;
             > .title {
-                .mixin-heading(h3);
+                .lib-heading(h3);
                 display: block;
             }
             .block {
@@ -30,7 +30,7 @@
                     border-top: @border-width__base solid @border-color__base;
                     cursor: pointer;
                     font-weight: @font-weight__semibold;
-                    .mixin-icon-font(
+                    .lib-icon-font(
                     @_icon-font-content: @icon-down,
                     @_icon-font-size: 30px,
                     @_icon-font-position: after,
@@ -47,7 +47,7 @@
                     }
                     strong {
                         .column.main & {
-                            .mixin-font-size(18);
+                            .lib-font-size(18);
                             font-weight: @font-weight__regular;
                         }
                     }
@@ -57,7 +57,7 @@
                 }
                 &.active {
                     > .title {
-                        .mixin-icon-font-symbol(
+                        .lib-icon-font-symbol(
                         @_icon-font-content: @icon-prev,
                         @_icon-font-position: after
                         );
@@ -157,7 +157,7 @@
                 &:extend(.abs-add-clearfix all);
                 > .action {
                     &:extend(button all);
-                    .mixin-link-as-button();
+                    .lib-link-as-button();
                     margin-bottom: @indent__s;
                     margin-right: @indent__s;
                     &:last-child {
@@ -320,7 +320,7 @@
             .block {
                 .fieldset {
                     .field {
-                        .mixin-form-field-type-revert(@_type: block);
+                        .lib-form-field-type-revert(@_type: block);
                         margin: 0 0 @indent__s;
                     }
                 }

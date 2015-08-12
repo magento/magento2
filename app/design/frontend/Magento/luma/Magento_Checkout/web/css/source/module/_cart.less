@@ -38,12 +38,12 @@
         //  Summary block
         &-summary {
             &:extend(.abs-add-box-sizing all);
-            .mixin-css(background, @sidebar__background-color);
+            .lib-css(background, @sidebar__background-color);
             margin-bottom: @indent__m;
             padding: 1px 0 @indent__m;
             > .title {
                 display: none;
-                .mixin-font-size(24);
+                .lib-font-size(24);
                 font-weight: @font-weight__light;
                 margin: 12px 0;
             }
@@ -85,7 +85,7 @@
                 &:extend(.abs-cart-block all);
                 .title {
                     strong {
-                        .mixin-font-size(14);
+                        .lib-font-size(14);
                         font-weight: @font-weight__semibold;
                     }
                 }
@@ -192,8 +192,8 @@
                     }
                 }
                 > .price {
-                    .mixin-css(color, @primary__color__lighter);
-                    .mixin-font-size(18);
+                    .lib-css(color, @primary__color__lighter);
+                    .lib-font-size(18);
                     font-weight: @font-weight__bold;
                 }
             }
@@ -225,7 +225,7 @@
                     position: absolute;
                     right: 16px;
                     top: 0;
-                    .mixin-icon-font(
+                    .lib-icon-font(
                     @icon-edit,
                     @_icon-font-size: 18px,
                     @_icon-font-line-height: 20px,
@@ -238,7 +238,7 @@
                 > .action-delete {
                     &:extend(.abs-action-button-as-link all);
                     right: 0;
-                    .mixin-icon-font-symbol(
+                    .lib-icon-font-symbol(
                     @_icon-font-content: @icon-trash
                     );
                 }
@@ -266,7 +266,7 @@
                 }
                 &-item-name {
                     display: block;
-                    .mixin-font-size(18);
+                    .lib-font-size(18);
                     margin: -3px 0 @indent__xs;
                 }
             }
@@ -482,7 +482,7 @@
     //  Cross sell
     .block.crosssell {
         margin-top: 70px;
-        .mixin-css(padding, 0 @mobile-cart-padding);
+        .lib-css(padding, 0 @mobile-cart-padding);
         .product-item-info {
             width: 200px;
         }
@@ -520,7 +520,7 @@
 
         //  Summary block
         &-summary {
-            .mixin-layout-column(2, 2, @layout-column-checkout__width-left);
+            .lib-layout-column(2, 2, @layout-column-checkout__width-left);
             padding: 1px @indent__base @indent__m;
             position: relative;
             > .title {
@@ -544,7 +544,7 @@
                 }
                 .fieldset {
                     .field {
-                        .mixin-form-field-type-revert(@_type: block);
+                        .lib-form-field-type-revert(@_type: block);
                         margin: 0 0 @indent__s;
                     }
                 }
@@ -594,7 +594,7 @@
         //  Discount
         &-discount {
             border: 0;
-            .mixin-layout-column(2, 1, @layout-column-checkout__width-main);
+            .lib-layout-column(2, 1, @layout-column-checkout__width-main);
             &:extend(.abs-add-box-sizing-desktop all);
             padding-right: 4%;
             .block {
@@ -605,7 +605,7 @@
                     cursor: default;
                     padding: 0 0 10px;
                     .column.main & strong {
-                        .mixin-font-size(16);
+                        .lib-font-size(16);
                     }
                     &:after {
                         display: none;
@@ -633,7 +633,7 @@
 
     //  Cross sell
     .block.crosssell {
-        .mixin-layout-column(2, 1, @layout-column-checkout__width-main);
+        .lib-layout-column(2, 1, @layout-column-checkout__width-main);
         &:extend(.abs-add-box-sizing-desktop all);
         padding: 0 4% 0 0;
         .products-grid .product-item {

@@ -11,7 +11,7 @@
 //  Icons using font
 //  ---------------------------------------------
 
-.mixin-icon-font(
+.lib-icon-font(
     @_icon-font-content,
     @_icon-font: @icon-font,
     @_icon-font-size: @icon-font__size,
@@ -25,12 +25,12 @@
     @_icon-font-text-hide: @icon-font__text-hide,
     @_icon-font-display: @icon-font__display
 ) when (@_icon-font-position = before) {
-    ._mixin-icon-text-hide(@_icon-font-text-hide);
-    .mixin-css(display, @_icon-font-display);
+    ._lib-icon-text-hide(@_icon-font-text-hide);
+    .lib-css(display, @_icon-font-display);
     text-decoration: none;
 
     &:before {
-        ._mixin-icon-font(
+        ._lib-icon-font(
             @_icon-font-content,
             @_icon-font,
             @_icon-font-size,
@@ -42,17 +42,17 @@
     }
     &:hover {
         &:before {
-            .mixin-css(color, @_icon-font-color-hover);
+            .lib-css(color, @_icon-font-color-hover);
         }
     }
     &:active {
         &:before {
-            .mixin-css(color, @_icon-font-color-active);
+            .lib-css(color, @_icon-font-color-active);
         }
     }
 }
 
-.mixin-icon-font(
+.lib-icon-font(
     @_icon-font-content,
     @_icon-font: @icon-font,
     @_icon-font-size: @icon-font__size,
@@ -66,11 +66,11 @@
     @_icon-font-text-hide: @icon-font__text-hide,
     @_icon-font-display: @icon-font__display
 ) when (@_icon-font-position = after) {
-    ._mixin-icon-text-hide(@_icon-font-text-hide);
-    .mixin-css(display, @_icon-font-display);
+    ._lib-icon-text-hide(@_icon-font-text-hide);
+    .lib-css(display, @_icon-font-display);
     text-decoration: none;
     &:after {
-        ._mixin-icon-font(
+        ._lib-icon-font(
             @_icon-font-content,
             @_icon-font,
             @_icon-font-size,
@@ -82,51 +82,51 @@
     }
     &:hover {
         &:after {
-            .mixin-css(color, @_icon-font-color-hover);
+            .lib-css(color, @_icon-font-color-hover);
         }
     }
     &:active {
         &:after {
-            .mixin-css(color, @_icon-font-color-active);
+            .lib-css(color, @_icon-font-color-active);
         }
     }
 }
 
-.mixin-icon-font-size(
+.lib-icon-font-size(
     @_icon-font-size: @icon-font__size,
     @_icon-font-line-height: @icon-font__line-height,
     @_icon-font-position: @icon-font__position
 ) when (@_icon-font-position = before) {
     &:before {
-        ._mixin-icon-font-size(@_icon-font-size, @_icon-font-line-height);
+        ._lib-icon-font-size(@_icon-font-size, @_icon-font-line-height);
     }
 }
 
-.mixin-icon-font-size(
+.lib-icon-font-size(
     @_icon-font-size: @icon-font__size,
     @_icon-font-line-height: @icon-font__line-height,
     @_icon-font-position: @icon-font__position
 ) when (@_icon-font-position = after) {
     &:after {
-        ._mixin-icon-font-size(@_icon-font-size, @_icon-font-line-height);
+        ._lib-icon-font-size(@_icon-font-size, @_icon-font-line-height);
     }
 }
 
-.mixin-icon-font-symbol(
+.lib-icon-font-symbol(
     @_icon-font-content,
     @_icon-font-position: @icon-font__position
 ) when (@_icon-font-position = before) {
     &:before {
-        .mixin-css(content, @_icon-font-content);
+        .lib-css(content, @_icon-font-content);
     }
 }
 
-.mixin-icon-font-symbol(
+.lib-icon-font-symbol(
     @_icon-font-content,
     @_icon-font-position: @icon-font__position
 ) when (@_icon-font-position = after) {
     &:after {
-        .mixin-css(content, @_icon-font-content);
+        .lib-css(content, @_icon-font-content);
     }
 }
 
@@ -134,7 +134,7 @@
 //  Icons using image or sprite
 //  ---------------------------------------------
 
-.mixin-icon-image(
+.lib-icon-image(
     @_icon-image,
     @_icon-image-width: @icon__width,
     @_icon-image-height: @icon__height,
@@ -146,9 +146,9 @@
     @_icon-image-text-hide: @icon__text-hide
 ) when (@_icon-image-position = before) {
     display: inline-block;
-    ._mixin-icon-text-hide(@_icon-image-text-hide);
+    ._lib-icon-text-hide(@_icon-image-text-hide);
     &:before {
-        ._mixin-icon-image(
+        ._lib-icon-image(
             @_icon-image,
             @_icon-image-width,
             @_icon-image-height,
@@ -157,11 +157,11 @@
             @_icon-image-position-x,
             @_icon-image-position-y
         );
-        .mixin-css(margin, @_icon-image-margin);
+        .lib-css(margin, @_icon-image-margin);
     }
 }
 
-.mixin-icon-image(
+.lib-icon-image(
     @_icon-image,
     @_icon-image-width: @icon__width,
     @_icon-image-height: @icon__height,
@@ -173,9 +173,9 @@
     @_icon-image-text-hide: @icon__text-hide
 ) when (@_icon-image-position = after) {
     display: inline-block;
-    ._mixin-icon-text-hide(@_icon-image-text-hide);
+    ._lib-icon-text-hide(@_icon-image-text-hide);
     &:after {
-        ._mixin-icon-image(
+        ._lib-icon-image(
             @_icon-image,
             @_icon-image-width,
             @_icon-image-height,
@@ -184,44 +184,44 @@
             @_icon-image-position-x,
             @_icon-image-position-y
         );
-        .mixin-css(margin, @_icon-image-margin);
+        .lib-css(margin, @_icon-image-margin);
     }
 }
 
-.mixin-icon-image-position(
+.lib-icon-image-position(
     @_icon-image-position-x: @icon-image__position-x,
     @_icon-image-position-y: @icon-image__position-y,
     @_icon-image-position: @icon__position
 ) when (@_icon-image-position = before) {
     &:before {
-        ._mixin-icon-image-position(
+        ._lib-icon-image-position(
             @_icon-image-position-x,
             @_icon-image-position-y
         );
     }
 }
 
-.mixin-icon-image-position(
+.lib-icon-image-position(
     @_icon-image-position-x: @icon-image__position-x,
     @_icon-image-position-y: @icon-image__position-y,
     @_icon-image-position: @icon__position
 ) when (@_icon-image-position = after) {
     &:after {
-        ._mixin-icon-image-position(
+        ._lib-icon-image-position(
             @_icon-image-position-x,
             @_icon-image-position-y
         );
     }
 }
 
-.mixin-icon-sprite-position(
+.lib-icon-sprite-position(
     @_icon-sprite-position-x: @icon-sprite__position-x,
     @_icon-sprite-position-y: @icon-sprite__position-y,
     @_icon-sprite-grid: @icon-sprite__grid,
     @_icon-sprite-position: @icon__position
 ) when (@_icon-sprite-position = before) {
     &:before {
-        ._mixin-icon-sprite-position(
+        ._lib-icon-sprite-position(
             @_icon-sprite-position-x,
             @_icon-sprite-position-y,
             @_icon-sprite-grid
@@ -229,14 +229,14 @@
     }
 }
 
-.mixin-icon-sprite-position(
+.lib-icon-sprite-position(
     @_icon-sprite-position-x: @icon-sprite__position-x,
     @_icon-sprite-position-y: @icon-sprite__position-y,
     @_icon-sprite-grid: @icon-sprite__grid,
     @_icon-sprite-position: @icon__position
 ) when (@_icon-sprite-position = after) {
     &:after {
-        ._mixin-icon-sprite-position(
+        ._lib-icon-sprite-position(
             @_icon-sprite-position-x,
             @_icon-sprite-position-y,
             @_icon-sprite-grid
@@ -244,29 +244,29 @@
     }
 }
 
-.mixin-icon-image-size(
+.lib-icon-image-size(
     @_icon-image-width: @icon__width,
     @_icon-image-height: @icon__height,
     @_icon-image-position: @icon__position
 ) when (@_icon-image-position = before) {
     &:before {
-        ._mixin-icon-image-size(@_icon-image-width, @_icon-image-height);
+        ._lib-icon-image-size(@_icon-image-width, @_icon-image-height);
     }
 }
 
-.mixin-icon-image-size(
+.lib-icon-image-size(
     @_icon-image-width: @icon__width,
     @_icon-image-height: @icon__height,
     @_icon-image-position: @icon__position
 ) when (@_icon-image-position = before) {
     &:after {
-        ._mixin-icon-image-size(@_icon-image-width, @_icon-image-height);
+        ._lib-icon-image-size(@_icon-image-width, @_icon-image-height);
     }
 }
 
-.mixin-icon-text-hide() {
+.lib-icon-text-hide() {
     > span {
-        .mixin-visually-hidden();
+        .lib-visually-hidden();
     }
 }
 
@@ -274,11 +274,11 @@
 //  Internal use mixins
 //  ---------------------------------------------
 
-._mixin-icon-text-hide(@_icon-text-hide) when (@_icon-text-hide = true) {
-    .mixin-icon-text-hide();
+._lib-icon-text-hide(@_icon-text-hide) when (@_icon-text-hide = true) {
+    .lib-icon-text-hide();
 }
 
-._mixin-icon-image(
+._lib-icon-image(
     @_icon-image,
     @_icon-image-width,
     @_icon-image-height,
@@ -287,34 +287,34 @@
     @_icon-image-position-x,
     @_icon-image-position-y
 ) {
-    .mixin-css(line-height, @_icon-image-height);
-    .mixin-css(margin, @_icon-image-margin);
-    .mixin-css(vertical-align, @_icon-image-vertical-align);
+    .lib-css(line-height, @_icon-image-height);
+    .lib-css(margin, @_icon-image-margin);
+    .lib-css(vertical-align, @_icon-image-vertical-align);
     background: url(@_icon-image) no-repeat @_icon-image-position-x @_icon-image-position-y;
     content: '';
     display: inline-block;
-    ._mixin-icon-image-size(
+    ._lib-icon-image-size(
     @_icon-image-width,
     @_icon-image-height
     );
 }
 
-._mixin-icon-image-position(
+._lib-icon-image-position(
     @_icon-image-position-x,
     @_icon-image-position-y
 ) {
     background-position: @_icon-image-position-x @_icon-image-position-y;
 }
 
-._mixin-icon-image-size(
+._lib-icon-image-size(
     @icon__width,
     @icon__height
 ) {
-    .mixin-css(height, @icon__height);
-    .mixin-css(width, @icon__width);
+    .lib-css(height, @icon__height);
+    .lib-css(width, @icon__width);
 }
 
-._mixin-icon-sprite-position(
+._lib-icon-sprite-position(
     @_icon-sprite-position-x,
     @_icon-sprite-position-y,
     @_icon-sprite-grid
@@ -322,7 +322,7 @@
     background-position: -(@_icon-sprite-position-x*@_icon-sprite-grid) -(@_icon-sprite-position-y*@_icon-sprite-grid);
 }
 
-._mixin-icon-font(
+._lib-icon-font(
     @_icon-font-content,
     @_icon-font,
     @_icon-font-size,
@@ -332,12 +332,12 @@
     @_icon-font-vertical-align
 ) {
     -webkit-font-smoothing: antialiased;
-    ._mixin-icon-font-size(@_icon-font-size, @_icon-font-line-height);
-    .mixin-css(color, @_icon-font-color);
-    .mixin-css(content, @_icon-font-content);
-    .mixin-css(font-family, @_icon-font);
-    .mixin-css(margin, @_icon-font-margin);
-    .mixin-css(vertical-align, @_icon-font-vertical-align);
+    ._lib-icon-font-size(@_icon-font-size, @_icon-font-line-height);
+    .lib-css(color, @_icon-font-color);
+    .lib-css(content, @_icon-font-content);
+    .lib-css(font-family, @_icon-font);
+    .lib-css(margin, @_icon-font-margin);
+    .lib-css(vertical-align, @_icon-font-vertical-align);
     display: inline-block;
     font-weight: normal;
     overflow: hidden;
@@ -345,7 +345,7 @@
     text-align: center;
 }
 
-._mixin-icon-font-size(@_icon-font-size, @_icon-font-line-height) {
-    .mixin-css(font-size, @_icon-font-size);
-    .mixin-css(line-height, @_icon-font-line-height);
+._lib-icon-font-size(@_icon-font-size, @_icon-font-line-height) {
+    .lib-css(font-size, @_icon-font-size);
+    .lib-css(line-height, @_icon-font-line-height);
 }

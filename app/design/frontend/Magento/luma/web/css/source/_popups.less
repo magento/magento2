@@ -20,15 +20,15 @@
         &.popup {
             .action {
                 &.close {
-                    .mixin-css(bottom, @popup-button-close__position-bottom);
-                    .mixin-css(left, @popup-button-close__position-left);
-                    .mixin-css(position, @popup-button-close__position);
+                    .lib-css(bottom, @popup-button-close__position-bottom);
+                    .lib-css(left, @popup-button-close__position-left);
+                    .lib-css(position, @popup-button-close__position);
                     height: 40px;
                     right: 0;
                     top: 0;
                     width: 40px;
                     z-index: 1001;
-                    ._mixin-popup-button-close-icon(
+                    ._lib-popup-button-close-icon(
                     @popup-button-close__icon,
                     @popup-icon-font__content,
                     @popup-icon-font,
@@ -42,7 +42,7 @@
                     @popup-icon-font__position,
                     @popup-icon-font__text-hide
                     );
-                    ._mixin-popup-button-close-reset(
+                    ._lib-popup-button-close-reset(
                     @popup-button-close__reset
                     );
                 }
@@ -62,7 +62,7 @@
     }
 
     .popup-pointer {
-        .mixin-pointer(
+        .lib-pointer(
         @_size: @popup-marker__size,
         @_background-color: @popup__background,
         @_border-color: @popup__border-color,

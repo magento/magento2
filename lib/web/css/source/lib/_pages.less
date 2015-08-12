@@ -11,7 +11,7 @@
 //  When pager items have solid or don't have background
 //  ---------------------------------------------
 
-.mixin-pager(
+.lib-pager(
     @_pager-label-display: @pager-label__display,
     @_pager-item-display: @pager-item__display,
     @_pager-reset-spaces: @pager-reset-spaces,
@@ -116,150 +116,150 @@
     @_pager-icon-font-position: @pager-icon__position,
     @_pager-icon-font-text-hide: @pager-icon__text-hide
 ) {
-    ._mixin-pager-label-display(  // To hide or to display label
+    ._lib-pager-label-display(  // To hide or to display label
         @_pager-label-display: @_pager-label-display,
         @_pager-font-size: @_pager-font-size,
         @_pager-line-height: @_pager-line-height
     );
     .items {
-        ._mixin-pager-inline-block-spaces-container();
-        .mixin-list-reset-styles();
-        .mixin-css(display, @_pager-item-display);
-        .mixin-css(font-weight, @_pager-font-weight);
+        ._lib-pager-inline-block-spaces-container();
+        .lib-list-reset-styles();
+        .lib-css(display, @_pager-item-display);
+        .lib-css(font-weight, @_pager-font-weight);
     }
     .item {
-        ._mixin-pager-inline-block-spaces-item(
+        ._lib-pager-inline-block-spaces-item(
             @_pager-font-size: @_pager-font-size,
             @_pager-line-height: @_pager-line-height
         );
-        .mixin-css(margin, @_pager-item-margin);
-        .mixin-css(display, @_pager-item-display);
+        .lib-css(margin, @_pager-item-margin);
+        .lib-css(display, @_pager-item-display);
         .label {
-            .mixin-visually-hidden();
+            .lib-visually-hidden();
         }
     }
     a.page {
-        .mixin-css(background, @_pager-background);
-        .mixin-background-gradient(
+        .lib-css(background, @_pager-background);
+        .lib-background-gradient(
             @_pager-gradient-color-start,
             @_pager-gradient-color-end,
             @_pager-gradient-direction,
             @_pager-gradient
         );
-        .mixin-css(border, @_pager-border);
-        .mixin-css(color, @_pager-color);
-        .mixin-css(display, @_pager-item-display);
-        .mixin-css(padding, @_pager-item-padding);
-        .mixin-css(text-decoration, @_pager-text-decoration);
+        .lib-css(border, @_pager-border);
+        .lib-css(color, @_pager-color);
+        .lib-css(display, @_pager-item-display);
+        .lib-css(padding, @_pager-item-padding);
+        .lib-css(text-decoration, @_pager-text-decoration);
 
         &:visited {
-            .mixin-css(background, @_pager-background-visited);
-            .mixin-background-gradient(
+            .lib-css(background, @_pager-background-visited);
+            .lib-background-gradient(
                 @_pager-gradient-color-start-visited,
                 @_pager-gradient-color-end-visited,
                 @_pager-gradient-direction,
                 @_pager-gradient
             );
-            .mixin-css(border, @_pager-border-visited);
-            .mixin-css(color, @_pager-color-visited);
+            .lib-css(border, @_pager-border-visited);
+            .lib-css(color, @_pager-color-visited);
         }
 
         &:hover {
-            .mixin-css(background, @_pager-background-hover);
-            .mixin-background-gradient(
+            .lib-css(background, @_pager-background-hover);
+            .lib-background-gradient(
                 @_pager-gradient-color-start-hover,
                 @_pager-gradient-color-end-hover,
                 @_pager-gradient-direction,
                 @_pager-gradient
             );
-            .mixin-css(border, @_pager-border-hover);
-            .mixin-css(color, @_pager-color-hover);
-            .mixin-css(text-decoration, @_pager-text-decoration-hover);
+            .lib-css(border, @_pager-border-hover);
+            .lib-css(color, @_pager-color-hover);
+            .lib-css(text-decoration, @_pager-text-decoration-hover);
         }
 
         &:active {
-            .mixin-css(background, @_pager-background-active);
-            .mixin-background-gradient(
+            .lib-css(background, @_pager-background-active);
+            .lib-background-gradient(
                 @_pager-gradient-color-start-active,
                 @_pager-gradient-color-end-active,
                 @_pager-gradient-direction,
                 @_pager-gradient
             );
-            .mixin-css(border, @_pager-border-active);
-            .mixin-css(color, @_pager-color-active);
+            .lib-css(border, @_pager-border-active);
+            .lib-css(color, @_pager-color-active);
         }
     }
     strong.page {
-        .mixin-css(background, @_pager-current-background);
-        .mixin-background-gradient(
+        .lib-css(background, @_pager-current-background);
+        .lib-background-gradient(
             @_pager-current-gradient-color-start,
             @_pager-current-gradient-color-end,
             @_pager-current-gradient-direction,
             @_pager-current-gradient
         );
-        .mixin-css(border, @_pager-current-border);
-        ._mixin-pager-inline-block-spaces-item(
+        .lib-css(border, @_pager-current-border);
+        ._lib-pager-inline-block-spaces-item(
             @_pager-font-size: @_pager-font-size,
             @_pager-line-height: @_pager-line-height
         );
-        .mixin-css(color, @_pager-current-color);
-        .mixin-css(display, @_pager-item-display);
-        .mixin-css(font-weight, @_pager-current-font-weight);
-        .mixin-css(padding, @_pager-item-padding);
+        .lib-css(color, @_pager-current-color);
+        .lib-css(display, @_pager-item-display);
+        .lib-css(font-weight, @_pager-current-font-weight);
+        .lib-css(padding, @_pager-item-padding);
     }
     .action {
-        .mixin-css(background, @_pager-action-background);
-        .mixin-background-gradient(
+        .lib-css(background, @_pager-action-background);
+        .lib-background-gradient(
             @_pager-action-gradient-color-start,
             @_pager-action-gradient-color-end,
             @_pager-gradient-direction,
             @_pager-action-gradient
         );
-        .mixin-css(border, @_pager-action-border);
-        .mixin-css(color, @_pager-action-color);
-        .mixin-css(display, @_pager-item-display);
-        .mixin-css(padding, @_pager-actions-padding);
-        .mixin-css(text-decoration, @_pager-action-text-decoration);
+        .lib-css(border, @_pager-action-border);
+        .lib-css(color, @_pager-action-color);
+        .lib-css(display, @_pager-item-display);
+        .lib-css(padding, @_pager-actions-padding);
+        .lib-css(text-decoration, @_pager-action-text-decoration);
 
         &:visited {
-            .mixin-css(background, @_pager-action-background-visited);
-            .mixin-background-gradient(
+            .lib-css(background, @_pager-action-background-visited);
+            .lib-background-gradient(
                 @_pager-action-gradient-color-start-visited,
                 @_pager-action-gradient-color-end-visited,
                 @_pager-action-gradient-direction,
                 @_pager-action-gradient
             );
-            .mixin-css(border, @_pager-action-border-visited);
-            .mixin-css(color, @_pager-action-color-visited);
+            .lib-css(border, @_pager-action-border-visited);
+            .lib-css(color, @_pager-action-color-visited);
         }
 
         &:hover {
-            .mixin-css(background, @_pager-action-background-hover);
-            .mixin-background-gradient(
+            .lib-css(background, @_pager-action-background-hover);
+            .lib-background-gradient(
                 @_pager-action-gradient-color-start-hover,
                 @_pager-action-gradient-color-end-hover,
                 @_pager-action-gradient-direction,
                 @_pager-action-gradient
             );
-            .mixin-css(border, @_pager-action-border-hover);
-            .mixin-css(color, @_pager-action-color-hover);
-            .mixin-css(text-decoration, @_pager-action-text-decoration-hover);
+            .lib-css(border, @_pager-action-border-hover);
+            .lib-css(color, @_pager-action-color-hover);
+            .lib-css(text-decoration, @_pager-action-text-decoration-hover);
         }
 
         &:active {
-            .mixin-css(background, @_pager-action-background-active);
-            .mixin-background-gradient(
+            .lib-css(background, @_pager-action-background-active);
+            .lib-background-gradient(
                 @_pager-action-gradient-color-start-active,
                 @_pager-action-gradient-color-end-active,
                 @_pager-action-gradient-direction,
                 @_pager-action-gradient
             );
-            .mixin-css(border, @_pager-action-border-active);
-            .mixin-css(color, @_pager-action-color-active);
+            .lib-css(border, @_pager-action-border-active);
+            .lib-css(color, @_pager-action-color-active);
         }
 
         &.next {
-            ._mixin-pager-icon (
+            ._lib-pager-icon (
                 @_pager-icon-use: @_pager-icon-use,
                 @_icon-font-content: @_pager-icon-next-content,
                 @_icon-font: @_pager-icon-font,
@@ -275,7 +275,7 @@
             );
         }
         &.previous {
-            ._mixin-pager-icon (
+            ._lib-pager-icon (
                 @_pager-icon-use: @_pager-icon-use,
                 @_icon-font-content: @_pager-icon-previous-content,
                 @_icon-font: @_pager-icon-font,
@@ -294,32 +294,32 @@
 }
 
 //  Delete spaces between elements when pager items have display: inline-block
-._mixin-pager-inline-block-spaces-container() when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
-    .mixin-inline-block-space-container();
+._lib-pager-inline-block-spaces-container() when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
+    .lib-inline-block-space-container();
     white-space: nowrap;
 }
 
-._mixin-pager-inline-block-spaces-item(
+._lib-pager-inline-block-spaces-item(
     @_pager-font-size: @_pager-font-size,
     @_pager-line-height: @_pager-line-height
 ) when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
-    .mixin-inline-block-space-item(
+    .lib-inline-block-space-item(
         @_font-size: @_pager-font-size,
         @_line-height: @_pager-line-height
     );
 }
 
 // Display or hide "page" label
-._mixin-pager-label-display(
+._lib-pager-label-display(
     @_pager-label-display: @_pager-label-display,
     @_pager-font-size: @_pager-font-size,
     @_pager-font-weight: @_pager-font-weight,
     @_pager-line-height: @_pager-line-height
 ) when not (@_pager-label-display = none){
     > .label {
-        .mixin-css(display, @_pager-label-display);
-        .mixin-css(font-weight, @_pager-font-weight);
-        .mixin-inline-block-space-item(
+        .lib-css(display, @_pager-label-display);
+        .lib-css(font-weight, @_pager-font-weight);
+        .lib-inline-block-space-item(
             @_font-size: @_pager-font-size,
             @_line-height: @_pager-line-height
         );
@@ -329,29 +329,29 @@
     }
 }
 
-._mixin-pager-label-display(
+._lib-pager-label-display(
     @_pager-label-display: @_pager-label-display,
     @_pager-font-size: @_pager-font-size,
     @_pager-font-weight: @_pager-font-weight,
     @_pager-line-height: @_pager-line-height
 ) when (@_pager-label-display = none) {
     > .label {
-        .mixin-visually-hidden();
+        .lib-visually-hidden();
     }
 }
 
-._mixin-pager-label-display(
+._lib-pager-label-display(
     @_pager-label-display: @_pager-label-display,
     @_pager-font-size: @_pager-font-size,
     @_pager-font-weight: @_pager-font-weight,
     @_pager-line-height: @_pager-line-height
 ) when (@_pager-label-display = false) {
     > .label {
-        .mixin-visually-hidden();
+        .lib-visually-hidden();
     }
 }
 
-._mixin-pager-icon (
+._lib-pager-icon (
     @_pager-icon-use: @_pager-icon-use,
     @_icon-font-content,
     @_icon-font: @_pager-icon-font,
@@ -368,15 +368,15 @@
 ) when (@_pager-icon-use = true) and (@_icon-font-position = before) {
     &:visited {
         &:before {
-            .mixin-css(color, @_icon-font-color-visited);
+            .lib-css(color, @_icon-font-color-visited);
         }
     }
     &:active {
         &:before {
-            .mixin-css(color, @_icon-font-color-active);
+            .lib-css(color, @_icon-font-color-active);
         }
     }
-    .mixin-icon-font(
+    .lib-icon-font(
         @_icon-font-content: @_icon-font-content,
         @_icon-font: @_icon-font,
         @_icon-font-size: @_icon-font-size,
@@ -391,7 +391,7 @@
     );
 }
 
-._mixin-pager-icon (
+._lib-pager-icon (
     @_pager-icon-use: @_pager-icon-use,
     @_icon-font-content,
     @_icon-font: @_pager-icon-font,
@@ -406,7 +406,7 @@
     @_icon-font-position: @_pager-icon-font-position,
     @_icon-font-text-hide: @_pager-icon-font-text-hide
 ) when (@_pager-icon-use = true) and (@_icon-font-position = after) {
-    .mixin-icon-font(
+    .lib-icon-font(
         @_icon-font-content: @_icon-font-content,
         @_icon-font: @_icon-font,
         @_icon-font-size: @_icon-font-size,
@@ -420,9 +420,9 @@
         @_icon-font-text-hide: @_icon-font-text-hide
     );
     &:visited:after {
-        .mixin-css(color, @_icon-font-color-visited);
+        .lib-css(color, @_icon-font-color-visited);
     }
     &:active:after {
-        .mixin-css(color, @_icon-font-color-active);
+        .lib-css(color, @_icon-font-color-active);
     }
 }

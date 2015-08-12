@@ -11,7 +11,7 @@
 //  Magento reset
 //  ---------------------------------------------
 
-.mixin-magento-reset() {
+.lib-magento-reset() {
     body {
         margin: 0;
         padding: 0;
@@ -67,21 +67,21 @@
         margin: 0;
     }
 
-    .mixin-typography-all();
+    .lib-typography-all();
 
     table {
-        .mixin-table();
+        .lib-table();
     }
 
     button {
-        .mixin-button();
+        .lib-button();
         &::-moz-focus-inner {
             border: 0;
             padding: 0;
         }
     }
 
-    .mixin-form-element-all();
+    .lib-form-element-all();
     form {
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
@@ -102,7 +102,7 @@
     textarea:not([disabled]),
     select:not([disabled]) {
         &:focus {
-            .mixin-css(box-shadow, @focus__box-shadow);
+            .lib-css(box-shadow, @focus__box-shadow);
         }
     }
 }
@@ -112,7 +112,7 @@
 //  ---------------------------------------------
 
 //  ToDo UI: delete with old admin styles
-.mixin-normalize() {
+.lib-normalize() {
     /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
     html {
         font-family: sans-serif;
@@ -296,7 +296,7 @@
 //  Reset
 //  ---------------------------------------------
 
-.mixin-reset() {
+.lib-reset() {
     /* http://meyerweb.com/eric/tools/css/reset/
        v2.0 | 20110126
        License: none (public domain)
@@ -349,7 +349,7 @@
 //  Universal Selector ‘*’ Reset
 //  ---------------------------------------------
 
-.mixin-universal() {
+.lib-universal() {
     * {
         margin: 0;
         padding: 0;
@@ -360,7 +360,7 @@
 //  Html5doctor Reset Stylesheet
 //  ---------------------------------------------
 
-.mixin-html5doctor-reset() {
+.lib-html5doctor-reset() {
     /*
         html5doctor.com Reset Stylesheet - http://html5doctor.com/html-5-reset-stylesheet
         v1.6.1

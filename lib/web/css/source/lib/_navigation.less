@@ -7,7 +7,7 @@
 //  Navigation
 //  _____________________________________________
 
-.mixin-main-navigation(
+.lib-main-navigation(
     @_nav__indent-side: 15px,
     @_nav-background-color: @navigation__background,
     @_nav-border: @navigation__border,
@@ -54,8 +54,8 @@
     @_submenu-item-text-decoration-active: @submenu-item__active__text-decoration
 ) {
     .navigation {
-        .mixin-css(background, @_nav-background-color);
-        .mixin-css(border, @_nav-border);
+        .lib-css(background, @_nav-background-color);
+        .lib-css(border, @_nav-border);
         box-sizing: border-box;
         ul {
             margin: 0;
@@ -66,38 +66,38 @@
         }
         a {
             display: block;
-            .mixin-css(padding-top, @_submenu-item__padding-top);
-            .mixin-css(padding-right, @_submenu-item__padding-right);
-            .mixin-css(padding-bottom, @_submenu-item__padding-bottom);
-            .mixin-css(padding-left, @_submenu-item__padding-left);
+            .lib-css(padding-top, @_submenu-item__padding-top);
+            .lib-css(padding-right, @_submenu-item__padding-right);
+            .lib-css(padding-bottom, @_submenu-item__padding-bottom);
+            .lib-css(padding-left, @_submenu-item__padding-left);
         }
         a,
         a:hover {
-            .mixin-css(color, @_nav-level0-item-color);
-            .mixin-css(text-decoration, @_nav-level0-item-text-decoration);
+            .lib-css(color, @_nav-level0-item-color);
+            .lib-css(text-decoration, @_nav-level0-item-text-decoration);
         }
         .level0 {
-            .mixin-css(border-top, @_nav-level0-item-border);
-            .mixin-font-size(@_nav-level0-font-size);
+            .lib-css(border-top, @_nav-level0-item-border);
+            .lib-font-size(@_nav-level0-font-size);
 
             > .level-top {
-                .mixin-css(background, @_nav-level0-item-background-color);
-                .mixin-css(font-weight, @_nav-level0-font-weight);
-                .mixin-css(line-height, @_nav-level0-item-line-height);
-                .mixin-css(padding, @_nav-level0-item-padding);
-                .mixin-css(text-transform, @_nav-level0-text-transform);
+                .lib-css(background, @_nav-level0-item-background-color);
+                .lib-css(font-weight, @_nav-level0-font-weight);
+                .lib-css(line-height, @_nav-level0-item-line-height);
+                .lib-css(padding, @_nav-level0-item-padding);
+                .lib-css(text-transform, @_nav-level0-text-transform);
                 word-wrap: break-word;
             }
             &.active {
                 .all-category {
                     .ui-state-focus {
-                        .mixin-css(background, @_nav-level0-item-background-color-active);
-                        .mixin-css(border-color, @_nav-level0-item__active__border-color);
-                        .mixin-css(border-style, @_nav-level0-item__active__border-style);
-                        .mixin-css(border-width, @_nav-level0-item__active__border-width);
-                        .mixin-css(color, @_nav-level0-item-color-active);
-                        .mixin-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
-                        .mixin-css(text-decoration, @_nav-level0-item-text-decoration-active);
+                        .lib-css(background, @_nav-level0-item-background-color-active);
+                        .lib-css(border-color, @_nav-level0-item__active__border-color);
+                        .lib-css(border-style, @_nav-level0-item__active__border-style);
+                        .lib-css(border-width, @_nav-level0-item__active__border-width);
+                        .lib-css(color, @_nav-level0-item-color-active);
+                        .lib-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
+                        .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
                         display: inline-block;
                     }
                 }
@@ -108,12 +108,12 @@
             &.active,
             &.has-active { // ToDo UI: remove "has_active" here, when mobile navigation default open state is implemented
                 > a:not(.ui-state-active) {
-                    .mixin-css(background, @_nav-level0-item-background-color-active);
-                    .mixin-css(border-color, @_nav-level0-item__active__border-color);
-                    .mixin-css(border-style, @_nav-level0-item__active__border-style);
-                    .mixin-css(border-width, @_nav-level0-item__active__border-width);
-                    .mixin-css(color, @_nav-level0-item-color-active);
-                    .mixin-css(text-decoration, @_nav-level0-item-text-decoration-active);
+                    .lib-css(background, @_nav-level0-item-background-color-active);
+                    .lib-css(border-color, @_nav-level0-item__active__border-color);
+                    .lib-css(border-style, @_nav-level0-item__active__border-style);
+                    .lib-css(border-width, @_nav-level0-item__active__border-width);
+                    .lib-css(color, @_nav-level0-item-color-active);
+                    .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
                     span:not(.ui-menu-icon) {
                         margin-left: -@_submenu-item__active__border;
                     }
@@ -122,7 +122,7 @@
         }
         li.level0 {
             &:last-child {
-                .mixin-css(border-bottom, @_nav-level0-item-border);
+                .lib-css(border-bottom, @_nav-level0-item-border);
             }
         }
         .submenu {
@@ -130,11 +130,11 @@
                 word-wrap: break-word;
             }
             &:not(:first-child) {
-                .mixin-css(background, @_submenu-background-color);
-                .mixin-css(border, @_submenu-border);
-                .mixin-css(font-size, @_submenu-font-size);
-                .mixin-css(font-weight, @_submenu-font-weight);
-                .mixin-css(line-height, @_submenu-line-height);
+                .lib-css(background, @_submenu-background-color);
+                .lib-css(border, @_submenu-border);
+                .lib-css(font-size, @_submenu-font-size);
+                .lib-css(font-weight, @_submenu-font-weight);
+                .lib-css(line-height, @_submenu-line-height);
                 left: auto !important;
                 overflow-x: hidden;
                 padding: 0;
@@ -151,14 +151,14 @@
                 }
                 ul {
                     display: block;
-                    .mixin-css(padding-left, @_submenu-item__padding-left);
+                    .lib-css(padding-left, @_submenu-item__padding-left);
                     > li {
                         margin: 0;
                         a {
-                            .mixin-css(background, @_submenu-item-background-color);
-                            .mixin-css(border, @_submenu-item-border);
-                            .mixin-css(color, @_submenu-item-color);
-                            .mixin-css(text-decoration, @_submenu-item-text-decoration);
+                            .lib-css(background, @_submenu-item-background-color);
+                            .lib-css(border, @_submenu-item-border);
+                            .lib-css(color, @_submenu-item-color);
+                            .lib-css(text-decoration, @_submenu-item-text-decoration);
                             display: block;
                             line-height: normal;
                         }
@@ -171,13 +171,13 @@
                 }
                 .active {
                     > a {
-                        .mixin-css(background, @_submenu-item-background-color-active);
-                        .mixin-css(border-color, @_submenu-item__active__border-color);
-                        .mixin-css(border-style, @_submenu-item__active__border-style);
-                        .mixin-css(border-width, @_submenu-item__active__border-width);
-                        .mixin-css(color, @_submenu-item-color-active);
-                        .mixin-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
-                        .mixin-css(text-decoration, @_submenu-item-text-decoration-active);
+                        .lib-css(background, @_submenu-item-background-color-active);
+                        .lib-css(border-color, @_submenu-item__active__border-color);
+                        .lib-css(border-style, @_submenu-item__active__border-style);
+                        .lib-css(border-width, @_submenu-item__active__border-width);
+                        .lib-css(color, @_submenu-item-color-active);
+                        .lib-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
+                        .lib-css(text-decoration, @_submenu-item-text-decoration-active);
                     }
                 }
                 .level1 {
@@ -196,7 +196,7 @@
 //  Desktop
 //  _____________________________________________
 
-.mixin-main-navigation-desktop(
+.lib-main-navigation-desktop(
     @_nav-background-color: @navigation-desktop__background,
     @_nav-border: @navigation-desktop__border,
     @_nav-font-size: @navigation-desktop__font-size,
@@ -257,10 +257,10 @@
 ) {
 
     .navigation {
-        .mixin-css(background, @_nav-background-color);
-        .mixin-css(border, @_nav-border);
-        .mixin-css(font-size, @_nav-font-size);
-        .mixin-css(font-weight, @_nav-font-weight);
+        .lib-css(background, @_nav-background-color);
+        .lib-css(border, @_nav-border);
+        .lib-css(font-size, @_nav-font-size);
+        .lib-css(font-weight, @_nav-font-weight);
         height: inherit;
         left: auto;
         overflow: inherit;
@@ -279,10 +279,10 @@
             position: relative;
         }
         li.level0 {
-            .mixin-css(border-top, none);
+            .lib-css(border-top, none);
         }
         .level0 {
-            .mixin-css(margin, @_nav-level0-item-margin);
+            .lib-css(margin, @_nav-level0-item-margin);
             display: inline-block;
             position: relative;
 
@@ -291,30 +291,30 @@
                 padding-right: 0;
             }
             > .level-top {
-                .mixin-css(background, @_nav-level0-item-background-color);
-                .mixin-css(border, @_nav-level0-item-border);
-                .mixin-css(color, @_nav-level0-item-color);
-                .mixin-css(line-height, @_nav-level0-item-line-height);
-                .mixin-css(padding, @_nav-level0-item-padding);
-                .mixin-css(text-decoration, @_nav-level0-item-text-decoration);
+                .lib-css(background, @_nav-level0-item-background-color);
+                .lib-css(border, @_nav-level0-item-border);
+                .lib-css(color, @_nav-level0-item-color);
+                .lib-css(line-height, @_nav-level0-item-line-height);
+                .lib-css(padding, @_nav-level0-item-padding);
+                .lib-css(text-decoration, @_nav-level0-item-text-decoration);
                 box-sizing: border-box;
                 position: relative;
                 &:hover, &.ui-state-focus {
-                    .mixin-css(background, @_nav-level0-item-background-color-hover);
-                    .mixin-css(border, @_nav-level0-item-border-hover);
-                    .mixin-css(color, @_nav-level0-item-color-hover);
-                    .mixin-css(text-decoration, @_nav-level0-item-text-decoration-hover);
+                    .lib-css(background, @_nav-level0-item-background-color-hover);
+                    .lib-css(border, @_nav-level0-item-border-hover);
+                    .lib-css(color, @_nav-level0-item-color-hover);
+                    .lib-css(text-decoration, @_nav-level0-item-text-decoration-hover);
                 }
             }
             &.active,
             &.has-active {
                 > .level-top {
-                    .mixin-css(background, @_nav-level0-item-background-color-active);
-                    .mixin-css(border-color, @_nav-level0-item__active__border-color);
-                    .mixin-css(border-style, @_nav-level0-item__active__border-style);
-                    .mixin-css(border-width, @_nav-level0-item__active__border-width);
-                    .mixin-css(color, @_nav-level0-item-color-active);
-                    .mixin-css(text-decoration, @_nav-level0-item-text-decoration-active);
+                    .lib-css(background, @_nav-level0-item-background-color-active);
+                    .lib-css(border-color, @_nav-level0-item__active__border-color);
+                    .lib-css(border-style, @_nav-level0-item__active__border-style);
+                    .lib-css(border-width, @_nav-level0-item__active__border-width);
+                    .lib-css(color, @_nav-level0-item-color-active);
+                    .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
                     display: inline-block;
                 }
             }
@@ -322,20 +322,20 @@
                 overflow: visible !important;
             }
             .submenu {
-                .mixin-css(background, @_submenu-background-color);
-                .mixin-css(border, @_submenu-border-width @_submenu-border-style @_submenu-border-color);
-                .mixin-css(box-shadow, @_submenu-box-shadow);
-                .mixin-css(font-size, @_submenu-font-size);
-                .mixin-css(font-weight, @_submenu-font-weight);
-                .mixin-css(min-width, @_submenu-min-width);
-                .mixin-css(padding, @_submenu-padding);
+                .lib-css(background, @_submenu-background-color);
+                .lib-css(border, @_submenu-border-width @_submenu-border-style @_submenu-border-color);
+                .lib-css(box-shadow, @_submenu-box-shadow);
+                .lib-css(font-size, @_submenu-font-size);
+                .lib-css(font-weight, @_submenu-font-weight);
+                .lib-css(min-width, @_submenu-min-width);
+                .lib-css(padding, @_submenu-padding);
                 display: none;
                 left: 0;
                 margin: 0 !important;
                 padding: 0;
                 position: absolute;
                 z-index: 1;
-                ._mixin-submenu-arrow(
+                ._lib-submenu-arrow(
                     @_submenu-arrow,
                     @_bg: @_submenu-background-color,
                     @_border: @_submenu-border-color,
@@ -345,26 +345,26 @@
                 a {
                     display: block;
                     line-height: inherit;
-                    .mixin-css(background, @_submenu-item-background-color);
-                    .mixin-css(border, @_submenu-item-border);
-                    .mixin-css(color, @_submenu-item-color);
-                    .mixin-css(padding, @_submenu-item-padding);
-                    .mixin-css(text-decoration, @_submenu-item-text-decoration);
+                    .lib-css(background, @_submenu-item-background-color);
+                    .lib-css(border, @_submenu-item-border);
+                    .lib-css(color, @_submenu-item-color);
+                    .lib-css(padding, @_submenu-item-padding);
+                    .lib-css(text-decoration, @_submenu-item-text-decoration);
                     &:hover,
                     &.ui-state-focus {
-                        .mixin-css(background, @_submenu-item__hover__background-color);
-                        .mixin-css(border, @_submenu-item-border-hover);
-                        .mixin-css(color, @_submenu-item-color-hover);
-                        .mixin-css(text-decoration, @_submenu-item-text-decoration-hover);
+                        .lib-css(background, @_submenu-item__hover__background-color);
+                        .lib-css(border, @_submenu-item-border-hover);
+                        .lib-css(color, @_submenu-item-color-hover);
+                        .lib-css(text-decoration, @_submenu-item-text-decoration-hover);
                     }
                 }
                 .active > a {
-                    .mixin-css(background, @_submenu-item-background-color-active);
-                    .mixin-css(border-color, @_submenu-item__active__border-color);
-                    .mixin-css(border-style, @_submenu-item__active__border-style);
-                    .mixin-css(border-width, @_submenu-item__active__border-width);
-                    .mixin-css(color, @_submenu-item-color-active);
-                    .mixin-css(text-decoration, @_submenu-item-text-decoration-active);
+                    .lib-css(background, @_submenu-item-background-color-active);
+                    .lib-css(border-color, @_submenu-item__active__border-color);
+                    .lib-css(border-style, @_submenu-item__active__border-style);
+                    .lib-css(border-width, @_submenu-item__active__border-width);
+                    .lib-css(color, @_submenu-item-color-active);
+                    .lib-css(text-decoration, @_submenu-item-text-decoration-active);
                 }
                 .submenu {
                     top: 0 !important;
@@ -377,7 +377,7 @@
             }
             &.more {
                 position: relative;
-                .mixin-icon-font(
+                .lib-icon-font(
                     @icon-pointer-down,
                     @_icon-font-size: 26px,
                     @_icon-font-position: after
@@ -403,7 +403,7 @@
 }
 
 //  Submenu arrow
-._mixin-submenu-arrow(
+._lib-submenu-arrow(
     @_submenu-arrow,
     @_bg,
     @_border,
@@ -413,9 +413,9 @@
     & when (iscolor(@_bg)) and (iscolor(@_border)) {
         @_outer-size: @_size + 1;
         @_outer-left: @_left - 1;
-        .mixin-css(margin-top, @_outer-size);
+        .lib-css(margin-top, @_outer-size);
         > ul {
-            .mixin-css(margin-top, @_outer-size);
+            .lib-css(margin-top, @_outer-size);
             &:before,
             &:after {
                 content: '';
@@ -424,30 +424,30 @@
                 position: absolute;
             }
             &:before {
-                .mixin-css(color, @_bg);
-                .mixin-css(left, @_left);
-                .mixin-css(top, -@_size*2);
-                .mixin-arrow(up, @_size, @_bg);
+                .lib-css(color, @_bg);
+                .lib-css(left, @_left);
+                .lib-css(top, -@_size*2);
+                .lib-arrow(up, @_size, @_bg);
                 z-index: 4;
             }
             &:after {
-                .mixin-arrow(up, @_outer-size, @_border);
-                .mixin-css(color, @_border);
-                .mixin-css(left, @_outer-left);
-                .mixin-css(top, -@_outer-size*2);
+                .lib-arrow(up, @_outer-size, @_border);
+                .lib-css(color, @_border);
+                .lib-css(left, @_outer-left);
+                .lib-css(top, -@_outer-size*2);
                 z-index: 3;
             }
         }
     }
     & when (iscolor(@_bg)) and not (iscolor(@_border)) {
-        .mixin-css(margin-top, -@_size);
+        .lib-css(margin-top, -@_size);
         > ul {
-            .mixin-css(margin-top, @_size);
+            .lib-css(margin-top, @_size);
             &:before {
-                .mixin-arrow(up, @_size, @_bg);
-                .mixin-css(color, @_bg);
-                .mixin-css(left, @_left);
-                .mixin-css(top, -@_size*2);
+                .lib-arrow(up, @_size, @_bg);
+                .lib-css(color, @_bg);
+                .lib-css(left, @_left);
+                .lib-css(top, -@_size*2);
                 content: '';
                 display: block;
                 overflow: hidden;
@@ -457,14 +457,14 @@
         }
     }
     & when (iscolor(@_border)) and not (iscolor(@_bg)) {
-        .mixin-css(margin-top, -@_size);
+        .lib-css(margin-top, -@_size);
         > ul {
-            .mixin-css(margin-top, @_size);
+            .lib-css(margin-top, @_size);
             &:before {
-                .mixin-arrow(up, @_size, @_border);
-                .mixin-css(color, @_border);
-                .mixin-css(left, @_left);
-                .mixin-css(top, -@_size*2);
+                .lib-arrow(up, @_size, @_border);
+                .lib-css(color, @_border);
+                .lib-css(left, @_left);
+                .lib-css(top, -@_size*2);
                 content: '';
                 display: block;
                 overflow: hidden;
