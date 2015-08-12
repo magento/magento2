@@ -6,21 +6,21 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="Magento\User\Test\TestCase\UpdateAdminUserEntityTest">
-      <variation name="UpdateAdminUserEntityTestVariation2">
-          <data name="initialUser/dataset" xsi:type="string">custom_admin_with_default_role</data>
-          <data name="user/data/role_id/dataset" xsi:type="string">role::role_sales</data>
-          <data name="user/data/current_password" xsi:type="string">123123q</data>
-          <data name="loginAsDefaultAdmin" xsi:type="string">0</data>
-          <data name="restrictedAccess" xsi:type="array">
-              <item name="0" xsi:type="string">sales</item>
-          </data>
-          <data name="denyUrl" xsi:type="string">admin/user</data>
-          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
-          <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
-          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
-          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
-          <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccess" />
-      </variation>
-  </testCase>
+    <testCase name="Magento\User\Test\TestCase\UpdateAdminUserEntityTest" summary="Update Admin User" ticketId="MAGETWO-24345">
+        <variation name="UpdateAdminUserEntityTestVariation2">
+            <data name="initialUser/dataset" xsi:type="string">custom_admin_with_default_role</data>
+            <data name="user/data/role_id/dataset" xsi:type="string">role::role_sales</data>
+            <data name="user/data/current_password" xsi:type="string">123123q</data>
+            <data name="loginAsDefaultAdmin" xsi:type="string">0</data>
+            <data name="restrictedAccess" xsi:type="array">
+                <item name="0" xsi:type="string">sales</item>
+            </data>
+            <data name="denyUrl" xsi:type="string">admin/user</data>
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccess" />
+        </variation>
+    </testCase>
 </config>
