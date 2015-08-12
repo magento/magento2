@@ -91,7 +91,7 @@ class SystemPackage
         }
 
         if (count($versions) >= 1) {
-            $versions[count($versions)-1]['name'] .= ' (current)';
+            $versions[count($versions) - 1]['name'] .= ' (current)';
         }
 
         $result = [
