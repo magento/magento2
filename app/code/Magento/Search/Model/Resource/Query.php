@@ -173,11 +173,9 @@ class Query extends AbstractDb
             'store_id' => $query->getStoreId(),
             'query_text' => $query->getQueryText(),
             'popularity' => 1,
-            'updated_at' => new \Zend_Db_Expr('NOW()'),
         ];
         $updateData = [
             'popularity' => new \Zend_Db_Expr('`popularity` + 1'),
-            'updated_at' => new \Zend_Db_Expr('NOW()'),
         ];
         $adapter->insertOnDuplicate($table, $saveData, $updateData);
     }
@@ -199,9 +197,8 @@ class Query extends AbstractDb
             'store_id' => $query->getStoreId(),
             'query_text' => $query->getQueryText(),
             'num_results' => $numResults,
-            'updated_at' => new \Zend_Db_Expr('NOW()'),
         ];
-        $updateData = ['num_results' => $numResults, 'updated_at' => new \Zend_Db_Expr('NOW()')];
+        $updateData = ['num_results' => $numResults];
         $adapter->insertOnDuplicate($table, $saveData, $updateData);
     }
 }
