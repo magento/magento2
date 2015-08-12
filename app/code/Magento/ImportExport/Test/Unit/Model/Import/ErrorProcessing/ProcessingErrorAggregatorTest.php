@@ -285,6 +285,38 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method getErrorByRowNumber
+     */
+    public function testGetErrorByRowNumber()
+    {
+        $this->model->addError('systemException1', 'not-critical', 1);
+        $this->model->addError('systemException2', 'not-critical', 1);
+        $this->model->addError('systemException3', 'not-critical', 2);
+        $result = $this->model->getErrorByRowNumber(1);
+
+        $this->assertInternalType('array', $result);
+        $this->assertCount(2, $result);
+        $this->assertInstanceOf('\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError', $result[0]);
+        $this->assertInstanceOf('\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError', $result[1]);
+        $this->assertEquals('systemException1', $result[0]->getErrorCode());
+        $this->assertEquals('systemException2', $result[1]->getErrorCode());
+    }
+
+    /**
+     * Test logic to prevent adding an identical error more than once.
+     * The error has to have the same error code for the same row number
+     */
+    public function testAddTheSameErrorTwice()
+    {
+        $this->model->addError('systemException', 'not-critical', 1);
+        $this->model->addError('systemException', 'not-critical', 1);
+        $result = $this->model->getErrorByRowNumber(1);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(1, $this->model->getErrorsCount());
+    }
+
+    /**
      * Test for method getErrorsByCode. Expects receive errors with code, which present in incomming parameter.
      */
     public function testGetErrorsByCodeInArray()
@@ -366,4 +398,3 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, 1);
     }
 }
- 
