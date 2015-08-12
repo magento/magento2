@@ -15,7 +15,7 @@ define([
                 expect(registry).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry);
+                var type = typeof registry;
 
                 expect(type).toEqual('object');
             });
@@ -25,7 +25,7 @@ define([
                 expect(registry.hasOwnProperty('set')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.set);
+                var type = typeof registry.set;
 
                 expect(type).toEqual('function');
             });
@@ -33,7 +33,7 @@ define([
                 expect(registry.set()).toBeDefined();
             });
             it('Check returned value type', function () {
-                var type = typeof(registry.set());
+                var type = typeof registry.set();
 
                 expect(type).toEqual('object');
             });
@@ -50,21 +50,22 @@ define([
                 expect(registry.hasOwnProperty('get')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.get);
+                var type = typeof registry.get;
 
                 expect(type).toEqual('function');
             });
             it('Check returned value if method called without arguments', function () {
-                expect(registry.get()).toBeDefined();
+                expect(registry.get()).toBeUndefined();
             });
             it('Check returned value type if method called without arguments', function () {
                 var type = registry.get() instanceof Array;
 
-                expect(type).toEqual(true);
+                expect(type).toBeFalsy();
             });
             it('Check called callback with arguments', function () {
                 var elems = ['magento'],
-                    callback = function(){};
+                    callback = function () {};
+
                 registry.events.wait = jasmine.createSpy();
                 registry.get(elems, callback);
                 expect(registry.events.wait).toHaveBeenCalledWith(elems, callback);
@@ -105,10 +106,9 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check returned value if registry.storage has property', function () {
-                var name = 'magento',
-                    value = 'magentoValue';
+                var name = 'magento';
 
-                registry.storage.data[name] = value;
+                registry.storage.data[name] = 'magentoValue';
                 expect(registry.has(name)).toEqual(true);
             });
             it('Check returned value if registry.storage has not property', function () {
