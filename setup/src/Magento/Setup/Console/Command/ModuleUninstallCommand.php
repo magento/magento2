@@ -13,6 +13,7 @@ use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Setup\BackupRollbackFactory;
+use Magento\Setup\Model\ModuleRegistryUninstaller;
 use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
@@ -101,6 +102,13 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $moduleUninstaller;
 
     /**
+     * Module Registry uninstaller
+     *
+     * @var ModuleRegistryUninstaller
+     */
+    private $moduleRegistryUninstaller;
+
+    /**
      * Constructor
      *
      * @param ComposerInformation $composer
@@ -110,6 +118,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param ObjectManagerProvider $objectManagerProvider
      * @param UninstallCollector $collector
      * @param ModuleUninstaller $moduleUninstaller
+     * @param ModuleRegistryUninstaller $moduleRegistryUninstaller
      */
     public function __construct(
         ComposerInformation $composer,
@@ -118,7 +127,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
         UninstallCollector $collector,
-        ModuleUninstaller $moduleUninstaller
+        ModuleUninstaller $moduleUninstaller,
+        ModuleRegistryUninstaller $moduleRegistryUninstaller
     ) {
         parent::__construct($objectManagerProvider);
         $this->composer = $composer;
@@ -130,6 +140,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
         $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
         $this->moduleUninstaller = $moduleUninstaller;
+        $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
     }
 
     /**
@@ -237,11 +248,9 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                     );
                 }
             }
-            $this->moduleUninstaller->uninstall(
-                $output,
-                $modules,
-                [ModuleUninstaller::OPTION_UNINSTALL_CODE => true, ModuleUninstaller::OPTION_UNINSTALL_REGISTRY => true]
-            );
+            $this->moduleRegistryUninstaller->removeModulesFromDb($output, $modules);
+            $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($output, $modules);
+            $this->moduleUninstaller->uninstallCode($output, $modules);
             $this->cleanup($input, $output);
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
@@ -290,7 +299,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         } else {
             $output->writeln('<info>Removing data</info>');
         }
-        $this->moduleUninstaller->uninstall($output, $modules, [ModuleUninstaller::OPTION_UNINSTALL_DATA => true]);
+        $this->moduleUninstaller->uninstallData($output, $modules);
     }
 
 

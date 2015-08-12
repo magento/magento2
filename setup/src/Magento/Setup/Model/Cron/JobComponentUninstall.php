@@ -5,12 +5,9 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\Updater;
-use Magento\Theme\Model\Theme\ThemeUninstaller;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,11 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class JobComponentUninstall extends AbstractJob
 {
-    /**
-     * Component type
-     */
-    const COMPONENT_TYPE = 'type';
-
     /**
      * Component name
      */
@@ -37,9 +29,9 @@ class JobComponentUninstall extends AbstractJob
     /**#@+
      * Component types
      */
-    const COMPONENT_MODULE = 'module';
-    const COMPONENT_THEME = 'theme';
-    const COMPONENT_LANGUAGE = 'language';
+    const COMPONENT_MODULE = 'magento2-module';
+    const COMPONENT_THEME = 'magento2-theme';
+    const COMPONENT_LANGUAGE = 'magento2-language';
     /**#@-*/
 
     /**
@@ -48,33 +40,56 @@ class JobComponentUninstall extends AbstractJob
     private $objectManager;
 
     /**
-     * @var ComponentUninstallerFactory
-     */
-    private $componentUninstallerFactory;
-
-    /**
      * @var Updater
      */
     private $updater;
 
     /**
-     * @var PackageInfo
+     * @var \Magento\Setup\Model\ModuleUninstaller
      */
-    private $packageInfo;
+    private $moduleUninstaller;
+
+    /**
+     * @var \Magento\Setup\Model\ModuleRegistryUninstaller
+     */
+    private $moduleRegistryUninstaller;
+
+    /**
+     * @var \Magento\Theme\Model\Theme\ThemeUninstaller
+     */
+    private $themeUninstaller;
+
+    /**
+     * @var \Magento\Theme\Model\Theme\ThemePackageInfo
+     */
+    private $themePackageInfo;
+
+    /**
+     * @var \Magento\Framework\Composer\ComposerInformation
+     */
+    private $composerInformation;
 
     /**
      * Constructor
      *
-     * @param ComponentUninstallerFactory $componentUninstallerFactory
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
+     * @param \Magento\Setup\Model\ModuleUninstaller $moduleUninstaller
+     * @param \Magento\Setup\Model\ModuleRegistryUninstaller $moduleRegistryUninstaller
+     * @param \Magento\Theme\Model\Theme\ThemeUninstaller $themeUninstaller
+     * @param \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo
      * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
      * @param Status $status
      * @param Updater $updater
-     * @param array $name
+     * @param $name
      * @param array $params
      */
     public function __construct(
-        ComponentUninstallerFactory $componentUninstallerFactory,
+        \Magento\Framework\Composer\ComposerInformation $composerInformation,
+        \Magento\Setup\Model\ModuleUninstaller $moduleUninstaller,
+        \Magento\Setup\Model\ModuleRegistryUninstaller $moduleRegistryUninstaller,
+        \Magento\Theme\Model\Theme\ThemeUninstaller $themeUninstaller,
+        \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo,
         ObjectManagerProvider $objectManagerProvider,
         OutputInterface $output,
         Status $status,
@@ -82,10 +97,13 @@ class JobComponentUninstall extends AbstractJob
         $name,
         $params = []
     ) {
+        $this->composerInformation = $composerInformation;
+        $this->moduleUninstaller = $moduleUninstaller;
+        $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
+        $this->themeUninstaller = $themeUninstaller;
         $this->objectManager = $objectManagerProvider->get();
-        $this->componentUninstallerFactory = $componentUninstallerFactory;
         $this->updater = $updater;
-        $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->themePackageInfo = $themePackageInfo;
         parent::__construct($output, $status, $name, $params);
     }
 
@@ -119,50 +137,35 @@ class JobComponentUninstall extends AbstractJob
      */
     private function executeComponent(array $component)
     {
-        if (!isset($component[self::COMPONENT_TYPE]) || !isset($component[self::COMPONENT_NAME])) {
+        if (!isset($component[self::COMPONENT_NAME])) {
             throw new \RuntimeException('Job parameter format is incorrect');
         }
-        $type = $component[self::COMPONENT_TYPE];
+
         $componentName = $component[self::COMPONENT_NAME];
+
+        $type = $this->composerInformation->getInstalledMagentoPackages()[$componentName]['type'];
 
         if (!in_array($type, [self::COMPONENT_MODULE, self::COMPONENT_THEME, self::COMPONENT_LANGUAGE])) {
             throw new \RuntimeException('Unknown component type');
         }
 
-        $options = [];
-        $skip = false;
         switch ($type) {
             case self::COMPONENT_MODULE:
                 // convert to module name
-                $componentName = $this->packageInfo->getModuleName($componentName);
-                $options[ModuleUninstaller::OPTION_UNINSTALL_DATA] = isset($this->params[self::DATA_OPTION]) ?
-                    $this->params[self::DATA_OPTION] : false;
-                $options[ModuleUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
+                /** @var \Magento\Framework\Module\PackageInfo $packageInfo */
+                $packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+                $moduleName = $packageInfo->getModuleName($componentName);
+                if (isset($this->params[self::DATA_OPTION]) && $this->params[self::DATA_OPTION]) {
+                    $this->moduleUninstaller->uninstallData($this->output, [$moduleName]);
+                }
+                $this->moduleRegistryUninstaller->removeModulesFromDb($this->output, [$moduleName]);
+                $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($this->output, [$moduleName]);
                 break;
             case self::COMPONENT_THEME:
-                $options[ThemeUninstaller::OPTION_UNINSTALL_REGISTRY] = true;
-                break;
-            case self::COMPONENT_LANGUAGE:
-                $skip = true;
+                $themePath = $this->themePackageInfo->getFullThemePath($componentName);
+                $this->themeUninstaller->uninstallRegistry($this->output, [$themePath]);
                 break;
         }
-        if (!$skip) {
-            $this->createAndRunUninstaller($type, $componentName, $options);
-        }
-    }
-
-    /**
-     * Create the command and run it
-     *
-     * @param string $type
-     * @param string $componentName
-     * @param array $options
-     * @return void
-     */
-    private function createAndRunUninstaller($type, $componentName, array $options)
-    {
-        $uninstaller = $this->componentUninstallerFactory->create($type);
-        $uninstaller->uninstall($this->output, [$componentName], $options);
     }
 
     /**

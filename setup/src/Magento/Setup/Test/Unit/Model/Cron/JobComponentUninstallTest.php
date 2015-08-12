@@ -27,11 +27,6 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
     private $status;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ComponentUninstallerFactory
-     */
-    private $componentUninstallerFactory;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Updater
      */
     private $updater;
@@ -46,6 +41,31 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManagerProvider;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ModuleUninstaller
+     */
+    private $moduleUninstaller;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ModuleRegistryUninstaller
+     */
+    private $moduleRegistryUninstaller;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Theme\ThemeUninstaller
+     */
+    private $themeUninstaller;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Theme\ThemePackageInfo
+     */
+    private $themePackageInfo;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerInformation
+     */
+    private $composerInformation;
+
     public function setUp()
     {
         $this->output = $this->getMockForAbstractClass(
@@ -55,8 +75,18 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $this->componentUninstallerFactory = $this->getMock(
-            'Magento\Setup\Model\Cron\ComponentUninstallerFactory',
+        $this->moduleUninstaller = $this->getMock('Magento\Setup\Model\ModuleUninstaller', [], [], '', false);
+        $this->moduleRegistryUninstaller = $this->getMock(
+            'Magento\Setup\Model\ModuleRegistryUninstaller',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->themeUninstaller = $this->getMock('Magento\Theme\Model\Theme\ThemeUninstaller', [], [], '', false);
+        $this->themePackageInfo = $this->getMock('Magento\Theme\Model\Theme\ThemePackageInfo', [], [], '', false);
+        $this->composerInformation = $this->getMock(
+            'Magento\Framework\Composer\ComposerInformation',
             [],
             [],
             '',
@@ -72,7 +102,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
         $packageInfoFactory = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
         $packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
-        $packageInfoFactory->expects($this->once())->method('create')->willReturn($packageInfo);
+        $packageInfoFactory->expects($this->any())->method('create')->willReturn($packageInfo);
         $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $cache->expects($this->any())->method('clean');
@@ -101,20 +131,17 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
     public function testExecuteModule()
     {
         $this->setUpUpdater();
-        $uninstaller = $this->getMockForAbstractClass(
-            'Magento\Framework\Composer\AbstractComponentUninstaller',
-            [],
-            '',
-            false
-        );
-        $uninstaller->expects($this->once())->method('uninstall');
-        $this->componentUninstallerFactory->expects($this->once())
-            ->method('create')
-            ->with(JobComponentUninstall::COMPONENT_MODULE)
-            ->willReturn($uninstaller);
+
+        $this->moduleUninstaller->expects($this->once())->method('uninstallData');
+        $this->moduleRegistryUninstaller->expects($this->once())->method('removeModulesFromDb');
+        $this->moduleRegistryUninstaller->expects($this->once())->method('removeModulesFromDeploymentConfig');
 
         $this->job = new JobComponentUninstall(
-            $this->componentUninstallerFactory,
+            $this->composerInformation,
+            $this->moduleUninstaller,
+            $this->moduleRegistryUninstaller,
+            $this->themeUninstaller,
+            $this->themePackageInfo,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -123,23 +150,32 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             [
                 'components' => [
                     [
-                        JobComponentUninstall::COMPONENT_TYPE => JobComponentUninstall::COMPONENT_MODULE,
-                        JobComponentUninstall::COMPONENT_NAME => 'moduleA',
+                        JobComponentUninstall::COMPONENT_NAME => 'vendor/module-package',
                     ]
                 ],
                 'dataOption' => true
             ]
         );
+
+        $this->composerInformation->expects($this->once())
+            ->method('getInstalledMagentoPackages')
+            ->willReturn(['vendor/module-package' => ['type' => JobComponentUninstall::COMPONENT_MODULE]]);
         $this->job->execute();
     }
 
     public function testExecuteLanguage()
     {
         $this->setUpUpdater();
-        $this->componentUninstallerFactory->expects($this->never())->method('create');
+        $this->composerInformation->expects($this->once())
+            ->method('getInstalledMagentoPackages')
+            ->willReturn(['vendor/language-a' => ['type' => JobComponentUninstall::COMPONENT_LANGUAGE]]);
 
         $this->job = new JobComponentUninstall(
-            $this->componentUninstallerFactory,
+            $this->composerInformation,
+            $this->moduleUninstaller,
+            $this->moduleRegistryUninstaller,
+            $this->themeUninstaller,
+            $this->themePackageInfo,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -148,8 +184,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             [
                 'components' => [
                     [
-                        JobComponentUninstall::COMPONENT_TYPE => JobComponentUninstall::COMPONENT_LANGUAGE,
-                        JobComponentUninstall::COMPONENT_NAME => 'languageA',
+                        JobComponentUninstall::COMPONENT_NAME => 'vendor/language-a',
                     ]
                 ]
             ]
@@ -160,20 +195,17 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
     public function testExecuteTheme()
     {
         $this->setUpUpdater();
-        $uninstaller = $this->getMockForAbstractClass(
-            'Magento\Framework\Composer\AbstractComponentUninstaller',
-            [],
-            '',
-            false
-        );
-        $uninstaller->expects($this->once())->method('uninstall');
-        $this->componentUninstallerFactory->expects($this->once())
-            ->method('create')
-            ->with(JobComponentUninstall::COMPONENT_THEME)
-            ->willReturn($uninstaller);
+        $this->composerInformation->expects($this->once())
+            ->method('getInstalledMagentoPackages')
+            ->willReturn(['vendor/theme-a' => ['type' => JobComponentUninstall::COMPONENT_THEME]]);
+        $this->themeUninstaller->expects($this->once())->method('uninstallRegistry');
 
         $this->job = new JobComponentUninstall(
-            $this->componentUninstallerFactory,
+            $this->composerInformation,
+            $this->moduleUninstaller,
+            $this->moduleRegistryUninstaller,
+            $this->themeUninstaller,
+            $this->themePackageInfo,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -182,8 +214,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             [
                 'components' => [
                     [
-                        JobComponentUninstall::COMPONENT_TYPE => JobComponentUninstall::COMPONENT_THEME,
-                        JobComponentUninstall::COMPONENT_NAME => 'themeA',
+                        JobComponentUninstall::COMPONENT_NAME => 'vendor/theme-a',
                     ]
                 ]
             ]
@@ -197,9 +228,17 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteUnknownType()
     {
-        $this->componentUninstallerFactory->expects($this->never())->method($this->anything());
+        $this->setUpUpdater();
+        $this->composerInformation->expects($this->once())
+            ->method('getInstalledMagentoPackages')
+            ->willReturn(['vendor/unknown-a' => ['type' => 'unknown']]);
+
         $this->job = new JobComponentUninstall(
-            $this->componentUninstallerFactory,
+            $this->composerInformation,
+            $this->moduleUninstaller,
+            $this->moduleRegistryUninstaller,
+            $this->themeUninstaller,
+            $this->themePackageInfo,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -208,8 +247,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             [
                 'components' => [
                     [
-                        JobComponentUninstall::COMPONENT_TYPE => 'unknown',
-                        JobComponentUninstall::COMPONENT_NAME => 'moduleA',
+                        JobComponentUninstall::COMPONENT_NAME => 'vendor/unknown-a',
                     ]
                 ]
             ]
@@ -225,9 +263,12 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWrongFormat(array $params)
     {
-        $this->componentUninstallerFactory->expects($this->never())->method($this->anything());
         $this->job = new JobComponentUninstall(
-            $this->componentUninstallerFactory,
+            $this->composerInformation,
+            $this->moduleUninstaller,
+            $this->moduleRegistryUninstaller,
+            $this->themeUninstaller,
+            $this->themePackageInfo,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -242,8 +283,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'empty' => [[]],
-            'no type' => [['components' => [[JobComponentUninstall::COMPONENT_NAME => 'name']]]],
-            'no name' => [['components' => [[JobComponentUninstall::COMPONENT_TYPE => 'type']]]],
+            'no name' => [['components' => [['key' => 'value']]]],
             'components not array' => [['components' => '']],
         ];
     }
@@ -255,20 +295,16 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
     public function testExecuteUpdateFails()
     {
         $this->updater->expects($this->once())->method('createUpdaterTask')->willReturn('error');
-        $uninstaller = $this->getMockForAbstractClass(
-            'Magento\Framework\Composer\AbstractComponentUninstaller',
-            [],
-            '',
-            false
-        );
-        $uninstaller->expects($this->once())->method('uninstall');
-        $this->componentUninstallerFactory->expects($this->once())
-            ->method('create')
-            ->with(JobComponentUninstall::COMPONENT_MODULE)
-            ->willReturn($uninstaller);
+        $this->composerInformation->expects($this->once())
+            ->method('getInstalledMagentoPackages')
+            ->willReturn(['vendor/language-a' => ['type' => JobComponentUninstall::COMPONENT_LANGUAGE]]);
 
         $this->job = new JobComponentUninstall(
-            $this->componentUninstallerFactory,
+            $this->composerInformation,
+            $this->moduleUninstaller,
+            $this->moduleRegistryUninstaller,
+            $this->themeUninstaller,
+            $this->themePackageInfo,
             $this->objectManagerProvider,
             $this->output,
             $this->status,
@@ -277,8 +313,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             [
                 'components' => [
                     [
-                        JobComponentUninstall::COMPONENT_TYPE => JobComponentUninstall::COMPONENT_MODULE,
-                        JobComponentUninstall::COMPONENT_NAME => 'moduleA',
+                        JobComponentUninstall::COMPONENT_NAME => 'vendor/language-a',
                     ]
                 ]
             ]

@@ -73,7 +73,11 @@ class JobFactory
                 break;
             case self::COMPONENT_UNINSTALL:
                 return new JobComponentUninstall(
-                    $this->serviceLocator->get('Magento\Setup\Model\Cron\ComponentUninstallerFactory'),
+                    $objectManager->get('Magento\Framework\Composer\ComposerInformation'),
+                    $this->serviceLocator->get('Magento\Setup\Model\ModuleUninstaller'),
+                    $this->serviceLocator->get('Magento\Setup\Model\ModuleRegistryUninstaller'),
+                    $objectManager->get('Magento\Theme\Model\Theme\ThemeUninstaller'),
+                    $objectManager->get('Magento\Theme\Model\Theme\ThemePackageInfo'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $cronStatus,

@@ -5,23 +5,15 @@
  */
 namespace Magento\Theme\Model\Theme;
 
-use Magento\Framework\Composer\AbstractComponentUninstaller;
 use Magento\Framework\Composer\Remove;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ThemeUninstaller extends AbstractComponentUninstaller
+class ThemeUninstaller
 {
-    /**#@+
-     * Theme uninstall options
-     */
-    const OPTION_UNINSTALL_REGISTRY = 'registry';
-    const OPTION_UNINSTALL_CODE = 'code';
-    /**#@-*/
-
     /**
-     * @var PackageNameFinder
+     * @var ThemePackageInfo
      */
-    private $packageNameFinder;
+    private $themePackageInfo;
 
     /**
      * @var Remove
@@ -36,41 +28,44 @@ class ThemeUninstaller extends AbstractComponentUninstaller
     /**
      * Constructor
      *
-     * @param PackageNameFinder $packageNameFinder
+     * @param ThemePackageInfo $themePackageInfo
      * @param Remove $remove
      * @param ThemeProvider $themeProvider
      */
-    public function __construct(PackageNameFinder $packageNameFinder, Remove $remove, ThemeProvider $themeProvider)
+    public function __construct(ThemePackageInfo $themePackageInfo, Remove $remove, ThemeProvider $themeProvider)
     {
-        $this->packageNameFinder = $packageNameFinder;
+        $this->themePackageInfo = $themePackageInfo;
         $this->remove = $remove;
         $this->themeProvider = $themeProvider;
     }
 
     /**
-     * Uninstall a theme
+     * Uninstall theme from database registry
      *
-     * @param OutputInterface $output
-     * @param array $components
-     * @param array $option
+     * @param array $themePaths
      * @return void
      */
-    public function uninstall(OutputInterface $output, array $components, array $option)
+    public function uninstallRegistry(OutputInterface $output, array $themePaths)
     {
-        if (isset($option[self::OPTION_UNINSTALL_REGISTRY]) && $option[self::OPTION_UNINSTALL_REGISTRY]) {
-            $output->writeln('<info>Removing ' . implode(', ', $components) . ' from database');
-            foreach ($components as $component) {
-                $this->themeProvider->getThemeByFullPath($component)->delete();
-            }
+        $output->writeln('<info>Removing ' . implode(', ', $themePaths) . ' from database');
+        foreach ($themePaths as $themePath) {
+            $this->themeProvider->getThemeByFullPath($themePath)->delete();
         }
+    }
 
-        if (isset($option[self::OPTION_UNINSTALL_CODE]) && $option[self::OPTION_UNINSTALL_CODE]) {
-            $output->writeln('<info>Removing ' . implode(', ', $components) . ' from Magento codebase');
-            $packageNames = [];
-            foreach ($components as $component) {
-                $packageNames[] = $this->packageNameFinder->getPackageName($component);
-            }
-            $output->writeln($this->remove->remove($packageNames));
+    /**
+     * Uninstall theme from code base
+     *
+     * @param array $themePaths
+     * @return void
+     */
+    public function uninstallCode(OutputInterface $output, array $themePaths)
+    {
+        $output->writeln('<info>Removing ' . implode(', ', $themePaths) . ' from Magento codebase');
+        $packageNames = [];
+        foreach ($themePaths as $themePath) {
+            $packageNames[] = $this->themePackageInfo->getPackageName($themePath);
         }
+        $output->writeln($this->remove->remove($packageNames));
     }
 }
