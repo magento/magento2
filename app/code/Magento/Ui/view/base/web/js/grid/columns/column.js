@@ -14,7 +14,6 @@ define([
         defaults: {
             headerTmpl: 'ui/grid/columns/text',
             bodyTmpl: 'ui/grid/cells/text',
-            disabled: false,
             sortable: true,
             sorting: false,
             visible: true,
@@ -44,7 +43,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('visible dragging dragover sorting disabled');
+                .observe('visible dragging dragover sorting');
 
             return this;
         },
@@ -151,7 +150,7 @@ define([
             var action = this.fieldAction,
                 callback;
 
-            if (!this.hasFieldAction() || this.disabled()) {
+            if (!this.hasFieldAction()) {
                 return this;
             }
 

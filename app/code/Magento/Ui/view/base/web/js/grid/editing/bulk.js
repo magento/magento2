@@ -21,6 +21,7 @@ define([
     return Record.extend({
         defaults: {
             template: 'ui/grid/editing/bulk',
+            active: false,
             templates: {
                 editors: {
                     select: {
@@ -28,10 +29,12 @@ define([
                     }
                 }
             },
+            imports: {
+                active: '${ $.editorProvider }:isMultiEditing'
+            },
             listens: {
-                data: 'onDataChange',
-                enabled: 'onEnableChange',
-                '${ $.editorProvider }:isMultiEditing': 'onMultiEditing'
+                data: 'updateState',
+                active: 'updateState'
             },
             modules: {
                 editor: '${ $.editorProvider }'
@@ -46,8 +49,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe({
-                    hasData: false,
-                    enabled: false
+                    hasData: false
                 });
 
             return this;
@@ -67,8 +69,6 @@ define([
                 delete rules['required-entry'];
             }
 
-            editor.disabled = false;
-
             return editor;
         },
 
@@ -78,12 +78,10 @@ define([
          * @returns {Bulk} Chainable.
          */
         apply: function () {
-            if (!this.isValid()) {
-                return this;
+            if (this.isValid()) {
+                this.applyData()
+                    .clear();
             }
-
-            this.applyData()
-                .clear();
 
             return this;
         },
@@ -97,7 +95,7 @@ define([
         applyData: function (data) {
             data = data || this.getData();
 
-            this.editor('setRecordsData', data, true);
+            this.editor('setData', data, true);
 
             return this;
         },
@@ -108,7 +106,7 @@ define([
          * @returns {Object} Fields data without empty values.
          */
         getData: function () {
-            return removeEmpty(this.data);
+            return removeEmpty(this._super());
         },
 
         /**
@@ -123,7 +121,7 @@ define([
 
             this.hasData(hasData);
 
-            if (!this.enabled()) {
+            if (!this.active()) {
                 fields = [];
             }
 
@@ -131,39 +129,6 @@ define([
             this.editor('canSave', !fields.length);
 
             return this;
-        },
-
-        /**
-         * Checks if provided column is an actions column.
-         *
-         * @param {Column} column - Column to be checked.
-         * @returns {Boolean}
-         */
-        isActionsColumn: function (column) {
-            return column.dataType === 'actions';
-        },
-
-        /**
-         * Listener of the 'data' object changes.
-         */
-        onDataChange: function () {
-            this.updateState();
-        },
-
-        /**
-         * Listener of the 'enabled' property.
-         */
-        onEnableChange: function () {
-            this.updateState();
-        },
-
-        /**
-         * Listener of the editors' multiediting state.
-         *
-         * @param {Boolean} enabled - Whether multiediting is enabled.
-         */
-        onMultiEditing: function (enabled) {
-            this.enabled(enabled);
         }
     });
 });
