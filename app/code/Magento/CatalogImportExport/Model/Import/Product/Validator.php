@@ -120,7 +120,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             }
         }
 
-        if (!isset($rowData[$attrCode])) {
+        if (!strlen(trim($rowData[$attrCode]))) {
             return true;
         }
         switch ($attrParams['type']) {
