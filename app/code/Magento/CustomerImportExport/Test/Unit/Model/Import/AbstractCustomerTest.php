@@ -172,6 +172,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testCheckUniqueKey(array $rowData, array $errors, $isValid = false)
     {
