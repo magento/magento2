@@ -25,7 +25,7 @@
             class="action-select admin__action-multiselect"
             data-bind="
                         css: {_focus: multiselectFocus},
-                        text: caption,
+                        text: setCaption(),
                         click: function(data, event) {
                             toggleListVisible(data, event)
                         }">
@@ -91,21 +91,18 @@
                     class="action-menu-item"
                     data-bind="
                                 css: {
-                                    _selected: option.selected,
-                                    _hover: option.hovered
+                                    _selected: $parent.isSelected(option.label),
+                                    _hover: $parent.isHovered($index())
                                 },
-                                click: $parent.proxyOptionsClick.bind($parent, $data, $index()),
+                                click: $parent.toggleOptionSelected.bind($parent, $data, $index()),
                                 event: {
                                     mouseenter: function(){$parent.onHoveredIn($data, $index())},
-                                    mouseleave: $parent.onHoveredOut
-                                },
-                                attr: {
-                                    'data-value': option.value
-                                }">
+                                    mouseleave: function(){$parent.onHoveredIn($data, $index())},
+">
                     <input
                         class="admin__control-checkbox"
                         type="checkbox"
-                        data-bind="attr: { 'checked': option.selected }">
+                        data-bind="attr: { 'checked': $parent.isSelected(option.label) }">
                     <label
                         class="admin__action-multiselect-label"
                         data-bind="text: option.label">
