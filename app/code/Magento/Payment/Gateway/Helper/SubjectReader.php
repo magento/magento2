@@ -85,19 +85,4 @@ class SubjectReader
 
         return $subject['stateObject'];
     }
-
-    /**
-     * Read transaction id from subject
-     *
-     * @param array $subject
-     * @return \Magento\Framework\DataObject
-     */
-    public static function readTransactionId(array $subject)
-    {
-        if (!isset($subject['transaction_id']) || !is_string($subject['transaction_id'])) {
-            throw new \InvalidArgumentException('Transaction id does not exist');
-        }
-
-        return $subject['transaction_id'];
-    }
 }
