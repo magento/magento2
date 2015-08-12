@@ -25,16 +25,16 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.0.1') < 0) {
             $connection->dropIndex(
                 'search_query',
-                $installer->getIdxName('search_query', ['query_text', 'store_id', 'popularity'])
+                $installer->getIdxName('search_query', ['query_text', 'store_id'])
             );
             $connection->addIndex(
                 'search_query',
                 $installer->getIdxName(
                     'search_query',
-                    ['query_text', 'store_id', 'popularity'],
+                    ['query_text', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['query_text', 'store_id', 'popularity'],
+                ['query_text', 'store_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             );
         }

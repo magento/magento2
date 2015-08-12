@@ -5,6 +5,7 @@
  */
 namespace Magento\Search\Model;
 
+use Magento\Framework\App\Resource;
 use Magento\Search\Model\Resource\Query\Collection as QueryCollection;
 use Magento\Search\Model\Resource\Query\CollectionFactory as QueryCollectionFactory;
 use Magento\Search\Model\SearchCollectionInterface as Collection;
@@ -19,8 +20,8 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Search query model
  *
- * @method Resource\Query _getResource()
- * @method Resource\Query getResource()
+ * @method \Magento\Search\Model\Resource\Query _getResource()
+ * @method \Magento\Search\Model\Resource\Query getResource()
  * @method \Magento\Search\Model\Query setQueryText(string $value)
  * @method int getNumResults()
  * @method \Magento\Search\Model\Query setNumResults(int $value)
@@ -226,6 +227,55 @@ class Query extends AbstractModel implements QueryInterface
             $this->setIsProcessed(0);
             $this->save();
             $this->setIsActive(1);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Save query with incremental popularity
+     *
+     * @return $this
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function saveIncrementalPopularity()
+    {
+        $this->incrementPopularity();
+        $this->getResource()->saveIncrementalPopularity($this);
+
+        return $this;
+    }
+
+    /**
+     * Save query with number of results
+     *
+     * @param int $numResults
+     * @return $this
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function saveNumResults($numResults)
+    {
+        $this->setNumResults($numResults);
+        $this->getResource()->saveNumResults($this);
+
+        return $this;
+    }
+
+    /**
+     * Increment popularity
+     *
+     * @return $this
+     */
+    public function incrementPopularity()
+    {
+        $popularity = $this->getPopularity();
+
+        if (is_numeric($popularity) && $popularity > 0) {
+            $this->setPopularity($popularity + 1);
+        } else {
+            $this->setPopularity(1);
         }
 
         return $this;
