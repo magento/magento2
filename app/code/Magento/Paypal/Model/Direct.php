@@ -261,15 +261,12 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * Check whether payment method can be used
      *
-     * @param \Magento\Quote\Model\Quote|null $quote
+     * @param \Magento\Quote\Api\Data\CartInterface|\Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        if (parent::isAvailable($quote) && $this->_pro->getConfig()->isMethodAvailable()) {
-            return true;
-        }
-        return false;
+        return parent::isAvailable($quote) && $this->_pro->getConfig()->isMethodAvailable();
     }
 
     /**

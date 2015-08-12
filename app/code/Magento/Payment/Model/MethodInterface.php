@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Payment\Model;
+use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Payment interface
@@ -341,10 +342,10 @@ interface MethodInterface
     /**
      * Check whether payment method can be used
      *
-     * @param \Magento\Quote\Api\Data\CartInterface|null $quote
+     * @param CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null);
+    public function isAvailable(CartInterface $quote = null);
 
     /**
      * Is active
