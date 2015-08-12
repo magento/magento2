@@ -208,6 +208,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                                             '$ref' => '#/definitions/test-module5-v1-entity-all-soap-and-rest',
                                         ],
                                     ],
+                                    'type' => 'object'
                                 ],
                             ]
                         ],
