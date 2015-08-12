@@ -62,6 +62,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @throws Exception\InputException
+     * @return void
      */
     protected function validateQuote(\Magento\Quote\Model\Quote $quote)
     {

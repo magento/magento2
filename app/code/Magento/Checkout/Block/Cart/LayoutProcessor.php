@@ -122,6 +122,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @param array $jsLayout
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function process($jsLayout)
     {

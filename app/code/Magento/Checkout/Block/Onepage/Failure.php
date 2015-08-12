@@ -38,7 +38,7 @@ class Failure extends \Magento\Framework\View\Element\Template
     /**
      *  Payment custom error message
      *
-     *  @return	string
+     * @return string
      */
     public function getErrorMessage()
     {

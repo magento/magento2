@@ -262,7 +262,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getProductUrl()
     {
-        if (!is_null($this->_productUrl)) {
+        if ($this->_productUrl !== null) {
             return $this->_productUrl;
         }
         if ($this->getItem()->getRedirectUrl()) {
