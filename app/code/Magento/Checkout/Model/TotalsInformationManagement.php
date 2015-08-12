@@ -5,8 +5,9 @@
  */
 namespace Magento\Checkout\Model;
 
-use Magento\Framework\Exception;
-
+/**
+ * Class TotalsInformationManagement
+ */
 class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInformationManagementInterface
 {
     /**
@@ -61,13 +62,15 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
 
     /**
      * @param \Magento\Quote\Model\Quote $quote
-     * @throws Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     protected function validateQuote(\Magento\Quote\Model\Quote $quote)
     {
         if ($quote->getItemsCount() === 0) {
-            throw new Exception\InputException(__('Totals calculation is not applicable to empty cart'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Totals calculation is not applicable to empty cart')
+            );
         }
     }
 }
