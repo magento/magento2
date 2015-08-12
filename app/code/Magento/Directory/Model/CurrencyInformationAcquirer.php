@@ -6,9 +6,9 @@
 namespace Magento\Directory\Model;
 
 /**
- * Currency Repository class
+ * Currency information acquirer class
  */
-class CurrencyRepository implements \Magento\Directory\Api\CurrencyRepositoryInterface
+class CurrencyInformationAcquirer implements \Magento\Directory\Api\CurrencyInformationAcquirerInterface
 {
     /**
      * @var \Magento\Directory\Model\Data\CurrencyInformationFactory

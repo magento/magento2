@@ -6,11 +6,11 @@
 namespace Magento\Directory\Api;
 
 /**
- * Currency Repository interface
+ * Currency information acquirer interface
  *
  * @api
  */
-interface CurrencyRepositoryInterface
+interface CurrencyInformationAcquirerInterface
 {
     /**
      * Get currency information for the store.

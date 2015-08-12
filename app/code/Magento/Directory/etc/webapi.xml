@@ -8,8 +8,8 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
     <!-- Currency -->
-    <route url="/V1/currency" method="GET">
-        <service class="Magento\Directory\Api\CurrencyRepositoryInterface" method="getCurrencyInfo"/>
+    <route url="/V1/directory/currency" method="GET">
+        <service class="Magento\Directory\Api\CurrencyInformationAcquirerInterface" method="getCurrencyInfo"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
