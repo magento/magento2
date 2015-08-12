@@ -39,7 +39,7 @@ define([
         return _.map(attributes, this.createAttribute, this);
     }, function(attributes) {
         return _.reduce(attributes, function (memo, attribute) {
-            return memo + attribute.id;
+            return (_.isObject(memo) ? memo.id : memo) + attribute.id;
         });
     });
 
