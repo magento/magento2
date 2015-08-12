@@ -32,5 +32,8 @@ define(
 
             }
         });
+        quote.shippingMethod.subscribe(function () {
+            totalsDefaultProvider.estimateTotals();
+        });
     }
 );
