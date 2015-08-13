@@ -13,17 +13,8 @@ class CurrencyInformationAcquirerTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/directory/currency';
     const SERVICE_VERSION = 'V1';
 
-    /**
-     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
-     */
     public function testGet()
     {
-        $storeCode = 'fixturestore';
-        /** @var $store \Magento\Store\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
-        $store = $store->load($storeCode);
-        $this->assertEquals($storeCode, $store->getCode(), 'Store does not have expected code: ' . $storeCode);
-
         $result = $this->getCurrencyInfo();
 
         $this->assertNotEmpty($result);
