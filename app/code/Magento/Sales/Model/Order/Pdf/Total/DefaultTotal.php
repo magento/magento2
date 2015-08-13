@@ -145,7 +145,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
     public function canDisplay()
     {
         $amount = $this->getAmount();
-        return $this->getDisplayZero() || $amount != 0;
+        return $this->getDisplayZero() === 'true' || $amount != 0;
     }
 
     /**
