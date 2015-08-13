@@ -82,9 +82,9 @@ class NewAction extends \Magento\Backend\App\Action
                     __('The order does not allow an invoice to be created.')
                 );
             }
-            $invoiceManagement = $this->_objectManager->create('Magento\Sales\Api\InvoiceManagementInterface');
+            $invoiceManagement = $this->_objectManager->create('Magento\Sales\Model\Service\InvoiceService');
             /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            $invoice = $invoiceManagement->prepareInvoice($orderId, $invoiceItems);
+            $invoice = $invoiceManagement->prepareInvoice($order, $invoiceItems);
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
