@@ -28,6 +28,9 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     private $filesystem;
 
+    /** @var  \Magento\Framework\Module\ModuleRegistryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $moduleRegistry;
+
     public function setUp()
     {
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
@@ -56,6 +59,10 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
+        
+        $this->moduleRegistry =  $this->getMock('Magento\Framework\Module\Registrar', [], [], '', false);
+        $this->moduleRegistry->method('getModulePaths')
+            ->willReturn([]);
 
         $directoryList->expects($this->exactly(3))->method('getPath');
         $this->command = new DiCompileCommand(
@@ -63,6 +70,7 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             $directoryList,
             $this->manager,
             $objectManagerProvider,
+            $this->moduleRegistry,
             $this->filesystem
         );
     }
