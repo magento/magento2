@@ -61,18 +61,6 @@
                 </item>
             </argument>
         </container>
-        <filterSearch name="fulltext">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid_data_source</item>
-                    <item name="chipsProvider" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.listing_filters_chips</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.search</item>
-                    </item>
-                </item>
-            </argument>
-        </filterSearch>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -143,37 +131,6 @@
                     </item>
                 </argument>
             </filterInput>
-            <!--<filterRange name="first_visit_at"  class="Magento\Ui\Component\Filters\Type\DateRange">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">first_visit_at</item>
-                        <item name="label" xsi:type="string" translate="true">Session Start Time</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterDate name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-                <filterDate name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-            </filterRange>-->
             <filterRange name="last_visit_at"  class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -217,14 +174,6 @@
                     </item>
                 </argument>
             </filterSelect>
-<!--            <filterInput name="last_url">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataScope" xsi:type="string">last_url</item>
-                    <item name="label" xsi:type="string" translate="true">Last URL</item>
-                </item>
-            </argument>
-            </filterInput>-->
         </filters>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">

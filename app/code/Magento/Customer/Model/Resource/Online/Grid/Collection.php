@@ -54,6 +54,7 @@ class Collection extends SearchResult
         $this->visitorModel = $visitorModel;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }
+
     /**
      * Init collection select
      *
@@ -83,6 +84,8 @@ class Collection extends SearchResult
     }
 
     /**
+     * Add field filter to collection
+     *
      * @param string|array $field
      * @param string|int|array|null $condition
      * @return \Magento\Cms\Model\Resource\Block\Collection
