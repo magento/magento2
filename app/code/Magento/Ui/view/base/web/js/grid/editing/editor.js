@@ -203,20 +203,32 @@ define([
          * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        edit: function (id, isIndex, ignoreSelections) {
+        edit: function (id, isIndex) {
             var recordId = this.getId(id, isIndex),
                 record   = this.getRecord(recordId);
-
-            if (!this.hasActive() && !ignoreSelections) {
-                this.selections('deselectAll');
-                this.selections('select', recordId);
-            }
 
             record ?
                 record.active(true) :
                 this.initRecord(recordId);
 
             return this;
+        },
+
+        /**
+         * Drops list of selections while activating only the specified record.
+         *
+         * @param {(Number|String)} id - See 'getId' method.
+         * @param {Boolean} [isIndex=false] - See 'getId' method.
+         * @returns {Editor} Chainable.
+         */
+        startEdit: function (id, isIndex) {
+            var recordId = this.getId(id, isIndex);
+
+            this.selections()
+                .deselectAll()
+                .select(recordId);
+
+            return this.edit(recordId);
         },
 
         /**
@@ -487,15 +499,19 @@ define([
         },
 
         /**
-         * Handles changes of the records 'active' property changes.
+         * Handles changes of the records 'active' property.
          *
          * @returns {Editor} Chainable.
          */
         updateState: function () {
-            var active = this.elems.filter('active');
+            var active      = this.elems.filter('active'),
+                activeCount = active.length,
+                columns     = this.columns().elems;
 
-            this.isMultiEditing(active.length > 1);
-            this.isSingleEditing(active.length === 1);
+            columns.each('disableAction', activeCount > 0);
+            
+            this.isMultiEditing(activeCount > 1);
+            this.isSingleEditing(activeCount === 1);
 
             this.active(active);
 
@@ -527,7 +543,7 @@ define([
             });
 
             selections.forEach(function (id) {
-                this.edit(id, false, true);
+                this.edit(id);
             }, this);
 
             return this;
