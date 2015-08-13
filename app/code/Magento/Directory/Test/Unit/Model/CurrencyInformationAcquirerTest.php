@@ -75,7 +75,13 @@ class CurrencyInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $this->exchangeRateFactory->expects($this->any())->method('create')->willReturn($exchangeRate);
 
         /** @var \Magento\Directory\Model\Data\CurrencyInformation $currencyInformation */
-        $currencyInformation = $this->getMock('\Magento\Directory\Model\Data\CurrencyInformation', ['load'], [], '', false);
+        $currencyInformation = $this->getMock(
+            '\Magento\Directory\Model\Data\CurrencyInformation'
+            ['load'],
+            [],
+            '',
+            false
+        );
 
         $currencyInformation->expects($this->any())->method('load')->willReturnSelf();
         $this->currencyInformationFactory->expects($this->any())->method('create')->willReturn($currencyInformation);
@@ -84,7 +90,13 @@ class CurrencyInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
 
         /** @var \Magento\Directory\Model\Currency $baseCurrency */
-        $baseCurrency = $this->getMock('\Magento\Directory\Model\Currency', ['getCode', 'getCurrencySymbol', 'getRate'], [], '', false);
+        $baseCurrency = $this->getMock(
+            '\Magento\Directory\Model\Currency',
+            ['getCode','getCurrencySymbol', 'getRate'],
+            [],
+            '',
+            false
+        );
         $baseCurrency->expects($this->atLeastOnce())->method('getCode')->willReturn('USD');
         $baseCurrency->expects($this->atLeastOnce())->method('getCurrencySymbol')->willReturn('$');
         $baseCurrency->expects($this->once())->method('getRate')->with('AUD')->willReturn('0.80');
