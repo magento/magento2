@@ -35,20 +35,20 @@ class Collection extends SearchResult
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param Visitor $visitorModel
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param string $mainTable
      * @param string $resourceModel
+     * @param Visitor $visitorModel
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
     public function __construct(
         EntityFactory $entityFactory,
         Logger $logger,
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
-        Visitor $visitorModel,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         $mainTable,
-        $resourceModel
+        $resourceModel,
+        Visitor $visitorModel,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->date = $date;
         $this->visitorModel = $visitorModel;
