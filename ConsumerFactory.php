@@ -75,7 +75,7 @@ class ConsumerFactory
     /**
      * Return the actual Consumer implementation for the given consumer name.
      *
-     * @param $consumerName
+     * @param string $consumerName
      * @return ConsumerInterface
      * @throws LocalizedException
      */
