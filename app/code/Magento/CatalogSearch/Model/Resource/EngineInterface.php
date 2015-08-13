@@ -48,4 +48,12 @@ interface EngineInterface
      * @return string
      */
     public function prepareEntityIndex($index, $separator = ' ');
+
+    /**
+     * Checks if the search engine is available.
+     *
+     * @return bool
+     */
+    public function isAvailable();
+
 }
