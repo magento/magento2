@@ -46,14 +46,18 @@ class UninstallCollector
     /**
      * Collect Uninstall classes from modules
      *
+     * @param array $filterModules
      * @return UninstallInterface[]
      */
-    public function collectUninstall()
+    public function collectUninstall($filterModules = [])
     {
         $uninstallList = [];
         /** @var \Magento\Setup\Module\DataSetup $setup */
         $setup = $this->dataSetupFactory->create();
         $result = $setup->getConnection()->select()->from($setup->getTable('setup_module'), ['module']);
+        if (isset($filterModules) && sizeof($filterModules) > 0) {
+            $result->where('module in( ? )', implode(',', $filterModules));
+        }
         // go through modules
         foreach ($setup->getConnection()->fetchAll($result) as $row) {
             $uninstallClassName = str_replace('_', '\\', $row['module']) . '\Setup\Uninstall';

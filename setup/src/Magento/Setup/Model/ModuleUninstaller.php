@@ -61,7 +61,7 @@ class ModuleUninstaller
      */
     public function uninstallData(OutputInterface $output, array $modules)
     {
-        $uninstalls = $this->collector->collectUninstall();
+        $uninstalls = $this->collector->collectUninstall($modules);
         $setupModel = $this->setupFactory->create();
         $resource = $this->objectManager->get('Magento\Framework\Module\Resource');
         foreach ($modules as $module) {
