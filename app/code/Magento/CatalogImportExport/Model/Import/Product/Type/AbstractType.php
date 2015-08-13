@@ -11,7 +11,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 /**
  * Import entity abstract product type model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractType
 {
@@ -318,7 +318,9 @@ abstract class AbstractType
     }
 
     /**
-     * @param $attributeCode
+     * Retrieve attribute from cache
+     *
+     * @param string $attributeCode
      * @return mixed
      */
     public function retrieveAttributeFromCache($attributeCode)
