@@ -19,13 +19,13 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  * Steps:
  * 1. Navigate to backend.
  * 2. Go to grid page
- * 3. Filter grid using provided columns
+ * 3. Perfrom full text search
  * 5. Perform Asserts
  *
  * @group Ui_(CS)
- * @ZephyrId MAGETWO-41329
+ * @ZephyrId MAGETWO-41330
  */
-class GridFilteringTest extends Injectable
+class GridFullTextSearchTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
@@ -66,14 +66,12 @@ class GridFilteringTest extends Injectable
      * @param array $steps
      * @param string $pageClass
      * @param string $gridRetriever
-     * @param array $filters
      * @param string $idColumn
      * @return array
      */
     public function test(
         $pageClass,
         $gridRetriever,
-        array $filters,
         $fixtureName,
         $fixtureDataSet,
         $itemsCount,
@@ -90,30 +88,21 @@ class GridFilteringTest extends Injectable
         $gridBlock->resetFilter();
 
         $filterResults = [];
-        foreach ($filters as $index => $itemFilters) {
-            foreach ($itemFilters as $itemFiltersName => $itemFilterValue) {
-                if (substr($itemFilterValue, 0, 1) === ':') {
-                    $value = $items[$index]->getData(substr($itemFilterValue, 1));
-                } else {
-                    $value = $itemFilterValue;
+        foreach ($items as $item) {
+            $gridBlock->fullTextSearch($item->getId());
+            $idsInGrid = $gridBlock->getAllIds();
+            if ($idColumn) {
+                $filteredTargetIds = [];
+                foreach ($idsInGrid as $filteredId) {
+                    $filteredTargetIds[] = $gridBlock->getColumnValue($filteredId, $idColumn);
                 }
-                $gridBlock->search(
-                    [$itemFiltersName => $value]
-                );
-                $idsInGrid = $gridBlock->getAllIds();
-                if ($idColumn) {
-                    $filteredTargetIds = [];
-                    foreach ($idsInGrid as $filteredId) {
-                        $filteredTargetIds[] = $gridBlock->getColumnValue($filteredId, $idColumn);
-                    }
-                    $idsInGrid = $filteredTargetIds;
-                }
-                $filteredIds = $this->getActualIds($idsInGrid, $items);
-                $filterResults[$items[$index]->getId()][$itemFiltersName] = $filteredIds;
+                $idsInGrid = $filteredTargetIds;
             }
+            $filteredIds = $this->getActualIds($idsInGrid, $items);
+            $filterResults[$item->getId()] = $filteredIds;
         }
 
-        return ['filterResults' => $filterResults];
+        return ['results' => $filterResults];
     }
 
     /**

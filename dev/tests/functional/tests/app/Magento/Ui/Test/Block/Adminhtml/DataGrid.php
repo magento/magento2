@@ -89,6 +89,16 @@ class DataGrid extends Grid
     protected $cellByHeader = "//td[count(//th[span[.='%s']]/preceding-sibling::th)+1]";
 
     /**
+     * @var string
+     */
+    protected $fullTextSearchField = '.data-grid-search-control';
+
+    /**
+     * @var string
+     */
+    protected $fullTextSearchButton = '.action-submit';
+
+    /**
      * Clear all applied Filters.
      *
      * @return void
@@ -267,5 +277,16 @@ class DataGrid extends Grid
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
         $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $headerLabel);
         return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * @param string $text
+     */
+    public function fullTextSearch($text)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->_rootElement->find($this->fullTextSearchField)->setValue($text);
+        $this->_rootElement->find($this->fullTextSearchButton)->click();
     }
 }

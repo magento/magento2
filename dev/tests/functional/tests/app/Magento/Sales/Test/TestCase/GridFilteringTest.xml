@@ -53,7 +53,7 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="SalesShipmentGridFiltering">
-            <data name="description" xsi:type="string">Verify sales shipment grid Filtering</data>
+            <data name="description" xsi:type="string">Verify sales shipment grid filtering</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateShipmentStep</item>
                 <item name="1" xsi:type="string">Magento\Sales\Test\TestStep\CreateShipmentStep</item>
@@ -75,7 +75,7 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="SalesCreditMemoGridFiltering">
-            <data name="description" xsi:type="string">Verify sales credit memo grid Filtering</data>
+            <data name="description" xsi:type="string">Verify sales credit memo grid filtering</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
