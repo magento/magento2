@@ -12,6 +12,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Information as StoreInformation;
+use Magento\Store\Model\Store;
 
 /**
  * Template model class
