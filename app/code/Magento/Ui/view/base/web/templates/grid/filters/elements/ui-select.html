@@ -29,62 +29,12 @@
                     click: function(data, event) {
                         toggleListVisible(data, event)
                     }">
-        <!--<span class="admin__action-multiselect-crumb">
-            crumb uno
-            <button
-                class="action-close"
-                type="button">
-                <span
-                    class="action-close-text"
-                    data-bind="text: 'Close'"></span>
-            </button>
-        </span>
-        <span class="admin__action-multiselect-crumb">
-            crmb
-            <button
-                class="action-close"
-                type="button">
-                <span
-                    class="action-close-text"
-                    data-bind="text: 'Close'"></span>
-            </button>
-        </span>
-        <span class="admin__action-multiselect-crumb">
-            crumb crab
-            <button
-                class="action-close"
-                type="button">
-                <span
-                    class="action-close-text"
-                    data-bind="text: 'Close'"></span>
-            </button>
-        </span>
-        <span class="admin__action-multiselect-crumb">
-            crumb apricot
-            <button
-                class="action-close"
-                type="button">
-                <span
-                    class="action-close-text"
-                    data-bind="text: 'Close'"></span>
-            </button>
-        </span>-->
     </div>
     <div
         class="action-menu"
         data-bind="css: {
                 _active: listVisible
             }">
-        <!-- <div class="admin__action-multiselect-search-wrap">
-            <input
-                id="foo"
-                class="admin__control-text admin__action-multiselect-search"
-                type="text">
-            <label
-                class="admin__action-multiselect-search-label"
-                data-bind="text: 'Search'"
-                for="foo"></label>
-        </div> -->
         <ul class="admin__action-multiselect-menu-inner">
             <!-- ko foreach: { data: options, as: 'option'}  -->
             <li
@@ -111,12 +61,6 @@
             </li>
             <!-- /ko -->
         </ul>
-        <!-- <div class="admin__action-multiselect-actions-wrap">
-            <button
-                class="action-default"
-                data-bind="text: 'Done'"
-                type="button"></button>
-        </div> -->
     </div>
 </div>
 

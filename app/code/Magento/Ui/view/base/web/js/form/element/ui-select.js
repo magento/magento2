@@ -7,34 +7,22 @@ define([
     'underscore',
     'ko',
     './abstract',
-    'Magento_Ui/js/lib/keyCodes'
-], function (_, ko, Abstract, keyCodes) {
+    'Magento_Ui/js/lib/keyCodes',
+    'mage/translate'
+], function (_, ko, Abstract, keyCodes, $t) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
-            options: [
-                {
-                    label: '1 column',
-                    value: '1column'
-                }, {
-                    label: '2 column',
-                    value: '2column'
-                }, {
-                    label: '3 column',
-                    value: '3column'
-                }
-            ],
-            caption: 'Select...',
+            options: [],
             listVisible: false,
             multiselectFocus: false,
             selected: [],
             selectedPlaceholders: {
-                defaultPlaceholder: 'Select...',
-                lotPlaceholders: ' Selected'
+                defaultPlaceholder: $t('Select...'),
+                lotPlaceholders: $t(' Selected')
             },
             hoverElIndex: null,
-
             listens: {
                 selected: 'setCaption setValue',
                 listVisible: 'cleanHoveredElement'
@@ -55,7 +43,7 @@ define([
         },
 
         /**
-         * clean hoverElIndex variable
+         * Clean hoverElIndex variable
          */
         cleanHoveredElement: function () {
             if (!this.listVisible() && !_.isNull(this.hoverElIndex())) {
@@ -66,26 +54,24 @@ define([
         },
 
         /**
-         *  "IS" METHODS
-         *
-         * check selected option
+         * Check selected option
+         * @param {String} label - option label
+         * @return {Boolean}
          */
         isSelected: function (label) {
             return _.contains(this.selected(), label);
         },
 
         /**
-         *  "IS" METHODS
-         *
-         * check hovered option
+         * Check hovered option
+         * @param {String} index - element index
+         * @return {Boolean}
          */
         isHovered: function (index) {
             return this.hoverElIndex() === index;
         },
 
         /**
-         *   "TOGGLE" METHODS
-         *
          * Toggle list visibility
          * @returns {Object} this context.
          */
@@ -97,6 +83,8 @@ define([
 
         /**
          * Toggle activity list element
+         * @param {Object} data - selected option data
+         * @returns {Object} this context
          */
         toggleOptionSelected: function (data) {
             if (!_.contains(this.selected(), data.label)) {
@@ -109,9 +97,7 @@ define([
         },
 
         /**
-         *   "ON" METHODS
-         *
-         * onHoveredIn: Add hover to some list element and clears element ID to variable
+         * Add hover to some list element and clears element ID to variable
          * @param {Object} data - object with data about this element
          * @param {Number} index - element index
          */
@@ -120,21 +106,21 @@ define([
         },
 
         /**
-         * onHoveredOut: Remove hover to some list element and write element ID from variable
+         * Remove hover to some list element and write element ID from variable
          */
         onHoveredOut: function () {
             this.hoverElIndex(null);
         },
 
         /**
-         * onFocusIn: Set true to observable variable multiselectFocus
+         * Set true to observable variable multiselectFocus
          */
         onFocusIn: function () {
             this.multiselectFocus(true);
         },
 
         /**
-         * onFocusOut: Set false to observable variable multiselectFocus
+         * Set false to observable variable multiselectFocus
          * and close list
          */
         onFocusOut: function () {
@@ -143,9 +129,7 @@ define([
         },
 
         /**
-         *  KEYDOWN HANDLERS
-         *
-         * enterKeyHandler: handler enter key, if select list is closed - open select,
+         * Handler enter key, if select list is closed - open select,
          * if select list is open toggle selected current option
          */
         enterKeyHandler: function () {
@@ -159,14 +143,14 @@ define([
         },
 
         /**
-         * escapeKeyHandler: handler escape key, if select list is open - closes it,
+         * Handler escape key, if select list is open - closes it,
          */
         escapeKeyHandler: function () {
             this.listVisible() ? this.setListVisible(false) : false;
         },
 
         /**
-         * pageDownKeyHandler: handler pageDown key, selected next option in list, if current option is last
+         * Handler pageDown key, selected next option in list, if current option is last
          * selected first option in list
          */
         pageDownKeyHandler: function () {
@@ -182,7 +166,7 @@ define([
         },
 
         /**
-         * pageUpKeyHandler: handler pageUp key, selected previous option in list, if current option is first -
+         * Handler pageUp key, selected previous option in list, if current option is first -
          * selected last option in list
          */
         pageUpKeyHandler: function () {
@@ -198,7 +182,10 @@ define([
         },
 
         /**
-         * keydownSwitcher: switcher to parse keydown event and delegate event to needful method
+         * Switcher to parse keydown event and delegate event to needful method
+         * @param {Object} data - element data
+         * @param {Object} event - keydown event
+         * @returns {Boolean} if handler for this event doesn't found return true
          */
         keydownSwitcher: function (data, event) {
             var handlers = {
@@ -213,18 +200,17 @@ define([
             if (handlers.hasOwnProperty(keyName)) {
                 handlers[keyName].apply(this, arguments);
             } else {
-
                 return true;
             }
         },
 
         /**
-         * setCaption: set caption
+         * Set caption
          */
         setCaption: function () {
             var length = this.selected().length;
 
-            if (length && length !== 1) {
+            if (length > 1) {
                 this.placeholder(length + this.selectedPlaceholders.lotPlaceholders);
             } else if (length) {
                 this.placeholder(this.selected()[0]);
@@ -236,14 +222,14 @@ define([
         },
 
         /**
-         * preprocessing array values to string and set to value variable
+         * Preprocessing array values to string and set to value variable
          */
         setValue: function () {
             this.value(this.selected());
         },
 
         /**
-         * setListVisible: set list status, open or close
+         * Set list status, open or close
          */
         setListVisible: function (value) {
             this.listVisible(value);
