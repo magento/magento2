@@ -91,12 +91,12 @@ class DataGrid extends Grid
     /**
      * @var string
      */
-    protected $fullTextSearchField = '.data-grid-search-control';
+    protected $fullTextSearchField = '.data-grid-search-control-wrap .data-grid-search-control';
 
     /**
      * @var string
      */
-    protected $fullTextSearchButton = '.action-submit';
+    protected $fullTextSearchButton = '.data-grid-search-control-wrap .action-submit';
 
     /**
      * Clear all applied Filters.
