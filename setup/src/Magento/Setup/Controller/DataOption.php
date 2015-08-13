@@ -53,11 +53,9 @@ class DataOption extends AbstractActionController
     public function hasUninstallAction()
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
-        $uninstallClasses = $this->uninstallCollector->collectUninstall([$params['moduleName']]);
-        if (isset($uninstallClasses) && sizeof($uninstallClasses) > 0) {
-            return new JsonModel(['hasUninstall' => true]);
-        } else {
-            return new JsonModel(['hasUninstall' => false]);
+        if (isset($params['moduleName'])) {
+            $uninstallClasses = $this->uninstallCollector->collectUninstall([$params['moduleName']]);
         }
+        return new JsonModel(['hasUninstall' => isset($uninstallClasses) && sizeof($uninstallClasses) > 0]);
     }
 }
