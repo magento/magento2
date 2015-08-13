@@ -18,6 +18,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Init mocks for tests
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function setUp()
     {
