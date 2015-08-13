@@ -69,7 +69,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         );
         $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
         $this->uninstallDependencyCheck = $this->getMock(
-            'Magento\Setup\Model\UninstallDependencyCheck', [], [], '', false
+            'Magento\Setup\Model\UninstallDependencyCheck',
+            [],
+            [],
+            '',
+            false
         );
         $this->environment = new Environment(
             $this->permissions,
