@@ -120,7 +120,7 @@ define(
 
             initElement: function(element) {
                 if (element.index === 'shipping-address-fieldset') {
-                    shippingRatesValidator.bindChangeHandlers(element.elems());
+                    shippingRatesValidator.bindChangeHandlers(element.elems(), false);
                 }
             },
 
