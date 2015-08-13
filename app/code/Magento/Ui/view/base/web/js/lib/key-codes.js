@@ -3,8 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([],
-    function () {
+define([], function () {
     'use strict';
 
     return {

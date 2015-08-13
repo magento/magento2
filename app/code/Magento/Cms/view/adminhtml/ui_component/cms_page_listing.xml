@@ -359,6 +359,20 @@
                         <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
                         <item name="dataScope" xsi:type="string">uiSelect</item>
                         <item name="label" xsi:type="string" translate="true">uiSelect</item>
+                        <item name="options" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="value" xsi:type="string">1column</item>
+                                <item name="label" xsi:type="string" translate="true">1 column</item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="value" xsi:type="string">2column</item>
+                                <item name="label" xsi:type="string" translate="true">2 column</item>
+                            </item>
+                            <item name="2" xsi:type="array">
+                                <item name="value" xsi:type="string">3column</item>
+                                <item name="label" xsi:type="string" translate="true">3 column</item>
+                            </item>
+                        </item>
                     </item>
                 </argument>
             </filterInput>
