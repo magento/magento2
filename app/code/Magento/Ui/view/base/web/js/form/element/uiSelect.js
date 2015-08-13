@@ -121,10 +121,9 @@ define([
 
         /**
          * onHoveredOut: Remove hover to some list element and write element ID from variable
-         * @param {Object} data - object with data about this element
          */
-        onHoveredOut: function (data, index) {
-            this.hoverElIndex(index);
+        onHoveredOut: function () {
+            this.hoverElIndex(null);
         },
 
         /**
@@ -235,14 +234,7 @@ define([
 
             return this.placeholder();
         },
-        hasSelected: function () {
-            return !!this.selected().length;
-        },
-        removeSelected: function(data, event){
-            event.cancelBubble = true;
-            console.log(data);
-            return false;
-        },
+
         /**
          * preprocessing array values to string and set to value variable
          */
