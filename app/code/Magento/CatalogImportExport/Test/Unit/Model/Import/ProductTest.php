@@ -300,6 +300,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->getMock();
         $this->validator =
             $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Validator')
+                ->setMethods(['isAttributeValid', 'getMessages', 'isValid'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->objectRelationProcessor =
@@ -385,7 +386,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                         ->with(DirectoryList::ROOT)
                         ->will($this->returnValue(self::MEDIA_DIRECTORY));
 
-        $this->validator->expects($this->once())->method('init');
+        $this->validator->expects($this->any())->method('init');
         return $this;
     }
 
@@ -540,6 +541,8 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
+        $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(true);
+
         $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
         $this->assertTrue($result);
     }
@@ -554,10 +557,14 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
+        $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
+        $messages = ['validator message'];
+        $this->validator->expects($this->once())->method('getMessages')->willReturn($messages);
+
         $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
         $this->assertFalse($result);
     }
-
+/*
     public function testIsAttributeValidNotValidAddErrorCall()
     {
         $attrCode = 'code';
@@ -569,13 +576,15 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
         $rowNum = 0;
 
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError'])
-            ->getMock();
-        $importProduct->expects($this->once())->method('addRowError');
+        $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
+        $messages = ['validator message'];
+        $this->validator->expects($this->once())->method('getMessages')->willReturn($messages);
+        $this->validator->expects($this->any())->method('init');
 
-        $importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+        $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+
+        $this->assertTrue($this->importProduct->getErrorAggregator()->isRowInvalid($rowNum));
+        $this->assertFalse($result);
     }
 
     public function testIsAttributeValidOnDuplicateAddErrorCall()
@@ -594,18 +603,15 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
         $rowNum = 0;
 
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError'])
-            ->getMock();
-        $importProduct->expects($this->once())->method('addRowError');
-        $this->setPropertyValue($importProduct, '_uniqueAttributes', [
+        $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
+        $messages = ['validator message'];
+        $this->validator->expects($this->once())->method('getMessages')->willReturn($messages);
+
+        $this->setPropertyValue($this->importProduct, '_uniqueAttributes', [
             $attrCode => [$attrCodeVal => $testSkuVal]
         ]);
 
-        $importProduct->expects($this->once())->method('addRowError');
-
-        $return = $importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+        $return = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
 
         $this->assertFalse($return);
     }
@@ -635,7 +641,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $_uniqueAttributes = $this->getPropertyValue($importProduct, '_uniqueAttributes');
         $this->assertEquals($expectedSkuVal, $_uniqueAttributes[$attrCode][$rowData[$attrCode]]);
     }
-
+*/
     public function testGetMultipleValueSeparatorDefault()
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
@@ -712,15 +718,14 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     }
 
     /**
-     * @dataProvider validateRowIsAlreadyValidatedDataProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testValidateRowIsAlreadyValidated($isInvalidRow, $expectedResult)
+    public function testValidateRowIsAlreadyValidated()
     {
         $rowNum = 0;
         $this->setPropertyValue($this->importProduct, '_validatedRows', [$rowNum => true]);
         $result = $this->importProduct->validateRow([], $rowNum);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -771,24 +776,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     public function testValidateRowValidatorCheck()
     {
-        $importProduct = $this->createModelMockWithErrorAggregator(
-            ['addRowError', 'getOptionEntity'],
-            ['isRowInvalid' => true]
-        );
-
-        $this->validator->expects($this->once())->method('isValid')->willReturn(false);
         $messages = ['validator message'];
         $this->validator->expects($this->once())->method('getMessages')->willReturn($messages);
-        $importProduct->expects($this->at(0))->method('addRowError')->with($messages[0]);
-        $this->setPropertyValue($importProduct, 'validator', $this->validator);
-        //suppress option validation
-        $this->_rewriteGetOptionEntityInImportProduct($importProduct);
         $rowData = [
             \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => 'sku',
         ];
         $rowNum = 0;
-
-        $importProduct->validateRow($rowData, $rowNum);
+        $this->importProduct->validateRow($rowData, $rowNum);
     }
 
     /**
@@ -1466,7 +1460,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                     $colSku => null,
                     $colStore => 'store',
                 ],
-                '$expectedResult' => \Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL
+                '$expectedResult' => \Magento\CatalogImportExport\Model\Import\Product::SCOPE_STORE
             ],
             [
                 '$rowData' => [
