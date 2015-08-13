@@ -13,19 +13,19 @@
         -ms-user-select: none;
             user-select: none;
     &.action-select-wrap {
+        &:focus {
+            box-shadow: none;
+        }
         .action-menu {
             max-height: none;
             overflow-y: inherit;
         }
     }
-    .action-menu {
-        padding: 1rem;
-    }
     .action-menu-item {
-        &:hover {
-            background-color: @page-wrapper__background-color;
+        transition: background-color .1s linear;
+        &._selected {
+            background-color: #f8f8f8;
         }
-        &._selected,
         &._hover {
             background-color: @action__hover__background-color;
         }

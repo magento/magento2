@@ -10,134 +10,113 @@
     data-bind="attr: {for: uid}">
     <span data-bind="text: label"></span>
 </label>
+
 <div
+    class="admin__action-multiselect-wrap action-select-wrap"
     tabindex="0"
-    data-bind="event: {
-                        focusin: onFocusIn,
-                        focusout: onFocusOut,
-                        keydown: keydownSwitcher
-                    },
-                    hasFocus: false">
+    data-bind="css: {_active: listVisible},
+                event: {
+                    focusin: onFocusIn,
+                    focusout: onFocusOut,
+                    keydown: keydownSwitcher
+                },
+                hasFocus: false">
     <div
-        class="admin__action-multiselect-wrap action-select-wrap"
-        data-bind="css: {_active: listVisible}">
-        <div
-            class="action-select admin__action-multiselect"
-            data-bind="
-                        css: {_focus: multiselectFocus},
-                        click: function(data, event) {
-                            toggleListVisible(data, event)
-                        }">
-            <span data-bind="
-                visible: !hasSelected(),
-                text: caption
-                ">
-            </span>
-            <!-- ko foreach: { data: selected, as: 'label'}  -->
-                <span class="admin__action-multiselect-crumb">
-                    <span data-bind="text:label">
-                    </span>
-                    <button
-                        class="action-close"
-                        type="button"
-                        tabindex="-1"
-                        data-bind="click: function(){ $parent.removeSelected($data, $event)}">
-                    <span
-                            class="action-close-text"
-                            data-bind="text: 'Close'">
-                    </span>
-                    </button>
-                </span>
-            <!-- /ko -->
-            <!--<span class="admin__action-multiselect-crumb">
-                crumb uno
-                <button
-                    class="action-close"
-                    type="button">
-                    <span
-                        class="action-close-text"
-                        data-bind="text: 'Close'"></span>
-                </button>
-            </span>
-            <span class="admin__action-multiselect-crumb">
-                crmb
-                text: setCaption(),
-                <button
-                    class="action-close"
-                    type="button">
-                    <span
-                        class="action-close-text"
-                        data-bind="text: 'Close'"></span>
-                </button>
-            </span>
-            <span class="admin__action-multiselect-crumb">
-                crumb crab
-                <button
-                    class="action-close"
-                    type="button">
-                    <span
-                        class="action-close-text"
-                        data-bind="text: 'Close'"></span>
-                </button>
-            </span>
-            <span class="admin__action-multiselect-crumb">
-                crumb apricot
-                <button
-                    class="action-close"
-                    type="button">
-                    <span
-                        class="action-close-text"
-                        data-bind="text: 'Close'"></span>
-                </button>
-            </span>-->
-        </div>
-        <div
-            class="action-menu"
-            data-bind="css: {
-                    _active: listVisible
-                }">
-            <!-- <div class="admin__action-multiselect-search-wrap">
+        class="action-select admin__action-multiselect"
+        data-bind="
+                    css: {_active: multiselectFocus},
+                    text: setCaption(),
+                    click: function(data, event) {
+                        toggleListVisible(data, event)
+                    }">
+        <!--<span class="admin__action-multiselect-crumb">
+            crumb uno
+            <button
+                class="action-close"
+                type="button">
+                <span
+                    class="action-close-text"
+                    data-bind="text: 'Close'"></span>
+            </button>
+        </span>
+        <span class="admin__action-multiselect-crumb">
+            crmb
+            <button
+                class="action-close"
+                type="button">
+                <span
+                    class="action-close-text"
+                    data-bind="text: 'Close'"></span>
+            </button>
+        </span>
+        <span class="admin__action-multiselect-crumb">
+            crumb crab
+            <button
+                class="action-close"
+                type="button">
+                <span
+                    class="action-close-text"
+                    data-bind="text: 'Close'"></span>
+            </button>
+        </span>
+        <span class="admin__action-multiselect-crumb">
+            crumb apricot
+            <button
+                class="action-close"
+                type="button">
+                <span
+                    class="action-close-text"
+                    data-bind="text: 'Close'"></span>
+            </button>
+        </span>-->
+    </div>
+    <div
+        class="action-menu"
+        data-bind="css: {
+                _active: listVisible
+            }">
+        <!-- <div class="admin__action-multiselect-search-wrap">
+            <input
+                id="foo"
+                class="admin__control-text admin__action-multiselect-search"
+                type="text">
+            <label
+                class="admin__action-multiselect-search-label"
+                data-bind="text: 'Search'"
+                for="foo"></label>
+        </div> -->
+        <ul class="admin__action-multiselect-menu-inner">
+            <!-- ko foreach: { data: options, as: 'option'}  -->
+            <li
+                class="action-menu-item"
+                data-bind="
+                            css: {
+                                _selected: $parent.isSelected(option.label),
+                                _hover: $parent.isHovered($index())
+                            },
+                            event: {
+                                mouseenter: function(){$parent.onHoveredIn($data, $index())},
+                                mouseleave: function(){$parent.onHoveredOut($data, $index())},
+                            },
+                            click: $parent.toggleOptionSelected.bind($parent, $data, $index())">
                 <input
-                    id="foo"
-                    class="admin__control-text admin__action-multiselect-search"
-                    type="text">
+                    class="admin__control-checkbox"
+                    type="checkbox"
+                    tabindex="-1"
+                    data-bind="attr: { 'checked': $parent.isSelected(option.label) }">
                 <label
-                    class="admin__action-multiselect-search-label"
-                    data-bind="text: 'Search'"
-                    for="foo"></label>
-            </div> -->
-            <ul class="admin__action-multiselect-menu-inner">
-                <!-- ko foreach: { data: options, as: 'option'}  -->
-                <li
-                    class="action-menu-item"
-                    data-bind="
-                                css: {
-                                    _selected: $parent.isSelected(option.label),
-                                    _hover: $parent.isHovered($index())
-                                },
-                                click: $parent.toggleOptionSelected.bind($parent, $data, $index()),
-                                event: {
-                                    mouseenter: function(){$parent.onHoveredIn($data, $index())},
-                                    mouseleave: function(){$parent.onHoveredIn($data, $index())},
-">
-                    <input
-                        class="admin__control-checkbox"
-                        type="checkbox"
-                        tabindex="-1"
-                        data-bind="attr: { 'checked': $parent.isSelected(option.label) }">
-                    <label
-                        class="admin__action-multiselect-label"
-                        data-bind="text: option.label">
-                    </label>
-                </li>
-                <!-- /ko -->
-            </ul>
-            <!-- <div class="admin__action-multiselect-actions-wrap">
-                <button
-                    class="action-default"
-                    data-bind="text: 'Done'"
-                    type="button"></button>
-            </div> -->
-        </div>
+                    class="admin__action-multiselect-label"
+                    data-bind="text: option.label">
+                </label>
+            </li>
+            <!-- /ko -->
+        </ul>
+        <!-- <div class="admin__action-multiselect-actions-wrap">
+            <button
+                class="action-default"
+                data-bind="text: 'Done'"
+                type="button"></button>
+        </div> -->
     </div>
 </div>
+
