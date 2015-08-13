@@ -81,19 +81,19 @@ class Http extends Request implements RequestInterface
 
     /**
      * @param CookieReaderInterface $cookieReader
+     * @param StringUtils $converter
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
      * @param ObjectManagerInterface  $objectManager
-     * @param StringUtils $converter
      * @param string|null $uri
      * @param array $directFrontNames
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
+        StringUtils $converter,
         ConfigInterface $routeConfig,
         PathInfoProcessorInterface $pathInfoProcessor,
         ObjectManagerInterface $objectManager,
-        StringUtils $converter,
         $uri = null,
         $directFrontNames = []
     ) {

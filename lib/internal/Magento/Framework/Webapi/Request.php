@@ -20,16 +20,16 @@ class Request extends HttpRequest implements RequestInterface
      * Modify pathInfo: strip down the front name and query parameters.
      *
      * @param CookieReaderInterface $cookieReader
+     * @param StringUtils $converter
      * @param AreaList $areaList
      * @param ScopeInterface $configScope
-     * @param StringUtils $converter
      * @param null|string|\Zend_Uri $uri
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
+        StringUtils $converter,
         AreaList $areaList,
         ScopeInterface $configScope,
-        StringUtils $converter,
         $uri = null
     ) {
         parent::__construct($cookieReader, $converter, $uri);
