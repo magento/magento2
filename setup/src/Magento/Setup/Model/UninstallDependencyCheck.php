@@ -71,6 +71,7 @@ class UninstallDependencyCheck
 
                 switch ($packagesAndTypes[$package]) {
                     case ComposerInformation::METAPACKAGE_PACKAGE_TYPE:
+                        unset($dependencies[$package]);
                         break;
                     case ComposerInformation::THEME_PACKAGE_TYPE:
                         $themes[] = $package;
