@@ -5,6 +5,7 @@
  */
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
@@ -240,8 +241,8 @@ class Adapter implements MethodInterface
             return false;
         }
 
-        $checkResult = new \StdClass();
-        $checkResult->isAvailable = true;
+        $checkResult = new DataObject();
+        $checkResult->setData('is_available', true);
         try {
             $validator = $this->validatorPool->get('availability');
             $result = $validator->validate(
@@ -250,7 +251,7 @@ class Adapter implements MethodInterface
                 ]
             );
 
-            $checkResult->isAvailable = $result->isValid();
+            $checkResult->setData('is_available', $result->isValid());
         } catch (NotFoundException $e) {
             // pass
         }
@@ -265,7 +266,7 @@ class Adapter implements MethodInterface
             ]
         );
 
-        return $checkResult->isAvailable;
+        return $checkResult->getData('is_available');
     }
 
     /**

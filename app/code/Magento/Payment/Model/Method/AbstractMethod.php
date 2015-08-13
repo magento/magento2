@@ -8,6 +8,7 @@
 
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Model\Order\Invoice;
@@ -784,8 +785,8 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
             return false;
         }
 
-        $checkResult = new \StdClass();
-        $checkResult->isAvailable = true;
+        $checkResult = new DataObject();
+        $checkResult->setData('is_available', true);
 
         // for future use in observers
         $this->_eventManager->dispatch(
@@ -797,7 +798,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
             ]
         );
 
-        return $checkResult->isAvailable;
+        return $checkResult->getData('is_available');
     }
 
     /**
