@@ -13,9 +13,19 @@ class CurrencyInformationAcquirerTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/directory/currency';
     const SERVICE_VERSION = 'V1';
 
+    const STORE_CODE_FROM_FIXTURE = 'fixturestore';
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
+     */
     public function testGet()
     {
-        $result = $this->getCurrencyInfo();
+        /** @var $store \Magento\Store\Model\Group   */
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+        $store->load(self::STORE_CODE_FROM_FIXTURE);
+        $this->assertNotEmpty($store->getId(), 'Precondition failed: fixture store was not created.');
+
+        $result = $this->getCurrencyInfo(self::STORE_CODE_FROM_FIXTURE);
 
         $this->assertNotEmpty($result);
         $this->assertArrayHasKey('base_currency_code', $result);
@@ -65,9 +75,10 @@ class CurrencyInformationAcquirerTest extends WebapiAbstract
     /**
      * Retrieve existing currency information for the store
      *
+     * @param string $storeCode
      * @return \Magento\Directory\Api\Data\CurrencyInformationInterface
      */
-    protected function getCurrencyInfo()
+    protected function getCurrencyInfo($storeCode = 'default')
     {
         $serviceInfo = [
             'rest' => [
@@ -80,7 +91,31 @@ class CurrencyInformationAcquirerTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetCurrencyInfo',
             ],
         ];
+        $requestData = ['storeId' => $storeCode];
 
-        return $this->_webApiCall($serviceInfo);
+        return $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * Remove test store
+     */
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        /** @var $store \Magento\Store\Model\Store */
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+        $store->load(self::STORE_CODE_FROM_FIXTURE);
+        if ($store->getId()) {
+            $store->delete();
+        }
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 }
