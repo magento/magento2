@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Model\Order\Pdf;
 
+use Magento\Sales\Model\Resource\Order\Invoice\Collection;
+
 /**
  * Sales Order Invoice PDF model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -110,7 +112,7 @@ class Invoice extends AbstractPdf
     /**
      * Return PDF document
      *
-     * @param  array $invoices
+     * @param array|Collection $invoices
      * @return \Zend_Pdf
      */
     public function getPdf($invoices = [])
