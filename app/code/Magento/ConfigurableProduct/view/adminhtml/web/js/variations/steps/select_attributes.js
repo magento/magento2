@@ -3,9 +3,10 @@
  * See COPYING.txt for license details.
  */
 define([
-    "uiComponent",
-    "jquery",
-    "underscore"
+    'uiComponent',
+    'jquery',
+    'underscore',
+    'mage/translate'
 ], function (Component, $, _) {
     "use strict";
 
@@ -14,6 +15,7 @@ define([
             provider().reload();
         });
     };
+
     return Component.extend({
         attributesLabels: {},
         stepInitialized: false,
@@ -25,6 +27,10 @@ define([
             listens: {
                 '${ $.multiselectName }:selected': 'doSelectedAttributesLabels',
                 '${ $.multiselectName }:rows': 'doSelectSavedAttributes'
+            },
+            notificationMessage: {
+                text: null,
+                error: null
             }
         },
         initialize: function () {
@@ -40,11 +46,8 @@ define([
         render: function (wizard) {
             this.wizard = wizard;
             if (this.initData) {
-                this.wizard.notifyMessage(
-                    $.mage.__('When you remove or add an attribute, we automatically ' +
-                    'update all configurations and you will need to manually recreate the current configurations.'),
-                    false
-                );
+                wizard.setNotificationMessage($.mage.__('When you remove or add an attribute, we automatically ' +
+                    'update all configurations and you will need to manually recreate the current configurations.'));
             }
         },
         doSelectSavedAttributes: function() {
@@ -58,8 +61,9 @@ define([
             }
         },
         doSelectedAttributesLabels: function(selected) {
-            this.selected = selected;
             var labels = [];
+
+            this.selected = selected;
             _.each(selected, function(attributeId) {
                 if (!this.attributesLabels[attributeId]) {
                     var attribute = _.findWhere(this.multiselect().rows(), {attribute_id: attributeId});
@@ -78,7 +82,7 @@ define([
                 throw new Error($.mage.__('Please, select attribute(s)'));
             }
         },
-        back: function (wizard) {
+        back: function () {
         }
     });
 });

@@ -6,15 +6,19 @@ define([
     'uiComponent',
     'jquery',
     'ko',
-    'underscore'
+    'underscore',
+    'mage/translate'
 ], function (Component, $, ko, _) {
     'use strict';
 
-    var viewModel;
-    viewModel = Component.extend({
+    return Component.extend({
         defaults: {
             modules: {
                 variationsComponent: '${ $.variationsComponent }'
+            },
+            notificationMessage: {
+                text: null,
+                error: null
             },
             gridExisting: [],
             gridNew: [],
@@ -26,6 +30,7 @@ define([
         },
         initObservable: function () {
             this._super().observe('gridExisting gridNew gridDeleted attributes attributesName sections');
+
             return this;
         },
         nextLabelText: $.mage.__('Generate Products'),
@@ -83,6 +88,7 @@ define([
                 row.push(option.label);
             });
             row.push('$ ' + variation.price);
+
             return row;
         },
         getGridTemplate: function() {
@@ -113,5 +119,4 @@ define([
         back: function (wizard) {
         }
     });
-    return viewModel;
 });
