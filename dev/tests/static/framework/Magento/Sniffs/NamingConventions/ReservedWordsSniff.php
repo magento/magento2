@@ -24,10 +24,10 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
         'true',
         'false',
         'null',
-//        'resource',
-//        'object',
-//        'mixed',
-//        'numeric',
+        //'resource',
+        //'object',
+        //'mixed',
+        //'numeric',
     ];
 
     /**
