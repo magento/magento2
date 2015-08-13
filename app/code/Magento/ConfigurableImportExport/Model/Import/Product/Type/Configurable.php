@@ -5,6 +5,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -616,7 +619,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             if ($this->_getSuperAttributeId($productId, $attrParams['id'])) {
                 $productSuperAttrId = $this->_getSuperAttributeId($productId, $attrParams['id']);
             } elseif (isset($this->_superAttributesData['attributes'][$productId][$attrParams['id']])) {
-                $productSuperAttrId = $this->_superAttributesData['attributes'][$productId][$attrParams['id']]['product_super_attribute_id'];
+                $attributes = $this->_superAttributesData['attributes'];
+                $productSuperAttrId = $attributes[$productId][$attrParams['id']]['product_super_attribute_id'];
                 $this->_collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels);
             } else {
                 $productSuperAttrId = $this->_getNextAttrId();
