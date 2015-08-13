@@ -36,9 +36,9 @@ class Collection extends SearchResult
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
      * @param Visitor $visitorModel
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param string $mainTable
      * @param string $resourceModel
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
     public function __construct(
         EntityFactory $entityFactory,
