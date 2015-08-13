@@ -5,12 +5,12 @@
  */
 namespace Magento\Cms\Test\Unit\Model\Resource\Block;
 
-use \Magento\Cms\Test\Unit\Model\Resource\AbstractCollectionTest;
+use Magento\Cms\Test\Unit\Model\Resource\AbstractCollectionTest;
 
 class CollectionTest extends AbstractCollectionTest
 {
     /**
-     * @var \Magento\Cms\Model\Resource\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\Resource\Block\Collection
      */
     protected $collection;
 
@@ -27,11 +27,27 @@ class CollectionTest extends AbstractCollectionTest
         );
     }
 
-    public function testAddFieldToFilterSore()
+    public function testAddFieldToFilterStore()
     {
         $storeId = 1;
 
-        $this->assertEquals($this->collection, $this->collection->addFieldToFilter('store_id', $storeId));
+        $this->assertSame($this->collection, $this->collection->addFieldToFilter('store_id', $storeId));
+    }
+
+    public function testFieldToFilterStoreAdded()
+    {
+        $field = 'store';
+        $value = ['in' => ['1']];
+        $type = 'public';
+
+        $dataObject = new \Magento\Framework\DataObject();
+        $dataObject->setData('field', $field);
+        $dataObject->setData('value', $value);
+        $dataObject->setData('type', $type);
+
+        $this->collection->addFilter($field, $value, $type);
+
+        $this->assertEquals($dataObject, $this->collection->getFilter($field));
     }
 
     public function testAddFieldToFilter()
@@ -45,12 +61,24 @@ class CollectionTest extends AbstractCollectionTest
 
         $this->select->expects($this->once())
             ->method('where')
-            ->with(
-                $this->equalTo($searchSql),
-                $this->equalTo(null),
-                $this->equalTo(\Magento\Framework\DB\Select::TYPE_CONDITION)
-            );
+            ->with($searchSql, null, \Magento\Framework\DB\Select::TYPE_CONDITION);
 
-        $this->assertEquals($this->collection, $this->collection->addFieldToFilter($field, $value));
+        $this->assertSame($this->collection, $this->collection->addFieldToFilter($field, $value));
+    }
+
+    public function testFieldToFilterAdded()
+    {
+        $field = 'is_active';
+        $value = ['eq' => ['1']];
+        $type = 'public';
+
+        $dataObject = new \Magento\Framework\DataObject();
+        $dataObject->setData('field', $field);
+        $dataObject->setData('value', $value);
+        $dataObject->setData('type', $type);
+
+        $this->collection->addFilter($field, $value, $type);
+
+        $this->assertEquals($dataObject, $this->collection->getFilter($field));
     }
 }

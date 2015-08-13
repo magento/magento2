@@ -15,7 +15,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
@@ -36,7 +36,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-        $this->_storeManager = $storeManager;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -61,12 +61,12 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
                         continue;
                     }
                     if ($result[$entityId] == 0) {
-                        $stores = $this->_storeManager->getStores(false, true);
+                        $stores = $this->storeManager->getStores(false, true);
                         $storeId = current($stores)->getId();
                         $storeCode = key($stores);
                     } else {
                         $storeId = $result[$item->getData($columnName)];
-                        $storeCode = $this->_storeManager->getStore($storeId)->getCode();
+                        $storeCode = $this->storeManager->getStore($storeId)->getCode();
                     }
                     $item->setData('_first_store_id', $storeId);
                     $item->setData('store_code', $storeCode);
@@ -81,7 +81,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
      *
      * @param array|string $field
      * @param string|int|array|null $condition
-     * @return \Magento\Cms\Model\Resource\AbstractCollection
+     * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -95,8 +95,8 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     /**
      * Add filter by store
      *
-     * @param int|\Magento\Store\Model\Store $store
-     * @param bool|true $withAdmin
+     * @param int|array|\Magento\Store\Model\Store $store
+     * @param bool $withAdmin
      * @return $this
      */
     abstract public function addStoreFilter($store, $withAdmin = true);
@@ -104,8 +104,8 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     /**
      * Perform adding filter by store
      *
-     * @param int|\Magento\Store\Model\Store $store
-     * @param bool|true $withAdmin
+     * @param int|array|\Magento\Store\Model\Store $store
+     * @param bool $withAdmin
      * @return void
      */
     protected function performAddStoreFilter($store, $withAdmin = true)
@@ -147,7 +147,8 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     }
 
     /**
-     * Get SQL for get record count.
+     * Get SQL for get record count
+     *
      * Extra GROUP BY strip added.
      *
      * @return \Magento\Framework\DB\Select
