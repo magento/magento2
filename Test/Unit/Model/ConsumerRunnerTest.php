@@ -73,8 +73,6 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testMagicMethodNoRelatedConsumer()
     {
-        /** @var \Magento\Framework\Amqp\ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
-        $consumerMock = $this->getMockBuilder('Magento\Framework\Amqp\ConsumerInterface')->getMock();
         $consumerName = 'nonDeclaredConsumer';
         $this->consumerFactoryMock
             ->expects($this->once())
