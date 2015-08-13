@@ -188,11 +188,9 @@
         padding-right: @data-grid-filters-fieldset__inner-side / 2;
         vertical-align: top;
         width: ~'calc(100% / @{data-grid-filters-fieldset__columns} - 4px)';
-        &:nth-child(5n + 1) {
-            clear: both;
-        }
         //  Inner fields
         .admin__form-field {
+            display: block;
             float: none;
             margin-bottom: 1.5rem;
             padding-left: 0;
