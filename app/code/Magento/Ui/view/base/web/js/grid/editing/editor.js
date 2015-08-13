@@ -508,8 +508,8 @@ define([
                 activeCount = active.length,
                 columns     = this.columns().elems;
 
-            columns.each('disableAction', activeCount > 0);
-            
+            columns.each('disableAction', !!activeCount);
+
             this.isMultiEditing(activeCount > 1);
             this.isSingleEditing(activeCount === 1);
 
