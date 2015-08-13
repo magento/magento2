@@ -63,20 +63,22 @@ class GridFilteringTest extends Injectable
      * @param string $fixtureName
      * @param string $fixtureDataSet
      * @param int $itemsCount
-     * @param string $steps
+     * @param array $steps
      * @param string $pageClass
      * @param string $gridRetriever
      * @param array $filters
+     * @param string $idColumn
      * @return array
      */
     public function test(
         $pageClass,
         $gridRetriever,
-        $filters,
+        array $filters,
         $fixtureName,
         $fixtureDataSet,
         $itemsCount,
-        $steps
+        array $steps,
+        $idColumn = null
     ) {
         $items = $this->createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps);
         $page = $this->pageFactory->create($pageClass);
@@ -91,37 +93,28 @@ class GridFilteringTest extends Injectable
         $filterResults = [];
         foreach ($filters as $index => $itemFilters) {
             foreach ($itemFilters as $itemFiltersName => $itemFilterValue) {
+                if (substr($itemFilterValue, 0, 1) === ':') {
+                    $value = $items[$index]->getData(substr($itemFilterValue, 1));
+                } else {
+                    $value = $itemFilterValue;
+                }
                 $gridBlock->search(
-                    [$itemFiltersName => $itemFilterValue ?: $items[$index]->getData($itemFiltersName)]
+                    [$itemFiltersName => $value]
                 );
-                $filteredIds = $this->getActualIds($gridBlock->getAllIds(), $items);
+                $idsInGrid = $gridBlock->getAllIds();
+                if ($idColumn) {
+                    $filteredTargetIds = [];
+                    foreach ($idsInGrid as $filteredId) {
+                        $filteredTargetIds[] = $gridBlock->getColumnValue($filteredId, $idColumn);
+                    }
+                    $idsInGrid = $filteredTargetIds;
+                }
+                $filteredIds = $this->getActualIds($idsInGrid, $items);
                 $filterResults[$items[$index]->getId()][$itemFiltersName] = $filteredIds;
             }
         }
 
         return ['filterResults' => $filterResults];
-    }
-
-    /**
-     * @param string $filtersString
-     * @return array
-     */
-    protected function getFiltersArray($filtersString)
-    {
-        $itemsFilters = explode('|', $filtersString);
-
-        $filters = [];
-        foreach ($itemsFilters as $itemFiltersString) {
-            $itemFilters = explode(',', $itemFiltersString);
-            $resultItemFilters = [];
-            foreach ($itemFilters as $itemFilterString) {
-                $itemFilter = explode('=', $itemFilterString);
-                $resultItemFilters[$itemFilter[0]] = isset($itemFilter[1]) ? $itemFilter[1] : null;
-            }
-            $filters[] = $resultItemFilters;
-        }
-
-        return $filters;
     }
 
     /**
@@ -150,7 +143,6 @@ class GridFilteringTest extends Injectable
     protected function createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps)
     {
         $items = [];
-        $steps = explode('|', $steps);
         for ($i = 0; $i < $itemsCount; $i++) {
             $item = $this->fixtureFactory->createByCode($fixtureName, ['dataset' => $fixtureDataSet]);
             $item->persist();
@@ -167,7 +159,11 @@ class GridFilteringTest extends Injectable
      */
     protected function processSteps(FixtureInterface $item, $steps)
     {
-        $steps = array_diff(explode(',', $steps), ['-']);
+        if (!is_array($steps) && $steps != '-') {
+            $steps = [$steps];
+        } elseif ($steps == '-') {
+            $steps = [];
+        }
         foreach ($steps as $step) {
             $processStep = $this->objectManager->create($step, ['order' => $item]);
             $processStep->run();

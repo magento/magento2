@@ -63,20 +63,20 @@ class GridSortingTest extends Injectable
      * @param string $fixtureName
      * @param string $fixtureDataSet
      * @param int $itemsCount
-     * @param string $steps
+     * @param array $steps
      * @param string $pageClass
      * @param string $gridRetriever
-     * @param string $columnsForSorting
+     * @param array $columnsForSorting
      * @return array
      */
     public function test(
         $pageClass,
         $gridRetriever,
-        $columnsForSorting,
+        array $columnsForSorting,
         $fixtureName = null,
         $fixtureDataSet = null,
         $itemsCount = null,
-        $steps = null
+        array $steps = []
     ) {
         // Fill grid before sorting if needed
         if  ($fixtureName && $fixtureDataSet && $itemsCount && $steps) {
@@ -91,9 +91,8 @@ class GridSortingTest extends Injectable
         $gridBlock = $page->$gridRetriever();
         $gridBlock->resetFilter();
 
-        $columnNames = explode('|', $columnsForSorting);
         $sortingResults = [];
-        foreach ($columnNames as $columnName) {
+        foreach ($columnsForSorting as $columnName) {
             $gridBlock->sortByColumn($columnName);
             $sortingResults[$columnName]['firstIdAfterFirstSoring'] = $gridBlock->getFirstItemId();
             $gridBlock->sortByColumn($columnName);
@@ -113,7 +112,6 @@ class GridSortingTest extends Injectable
     protected function createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps)
     {
         $items = [];
-        $steps = explode('|', $steps);
         for ($i = 0; $i < $itemsCount; $i++) {
             $item = $this->fixtureFactory->createByCode($fixtureName, ['dataset' => $fixtureDataSet]);
             $item->persist();
@@ -130,7 +128,9 @@ class GridSortingTest extends Injectable
      */
     protected function processSteps(FixtureInterface $item, $steps)
     {
-        $steps = array_diff(explode(',', $steps), ['-']);
+        if (!is_array($steps) && $steps != '-') {
+            $steps = [$steps];
+        }
         foreach ($steps as $step) {
             $processStep = $this->objectManager->create($step, ['order' => $item]);
             $processStep->run();
