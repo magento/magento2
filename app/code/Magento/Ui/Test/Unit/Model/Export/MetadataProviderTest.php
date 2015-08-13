@@ -214,12 +214,9 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->any())
             ->method('getName')
             ->willReturn($filter);
-        $select->expects($this->once())
-            ->method('getOptionProvider')
-            ->willReturn($optionProvider);
-
-        $optionProvider->expects($this->once())
-            ->method('toOptionArray')
+        $select->expects($this->any())
+            ->method('getData')
+            ->with('config/options')
             ->willReturn($options);
 
         $result = $this->model->getOptions();

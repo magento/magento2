@@ -155,7 +155,7 @@ class MetadataProvider
     protected function getFilterOptions(Select $filter)
     {
         $options = [];
-        foreach ($filter->getOptionProvider()->toOptionArray() as $option) {
+        foreach ($filter->getData('config/options') as $option) {
             if (!is_array($option['value'])) {
                 $options[$option['value']] = $option['label'];
             } else {
