@@ -44,6 +44,8 @@ define([
 
         /**
          * Clean hoverElIndex variable
+         *
+         * @returns {Object} Chainable
          */
         cleanHoveredElement: function () {
             if (!this.listVisible() && !_.isNull(this.hoverElIndex())) {
@@ -55,6 +57,7 @@ define([
 
         /**
          * Check selected option
+         *
          * @param {String} label - option label
          * @return {Boolean}
          */
@@ -64,6 +67,7 @@ define([
 
         /**
          * Check hovered option
+         *
          * @param {String} index - element index
          * @return {Boolean}
          */
@@ -73,7 +77,8 @@ define([
 
         /**
          * Toggle list visibility
-         * @returns {Object} this context.
+         *
+         * @returns {Object} Chainable
          */
         toggleListVisible: function () {
             this.listVisible(!this.listVisible());
@@ -83,8 +88,9 @@ define([
 
         /**
          * Toggle activity list element
+         *
          * @param {Object} data - selected option data
-         * @returns {Object} this context
+         * @returns {Object} Chainable
          */
         toggleOptionSelected: function (data) {
             if (!_.contains(this.selected(), data.label)) {
@@ -98,6 +104,7 @@ define([
 
         /**
          * Add hover to some list element and clears element ID to variable
+         *
          * @param {Object} data - object with data about this element
          * @param {Number} index - element index
          */
@@ -183,17 +190,18 @@ define([
 
         /**
          * Switcher to parse keydown event and delegate event to needful method
+         *
          * @param {Object} data - element data
          * @param {Object} event - keydown event
          * @returns {Boolean} if handler for this event doesn't found return true
          */
         keydownSwitcher: function (data, event) {
             var handlers = {
-                    'enterKey': this.enterKeyHandler,
-                    'escapeKey': this.escapeKeyHandler,
-                    'spaceKey': this.enterKeyHandler,
-                    'pageUpKey': this.pageUpKeyHandler,
-                    'pageDownKey': this.pageDownKeyHandler
+                    enterKey: this.enterKeyHandler,
+                    escapeKey: this.escapeKeyHandler,
+                    spaceKey: this.enterKeyHandler,
+                    pageUpKey: this.pageUpKeyHandler,
+                    pageDownKey: this.pageDownKeyHandler
                 },
                 keyName = keyCodes[event.keyCode];
 
