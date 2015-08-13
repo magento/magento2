@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class MassSubscribeTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassSubscribeTest extends \PHPUnit_Framework_TestCase
 {
