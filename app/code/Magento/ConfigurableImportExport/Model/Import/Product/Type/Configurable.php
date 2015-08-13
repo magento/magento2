@@ -5,6 +5,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
