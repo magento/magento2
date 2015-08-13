@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Store\Test\Unit\Model;
+namespace Magento\Store\Test\Unit\Model\Address;
 
 use Magento\Framework\DataObject;
 use Magento\Store\Model\Address\Renderer;
