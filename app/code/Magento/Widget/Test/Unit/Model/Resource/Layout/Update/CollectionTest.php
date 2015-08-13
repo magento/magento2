@@ -10,10 +10,10 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
     /**
      * Retrieve layout update collection instance
      *
-     * @param \Zend_Db_Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Widget\Model\Resource\Layout\Update\Collection
      */
-    protected function _getCollection(\Zend_Db_Select $select)
+    protected function _getCollection(\Magento\Framework\DB\Select $select)
     {
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
@@ -31,7 +31,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
     public function testAddThemeFilter()
     {
         $themeId = 1;
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects($this->once())->method('where')->with('link.theme_id = ?', $themeId);
 
         $collection = $this->_getCollection($select);
@@ -41,7 +41,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
     public function testAddStoreFilter()
     {
         $storeId = 1;
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects($this->once())->method('where')->with('link.store_id = ?', $storeId);
 
         $collection = $this->_getCollection($select);
@@ -53,7 +53,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
      */
     public function testJoinWithLink()
     {
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects(
             $this->once()
         )->method(
@@ -71,7 +71,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
 
     public function testAddNoLinksFilter()
     {
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects(
             $this->once()
         )->method(
@@ -86,7 +86,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
         $collection = $this->_getCollection($select);
 
         /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
-        $connection = $collection->getResource()->getReadConnection();
+        $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->once()
         )->method(

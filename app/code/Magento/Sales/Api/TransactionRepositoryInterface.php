@@ -44,4 +44,11 @@ interface TransactionRepositoryInterface
      * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
      */
     public function save(\Magento\Sales\Api\Data\TransactionInterface $entity);
+
+    /**
+     * Creates new Transaction instance.
+     *
+     * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
+     */
+    public function create();
 }

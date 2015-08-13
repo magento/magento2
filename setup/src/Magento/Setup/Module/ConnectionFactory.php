@@ -7,6 +7,8 @@
  */
 namespace Magento\Setup\Module;
 
+use Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql;
+use Magento\Framework\Stdlib;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class ConnectionFactory implements \Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface
@@ -31,16 +33,8 @@ class ConnectionFactory implements \Magento\Framework\Model\Resource\Type\Db\Con
      */
     public function create(array $connectionConfig)
     {
-        if (!$connectionConfig || !isset($connectionConfig['active']) || !$connectionConfig['active']) {
-            return null;
-        }
+        $resourceInstance = new Mysql(new Stdlib\StringUtils(), new Stdlib\DateTime(), $connectionConfig);
 
-        $adapterInstance = new \Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql(
-            new \Magento\Framework\Stdlib\String(),
-            new \Magento\Framework\Stdlib\DateTime(),
-            $connectionConfig
-        );
-
-        return $adapterInstance->getConnection($this->serviceLocator->get('Magento\Framework\DB\Logger\Null'));
+        return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));
     }
 }

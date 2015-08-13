@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\ConfigurableProduct\Test\TestCase\UpdateConfigurableProductEntityTest">
+    <testCase name="Magento\ConfigurableProduct\Test\TestCase\UpdateConfigurableProductEntityTest" summary="Update Configurable Product" ticketId="MAGETWO-29916">
         <variation name="UpdateConfigurableProductEntityTestVariation1">
             <data name="description" xsi:type="string">Add new option to existed Attribute</data>
             <data name="attributeTypeAction" xsi:type="string">addOptions</data>
@@ -80,7 +80,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesAbsentOnProductPage" />
         </variation>
         <variation name="UpdateConfigurableProductEntityTestVariation4">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-34791</data>
             <data name="description" xsi:type="string">Delete attribute and add another with products qty = 0</data>
             <data name="attributeTypeAction" xsi:type="string">deleteAll</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
@@ -100,8 +99,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
-        <variation name="UpdateConfigurableProductEntityTestVariation5">
-            <data name="description" xsi:type="string">MAGETWO-12840: Edit Configurable Product</data>
+        <variation name="UpdateConfigurableProductEntityTestVariation5" summary="Edit Configurable Product" ticketId="MAGETWO-12840">
             <data name="attributeTypeAction" xsi:type="string">addOptions</data>
             <data name="product" xsi:type="string">configurableProduct::two_options_with_fixed_price</data>
             <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
