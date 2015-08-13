@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Amqp\Test\Unit\Console;
+namespace Magento\Amqp\Test\Unit\Model;
 
 use Magento\Amqp\Model\ConsumerRunner;
 use Magento\Framework\Exception\LocalizedException;
