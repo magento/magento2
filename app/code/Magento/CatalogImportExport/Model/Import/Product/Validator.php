@@ -174,6 +174,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function isValidAttributes()
     {
