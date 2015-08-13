@@ -8,6 +8,7 @@ namespace Magento\ImportExport\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\History;
 
 /**
  * Import controller
@@ -65,8 +66,10 @@ abstract class ImportResult extends Import
             }
             if ($errorAggregator->hasFatalExceptions()) {
                 foreach ($this->getSystemExceptions($errorAggregator) as $error) {
-                    $message .= $error->getErrorMessage() . '<br>'
-                        . __('Additional data: ') . $error->getErrorDescription() . '<br>';
+                    $message .= $error->getErrorMessage()
+                        . '<a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
+                        . __('Show more') . '</a><div style="display:none;">' . __('Additional data') . ': '
+                        . $error->getErrorDescription() . '</div>';
                 }
             }
             $resultBlock->addNotice(
@@ -113,7 +116,11 @@ abstract class ImportResult extends Import
     {
         $this->historyModel->loadLastInsertItem();
         $sourceFile = $this->reportHelper->getReportAbsolutePath($this->historyModel->getData('imported_file'));
-        return $this->reportProcessor->createReport($sourceFile, $errorAggregator);
+        $writeOnlyErrorItems = true;
+        if ($this->historyModel->getData('execution_time') == History::IMPORT_VALIDATION) {
+            $writeOnlyErrorItems = false;
+        }
+        return $this->reportProcessor->createReport($sourceFile, $errorAggregator, $writeOnlyErrorItems);
     }
 
     /**
