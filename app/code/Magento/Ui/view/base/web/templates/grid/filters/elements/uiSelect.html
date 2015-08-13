@@ -25,10 +25,30 @@
             class="action-select admin__action-multiselect"
             data-bind="
                         css: {_focus: multiselectFocus},
-                        text: setCaption(),
                         click: function(data, event) {
                             toggleListVisible(data, event)
                         }">
+            <span data-bind="
+                visible: !hasSelected(),
+                text: caption
+                ">
+            </span>
+            <!-- ko foreach: { data: selected, as: 'label'}  -->
+                <span class="admin__action-multiselect-crumb">
+                    <span data-bind="text:label">
+                    </span>
+                    <button
+                        class="action-close"
+                        type="button"
+                        tabindex="-1"
+                        data-bind="click: function(){ $parent.removeSelected($data, $event)}">
+                    <span
+                            class="action-close-text"
+                            data-bind="text: 'Close'">
+                    </span>
+                    </button>
+                </span>
+            <!-- /ko -->
             <!--<span class="admin__action-multiselect-crumb">
                 crumb uno
                 <button
@@ -41,6 +61,7 @@
             </span>
             <span class="admin__action-multiselect-crumb">
                 crmb
+                text: setCaption(),
                 <button
                     class="action-close"
                     type="button">
@@ -102,6 +123,7 @@
                     <input
                         class="admin__control-checkbox"
                         type="checkbox"
+                        tabindex="-1"
                         data-bind="attr: { 'checked': $parent.isSelected(option.label) }">
                     <label
                         class="admin__action-multiselect-label"
