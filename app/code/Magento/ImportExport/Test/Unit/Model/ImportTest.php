@@ -261,7 +261,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
         }
 
-        $this->assertEquals(false, $this->import->importSource());
+        $this->assertEquals(true, $this->import->importSource());
     }
 
     /**
