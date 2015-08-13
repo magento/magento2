@@ -128,7 +128,7 @@ class Generator extends AbstractSchemaGenerator
     /**
      * {@inheritdoc}
      */
-    protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endPointUrl)
+    protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $basePath)
     {
         /** @var Swagger $swagger */
         $swagger = $this->swaggerFactory->create();
@@ -137,7 +137,7 @@ class Generator extends AbstractSchemaGenerator
 
         $this->addCustomAttributeTypes();
         $swagger->setHost($requestHost);
-        $swagger->setBasePath(strstr(str_replace($requestScheme . $requestHost, '', $endPointUrl), '?', true));
+        $swagger->setBasePath($basePath);
         $swagger->setSchemes([$requestScheme]);
 
         foreach ($requestedServiceMetadata as $serviceName => $serviceData) {

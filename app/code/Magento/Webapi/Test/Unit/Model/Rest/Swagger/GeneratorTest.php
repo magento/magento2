@@ -136,14 +136,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $basePath = '/rest/default';
         $this->assertEquals(
             $schema,
             $this->generator->generate(
                 $requestedService,
                 'http://',
                 'magento.host',
-                $basePath . '?swagger=1&services=' . $service
+                '/rest/default'
             )
         );
     }
