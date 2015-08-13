@@ -8,8 +8,9 @@ define([
     'ko',
     './abstract',
     'Magento_Ui/js/lib/key-codes',
-    'mage/translate'
-], function (_, ko, Abstract, keyCodes, $t) {
+    'mage/translate',
+    'uiLayout'
+], function (_, ko, Abstract, keyCodes, $t, layout) {
     'use strict';
 
     return Abstract.extend({
@@ -20,13 +21,36 @@ define([
             selected: [],
             selectedPlaceholders: {
                 defaultPlaceholder: $t('Select...'),
-                lotPlaceholders: $t(' Selected')
+                lotPlaceholders: $t('Selected')
+            },
+            optionsConfig: {
+                name: '${ $.name }_options',
+                component: 'Magento_Ui/js/form/element/helpers/options'
             },
             hoverElIndex: null,
             listens: {
                 selected: 'setCaption setValue',
                 listVisible: 'cleanHoveredElement'
+            },
+            imports: {
+                options: '${ $.optionsConfig.name }:options'
+            },
+            modules: {
+                optionsProvider: '${ $.optionsConfig.name }'
             }
+        },
+
+        /**
+         * Extends instance with defaults, extends config with formatted values
+         *     and options, and invokes initialize method of AbstractElement class.
+         *
+         * @returns {Object} Chainable
+         */
+        initialize: function () {
+            this._super()
+                .initOptions();
+
+            return this;
         },
 
         /**
@@ -37,7 +61,19 @@ define([
          */
         initObservable: function () {
             this._super();
-            this.observe(['listVisible', 'selected', 'hoverElIndex', 'placeholder', 'multiselectFocus']);
+            this.observe(['listVisible', 'selected', 'hoverElIndex', 'placeholder', 'multiselectFocus', 'options']);
+
+            return this;
+        },
+
+        /**
+         * Initializes optionsProvider
+         *
+         * @returns {Object} Chainable.
+         */
+        initOptions: function () {
+            this.optionsConfig.options = this.options();
+            layout([this.optionsConfig]);
 
             return this;
         },
@@ -219,7 +255,7 @@ define([
             var length = this.selected().length;
 
             if (length > 1) {
-                this.placeholder(length + this.selectedPlaceholders.lotPlaceholders);
+                this.placeholder(length + ' ' + this.selectedPlaceholders.lotPlaceholders);
             } else if (length) {
                 this.placeholder(this.selected()[0]);
             } else {
