@@ -11,9 +11,11 @@ use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\Address\Renderer;
 
+/**
+ * Store information class used to retrieve and format store information as set in store config
+ */
 class Information
 {
-
     /**#@+
      * Configuration paths
      */
@@ -41,17 +43,17 @@ class Information
     /**
      * @var Renderer
      */
-    protected $renderer = null;
+    protected $renderer;
 
     /**
      * @var CountryFactory
      */
-    protected $countryFactory = null;
+    protected $countryFactory;
 
     /**
      * @var RegionFactory
      */
-    protected $regionFactory = null;
+    protected $regionFactory;
 
     /**
      * @param Renderer $renderer
