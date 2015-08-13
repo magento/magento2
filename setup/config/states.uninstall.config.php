@@ -60,6 +60,7 @@ return [
             'url'         => 'data-option',
             'templateUrl' => "$base/data-option",
             'title'       => "Data \n Option",
+            'controller'  => 'dataOptionController',
             'header'      => 'Step 3: Data Option',
             'nav'         => true,
             'order'       => 6,

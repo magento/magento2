@@ -210,7 +210,7 @@ angular.module('readiness-check', [])
                     $scope.stopProgress();
                 },
                 fail: function() {
-                    $scope.requestFailedHandler($scope.cronScriptSetup);
+                    $scope.requestFailedHandler($scope.cronScript);
                 }
             };
             $scope.items['component-dependency'] = {

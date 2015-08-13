@@ -21,6 +21,7 @@ var app = angular.module(
         'component-grid',        
         'create-backup',
         'complete-backup',
+        'data-option',
         'start-updater',
         'select-version',
         'updater-success'

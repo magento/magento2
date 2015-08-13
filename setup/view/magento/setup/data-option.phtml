@@ -10,7 +10,7 @@
         <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next">
             <button
                 type="button"
-                class="btn"
+                class="btn btn-prime"
                 ng-click="nextState()"
                 >Next</button>
         </div>
@@ -26,4 +26,45 @@
 
 <h2 class="page-title">{{$state.current.header}}</h2>
 
-Placeholder
+<div ng-init="dataOption=true">
+    <div class="message" ng-hide="component.hasUninstall">
+        No data to remove, please proceed to the next step.
+    </div>
+    <div ng-show="component.hasUninstall">
+        <div class="form-row">
+            What do you want to do with {{moduleName}}'s data?<br/>
+            </div>
+        <div class="form-row">
+            <input
+                id="keepData"
+                class="form-el-radio"
+                type="radio"
+                ng-model="dataOption"
+                value="true"
+                ng-checked="false"
+                >
+            <label class="form-label" for="keepData">
+                Keep data
+                <br/><br/>
+                Note: You can see the associated data in your database,
+                however your customer will not see this in your online store.
+            </label>
+
+        </div>
+        <div class="form-row">
+            <input
+                id="removeData"
+                class="form-el-radio"
+                type="radio"
+                ng-model="dataOption"
+                value="true"
+                >
+            <label class="form-label" for="removeData">
+                Remove data
+                <br/><br/>
+                Note: You will not be able to recover any data,
+                unless you performed a database and media backup in the previous step
+            </label>
+        </div>
+    </div>
+</div>

@@ -91,13 +91,13 @@ angular.module('component-grid', ['ngStorage'])
             $scope.uninstall = function(component) {
                 $localStorage.packages = [
                     {
-                        name: component.name,
-                        version: component.version
+                        name: component.name
                     }
                 ];
                 if ($localStorage.titles['uninstall'].indexOf(component.moduleName) < 0 ) {
                     $localStorage.titles['uninstall'] += ' ' + component.moduleName;
                 }
+                $localStorage.componentType = component.type;
                 $localStorage.moduleName = component.moduleName;
                 $state.go('root.readiness-check-uninstall');
             };

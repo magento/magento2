@@ -24,7 +24,9 @@ main.controller('navigationController',
 }])
 .controller('headerController', ['$scope', '$localStorage', '$window',
         function ($scope, $localStorage, $window) {
-            $scope.titles = $localStorage.titles;
+            if ($localStorage.titles) {
+                $scope.titles = $localStorage.titles;
+            }
             $scope.redirectTo = function (url) {
                 if (url) {
                     $window.location.href = url;
