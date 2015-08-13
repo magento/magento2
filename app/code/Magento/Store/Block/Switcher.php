@@ -91,7 +91,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
             $stores = [];
             foreach ($websiteStores as $store) {
                 /* @var $store \Magento\Store\Model\Store */
-                if (!$store->getIsActive()) {
+                if (!$store->isActive()) {
                     continue;
                 }
                 $localeCode = $this->_scopeConfig->getValue(

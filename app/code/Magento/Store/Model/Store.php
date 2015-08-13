@@ -1077,7 +1077,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      *
      * @return boolean
      */
-    public function getIsActive()
+    public function isActive()
     {
         return (bool)$this->_getData('is_active');
     }

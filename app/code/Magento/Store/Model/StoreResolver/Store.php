@@ -27,7 +27,7 @@ class Store implements ReaderInterface
     {
         $stores = [];
         foreach ($this->storeRepository->getList() as $store) {
-            if ($store->getIsActive()) {
+            if ($store->isActive()) {
                 $stores[] = $store->getId();
             }
         }
