@@ -25,6 +25,7 @@ define([
                     value: '3column'
                 }
             ],
+            caption: 'Select...',
             listVisible: false,
             multiselectFocus: false,
             selected: [],
@@ -234,7 +235,14 @@ define([
 
             return this.placeholder();
         },
-
+        hasSelected: function () {
+            return !!this.selected().length;
+        },
+        removeSelected: function(data, event){
+            event.cancelBubble = true;
+            console.log(data);
+            return false;
+        },
         /**
          * preprocessing array values to string and set to value variable
          */
