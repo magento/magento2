@@ -5,8 +5,6 @@
  */
 namespace Magento\Dhl\Test\Unit\Model;
 
-
-use Magento\Framework\Object;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\Xml\Security;
 
