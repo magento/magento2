@@ -644,7 +644,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     /**
      * Return total list
      *
-     * @return \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
+     * @return \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal[] Array of totals
      */
     protected function _getTotalsList()
     {
