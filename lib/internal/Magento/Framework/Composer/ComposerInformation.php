@@ -20,6 +20,36 @@ use Magento\Framework\Stdlib\DateTime;
  */
 class ComposerInformation
 {
+    /**
+     * Magento2 theme type
+     */
+    const THEME_PACKAGE_TYPE = 'magento2-theme';
+
+    /**
+     * Magento2 module type
+     */
+    const MODULE_PACKAGE_TYPE = 'magento2-module';
+
+    /**
+     * Magento2 language type
+     */
+    const LANGUAGE_PACKAGE_TYPE = 'magento2-language';
+
+    /**
+     * Magento2 metapackage type
+     */
+    const METAPACKAGE_PACKAGE_TYPE = 'metapackage';
+
+    /**
+     * Magento2 library type
+     */
+    const LIBRARY_PACKAGE_TYPE = 'magento2-library';
+
+    /**
+     * Magento2 component type
+     */
+    const COMPONENT_PACKAGE_TYPE = 'magento2-component';
+
     /**#@+
      * Composer command
      */
@@ -66,12 +96,12 @@ class ComposerInformation
 
     /** @var array */
     private static $packageTypes = [
-        'magento2-theme',
-        'magento2-language',
-        'magento2-module',
-        'magento2-library',
-        'magento2-component',
-        'metapackage'
+        self::THEME_PACKAGE_TYPE,
+        self::LANGUAGE_PACKAGE_TYPE,
+        self::MODULE_PACKAGE_TYPE,
+        self::LIBRARY_PACKAGE_TYPE,
+        self::COMPONENT_PACKAGE_TYPE,
+        self::METAPACKAGE_PACKAGE_TYPE
     ];
 
     /**

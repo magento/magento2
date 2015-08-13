@@ -39,6 +39,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     private $phpReadinessCheck;
 
     /**
+     * @var \Magento\Setup\Model\UninstallDependencyCheck|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $uninstallDependencyCheck;
+
+    /**
      * @var Environment
      */
     private $environment;
@@ -63,11 +68,15 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
+        $this->uninstallDependencyCheck = $this->getMock(
+            'Magento\Setup\Model\UninstallDependencyCheck', [], [], '', false
+        );
         $this->environment = new Environment(
             $this->permissions,
             $this->filesystem,
             $this->cronScriptReadinessCheck,
             $this->dependencyReadinessCheck,
+            $this->uninstallDependencyCheck,
             $this->phpReadinessCheck
         );
     }
