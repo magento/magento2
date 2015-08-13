@@ -524,21 +524,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
      */
-    public function testGridAction()
-    {
-        $this->dispatch('backend/customer/index/grid');
-
-        $body = $this->getResponse()->getBody();
-
-        $this->assertContains('test firstname test lastname', $body);
-        $this->assertContains('customer@example.com', $body);
-        $this->assertContains('+7000000001', $body);
-        $this->assertContains('United States', $body);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
-     */
     public function testCartAction()
     {
         $this->getRequest()->setParam('id', 1)->setParam('website_id', 1)->setPostValue('delete', 1);
