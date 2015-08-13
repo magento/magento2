@@ -181,12 +181,13 @@
     }
     //  First level field
     .admin__form-field {
-        float: left;
+        display: inline-block;
         margin-bottom: 2em;
         margin-left: 0;
         padding-left: @data-grid-filters-fieldset__inner-side / 2;
         padding-right: @data-grid-filters-fieldset__inner-side / 2;
-        width: 100% / @data-grid-filters-fieldset__columns;
+        vertical-align: top;
+        width: ~'calc(100% / @{data-grid-filters-fieldset__columns} - 4px)';
         &:nth-child(5n + 1) {
             clear: both;
         }
