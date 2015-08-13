@@ -3,7 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-//
 'use strict';
 angular.module('data-option', ['ngStorage'])
     .controller('dataOptionController', ['$scope', '$localStorage', '$http', function ($scope, $localStorage, $http) {
