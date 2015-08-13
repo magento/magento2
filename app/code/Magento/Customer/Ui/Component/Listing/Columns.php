@@ -84,19 +84,16 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     public function prepare()
     {
         $indexer = $this->indexerRegistry->get(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID);
-        if ($indexer->getState()->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_INVALID) {
-            parent::prepare();
-            return false;
-        }
-
-        $this->columnSortOrder = $this->getDefaultSortOrder();
-        foreach ($this->attributeRepository->getList() as $newAttributeCode => $attributeData) {
-            if (isset($this->components[$newAttributeCode])) {
-                $this->updateColumn($attributeData, $newAttributeCode);
-            } elseif (!$attributeData[AttributeMetadata::BACKEND_TYPE] != 'static'
-                && $attributeData[AttributeMetadata::IS_USED_IN_GRID]
-            ) {
-                $this->addColumn($attributeData, $newAttributeCode);
+        if ($indexer->getState()->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_VALID) {
+            $this->columnSortOrder = $this->getDefaultSortOrder();
+            foreach ($this->attributeRepository->getList() as $newAttributeCode => $attributeData) {
+                if (isset($this->components[$newAttributeCode])) {
+                    $this->updateColumn($attributeData, $newAttributeCode);
+                } elseif (!$attributeData[AttributeMetadata::BACKEND_TYPE] != 'static'
+                    && $attributeData[AttributeMetadata::IS_USED_IN_GRID]
+                ) {
+                    $this->addColumn($attributeData, $newAttributeCode);
+                }
             }
         }
         $this->updateActionColumnSortOrder();
