@@ -16,7 +16,15 @@ use Magento\Framework\Phrase;
 
 class Request extends HttpRequest implements RequestInterface
 {
+    /**
+     * Name of query parameter to specify services for which to generate schema
+     */
     const REQUEST_PARAM_SERVICES = 'services';
+
+    /**
+     * services parameter value to indicate that a schema for all services should be generated
+     */
+    const ALL_SERVICES = 'all';
 
     /**
      * Modify pathInfo: strip down the front name and query parameters.
@@ -69,7 +77,7 @@ class Request extends HttpRequest implements RequestInterface
      */
     public function getRequestedServices()
     {
-        $param = $this->getParam(self::REQUEST_PARAM_SERVICES);
+        $param = $this->getParam(self::REQUEST_PARAM_SERVICES, 'all');
         return $this->_convertRequestParamToServiceArray($param);
     }
 

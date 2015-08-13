@@ -46,7 +46,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     {
         $this->isSingleService = false;
 
-        $resourcePath = '?schema=1&services=testModule5AllSoapAndRestV1,testModule5AllSoapAndRestV2';
+        $resourcePath = '/schema?services=testModule5AllSoapAndRestV1,testModule5AllSoapAndRestV2';
 
         $serviceInfo = [
             'rest' => [
@@ -63,7 +63,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     {
         $this->isSingleService = false;
 
-        $resourcePath = '?schema=1&services=testModule5AllSoapAndRestV2';
+        $resourcePath = '/schema?services=testModule5AllSoapAndRestV2';
 
         $serviceInfo = [
             'rest' => [
@@ -103,7 +103,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     {
         $this->isSingleService = false;
 
-        $resourcePath = '?schema=1&services=invalidServiceName';
+        $resourcePath = '/schema?services=invalidServiceName';
 
         $serviceInfo = [
             'rest' => [

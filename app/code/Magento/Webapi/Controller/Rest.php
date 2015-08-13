@@ -8,6 +8,7 @@ namespace Magento\Webapi\Controller;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
@@ -28,9 +29,9 @@ use Magento\Webapi\Controller\Rest\Router\Route;
 class Rest implements \Magento\Framework\App\FrontControllerInterface
 {
     /**
-     * schema request key
+     * Path for accessing REST API schema
      */
-    const REQUEST_PARAM_SCHEMA = 'schema';
+    const SCHEMA_PATH = '/schema';
 
     /**
      * @var Router
@@ -197,7 +198,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      */
     protected function isSchemaRequest()
     {
-        return $this->_request->getParam(self::REQUEST_PARAM_SCHEMA) !== null;
+        return $this->_request->getPathInfo() === self::SCHEMA_PATH;
     }
 
     /**
@@ -254,14 +255,15 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected function processSchemaRequest()
     {
         $requestedServices = $this->_request->getRequestedServices();
-        $requestedServices = $requestedServices == 'all'
+        $requestedServices = $requestedServices == Request::ALL_SERVICES
             ? array_keys($this->swaggerGenerator->getListOfServices())
             : $requestedServices;
+        $basePath = strstr($this->_request->getRequestUri(), self::SCHEMA_PATH, true);
         $responseBody = $this->swaggerGenerator->generate(
             $requestedServices,
             $this->_request->getScheme(),
             $this->_request->getHttpHost(),
-            $this->_request->getRequestUri()
+            $basePath
         );
         $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
     }
