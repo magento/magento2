@@ -2,35 +2,37 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*global define*/
 define(
     [
+        'underscore',
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/quote',
         'mage/storage',
         'Magento_Checkout/js/model/totals',
         'Magento_Checkout/js/model/error-processor'
     ],
-    function (resourceUrlManager, quote, storage, totalsService, errorProcessor) {
+    function (_, resourceUrlManager, quote, storage, totalsService, errorProcessor) {
         'use strict';
 
         return {
+            requiredFields: ['countryId', 'regionId', 'postcode'],
+
             /**
              * Get shipping rates for specified address.
-             * @param {Object} address
              */
-            estimateTotals: function (address) {
+            estimateTotals: function () {
+                var serviceUrl, payload;
                 totalsService.isLoading(true);
-                var serviceUrl = resourceUrlManager.getUrlForTotalsEstimationForNewAddress(quote),
+                serviceUrl = resourceUrlManager.getUrlForTotalsEstimationForNewAddress(quote),
                     payload = {
-                            addressInformation: {
-                                address: quote.shippingAddress()
-                            }
+                        addressInformation: {
+                            address: _.pick(quote.shippingAddress(), this.requiredFields)
+                        }
                     };
-                if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
-                    payload.addressInformation.shipping_method_code = quote.shippingMethod()['method_code'];
-                    payload.addressInformation.shipping_carrier_code = quote.shippingMethod()['carrier_code'];
 
+                if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
+                    payload.addressInformation['shipping_method_code'] = quote.shippingMethod()['method_code'];
+                    payload.addressInformation['shipping_carrier_code'] = quote.shippingMethod()['carrier_code'];
                 }
 
                 storage.post(
