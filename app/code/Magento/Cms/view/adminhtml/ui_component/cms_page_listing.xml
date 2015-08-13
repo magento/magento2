@@ -441,7 +441,7 @@
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
                         <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns_editor</item>
-                        <item name="target" xsi:type="string">edit</item>
+                        <item name="target" xsi:type="string">startEdit</item>
                         <item name="params" xsi:type="array">
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
                             <item name="1" xsi:type="boolean">true</item>
