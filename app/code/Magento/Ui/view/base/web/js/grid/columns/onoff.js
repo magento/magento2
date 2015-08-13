@@ -18,11 +18,12 @@ define([
             },
             listens: {
                 '${ $.provider }:reloaded': 'setDefaultSelections'
-            }
+            },
+            currentSelectData: []
         },
 
         getLabel: function(id) {
-            return (this.selected.indexOf(id) > -1) ? "On" : "Off";
+            return $t(this.selected.indexOf(id) > -1) ? $t('On') : $t('Off');
         },
         /**
          * Initializes components' static properties.
@@ -47,12 +48,23 @@ define([
          * @returns void
          */
         setDefaultSelections: function() {
-            if(this.selected().length == 0) {
+            if(this.selected().length != this.selectedData.length) {
                 for (var key in this.selectedData) {
-                    this.selected.push(key);
+                    if(this.selected().indexOf(key) == -1) {
+                        this.selected.push(key);
+                        this.currentSelectData.push(key);
+                    }
+                }
+                for (var i = 0; i < this.currentSelectData.length; i++) {
+                    var removalKey = this.currentSelectData[i];
+                    if(!this.selectedData.hasOwnProperty(removalKey) && this.selected().indexOf(removalKey) > -1) {
+                        this.selected.splice(this.selected().indexOf(removalKey), 1);
+                        this.currentSelectData.splice(this.currentSelectData.indexOf(removalKey), 1);
+                    }
                 }
             }
         },
+
         /**
          * Show/hide action in the massaction menu
          * @param actionId
