@@ -68,7 +68,8 @@ class ComponentGrid extends AbstractActionController
         foreach ($components as $component) {
             $components[$component['name']]['update'] = false;
             $components[$component['name']]['uninstall'] = false;
-            if ($this->composerInformation->isPackageInComposerJson($component['name'])) {
+            if ($this->composerInformation->isPackageInComposerJson($component['name'])
+                && ($component['type'] !== ComposerInformation::METAPACKAGE_PACKAGE_TYPE)) {
                 if (isset($lastSyncData['packages'][$component['name']]['latestVersion'])
                     && version_compare(
                         $lastSyncData['packages'][$component['name']]['latestVersion'],
