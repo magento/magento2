@@ -7,7 +7,6 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 class Start extends ImportResultController
 {
