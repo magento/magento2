@@ -41,7 +41,17 @@ class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
         $emailConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Email\Model\Template\Config'
         );
-        $templateFilename = $emailConfig->getTemplateFilename($templateId);
+
+        $parts = $emailConfig->parseTemplateIdParts($templateId);
+        $templateId = $parts['templateId'];
+
+        $designParams = [];
+        $theme = $parts['theme'];
+        if ($theme) {
+            $designParams['theme'] = $theme;
+        }
+
+        $templateFilename = $emailConfig->getTemplateFilename($templateId, $designParams);
         $this->assertFileExists($templateFilename, 'Email template file, specified in the configuration, must exist');
     }
 
