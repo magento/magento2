@@ -33,7 +33,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewMock;
+    protected $imageHelper;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -53,7 +53,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
         $this->urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $this->viewMock = $this->getMock('\Magento\Catalog\Model\Product\Image\View', [], [], '', false);
+        $this->imageHelper = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
         $this->scopeConfigMock = $this->getMock(
             '\Magento\Framework\App\Config\ScopeConfigInterface',
             [],
@@ -84,7 +84,11 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
         $this->model = $this->_objectManager->getObject(
             'Magento\Checkout\Block\Cart\Sidebar',
-            ['context' => $contextMock, 'imageView' => $this->viewMock, 'checkoutSession' => $this->checkoutSessionMock]
+            [
+                'context' => $contextMock,
+                'imageHelper' => $this->imageHelper,
+                'checkoutSession' => $this->checkoutSessionMock
+            ]
         );
     }
 
@@ -140,7 +144,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($valueMap);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
-        $this->viewMock->expects($this->once())->method('isWhiteBorders')->willReturn(false);
+        $this->imageHelper->expects($this->once())->method('getFrame')->willReturn(false);
 
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
