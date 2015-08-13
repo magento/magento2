@@ -8,6 +8,11 @@ namespace Magento\DownloadableImportExport\Test\Unit\Model\Import\Product\Type;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
+/**
+ * Class DownloadableTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DownloadableTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ObjectManager|\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable */
@@ -63,6 +68,10 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Downloadable\Helper\File|\PHPUnit_Framework_MockObject_MockObject */
     protected $fileHelperMock;
 
+    /**
+     * Set up
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -250,6 +259,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      * Data for method testSaveDataAppend
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function dataForSave()
     {
@@ -531,6 +541,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      * Data for method testIsRowValid
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function isRowValidData()
     {
@@ -787,7 +798,6 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ]
-
         );
 
         $this->downloadableModelMock->prepareAttributesWithDefaultValueForSave($rowData);
