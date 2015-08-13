@@ -401,7 +401,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         )
             ->validateData()
             ->hasToBeTerminated();
-        $this->assertFalse(!$result, 'Validation result must be false.');
+        $this->assertFalse($result, 'Validation result must be false.');
 
         // import data
         $this->_entityAdapter->importData();
