@@ -10,6 +10,9 @@ use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 
+/**
+ * Class checks components dependencies for uninstall flow
+ */
 class UninstallDependencyCheck
 {
     /**
