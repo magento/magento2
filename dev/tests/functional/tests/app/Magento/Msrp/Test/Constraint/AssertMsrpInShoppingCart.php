@@ -50,8 +50,9 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
         $catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
         $checkoutCart->open();
-        // TODO: adopt fixture - price is moved to child product from attributes options.
-        $productPrice =  $product->getPrice();
+
+        $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
+        $productPrice = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
         $unitPrice = $checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
         \PHPUnit_Framework_Assert::assertEquals($productPrice, $unitPrice, 'Incorrect unit price is displayed in Cart');
     }
