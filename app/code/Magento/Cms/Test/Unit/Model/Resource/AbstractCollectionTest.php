@@ -27,7 +27,7 @@ abstract class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $resource;
 
-    protected function initSetUp()
+    protected function setUp()
     {
         $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
