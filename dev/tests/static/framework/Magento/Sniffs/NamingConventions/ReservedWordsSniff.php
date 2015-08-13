@@ -38,6 +38,13 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
         return [T_NAMESPACE, T_CLASS];
     }
 
+    /**
+     * Check all namespace parts
+     *
+     * @param PHP_CodeSniffer_File $sourceFile
+     * @param int $stackPtr
+     * @return void
+     */
     protected function validateNameSpace(PHP_CodeSniffer_File $sourceFile, $stackPtr)
     {
         $skippedTokens = ['T_NS_SEPARATOR', 'T_WHITESPACE'];
@@ -57,6 +64,13 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
         }
     }
 
+    /**
+     * Check class name not having reserved words
+     *
+     * @param PHP_CodeSniffer_File $sourceFile
+     * @param int $stackPtr
+     * @return void
+     */
     protected function validateClass(PHP_CodeSniffer_File $sourceFile, $stackPtr)
     {
         $tokens = $sourceFile->getTokens();
