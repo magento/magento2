@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\Category\DeleteCategoryEntityTest">
+    <testCase name="Magento\Catalog\Test\TestCase\Category\DeleteCategoryEntityTest" summary="Delete Category" ticketId="MAGETWO-23303">
         <variation name="DeleteCategoryEntityTestVariation1">
             <data name="category/dataset" xsi:type="string">root_category</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySuccessDeleteMessage" />

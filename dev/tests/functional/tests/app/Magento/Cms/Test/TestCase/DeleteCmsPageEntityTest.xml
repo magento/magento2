@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Cms\Test\TestCase\DeleteCmsPageEntityTest">
+    <testCase name="Magento\Cms\Test\TestCase\DeleteCmsPageEntityTest" summary="Delete CMS Page" ticketId="MAGETWO-23291">
         <variation name="DeleteCmsPageEntityTestVariation1">
             <data name="cmsPage/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDeleteMessage" />

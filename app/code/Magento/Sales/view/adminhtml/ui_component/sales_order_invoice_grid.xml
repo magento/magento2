@@ -15,9 +15,9 @@
     </argument>
     <dataSource name="sales_order_invoice_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">InvoiceGridDataProvider</argument>
+            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
             <argument name="name" xsi:type="string">sales_order_invoice_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">increment_id</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -64,17 +64,18 @@
         <exportButton name="export_button">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.sales_order_invoice_columns.ids</item>
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
                     <item name="options" xsi:type="array">
                         <item name="cvs" xsi:type="array">
                             <item name="value" xsi:type="string">csv</item>
                             <item name="label" xsi:type="string" translate="true">CSV</item>
-                            <item name="url" xsi:type="string">sales/invoice/exportCsv</item>
+                            <item name="url" xsi:type="string">mui/export/gridToCsv</item>
                         </item>
                         <item name="xml" xsi:type="array">
                             <item name="value" xsi:type="string">xml</item>
                             <item name="label" xsi:type="string" translate="true">Excel XML</item>
-                            <item name="url" xsi:type="string">sales/invoice/exportExcel</item>
+                            <item name="url" xsi:type="string">mui/export/gridToCsv</item>
                         </item>
                     </item>
                 </item>
