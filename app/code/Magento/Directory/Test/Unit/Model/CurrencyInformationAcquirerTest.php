@@ -92,7 +92,7 @@ class CurrencyInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Directory\Model\Currency $baseCurrency */
         $baseCurrency = $this->getMock(
             '\Magento\Directory\Model\Currency',
-            ['getCode','getCurrencySymbol', 'getRate'],
+            ['getCode', 'getCurrencySymbol', 'getRate'],
             [],
             '',
             false
