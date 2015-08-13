@@ -10,7 +10,7 @@ namespace Magento\Store\Api\Data;
  *
  * @api
  */
-interface GroupInterface
+interface GroupInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return int

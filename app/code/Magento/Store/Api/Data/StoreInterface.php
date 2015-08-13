@@ -10,7 +10,7 @@ namespace Magento\Store\Api\Data;
  *
  * @api
  */
-interface StoreInterface
+interface StoreInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return int
@@ -26,4 +26,9 @@ interface StoreInterface
      * @return int
      */
     public function getWebsiteId();
+
+    /**
+     * @return int
+     */
+    public function getStoreGroupId();
 }

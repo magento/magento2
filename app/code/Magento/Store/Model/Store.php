@@ -1018,6 +1018,16 @@ class Store extends AbstractModel implements
     }
 
     /**
+     * Retrieve store group identifier
+     *
+     * @return string|int|null
+     */
+    public function getStoreGroupId()
+    {
+        return $this->getGroupId();
+    }
+
+    /**
      * Retrieve default group identifier
      *
      * @return string|int|null
