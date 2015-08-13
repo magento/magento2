@@ -16,7 +16,7 @@ class CollectionTest extends AbstractCollectionTest
 
     protected function setUp()
     {
-        $this->initSetUp();
+        parent::setUp();
 
         $this->collection = $this->objectManager->getObject(
             'Magento\Cms\Model\Resource\Page\Collection',
