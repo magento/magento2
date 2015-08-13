@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Catalog\Model\Category;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -941,7 +942,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function getRootCategoryId()
     {
         if (!$this->getGroup()) {
-            return 0;   // TODO move default root category ID to constant
+            return Category::ROOT_CATEGORY_ID;
         }
         return $this->getGroup()->getRootCategoryId();
     }
