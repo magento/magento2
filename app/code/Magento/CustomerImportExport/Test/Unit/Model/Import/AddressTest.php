@@ -519,6 +519,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testValidateRowForUpdate(array $rowData, array $errors, $isValid = false)
     {
@@ -582,6 +583,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testValidateRowForDelete(array $rowData, array $errors, $isValid = false)
     {

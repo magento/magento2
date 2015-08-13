@@ -26,6 +26,7 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
      * Test for method init.
      *
      * @dataProvider errorMessageInfo
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testInit($initData)
     {
@@ -280,4 +281,3 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 }
- 
