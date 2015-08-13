@@ -6,14 +6,14 @@
 
 namespace Magento\Customer\Test\Block\Adminhtml;
 
-use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Class CustomerGrid
  * Backend customer grid
  *
  */
-class CustomerGrid extends AbstractGrid
+class CustomerGrid extends DataGrid
 {
     /**
      * Selector for action option select
