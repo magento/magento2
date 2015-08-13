@@ -238,6 +238,8 @@ define([
 
         /**
          * Set list status, open or close
+         *
+         * @param {Boolean} value - variable for set list visible status
          */
         setListVisible: function (value) {
             this.listVisible(value);
