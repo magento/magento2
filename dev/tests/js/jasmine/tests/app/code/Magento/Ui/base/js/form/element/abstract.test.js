@@ -90,8 +90,8 @@ define([
                     _error: model.error,
                     _disabled: model.disabled
                 };
-                model.additionalClasses = 'simple';
 
+                model.additionalClasses = 'simple';
                 expect(model._setClasses()).toEqual(model);
                 expect(model.additionalClasses).toEqual(extendObject);
             });
@@ -102,8 +102,8 @@ define([
                     _error: model.error,
                     _disabled: model.disabled
                 };
-                model.additionalClasses = ' simple ';
 
+                model.additionalClasses = ' simple ';
                 expect(model._setClasses()).toEqual(model);
                 expect(model.additionalClasses).toEqual(extendObject);
             });
@@ -115,8 +115,8 @@ define([
                     _error: model.error,
                     _disabled: model.disabled
                 };
-                model.additionalClasses = 'simple example';
 
+                model.additionalClasses = 'simple example';
                 expect(model._setClasses()).toEqual(model);
                 expect(model.additionalClasses).toEqual(extendObject);
             });
@@ -128,8 +128,8 @@ define([
                     _error: model.error,
                     _disabled: model.disabled
                 };
-                model.additionalClasses = ' simple example ';
 
+                model.additionalClasses = ' simple example ';
                 expect(model._setClasses()).toEqual(model);
                 expect(model.additionalClasses).toEqual(extendObject);
             });
