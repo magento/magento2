@@ -6,6 +6,12 @@
 namespace Magento\Customer\Model\Resource\Online\Grid;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
+use Magento\Customer\Model\Visitor;
+use Magento\Framework\Api;
+use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
+use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Flat customer online grid collection
@@ -15,18 +21,80 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 class Collection extends SearchResult
 {
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $date;
+
+    /**
+     * @var Visitor
+     */
+    protected $visitorModel;
+
+    /**
+     * @param EntityFactory $entityFactory
+     * @param Logger $logger
+     * @param FetchStrategy $fetchStrategy
+     * @param EventManager $eventManager
+     * @param Visitor $visitorModel
+     * @param string $mainTable
+     * @param string $resourceModel
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     */
+    public function __construct(
+        EntityFactory $entityFactory,
+        Logger $logger,
+        FetchStrategy $fetchStrategy,
+        EventManager $eventManager,
+        Visitor $visitorModel,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
+        $mainTable,
+        $resourceModel
+    ) {
+        $this->date = $date;
+        $this->visitorModel = $visitorModel;
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
+    }
+    /**
      * Init collection select
      *
      * @return $this
      */
     protected function _initSelect()
     {
-        $this->getSelect()->from(['main_table' => $this->getMainTable()])
-            ->joinLeft(
-                ['customer' => $this->getTable('customer_entity')],
-                'customer.entity_id = main_table.customer_id',
-                ['email', 'firstname', 'lastname']
-            );
+        parent::_initSelect();
+        $connection = $this->getConnection();
+        $lastDate = $this->date->gmtTimestamp() - $this->visitorModel->getOnlineInterval() * 60;
+        $this->getSelect()->joinLeft(
+            ['customer' => $this->getTable('customer_entity')],
+            'customer.entity_id = main_table.customer_id',
+            ['email', 'firstname', 'lastname']
+        )->where(
+            'main_table.last_visit_at >= ?',
+            $connection->formatDate($lastDate)
+        );
+
+        $expression = $connection->getCheckSql(
+            'main_table.customer_id IS NOT NULL AND main_table.customer_id != 0',
+            '\'' . Visitor::VISITOR_TYPE_CUSTOMER . '\'',
+            '\'' . Visitor::VISITOR_TYPE_VISITOR . '\''
+        );
+        $this->getSelect()->columns(['visitor_type' => $expression]);
         return $this;
+    }
+
+    /**
+     * @param string|array $field
+     * @param string|int|array|null $condition
+     * @return \Magento\Cms\Model\Resource\Block\Collection
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field == 'visitor_type') {
+            $field = 'customer_id';
+            if (is_array($condition) && isset($condition['eq'])) {
+                $condition = $condition['eq'] == Visitor::VISITOR_TYPE_CUSTOMER ? ['gt' => 0] : ['null' => true];
+            }
+        }
+        return parent::addFieldToFilter($field, $condition);
     }
 }
