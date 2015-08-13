@@ -59,10 +59,15 @@ class Csv implements ReportProcessorInterface
     /**
      * @param string $originalFileName
      * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param bool $writeOnlyErrorItems
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function createReport($originalFileName, ProcessingErrorAggregatorInterface $errorAggregator)
-    {
+    public function createReport(
+        $originalFileName,
+        ProcessingErrorAggregatorInterface $errorAggregator,
+        $writeOnlyErrorItems = false
+    ) {
         $sourceCsv = $this->createSourceCsvModel($originalFileName);
 
         $outputFileName = $this->generateOutputFileName($originalFileName);
@@ -73,11 +78,11 @@ class Csv implements ReportProcessorInterface
         $outputCsv->setHeaderCols($columnsName);
 
         foreach($sourceCsv as $rowNum => $rowData) {
-            $rowData[self::REPORT_ERROR_COLUMN_NAME] = $this->retrieveErrorMessagesByRowNumber(
-                $rowNum,
-                $errorAggregator
-            );
-            $outputCsv->writeRow($rowData);
+            $errorMessages = $this->retrieveErrorMessagesByRowNumber($rowNum, $errorAggregator);
+            if (!$writeOnlyErrorItems || ($writeOnlyErrorItems && $errorMessages)) {
+                $rowData[self::REPORT_ERROR_COLUMN_NAME] = $errorMessages;
+                $outputCsv->writeRow($rowData);
+            }
         }
 
         return $outputFileName;
