@@ -76,7 +76,7 @@ class CurrencyInformationAcquirerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Directory\Model\Data\CurrencyInformation $currencyInformation */
         $currencyInformation = $this->getMock(
-            '\Magento\Directory\Model\Data\CurrencyInformation'
+            '\Magento\Directory\Model\Data\CurrencyInformation',
             ['load'],
             [],
             '',
