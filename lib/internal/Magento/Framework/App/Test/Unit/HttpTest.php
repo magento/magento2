@@ -84,10 +84,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->setConstructorArgs([
                 'cookieReader' => $cookieReaderMock,
+                'converter' => $converterMock,
                 'routeConfig' => $routeConfigMock,
                 'pathInfoProcessor' => $pathInfoProcessorMock,
-                'objectManager' => $objectManagerMock,
-                'converter' => $converterMock
+                'objectManager' => $objectManagerMock
             ])
             ->setMethods(['getFrontName'])
             ->getMock();
