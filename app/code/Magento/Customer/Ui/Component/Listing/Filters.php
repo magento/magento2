@@ -31,6 +31,7 @@ class Filters extends \Magento\Ui\Component\Filters
         parent::__construct($context, $components, $data);
         $this->filterFactory = $filterFactory;
         $this->attributeRepository = $attributeRepository;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -40,6 +41,7 @@ class Filters extends \Magento\Ui\Component\Filters
     {
         $indexer = $this->indexerRegistry->get(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID);
         if ($indexer->getState()->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_INVALID) {
+            parent::prepare();
             return false;
         }
 

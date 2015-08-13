@@ -85,6 +85,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         $indexer = $this->indexerRegistry->get(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID);
         if ($indexer->getState()->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_INVALID) {
+            parent::prepare();
             return false;
         }
 
