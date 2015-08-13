@@ -27,12 +27,12 @@ class CurrencyInformationAcquirer implements \Magento\Directory\Api\CurrencyInfo
     
     /**
      * @param \Magento\Directory\Model\Data\CurrencyInformationFactory $currencyInformationFactory
-     * @param \Magento\Directory\Model\Data\exchangeRateFactory $exchangeRateFactory
+     * @param \Magento\Directory\Model\Data\ExchangeRateFactory $exchangeRateFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Directory\Model\Data\CurrencyInformationFactory $currencyInformationFactory,
-        \Magento\Directory\Model\Data\exchangeRateFactory $exchangeRateFactory,
+        \Magento\Directory\Model\Data\ExchangeRateFactory $exchangeRateFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->currencyInformationFactory = $currencyInformationFactory;
