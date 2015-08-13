@@ -20,9 +20,10 @@
     ],
     "extra": {
         "map": [
-            "*",
-            "Magento/DownloadableImportExport"
+            [
+                "*",
+                "Magento/DownloadableImportExport"
+            ]
         ]
     }
-
 }

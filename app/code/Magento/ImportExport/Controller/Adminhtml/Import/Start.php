@@ -46,6 +46,10 @@ class Start extends ImportResultController
             $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
             /** @var $resultBlock \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result */
             $resultBlock = $resultLayout->getLayout()->getBlock('import.frame.result');
+            $resultBlock
+                ->addAction('show', 'import_validation_container')
+                ->addAction('innerHTML', 'import_validation_container_header', __('Status'))
+                ->addAction('hide', ['edit_form', 'upload_button', 'messages']);
 
             $this->importModel->setData($data);
             $this->importModel->importSource();
@@ -55,12 +59,8 @@ class Start extends ImportResultController
                 $this->addErrorMessages($resultBlock, $errorAggregator);
             } else {
                 $this->importModel->invalidateIndex();
-                $resultBlock
-                    ->addAction('show', 'import_validation_container')
-                    ->addAction('innerHTML', 'import_validation_container_header', __('Status'))
-                    ->addAction('hide', ['edit_form', 'upload_button', 'messages'])
-                    ->addSuccess(__('Import successfully done'));
                 $this->addErrorMessages($resultBlock, $errorAggregator);
+                $resultBlock->addSuccess(__('Import successfully done'));
             }
 
             return $resultLayout;
