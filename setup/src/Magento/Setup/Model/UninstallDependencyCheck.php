@@ -23,7 +23,7 @@ class UninstallDependencyCheck
     /**
      * @var DependencyChecker
      */
-    private $dependencyChecker;
+    private $packageDependencyChecker;
 
     /**
      * Theme Dependency Checker
@@ -46,7 +46,7 @@ class UninstallDependencyCheck
         ThemeDependencyCheckerFactory $themeDependencyCheckerFactory
     ) {
         $this->composerInfo = $composerInfo;
-        $this->dependencyChecker = $dependencyChecker;
+        $this->packageDependencyChecker = $dependencyChecker;
         $this->themeDependencyChecker = $themeDependencyCheckerFactory->create();
     }
 
@@ -57,11 +57,11 @@ class UninstallDependencyCheck
      * @return array
      * @throws \RuntimeException
      */
-    public function runDeleteReadinessCheck(array $packages)
+    public function runUninstallReadinessCheck(array $packages)
     {
         try {
             $packagesAndTypes = $this->composerInfo->getRootRequiredPackageTypesByName();
-            $dependencies = $this->dependencyChecker->checkDependencies($packages, true);
+            $dependencies = $this->packageDependencyChecker->checkDependencies($packages, true);
             $messages = [];
             $themes = [];
 

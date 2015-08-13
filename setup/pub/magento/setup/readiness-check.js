@@ -16,7 +16,7 @@ angular.module('readiness-check', [])
         if ($state.current.type !== 'uninstall') {
             $scope.dependencyUrl = 'index.php/environment/component-dependency';
         } else {
-            $scope.dependencyUrl = 'index.php/environment/uninstall-dependency';
+            $scope.dependencyUrl = 'index.php/environment/uninstall-dependency-check';
         };
         $scope.stopProgress = function() {
             --$scope.progressCounter;

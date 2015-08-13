@@ -276,7 +276,7 @@ class Environment extends AbstractActionController
             $packagesToDelete[] = $package['name'];
         }
 
-        $dependencyCheck = $this->uninstallDependencyCheck->runDeleteReadinessCheck($packagesToDelete);
+        $dependencyCheck = $this->uninstallDependencyCheck->runUninstallReadinessCheck($packagesToDelete);
         $data = [];
         if (!$dependencyCheck['success']) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
