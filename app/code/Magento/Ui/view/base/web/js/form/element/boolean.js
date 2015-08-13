@@ -8,6 +8,7 @@ define([
     'use strict';
 
     return Abstract.extend({
+
         /**
          * Converts the result of parent 'getInitialValue' call to boolean
          *
@@ -18,18 +19,14 @@ define([
         },
 
         /**
-         * Calls 'store' method of parent, if value is defined and instance's
+         * Calls 'onUpdate' method of parent, if value is defined and instance's
          *     'unique' property set to true, calls 'setUnique' method
-         *
-         * @param  {*} value
-         * @return {Object} - reference to instance
          */
         onUpdate: function () {
             if (this.hasUnique) {
                 this.setUnique();
             }
-
-            return this._super();
+            this._super();
         }
     });
 });
