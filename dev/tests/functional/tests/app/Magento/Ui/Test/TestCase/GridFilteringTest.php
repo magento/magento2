@@ -97,9 +97,7 @@ class GridFilteringTest extends Injectable
                 } else {
                     $value = $itemFilterValue;
                 }
-                $gridBlock->search(
-                    [$itemFiltersName => $value]
-                );
+                $gridBlock->search([$itemFiltersName => $value]);
                 $idsInGrid = $gridBlock->getAllIds();
                 if ($idColumn) {
                     $filteredTargetIds = [];

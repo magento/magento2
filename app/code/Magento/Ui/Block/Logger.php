@@ -6,7 +6,6 @@
 namespace Magento\Ui\Block;
 
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Logger extends Template
 {
@@ -21,32 +20,13 @@ class Logger extends Template
     const XML_PATH_KEY = 'dev/js/session_storage_key';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    protected $config;
-
-    /**
-     * @param Template\Context $context
-     * @param ScopeConfigInterface $config
-     * @param array $data
-     */
-    public function __construct(
-        Template\Context $context,
-        ScopeConfigInterface $config,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-        $this->config = $config;
-    }
-
-    /**
      * Is session storage logging enabled
      *
      * @return bool
      */
     public function isLoggingEnabled()
     {
-        return $this->config->getValue(self::XML_PATH_LOGGING);
+        return $this->_scopeConfig->getValue(self::XML_PATH_LOGGING);
     }
 
     /**
@@ -56,6 +36,6 @@ class Logger extends Template
      */
     public function getSessionStorageKey()
     {
-        return $this->config->getValue(self::XML_PATH_KEY);
+        return $this->_scopeConfig->getValue(self::XML_PATH_KEY);
     }
 }
