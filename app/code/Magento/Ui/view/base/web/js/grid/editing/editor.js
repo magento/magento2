@@ -34,35 +34,29 @@ define([
                     }
                 }
             },
-
             bulkConfig: {
                 component: 'Magento_Ui/js/grid/editing/bulk',
                 name: '${ $.name }_bulk',
                 editorProvider: '${ $.name }',
                 columnsProvider: '${ $.columnsProvider }'
             },
-
             clientConfig: {
                 component: 'Magento_Ui/js/grid/editing/client',
                 name: '${ $.name }_client'
             },
-
             viewConfig: {
                 component: 'Magento_Ui/js/grid/editing/editor-view',
                 name: '${ $.name }_view',
                 model: '${ $.name }',
                 columnsProvider: '${ $.columnsProvider }'
             },
-
             imports: {
                 rowsData: '${ $.dataProvider }:data.items'
             },
-
             listens: {
                 '${ $.dataProvider }:reloaded': 'cancel',
                 '${ $.selectProvider }:selected': 'onSelectionsChange'
             },
-
             modules: {
                 source: '${ $.dataProvider }',
                 client: '${ $.clientConfig.name }',
@@ -232,7 +226,9 @@ define([
          */
         cancel: function () {
             this.reset()
-                .hide();
+                .hide()
+                .clearMessages()
+                .bulk('clear');
 
             return this;
         },
@@ -308,7 +304,7 @@ define([
         },
 
         /**
-         * Returns active records data, indexed by a records id.
+         * Returns active records data, indexed by a theirs ids.
          *
          * @returns {Object} Collection of records data.
          */
@@ -404,7 +400,7 @@ define([
          * @param {(Number|String)} id - Records' identifier or its' index in the rows array.
          * @param {Boolean} [isIndex=false] - Flag that indicates if first
          *      parameter is an index or identifier.
-         * @returns {Number|String} Records' id.
+         * @returns {String} Records' id.
          */
         getId: function (id, isIndex) {
             var rowsData = this.rowsData,
@@ -491,8 +487,7 @@ define([
         },
 
         /**
-         * Defines values of the 'isMultiEditing' and
-         * 'isSingleEditing' properties.
+         * Handles changes of the records 'active' property changes.
          *
          * @returns {Editor} Chainable.
          */
@@ -596,8 +591,6 @@ define([
 
             this.addMessage(msg)
                 .source('reload');
-
-            _.delay(this.clearMessages.bind(this), 2000);
         },
 
         /**
