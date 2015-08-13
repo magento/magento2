@@ -151,7 +151,7 @@ define([
             var action = this.fieldAction,
                 callback;
 
-            if (!this.hasFieldAction() || !this.disableAction()) {
+            if (!this.hasFieldAction() || this.disableAction()) {
                 return this;
             }
 
