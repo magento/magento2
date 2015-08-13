@@ -43,7 +43,7 @@ class StartConsumerCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Start AMQP consumer.', $this->command->getDescription());
         /** Exception will be thrown if argument is not declared */
         $this->command->getDefinition()->getArgument(StartConsumerCommand::ARGUMENT_CONSUMER);
-        $this->command->getDefinition()->getArgument(StartConsumerCommand::ARGUMENT_NUMBER_OF_MESSAGES);
+        $this->command->getDefinition()->getArgument(StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES);
         $this->assertContains('To start consumer which will process', $this->command->getHelp());
     }
 }
