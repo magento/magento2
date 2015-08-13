@@ -190,6 +190,7 @@ class Options extends \Magento\Framework\View\Element\Template
                 ],
             ],
             'type' => $option->getPriceType(),
+            'name' => $option->getTitle()
         ];
         return $data;
     }
