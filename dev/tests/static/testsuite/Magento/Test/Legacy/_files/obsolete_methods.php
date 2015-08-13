@@ -2433,4 +2433,5 @@ return [
     ['getThumbnailSize', 'Magento\ProductAlert\Block\Email\AbstractEmail'],
     ['getThumbnailUrl', 'Magento\ProductAlert\Block\Email\AbstractEmail'],
     ['getProductThumbnail', 'Magento\Checkout\Block\Cart\Item\Renderer'],
+    ['prepareInvoice', 'Magento\Sales\Api\InvoiceManagementInterface'],
 ];
