@@ -8,6 +8,7 @@ namespace Magento\Customer\Ui\Component\Listing;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Ui\Component\ColumnFactory;
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
@@ -21,10 +22,14 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      */
     protected $attributeRepository;
 
+    /** @var IndexerRegistry  */
+    protected $indexerRegistry;
+
     /**
      * @param ContextInterface $context
      * @param ColumnFactory $columnFactory
      * @param AttributeRepository $attributeRepository
+     * @param IndexerRegistry $indexerRegistry
      * @param array $components
      * @param array $data
      */
@@ -32,12 +37,14 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
         ContextInterface $context,
         ColumnFactory $columnFactory,
         AttributeRepository $attributeRepository,
+        IndexerRegistry $indexerRegistry,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
         $this->columnFactory = $columnFactory;
         $this->attributeRepository = $attributeRepository;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -76,6 +83,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      */
     public function prepare()
     {
+        $indexer = $this->indexerRegistry->get(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID);
+        if ($indexer->getState()->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_INVALID) {
+            return false;
+        }
+
         $this->columnSortOrder = $this->getDefaultSortOrder();
         foreach ($this->attributeRepository->getList() as $newAttributeCode => $attributeData) {
             if (isset($this->components[$newAttributeCode])) {
