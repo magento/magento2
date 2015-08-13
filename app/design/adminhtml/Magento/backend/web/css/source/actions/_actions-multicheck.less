@@ -12,9 +12,9 @@
 .action-multicheck-wrap {
     &:extend(.abs-clearfix all);
     display: inline-block;
+    height: @control-checkbox-radio__size;
     padding-top: 1px;
     position: relative;
-    height: @control-checkbox-radio__size;
     width: @control-checkbox-radio__size * 2 - .1rem;
     z-index: @action-multicheck__z-index;
     &:hover {
@@ -53,8 +53,8 @@
     }
     .action-multicheck-toggle {
         .action-toggle-triangle(
-            @_triangle__height: @button-marker-triangle__height;
-            @_triangle__width: @button-marker-triangle__width;
+        @_triangle__height: @button-marker-triangle__height;
+        @_triangle__width: @button-marker-triangle__width;
         );
         border-radius: 0 1px 1px 0;
         height: @control-checkbox-radio__size;
@@ -75,9 +75,9 @@
     }
     .action-menu {
         left: -(@data-grid-cell__padding-horizontal + @data-grid-cell__border-width + .1rem);
+        margin-top: 1px;
         right: auto;
         text-align: left;
-        margin-top: 1px;
     }
     .action-menu-item {
         white-space: nowrap;

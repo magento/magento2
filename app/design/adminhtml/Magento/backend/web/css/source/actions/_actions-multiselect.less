@@ -7,6 +7,20 @@
 //  Actions -> Actions multiselect
 //  _____________________________________________
 
+//
+//  Variables
+//  ---------------------------------------------
+
+@action-multiselect-menu-item__selected__background-color: @color-gray89;
+
+//  Crumbs
+@action-multiselect-crumb__background-color: @color-white-smoke;
+@action-multiselect-crumb__border-color: @color-gray65-almost;
+
+@action-multiselect-crumb-close-action__size: 2rem;
+
+//
+
 .admin__action-multiselect-wrap {
     -webkit-user-select: none;
        -moz-user-select: none;
@@ -21,10 +35,14 @@
             overflow-y: inherit;
         }
     }
+    //  ToDo UI or Vanilla: should be uncommented with expanding functionality
+    //.action-menu {
+    //    padding: 1rem;
+    //}
     .action-menu-item {
         transition: background-color .1s linear;
         &._selected {
-            background-color: #f8f8f8;
+            background-color: @action-multiselect-menu-item__selected__background-color;
         }
         &._hover {
             background-color: @action__hover__background-color;
@@ -37,12 +55,12 @@
         padding: @action__padding-top + .1rem (@action__height + .4rem) @action__padding-bottom 1em;
         white-space: normal;
         &:after {
-            top: auto;
             bottom: @action__height / 2 - @button-marker-triangle__height / 2 - .1rem;
+            top: auto;
         }
         &:before {
-            top: auto;
             height: @action__height;
+            top: auto;
             width: @action__height;
         }
     }
@@ -62,9 +80,9 @@
     + .admin__action-multiselect-menu-inner {
         border-bottom: 1px solid @border__color;
         border-top: 1px solid @border__color;
-        overflow-y: auto;
         margin-bottom: 1rem;
         max-height: 17.2rem;
+        overflow-y: auto;
     }
 }
 
@@ -102,13 +120,13 @@
 
 //  Crumbs
 .admin__action-multiselect-crumb {
-    background-color: @color-white-smoke;
-    border: 1px solid @color-gray65-almost;
+    background-color: @action-multiselect-crumb__background-color;
+    border: 1px solid @action-multiselect-crumb__border-color;
     border-radius: 1px;
     display: inline-block;
     font-size: 1.2rem;
     margin: -.3rem .9rem .5rem -1.1rem;
-    padding: .3rem (2rem + .4rem) .4rem 1rem;
+    padding: .3rem (@action-multiselect-crumb-close-action__size + .4rem) .4rem 1rem;
     position: relative;
     transition: border-color .1s linear;
     &:hover {
@@ -120,7 +138,7 @@
         position: absolute;
         right: 0;
         top: 0;
-        width: 2rem;
+        width: @action-multiselect-crumb-close-action__size;
         &:hover {
             color: darken(@text__color, 20%);
         }
