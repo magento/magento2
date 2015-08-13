@@ -192,9 +192,6 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $optionProvider = $this->getMockBuilder('Magento\Framework\Data\OptionSourceInterface')
-            ->getMockForAbstractClass();
-
         $this->filter->expects($this->once())
             ->method('getComponent')
             ->willReturn($component);
