@@ -24,11 +24,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $connection = $installer->getConnection();
         if (version_compare($context->getVersion(), '2.0.1') < 0) {
             $connection->dropIndex(
-                'search_query',
+                $setup->getTable('search_query'),
                 $installer->getIdxName('search_query', ['query_text', 'store_id'])
             );
             $connection->addIndex(
-                'search_query',
+                $setup->getTable('search_query'),
                 $installer->getIdxName(
                     'search_query',
                     ['query_text', 'store_id'],
