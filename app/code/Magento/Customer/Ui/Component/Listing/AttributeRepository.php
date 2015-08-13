@@ -10,6 +10,7 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataManagementInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
+use Magento\Customer\Api\MetadataManagementInterface;
 
 class AttributeRepository
 {
@@ -73,12 +74,12 @@ class AttributeRepository
     }
 
     /**
-     * @param array $metadata
+     * @param AttributeMetadataInterface[] $metadata
      * @param string $entityTypeCode
-     * @param \Magento\Customer\Api\MetadataManagementInterface $management
+     * @param MetadataManagementInterface $management
      * @return array
      */
-    protected function getListForEntity(array $metadata, $entityTypeCode, $management)
+    protected function getListForEntity(array $metadata, $entityTypeCode, MetadataManagementInterface $management)
     {
         $attributes = [];
         /** @var AttributeMetadataInterface $attribute */
