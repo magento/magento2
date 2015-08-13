@@ -79,6 +79,16 @@ class DataGrid extends Grid
     protected $columnHeader = "//th/span[.='%s']";
 
     /**
+     * @var string
+     */
+    protected $rowById = "//tr[//input[@data-action='select-row' and @value='%s']]";
+
+    /**
+     * @var string
+     */
+    protected $cellByHeader = "//td[count(//th[span[.='%s']]/preceding-sibling::th)+1]";
+
+    /**
      * Clear all applied Filters.
      *
      * @return void
@@ -244,5 +254,18 @@ class DataGrid extends Grid
             $ids[] = $checkbox->getValue();
         }
         return $ids;
+    }
+
+    /**
+     * @param string $id
+     * @param string $headerLabel
+     * @return array|string
+     */
+    public function getColumnValue($id, $headerLabel)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $headerLabel);
+        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
     }
 }
