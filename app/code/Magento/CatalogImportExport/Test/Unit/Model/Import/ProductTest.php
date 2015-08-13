@@ -1480,23 +1480,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     }
 
     /**
-     * @return array
-     */
-    public function validateRowIsAlreadyValidatedDataProvider()
-    {
-        return [
-            [
-                '$isInvalidRow' => true,
-                '$expectedResult' => false,
-            ],
-            [
-                '$isInvalidRow' => null,
-                '$expectedResult' => true,
-            ],
-        ];
-    }
-
-    /**
      * @return mixed
      */
     public function returnQuoteCallback()
