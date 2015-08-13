@@ -20,8 +20,8 @@
         <variation name="CmsBlocksGridSorting">
             <data name="description" xsi:type="string">Verify cms blocks grid sorting</data>
             <data name="steps" xsi:type="array">
-                <item name="id" xsi:type="string">-</item>
-                <item name="date" xsi:type="string">-</item>
+                <item name="0" xsi:type="string">-</item>
+                <item name="1" xsi:type="string">-</item>
             </data>
             <data name="itemsCount" xsi:type="string">2</data>
             <data name="fixtureName" xsi:type="string">cmsBlock</data>

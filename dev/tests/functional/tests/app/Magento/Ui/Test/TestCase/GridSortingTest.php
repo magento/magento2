@@ -80,7 +80,7 @@ class GridSortingTest extends Injectable
     ) {
         // Fill grid before sorting if needed
         if  ($fixtureName && $fixtureDataSet && $itemsCount && $steps) {
-            $this->createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps);
+            //$this->createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps);
         }
 
         $page = $this->pageFactory->create($pageClass);
@@ -130,6 +130,8 @@ class GridSortingTest extends Injectable
     {
         if (!is_array($steps) && $steps != '-') {
             $steps = [$steps];
+        } elseif ($steps == '-') {
+            $steps = [];
         }
         foreach ($steps as $step) {
             $processStep = $this->objectManager->create($step, ['order' => $item]);

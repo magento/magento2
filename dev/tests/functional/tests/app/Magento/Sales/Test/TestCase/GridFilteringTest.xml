@@ -18,11 +18,11 @@
             <data name="fixtureDataSet" xsi:type="string">default</data>
             <data name="filters" xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="order_id" xsi:type="string">:id</item>
+                    <item name="id" xsi:type="string">:id</item>
                     <item name="status" xsi:type="string">Pending</item>
                 </item>
                 <item name="1" xsi:type="array">
-                    <item name="id" xsi:type="boolean">false</item>
+                    <item name="id" xsi:type="string">:id</item>
                     <item name="status" xsi:type="string">On Hold</item>
                 </item>
             </data>
