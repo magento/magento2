@@ -47,7 +47,7 @@ class CurrencyInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $className = '\Magento\Directory\Model\Data\CurrencyInformationFactory';
         $this->currencyInformationFactory = $this->getMock($className, ['create'], [], '', false);
 
-        $className = '\Magento\Directory\Model\Data\exchangeRateFactory';
+        $className = '\Magento\Directory\Model\Data\ExchangeRateFactory';
         $this->exchangeRateFactory = $this->getMock($className, ['create'], [], '', false);
 
         $className = '\Magento\Store\Model\StoreManager';
