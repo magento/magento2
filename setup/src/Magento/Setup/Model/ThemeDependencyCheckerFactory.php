@@ -8,6 +8,9 @@ namespace Magento\Setup\Model;
 
 use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 
+/**
+ * Class ThemeDependencyCheckerFactory creates instance of ThemeDependencyChecker
+ */
 class ThemeDependencyCheckerFactory
 {
     /**
@@ -32,6 +35,6 @@ class ThemeDependencyCheckerFactory
      */
     public function create()
     {
-        $this->objectManagerProvider->get('Magento\Theme\Model\Theme\ThemeDependencyChecker');
+        return $this->objectManagerProvider->get('Magento\Theme\Model\Theme\ThemeDependencyChecker');
     }
 }

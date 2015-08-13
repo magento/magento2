@@ -266,7 +266,7 @@ class Environment extends AbstractActionController
      *
      * @return JsonModel
      */
-    public function uninstallDependencyAction()
+    public function uninstallDependencyCheckAction()
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         $packages = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);

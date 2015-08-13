@@ -55,7 +55,7 @@ class ThemeDependencyChecker
      * Check theme by package name(s) if has child virtual and physical theme
      *
      * @param string[] $packages
-     * @return string[] $messages
+     * @return string[]
      */
     public function checkChildThemeByPackagesName($packages)
     {
@@ -71,7 +71,7 @@ class ThemeDependencyChecker
      * Check theme if has child virtual and physical theme
      *
      * @param string[] $themePaths
-     * @return string[] $messages
+     * @return string[]
      */
     public function checkChildTheme($themePaths)
     {
