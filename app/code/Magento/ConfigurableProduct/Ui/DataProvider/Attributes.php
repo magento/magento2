@@ -37,7 +37,7 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
      */
-    protected function getCollection()
+    public function getCollection()
     {
         return $this->collection;
     }

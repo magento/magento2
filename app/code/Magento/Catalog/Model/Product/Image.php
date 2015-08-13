@@ -57,7 +57,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @var bool
      */
-    protected $_constrainOnly = false;
+    protected $_constrainOnly = true;
 
     /**
      * @var int[]

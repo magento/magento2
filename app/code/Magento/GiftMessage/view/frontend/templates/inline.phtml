@@ -81,8 +81,7 @@ require(['jquery'], function(jQuery){
                                  <?php echo __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?>
                              </div>
                              <div class="img photo container">
-                                 <?php $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
-                                 <?php echo $imageBlock->init($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
+                                 <?php echo $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml(); ?>
                              </div>
                              <strong class="product name"><?php echo $block->escapeHtml($_product->getName()) ?></strong>
                          </div>
@@ -204,8 +203,7 @@ require(['jquery'], function(jQuery){
                          <div class="product">
                              <div class="number"><?php echo __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?></div>
                              <div class="img photo container">
-                                 <?php $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
-                                 <?php echo $imageBlock->init($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
+                                 <?php echo $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml(); ?>
                              </div>
                              <strong class="product-name"><?php echo $block->escapeHtml($_product->getName()) ?></strong>
                          </div>
