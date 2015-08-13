@@ -6,12 +6,17 @@
 'use strict';
 angular.module('readiness-check', [])
     .constant('COUNTER', 1)
-    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, COUNTER) {
+    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER) {
         $scope.titles = $localStorage.titles;
         $scope.moduleName = $localStorage.moduleName;
         $scope.progressCounter = COUNTER;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
+        };
+        if ($state.current.type !== 'uninstall') {
+            $scope.dependencyUrl = 'index.php/environment/component-dependency';
+        } else {
+            $scope.dependencyUrl = 'index.php/environment/uninstall-dependency';
         };
         $scope.stopProgress = function() {
             --$scope.progressCounter;
@@ -209,7 +214,7 @@ angular.module('readiness-check', [])
                 }
             };
             $scope.items['component-dependency'] = {
-                url: 'index.php/environment/component-dependency',
+                url: $scope.dependencyUrl,
                 params: $scope.componentDependency.packages,
                 show: function() {
                     $scope.startProgress();

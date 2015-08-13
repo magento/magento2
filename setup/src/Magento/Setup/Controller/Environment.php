@@ -8,6 +8,7 @@ namespace Magento\Setup\Controller;
 use Magento\Setup\Model\Cron\ReadinessCheck;
 use Magento\Setup\Model\CronScriptReadinessCheck;
 use Magento\Setup\Model\DependencyReadinessCheck;
+use Magento\Setup\Model\UninstallDependencyCheck;
 use Magento\Setup\Model\PhpReadinessCheck;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -52,6 +53,13 @@ class Environment extends AbstractActionController
     protected $dependencyReadinessCheck;
 
     /**
+     * Uninstall Dependency Readiness Check
+     *
+     * @var UninstallDependencyCheck
+     */
+    protected $uninstallDependencyCheck;
+
+    /**
      * PHP Readiness Check
      *
      * @var PhpReadinessCheck
@@ -65,6 +73,7 @@ class Environment extends AbstractActionController
      * @param Filesystem $filesystem
      * @param CronScriptReadinessCheck $cronScriptReadinessCheck
      * @param DependencyReadinessCheck $dependencyReadinessCheck
+     * @param UninstallDependencyCheck $uninstallDependencyCheck
      * @param PhpReadinessCheck $phpReadinessCheck
      */
     public function __construct(
@@ -72,12 +81,14 @@ class Environment extends AbstractActionController
         Filesystem $filesystem,
         CronScriptReadinessCheck $cronScriptReadinessCheck,
         DependencyReadinessCheck $dependencyReadinessCheck,
+        UninstallDependencyCheck $uninstallDependencyCheck,
         PhpReadinessCheck $phpReadinessCheck
     ) {
         $this->permissions = $permissions;
         $this->filesystem = $filesystem;
         $this->cronScriptReadinessCheck = $cronScriptReadinessCheck;
         $this->dependencyReadinessCheck = $dependencyReadinessCheck;
+        $this->uninstallDependencyCheck = $uninstallDependencyCheck;
         $this->phpReadinessCheck = $phpReadinessCheck;
     }
 
@@ -177,8 +188,6 @@ class Environment extends AbstractActionController
         return new JsonModel($data);
     }
 
-
-
     /**
      * Verifies updater application exists
      *
@@ -243,6 +252,31 @@ class Environment extends AbstractActionController
             $data[] = implode(' ', $package);
         }
         $dependencyCheck = $this->dependencyReadinessCheck->runReadinessCheck($data);
+        $data = [];
+        if (!$dependencyCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['errorMessage'] = $dependencyCheck['error'];
+        }
+        $data['responseType'] = $responseType;
+        return new JsonModel($data);
+    }
+
+    /**
+     * Verifies component dependency for uninstall
+     *
+     * @return JsonModel
+     */
+    public function uninstallDependencyAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+        $packages = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+
+        $packagesToDelete = [];
+        foreach ($packages as $package) {
+            $packagesToDelete[] = $package['name'];
+        }
+
+        $dependencyCheck = $this->uninstallDependencyCheck->runDeleteReadinessCheck($packagesToDelete);
         $data = [];
         if (!$dependencyCheck['success']) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
