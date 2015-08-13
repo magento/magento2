@@ -6,9 +6,31 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Online;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
+
 class Index extends \Magento\Backend\App\Action
 {
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     */
+    public function __construct(
+        Context $context,
+        PageFactory $resultPageFactory
+    ) {
+        parent::__construct($context);
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
+    /**
+     * Check the permission to run it
+     *
      * @return bool
      */
     protected function _isAllowed()
@@ -17,23 +39,19 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return void
+     * Index action
+     *
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        if ($this->getRequest()->getParam('ajax')) {
-            $this->_forward('grid');
-            return;
-        }
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Customer::customer_online');
+        $resultPage->addBreadcrumb(__('Customers'), __('Customers'));
+        $resultPage->addBreadcrumb(__('Online Customers'), __('Online Customers'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Customers Now Online'));
 
-        $this->_view->loadLayout();
-
-        $this->_setActiveMenu('Magento_Customer::customer_online');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Customers Now Online'));
-
-        $this->_addBreadcrumb(__('Customers'), __('Customers'));
-        $this->_addBreadcrumb(__('Online Customers'), __('Online Customers'));
-
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }
