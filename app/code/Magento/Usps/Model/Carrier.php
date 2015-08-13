@@ -8,6 +8,7 @@
 
 namespace Magento\Usps\Model;
 
+use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
@@ -181,19 +182,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Collect and get rates
      *
-     * @param \Magento\Framework\DataObject $request
-     * @return Result|bool|null
+     * @param RateRequest $request
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Error|bool|Result
      */
-    public function collectRates(\Magento\Framework\DataObject $request)
+    public function collectRates(RateRequest $request)
     {
-        if (!$this->getConfigFlag($this->_activeFlag)) {
-            return false;
+        if (!$this->canCollectRates()) {
+            return $this->getErrorMessage();
         }
 
         $this->setRequest($request);
-
         $this->_result = $this->_getQuotes();
-
         $this->_updateFreeMethodQuote($request);
 
         return $this->getResult();
@@ -385,6 +384,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // The origin address(shipper) must be only in USA
         if (!$this->_isUSCountry($r->getOrigCountryId())) {
             $responseBody = '';
+
             return $this->_parseXmlResponse($responseBody);
         }
 
@@ -1051,12 +1051,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     if (isset($xml->Number) && isset($xml->Description) && (string)$xml->Description != '') {
                         $errorTitle = (string)$xml->Description;
                     } elseif (isset(
-                        $xml->TrackInfo
-                    ) && isset(
-                        $xml->TrackInfo->Error
-                    ) && isset(
-                        $xml->TrackInfo->Error->Description
-                    ) && (string)$xml->TrackInfo->Error->Description != ''
+                            $xml->TrackInfo
+                        ) && isset(
+                            $xml->TrackInfo->Error
+                        ) && isset(
+                            $xml->TrackInfo->Error->Description
+                        ) && (string)$xml->TrackInfo->Error->Description != ''
                     ) {
                         $errorTitle = (string)$xml->TrackInfo->Error->Description;
                     } else {
@@ -1118,6 +1118,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (empty($statuses)) {
             $statuses = __('Empty response');
         }
+
         return $statuses;
     }
 
@@ -1133,6 +1134,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         foreach ($allowed as $k) {
             $arr[$k] = $this->getCode('method', $k);
         }
+
         return $arr;
     }
 
@@ -1459,6 +1461,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $xml->addChild('ImageType', 'PDF');
 
         $xml = $xmlWrap->{$rootNode}->asXML();
+
         return $xml;
     }
 
@@ -1547,6 +1550,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $xml->addChild('ImageType', 'PDF');
 
         $xml = $xmlWrap->{$rootNode}->asXML();
+
         return $xml;
     }
 
@@ -1561,6 +1565,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $weightInOunces = ceil($weightInPounds * self::OUNCES_POUND);
         $pounds = floor($weightInOunces / self::OUNCES_POUND);
         $ounces = $weightInOunces % self::OUNCES_POUND;
+
         return [$pounds, $ounces];
     }
 
@@ -1817,6 +1822,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $xml = $xmlWrap->{$rootNode}->asXML();
+
         return $xml;
     }
 
@@ -1900,6 +1906,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $result->setGatewayResponse($response);
         $debugData['result'] = $response;
         $this->_debug($debugData);
+
         return $result;
     }
 
@@ -1914,6 +1921,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (is_null($params)) {
             return $this->_getAllowedContainers();
         }
+
         return $this->_isUSCountry($params->getCountryRecipient()) ? [] : $this->_getAllowedContainers($params);
     }
 
@@ -1988,6 +1996,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'OTHER' => __('Other')
             ];
         }
+
         return [];
     }
 

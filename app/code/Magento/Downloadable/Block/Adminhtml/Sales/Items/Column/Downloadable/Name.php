@@ -8,7 +8,9 @@
 
 namespace Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable;
 
+use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Link\Purchased;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Sales Order downloadable items name column renderer
@@ -61,8 +63,8 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
     public function getLinks()
     {
         $this->_purchased = $this->_purchasedFactory->create()->load(
-            $this->getItem()->getOrder()->getId(),
-            'order_id'
+            $this->getItem()->getId(),
+            'order_item_id'
         );
         $purchasedItem = $this->_itemsFactory->create()->addFieldToFilter('order_item_id', $this->getItem()->getId());
         $this->_purchased->setPurchasedItems($purchasedItem);
@@ -74,9 +76,9 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
      */
     public function getLinksTitle()
     {
-        if ($this->_purchased && $this->_purchased->getLinkSectionTitle()) {
-            return $this->_purchased->getLinkSectionTitle();
-        }
-        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->getLinks()->getLinkSectionTitle() ?: $this->_scopeConfig->getValue(
+            Link::XML_PATH_LINKS_TITLE,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }
