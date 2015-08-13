@@ -7,7 +7,7 @@ define([
     'underscore',
     'ko',
     './abstract',
-    'Magento_Ui/js/lib/keyCodes',
+    'Magento_Ui/js/lib/key-codes',
     'mage/translate'
 ], function (_, ko, Abstract, keyCodes, $t) {
     'use strict';
