@@ -203,7 +203,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $_productVisibility;
 
     /**
-     * @var \Magento\Sales\Api\InvoiceManagementInterface
+     * @var \Magento\Sales\Model\Service\InvoiceService
      */
     protected $invoiceManagement;
 
@@ -1867,7 +1867,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function prepareInvoice($qtys = [])
     {
-        return $this->invoiceManagement->prepareInvoice($this->getEntityId(), $qtys);
+        return $this->invoiceManagement->prepareInvoice($this, $qtys);
     }
 
     /**

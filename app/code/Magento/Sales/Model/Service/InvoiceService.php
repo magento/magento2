@@ -126,9 +126,8 @@ class InvoiceService implements InvoiceManagementInterface
     /**
      * @inheritdoc
      */
-    public function prepareInvoice($orderId, array $qtys = [])
+    public function prepareInvoice($order, array $qtys = [])
     {
-        $order = $this->orderRepository->get($orderId);
         $invoice = $this->orderConverter->toInvoice($order);
         $totalQty = 0;
         foreach ($order->getAllItems() as $orderItem) {
