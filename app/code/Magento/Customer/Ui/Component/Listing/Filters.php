@@ -17,6 +17,7 @@ class Filters extends \Magento\Ui\Component\Filters
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Customer\Ui\Component\FilterFactory $filterFactory
      * @param AttributeRepository $attributeRepository
+     * @param IndexerRegistry $indexerRegistry
      * @param array $components
      * @param array $data
      */
