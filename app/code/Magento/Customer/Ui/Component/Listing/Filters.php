@@ -6,9 +6,13 @@
 namespace Magento\Customer\Ui\Component\Listing;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 class Filters extends \Magento\Ui\Component\Filters
 {
+    /** @var IndexerRegistry  */
+    protected $indexerRegistry;
+
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Customer\Ui\Component\FilterFactory $filterFactory
@@ -20,6 +24,7 @@ class Filters extends \Magento\Ui\Component\Filters
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
         \Magento\Customer\Ui\Component\FilterFactory $filterFactory,
         \Magento\Customer\Ui\Component\Listing\AttributeRepository $attributeRepository,
+        IndexerRegistry $indexerRegistry,
         array $components = [],
         array $data = []
     ) {
@@ -33,6 +38,11 @@ class Filters extends \Magento\Ui\Component\Filters
      */
     public function prepare()
     {
+        $indexer = $this->indexerRegistry->get(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID);
+        if ($indexer->getState()->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_INVALID) {
+            return false;
+        }
+
         /** @var \Magento\Customer\Model\Attribute $attribute */
         foreach ($this->attributeRepository->getList() as $attributeCode => $attributeData) {
             if (!isset($this->components[$attributeCode])) {
