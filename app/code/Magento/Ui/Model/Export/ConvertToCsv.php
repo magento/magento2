@@ -49,17 +49,20 @@ class ConvertToCsv
      */
     public function getCsvFile()
     {
-        $options = $this->metadataProvider->getOptions();
         $component = $this->filter->getComponent();
+
         $name = md5(microtime());
         $file = 'export/'. $component->getName() . $name . '.csv';
+
         $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();
+
         $searchResult = $component->getContext()->getDataProvider()->getSearchResult();
+        $fields = $this->metadataProvider->getFields($component);
+        $options = $this->metadataProvider->getOptions();
+
         $this->directory->create('export');
         $stream = $this->directory->openFile($file, 'w+');
-
-        $fields = $this->metadataProvider->getFields($component);
         $stream->lock();
         $stream->writeCsv($this->metadataProvider->getHeaders($component));
         foreach ($searchResult->getItems() as $document) {

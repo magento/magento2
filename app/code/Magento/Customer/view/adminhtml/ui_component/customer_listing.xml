@@ -243,18 +243,6 @@
                     </item>
                 </argument>
             </filterSelect>
-            <filterSelect name="gender">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Customer\Model\Config\Source\Gender</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">gender</item>
-                        <item name="label" xsi:type="string" translate="true">Gender</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                    </item>
-                </argument>
-            </filterSelect>
         </filters>
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
