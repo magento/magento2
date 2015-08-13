@@ -8,7 +8,8 @@ define([
     'ko',
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/collapsible'
+    'Magento_Ui/js/lib/collapsible',
+    'mage/translate'
 ], function (Component, $, ko, _, utils, Collapsible) {
     'use strict';
 
@@ -16,6 +17,7 @@ define([
     ko.bindingHandlers.sortableList = {
         init: function(element, valueAccessor) {
             var list = valueAccessor();
+
             $(element).sortable({
                 axis: 'y',
                 handle: '[data-role="draggable"]',
@@ -46,6 +48,12 @@ define([
     return Collapsible.extend({
         stepInitialized: false,
         attributes: ko.observableArray([]),
+        defaults: {
+            notificationMessage: {
+                text: null,
+                error: null
+            }
+        },
         createOption: function () {
             // this - current attribute
             this.options.push({value: 0, label: '', id: utils.uniqueid(), attribute_id: this.id, is_new: true});
@@ -60,9 +68,8 @@ define([
         },
         removeAttribute: function (attribute) {
             this.attributes.remove(attribute);
-            this.wizard.notifyMessage(
-                $.mage.__('An attribute has been removed. This attribute will no longer appear in your configurations.'),
-                false
+            this.wizard.setNotificationMessage(
+                $.mage.__('An attribute has been removed. This attribute will no longer appear in your configurations.')
             );
         },
         createAttribute: function (attribute, index) {
@@ -73,6 +80,7 @@ define([
             }));
             attribute.opened = ko.observable(this.initialOpened(index));
             attribute.collapsible = ko.observable(true);
+
             return attribute;
         },
         //first 3 attribute panels must be open
@@ -98,9 +106,11 @@ define([
         },
         saveOptions: function() {
             var options = [];
+
             this.attributes.each(function(attribute) {
                 attribute.chosenOptions.each(function(id) {
                     var option = attribute.options.findWhere({id:id, is_new: true});
+
                     if (option) {
                         options.push(option);
                     }
@@ -118,6 +128,7 @@ define([
                 this.attributes.each(function(attribute) {
                     _.each(options, function(newOptionId, oldOptionId) {
                         var option = attribute.options.findWhere({id:oldOptionId});
+
                         if (option) {
                             attribute.options.remove(option);
                             option.is_new = false;
@@ -145,6 +156,7 @@ define([
                 this.stepInitialized = true;
                 _.each(this.attributes(), function(attribute) {
                     var selectedAttribute = _.findWhere(this.initData.attributes, {id: attribute.id});
+
                     if (selectedAttribute) {
                         var selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
                         var selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
@@ -157,13 +169,6 @@ define([
         },
         render: function(wizard) {
             this.wizard = wizard;
-            if (this.initData) {
-                this.wizard.notifyMessage(
-                    $.mage.__('When you remove or add an attribute, we automatically ' +
-                    'update all configurations and you will need to manually recreate the current configurations.'),
-                    false
-                );
-            }
             this.requestAttributes(wizard.data.attributesIds());
         },
         force: function(wizard) {
