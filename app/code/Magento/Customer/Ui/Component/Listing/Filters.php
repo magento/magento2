@@ -41,26 +41,23 @@ class Filters extends \Magento\Ui\Component\Filters
     public function prepare()
     {
         $indexer = $this->indexerRegistry->get(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID);
-        if ($indexer->getState()->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_INVALID) {
-            parent::prepare();
-            return false;
-        }
-
-        /** @var \Magento\Customer\Model\Attribute $attribute */
-        foreach ($this->attributeRepository->getList() as $attributeCode => $attributeData) {
-            if (!isset($this->components[$attributeCode])) {
-                if (!$attributeData[AttributeMetadata::BACKEND_TYPE] != 'static'
-                    && $attributeData[AttributeMetadata::IS_USED_IN_GRID]
-                    && $attributeData[AttributeMetadata::IS_FILTERABLE_IN_GRID]
+        if ($indexer->getState()->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_VALID) {
+            /** @var \Magento\Customer\Model\Attribute $attribute */
+            foreach ($this->attributeRepository->getList() as $attributeCode => $attributeData) {
+                if (!isset($this->components[$attributeCode])) {
+                    if (!$attributeData[AttributeMetadata::BACKEND_TYPE] != 'static'
+                        && $attributeData[AttributeMetadata::IS_USED_IN_GRID]
+                        && $attributeData[AttributeMetadata::IS_FILTERABLE_IN_GRID]
+                    ) {
+                        $filter = $this->filterFactory->create($attributeData, $this->getContext());
+                        $filter->prepare();
+                        $this->addComponent($attributeCode, $filter);
+                    }
+                } elseif ($attributeData[AttributeMetadata::IS_USED_IN_GRID]
+                    && !$attributeData[AttributeMetadata::IS_FILTERABLE_IN_GRID]
                 ) {
-                    $filter = $this->filterFactory->create($attributeData, $this->getContext());
-                    $filter->prepare();
-                    $this->addComponent($attributeCode, $filter);
+                    unset($this->components[$attributeCode]);
                 }
-            } elseif ($attributeData[AttributeMetadata::IS_USED_IN_GRID]
-                && !$attributeData[AttributeMetadata::IS_FILTERABLE_IN_GRID]
-            ) {
-                unset($this->components[$attributeCode]);
             }
         }
         parent::prepare();
