@@ -107,7 +107,11 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->themeValidator = $this->getMock('Magento\Theme\Model\ThemeValidator', [], [], '', false);
         $this->themeUninstaller = $this->getMock('Magento\Theme\Model\Theme\ThemeUninstaller', [], [], '', false);
         $this->themeDependencyChecker = $this->getMock(
-            'Magento\Theme\Model\Theme\ThemeDependencyChecker', [], [], '', false
+            'Magento\Theme\Model\Theme\ThemeDependencyChecker',
+            [],
+            [],
+            '',
+            false
         );
         $this->themePackageInfo = $this->getMock('Magento\Theme\Model\Theme\ThemePackageInfo', [], [], '', false);
         $this->command = new ThemeUninstallCommand(
@@ -277,7 +281,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->setupPassChildThemeCheck();
         $this->setupPassDependencyCheck();
         $this->cache->expects($this->once())->method('clean');
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
 
         $this->themeUninstaller->expects($this->once())
             ->method('uninstallRegistry')
