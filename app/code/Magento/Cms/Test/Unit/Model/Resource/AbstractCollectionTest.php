@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Test\Unit\Model\Resource;
 
-class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
