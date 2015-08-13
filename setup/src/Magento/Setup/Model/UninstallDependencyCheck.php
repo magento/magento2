@@ -32,7 +32,6 @@ class UninstallDependencyCheck
      */
     private $themeDependencyChecker;
 
-
     /**
      * Constructor
      *
@@ -71,8 +70,7 @@ class UninstallDependencyCheck
                 }
 
                 switch ($packagesAndTypes[$package]) {
-                    case ComposerInformation::COMPONENT_PACKAGE_TYPE:
-                        return ['success' => true];
+                    case ComposerInformation::METAPACKAGE_PACKAGE_TYPE:
                         break;
                     case ComposerInformation::THEME_PACKAGE_TYPE:
                         $themes[] = $package;

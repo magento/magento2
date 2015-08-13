@@ -61,10 +61,16 @@ class ThemeDependencyChecker
     {
         $themePaths = [];
         foreach ($packages as $package) {
-            $themePaths[] = $this->themePackageInfo->getFullThemePath($package);
+            $themePath = $this->themePackageInfo->getFullThemePath($package);
+            if ($themePath) {
+                $themePaths[] = $themePath;
+            }
+        }
+        if ($themePaths) {
+            return $this->checkChildTheme($themePaths);
         }
 
-        return $this->checkChildTheme($themePaths);
+        return false;
     }
 
     /**
@@ -90,13 +96,13 @@ class ThemeDependencyChecker
         }
         if (!empty($themeHasVirtualChildren)) {
             $text = count($themeHasVirtualChildren) > 1 ? ' are parents of' : ' is a parent of';
-            $messages[] = '<error>' . implode(', ', $themeHasVirtualChildren) . $text . ' virtual theme.'
-                . ' Parent themes cannot be uninstalled.</error>';
+            $messages[] = implode(', ', $themeHasVirtualChildren) . $text . ' virtual theme.'
+                . ' Parent themes cannot be uninstalled.';
         }
         if (!empty($themeHasPhysicalChildren)) {
             $text = count($themeHasPhysicalChildren) > 1 ? ' are parents of' : ' is a parent of';
-            $messages[] = '<error>' . implode(', ', $themeHasPhysicalChildren) . $text . ' physical theme.'
-                . ' Parent themes cannot be uninstalled.</error>';
+            $messages[] = implode(', ', $themeHasPhysicalChildren) . $text . ' physical theme.'
+                . ' Parent themes cannot be uninstalled.';
         }
         return $messages;
     }
