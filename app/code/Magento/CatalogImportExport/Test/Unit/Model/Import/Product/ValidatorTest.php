@@ -40,7 +40,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
         $this->context = $this->getMock(
             '\Magento\CatalogImportExport\Model\Import\Product',
-            ['retrieveProductTypeByName','retrieveMessageTemplate'],
+            ['retrieveProductTypeByName', 'retrieveMessageTemplate'],
             [],
             '',
             false
