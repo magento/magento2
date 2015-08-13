@@ -14,12 +14,15 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use Magento\Setup\Module\Di\App\Task\OperationException;
+use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to run compile in single-tenant mode
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DiCompileCommand extends Command
 {
@@ -104,39 +107,10 @@ class DiCompileCommand extends Command
         ];
         $this->configureObjectManager($output);
 
-        $operations = [
-            OperationFactory::REPOSITORY_GENERATOR => [
-                'path' => $compiledPathsList['application'],
-                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
-            ],
-            OperationFactory::DATA_ATTRIBUTES_GENERATOR => [
-                'path' => $compiledPathsList['application'],
-                'filePatterns' => $dataAttributesIncludePattern
-            ],
-            OperationFactory::APPLICATION_CODE_GENERATOR => [
-                $compiledPathsList['application'],
-                $compiledPathsList['library'],
-                $compiledPathsList['generated_helpers'],
-            ],
-            OperationFactory::INTERCEPTION => [
-                    'intercepted_paths' => [
-                        $compiledPathsList['application'],
-                        $compiledPathsList['library'],
-                        $compiledPathsList['generated_helpers'],
-                    ],
-                    'path_to_store' => $compiledPathsList['generated_helpers'],
-            ],
-            OperationFactory::AREA_CONFIG_GENERATOR => [
-                $compiledPathsList['application'],
-                $compiledPathsList['library'],
-                $compiledPathsList['generated_helpers'],
-            ],
-            OperationFactory::INTERCEPTION_CACHE => [
-                $compiledPathsList['application'],
-                $compiledPathsList['library'],
-                $compiledPathsList['generated_helpers'],
-            ]
-        ];
+        $operations = $this->getOperationsConfiguration(
+            $compiledPathsList,
+            $dataAttributesIncludePattern
+        );
 
         try {
             $this->cleanupFilesystem(
@@ -152,7 +126,34 @@ class DiCompileCommand extends Command
                     $arguments
                 );
             }
-            $this->taskManager->process();
+
+            /** @var ProgressBar $progressBar */
+            $progressBar = $this->objectManager->create(
+                'Symfony\Component\Console\Helper\ProgressBar',
+                [
+                    'output' => $output,
+                    'max' => count($operations)
+                ]
+            );
+            $progressBar->setFormat(
+                '<info>%message%</info> %current%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s%'
+            );
+            $output->writeln('<info>Compilation was started.</info>');
+            $progressBar->start();
+            $progressBar->display();
+
+            $this->taskManager->process(
+                function (OperationInterface $operation) use ($progressBar) {
+                    $progressBar->setMessage($operation->getName() . '...');
+                    $progressBar->display();
+                },
+                function (OperationInterface $operation) use ($progressBar) {
+                    $progressBar->advance();
+                }
+            );
+
+            $progressBar->finish();
+            $output->writeln('');
             $output->writeln('<info>Generated code and dependency injection configuration successfully.</info>');
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
@@ -221,5 +222,53 @@ class DiCompileCommand extends Command
                 ],
             ]
         );
+    }
+
+    /**
+     * Returns operations configuration
+     *
+     * @param array $compiledPathsList
+     * @param array $dataAttributesIncludePattern
+     * @return array
+     */
+    private function getOperationsConfiguration(
+        array $compiledPathsList,
+        array $dataAttributesIncludePattern
+    ) {
+        $operations = [
+            OperationFactory::REPOSITORY_GENERATOR => [
+                'path' => $compiledPathsList['application'],
+                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
+            ],
+            OperationFactory::DATA_ATTRIBUTES_GENERATOR => [
+                'path' => $compiledPathsList['application'],
+                'filePatterns' => $dataAttributesIncludePattern
+            ],
+            OperationFactory::APPLICATION_CODE_GENERATOR => [
+                $compiledPathsList['application'],
+                $compiledPathsList['library'],
+                $compiledPathsList['generated_helpers'],
+            ],
+            OperationFactory::INTERCEPTION => [
+                'intercepted_paths' => [
+                    $compiledPathsList['application'],
+                    $compiledPathsList['library'],
+                    $compiledPathsList['generated_helpers'],
+                ],
+                'path_to_store' => $compiledPathsList['generated_helpers'],
+            ],
+            OperationFactory::AREA_CONFIG_GENERATOR => [
+                $compiledPathsList['application'],
+                $compiledPathsList['library'],
+                $compiledPathsList['generated_helpers'],
+            ],
+            OperationFactory::INTERCEPTION_CACHE => [
+                $compiledPathsList['application'],
+                $compiledPathsList['library'],
+                $compiledPathsList['generated_helpers'],
+            ]
+        ];
+
+        return $operations;
     }
 }

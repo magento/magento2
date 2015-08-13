@@ -36,8 +36,8 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $childrenIds = [];
         $notRequired = [];
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['tbl_selection' => $this->getMainTable()],
             ['product_id', 'parent_product_id', 'option_id']
         )->join(
@@ -51,7 +51,7 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->where(
             'tbl_selection.parent_product_id = :parent_id'
         );
-        foreach ($adapter->fetchAll($select, ['parent_id' => $parentId]) as $row) {
+        foreach ($connection->fetchAll($select, ['parent_id' => $parentId]) as $row) {
             if ($row['required']) {
                 $childrenIds[$row['option_id']][$row['product_id']] = $row['product_id'];
             } else {
@@ -85,8 +85,8 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getParentIdsByChild($childId)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->distinct(
+        $connection = $this->getConnection();
+        $select = $connection->select()->distinct(
             true
         )->from(
             $this->getMainTable(),
@@ -96,7 +96,7 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $childId
         );
 
-        return $adapter->fetchCol($select);
+        return $connection->fetchCol($select);
     }
 
     /**
@@ -107,9 +107,9 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function saveSelectionPrice($item)
     {
-        $write = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         if ($item->getDefaultPriceScope()) {
-            $write->delete(
+            $connection->delete(
                 $this->getTable('catalog_product_bundle_selection_price'),
                 ['selection_id = ?' => $item->getSelectionId(), 'website_id = ?' => $item->getWebsiteId()]
             );
@@ -120,7 +120,7 @@ class Selection extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'selection_price_type' => $item->getSelectionPriceType(),
                 'selection_price_value' => $item->getSelectionPriceValue(),
             ];
-            $write->insertOnDuplicate(
+            $connection->insertOnDuplicate(
                 $this->getTable('catalog_product_bundle_selection_price'),
                 $values,
                 ['selection_price_type', 'selection_price_value']

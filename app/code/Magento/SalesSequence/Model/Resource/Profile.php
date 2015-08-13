@@ -39,15 +39,15 @@ class Profile extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param DatabaseContext $context
      * @param ProfileFactory $profileFactory
-     * @param null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         DatabaseContext $context,
         ProfileFactory $profileFactory,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->profileFactory = $profileFactory;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -60,14 +60,14 @@ class Profile extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function loadActiveProfile($metadataId)
     {
         $profile = $this->profileFactory->create();
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['meta_id' => $metadataId];
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from($this->getMainTable(), ['profile_id'])
             ->where('meta_id = :meta_id')
             ->where('is_active = 1');
 
-        $profileId = $adapter->fetchOne($select, $bind);
+        $profileId = $connection->fetchOne($select, $bind);
 
         if ($profileId) {
             $this->load($profile, $profileId);

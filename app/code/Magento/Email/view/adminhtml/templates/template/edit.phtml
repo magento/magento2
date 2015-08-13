@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\App\TemplateTypesInterface;
+
 // @codingStandardsIgnoreFile
 
+/** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
 ?>
 <?php if (!$block->getEditMode()): ?>
 <form action="<?php echo $block->getLoadUrl() ?>" method="post" id="email_template_load_form">
@@ -139,9 +142,9 @@ require([
         },
         preview: function() {
             if (this.typeChange) {
-                $('preview_type').value = 1;
+                $('preview_type').value = <?php echo TemplateTypesInterface::TYPE_TEXT ?>;
             } else {
-                $('preview_type').value = 2;
+                $('preview_type').value = <?php echo $block->getTemplateType() ?>;
             }
             if (typeof tinyMCE == 'undefined' || !tinyMCE.getInstanceById('template_text')) {
                 $('preview_text').value = $('template_text').value;
@@ -214,7 +217,7 @@ require([
         renderPaths: function(paths, fieldId) {
             var field = $(fieldId);
             if (field) {
-                field.down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
+                field.down('div').down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
             }
         },
 

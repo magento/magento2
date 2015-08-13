@@ -10,10 +10,10 @@ class DraggableHandle extends \Magento\Backend\Block\Widget\Grid\Column\Renderer
     /**
      * Render grid row
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         return '<span class="' .
             $this->getColumn()->getInlineCss() .

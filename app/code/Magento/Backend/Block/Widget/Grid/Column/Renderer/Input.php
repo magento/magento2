@@ -21,10 +21,10 @@ class Input extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     /**
      * Renders grid column
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $html = '<input type="text" ';
         $html .= 'name="' . $this->getColumn()->getId() . '" ';
