@@ -119,6 +119,7 @@ class MassUnsubscribeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($redirectMock);
         $this->subscriberMock = $this->getMock('Magento\Newsletter\Model\Subscriber', [], [], '', false);
         $subscriberFactoryMock = $this->getMockBuilder('Magento\Newsletter\Model\SubscriberFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $subscriberFactoryMock->expects($this->any())
