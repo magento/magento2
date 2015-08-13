@@ -17,7 +17,7 @@
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
             <argument name="name" xsi:type="string">customer_online_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">customer_id</argument>
+            <argument name="primaryFieldName" xsi:type="string">visitor_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -90,7 +90,7 @@
                     </item>
                 </item>
             </argument>
-            <filterRange name="customer_id" class="Magento\Ui\Component\Filters\Type\DateRange">
+            <filterRange name="customer_id">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">customer_id</item>
@@ -100,7 +100,7 @@
                         </item>
                     </item>
                 </argument>
-                <filterDate name="from">
+                <filterInput name="from">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataScope" xsi:type="string">from</item>
@@ -108,8 +108,8 @@
                             <item name="placeholder" xsi:type="string" translate="true">From</item>
                         </item>
                     </argument>
-                </filterDate>
-                <filterDate name="to">
+                </filterInput>
+                <filterInput name="to">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataScope" xsi:type="string">to</item>
@@ -117,7 +117,7 @@
                             <item name="placeholder" xsi:type="string" translate="true">To</item>
                         </item>
                     </argument>
-                </filterDate>
+                </filterInput>
             </filterRange>
             <filterInput name="firstname">
                 <argument name="data" xsi:type="array">
@@ -143,7 +143,7 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterRange name="first_visit_at"  class="Magento\Ui\Component\Filters\Type\DateRange">
+            <!--<filterRange name="first_visit_at"  class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">first_visit_at</item>
@@ -173,12 +173,12 @@
                         </item>
                     </argument>
                 </filterDate>
-            </filterRange>
+            </filterRange>-->
             <filterRange name="last_visit_at"  class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">last_visit_at</item>
-                        <item name="label" xsi:type="string" translate="true">Session Start Time</item>
+                        <item name="label" xsi:type="string" translate="true">Last Activity</item>
                         <item name="childDefaults" xsi:type="array">
                             <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.listing_filters</item>
                         </item>
@@ -206,9 +206,9 @@
                 </filterDate>
             </filterRange>
             <filterSelect name="visitor_type">
-<!--                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Customer\Ui\Component\Listing\Column\Type\Options</argument>
-                </argument>-->
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Customer\Ui\Component\Listing\Column\Online\Type\Options</argument>
+                </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
@@ -217,14 +217,14 @@
                     </item>
                 </argument>
             </filterSelect>
-            <filterInput name="last_url">
+<!--            <filterInput name="last_url">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataScope" xsi:type="string">last_url</item>
                     <item name="label" xsi:type="string" translate="true">Last URL</item>
                 </item>
             </argument>
-        </filterInput>
+            </filterInput>-->
         </filters>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
@@ -376,7 +376,7 @@
                 </item>
             </argument>
         </column>
-        <column name="visitor_type"><!-- class="Magento\Customer\Ui\Component\Listing\Column\Visitor\Type">-->
+        <column name="visitor_type" class="Magento\Customer\Ui\Component\Listing\Column\Online\Type">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
