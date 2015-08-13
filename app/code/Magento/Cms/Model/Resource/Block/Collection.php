@@ -20,7 +20,7 @@ class Collection extends AbstractCollection
     /**
      * Perform operations after collection load
      *
-     * @return \Magento\Cms\Model\Resource\Block\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -53,8 +53,8 @@ class Collection extends AbstractCollection
     /**
      * Add filter by store
      *
-     * @param int|\Magento\Store\Model\Store $store
-     * @param bool|true $withAdmin
+     * @param int|array|\Magento\Store\Model\Store $store
+     * @param bool $withAdmin
      * @return $this
      */
     public function addStoreFilter($store, $withAdmin = true)
