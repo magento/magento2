@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model\Address;
 
-use Magento\Framework\Config\Data;
+use Magento\Framework\Config\Data as ConfigData;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
 
@@ -14,7 +14,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Config extends Data
+class Config extends ConfigData
 {
     const DEFAULT_ADDRESS_RENDERER = 'Magento\Customer\Block\Address\Renderer\DefaultRenderer';
 
