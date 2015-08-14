@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Model\Resource\Observer;
+namespace Magento\Customer\Model\Resource\Customer;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Customer\Model\Customer;
 
-class Grid
+class GridSynchronization
 {
     /** @var Resource */
     protected $resource;

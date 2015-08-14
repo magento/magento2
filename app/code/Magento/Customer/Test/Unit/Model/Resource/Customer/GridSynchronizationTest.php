@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Test\Unit\Model\Resource\Observer;
+namespace Magento\Customer\Test\Unit\Model\Resource\Customer;
 
-use Magento\Customer\Model\Resource\Observer\Grid;
+use Magento\Customer\Model\Resource\Customer\GridSynchronization;
 
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridSynchronizationTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
@@ -27,7 +27,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
     protected $select;
 
-    /** @var Grid */
+    /** @var GridSynchronization */
     protected $observer;
 
     /** @var \Zend_Db_Statement_Interface|\PHPUnit_Framework_MockObject_MockObject */
@@ -64,7 +64,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->observer = new Grid(
+        $this->observer = new GridSynchronization(
             $this->resource,
             $this->indexerRegistry,
             $this->flatScopeResolver
