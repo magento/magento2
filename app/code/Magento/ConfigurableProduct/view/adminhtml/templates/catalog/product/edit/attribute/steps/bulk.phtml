@@ -503,6 +503,7 @@
                     </div>
                 </li>
             </ul>
+            <form action="" data-role="attributes-values-form">
             <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                 <div class="admin__field">
                     <label for="apply-single-price-input" class="admin__field-label">
@@ -510,12 +511,14 @@
                     </label>
                     <div class="admin__field-control">
                         <div class="currency-addon">
-                            <input class="admin__control-text" type="text" data-bind="value:value">
+                            <input class="admin__control-text required-entry validate-zero-or-greater" type="text"
+                                   data-bind="value:value, uniqueName: true" />
                             <span class="currency-symbol" data-bind="text:currencySymbol"></span>
                         </div>
                     </div>
                 </div>
             </fieldset>
+            </form>
 
             <div data-bind="visible: type() == 'each'">
                 <fieldset class="admin__fieldset bulk-attribute-values">
@@ -532,6 +535,7 @@
                         </div>
                     </div>
                 </fieldset>
+                <form action="" data-role="attributes-values-form">
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
                     <!-- ko foreach: attribute().chosen -->
                     <div class="admin__field">
@@ -540,13 +544,15 @@
                         </label>
                         <div class="admin__field-control">
                             <div class="currency-addon">
-                                <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                                <input class="admin__control-text required-entry validate-zero-or-greater" type="text"
+                                       data-bind="value:sections()[$parent.label], uniqueName: true" />
                                 <span class="currency-symbol" data-bind="text:$parent.currencySymbol"></span>
                             </div>
                         </div>
                     </div>
                     <!-- /ko -->
                 </fieldset>
+                </form>
             </div>
         </div>
     </div>
@@ -596,6 +602,7 @@
                 </li>
             </ul>
 
+            <form action="" data-role="attributes-values-form">
             <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                 <div class="admin__field">
                     <label for="apply-single-inventory-input" class="admin__field-label">
@@ -604,11 +611,12 @@
                     <div class="admin__field-control">
                         <input type="text"
                                id="apply-single-inventory-input"
-                               class="admin__control-text"
-                               data-bind="value: value" />
+                               class="admin__control-text required-entry validate-zero-or-greater"
+                               data-bind="value: value, uniqueName: true" />
                     </div>
                 </div>
             </fieldset>
+            </form>
 
             <div data-bind="visible: type() == 'each'">
                 <fieldset class="admin__fieldset bulk-attribute-values">
@@ -625,6 +633,7 @@
                         </div>
                     </div>
                 </fieldset>
+                <form action="" data-role="attributes-values-form">
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
                     <!-- ko foreach: attribute().chosen -->
                     <div class="admin__field">
@@ -632,15 +641,17 @@
                             <span data-bind="text:label"></span>
                         </label>
                         <div class="admin__field-control">
-                            <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                            <input class="admin__control-text required-entry validate-zero-or-greater" type="text"
+                                   data-bind="value:sections()[$parent.label], uniqueName: true" />
                         </div>
                     </div>
                     <!-- /ko -->
                 </fieldset>
+                </form>
             </div>
         </div>
     </div>
-
+</form>
 </div>
 
 <script type="text/x-magento-init">
