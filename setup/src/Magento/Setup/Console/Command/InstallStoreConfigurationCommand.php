@@ -260,6 +260,15 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                         $errors[] = $errorMsg;
                     }
                     break;
+                case StoreConfigurationDataMapper::KEY_JS_LOGGING:
+                    $errorMsg = $this->validateBinaryValue(
+                        $value,
+                        StoreConfigurationDataMapper::KEY_JS_LOGGING
+                    );
+                    if ($errorMsg !== '') {
+                        $errors[] = $errorMsg;
+                    }
+                    break;
             }
         }
         return $errors;
