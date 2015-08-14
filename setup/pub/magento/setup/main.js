@@ -75,6 +75,16 @@ main.controller('navigationController',
         $scope.endsWith = function(str, suffix) {
             return str.indexOf(suffix, str.length - suffix.length) !== -1;
         }
+
+        $scope.goToStart = function() {
+            if ($state.current.type === 'install') {
+                $state.go('root.landing-installer');
+            } else if ($state.current.type === 'upgrade') {
+                $state.go('root.upgrade');
+            } else {
+                $state.go('root.update');
+            }
+        }
     }
 ])
 .service('navigationService', ['$location', '$state', '$http', '$localStorage',
