@@ -27,7 +27,7 @@ class Filter
      * @param FlatScopeResolver $flatScopeResolver
      * @param IndexerRegistry $indexerRegistry
      */
-    function __construct(
+    public function __construct(
         Resource $resource,
         FlatScopeResolver $flatScopeResolver,
         IndexerRegistry $indexerRegistry
@@ -48,8 +48,8 @@ class Filter
             $tableName = $this->flatScopeResolver->resolve(Customer::CUSTOMER_GRID_INDEXER_ID, []);
             $columns = $this->resource->getConnection()->describeTable($tableName);
 
-            foreach ($attributes as $attributeCode => $attributeData) {
-                if (!isset($columns[$attributeCode]))  {
+            foreach (array_keys($attributes) as $attributeCode) {
+                if (!isset($columns[$attributeCode])) {
                     unset($attributes[$attributeCode]);
                 }
             }
