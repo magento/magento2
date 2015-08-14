@@ -99,7 +99,8 @@ class FileGenerator implements SourceFileGeneratorInterface
     }
 
     /**
-     * Create a tree of self-sustainable files and return the topmost source file, ready for passing to 3rd party library
+     * Create a tree of self-sustainable files and return the topmost source file,
+     * ready for passing to 3rd party library
      *
      * @param Chain $chain
      * @return string Absolute path of generated topmost source file
