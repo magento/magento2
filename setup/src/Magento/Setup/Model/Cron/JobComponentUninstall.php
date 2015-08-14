@@ -140,11 +140,16 @@ class JobComponentUninstall extends AbstractJob
 
         switch ($type) {
             case self::COMPONENT_MODULE:
+                if (isset($this->params[self::DATA_OPTION]) && $this->params[self::DATA_OPTION] === 'true' ) {
+                    $dataOption = true;
+                } else {
+                    $dataOption = false;
+                }
+
                 $this->moduleUninstall->uninstall(
                     $this->output,
                     $componentName,
-                    isset($this->params[self::DATA_OPTION]) ?
-                        $this->params[self::DATA_OPTION] == 'true' ? true : false : false
+                    $dataOption
                 );
                 break;
             case self::COMPONENT_THEME:
