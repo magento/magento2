@@ -85,6 +85,10 @@ main.controller('navigationController',
                 $state.go('root.update');
             }
         }
+
+        $scope.goToBackup = function() {
+            $state.go('root.create-backup-uninstall');
+        }
     }
 ])
 .service('navigationService', ['$location', '$state', '$http', '$localStorage',

@@ -7,6 +7,7 @@
 angular.module('data-option', ['ngStorage'])
     .controller('dataOptionController', ['$scope', '$localStorage', '$http', function ($scope, $localStorage, $http) {
         $scope.component = {
+            dataOption : false,
             hasUninstall : false
         };
 
@@ -18,10 +19,10 @@ angular.module('data-option', ['ngStorage'])
         }
 
         if ($localStorage.dataOption) {
-            $scope.dataOption = $localStorage.dataOption;
+            $scope.component.dataOption = $localStorage.dataOption;
         }
 
-        $scope.$watch('dataOption', function(value) {
+        $scope.$watch('component.dataOption', function(value) {
             $localStorage.dataOption = value;
         });
     }]);
