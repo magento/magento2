@@ -17,14 +17,14 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
      * Constructor
      *
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param DateTimeFormatterInterface $dateTimeFormatter
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         DateTimeFormatterInterface $dateTimeFormatter,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = []
     ) {
         parent::__construct($context, $dateTimeFormatter, $data);
