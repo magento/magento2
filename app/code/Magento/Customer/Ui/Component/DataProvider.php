@@ -30,6 +30,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param AttributeRepository $attributeRepository
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -101,7 +102,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      */
     public function getData()
     {
-        $data = $this->searchResultToOutput($this->getSearchResult());;
+        $data = $this->searchResultToOutput($this->getSearchResult());
         $customAttributesOptions = $this->getCustomAttributesOptions();
         foreach ($customAttributesOptions as $attributeCode => $attributeData) {
             foreach ($data['items'] as &$item) {
