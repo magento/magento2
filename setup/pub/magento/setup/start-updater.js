@@ -46,8 +46,8 @@ angular.module('start-updater', ['ngStorage'])
         $scope.update = function() {
             $scope.started = true;
             var payLoad = {'packages': $scope.packages, 'type': $state.current.type, 'headerTitle': $scope.title};
-            if ($scope.dataOption) {
-                payLoad.dataOption = $scope.dataOption;
+            if ($localStorage.dataOption) {
+                payLoad.dataOption = $localStorage.dataOption;
             }
             $http.post('index.php/start-updater/update', payLoad)
                 .success(function (data) {

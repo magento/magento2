@@ -16,14 +16,48 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
     private $uninstallCollector;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\PhpEnvironment\Request
+     */
+    private $request;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\PhpEnvironment\Response
+     */
+    private $response;
+
+    /**
+     * @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mvcEvent;
+
+    /**
      * @var DataOption
      */
     private $controller;
 
     public function setUp()
     {
+        $this->request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
+        $this->response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
+        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+
         $this->uninstallCollector = $this->getMock('Magento\Setup\Model\UninstallCollector', [], [], '', false);
         $this->controller = new DataOption($this->uninstallCollector);
+
+        $this->mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $this->mvcEvent->expects($this->any())
+            ->method('setRequest')
+            ->with($this->request)
+            ->willReturn($this->mvcEvent);
+        $this->mvcEvent->expects($this->any())
+            ->method('setResponse')
+            ->with($this->response)
+            ->willReturn($this->mvcEvent);
+        $this->mvcEvent->expects($this->any())
+            ->method('setTarget')
+            ->with($this->controller)
+            ->willReturn($this->mvcEvent);
+        $this->mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
     }
 
     public function testIndexAction()
@@ -33,72 +67,44 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($viewModel->terminate());
     }
 
-    public function testHasUninstallAction()
+    public function testHasNoUninstallAction()
     {
-        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
-
-        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
-        $content = '{"moduleName": "some_module"}';
-        $request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->request->expects($this->any())->method('getContent')->willReturn('');
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
+        $this->uninstallCollector->expects($this->never())->method('collectUninstall')->with(["some_module"]);
+        $this->assertFalse($this->controller->hasUninstallAction()->getVariable("hasUninstall"));
+    }
+    /**
+     * @param string $content
+     * @param array $expected
+     * @param bool $result
+     * @dataProvider uninstallActionDataProvider
+     */
+    public function testHasUninstallAction($content, $expected, $result)
+    {
+        $this->request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->controller->setEvent($this->mvcEvent);
+        $this->controller->dispatch($this->request, $this->response);
 
         $this->uninstallCollector
             ->expects($this->once())
             ->method('collectUninstall')
             ->with(["some_module"])
-            ->willReturn(['module']);
+            ->willReturn($expected);
 
-        $this->controller->setEvent($mvcEvent);
-        $this->controller->dispatch($request, $response);
-        $this->assertTrue($this->controller->hasUninstallAction()->getVariable("hasUninstall"));
+        $this->assertSame($result, $this->controller->hasUninstallAction()->getVariable("hasUninstall"));
     }
 
-    public function testNoUninstallAction()
+    /**
+     * @return array
+     */
+    public function uninstallActionDataProvider()
     {
-        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
-
-        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
-        $request->expects($this->any())->method('getContent')->willReturn('');
-
-        $this->uninstallCollector->expects($this->never())->method('collectUninstall');
-        $this->controller->setEvent($mvcEvent);
-        $this->controller->dispatch($request, $response);
-        $this->assertFalse($this->controller->hasUninstallAction()->getVariable("hasUninstall"));
-    }
-
-    public function testEmptyUninstallAction()
-    {
-        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
-
-        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
         $content = '{"moduleName": "some_module"}';
-        $request->expects($this->any())->method('getContent')->willReturn($content);
-
-        $this->uninstallCollector
-            ->expects($this->once())
-            ->method('collectUninstall')
-            ->with(["some_module"])
-            ->willReturn([]);
-
-        $this->controller->setEvent($mvcEvent);
-        $this->controller->dispatch($request, $response);
-        $this->assertFalse($this->controller->hasUninstallAction()->getVariable("hasUninstall"));
+        return [
+            "option1" => [$content, ['module'], true],
+            "option2" => [$content, [], false],
+        ];
     }
 }
