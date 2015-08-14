@@ -74,7 +74,7 @@ class Request extends HttpRequest implements RequestInterface
      *
      * @param string|null $default
      * @return array|string
-     * @throws Exception
+     * @throws \Magento\Framework\Webapi\Exception When GET parameters are invalid
      */
     public function getRequestedServices($default = null)
     {
