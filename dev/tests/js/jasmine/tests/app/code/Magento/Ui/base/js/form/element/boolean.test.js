@@ -39,18 +39,15 @@ define([
             });
         });
         describe('onUpdate method', function () {
-            it('check for return value', function () {
-                expect(model.onUpdate()).toEqual(model);
-            });
             it('check for setUnique call', function () {
                 spyOn(model, 'setUnique');
                 model.hasUnique = true;
-                expect(model.onUpdate()).toEqual(model);
+                model.onUpdate();
                 expect(model.setUnique).toHaveBeenCalled();
             });
             it('check for setUnique not call', function () {
                 spyOn(model, 'setUnique');
-                expect(model.onUpdate()).toEqual(model);
+                model.onUpdate();
                 expect(model.setUnique).not.toHaveBeenCalled();
             });
         });
