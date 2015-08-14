@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Test\Unit\Stdlib\DateTime;
+namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -58,7 +58,6 @@ class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
             [$date, "d 'of' MMMM y", 'en_US'],
             [new \DateTime('2013-09-09 09:09:09 Europe/Madrid'), \IntlDateFormatter::FULL, 'es_ES'],
             [new \DateTime('2013-09-09 09:09:09 -01:00'), null, null],
-            [new \DateTime('2013-09-09 09:09:09 +00:00'), null, null],
             [new \DateTime('2013-09-09 09:09:09 +01:00'), null, null],
 
             [$calendar, null, null],
@@ -70,7 +69,6 @@ class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
             [$calendar, "d 'of' MMMM y", 'en_US'],
             [\IntlCalendar::fromDateTime('2013-09-09 09:09:09 Europe/Madrid'), \IntlDateFormatter::FULL, 'es_ES'],
             [\IntlCalendar::fromDateTime('2013-09-09 09:09:09 -01:00'), null, null],
-            [\IntlCalendar::fromDateTime('2013-09-09 09:09:09 +00:00'), null, null],
             [\IntlCalendar::fromDateTime('2013-09-09 09:09:09 +01:00'), null, null],
         ];
     }
