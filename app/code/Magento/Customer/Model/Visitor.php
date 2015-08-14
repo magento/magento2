@@ -295,10 +295,10 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     {
         $configValue = intval(
             $this->scopeConfig->getValue(
-                self::XML_PATH_ONLINE_INTERVAL,
+                static::XML_PATH_ONLINE_INTERVAL,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
-        return $configValue ?: self::DEFAULT_ONLINE_MINUTES_INTERVAL;
+        return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 }
