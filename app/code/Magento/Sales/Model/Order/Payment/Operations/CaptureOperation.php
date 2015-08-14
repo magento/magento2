@@ -81,12 +81,14 @@ class CaptureOperation extends AbstractOperation
             //TODO replace for sale usage
             $method->capture($payment, $amountToCapture);
 
-            $transaction = $this->transactionBuilder->setPayment($this)
-                ->setOrder($order)
-                ->setFailSafe(true)
-                ->setTransactionId($payment->getTransactionId())
-                ->setAdditionalInformation($payment->getTransactionAdditionalInfo())
-                ->setSalesDocument($invoice)->build(Transaction::TYPE_CAPTURE);
+            $transactionBuilder = $this->transactionBuilder->setPayment($payment);
+            $transactionBuilder->setOrder($order);
+            $transactionBuilder->setFailSafe(true);
+            $transactionBuilder->setTransactionId($payment->getTransactionId());
+            $transactionBuilder->setAdditionalInformation($payment->getTransactionAdditionalInfo());
+            $transactionBuilder->setSalesDocument($invoice);
+            $transaction = $transactionBuilder->build(Transaction::TYPE_CAPTURE);
+
             $message = $this->stateCommand->execute($payment, $amountToCapture, $order);
             if ($payment->getIsTransactionPending()) {
                 $invoice->setIsPaid(false);
