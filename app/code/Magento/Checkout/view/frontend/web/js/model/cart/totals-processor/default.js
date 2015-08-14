@@ -15,18 +15,18 @@ define(
         'use strict';
 
         return {
-            requiredFields: ['countryId', 'regionId', 'postcode'],
+            requiredFields: ['countryId', 'region', 'regionId', 'postcode'],
 
             /**
              * Get shipping rates for specified address.
              */
-            estimateTotals: function () {
+            estimateTotals: function (address) {
                 var serviceUrl, payload;
                 totalsService.isLoading(true);
                 serviceUrl = resourceUrlManager.getUrlForTotalsEstimationForNewAddress(quote),
                     payload = {
                         addressInformation: {
-                            address: _.pick(quote.shippingAddress(), this.requiredFields)
+                            address: _.pick(address, this.requiredFields)
                         }
                     };
 
