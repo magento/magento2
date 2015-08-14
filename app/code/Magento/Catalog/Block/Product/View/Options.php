@@ -13,6 +13,9 @@ namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Options extends \Magento\Framework\View\Element\Template
 {
     /**
