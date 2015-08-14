@@ -116,11 +116,12 @@ abstract class ImportResult extends Import
     {
         $this->historyModel->loadLastInsertItem();
         $sourceFile = $this->reportHelper->getReportAbsolutePath($this->historyModel->getData('imported_file'));
-        $writeOnlyErrorItems = true;
+        $fileName = $this->reportProcessor->createReport($sourceFile, $errorAggregator, true);
+        $this->historyModel->addErrorFile($fileName);
         if ($this->historyModel->getData('execution_time') == History::IMPORT_VALIDATION) {
-            $writeOnlyErrorItems = false;
+            $fileName = $this->reportProcessor->createReport($sourceFile, $errorAggregator, false);
         }
-        return $this->reportProcessor->createReport($sourceFile, $errorAggregator, $writeOnlyErrorItems);
+        return $fileName;
     }
 
     /**
