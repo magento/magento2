@@ -5,9 +5,9 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Resource\Customer;
 
-use Magento\Customer\Model\Resource\Customer\GridSynchronization;
+use Magento\Customer\Model\Resource\Customer\Grid;
 
-class GridSynchronizationTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
@@ -27,7 +27,7 @@ class GridSynchronizationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
     protected $select;
 
-    /** @var GridSynchronization */
+    /** @var Grid */
     protected $observer;
 
     /** @var \Zend_Db_Statement_Interface|\PHPUnit_Framework_MockObject_MockObject */
@@ -64,7 +64,7 @@ class GridSynchronizationTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->observer = new GridSynchronization(
+        $this->observer = new Grid(
             $this->resource,
             $this->indexerRegistry,
             $this->flatScopeResolver
