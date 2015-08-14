@@ -24,15 +24,6 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $column;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
-    protected $indexerRegistry;
-
-    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $indexer;
-
-    /** @var \Magento\Framework\Indexer\StateInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $indexerState;
-
     /** @var Columns */
     protected $component;
 
@@ -71,43 +62,17 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
-        $this->indexer = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
-            [],
-            '',
-            false
-        );
-        $this->indexerState = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\StateInterface',
-            [],
-            '',
-            false
-        );
 
         $this->component = new Columns(
             $this->context,
             $this->columnFactory,
-            $this->attributeRepository,
-            $this->indexerRegistry
+            $this->attributeRepository
         );
     }
 
     public function testPrepareWithAddColumn()
     {
         $attributeCode = 'attribute_code';
-
-        $this->indexerRegistry->expects($this->once())
-            ->method('get')
-            ->with('customer_grid')
-            ->willReturn($this->indexer);
-        $this->indexer->expects($this->once())
-            ->method('getState')
-            ->willReturn($this->indexerState);
-        $this->indexerState
-            ->expects($this->once())
-            ->method('getStatus')
-            ->willReturn('valid');
 
         $this->attributeRepository->expects($this->atLeastOnce())
             ->method('getList')
@@ -161,17 +126,6 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             'is_searchable_in_grid' => true,
         ];
 
-        $this->indexerRegistry->expects($this->once())
-            ->method('get')
-            ->with('customer_grid')
-            ->willReturn($this->indexer);
-        $this->indexer->expects($this->once())
-            ->method('getState')
-            ->willReturn($this->indexerState);
-        $this->indexerState
-            ->expects($this->once())
-            ->method('getStatus')
-            ->willReturn('valid');
         $this->attributeRepository->expects($this->atLeastOnce())
             ->method('getList')
             ->willReturn([$attributeCode => $attributeData]);
@@ -220,17 +174,6 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             'is_searchable_in_grid' => true,
         ];
 
-        $this->indexerRegistry->expects($this->once())
-            ->method('get')
-            ->with('customer_grid')
-            ->willReturn($this->indexer);
-        $this->indexer->expects($this->once())
-            ->method('getState')
-            ->willReturn($this->indexerState);
-        $this->indexerState
-            ->expects($this->once())
-            ->method('getStatus')
-            ->willReturn('valid');
         $this->attributeRepository->expects($this->atLeastOnce())
             ->method('getList')
             ->willReturn([$attributeCode => $attributeData]);
