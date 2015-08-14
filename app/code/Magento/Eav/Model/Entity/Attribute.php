@@ -7,7 +7,7 @@ namespace Magento\Eav\Model\Entity;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * EAV Entity attribute model
@@ -66,7 +66,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     protected $_localeResolver;
 
     /**
-     * @var DateTimeFormatter
+     * @var DateTimeFormatterInterface
      */
     protected $dateTimeFormatter;
 
@@ -86,7 +86,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param DateTimeFormatter $dateTimeFormatter
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -108,7 +108,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        DateTimeFormatter $dateTimeFormatter,
+        DateTimeFormatterInterface $dateTimeFormatter,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []

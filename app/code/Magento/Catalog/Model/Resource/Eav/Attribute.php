@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\Resource\Eav;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Catalog attribute model
@@ -107,7 +107,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper
      * @param LockValidatorInterface $lockValidator
-     * @param DateTimeFormatter $dateTimeFormatter
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -129,7 +129,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        DateTimeFormatter $dateTimeFormatter,
+        DateTimeFormatterInterface $dateTimeFormatter,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper,

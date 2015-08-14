@@ -5,7 +5,7 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons;
 
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Edit button block
@@ -23,7 +23,7 @@ class Edit extends \Magento\Backend\Block\Widget\Button\SplitButton
     protected $_changeFactory;
 
     /**
-     * @var DateTimeFormatter
+     * @var DateTimeFormatterInterface
      */
     protected $dateTimeFormatter;
 
@@ -31,14 +31,14 @@ class Edit extends \Magento\Backend\Block\Widget\Button\SplitButton
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
      * @param \Magento\DesignEditor\Model\Theme\ChangeFactory $changeFactory
-     * @param DateTimeFormatter $dateTimeFormatter
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
         \Magento\DesignEditor\Model\Theme\ChangeFactory $changeFactory,
-        DateTimeFormatter $dateTimeFormatter,
+        DateTimeFormatterInterface $dateTimeFormatter,
         array $data = []
     ) {
         $this->_themeContext = $themeContext;

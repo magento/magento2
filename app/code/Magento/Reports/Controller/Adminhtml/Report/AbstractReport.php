@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
@@ -26,7 +26,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     protected $_dateFilter;
 
     /**
-     * @var DateTimeFormatter
+     * @var DateTimeFormatterInterface
      */
     protected $dateTimeFormatter;
 
@@ -34,13 +34,13 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param DateTimeFormatter $dateTimeFormatter
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        DateTimeFormatter $dateTimeFormatter
+        DateTimeFormatterInterface $dateTimeFormatter
     ) {
         parent::__construct($context);
         $this->_fileFactory = $fileFactory;

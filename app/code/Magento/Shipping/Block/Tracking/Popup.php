@@ -8,7 +8,7 @@
 
 namespace Magento\Shipping\Block\Tracking;
 
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 class Popup extends \Magento\Framework\View\Element\Template
 {
@@ -20,20 +20,20 @@ class Popup extends \Magento\Framework\View\Element\Template
     protected $_registry;
 
     /**
-     * @var DateTimeFormatter
+     * @var DateTimeFormatterInterface
      */
     protected $dateTimeFormatter;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param DateTimeFormatter $dateTimeFormatter
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        DateTimeFormatter $dateTimeFormatter,
+        DateTimeFormatterInterface $dateTimeFormatter,
         array $data = []
     ) {
         $this->_registry = $registry;
