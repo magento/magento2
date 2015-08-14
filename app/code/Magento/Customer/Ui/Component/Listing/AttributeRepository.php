@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataManagementInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Api\MetadataManagementInterface;
+use Magento\Customer\Model\Indexer\Attribute\Filter;
 
 class AttributeRepository
 {
@@ -31,22 +32,28 @@ class AttributeRepository
     /** @var AddressMetadataManagementInterface */
     protected $addressMetadataManagement;
 
+    /** @var Filter */
+    protected $attributeFilter;
+
     /**
      * @param CustomerMetadataManagementInterface $customerMetadataManagement
      * @param AddressMetadataManagementInterface $addressMetadataManagement
      * @param CustomerMetadataInterface $customerMetadata
      * @param AddressMetadataInterface $addressMetadata
+     * @param Filter $attributeFiltering
      */
     public function __construct(
         CustomerMetadataManagementInterface $customerMetadataManagement,
         AddressMetadataManagementInterface $addressMetadataManagement,
         CustomerMetadataInterface $customerMetadata,
-        AddressMetadataInterface $addressMetadata
+        AddressMetadataInterface $addressMetadata,
+        Filter $attributeFiltering
     ) {
         $this->customerMetadataManagement = $customerMetadataManagement;
         $this->addressMetadataManagement = $addressMetadataManagement;
         $this->customerMetadata = $customerMetadata;
         $this->addressMetadata = $addressMetadata;
+        $this->attributeFilter = $attributeFiltering;
     }
 
     /**
@@ -70,7 +77,7 @@ class AttributeRepository
             );
         }
 
-        return $this->attributes;
+        return $this->attributeFilter->filter($this->attributes);
     }
 
     /**

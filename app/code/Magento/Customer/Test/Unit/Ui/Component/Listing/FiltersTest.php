@@ -24,15 +24,6 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $filter;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
-    protected $indexerRegistry;
-
-    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $indexer;
-
-    /** @var \Magento\Framework\Indexer\StateInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $indexerState;
-
     /** @var Filters */
     protected $component;
 
@@ -70,25 +61,11 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
-        $this->indexer = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
-            [],
-            '',
-            false
-        );
-        $this->indexerState = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\StateInterface',
-            [],
-            '',
-            false
-        );
 
         $this->component = new Filters(
             $this->context,
             $this->filterFactory,
-            $this->attributeRepository,
-            $this->indexerRegistry
+            $this->attributeRepository
         );
     }
 
@@ -112,17 +89,6 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
             'is_searchable_in_grid' => true,
         ];
 
-        $this->indexerRegistry->expects($this->once())
-            ->method('get')
-            ->with('customer_grid')
-            ->willReturn($this->indexer);
-        $this->indexer->expects($this->once())
-            ->method('getState')
-            ->willReturn($this->indexerState);
-        $this->indexerState
-            ->expects($this->once())
-            ->method('getStatus')
-            ->willReturn('valid');
         $this->attributeRepository->expects($this->atLeastOnce())
             ->method('getList')
             ->willReturn([$attributeCode => $attributeData]);
@@ -156,17 +122,7 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
             'is_filterable_in_grid' => false,
             'is_searchable_in_grid' => true,
         ];
-        $this->indexerRegistry->expects($this->once())
-            ->method('get')
-            ->with('customer_grid')
-            ->willReturn($this->indexer);
-        $this->indexer->expects($this->once())
-            ->method('getState')
-            ->willReturn($this->indexerState);
-        $this->indexerState
-            ->expects($this->once())
-            ->method('getStatus')
-            ->willReturn('valid');
+
         $this->component->addComponent($attributeCode, $this->filter);
 
         $this->attributeRepository->expects($this->atLeastOnce())
