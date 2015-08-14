@@ -42,7 +42,7 @@
                 data-bind="
                             css: {
                                 _selected: $parent.isSelected(option.label),
-                                _hover: $parent.isHovered($index())
+                                _hover: $parent.isHovered($index(), $element)
                             },
                             event: {
                                 mouseenter: function(){$parent.onHoveredIn($data, $index())},
