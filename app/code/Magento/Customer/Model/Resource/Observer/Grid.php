@@ -28,7 +28,7 @@ class Grid
      * @param IndexerRegistry $indexerRegistry
      * @param FlatScopeResolver $flatScopeResolver
      */
-    function __construct(
+    public function __construct(
         Resource $resource,
         IndexerRegistry $indexerRegistry,
         FlatScopeResolver $flatScopeResolver
@@ -38,6 +38,11 @@ class Grid
         $this->flatScopeResolver = $flatScopeResolver;
     }
 
+    /**
+     * Synchronize customer grid
+     *
+     * @return void
+     */
     public function syncCustomerGrid()
     {
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
@@ -47,6 +52,11 @@ class Grid
         }
     }
 
+    /**
+     * Retrieve customer IDs for reindex
+     *
+     * @return array
+     */
     protected function getCustomerIdsForReindex()
     {
         $connection = $this->resource->getConnection();
