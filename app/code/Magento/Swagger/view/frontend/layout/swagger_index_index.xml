@@ -41,7 +41,7 @@
         <remove name="after.body.start"/>
         <remove name="page.bottom"/>
         <referenceContainer name="root">
-            <block name="swaggerUiContent" class="Magento\Framework\View\Element\Template" template="Magento_Swagger::swagger.phtml"/>
+            <block name="swaggerUiContent" class="Magento\Framework\View\Element\Template" template="Magento_Swagger::swagger-ui/index.phtml"/>
         </referenceContainer>
     </body>
 </page>
