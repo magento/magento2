@@ -34,7 +34,10 @@ define(
                     region: regionName
                 };
 
-                if (addressData.region_id && countryData()[addressData.country_id]['regions']) {
+                if (addressData.region_id
+                    && countryData()[addressData.country_id]
+                    && countryData()[addressData.country_id]['regions']
+                ) {
                     region = countryData()[addressData.country_id]['regions'][addressData.region_id];
                     if (region) {
                         addressData.region.region_id = addressData['region_id'];
