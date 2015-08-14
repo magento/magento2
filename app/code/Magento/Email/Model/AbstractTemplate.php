@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\Store;
 
 /**
@@ -457,14 +458,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         }
         if (!isset($variables['store_phone'])) {
             $variables['store_phone'] = $this->scopeConfig->getValue(
-                Store::XML_PATH_STORE_STORE_PHONE,
+                StoreInformation::XML_PATH_STORE_INFO_PHONE,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
         if (!isset($variables['store_hours'])) {
             $variables['store_hours'] = $this->scopeConfig->getValue(
-                Store::XML_PATH_STORE_STORE_HOURS,
+                StoreInformation::XML_PATH_STORE_INFO_HOURS,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
