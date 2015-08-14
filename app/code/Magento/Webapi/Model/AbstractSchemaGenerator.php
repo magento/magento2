@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model;
+use Magento\Webapi\Controller\Rest;
+use Magento\Framework\App\Cache\Type\Webapi;
 
 /**
  * Abstract API schema generator.
@@ -12,7 +14,7 @@ namespace Magento\Webapi\Model;
 abstract class AbstractSchemaGenerator
 {
     /**
-     * @var \Magento\Framework\App\Cache\Type\Webapi
+     * @var Webapi
      */
     protected $cache;
 
@@ -39,14 +41,14 @@ abstract class AbstractSchemaGenerator
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\App\Cache\Type\Webapi $cache
+     * @param Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      */
     public function __construct(
-        \Magento\Framework\App\Cache\Type\Webapi $cache,
+        Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
@@ -94,8 +96,9 @@ abstract class AbstractSchemaGenerator
         }
 
         $this->collectCallInfo($requestedServiceMetadata);
-        $schemaContent = $this->generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endPointUrl);
-        $this->cache->save($schemaContent, $cacheId, [\Magento\Framework\App\Cache\Type\Webapi::CACHE_TAG]);
+        $basePath = strstr($endPointUrl, Rest::SCHEMA_PATH, true);
+        $schemaContent = $this->generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $basePath);
+        $this->cache->save($schemaContent, $cacheId, [Webapi::CACHE_TAG]);
 
         return $schemaContent;
     }

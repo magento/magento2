@@ -254,16 +254,15 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      */
     protected function processSchemaRequest()
     {
-        $requestedServices = $this->_request->getRequestedServices();
+        $requestedServices = $this->_request->getRequestedServices('all');
         $requestedServices = $requestedServices == Request::ALL_SERVICES
             ? array_keys($this->swaggerGenerator->getListOfServices())
             : $requestedServices;
-        $basePath = strstr($this->_request->getRequestUri(), self::SCHEMA_PATH, true);
         $responseBody = $this->swaggerGenerator->generate(
             $requestedServices,
             $this->_request->getScheme(),
             $this->_request->getHttpHost(),
-            $basePath
+            $this->_request->getRequestUri()
         );
         $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
     }

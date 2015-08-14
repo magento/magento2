@@ -142,7 +142,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 $requestedService,
                 'http://',
                 'magento.host',
-                '/rest/default'
+                '/rest/default/schema?services=service1'
             )
         );
     }
