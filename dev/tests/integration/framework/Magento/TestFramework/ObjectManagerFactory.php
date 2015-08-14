@@ -6,6 +6,7 @@
 namespace Magento\TestFramework;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -91,15 +92,14 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
             );
             $diPreferences = [];
             $diPreferencesPath = __DIR__ . '/../../../etc/di/preferences/';
-            $directory = new \RecursiveDirectoryIterator($diPreferencesPath, \FilesystemIterator::SKIP_DOTS);
 
-            foreach (new \RecursiveIteratorIterator($directory) as $file) {
-                if (!is_readable($file->getPathname())) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __("'%1' is not readable file.", $file->getPathname())
-                    );
+            $preferenceFiles = glob($diPreferencesPath . '*.php');
+
+            foreach ($preferenceFiles as $file) {
+                if (!is_readable($file)) {
+                    throw new LocalizedException(__("'%1' is not readable file.", $file));
                 }
-                $diPreferences = array_replace($diPreferences, include $file->getPathname());
+                $diPreferences = array_replace($diPreferences, include $file);
             }
 
             $this->_primaryConfigData['preferences'] = array_replace(
