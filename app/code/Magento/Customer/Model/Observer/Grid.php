@@ -5,18 +5,22 @@
  */
 namespace Magento\Customer\Model\Observer;
 
+use Magento\Customer\Model\Resource\Customer\Grid as CustomerGrid;
+
 class Grid
 {
-    /** @var \Magento\Customer\Model\Resource\Customer\Grid */
-    protected $gridSynchronization;
+    /**
+     * @var CustomerGrid
+     */
+    protected $customerGrid;
 
     /**
-     * @param \Magento\Customer\Model\Resource\Customer\Grid $grid
+     * @param CustomerGrid $grid
      */
     public function __construct(
-        \Magento\Customer\Model\Resource\Customer\Grid $grid
+        CustomerGrid $grid
     ) {
-        $this->gridSynchronization = $grid;
+        $this->customerGrid = $grid;
     }
 
     /**
@@ -24,7 +28,6 @@ class Grid
      */
     public function syncCustomerGrid()
     {
-        $this->gridSynchronization->syncCustomerGrid();
+        $this->customerGrid->syncCustomerGrid();
     }
 }
-
