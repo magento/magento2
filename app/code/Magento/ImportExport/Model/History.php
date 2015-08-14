@@ -94,19 +94,6 @@ class History extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Add error file to history report
-     *
-     * @param $filename
-     * @return $this
-     */
-    public function addErrorFile($filename)
-    {
-        $this->setErrorFile($filename);
-        $this->save();
-        return $this;
-    }
-
-    /**
      * Update import history report
      *
      * @param Import $import
