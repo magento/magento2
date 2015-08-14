@@ -38,6 +38,11 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     protected $layoutProcessor;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManager;
+
+    /**
      * @var array
      */
     protected $layout;
@@ -55,6 +60,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                 'secondComponent' => ['param' => 'value'],
             ]
         ];
+
+        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->context->expects($this->once())->method('getStoreManager')->willReturn($this->storeManager);
 
         $this->model = new \Magento\Checkout\Block\Cart\Shipping(
             $this->context,
@@ -86,5 +94,14 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             \Zend_Json::encode($layoutProcessed),
             $this->model->getJsLayout()
         );
+    }
+
+    public function testGetBaseUrl()
+    {
+        $baseUrl = 'baseUrl';
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', ['getBaseUrl'], [], '', false);
+        $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $this->assertEquals($baseUrl, $this->model->getBaseUrl());
     }
 }

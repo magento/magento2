@@ -64,4 +64,14 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         }
         return \Zend_Json::encode($this->jsLayout);
     }
+
+    /**
+     * Get base url for block.
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl();
+    }
 }
