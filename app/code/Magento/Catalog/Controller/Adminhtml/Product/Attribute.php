@@ -73,7 +73,7 @@ abstract class Attribute extends \Magento\Backend\App\Action
     }
 
     /**
-     * @param null|\Magento\Framework\Phrase
+     * @param null|\Magento\Framework\Phrase $item
      * @return \Magento\Backend\Model\View\Result\Page
      */
     protected function createActionPage($item = null)
