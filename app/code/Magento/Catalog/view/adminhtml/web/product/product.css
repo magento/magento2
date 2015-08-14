@@ -326,8 +326,8 @@
     overflow: hidden;
 }
 
-.admin__scope-old .tiers_table .col-price {
-    width: 16%;
+.admin__scope-old .tiers_table .col-price .input-text {
+    width: 90px;
 }
 
 .admin__scope-old .new-variation-set {
