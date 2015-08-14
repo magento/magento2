@@ -10,7 +10,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Customer\Model\Customer;
 
-class GridSynchronization
+class Grid
 {
     /** @var Resource */
     protected $resource;
