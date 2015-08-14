@@ -36,7 +36,7 @@ class StoreCheck
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$this->_storeManager->getStore()->getIsActive()) {
+        if (!$this->_storeManager->getStore()->isActive()) {
             throw new \Magento\Framework\Exception\State\InitException(
                 __('Current store is not active.')
             );
