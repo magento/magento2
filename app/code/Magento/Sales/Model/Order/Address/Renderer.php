@@ -11,7 +11,7 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Model\Order\Address;
 
 /**
- * Class Renderer using for formatting of order address
+ * Class Renderer used for formatting an order address
  */
 class Renderer
 {
