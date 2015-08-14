@@ -99,6 +99,14 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $parentTransaction = $this->expectTransaction($orderId, $paymentId);
         $transaction = $this->expectTransaction($orderId, $paymentId);
         $transaction->expects($this->atLeastOnce())->method('getTxnId')->willReturn($transactionId);
+        $transaction->expects($this->once())
+            ->method('setPayment')
+            ->withAnyParameters()
+            ->willReturnSelf();
+        $transaction->expects($this->once())
+            ->method('setOrder')
+            ->withAnyParameters()
+            ->willReturnSelf();
 
         if ($isTransactionExists) {
             $this->repositoryMock->method('getByTransactionId')
@@ -210,7 +218,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                 'setAdditionalInformation',
                 'setParentTxnId',
                 'close',
-                'getIsClosed'
+                'getIsClosed',
+                'setPayment',
+                'setOrder'
             ],
             [],
             '',
